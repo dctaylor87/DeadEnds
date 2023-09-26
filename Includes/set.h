@@ -4,7 +4,7 @@
 //  set.h -- Header file for the Set type.
 //
 //  Created by Thomas Wetmore on 22 November 2022.
-//  Last changed on 10 April 2023.
+//  Last changed on 25 September 2023.
 //
 
 #ifndef set_h
@@ -18,7 +18,7 @@
 //    The user can provide a delete function to dispose of the elements when the set is removed.
 //    Duplicate elements, as detected by the compare function, are not added.
 //--------------------------------------------------------------------------------------------------
-typedef struct {
+typedef struct Set {
     List *list;  // Sortable list holding the set's elements.
 } Set;
 

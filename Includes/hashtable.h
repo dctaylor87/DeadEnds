@@ -73,7 +73,7 @@ void removeElement(HashTable*, Word element);  // Remove an element from the has
 
 //  WordElement -- Elements for wholly generic hash tables. Casts needed throughout.
 //--------------------------------------------------------------------------------------------------
-typedef struct {
+typedef struct WordElement {
     String key;
     Word value;
 } WordElement;
