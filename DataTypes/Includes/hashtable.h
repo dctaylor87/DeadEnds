@@ -6,7 +6,7 @@
 //    function in order to keep the elements in the buckets sorted.
 //
 //  Created by Thomas Wetmore 29 November 2022.
-//  Last changed on 29 August 2023.
+//  Last changed on 27 September 2023.
 //
 
 #ifndef hashtable_h
@@ -68,7 +68,7 @@ void removeElement(HashTable*, Word element);  // Remove an element from the has
 
 //  The rest of this file defines the interfaces to hash tables with specific element types.
 #define IntegerTable HashTable      //  Hash table whose element values are integers.
-#define FunctionTable HashTable     //  Hash table whose element values are function definitions.
+//#define FunctionTable HashTable     //  Hash table whose element values are function definitions.
 #define WordTable HashTable         //  Hash table whose element values are arbitrary void*'s.
 
 //  WordElement -- Elements for wholly generic hash tables. Casts needed throughout.

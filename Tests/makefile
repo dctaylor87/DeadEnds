@@ -4,10 +4,10 @@ INCLUDES= -I../Includes
 
 all: hashtabletest stringtabletest
 
-hashtabletest: testhashtable.o
+hashtabletest: testhashtable.o ../DataTypes/datatypeslib.a
 	$(CC) -o hashtabletest testhashtable.o ../DataTypes/datatypeslib.a -lc
 
-stringtabletest: teststringtable.o
+stringtabletest: teststringtable.o ../DataTypes/datatypeslib.a
 	$(CC) -o stringtabletest teststringtable.o ../DataTypes/datatypeslib.a -lc
 
 %.o: %.c
