@@ -4,4 +4,5 @@ all:
 	cd Gedcom; make
 	cd Interpreter; make
 	cd Parser; make
-	cd Datatypes; make
+	cd DataTypes; make
+	cd Utilities; make
