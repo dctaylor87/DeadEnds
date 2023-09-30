@@ -1,6 +1,6 @@
 CC=clang
 CFLAGS=-c -g -Wall
-INCLUDES=-I./Includes -I../DataTypes/Includes
+INCLUDES=-I./Includes -I../DataTypes/Includes -I../Gedcom/Includes
 AR=ar
 ARFLAGS=-cr
 OFILES=database.o nameindex.o recordindex.o
