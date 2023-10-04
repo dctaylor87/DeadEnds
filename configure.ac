@@ -40,8 +40,8 @@ AM_GNU_GETTEXT_VERSION([0.11.5])
 dnl iconv
 AM_ICONV
 
-dnl langinfo
-AM_LANGINFO_CODESET
+#dnl langinfo
+#AM_LANGINFO_CODESET
 
 dnl **************************************************************
 dnl Compile-Chain Section
@@ -70,7 +70,8 @@ dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_c_compiler_gnu}" = "yes"; then
   CFLAGS="${CFLAGS} -W -Wall -Wextra"
   CFLAGS="${CFLAGS} -Wcast-align -Wmissing-declarations -Wmissing-prototypes"
-  CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes -pedantic"
+# CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes -pedantic"
+  CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes"
 
   dnl Add debugging as well
   CFLAGS="${CFLAGS} -g"
@@ -234,12 +235,12 @@ echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
 AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
 AC_CHECK_FUNCS( backtrace backtrace_symbols )
-AC_SEARCH_LIBS( sin, m )
-AC_SEARCH_LIBS( cos, m )
-AC_SEARCH_LIBS( tan, m )
-AC_SEARCH_LIBS( asin, m )
-AC_SEARCH_LIBS( acos, m )
-AC_SEARCH_LIBS( atan, m )
+#AC_SEARCH_LIBS( sin, m )
+#AC_SEARCH_LIBS( cos, m )
+#AC_SEARCH_LIBS( tan, m )
+#AC_SEARCH_LIBS( asin, m )
+#AC_SEARCH_LIBS( acos, m )
+#AC_SEARCH_LIBS( atan, m )
 
 echo Looking for header files and libraries to support heap walking
 dnl We need to cheat on OSX/Darwin.  The standard configure
@@ -260,54 +261,6 @@ case $host in
 esac
 
 dnl **************************************************************
-dnl Check for curses
-dnl **************************************************************
-
-dnl Since some distributions package wide and narrow functions
-dnl in separate libraries, we need to check for them separately.
-dnl We also need to search for a wide character routine, so that
-dnl we can warn if only a narrow version of curses is found.
-dnl
-dnl We search for libraries first, since its easier to tell if
-dnl the right libraries are installed than the right headers.
-
-echo Looking for curses libraries
-AC_CHECK_LIB(ncursesw, in_wch)
-if test "$ac_cv_lib_ncursesw_in_wch" = "yes"; then
-  echo Using ncursesw
-else
-  AC_CHECK_LIB(ncurses, in_wch)
-  if test "$ac_cv_lib_ncurses_in_wch" = "yes"; then
-    echo Using ncurses
-  else
-    AC_CHECK_LIB(cursesw, in_wch)
-    if test "$ac_cv_lib_cursesw_in_wch" = "yes"; then
-      echo Using cursesw
-    else
-      AC_CHECK_LIB(curses, in_wch)
-      if test "$ac_cv_lib_curses_in_wch" = "yes"; then
-        echo Using curses
-      else
-        case $host in
-          *mingw32*)
-            echo "Using LifeLines version of curses for Windows."
-          ;;
-          *)
-            echo "LifeLines requires a curses implementation with wide character support!"
-            exit
-          ;;
-        esac
-      fi
-    fi
-  fi
-fi
-
-dnl Check for headers
-echo Looking for curses headers
-AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
-
-dnl **************************************************************
-
 dnl Check for Python
 dnl **************************************************************
 # --------------------- #
@@ -525,7 +478,7 @@ else
   fi
 fi
 
-dnl Use --with-python-libdir to control where Lifelines looks for the
+dnl Use --with-python-libdir to control where DeadEnds looks for the
 dnl Python libraries.
 dnl
 dnl If this is not given then the default will be based on the value
@@ -646,14 +599,14 @@ dnl **************************************************************
 dnl Platform-Specific Configuration
 dnl **************************************************************
 
-case $host_os in
-  *windows*)
-    AC_DEFINE(LINES_CONFIG_FILE,"lines.cfg",[lifelines configuration file])
-    ;;
-  *)
-    AC_DEFINE(LINES_CONFIG_FILE,".linesrc",[lifelines configuration file])
-    ;;
-esac
+#case $host_os in
+#  *windows*)
+#    AC_DEFINE(LINES_CONFIG_FILE,"lines.cfg",[lifelines configuration file])
+#    ;;
+#  *)
+#    AC_DEFINE(LINES_CONFIG_FILE,".linesrc",[lifelines configuration file])
+#    ;;
+#esac
 
 dnl **************************************************************
 dnl Generate Makefiles
@@ -665,5 +618,6 @@ AC_CONFIG_FILES([Makefile \
         Interpreter/Makefile \
         Parser/Makefile \
         DataTypes/Makefile \
-        Utilities/Makefile])
+        Utilities/Makefile \
+        Tests/Makefile])
 AC_OUTPUT
