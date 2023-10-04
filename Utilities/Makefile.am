@@ -6,7 +6,7 @@
 noinst_LIBRARIES = libutilities.a
 
 libutilities_a_SOURCES = \
-	data.c \
+	date.c \
 	errors.c \
 	standard.c \
 	unicode.c \
