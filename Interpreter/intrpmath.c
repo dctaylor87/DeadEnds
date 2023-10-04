@@ -12,6 +12,7 @@
 #include "pvalue.h"
 #include "evaluate.h"
 #include "interp.h"
+#include "builtintable.h"
 
 // Local helper function.
 //--------------------------------------------------------------------------------------------------

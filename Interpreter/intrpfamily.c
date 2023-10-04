@@ -12,6 +12,7 @@
 #include "evaluate.h"
 #include "lineage.h"
 #include "database.h"
+#include "builtintable.h"
 
 extern RecordIndex *theIndex;
 

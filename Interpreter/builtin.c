@@ -22,6 +22,7 @@
 #include "evaluate.h"  // evaluate().
 #include "path.h"      // fopenpath().
 #include "symboltable.h"
+#include "builtintable.h"
 
 //#define Table SymbolTable
 

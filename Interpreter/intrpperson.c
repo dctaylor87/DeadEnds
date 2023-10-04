@@ -16,6 +16,7 @@
 #include "interp.h"
 #include "recordindex.h"
 #include "database.h"
+#include "builtintable.h"
 
 extern RecordIndex *theIndex;
 

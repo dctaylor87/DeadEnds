@@ -13,6 +13,7 @@
 #include "pnode.h"
 #include "pvalue.h"
 #include "evaluate.h"
+#include "builtintable.h"
 
 //  __key -- Return person or family key (or event or source or other).
 //    usage: key(INDI|FAM) -> STRING

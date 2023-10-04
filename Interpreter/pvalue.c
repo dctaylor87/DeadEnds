@@ -11,6 +11,7 @@
 #include "pvalue.h"
 #include "standard.h"
 #include "gedcom.h"
+#include "builtintable.h"
 
 extern const PValue nullPValue;  // Defined in builtin.c
 

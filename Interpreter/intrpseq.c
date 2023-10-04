@@ -17,6 +17,7 @@
 #include "list.h"
 #include "pvalue.h"
 #include "evaluate.h"  // evaluatePerson
+#include "builtintable.h"
 
 //  __indiset -- Declare and create a sequence and assign it to an identifier in a symbol table.
 //    usage: indiset(IDEN) -> VOID
