@@ -1,0 +1,4 @@
+proc main()
+{
+	"Hello, World" nl() nl() nl()
+}
