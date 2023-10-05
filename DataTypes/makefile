@@ -1,12 +1,13 @@
 CC=clang
 CFLAGS=-c -g -Wall
-INCLUDES=-I./Includes -I../Utilities/Includes
+INCLUDES=-I./Includes -I../Utils/Includes
 AR=ar
 ARFLAGS=-cr
 OFILES=list.o hashtable.o sort.o set.o stringtable.o integertable.o
+LIBNAME=datatypes
 
-datatypelib.a: $(OFILES)
-	$(AR) $(ARFLAGS) datatypeslib.a $(OFILES)
+lib$(LIBNAME).a: $(OFILES)
+	$(AR) $(ARFLAGS) lib$(LIBNAME).a $(OFILES)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $<
