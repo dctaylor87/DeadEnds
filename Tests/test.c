@@ -5,7 +5,7 @@
 #include "functiontable.h"
 #include "pnode.h"
 
-static bool debugging = false;
+//static bool debugging = false;
 
 extern String currentProgramFileName;
 extern int currentProgramLineNumber;
@@ -14,7 +14,7 @@ extern FunctionTable *procedureTable;
 int main()
 {
 	//  Parse a simple LifeLines "hello, world" program.
-	parseProgram("llprogram", "/Users/ttw4/Desktop/DeadEnds/Data");
+	parseProgram("llprogram", "../Data");
 
 
 	//  Create a PNProcCall node to call the main procedure with
