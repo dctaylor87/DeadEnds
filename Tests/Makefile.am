@@ -2,27 +2,53 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # what are we going to build?
-bin_PROGRAMS = hashtabletest stringtabletest
+bin_PROGRAMS = hashtabletest stringtabletest test
 
-# what goes into hashtabletest:
+# what goes into hashtabletest, stringtabletest, test:
+
 hashtabletest_SOURCES = testhashtable.c
 
-# what goes into stringtabletest:
-stringtabletest_SOURCES = stringtabletest
+stringtabletest_SOURCES = teststringtable.c
 
-# extra stuff for hashtabletest
-hashtabletest_LDDADD = ../DataTypes/libdatatypes.a
+test_SOURCES = test.c
 
-# extra stuff for hashtabletest
-stringtabletest_LDDADD = ../DataTypes/libdatatypes.a
+# extra stuff for hashtabletest, hashtabletest
+hashtabletest_LDADD = ../DataTypes/libdatatypes.a ../Utils/libutils.a
+
+stringtabletest_LDADD = ../DataTypes/libdatatypes.a ../Utils/libutils.a
+
+test_LDADD = ../Interp/libinterp.a ../Parser/libparser.a \
+	 ../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 # $(top_builddir)        for files in the build tree
 # $(top_srcdir)          for files in the source tree
 
-AM_CPPFLAGS = -I${top_srcdir}/DataTypes/Includes
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/Utils/Includes \
+	-I$(top_srcdir)/DataTypes/Includes \
+	-I$(top_srcdir)/Parser/Includes \
+	-I$(top_srcdir)/Interp/Includes \
+	-I$(top_srcdir)/Gedcom/Includes \
+	-I$(top_srcdir)/Database/Includes
 
 # these dependencies are so that building just the tests plus whatever
 # they depend upon will work
 
- ../DataTypes/libdatatypes.a:
+../DataTypes/libdatatypes.a:
 	${MAKE} -C ../DataTypes libdatatypes.a
+
+../Interp/libinterp.a:
+	${MAKE} -C ../Interp libinterp.a
+
+../Parser/libparser.a:
+	${MAKE} -C ../Parser libparser.a
+
+../Gedcom/libgedcom.a:
+	${MAKE} -C ../Gedcom libgedcom.a
+
+../Database/libdatabase.a:
+	${MAKE} -C ../Database libdatabase.a
+
+../Utils/libutils.a:
+	${MAKE} -C ../Utils libutils.a

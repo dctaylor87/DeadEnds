@@ -83,7 +83,7 @@ GNode* copy_nodes(GNode*, bool, bool);
 bool traverseNodes(GNode*, bool(*)(GNode*));
 int num_spouses_of_indi(GNode*);
 GNode* find_node(GNode*, String, String, GNode**);
-GNode* father_nodes(Database*, GNode*);
+GNode* fatherNodes(Database*, GNode*);
 GNode* mother_nodes(Database*, GNode*);
 GNode* children_nodes(Database*, GNode*);
 GNode* parents_nodes(Database*, GNode*);

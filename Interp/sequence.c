@@ -20,7 +20,7 @@
 #include "stringtable.h"
 #include "sort.h"
 
-bool debugging = true;
+static bool debugging = true;
 
 static void write_nonlink_indi(GNode* indi);
 static void new_write_node (int levl, GNode* node, bool list);

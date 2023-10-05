@@ -18,7 +18,7 @@
 #include "pnode.h"
 #include <unistd.h>  // sleep.
 
-static bool debugging = false;  //  Turn on local debugging in this file.
+static bool debugging = true;  //  Turn on local debugging in this file.
 extern bool programParsing;     //  True when program files are being parsed.
 
 //  Global variables defined and created here. Not mentioned in header files.

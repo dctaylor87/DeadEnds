@@ -1,11 +1,11 @@
 # Process this file with automake to produce Makefile.in
 # (configure will process the resulting Makefile.in to produce Makefile)
 
-# Makefile for the DeadEnds Utilities library
+# Makefile for the DeadEnds Utils library
 
-noinst_LIBRARIES = libutilities.a
+noinst_LIBRARIES = libutils.a
 
-libutilities_a_SOURCES = \
+libutils_a_SOURCES = \
 	date.c \
 	errors.c \
 	standard.c \
@@ -14,5 +14,5 @@ libutilities_a_SOURCES = \
 	utils.c
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/Utilities/Includes \
+	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes

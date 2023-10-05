@@ -615,9 +615,9 @@ dnl **************************************************************
 AC_CONFIG_FILES([Makefile \
         Database/Makefile \
         Gedcom/Makefile \
-        Interpreter/Makefile \
+        Interp/Makefile \
         Parser/Makefile \
         DataTypes/Makefile \
-        Utilities/Makefile \
+        Utils/Makefile \
         Tests/Makefile])
 AC_OUTPUT

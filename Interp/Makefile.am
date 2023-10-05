@@ -3,9 +3,11 @@
 
 # Makefile for the DeadEnds Interpreter library
 
-noinst_LIBRARIES = libinterpreter.a
+CC=clang
 
-libinterpreter_a_SOURCES = \
+noinst_LIBRARIES = libinterp.a
+
+libinterp_a_SOURCES = \
 	builtin.c \
 	builtintable.c \
 	evaluate.c \
@@ -22,11 +24,12 @@ libinterpreter_a_SOURCES = \
 	pvalue.c \
 	pvaluetable.c \
 	sequence.c \
-	symboltable.c
+	symboltable.c \
+	builtinlist.c
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/Interpreter/Includes \
-	-I$(top_srcdir)/Utilities/Includes \
+	-I$(top_srcdir)/Interp/Includes \
+	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/Database/Includes

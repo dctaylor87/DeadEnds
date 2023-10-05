@@ -23,7 +23,7 @@ extern int currentProgramLineNumber;;  // Current line number in file being pars
 // Define yylval here for now.
 extern SemanticValue yylval;  // Defined in y.tab.c
 
-static bool debugging = false;
+static bool debugging = false; 
 
 // yylex -- Interface to the yacc-generated parser. Returns an integer as the token type,
 //   and in some cases sets yylval as the token value.
