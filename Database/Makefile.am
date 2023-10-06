@@ -11,7 +11,8 @@ noinst_LIBRARIES = libdatabase.a
 libdatabase_a_SOURCES = \
 	database.c \
 	nameindex.c \
-	recordindex.c
+	recordindex.c \
+	import.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
