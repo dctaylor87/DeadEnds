@@ -1,9 +1,9 @@
 CC=clang
-CFLAGS=-c -g -Wall
-INCLUDES=-I./Includes -I../DataTypes/Includes -I../Gedcom/Includes
+CFLAGS=-c -g -Wall -Wno-unused-function
+INCLUDES=-I./Includes -I../DataTypes/Includes -I../Gedcom/Includes -I../Utils/Includes
 AR=ar
 ARFLAGS=-cr
-OFILES=database.o nameindex.o recordindex.o
+OFILES=database.o nameindex.o recordindex.o import.o
 LIBNAME=database
 
 lib$(LIBNAME).a: $(OFILES)
