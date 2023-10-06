@@ -1,8 +1,11 @@
 # Process this file with automake to produce Makefile.in
 # (configure will process the resulting Makefile.in to produce Makefile)
 
+# not sure that this matters...
+CC=clang
+
 # what are we going to build?
-bin_PROGRAMS = hashtabletest stringtabletest test
+bin_PROGRAMS = test hashtabletest stringtabletest
 
 # what goes into hashtabletest, stringtabletest, test:
 
