@@ -4,13 +4,12 @@
 //  standard.c -- Standard routines.
 //
 //  Create by Thomas Wetmore on 7 November 2022.
-//  Last changed on 5 October 2023.
+//  Last changed on 6 October 2023.
 
 #include <stdlib.h>
-#include <malloc/malloc.h>
 #include "standard.h"
 
-#define ALLOCLOGFILE "/Users/ttw4/alloc.log"
+#define ALLOCLOGFILE "./alloc.log"
 
 static FILE *allocLogFile = null;  // The logging file.
 static bool logopen = false;       // The logging file is open for writing.
@@ -61,10 +60,10 @@ char *__alloc (size_t len, String file, int line)
 	char *p;
 	if (len == 0) return null;
 	ASSERT(p = malloc(len));
-	if (loggingAllocs) {
-        bytesAllocated += malloc_size(p);
-        fprintf(allocLogFile, "A  %s\t%d\t%zu\t%ld\t%ld\n", lastSegment(file), line, len, malloc_size(p), (long) p);
-	}
+	//if (loggingAllocs) {
+        //bytesAllocated += malloc_size(p);
+        //fprintf(allocLogFile, "A  %s\t%d\t%zu\t%ld\t%ld\n", lastSegment(file), line, len, malloc_size(p), (long) p);
+	//}
 	return p;
 }
 
@@ -75,10 +74,10 @@ void __free (void* ptr, String file, int line)
 // String file  -- Name of the file deallocating the memory.
 // int line -- Line number in the file where deallocating.
 {
-	if (loggingAllocs) {
-        fprintf(allocLogFile, "F  %s\t%d\t%ld\t%ld\n", lastSegment(file), line, malloc_size(ptr), (long) ptr);
-        bytesFreed += malloc_size(ptr);
-	}
+	//if (loggingAllocs) {
+        //fprintf(allocLogFile, "F  %s\t%d\t%ld\t%ld\n", lastSegment(file), line, malloc_size(ptr), (long) ptr);
+        //bytesFreed += malloc_size(ptr);
+	//}
 	free(ptr);
 }
 
