@@ -15,6 +15,7 @@ AC_REVISION([for DeadEnds, built with autoconf] AC_ACVERSION)
 AC_DISABLE_OPTION_CHECKING
 AC_CONFIG_AUX_DIR(build/autotools)
 AC_CANONICAL_HOST
+AC_CONFIG_HEADERS([config.h])
 
 dnl **************************************************************
 dnl Automake Section
@@ -617,6 +618,7 @@ AC_CONFIG_FILES([Makefile \
         Gedcom/Makefile \
         Interp/Makefile \
         Parser/Makefile \
+        Python/Makefile \
         DataTypes/Makefile \
         Utils/Makefile \
         Tests/Makefile])
