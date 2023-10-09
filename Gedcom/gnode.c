@@ -439,7 +439,7 @@ GNode* find_node (GNode* parent, String tag, String value, GNode **plast)
 	return null;
 }
 
-// father_nodes -- Given a list of FAMS and FAMC Nodes, return the list of HUSB Nodes they contain.
+// fatherNodes -- Given a list of FAMS or FAMC nodes, return the list of HUSB nodes they contain.
 //--------------------------------------------------------------------------------------------------
 GNode* fatherNodes (Database* database, GNode* faml)
 // Node faml -- List of FAMC and/or FAMS Nodes.

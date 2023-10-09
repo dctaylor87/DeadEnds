@@ -4,7 +4,7 @@
 //  interp.h -- Header for the DeadEnds language interpreter.
 //
 //  Created by Thomas Wetmore on 8 December 2022.
-//  Last changed on 1 April 2023.
+//  Last changed on 6 October 2023.
 //
 
 #ifndef interp_h
@@ -24,7 +24,7 @@ typedef enum {
 //extern Table testTable;
 
 // Report Interpreter.
-void initializeInterpreter(RecordIndex*);
+void initializeInterpreter(Database*);
 void initset(void);
 void initrassa(void);
 void parseProgram(String fileName, String searchPath);

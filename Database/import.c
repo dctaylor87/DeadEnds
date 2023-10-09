@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 6 August 2023.
+//  Last changed on 6 October 2023.
 //
 
 #include "standard.h"
@@ -127,14 +127,18 @@ Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog)
 {
     //  Create a new database to hold this file's records.
     Database *database = createDatabase();
+    ASSERT(database);
 
     //  Read the records and add them to the database.
     String msg;
+    int recordCount = 0;
     GNode *root = firstNodeTreeFromFile(file, &msg);
     while (root) {
+        recordCount++;
         storeRecord(database, root);
         root = nextNodeTreeFromFile(file, &msg);
     }
+    printf("Read %d records.\n", recordCount);
 
     return database;
 }

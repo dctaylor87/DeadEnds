@@ -557,7 +557,7 @@ PValue __copyfile (PNode *node, SymbolTable *stab, bool *eflg)
         *eflg = true;
         return nullPValue;
     }
-    FILE *cfp = fopenpath(fileName, "r", ".:/Users/ttw4");
+    FILE *cfp = fopenpath(fileName, "r", ".:$HOME");
     if (cfp == null) {
         prog_error(node, "could not open file for copying");
         *eflg = true;

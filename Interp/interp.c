@@ -6,7 +6,7 @@
 //    may interpret a node directly, or call a more specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 6 July 2023.
+//  Last changed on 6 October 2023.
 //
 
 #include <stdarg.h>
@@ -24,6 +24,7 @@ static bool debugging = false;
 extern FunctionTable *procedureTable;  //  Table of user-defined procedures.
 extern FunctionTable *functionTable;   //  Table of user-defined functions.
 extern SymbolTable *globalTable;       //  Global symbol table.
+Database *theDatabase;  // The database.
 RecordIndex *theIndex;  //  Index to all Gedcom records in the database.
 
 extern String pnodeTypes[];
@@ -41,10 +42,10 @@ int Perrors = 0;      // Number of errors encountered during parsing.
 
 // initializeInterpreter -- Initialize the interpreter.
 //--------------------------------------------------------------------------------------------------
-void initializeInterpreter(RecordIndex *index)
+void initializeInterpreter(Database *database)
 {
     Perrors = 0;
-    theIndex = index;
+    theDatabase = database;
 }
 
 // finishInterpreter -- Finish the interpreter.
