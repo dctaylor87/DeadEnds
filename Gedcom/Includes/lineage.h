@@ -5,7 +5,7 @@
 //    and properties
 //
 //  Created by Thomas Wetmore on 17 February 2023.
-//  Last changed on 1 June 2023.
+//  Last changed on 10 October 2023.
 //
 
 #ifndef lineage_h
@@ -24,5 +24,8 @@ GNode* familyToLastChild(GNode* fam);  //  Return the last child of a family.
 String personToName(GNode*, int);  //  Return the first name of a person.
 String personToTitle(GNode*, int);  //  Return the first title of a person.
 int numberOfSpouses(GNode* indi);  //  Return the number of spouses of a person.
+
+
+GNode* fam_to_spouse(Database*, GNode*, GNode*);
 
 #endif // lineage_h

@@ -51,93 +51,76 @@ void deleteDatabase(Database *database)
 //--------------------------------------------------------------------------------------------------
 StringTable *keyMap;
 
-// numberPersons -- Return the number of persons in a record index.
+// numberPersons -- Return the number of persons in a database.
 //--------------------------------------------------------------------------------------------------
-bool personPredicate(Word element)
+int numberPersons(Database *database)
 {
-    return recordType(((RecordIndexEl*) element)->root) == GRPerson;
-}
-int numberPersons(RecordIndex *index)
-{
-    return iterateHashTableWithPredicate(index, personPredicate);
+    return sizeHashTable(database->personIndex);
 }
 
-// numberFamilies -- Return the number of families in an index.
+// numberFamilies -- Return the number of families in a database.
 //--------------------------------------------------------------------------------------------------
-bool familyPredicate(Word element) {
-    return recordType(((RecordIndexEl*) element)->root) == GRFamily;
-}
-int numberFamilies(RecordIndex* index)
+int numberFamilies(Database *database)
 {
-    return iterateHashTableWithPredicate(index, familyPredicate);
+    return sizeHashTable(database->familyIndex);
 }
 
-// numberSources -- Return the number of sources in an index.
+// numberSources -- Return the number of sources in a database.
 //--------------------------------------------------------------------------------------------------
-bool sourcePredicate(Word element)
+int numberSources(Database *database)
 {
-    return recordType(((RecordIndexEl*) element)->root) == GRSource;
-}
-int numberSources(RecordIndex *index)
-{
-    return iterateHashTableWithPredicate(index, sourcePredicate);
+    return sizeHashTable(database->sourceIndex);
 }
 
 //  numberEvents -- Return the number of (top level) events in the database.
 //--------------------------------------------------------------------------------------------------
-bool eventPredicate(Word element) {
-    return recordType(((RecordIndexEl*) element)->root) == GREvent;
-}
-int numberEvents(RecordIndex *index)
+int numberEvents(Database *database)
 {
-    return iterateHashTableWithPredicate(index, eventPredicate);
+    return sizeHashTable(database->eventIndex);
 }
 
 //  numberOthers -- Return the number of other records in the database.
 //--------------------------------------------------------------------------------------------------
-bool otherPredicate(Word element) {
-    return recordType(((RecordIndexEl*) element)->root) == GROther;
-}
-int numberOthers(RecordIndex *index)
+int numberOthers(Database *database)
 {
-    return iterateHashTableWithPredicate(index, otherPredicate);
+    return sizeHashTable(database->otherIndex);
 }
 
-//  keyToPerson -- Get a person record from a record index.
+//  keyToPerson -- Get a person record from a database.
 //--------------------------------------------------------------------------------------------------
-GNode* keyToPerson(String key, RecordIndex *index)
+GNode* keyToPerson(String key, Database *database)
 //  key -- Key of person record. The @-signs are not part of the database key.
 //  index -- Record index to search for the person.
 {
     if (debugging) printf("keyToPerson called with key: %s\n", key);
-    RecordIndexEl* element = searchHashTable(index, key);
+    RecordIndexEl* element = searchHashTable(database->personIndex, key);
     return element ? element->root : null;
 }
 
 //  keyToFamily -- Get a family record from a record index.
 //--------------------------------------------------------------------------------------------------
-GNode* keyToFamily(String key, RecordIndex *index)
+GNode* keyToFamily(String key, Database *database)
 //  key -- Key of family record. The @-signs are not part of the key.
 //  index -- Record index to search for the family.
 {
     if (debugging) printf("keyToFamily called with key: %s\n", key);
-    RecordIndexEl *element = (RecordIndexEl*) searchHashTable(index, key);
+    RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->familyIndex, key);
     return element == null ? null : element->root;
 }
 
 //  keyToSource -- Get a source record from the database.
 //--------------------------------------------------------------------------------------------------
-GNode *keyToSource(String key, RecordIndex *index)
+GNode *keyToSource(String key, Database *database)
 {
-    RecordIndexEl* element = searchHashTable(index, key);
+    RecordIndexEl* element = searchHashTable(database->sourceIndex, key);
     return element ? element->root : null;
 }
 
 //  keyToEvent -- Get an event record from a database.
 //--------------------------------------------------------------------------------------------------
-GNode *keyToEvent(String key, RecordIndex *index)
+GNode *keyToEvent(String key, Database *database)
 {
-    RecordIndexEl *element = searchHashTable(index, key);
+    RecordIndexEl *element = searchHashTable(database->eventIndex, key);
     return element ? element->root : null;
 }
 

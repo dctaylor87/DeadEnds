@@ -2,7 +2,7 @@ proc main()
 {
 	"Hello, World" nl() nl() nl()
 	forindi(indi, count) {
-		d(count) nl()
+		d(count) name(indi) nl()
 	}
 }
 

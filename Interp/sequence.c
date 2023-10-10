@@ -5,7 +5,7 @@
 //    lists/sequences/sets of persons and families.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 9 August 2023.
+//  Last changed on 8 October 2023.
 //
 
 #include "standard.h"
@@ -26,7 +26,8 @@ static void write_nonlink_indi(GNode* indi);
 static void new_write_node (int levl, GNode* node, bool list);
 static void write_family (String key, StringTable *itab);
 
-extern RecordIndex *theIndex;
+//extern RecordIndex *theIndex;
+extern Database *theDatabase;
 
 //  Compare functions used when sorting sequences of persons.
 //--------------------------------------------------------------------------------------------------
@@ -41,7 +42,7 @@ void baseFree(Word word) { stdfree(word); }
 //extern Sequence *find_named_seq();
 //extern String *id_by_key();
 
-#define key_to_name(k)  (NAME(keyToPerson(k, theIndex))->value)
+#define key_to_name(k)  (NAME(keyToPerson(k, theDatabase))->value)
 
 //  createSequence -- Create a new sequence on the heap.
 //--------------------------------------------------------------------------------------------------
@@ -490,7 +491,7 @@ Sequence *parentSequence(Sequence *sequence)
 
     // For each person in the original sequence.
     FORSEQUENCE(sequence, el, num) {
-        GNode *indi = keyToPerson(el->key, theIndex); // Get the person from its key.
+        GNode *indi = keyToPerson(el->key, theDatabase); // Get the person from its key.
         GNode *fath = personToFather(indi);   // Get the person's father, if there.
         GNode *moth = personToMother(indi);   // Get the person's mother, if there.
 
@@ -522,7 +523,7 @@ Sequence *childSequence(Sequence *sequence)
 
     // For each person in the sequence.
     FORSEQUENCE(sequence, el, num) {
-        GNode *person = keyToPerson(el->key, theIndex);
+        GNode *person = keyToPerson(el->key, theDatabase);
 
         //  For each family the person is a spouse in.
         FORFAMSS(person, fam, spouse, num1) {
@@ -741,7 +742,7 @@ Sequence *siblingSequence(Sequence *sequence, bool close)
         //  TODO: THIS ONLY USES THE FIRST FAMC FAMILY, WHICH IN 99.9% OF THE CASES IS OKAY.
         //  BUT TO BE CONSISTENT WITH OTHER SITUATIONS WHERE THERE ARE MULTIPLE FAMC NODES,
         //  IT MIGHT BE BETTER TO GO THROUGH THEM ALL.
-        GNode *person = keyToPerson(element->key, theIndex);
+        GNode *person = keyToPerson(element->key, theDatabase);
         if ((fam = personToFamilyAsChild(person))) {
             appendToSequence(familySequence, familyToKey(fam), null, null);
         }
@@ -749,7 +750,7 @@ Sequence *siblingSequence(Sequence *sequence, bool close)
     }
     ENDSEQUENCE
     FORSEQUENCE(familySequence, el, num) {
-        fam = keyToFamily(el->key, theIndex);
+        fam = keyToFamily(el->key, theDatabase);
         FORCHILDREN(fam, chil, num2) {
             key = personToKey(chil);
             if (!isInHashTable(tab, key)) {
@@ -788,7 +789,7 @@ Sequence *ancestorSequence(Sequence *startSequence)
 
         //  Get the father and mother, if any, of the person from the queue.
         //  TODO: TREATS ONLY THE MOTHER AND FATHER OF THE PERSON'S 1ST FAMC FAMILY AS ANCESTORS.
-        GNode *person = keyToPerson(key, theIndex);
+        GNode *person = keyToPerson(key, theDatabase);
         GNode *father = personToFather(person);
         GNode *mother = personToMother(person);
 
@@ -835,7 +836,7 @@ Sequence *descendentSequence(Sequence *startSequence)
     //  Dequeue the next person in the descendent queue.
     while (!isEmptyList(descendentQueue)) {
         key = (String) dequeueList(descendentQueue);
-        GNode *person = keyToPerson(key, theIndex);
+        GNode *person = keyToPerson(key, theDatabase);
 
         //  All children in the person's FAMS families are descendents.
         FORFAMSS(person, family, spouse, count) {
@@ -868,7 +869,7 @@ Sequence *spouseSequence(Sequence *sequence)
     StringTable *table = createStringTable();
     Sequence *spouses = createSequence();
     FORSEQUENCE(sequence, el, num) {              //  For each person in the original sequence
-        GNode *person = keyToPerson(el->key, theIndex);
+        GNode *person = keyToPerson(el->key, theDatabase);
         FORSPOUSES(person, spouse, fam, num1) {   // For each spouse that that person has
             String key = personToKey(spouse);     // Get the key of the spouse
             if (!isInHashTable(table, key)) {         // If the spouse's key isn't in the table.
@@ -901,7 +902,7 @@ void sequenceToGedcom(Sequence *seq)
     }
     ENDSEQUENCE
     FORSEQUENCE(seq, el, num) {
-        indi = keyToPerson(el->key, theIndex);
+        indi = keyToPerson(el->key, theDatabase);
         sex = SEXV(indi);
         write_nonlink_indi(indi);
         famc = personToFamilyAsChild(indi);
@@ -1023,7 +1024,7 @@ static void write_family (String key, StringTable *itab)
 //  key;    /* family key */
 //  itab;    /* table of persons in file */
 {
-    GNode *fam = keyToFamily(key, theIndex);
+    GNode *fam = keyToFamily(key, theDatabase);
     char scratch[30];
     String t;
     sprintf(scratch, "0 %s FAM\n", fam->key);
