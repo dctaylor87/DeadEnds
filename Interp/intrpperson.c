@@ -4,7 +4,7 @@
 //  intrpperson.c -- Built-in functions dealing with persons.
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 29 September 2023.
+//  Last changed on 8 October 2023.
 //
 
 #include "standard.h"
@@ -18,7 +18,8 @@
 #include "database.h"
 #include "builtintable.h"
 
-extern RecordIndex *theIndex;
+//extern RecordIndex *theIndex;
+extern Database *theDatabase;
 
 // __name -- Get a person's name.
 //   usage: name(INDI [,BOOL]) -> STRING
@@ -420,7 +421,7 @@ PValue __indi(PNode *pnode, SymbolTable *symtab, bool* errflg)
     String key = value.value.uString;
 
     // Get the person with the key.
-    GNode* person = keyToPerson(key, theIndex);
+    GNode* person = keyToPerson(key, theDatabase);
     if (person == null) {
         prog_error(pnode, "could not find a person with the key '%s'", key);
         return nullPValue;
@@ -438,7 +439,7 @@ PValue __firstindi (PNode *node, SymbolTable *stab, bool *eflg)
     *eflg = false;
     while (true) {
         sprintf(key, "I%d", ++i);
-        GNode *indi = keyToPerson(key, theIndex);
+        GNode *indi = keyToPerson(key, theDatabase);
         if (!indi) return nullPValue;
         return PVALUE(PVPerson, uGNode, indi);
     }
@@ -460,7 +461,7 @@ PValue __nextindi (PNode *pnode, SymbolTable *symtab, bool *eflg)
     int i = atoi(&key[1]);
     while (true) {
         sprintf(key, "I%d", ++i);
-        indi = keyToPerson(key, theIndex);
+        indi = keyToPerson(key, theDatabase);
         if (!indi) return nullPValue;
         return PVALUE(PVPerson, uGNode, indi);
     }
@@ -479,7 +480,7 @@ PValue __previndi (PNode *node, SymbolTable *stab, bool *eflg)
     i = atoi(&key[1]);
     while (true) {
         sprintf(key, "I%d", --i);
-        indi = keyToPerson(key, theIndex);
+        indi = keyToPerson(key, theDatabase);
         if (!indi) return nullPValue;
         return PVALUE(PVPerson, uGNode, indi);
     }

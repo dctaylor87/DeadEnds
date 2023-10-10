@@ -8,7 +8,7 @@
 //    Gedcom-based operations.
 //
 //  Created by Thomas Wetmore on 12 November 2022.
-//  Last changed on 30 September 2023.
+//  Last changed on 10 November 2023.
 
 #include "standard.h"
 #include "gnode.h"
@@ -21,7 +21,8 @@
 #include "readnode.h"
 #include "database.h"
 
-extern RecordIndex *theIndex;
+//  TODO: This file should not have any functions that require the database.
+//extern Database *theDatabase;
 
 //  Tag table. Ensures there are only two allocated strings for every tag. Created the first time
 //    fix_tag is called.
@@ -32,7 +33,7 @@ static StringTable *tagTable = null;
 static int nodeAllocs = 0;
 int numNodeAllocs(void)
 {
-    return nodeAllocs;
+	return nodeAllocs;
 }
 
 //  numNodeFrees -- Return the number of nodes that have been freed to the heap. Debugging.
@@ -40,7 +41,7 @@ int numNodeAllocs(void)
 static int nodeFrees = 0;
 int numNodeFrees(void)
 {
-    return nodeFrees;
+	return nodeFrees;
 }
 
 //  fixup -- Save non-tag strings. These strings are allocated in the heap via the system malloc.
@@ -58,18 +59,18 @@ static String fixup(String str)
 static String fix_tag(String tag)
 //  tag -- Return the copy of this tag that is in the tag table.
 {
-    // Need this function to work with or without the table -- a testing issue right now.
-    if (tagTable) return fixString(tagTable, tag);
-    tagTable = createStringTable();
-    return fixString(tagTable, tag);
+	// Need this function to work with or without the table -- a testing issue right now.
+	if (tagTable) return fixString(tagTable, tag);
+	tagTable = createStringTable();
+	return fixString(tagTable, tag);
 }
 
 //  allocGNode -- Allocate a gedcom node. Keep track of the number of allocations.
 //--------------------------------------------------------------------------------------------------
 static GNode* allocGNode(void)
 {
-    nodeAllocs++;
-    return (GNode*) stdalloc(sizeof(GNode));
+	nodeAllocs++;
+	return (GNode*) stdalloc(sizeof(GNode));
 }
 
 //  freeGNode -- Free a gedcom node. Keep track of the number of frees.
@@ -78,11 +79,11 @@ static GNode* allocGNode(void)
 void freeGNode(GNode* node)
 // node -- GNode to be freed.
 {
-    ASSERT(node);
-    if (node->key) stdfree(node->key);
-    //if (node->gValue) stdfree(node->gValue);  //  DEBUG: THIS CAUSES A CRASH.
-    nodeFrees++;
-    stdfree(node);
+	ASSERT(node);
+	if (node->key) stdfree(node->key);
+	//if (node->gValue) stdfree(node->gValue);  //  DEBUG: THIS CAUSES A CRASH.
+	nodeFrees++;
+	stdfree(node);
 }
 
 //  createGNode -- Create and initialize a gedcom node.
@@ -99,7 +100,7 @@ GNode* createGNode(String key, String tag, String value, GNode* parent)
 	node->value = fixup(value);  // TODO: WHERE ARE WE GOING TO REMOVE @-SIGNS FROM CERTAIN VALUES?
 	node->parent = parent;
 	node->child = null;
-    node->sibling = null;
+	node->sibling = null;
 	return node;
 }
 
@@ -110,13 +111,13 @@ void freeGNodes(GNode* node)
 // node -- GNode to recursively free.
 {
 	while (node) {
-        // If this Node has children, recurse down a level.
+		// If this Node has children, recurse down a level.
 		if (node->child) freeGNodes(node->child);
-        // TODO: If keys eventually live in a hash table, the next line has to be removed.
+		// TODO: If keys eventually live in a hash table, the next line has to be removed.
 		if (node->key) stdfree(node->key);
 		if (node->value) stdfree(node->value);
-        // Tags are not freed. They are immortal and live in the tagTable.
-        // Move on the the sibling Node before freeing this Node.
+		// Tags are not freed. They are immortal and live in the tagTable.
+		// Move on the the sibling Node before freeing this Node.
 		GNode* sib = node->sibling;
 		freeGNode(node);
 		node = sib;
@@ -129,44 +130,12 @@ void freeGNodes(GNode* node)
 int gnodeLevel(GNode* node)
 //  node -- The node to have its level determined.
 {
-    int level = 0;
-    while (node->parent) {
-        level++;
-        node = node->parent;
-    }
-    return level;
-}
-
-// fam_to_spouse -- Return other spouse of a family.
-//--------------------------------------------------------------------------------------------------
-GNode* fam_to_spouse(Database* database, GNode* fam, GNode* indi)
-{
-	if (!fam) return null;
-    FORHUSBS(fam, husb, num) {
-        if(husb != indi) return(husb);
-    }
-    ENDHUSBS
-    FORWIFES(fam, wife, num) {
-        if(wife != indi) return(wife);
-    }
-	ENDWIFES
-	return null;
-}
-
-/*======================================
- * node_to_tag -- Return a subtag of a node
- * (presumably top level, but not necessarily)
- *====================================*/
-String node_to_tag(GNode* node, String tag, int len)
-{
-	static char scratch[MAXNAMELEN+1];
-	String refn;
-	if (!node) return null;
-	if (!(node = findTag(node->child, tag))) return null;
-	refn = node->value;
-	if (len > sizeof(scratch)-1) len = sizeof(scratch)-1;
-    strcpy(scratch, refn);
-	return scratch;
+	int level = 0;
+	while (node->parent) {
+		level++;
+		node = node->parent;
+	}
+	return level;
 }
 
 //  personToEvent -- Convert an event tree into a string.
@@ -174,9 +143,9 @@ String node_to_tag(GNode* node, String tag, int len)
 //--------------------------------------------------------------------------------------------------
 String personToEvent(GNode* node, String tag, String head, int len, bool shorten)
 {
-    ASSERT(node);
+	ASSERT(node);
 	static char scratch[200];
-    String event;
+	String event;
 	size_t n;
 	if (!node) return null;
 	if (!(node = findTag(node->child, tag))) return null;
@@ -259,7 +228,7 @@ String event_to_plac (GNode* node, bool shorten)
  *==============================*/
 void show_node(GNode* node)
 {
-    if (!node) return;
+	if (!node) return;
 	show_node_rec(0, node);
 }
 
@@ -271,11 +240,11 @@ void show_node_rec(int levl, GNode* node)
 	for (int i = 1;  i < levl;  i++)
 		printf("  ");
 
-    printf("%d", levl);
+	printf("%d", levl);
 	if (node->key) printf(" %s", node->key);
-    printf(" %s", node->tag);
-    if (node->value) printf(" %s", node->value);
-    printf("\n");
+	printf(" %s", node->tag);
+	if (node->value) printf(" %s", node->value);
+	printf("\n");
 	show_node_rec(levl + 1, node->child);
 	show_node_rec(levl    , node->sibling);
 }
@@ -331,7 +300,7 @@ String shorten_date(String date)
 //--------------------------------------------------------------------------------------------------
 String shorten_plac(String plac)
 {
-    String plac0 = plac, comma /* , val */;
+	String plac0 = plac, comma /* , val */;
 	if (!plac) return null;
 	comma = (String) strrchr(plac, ',');
 	if (comma) plac = comma + 1;
@@ -368,8 +337,8 @@ GNode* copy_nodes (GNode* node, bool kids, bool sibs)
 //  kids -- If true also copy children.
 //  sibs -- if true also cope siblings.
 {
-    GNode* new;
-    GNode* kin;
+	GNode* new;
+	GNode* kin;
 	if (!node) return null;
 	new = copy_node(node);
 	if (kids && node->child) {
@@ -395,7 +364,7 @@ bool traverseNodes (GNode* node, bool (*func)(GNode*))
 // Node node -- Root of tree to traverse.
 // bool (*func)(Node) -- Function to call at each Node. If it returns false stop the traverse.
 {
-    if (func == null) return false;  // Nothing to do if there is no function.
+	if (func == null) return false;  // Nothing to do if there is no function.
 	while (node) {
 		if (!(*func)(node)) return false;
 		if (node->child) {
@@ -410,13 +379,13 @@ bool traverseNodes (GNode* node, bool (*func)(GNode*))
 //--------------------------------------------------------------------------------------------------
 int countNodes(GNode* node)
 {
-    if (node == null) return 0;
-    int count = 1 + countNodes(node->child) + countNodes(node->sibling);
-    if (count > 5000) {
-        printf("Recursing forever?????\n");
-        exit(3);
-    }
-    return count;
+	if (node == null) return 0;
+	int count = 1 + countNodes(node->child) + countNodes(node->sibling);
+	if (count > 5000) {
+		printf("Recursing forever?????\n");
+		exit(3);
+	}
+	return count;
 }
 
 //  find_node -- Find child node with specific tag and value. Either or both of tag and value
@@ -428,7 +397,7 @@ GNode* find_node (GNode* parent, String tag, String value, GNode **plast)
 //  value -- Value of requested node; if null no value check is done.
 //  plast -- (out) Previous node to the requested node if any; may be null.
 {
-    ASSERT(parent && (tag || value));
+	ASSERT(parent && (tag || value));
 	if (plast) *plast = null;
 	for (GNode *last = null, *node = parent->child; node; last = node, node = node->sibling) {
 		if (tag && nestr(tag, node->tag)) continue;
@@ -444,11 +413,11 @@ GNode* find_node (GNode* parent, String tag, String value, GNode **plast)
 GNode* fatherNodes (Database* database, GNode* faml)
 // Node faml -- List of FAMC and/or FAMS Nodes.
 {
-    GNode *refn, *husb, *wife, *chil, *rest;
-    GNode *old = null, *new = null;
+	GNode *refn, *husb, *wife, *chil, *rest;
+	GNode *old = null, *new = null;
 	while (faml) {
 		ASSERT(eqstr("FAMC", faml->tag) || eqstr("FAMS", faml->tag));
-        GNode *fam = keyToFamily(rmvat(faml->tag), database->familyIndex);
+		GNode *fam = keyToFamily(rmvat(faml->tag), database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, husb, false, true);
@@ -465,11 +434,11 @@ GNode* fatherNodes (Database* database, GNode* faml)
 GNode* mother_nodes (Database *database, GNode *faml)
 // fam -- List of FAMC and/or FAMS nodes.
 {
-    GNode *refn, *husb, *wife, *chil, *rest;
-    GNode *old = null, *new = null;
+	GNode *refn, *husb, *wife, *chil, *rest;
+	GNode *old = null, *new = null;
 	while (faml) {
 		ASSERT(eqstr("FAMC", faml->tag) || eqstr("FAMS", faml->tag));
-        GNode *fam = keyToFamily(rmvat(faml->tag), database->familyIndex);
+		GNode *fam = keyToFamily(rmvat(faml->tag), database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, wife, false, true);
@@ -488,11 +457,11 @@ GNode* children_nodes(Database *database, GNode *faml)
 //  database -- Database of records.
 //  faml -- List of FAMC or FAMS node.
 {
-    GNode *refn, *husb, *wife, *chil, *rest;
-    GNode *old = null, *new = null;
+	GNode *refn, *husb, *wife, *chil, *rest;
+	GNode *old = null, *new = null;
 	while (faml) {
 		ASSERT(eqstr("FAMC", faml->tag) || eqstr("FAMS", faml->tag));
-        GNode *fam = keyToFamily(rmvat(faml->tag), database->familyIndex);
+		GNode *fam = keyToFamily(rmvat(faml->tag), database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, chil, false, true);
@@ -510,12 +479,12 @@ GNode* children_nodes(Database *database, GNode *faml)
 GNode* parents_nodes(Database *database, GNode* family)
 // Node family -- List of FAMC and/or FAMS Nodes.
 {
-    GNode *refn, *husb, *wife, *chil, *rest;
-    GNode *old = null, *new = null;
+	GNode *refn, *husb, *wife, *chil, *rest;
+	GNode *old = null, *new = null;
 	while (family) {
 		ASSERT(eqstr("FAMC", family->tag) || eqstr("FAMS", family->tag));
-		GNode *fam = keyToFamily(rmvat(family->value), database->familyIndex);
-        ASSERT(fam);
+		GNode *fam = keyToFamily(rmvat(family->value), database);
+		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, husb, false, true);
 		freeGNodes(old);
@@ -536,13 +505,13 @@ GNode* parents_nodes(Database *database, GNode* family)
 String addat (String string)
 //  string -- String to have @-signs attached to.
 {
-    String scratch;
-    static char buffer[3][20];
-    static int dex = 0;
-    if (++dex > 2) dex = 0;
-    scratch = buffer[dex];
-    sprintf(scratch, "@%s@", string);
-    return scratch;
+	String scratch;
+	static char buffer[3][20];
+	static int dex = 0;
+	if (++dex > 2) dex = 0;
+	scratch = buffer[dex];
+	sprintf(scratch, "@%s@", string);
+	return scratch;
 }
 
 //  rmvat -- Remove the @-signs from both ends of a Gedcom key.
@@ -553,21 +522,21 @@ String addat (String string)
 String rmvat (String string)
 //  string -- String that should start and end with an @-sign. This is not checked.
 {
-    String scratch;
-    static char buffer[NUMRMVAT][20];
-    static int dex = 0;
-    if (++dex > NUMRMVAT - 1) dex = 0;
-    scratch = buffer[dex];
-    strcpy(scratch, &string[1]);  // Remove the left @-sign.
-    scratch[strlen(scratch)-1] = 0;  // Remove the right @-sign.
-    return scratch;
+	String scratch;
+	static char buffer[NUMRMVAT][20];
+	static int dex = 0;
+	if (++dex > NUMRMVAT - 1) dex = 0;
+	scratch = buffer[dex];
+	strcpy(scratch, &string[1]);  // Remove the left @-sign.
+	scratch[strlen(scratch)-1] = 0;  // Remove the right @-sign.
+	return scratch;
 }
 
 //  isKey -- Return true is a string has a Gedcom key format (surrounded by @signs).
 //--------------------------------------------------------------------------------------------------
 bool isKey(String str)
 {
-    return str && str[0] == '@' && str[strlen(str) - 1] == '@' && strlen(str) >= 3;
+	return str && str[0] == '@' && str[strlen(str) - 1] == '@' && strlen(str) >= 3;
 }
 
 //  findTag -- Search a list of nodes for the first node with a specific tag. Return that node.
@@ -577,11 +546,11 @@ GNode* findTag(GNode* node, String tag)
 //  node -- First node in the list of nodes to search.
 //  tag -- Tag being searched for.
 {
-    while (node) {
-        if (eqstr(tag, node->tag)) return node;
-        node = node->sibling;
-    }
-    return null;
+	while (node) {
+		if (eqstr(tag, node->tag)) return node;
+		node = node->sibling;
+	}
+	return null;
 }
 
 // val_to_sex -- Convert SEX value to internal form.
@@ -589,10 +558,10 @@ GNode* findTag(GNode* node, String tag)
 SexType val_to_sex (GNode* node)
 //  node -- Node whose tag should be SEX and whose value should be M, F, or U.
 {
-    if (!node || !node->value) return sexUnknown;
-    if (!strcmp("M", node->value)) return sexMale;
-    if (!strcmp("F", node->value)) return sexFemale;
-    return sexUnknown;
+	if (!node || !node->value) return sexUnknown;
+	if (!strcmp("M", node->value)) return sexMale;
+	if (!strcmp("F", node->value)) return sexFemale;
+	return sexUnknown;
 }
 
 // full_value -- Return value of node, with CONT lines. This has never worked according to Gedcom
@@ -601,34 +570,34 @@ SexType val_to_sex (GNode* node)
 String full_value(GNode* node)
 //Node node;
 {
-    GNode* cont;
-    int len = 0;
-    String p, q, str;
-    if (!node) return null;
-    if ((p = node->value)) len += strlen(p) + 1;
-    cont = node->child;
-    while (cont && !strcmp("CONT", cont->tag)) {
-        if ((p = cont->value))
-            len += strlen(p) + 1;
-        else
-            len++;
-        cont = cont->sibling;
-    }
-    if (len == 0) return null;
-    str = p = stdalloc(len + 1);
-    if ((q = node->value)) {
-        sprintf(p, "%s\n", q);
-        p += strlen(p);
-    }
-    cont = node->child;
-    while (cont && !strcmp("CONT", cont->tag)) {
-        if ((q = cont->value))
-            sprintf(p, "%s\n", q);
-        else
-            sprintf(p, "\n");
-        p += strlen(p);
-        cont = cont->sibling;
-    }
-    *(p - 1) = 0;
-    return str;
+	GNode* cont;
+	int len = 0;
+	String p, q, str;
+	if (!node) return null;
+	if ((p = node->value)) len += strlen(p) + 1;
+	cont = node->child;
+	while (cont && !strcmp("CONT", cont->tag)) {
+		if ((p = cont->value))
+			len += strlen(p) + 1;
+		else
+			len++;
+		cont = cont->sibling;
+	}
+	if (len == 0) return null;
+	str = p = stdalloc(len + 1);
+	if ((q = node->value)) {
+		sprintf(p, "%s\n", q);
+		p += strlen(p);
+	}
+	cont = node->child;
+	while (cont && !strcmp("CONT", cont->tag)) {
+		if ((q = cont->value))
+			sprintf(p, "%s\n", q);
+		else
+			sprintf(p, "\n");
+		p += strlen(p);
+		cont = cont->sibling;
+	}
+	*(p - 1) = 0;
+	return str;
 }

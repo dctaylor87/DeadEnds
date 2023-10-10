@@ -1,6 +1,8 @@
 To Do Items for DeadEnds project.
 ----------------------------------------------------
 OPEN
+09 Oct 2023
+o Subsume allocGNode into createGNode.
 
 ----------------------------------------------------
 CLOSED

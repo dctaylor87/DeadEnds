@@ -4,7 +4,7 @@
 //  gedcom.h
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 9 September 2023.
+//  Last changed on 7 October 2023.
 //
 
 #ifndef gedcom_h
@@ -41,7 +41,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode* childd;\
     int num = 0;\
     while (__node) {\
-        childd = keyToPerson(rmvat(__node->value), theIndex);\
+        childd = keyToPerson(rmvat(__node->value), theDatabase);\
         ASSERT(childd);\
         num++;\
         {
@@ -59,7 +59,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode *fam;\
     int num = 0;\
     while (__node) {\
-        fam = keyToFamily(rmvat(__node->value), theIndex);\
+        fam = keyToFamily(rmvat(__node->value), theDatabase);\
         ASSERT(fam);\
         {
 #define ENDFAMILIES\
@@ -78,7 +78,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode *fam, *spouse;\
     int num = 0;\
     while (__node) {\
-        fam = keyToFamily(rmvat(__node->value), theIndex);\
+        fam = keyToFamily(rmvat(__node->value), theDatabase);\
         ASSERT(fam);\
         if (__sex == sexMale)\
             spouse = familyToWife(fam);\
@@ -101,7 +101,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode *fam, *fath, *moth;\
     int num = 0;\
     while (__node) {\
-        fam = keyToFamily(rmvat(__node->value), theIndex);\
+        fam = keyToFamily(rmvat(__node->value), theDatabase);\
         ASSERT(fam);\
         fath = familyToHusband(fam);\
         moth = familyToWife(fam);\
@@ -144,7 +144,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     int num = 0;\
     while (__node) {\
         __key = rmvat(__node->value);\
-        if (!__key || !(husb = keyToPerson(__key, theIndex))) {\
+        if (!__key || !(husb = keyToPerson(__key, theDatabase))) {\
             ++num;\
             __node = __node->sibling;\
             continue;\
@@ -168,7 +168,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     int num = 0;\
     while (__node) {\
         __key = rmvat(__node->value);\
-        if (!__key || !(wife = keyToPerson(__key, theIndex))) {\
+        if (!__key || !(wife = keyToPerson(__key, theDatabase))) {\
             ++num;\
             __node = __node->sibling;\
             if (__node && nestr(__node->tag, "WIFE")) __node = null;\
@@ -195,7 +195,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     int num = 0;\
     while (__fnode) {\
         spouse = null;\
-        fam = keyToFamily(rmvat(__fnode->value), theIndex);\
+        fam = keyToFamily(rmvat(__fnode->value), theDatabase);\
         if (__sex == sexMale)\
             spouse = familyToWife(fam);\
         else\

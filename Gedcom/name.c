@@ -5,7 +5,7 @@
 //    static memory. Callers of those functions must be aware of the consequences.
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 21 August 2023.
+//  Last changed on 10 October 2023.
 //
 
 #include "standard.h"
@@ -28,7 +28,7 @@ static String nameSurnameFirst(String);
 
 //extern NameIndex *nameIndex;
 
-extern RecordIndex *theIndex;
+extern Database *theDatabase;
 
 //  nameToNameKey - Convert Gedcom name or partial name to a name key. A name key is six
 //    characters and consists of the name's first initial and the soundex of the surname.
@@ -317,7 +317,9 @@ String* personKeysFromName(String name, NameIndex *index, int* pcount)
     //    Callers should copy this list if they need a persistent copy.
     static bool first = true;
     static int count = 0;
-    static List listOfKeys;
+    static List listOfKeys;  //  NOTE: listOfKeys is not on the heap.
+
+    ASSERT(name);
 
     // Create the state variables on the first call.
     if (first) {
@@ -326,8 +328,6 @@ String* personKeysFromName(String name, NameIndex *index, int* pcount)
         stdfree(pListOfKeys);
         first = false;
     }
-    // Check there is a name string.
-    if (!name) return null;
 
     //  Get the record keys of the persons with names that share the name key of the input name.
     //  The set of keys is in the index -- no memory obligations.
@@ -344,7 +344,7 @@ String* personKeysFromName(String name, NameIndex *index, int* pcount)
     String* keys = (String*) list->data;
     count = 0;
     for (int i = 0, n = list->length; i < n; i++) {
-        GNode* person = keyToPerson(keys[i], theIndex);
+        GNode* person = keyToPerson(keys[i], theDatabase);
         for (GNode* node = NAME(person); node && eqstr(node->tag, "NAME"); node = node->sibling) {
             if (!compareNames(name, node->value)) continue;
             appendListElement(&listOfKeys, (Word) keys[i]);

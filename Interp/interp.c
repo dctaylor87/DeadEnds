@@ -6,7 +6,7 @@
 //    may interpret a node directly, or call a more specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 6 October 2023.
+//  Last changed on 7 October 2023.
 //
 
 #include <stdarg.h>
@@ -25,7 +25,6 @@ extern FunctionTable *procedureTable;  //  Table of user-defined procedures.
 extern FunctionTable *functionTable;   //  Table of user-defined functions.
 extern SymbolTable *globalTable;       //  Global symbol table.
 Database *theDatabase;  // The database.
-RecordIndex *theIndex;  //  Index to all Gedcom records in the database.
 
 extern String pnodeTypes[];
 
@@ -585,13 +584,13 @@ InterpType interpForindi (PNode *node, SymbolTable *stab, PValue *pval)
 //  stab -- Symbol table.
 //  pval -- Possible return value.
 {
-    int numPersons = numberPersons(theIndex);
+    int numPersons = numberPersons(theDatabase);
     int numMisses = 0;
     char scratch[10];
 
     for (int i = 1; i <= numPersons; i++) {
         sprintf(scratch, "I%d", i);
-        GNode *person = keyToPerson(scratch, theIndex);
+        GNode *person = keyToPerson(scratch, theDatabase);
         if (person) {
             assignValueToSymbol(stab, node->personIden, PVALUE(PVPerson, uGNode, person));
             assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, i));
@@ -661,13 +660,13 @@ InterpType interp_forsour (PNode *node, SymbolTable *stab, PValue *pval)
 //--------------------------------------------------------------------------------------------------
 InterpType interp_foreven (PNode *node, SymbolTable *stab, PValue *pval)
 {
-    int numEvents = numberEvents(theIndex);
+    int numEvents = numberEvents(theDatabase);
     int numMisses = 0;
     char scratch[10];
 
     for (int i = 1; i <= numEvents; i++) {
         sprintf(scratch, "E%d", i);
-        GNode *event = keyToEvent(scratch, theIndex);
+        GNode *event = keyToEvent(scratch, theDatabase);
         if (event) {
             assignValueToSymbol(stab, node->eventIden, PVALUE(PVEvent, uGNode, event));
             assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, i));
@@ -696,13 +695,13 @@ e:  removeFromHashTable(stab, node->personIden);
 //// *=======================================*/
 InterpType interp_forothr(PNode *node, SymbolTable *stab, PValue *pval)
 {
-    int numOthers = numberOthers(theIndex);
+    int numOthers = numberOthers(theDatabase);
     int numMisses = 0;
     char scratch[10];
 
     for (int i = 1; i <= numOthers; i++) {
         sprintf(scratch, "X%d", i);
-        GNode *event = keyToEvent(scratch, theIndex);
+        GNode *event = keyToEvent(scratch, theDatabase);
         if (event) {
             assignValueToSymbol(stab, node->otherIden, PVALUE(PVEvent, uGNode, event));
             assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, i));
@@ -787,7 +786,7 @@ InterpType interp_indisetloop(PNode *pnode, SymbolTable *symbolTable, PValue *pv
     FORSEQUENCE(seq, el, ncount) {
 
         // Update the current person in the symbol table.
-        GNode *indi = keyToPerson(el->key, theIndex);
+        GNode *indi = keyToPerson(el->key, theDatabase);
         assignValueToSymbol(symbolTable, pnode->elementIden, PVALUE(PVPerson, uGNode, indi));
 
         // Update the current person's value in the symbol table.

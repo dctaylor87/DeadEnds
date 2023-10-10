@@ -3,7 +3,7 @@
 //  JustParsing
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 8 August 2023.
+//  Last changed on 8 October 2023.
 //
 
 #include "standard.h"
@@ -14,7 +14,8 @@
 #include "database.h"
 #include "builtintable.h"
 
-extern RecordIndex *theIndex;
+//extern RecordIndex *theIndex;
+extern Database *theDatabase;
 
 //  __marriage -- Return the first marriage event of a family.
 //    usage: marriage(FAM) -> EVENT
@@ -124,7 +125,7 @@ PValue __fam(PNode *pnode, SymbolTable *symtab, bool* eflg)
     String key = value.value.uString;
 
     //  Search the database for the family with the key.
-    GNode* family = keyToFamily(rmvat(key), theIndex);
+    GNode* family = keyToFamily(rmvat(key), theDatabase);
     if (!family) {
         printf("Could not find a family with key %s.\n", key);
         return nullPValue;
