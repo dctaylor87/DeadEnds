@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 6 October 2023.
+//  Last changed on 10 October 2023.
 //
 
 #include "standard.h"
@@ -40,7 +40,7 @@ extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, db
 
 static GNode *normalizeNodeTree (GNode*);
 
-static bool debugging = false;
+static bool debugging = true;
 
 //  Counters for the record types with keys.
 //--------------------------------------------------------------------------------------------------
@@ -49,13 +49,6 @@ static int numFamilies = 0;
 static int numSources = 0;
 static int numEvents = 0;
 static int numOthers = 0;
-
-//  These are the tables of the database.
-extern RecordIndex *personIndex;
-extern RecordIndex *familyIndex;
-extern RecordIndex *sourceIndex;
-extern RecordIndex *eventIndex;
-extern RecordIndex *otherIndex;
 
 //  The steps for each file are:
 //    Create a record index.
@@ -125,6 +118,7 @@ bool importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 
 Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog)
 {
+	if (debugging) printf("Entered simpleImportFromFile\n");
     //  Create a new database to hold this file's records.
     Database *database = createDatabase();
     ASSERT(database);
@@ -135,6 +129,7 @@ Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog)
     GNode *root = firstNodeTreeFromFile(file, &msg);
     while (root) {
         recordCount++;
+	//if (debugging) printf("Just read record %d\n", recordCount);
         storeRecord(database, root);
         root = nextNodeTreeFromFile(file, &msg);
     }
