@@ -285,10 +285,10 @@ AC_DEFUN([AC_TRY_LIBPYTHON],
   CPPFLAGS="$CPPFLAGS $new_CPPFLAGS"
   LIBS="$new_LIBS $LIBS"
   found_usable_python=no
-  AC_MSG_NOTICE(AC TRY LIBPYTHON entered; new_CPPFLAGS: $new_CPPFLAGS)
-  AC_MSG_NOTICE(AC TRY LIBPYTHON entered; new_LIBS: $new_LIBS)
-  AC_MSG_NOTICE(AC TRY LIBPYTHON entered; CPPFLAGS: $CPPFLAGS)
-  AC_MSG_NOTICE(AC TRY LIBPYTHON entered; LIBS: $LIBS)
+  #AC_MSG_NOTICE(AC TRY LIBPYTHON entered; new_CPPFLAGS: $new_CPPFLAGS)
+  #AC_MSG_NOTICE(AC TRY LIBPYTHON entered; new_LIBS: $new_LIBS)
+  #AC_MSG_NOTICE(AC TRY LIBPYTHON entered; CPPFLAGS: $CPPFLAGS)
+  #AC_MSG_NOTICE(AC TRY LIBPYTHON entered; LIBS: $LIBS)
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "Python.h"]],
                                  [[
 				    #if PY_MAJOR_VERSION != 3
@@ -455,8 +455,8 @@ else
                      ${python_includes}, ${python_libs})
   fi
 
-  AC_MSG_NOTICE(final PYTHON_CPPFLAGS: $PYTHON_CPPFLAGS)
-  AC_MSG_NOTICE(final PYTHON_LIBS: $PYTHON_LIBS)
+  #AC_MSG_NOTICE(final PYTHON_CPPFLAGS: $PYTHON_CPPFLAGS)
+  #AC_MSG_NOTICE(final PYTHON_LIBS: $PYTHON_LIBS)
 
   if test "${have_libpython}" = no; then
     case "${with_python}" in
