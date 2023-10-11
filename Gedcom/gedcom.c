@@ -4,7 +4,7 @@
 //  gedcom.c
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 20 March 2023.
+//  Last changed on 11 October 2023.
 //
 
 #include "gedcom.h"
@@ -17,6 +17,8 @@ RecordType recordType(GNode *root)
     if (eqstr(tag, "FAM"))  return GRFamily;
     if (eqstr(tag, "SOUR")) return GRSource;
     if (eqstr(tag, "EVEN")) return GREvent;
+    if (eqstr(tag, "HEAD")) return GRHeader;
+    if (eqstr(tag, "TRLR")) return GRTrailer;
     return GROther;
 }
 

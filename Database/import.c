@@ -40,7 +40,7 @@ extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, db
 
 static GNode *normalizeNodeTree (GNode*);
 
-static bool debugging = false;
+static bool debugging = true;
 
 //  Counters for the record types with keys.
 //--------------------------------------------------------------------------------------------------
@@ -118,6 +118,7 @@ bool importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 
 Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog)
 {
+	if (debugging) printf("Entered simpleImportFromFile\n");
     //  Create a new database to hold this file's records.
     Database *database = createDatabase();
     ASSERT(database);
@@ -128,6 +129,7 @@ Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog)
     GNode *root = firstNodeTreeFromFile(file, &msg);
     while (root) {
         recordCount++;
+	//if (debugging) printf("Just read record %d\n", recordCount);
         storeRecord(database, root);
         root = nextNodeTreeFromFile(file, &msg);
     }

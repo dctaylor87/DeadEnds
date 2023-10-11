@@ -7,7 +7,7 @@
 //    records is also done.
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed 11 August 2023.
+//  Last changed 11 October 2023.
 //
 
 #include "database.h"
@@ -17,7 +17,7 @@
 #include "stringtable.h"
 #include "nameindex.h"
 
-static bool debugging = false;
+static bool debugging = true;
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
@@ -92,7 +92,6 @@ GNode* keyToPerson(String key, Database *database)
 //  key -- Key of person record. The @-signs are not part of the database key.
 //  index -- Record index to search for the person.
 {
-    if (debugging) printf("keyToPerson called with key: %s\n", key);
     RecordIndexEl* element = searchHashTable(database->personIndex, key);
     return element ? element->root : null;
 }
@@ -132,9 +131,13 @@ static int count = 0;  // Debugging.
 bool storeRecord(Database *database, GNode* root)
 //  root -- Root of a record tree to store in the database.
 {
-    ASSERT(root && root->key);
-    count++;
+    //if (debugging) printf("storeRecord called\n");
+    ASSERT(root);
     RecordType type = recordType(root);
+    //if (debugging) printf("type of record is %d\n", type);
+    if (type == GRHeader || type == GRTrailer) return true;  // Ignore HEAD and TRLR records.
+    ASSERT(root->key);
+    count++;
     String key = rmvat(root->key);
     switch (type) {
         case GRPerson:
