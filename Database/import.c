@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 6 October 2023.
+//  Last changed on 10 October 2023.
 //
 
 #include "standard.h"
@@ -49,13 +49,6 @@ static int numFamilies = 0;
 static int numSources = 0;
 static int numEvents = 0;
 static int numOthers = 0;
-
-//  These are the tables of the database.
-extern RecordIndex *personIndex;
-extern RecordIndex *familyIndex;
-extern RecordIndex *sourceIndex;
-extern RecordIndex *eventIndex;
-extern RecordIndex *otherIndex;
 
 //  The steps for each file are:
 //    Create a record index.

@@ -36,8 +36,6 @@ int main()
 
 	showRecordIndex(theDatabase->personIndex);
 	showRecordIndex(theDatabase->familyIndex);
-	
-
 
 	//  Parse a simple LifeLines "hello, world" program.
 	parseProgram("llprogram", "../Data");
