@@ -22,7 +22,7 @@
 
 #define MAXSTRINGSIZE 512
 
-#define NAN 313131  // Poor man's implementation of NAN for integers.
+//#define NAN 313131  // Poor man's implementation of NAN for integers.
 
 // Useful typedefs.
 //--------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void __logAllocations(bool);  // Turn allocation logging on and off.
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 
 void __fatal(String, int); // standard.c
-void __assert(bool, String, int);  // standard.c
+//void __assert(bool, String, int);  // standard.c
 
 // These macros are used for character types in the chartype() function.
 #define WHITE  ' '
