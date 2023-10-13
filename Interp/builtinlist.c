@@ -131,7 +131,8 @@ PValue __dequeue(PNode *node, SymbolTable *symtab, bool *eflg)
         return nullPValue;
     }
     List *list = pvalue.value.uList;
-    ASSERT(list && list->length > 0);
+	ASSERT(list);
+    //ASSERT(list && list->length > 0);
 
     //  Remove and return the last element of the list.
     PValue *ppvalue = removeLastListElement(list);

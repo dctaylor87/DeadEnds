@@ -102,7 +102,7 @@ GNode* keyToFamily(String key, Database *database)
 //  key -- Key of family record. The @-signs are not part of the key.
 //  index -- Record index to search for the family.
 {
-    if (debugging) printf("keyToFamily called with key: %s\n", key);
+    //if (debugging) printf("keyToFamily called with key: %s\n", key);
     RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->familyIndex, key);
     return element == null ? null : element->root;
 }

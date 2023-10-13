@@ -12,7 +12,7 @@ hashtabletest: testhashtable.o
 stringtabletest: teststringtable.o
 	$(CC) -o stringtabletest teststringtable.o $(LIBLOCNS) $(LIBS) -lc
 
-test: test.o
+test: test.o ../Database/libdatabase.a ../Parser/libparser.a ../DataTypes/libdatatypes.a ../Interp/libinterp.a ../Gedcom/libgedcom.a
 	$(CC) -o test test.o $(INCLUDES) $(LIBLOCNS) $(LIBS) -lc
 
 %.o: %.c

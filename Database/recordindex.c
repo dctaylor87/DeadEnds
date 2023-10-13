@@ -14,7 +14,7 @@
 #include "sort.h"
 #include "gedcom.h"
 
-//  compareRecordIndexEls -- Element compare function needed by the record index hash table.
+//  RecordIndexEls -- Element compare function needed by the record index hash table.
 //--------------------------------------------------------------------------------------------------
 static int compareRecordIndexEls(Word leftEl, Word rightEl)
 {
