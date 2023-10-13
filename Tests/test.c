@@ -23,8 +23,8 @@ extern Database *simpleImportFromFile(FILE*, ErrorLog*);
 int main()
 {
 	//  Create a database from the main.ged file.
-	FILE *gedcomFile = fopen("../Data/main.ged", "r");
-	//FILE *gedcomFile = fopen("../Data/circle.ged", "r");
+	FILE *gedcomFile = fopen("../Gedfiles/main.ged", "r");
+	//FILE *gedcomFile = fopen("../Gedfiles/circle.ged", "r");
 	ASSERT(gedcomFile);
 	ErrorLog errorLog;
 	theDatabase = simpleImportFromFile(gedcomFile, &errorLog);
@@ -39,7 +39,7 @@ int main()
 	//showRecordIndex(theDatabase->familyIndex);
 
 	//  Parse a simple LifeLines "hello, world" program.
-	parseProgram("llprogram", "../Data");
+	parseProgram("llprogram", "../Reports");
 
 	//  Create a PNProcCall node to call the main procedure with
 	currentProgramFileName = "internal";
