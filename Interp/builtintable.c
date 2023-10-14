@@ -10,6 +10,7 @@
 //
 
 #include "pvaluetable.h"
+#include "builtintable.h"
 #include "interp.h"
 
 //  __table -- Create a program value table.

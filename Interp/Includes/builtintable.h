@@ -22,7 +22,7 @@ extern PValue __burial(PNode*, SymbolTable*, bool*);
 extern PValue __capitalize(PNode*, SymbolTable*, bool*);
 extern PValue __card(PNode*, SymbolTable*, bool*);
 extern PValue __child(PNode*, SymbolTable*, bool*);
-//extern PValue __children(PNode*, SymbolTable*, bool*);  // NEW TO DEADENDS.
+extern PValue __children(PNode*, SymbolTable*, bool*);  // NEW TO DEADENDS.
 extern PValue __childset(PNode*, SymbolTable*, bool*);
 extern PValue __choosechild(PNode*, SymbolTable*, bool*);
 extern PValue __choosefam(PNode*, SymbolTable*, bool*);

@@ -12,6 +12,7 @@
 
 #include "interp.h"
 #include "list.h"
+#include "builtintable.h"
 
 //  __list -- Create a list.
 //    usage: list(IDENT) -> VOID
