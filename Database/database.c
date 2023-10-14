@@ -88,7 +88,7 @@ int numberOthers(Database *database)
 
 //  keyToPerson -- Get a person record from a database.
 //--------------------------------------------------------------------------------------------------
-GNode* keyToPerson(String key, Database *database)
+GNode* keyToPerson(CString key, Database *database)
 //  key -- Key of person record. The @-signs are not part of the database key.
 //  index -- Record index to search for the person.
 {
@@ -98,7 +98,7 @@ GNode* keyToPerson(String key, Database *database)
 
 //  keyToFamily -- Get a family record from a record index.
 //--------------------------------------------------------------------------------------------------
-GNode* keyToFamily(String key, Database *database)
+GNode* keyToFamily(CString key, Database *database)
 //  key -- Key of family record. The @-signs are not part of the key.
 //  index -- Record index to search for the family.
 {
@@ -109,7 +109,7 @@ GNode* keyToFamily(String key, Database *database)
 
 //  keyToSource -- Get a source record from the database.
 //--------------------------------------------------------------------------------------------------
-GNode *keyToSource(String key, Database *database)
+GNode *keyToSource(CString key, Database *database)
 {
     RecordIndexEl* element = searchHashTable(database->sourceIndex, key);
     return element ? element->root : null;
@@ -117,10 +117,63 @@ GNode *keyToSource(String key, Database *database)
 
 //  keyToEvent -- Get an event record from a database.
 //--------------------------------------------------------------------------------------------------
-GNode *keyToEvent(String key, Database *database)
+GNode *keyToEvent(CString key, Database *database)
 {
     RecordIndexEl *element = searchHashTable(database->eventIndex, key);
     return element ? element->root : null;
+}
+
+//  keyToOther -- Get an other record from a database.
+//--------------------------------------------------------------------------------------------------
+GNode *keyToOther(CString key, Database *database)
+{
+    RecordIndexEl *element = searchHashTable(database->otherIndex, key);
+    return element ? element->root : null;
+}
+
+//  keyToPersonRecord -- Get a person record from a database.
+//--------------------------------------------------------------------------------------------------
+RecordIndexEl* keyToPersonRecord(CString key, Database *database)
+//  key -- Key of person record. The @-signs are not part of the database key.
+//  index -- Record index to search for the person.
+{
+    RecordIndexEl* element = searchHashTable(database->personIndex, key);
+    return element;
+}
+
+//  keyToFamilyRecord -- Get a family record from a record index.
+//--------------------------------------------------------------------------------------------------
+RecordIndexEl* keyToFamilyRecord(CString key, Database *database)
+//  key -- Key of family record. The @-signs are not part of the key.
+//  index -- Record index to search for the family.
+{
+    if (debugging) printf("keyToFamilyRecord called with key: %s\n", key);
+    RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->familyIndex, key);
+    return element;
+}
+
+//  keyToSourceRecord -- Get a source record from the database.
+//--------------------------------------------------------------------------------------------------
+RecordIndexEl *keyToSourceRecord(CString key, Database *database)
+{
+    RecordIndexEl* element = searchHashTable(database->sourceIndex, key);
+    return element;
+}
+
+//  keyToEventRecord -- Get an event record from a database.
+//--------------------------------------------------------------------------------------------------
+RecordIndexEl *keyToEventRecord(CString key, Database *database)
+{
+    RecordIndexEl *element = searchHashTable(database->eventIndex, key);
+    return element;
+}
+
+//  keyToOtherRecord -- Get an other record from a database.
+//--------------------------------------------------------------------------------------------------
+RecordIndexEl *keyToOtherRecord(CString key, Database *database)
+{
+    RecordIndexEl *element = searchHashTable(database->otherIndex, key);
+    return element;
 }
 
 static int count = 0;  // Debugging.

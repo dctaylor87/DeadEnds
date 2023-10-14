@@ -10,6 +10,6 @@
 #define path_h
 
 // fopenpath -- Open a file using a search path.
-FILE *fopenpath(String fileName, String mode, String searchPath);
+FILE *fopenpath(CString fileName, CString mode, CString searchPath);
 
 #endif /* path_h */

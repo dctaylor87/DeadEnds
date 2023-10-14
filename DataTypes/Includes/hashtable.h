@@ -47,21 +47,21 @@ typedef struct HashTable {
 HashTable *createHashTable(int (*compare)(Word, Word), void(*delete)(Word), String(*getKey)(Word));
 void deleteHashTable(HashTable*);  // Delete a HashTable; use the element delete function if exists.
 bool isInHashTable(HashTable*, String key);  //  Return whether an element with key is in.
-Word searchHashTable(HashTable*, String key);  // Return the element that matches the key.
+Word searchHashTable(HashTable*, CString key);  // Return the element that matches the key.
 
 void insertInHashTable(HashTable*, Word element);  // Add a new element to the table.
 Word firstInHashTable(HashTable*, int*, int*);  // Return first element in a new iteration.
 Word nextInHashTable(HashTable*, int*, int*);  // Return next table element in iteration.
 int sizeHashTable(HashTable*);  // Return the number of elements in a table.
 void showHashTable(HashTable*, void (*show)(Word));  // Show the contents of a table; for debugging.
-/*static*/ int getHash(String);  // Return the hashed value of a String.
+/*static*/ int getHash(CString);  // Return the hashed value of a String.
 void removeFromHashTable(HashTable*, String key);
 int iterateHashTableWithPredicate(HashTable*, bool (*function)(Word element));
 
 //  SHOULDN'T THE BUCKET FUNCTIONS BE STATIC, SO NOT DECLARED IN HERE AT ALL??
 Bucket *createBucket(void);  // Create a bucket.
 void deleteBucket(Bucket*, void(*)(Word));  // Delete a bucket.
-Word searchBucket(Bucket*, String key, int(*compare)(Word, Word), String (*getKey)(Word), int* index);  // Search a bucket.
+Word searchBucket(Bucket*, CString key, int(*compare)(Word, Word), String (*getKey)(Word), int* index);  // Search a bucket.
 
 void appendToBucket(Bucket*, Word element);  // Append an element to a bucket.
 void removeElement(HashTable*, Word element);  // Remove an element from the hash table.

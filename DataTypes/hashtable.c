@@ -11,9 +11,9 @@
 #include "hashtable.h"
 #include "sort.h"
 
-Word searchBucket(Bucket*, String key, int(*compare)(Word, Word), String(*getKey)(Word), int* index);
-static Word linearSearchBucket(Bucket*, String key, String(*)(Word), int *index);
-static Word binarySearchBucket(Bucket*, String key, String(*)(Word), int *index);
+Word searchBucket(Bucket*, CString key, int(*compare)(Word, Word), String(*getKey)(Word), int* index);
+static Word linearSearchBucket(Bucket*, CString key, String(*)(Word), int *index);
+static Word binarySearchBucket(Bucket*, CString key, String(*)(Word), int *index);
 static void sortBucket(Bucket*, int(*)(Word, Word), String(*)(Word), bool force);
 static void growBucket(Bucket *bucket);
 static void removeFromBucketByIndex(Bucket *bucket, int index, void (*delete)(Word));
@@ -87,7 +87,7 @@ Bucket *createBucket(void)
 
 //  getHash -- Hash function. This function was found on the internet.
 //--------------------------------------------------------------------------------------------------
-int getHash(String key)
+int getHash(CString key)
 {
     unsigned long hash = 5381;
     int c;
@@ -99,7 +99,7 @@ int getHash(String key)
 //  searchHashTable -- Search a hash table for an element with a key. Return the element if it
 //    exists or null otherwise.
 //--------------------------------------------------------------------------------------------------
-Word searchHashTable(HashTable *table, String key)
+Word searchHashTable(HashTable *table, CString key)
 {
     ASSERT(table && key);
     // Get the Bucket that does or would contain the key's element.
@@ -115,7 +115,7 @@ Word searchHashTable(HashTable *table, String key)
 //    SORT_THRESHOLD elements a binary search is used. This function is not static because
 //    specialized hash tables may choose to use it.
 //--------------------------------------------------------------------------------------------------
-Word searchBucket(Bucket *bucket, String key, int (*compare)(Word, Word),
+Word searchBucket(Bucket *bucket, CString key, int (*compare)(Word, Word),
                   String (*getKey)(Word), int* index)
 //  bucket -- Bucket of elements to search.
 //  key -- Key to search for.
@@ -135,7 +135,7 @@ Word searchBucket(Bucket *bucket, String key, int (*compare)(Word, Word),
 
 // linearSearchList -- Use linear search to look for for an element in a bucket.
 //--------------------------------------------------------------------------------------------------
-Word linearSearchBucket(Bucket *bucket, String key, String (*getKey)(Word), int *index)
+Word linearSearchBucket(Bucket *bucket, CString key, String (*getKey)(Word), int *index)
 //  bucket -- Bucket of elements to search.
 //  key    -- Key to search for.
 //  getKey -- Function that gets the key from an element.
@@ -155,7 +155,7 @@ Word linearSearchBucket(Bucket *bucket, String key, String (*getKey)(Word), int 
 
 //  binarySearchBucket -- Use binary search to look for an element in a bucket.
 //--------------------------------------------------------------------------------------------------
-Word binarySearchBucket(Bucket *bucket, String key, String(*getKey)(Word), int *index)
+Word binarySearchBucket(Bucket *bucket, CString key, String(*getKey)(Word), int *index)
 //  bucket -- Bucket of elements to search.
 //  key    -- Key to search for.
 //  getKey -- Function that gets the key from an element.

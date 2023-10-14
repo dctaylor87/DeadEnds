@@ -10,15 +10,19 @@
 #ifndef recordindex_h
 #define recordindex_h
 
+/* forward reference needed */
+struct RecordIndexEl;
+typedef struct RecordIndexEl RecordIndexEl;
+
 #include "gnode.h"
 #include "hashtable.h"
 
 //  RecordIndexEl -- An element of a record index bucket.
 //--------------------------------------------------------------------------------------------------
-typedef struct RecordIndexEl {
+struct RecordIndexEl {
     String key;   //  The key (minus @-signs) of the record.
     GNode* root;  //  The root node of the record.
-}  RecordIndexEl;
+};
 
 //  RecordIndex -- A record index is a hash table.
 //--------------------------------------------------------------------------------------------------

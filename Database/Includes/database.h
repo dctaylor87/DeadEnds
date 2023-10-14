@@ -29,6 +29,8 @@ typedef struct Database {
     NameIndex *nameIndex;
 } Database;
 
+extern Database *theDatabase;
+
 Database *createDatabase(void);  //  Create an empty database.
 void deleteDatabase(Database*);  //  Delete a database.
 
@@ -38,11 +40,23 @@ int numberFamilies(Database*);   //  Return the number of families in the databa
 int numberSources(Database*);    //  Return the number of sources in the database.
 int numberEvents(Database*);     //  Return the number of events in the database.
 int numberOthers(Database*);     //  Return the number of other records in the database.
-GNode *keyToPerson(String key, Database*);  //  Get a person record the database.
-GNode *keyToFamily(String key, Database*);  //  Get a family record from the database.
-GNode *keyToSource(String key, Database*);  //  Get a source record from the database.
-GNode *keyToEvent(String key, Database*);   //  Get an event record from the database.
-GNode *keyToOther(String Key, Database*);   //  Get an other record from the database.
+GNode *keyToPerson(CString key, Database*);  //  Get a person node the database.
+GNode *keyToFamily(CString key, Database*);  //  Get a family node from the database.
+GNode *keyToSource(CString key, Database*);  //  Get a source node from the database.
+GNode *keyToEvent(CString key, Database*);   //  Get an event node from the database.
+GNode *keyToOther(CString Key, Database*);   //  Get an other node from the database.
+
+//  Get a person record from the database.
+RecordIndexEl *keyToPersonRecord(CString key, Database*);
+//  Get a family record from the database.
+RecordIndexEl *keyToFamilyRecord(CString key, Database*);
+//  Get a source record from the database.
+RecordIndexEl *keyToSourceRecord(CString key, Database*);
+//  Get an event record from the database.
+RecordIndexEl *keyToEventRecord(CString key, Database*);
+//  Get an other record from the database.
+RecordIndexEl *keyToOtherRecord(CString Key, Database*);
+
 bool storeRecord(Database*, GNode*);        //  Add a record to the database.
 void showTableSizes(Database*);          //  Show the sizes of the database tables. Debugging.
 void showPersonIndex(Database*);      //  Show the person index. Debugging.

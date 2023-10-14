@@ -52,7 +52,7 @@ void __logAllocations(bool onOrOff)
 
 // __alloc -- Allocate memory - used by stdalloc
 //--------------------------------------------------------------------------------------------------
-char *__alloc (size_t len, String file, int line)
+void *__alloc (size_t len, String file, int line)
 // int len -- Number of bytes to allocate.
 // String file -- File requesting the allocation.
 // int line -- Line number in file requesting the allocation.

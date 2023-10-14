@@ -9,17 +9,18 @@
 
 #include <unistd.h>  // access.
 #include "standard.h"  // String, strlen, strcpy, null.
+#include "path.h"
 
 #define MAXPATHBUFFER 1024
 
 // Static functions defined in this file.
 //--------------------------------------------------------------------------------------------------
-static String filepath (String name, String path);  // Find a file in a path sequence.
+static String filepath (CString name, CString path);  // Find a file in a path sequence.
 //static String lastpathname (String path);  // Return the last component of a path.
 
 // filepath -- Find a file in a sequence of paths.
 //--------------------------------------------------------------------------------------------------
-static String filepath (String fileName, String searchPath)
+static String filepath (CString fileName, CString searchPath)
 // fileName -- Name of a file to search for and open.
 // searchPath -- Search path to use in finding the file.
 {
@@ -77,7 +78,7 @@ static String filepath (String fileName, String searchPath)
 
 // fopenpath -- Attemp to open a file using a path variable.
 //--------------------------------------------------------------------------------------------------
-FILE *fopenpath (String name, String mode, String path)
+FILE *fopenpath (CString name, CString mode, CString path)
 // String name - Name of the file.
 // String path - Path variable that can be used to locate the file.
 {

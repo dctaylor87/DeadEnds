@@ -28,6 +28,7 @@
 //--------------------------------------------------------------------------------------------------
 typedef void* Word;
 typedef char* String;
+typedef const char* CString;
 
 // CharacterType -- Characters are partitioned into different types.
 //--------------------------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ String capitalize(String);
 
 // User interface to the standard functions.
 //--------------------------------------------------------------------------------------------------
-char* __alloc(size_t, String, int);
+void *__alloc(size_t, String, int);
 void __free(void* ptr, String, int);
 bool isLetter(int ascii);  // Check if a character is a letter.
 String trim(String, int);
@@ -102,5 +103,23 @@ void __fatal(String, int); // standard.c
 // Debugging aids.
 extern String last_segment(String);
 #define PH if(debugging) printf("%s %s %d\n", __FUNCTION__, last_segment(__FILE__), __LINE__);
+
+#if ENABLE_NLS
+
+/* I hate nested includes, but the alternative is to put the include
+   surrounded by #if ENABLE_NLS inside every file that has strings
+   needing translation */
+
+#include <libintl.h>
+
+#define _(str)	gettext(str)
+#define _pl(singular, plural, number)	ngettext(signular, plural, number)
+
+#else
+
+#define _(str)	str
+#define _pl(signular, plural, number)	((number == 1) ? singular : plural)
+
+#endif
 
 #endif
