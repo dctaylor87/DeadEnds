@@ -15,7 +15,7 @@
 #include "set.h"
 #include "gedcom.h"
 
-// compareNameKeys -- Compare two name keys.
+// NameKeys -- Compare two name keys.
 //--------------------------------------------------------------------------------------------------
 static int compareNameKeys(Word leftEl, Word rightEl)
 {

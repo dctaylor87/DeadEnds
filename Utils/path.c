@@ -67,6 +67,7 @@ static String filepath (CString fileName, CString searchPath)
         // See if the buffer contains a file in the file system.
         if (access((const char*) buf2, 0) == 0)
             // Yes it does; return first that matches.
+            // MNOTE: MEMORY LEAK!!!!!!!
             return strsave((String) buf2);
 
         // Move to the next path segment and try again.

@@ -7,7 +7,7 @@
 //  MNOTE: Memory management is an issue to be dealt with carefully.
 //
 //  Created by Thomas Wetmore on 16 April 2023.
-//  Last changed on 31 May 2023.
+//  Last changed on 13 October 2023.
 //
 
 #include "interp.h"
@@ -109,11 +109,11 @@ PValue __pop(PNode *node, SymbolTable *symtab, bool *eflg)
         return nullPValue;
     }
     List *list = pvalue.value.uList;
-    ASSERT(list && list->length > 0);
+    ASSERT(list && list->length >= 0);
 
     //  Remove and return the first element of the list.
     PValue *ppvalue = removeFirstListElement(list);
-    ASSERT(ppvalue);
+    if (!ppvalue) return nullPValue;
     memcpy(&pvalue, ppvalue, sizeof(PValue));
     stdfree(ppvalue);  //  MNOTE: Free the popped heap version of the program value.
     return pvalue;     //  MNOTE: Return the stack version of the program value.
@@ -132,11 +132,11 @@ PValue __dequeue(PNode *node, SymbolTable *symtab, bool *eflg)
         return nullPValue;
     }
     List *list = pvalue.value.uList;
-    ASSERT(list && list->length > 0);
+    ASSERT(list && list->length >= 0);
 
     //  Remove and return the last element of the list.
     PValue *ppvalue = removeLastListElement(list);
-    ASSERT(ppvalue);
+    if (!ppvalue) return nullPValue;
     memcpy(&pvalue, ppvalue, sizeof(PValue));
     stdfree(ppvalue);  //  MNOTE: Free the dequeued heap version of the program value.
     return pvalue;     //  MNOTE: Return the stack version of the program value.

@@ -22,7 +22,7 @@
 
 #define MAXSTRINGSIZE 512
 
-//#define NAN 313131  // Poor man's implementation of NAN for integers.
+#define NAN 313131  // Poor man's implementation of NAN for integers.
 
 // Useful typedefs.
 //--------------------------------------------------------------------------------------------------

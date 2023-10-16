@@ -24,7 +24,6 @@ static bool debugging = false;
 extern FunctionTable *procedureTable;  //  Table of user-defined procedures.
 extern FunctionTable *functionTable;   //  Table of user-defined functions.
 extern SymbolTable *globalTable;       //  Global symbol table.
-Database *theDatabase;  // The database.
 
 extern String pnodeTypes[];
 

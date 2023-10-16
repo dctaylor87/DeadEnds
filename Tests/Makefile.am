@@ -15,13 +15,10 @@ stringtabletest_SOURCES = teststringtable.c
 
 test_SOURCES = test.c
 
-# extra stuff for hashtabletest, hashtabletest
-hashtabletest_LDADD = ../DataTypes/libdatatypes.a ../Utils/libutils.a
+# extra stuff for hashtabletest, hashtabletest, test
 
-stringtabletest_LDADD = ../DataTypes/libdatatypes.a ../Utils/libutils.a
-
-test_LDADD = ../Interp/libinterp.a ../Parser/libparser.a \
-	 ../Database/libdatabase.a ../Gedcom/libgedcom.a \
+LIBS = ../Interp/libinterp.a ../Parser/libparser.a \
+	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 # $(top_builddir)        for files in the build tree

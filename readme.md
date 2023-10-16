@@ -19,7 +19,7 @@ As a followon system from LifeLines, DeadEnds has the following goals:
 
 ## Repository Structure
 
-The home directory of the DeadEnds repository is named, unsurprisingly, *DeadEnds*. It contains a number of files and sub-directories. The following sub-directories hold the libraries.
+The home directory of the DeadEnds repository is named, unsurprisingly, *DeadEnds*. It contains a number of files and sub-directories. The following sub-directories hold the C code libraries.
 
 | Library | Description |
 | :--- | :--- |
@@ -35,18 +35,6 @@ Other subdirectories include:
 | Directory | Description |
 | :--- | :--- |
 | Test | Test programs. Main programs that test the DeadEnds code base as it is developed.|
-|Data| Data used by test programs.|
+|Gedfiles|Gedcom files useful for testing.|
+|Reports|Report programs useful for testing.
 |Docs| Documentation.|
-
-
-
-## Introduction
-
-### Third Level Heading
-
-#### Fourth Level Heading
-
-Just plain text.
-
-##### Fifth Level Heading.
-

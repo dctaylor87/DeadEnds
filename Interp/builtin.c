@@ -199,7 +199,7 @@ PValue __set(PNode *pnode, SymbolTable *symtab, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __d(PNode *expr, SymbolTable *stab, bool* eflg)
 {
-    static char scratch[20];
+    char scratch[20];
     PValue value = evaluate(expr->arguments, stab, eflg);
     if (value.type == PVBool)
         return PVALUE(PVString, uString, value.value.uBool ? "1" : "0");
@@ -212,7 +212,7 @@ PValue __d(PNode *expr, SymbolTable *stab, bool* eflg)
 //---------------------------------------------------------------------------------------------------
 PValue __f(PNode *expr, SymbolTable *symtab, bool *errflg)
 {
-    static char scratch[20];
+    char scratch[20];
     PValue value = evaluate(expr->arguments, symtab, errflg);
     if (*errflg || value.type != PVFloat) return nullPValue;
     sprintf(scratch, "%4f", value.value.uFloat);
@@ -224,7 +224,7 @@ PValue __f(PNode *expr, SymbolTable *symtab, bool *errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __alpha(PNode *expr, SymbolTable *stab, bool* eflg)
 {
-    static char scratch[4];
+    char scratch[4];
     PValue value = evaluate(expr->arguments, stab, eflg);
     if (*eflg || value.type != PVInt) return nullPValue;
     long lvalue = value.value.uInt;
@@ -243,7 +243,7 @@ static char *ordinals[] = {
 };
 PValue __ord(PNode *expr, SymbolTable *stab, bool* eflg)
 {
-    static char scratch[12];
+    char scratch[12];
     PValue value = evaluate(expr->arguments, stab, eflg);
     if (*eflg || value.type != PVInt) return nullPValue;
     long lvalue = value.value.uInt;

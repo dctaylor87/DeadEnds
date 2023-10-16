@@ -7,7 +7,7 @@
 //    list is created.
 //
 //  Created by Thomas Wetmore on 22 November 2022.
-//  Last changed on 28 August 2023.
+//  Last changed on 13 October 2023.
 //
 
 #include "list.h"
@@ -147,13 +147,14 @@ bool insertSortedListElement(List *list, Word value)
 }
 
 //  removeListElement -- Remove an indexed value from a list. This does not affect the sorted
-//    state of the list.
-//  MNOTE: The caller must take responsibility to delete the removed element.
+//    state of the list. If the list is empty return the null pointer.
+//  MNOTE: The caller takes responsibility to delete the removed element.
 //--------------------------------------------------------------------------------------------------
 Word removeListElement(List *list, int index)
 {
-    ASSERT(list && index >= 0 && index < list->length);
+    ASSERT(list && index >= 0);
     int length = list->length;
+    if (length == 0) return null;
     Word* array = list->data;
     Word element = array[index];  // Element to remove from  list.
     for (; index < length - 1; index++)
@@ -162,8 +163,23 @@ Word removeListElement(List *list, int index)
     return element;
 }
 
-Word removeFirstListElement(List *list) { return removeListElement(list, 0); }
-Word removeLastListElement(List *list) { return removeListElement(list, list->length - 1); }
+//  removeFirstListElement -- Remove the first element from a list.
+//-------------------------------------------------------------------------------------------------
+Word removeFirstListElement(List *list)
+{
+    ASSERT(list);
+    if (list->length <= 0) return null;
+    return removeListElement(list, 0);
+}
+
+//  removeLastListElement -- Remove the last element from a list.
+//-------------------------------------------------------------------------------------------------
+Word removeLastListElement(List *list)
+{
+    ASSERT(list);
+    if (list->length <= 0) return null;
+    return removeListElement(list, list->length - 1);
+}
 
 //  showList -- Show the contents of a List. Intended for debugging. If the describe function is
 //    not null, call it to get the String from of the element to print. Otherwise assume the
