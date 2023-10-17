@@ -22,8 +22,8 @@ typedef enum st SexType;
 //  GNode -- Data object that holds a Gedcom line in its tree node form. Only root nodes have
 //    key fields, and the @-signs have been removed. Remember this throughout.
 //--------------------------------------------------------------------------------------------------
-typedef struct g GNode;
-struct g {
+typedef struct GNode GNode;
+struct GNode {
     String key;     // Record key; only root nodes use this field; @-signs are removed.
     String tag;     // Line tag; all nodes use this field.
     String value;   // Line value; values are optional.

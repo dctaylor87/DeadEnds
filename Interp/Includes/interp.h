@@ -4,7 +4,7 @@
 //  interp.h -- Header for the DeadEnds language interpreter.
 //
 //  Created by Thomas Wetmore on 8 December 2022.
-//  Last changed on 6 October 2023.
+//  Last changed on 13 October 2023.
 //
 
 #ifndef interp_h
@@ -17,7 +17,7 @@
 
 // InterpType -- Enumeration of the interpreter return types.
 //--------------------------------------------------------------------------------------------------
-typedef enum {
+typedef enum InterpType {
     InterpError = 0, InterpOkay, InterpBreak, InterpContinue, InterpReturn
 } InterpType;
 

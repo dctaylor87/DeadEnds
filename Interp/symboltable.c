@@ -18,7 +18,7 @@ extern SymbolTable *globalTable;
 //  compareSymbols -- Compare two symbols by comparing the names of the variables.
 //--------------------------------------------------------------------------------------------------
 static int compareSymbols(Word a, Word b) {
-    return strcmp(((Symbol*) a)->ident, ((Symbol*) b)->ident);
+	return strcmp(((Symbol*) a)->ident, ((Symbol*) b)->ident);
 }
 
 //  deleteSymbol -- Delete a symbol. For now it's a noop.
@@ -26,9 +26,9 @@ static int compareSymbols(Word a, Word b) {
 //--------------------------------------------------------------------------------------------------
 static void deleteSymbol(Word a)
 {
-    Symbol *symbol = (Symbol*) a;
-    //stdfree(symbol->ident);
-    stdfree(symbol->value);
+	Symbol *symbol = (Symbol*) a;
+	//stdfree(symbol->ident);
+	stdfree(symbol->value);
 }
 
 //  getSymbolKey -- Function to extract the identifier from a symbol in a symbol table.
@@ -39,16 +39,16 @@ static String getSymbolKey(Word a) { return ((Symbol*) a)->ident; }
 //--------------------------------------------------------------------------------------------------
 static Symbol *createSymbol(String iden, PValue *ppvalue)
 {
-    Symbol *symbol = (Symbol*) stdalloc(sizeof(Symbol));
-    symbol->ident = iden;
-    symbol->value = ppvalue;
-    return symbol;
+	Symbol *symbol = (Symbol*) stdalloc(sizeof(Symbol));
+	symbol->ident = iden;
+	symbol->value = ppvalue;
+	return symbol;
 }
 
 // createSymbolTable -- Create and return a new symbol table.
 //--------------------------------------------------------------------------------------------------
 SymbolTable *createSymbolTable(void) {
-    return createHashTable(compareSymbols, deleteSymbol, getSymbolKey);
+	return createHashTable(compareSymbols, deleteSymbol, getSymbolKey);
 }
 
 //  assignValueToSymbol -- Assign a value to an identifier. If the identifier isn't in the local
@@ -56,32 +56,32 @@ SymbolTable *createSymbolTable(void) {
 //--------------------------------------------------------------------------------------------------
 void assignValueToSymbol(SymbolTable *symtab, String ident, PValue pvalue)
 {
-    //  Determine the symbol table to use.
-    SymbolTable *table = symtab;
-    if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) table = globalTable;
+	//  Determine the symbol table to use.
+	SymbolTable *table = symtab;
+	if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) table = globalTable;
 
-    //  Prepare the pvalue to become the symbol value; it is on the heap.
-    PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
-    memcpy(ppvalue, &pvalue, sizeof(PValue));
-    if (pvalue.type == PVString) {
-        ppvalue->value.uString = strsave(pvalue.value.uString);
-        //  MNOTE: The key is here. Does it have to be? The stack pvalue is about to dissappear.
-    }
+	//  Prepare the pvalue to become the symbol value; it is on the heap.
+	PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
+	memcpy(ppvalue, &pvalue, sizeof(PValue));
+	if (pvalue.type == PVString) {
+		ppvalue->value.uString = strsave(pvalue.value.uString);
+		//  MNOTE: The key is here. Does it have to be? The stack pvalue is about to dissappear.
+	}
 
-    //  If the symbol is in the table free its old pvalue and reuse the heap area.
-    //  MNOTE: Do we need to also free the string if this is a string value?
-    Symbol *symbol = searchHashTable(table, ident);
-    if (symbol) {
-        //  MNOTE: Just removing the pvalue to reuse the symbol. Should the delete function be
-        //    called and a new symbol be created?
-        freePValue(symbol->value);
-        symbol->value = ppvalue;
-        return;
-    }
+	//  If the symbol is in the table free its old pvalue and reuse the heap area.
+	//  MNOTE: Do we need to also free the string if this is a string value?
+	Symbol *symbol = searchHashTable(table, ident);
+	if (symbol) {
+		//  MNOTE: Just removing the pvalue to reuse the symbol. Should the delete function be
+		//    called and a new symbol be created?
+		freePValue(symbol->value);
+		symbol->value = ppvalue;
+		return;
+	}
 
-    // Otherwise add a new symbol to the table; delegate to hash table.
-    if (debugging) printf("assignValueToSymbol: %s = %s in %p\n", ident, pvalueToString(*ppvalue, true), symtab);
-    insertInHashTable(table, createSymbol(ident, ppvalue));
+	// Otherwise add a new symbol to the table; delegate to hash table.
+	if (debugging) printf("assignValueToSymbol: %s = %s in %p\n", ident, pvalueToString(*ppvalue, true), symtab);
+	insertInHashTable(table, createSymbol(ident, ppvalue));
 }
 
 //  getValueOfSymbol -- Get the value of a symbol from a symbol table. The program value is
@@ -91,37 +91,37 @@ PValue getValueOfSymbol(SymbolTable *symtab, String ident)
 //  symtab -- Symbol table to look the identifer up in.
 //  ident -- Identifier to return the value of.
 {
-    if (debugging) printf("getValueOfSymbol %s from table\n", ident);
-    if (debugging) showSymbolTable(symtab);
-    //  Look for the identifier in the local table.
-    Symbol *symbol = searchHashTable(symtab, ident);
-    if (symbol) {
-        PValue *ppvalue = symbol->value;
-        if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};
-    }
+	if (debugging) printf("getValueOfSymbol %s from table\n", ident);
+	if (debugging) showSymbolTable(symtab);
+	//  Look for the identifier in the local table.
+	Symbol *symbol = searchHashTable(symtab, ident);
+	if (symbol) {
+		PValue *ppvalue = symbol->value;
+		if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};
+	}
 
-    //  If not in the local table, look for it in the global table.
-    symbol = searchHashTable(globalTable, ident);
-    if (symbol) {
-        PValue *ppvalue = symbol->value;
-        if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};
-    }
+	//  If not in the local table, look for it in the global table.
+	symbol = searchHashTable(globalTable, ident);
+	if (symbol) {
+		PValue *ppvalue = symbol->value;
+		if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};
+	}
 
-    // If not found in either table the symbol isn't defined.
-    return nullPValue;
+	// If not found in either table the symbol isn't defined.
+	return nullPValue;
 }
 
 void showSymbolTable(SymbolTable* table)
 {
-    ASSERT(table);
-    printf("Symbol Table at Location %p\n", table);
-    for (int i = 0; i < MAX_HASH; i++) {
-        Bucket *bucket = table->buckets[i];
-        if (!bucket || bucket->length <= 0) continue;
-        for (int j = 0; j < bucket->length; j++) {
-            Symbol *symbol = (Symbol*) bucket->elements[j];
-            String pvalue = pvalueToString(*(symbol->value), false);
-            printf("  %s = %s\n", symbol->ident, pvalue);
-        }
-    }
+	ASSERT(table);
+	printf("Symbol Table at Location %p\n", table);
+	for (int i = 0; i < MAX_HASH; i++) {
+		Bucket *bucket = table->buckets[i];
+		if (!bucket || bucket->length <= 0) continue;
+		for (int j = 0; j < bucket->length; j++) {
+			Symbol *symbol = (Symbol*) bucket->elements[j];
+			String pvalue = pvalueToString(*(symbol->value), false);
+			printf("  %s = %s\n", symbol->ident, pvalue);
+		}
+	}
 }

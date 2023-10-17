@@ -8,16 +8,16 @@
 //    spaces.
 //
 //  Created by Thomas Wetmore on 15 December 2022.
-//  Last changed on 29 September 2023.
+//  Last changed on 13 October 2023.
 //
 
 #ifndef pvalue_h
 #define pvalue_h
 
 //  Forward references.
-typedef struct seq Sequence;
+typedef struct Sequence Sequence;
 typedef struct HashTable PValueTable;
-typedef struct g GNode;
+typedef struct GNode GNode;
 
 #include "standard.h"
 #include "gnode.h"
@@ -34,33 +34,33 @@ typedef struct g GNode;
 //  PVType -- Enumeration of the types of PValues.
 //--------------------------------------------------------------------------------------------------
 typedef enum {
-    PVNull = 0, PVAny, PVInt, PVFloat, PVBool, PVString, PVGNode, PVPerson,
-    PVFamily, PVSource, PVEvent, PVOther, PVList, PVTable, PVSequence
+	PVNull = 0, PVAny, PVInt, PVFloat, PVBool, PVString, PVGNode, PVPerson,
+	PVFamily, PVSource, PVEvent, PVOther, PVList, PVTable, PVSequence
 } PVType;
 
 bool isGNodeType(PVType type);
 
 // VUnion -- Union that holds PValue values.
 //--------------------------------------------------------------------------------------------------
-typedef union {
-    bool uBool;           // Value if PVBool.
-    GNode* uGNode;        // Value if PVGNode, PVPerson, PVFamily, PVSource, PVEvent, PVOther.
-    long uInt;            // Value if PVInt.
-    double uFloat;        // Value if PVFloat.
-    String uString;       // Value if PVString.
-    List *uList;          // Value if PVList.
-    PValueTable *uTable;  // Value if PVTable.
-    Sequence *uSequence;  // Value if PVSequence.
-    Word uWord;           // Value is anything else?
+typedef union VUnion {
+	bool uBool;           // Value if PVBool.
+	GNode* uGNode;        // Value if PVGNode, PVPerson, PVFamily, PVSource, PVEvent, PVOther.
+	long uInt;            // Value if PVInt.
+	double uFloat;        // Value if PVFloat.
+	String uString;       // Value if PVString.
+	List *uList;          // Value if PVList.
+	PValueTable *uTable;  // Value if PVTable.
+	Sequence *uSequence;  // Value if PVSequence.
+	Word uWord;           // Value is anything else?
 } VUnion;
 
 //  PValue -- Values of the programming language expressions. This used to be a pointer type. It
 //   has been changed to a value type. However some of the fields in a PValue's VUnion value are
 //   pointers whose memory must be paid attention to.
 //--------------------------------------------------------------------------------------------------
-typedef struct pval {
-    PVType type;    // Type of this PValue.
-    VUnion value;   // Value of this PValue.
+typedef struct PValue {
+	PVType type;    // Type of this PValue.
+	VUnion value;   // Value of this PValue.
 } PValue;
 
 // User Interface to PValues.

@@ -182,6 +182,7 @@ static int count = 0;  // Debugging.
 //    its type. Return true if the record was added successfully.
 //--------------------------------------------------------------------------------------------------
 bool storeRecord(Database *database, GNode* root)
+//  database -- Database to add the record to
 //  root -- Root of a record tree to store in the database.
 {
     //if (debugging) printf("storeRecord called\n");
@@ -191,7 +192,7 @@ bool storeRecord(Database *database, GNode* root)
     if (type == GRHeader || type == GRTrailer) return true;  // Ignore HEAD and TRLR records.
     ASSERT(root->key);
     count++;
-    String key = rmvat(root->key);
+    String key = rmvat(root->key);  // MNOTE: insertInRecord copies the key.
     switch (type) {
         case GRPerson:
             insertInRecordIndex(database->personIndex, key, root);
