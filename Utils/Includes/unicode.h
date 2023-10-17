@@ -10,4 +10,8 @@
 
 #include <stdio.h>
 
+extern bool isCombiningCharacter(unsigned int codePoint);
+extern char* normalizeDType(const char* input);
+
+
 #endif /* unicode_h */

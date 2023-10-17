@@ -24,6 +24,7 @@ GNode* familyToLastChild(GNode* fam);  //  Return the last child of a family.
 String personToName(GNode*, int);  //  Return the first name of a person.
 String personToTitle(GNode*, int);  //  Return the first title of a person.
 int numberOfSpouses(GNode* indi);  //  Return the number of spouses of a person.
+extern int numberOfFamilies(GNode* person); // Return the number of families a person is a spouse in.
 
 
 GNode* fam_to_spouse(Database*, GNode*, GNode*);

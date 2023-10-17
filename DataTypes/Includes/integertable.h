@@ -27,6 +27,7 @@ typedef struct {
 
 //  User interface.
 //--------------------------------------------------------------------------------------------------
+extern String integerGetKey(Word element);
 IntegerTable *createIntegerTable(void);
 int searchIntegerTable(IntegerTable *table, String key);
 void insertInIntegerTable(IntegerTable *table, String key, int value);

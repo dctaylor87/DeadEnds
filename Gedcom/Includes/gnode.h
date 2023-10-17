@@ -52,6 +52,7 @@ struct g {
 //--------------------------------------------------------------------------------------------------
 GNode* createGNode(String key, String tag, String value, GNode* parent);  // Create a Node.
 void freeGNodes(GNode* node);  // Free a node tree.
+extern void freeGNode(GNode* node); // Free a gedcom node.
 int gnodeLevel(GNode* node);  // Return the level of a GNode in its tree.
 
 GNode* file_to_node(String, String*, bool*);

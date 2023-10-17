@@ -35,6 +35,8 @@ typedef const char* CString;
 typedef enum { Letter = 300, Digit, White, Other } CharType;  // TODO: NOT USED YET.
 
 String strsave(String);  // Save a string in the heap.
+// Catenate two strings and return a new String on the heap with the value.
+extern String strconcat(String s1, String s2);
 bool iswhite(int);       // Check if a character is white space.
 bool allwhite(String);   // Check if a string is all white space.
 void striptrail(String);  // Strip trailing white space.

@@ -33,6 +33,7 @@ typedef HashTable RecordIndex;
 RecordIndex *createRecordIndex(void);                   //  Create a record index.
 void deleteRecordIndex(RecordIndex*);                   //  Delete a record index.
 void insertInRecordIndex(RecordIndex*, String, GNode*); //  Add an entry to a RecordIndex.
+extern int getRecordInsertCount(void); // Return the record insert count.  For debugging.
 GNode* searchRecordIndex(RecordIndex*, String);         //  Search for an entry in a RecordIndex.
 void showRecordIndex(RecordIndex*);                     //  Show the contents of record index.
 

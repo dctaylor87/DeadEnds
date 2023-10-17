@@ -128,6 +128,7 @@ bool is_zero(PValue);
 //void pvalues_begin(void);
 //void pvalues_end(void);
 void setPValue(PValue, int, VUnion);
+extern bool numericPValue(PValue value); // See if a PValue is numeric.
 //String pvalue_to_string(PValue);
 //void insert_pvtable(Table, String, int, VPTR);
 //void remove_pvtable(Table);
@@ -139,5 +140,6 @@ String pvalueToString(PValue pvalue, bool showType);
 //--------------------------------------------------------------------------------------------------
 PValue* allocPValue(PVType type, VUnion value);
 void freePValue(PValue* pvalue);
+extern PValue *copyPValue(PValue pvalue);
 
 #endif // pvalue_h

@@ -73,6 +73,7 @@ Word isInList(List*, Word);  // Check if an element is in the list; only check k
 void showList(List*, String(*describe)(Word));  // Show the contents of a list.
 void iterateList(List*, void(*iterate)(Word));  // Iterate the list elements running a function.
 int lengthList(List*);  // Return the length of the list.
+extern void emptyList(List *list); // Make a list empty.
 bool isEmptyList(List*);  // Check if a list is empty.
 
 Word searchList(List*, Word element, int *index);

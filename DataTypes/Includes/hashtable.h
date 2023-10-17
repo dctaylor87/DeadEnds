@@ -45,6 +45,7 @@ typedef struct HashTable {
 // User interface to hash table.
 //--------------------------------------------------------------------------------------------------
 HashTable *createHashTable(int (*compare)(Word, Word), void(*delete)(Word), String(*getKey)(Word));
+extern int compareElements(Word a, Word b, String(*getKey)(Word));
 void deleteHashTable(HashTable*);  // Delete a HashTable; use the element delete function if exists.
 bool isInHashTable(HashTable*, String key);  //  Return whether an element with key is in.
 Word searchHashTable(HashTable*, CString key);  // Return the element that matches the key.
@@ -77,5 +78,7 @@ typedef struct WordElement {
     String key;
     Word value;
 } WordElement;
+
+extern String wordGetKey(Word element);
 
 #endif // hashtable_h
