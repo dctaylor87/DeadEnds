@@ -6,7 +6,7 @@
 //    type. The type RecordIndex is a synonym of HashTable.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 23 April 2023.
+//  Last changed on 17 October 2023.
 //
 
 #include "recordindex.h"
@@ -18,25 +18,25 @@
 //--------------------------------------------------------------------------------------------------
 static int compareRecordIndexEls(Word leftEl, Word rightEl)
 {
-    String a = ((RecordIndexEl*) leftEl)->key;
-    String b = ((RecordIndexEl*) rightEl)->key;
-    return strcmp(a, b);
+	String a = ((RecordIndexEl*) leftEl)->key;
+	String b = ((RecordIndexEl*) rightEl)->key;
+	return strcmp(a, b);
 }
 
 //  deleteRecordIndexEl -- Delete function needed by the record index hash table.
 //--------------------------------------------------------------------------------------------------
 static void deleteRecordIndexEl(Word word)
 {
-    RecordIndexEl* element = (RecordIndexEl*) word;
-    stdfree(element->key);
-    stdfree(element);
+	RecordIndexEl* element = (RecordIndexEl*) word;
+	stdfree(element->key);
+	stdfree(element);
 }
 
 //  recordIndexElKey -- Return the key of record index element. This is the key of the root node.
 //  NOTE: Doesn't this mean that the key has @signs at each end?
 //--------------------------------------------------------------------------------------------------
 static String recordIndexElKey(Word word) {
-    return rmvat(((RecordIndexEl*) word)->root->key);
+	return rmvat(((RecordIndexEl*) word)->root->key);
 }
 
 //  createRecordIndex -- Create a record index. A record index is a hash table with its functions
@@ -44,14 +44,14 @@ static String recordIndexElKey(Word word) {
 //--------------------------------------------------------------------------------------------------
 RecordIndex *createRecordIndex(void)
 {
-    return createHashTable(compareRecordIndexEls, deleteRecordIndexEl, recordIndexElKey);
+	return createHashTable(compareRecordIndexEls, deleteRecordIndexEl, recordIndexElKey);
 }
 
 //  deleteRecordIndex -- Delete a record index. Delegate to the hash table.
 //--------------------------------------------------------------------------------------------------
 void deleteRecordIndex(RecordIndex *index)
 {
-    deleteHashTable(index);
+	deleteHashTable(index);
 }
 
 //  insertInRecordIndex -- Add a (key, root) element to a record index.
@@ -66,61 +66,67 @@ void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
 //  key -- Key (minus @-signs) of a Gedcom node record.
 //  root -- Root of the Gedom record.
 {
-    recordInsertCount++;  //  Debugging.
-    ASSERT(index && key && root);
-    //  Hash the record key to get the bucket. If the bucket doesn't exist, create it.
-    int hash = getHash(key);
-    Bucket *bucket = index->buckets[hash];
-    if (!bucket) {
-        bucket = createBucket();
-        index->buckets[hash] = bucket;
-    }
+	recordInsertCount++;  //  Debugging.
+	ASSERT(index && key && root);
+	//  Hash the record key to get the bucket. If the bucket doesn't exist, create it.
+	int hash = getHash(key);
+	Bucket *bucket = index->buckets[hash];
+	if (!bucket) {
+		bucket = createBucket();
+		index->buckets[hash] = bucket;
+	}
 
-    // See if there is an element for the key. If not create one and insert it.
-    RecordIndexEl* element = searchBucket(bucket, key, index->compare,  index->getKey, null);
-    // TODO. Note the index pointer is null above. If we used it, we could insert faster below.
-    if (!element) {
-        element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
-        element->key = strsave(key);
-        element->root = root;
-        appendToBucket(bucket, element);
-    } //else {
-        //printf("The element exists\n");  //  Debugging.
-    //}
-    // TODO: Should there be a warning if the element exists?
+	// See if there is an element for the key. If not create one and insert it.
+	RecordIndexEl* element = searchBucket(bucket, key, index->compare,  index->getKey, null);
+	// TODO. Note the index pointer is null above. If we used it, we could insert faster below.
+	if (!element) {
+		element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
+		element->key = strsave(key);
+		element->root = root;  //  MNOTE: Not copied, records persist.
+		appendToBucket(bucket, element);
+	} //else {
+		//printf("The element exists\n");  //  Debugging.
+	//}
+	// TODO: Should there be a warning if the element exists?
+	// TODO: Should it be an error if the element exists?
 }
 
 //  getRecordInsertCount -- Return the record insert count. For debugging.
 //--------------------------------------------------------------------------------------------------
-int getRecordInsertCount(void) { return recordInsertCount; }
+int getRecordInsertCount(void)
+{
+	return recordInsertCount;
+}
 
 //  searchRecordIndex -- Search a record index for a key, and return the associated node tree.
 //--------------------------------------------------------------------------------------------------
 GNode* searchRecordIndex(RecordIndex *index, String key)
+// index -- Record index to for the key in.
+// key -- Key of record to search for.
 {
-    ASSERT(index && key);
-    RecordIndexEl* element = searchHashTable(index, key);
-    return element == null ? null : element->root;
+	ASSERT(index && key);
+	RecordIndexEl* element = searchHashTable(index, key);
+	return element == null ? null : element->root;
 }
 
 // showRecordIndex -- Show the contents of a RecordIndex. For debugging.
 //--------------------------------------------------------------------------------------------------
 void showRecordIndex(RecordIndex *index)
 {
-    //  Loop through the buckets.
-    for (int i = 0; i < MAX_HASH; i++) {
+	//  Loop through the buckets.
+	for (int i = 0; i < MAX_HASH; i++) {
 
-        //  Ignore empty buckets.
-        if (!index->buckets[i]) continue;
+		//  Ignore empty buckets.
+		if (!index->buckets[i]) continue;
 
-        Bucket *bucket = index->buckets[i];
-        Word* elements = bucket->elements;
-        printf("Bucket %d\n", i);
+		Bucket *bucket = index->buckets[i];
+		Word* elements = bucket->elements;
+		printf("Bucket %d\n", i);
 
-        // Loop through the elements in the ith Bucket.
-        for (int j = 0; j < bucket->length; j++) {
-            RecordIndexEl* element = elements[j];
-            printf("    Key %s\n", element->root->key);
-        }
-    }
+		// Loop through the elements in the ith Bucket.
+		for (int j = 0; j < bucket->length; j++) {
+			RecordIndexEl* element = elements[j];
+			printf("    Key %s\n", element->root->key);
+		}
+	}
 }

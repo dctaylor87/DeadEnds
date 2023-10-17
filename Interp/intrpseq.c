@@ -141,7 +141,7 @@ PValue __inset (PNode *programNode, SymbolTable *systemTable, bool *eflg)
 }
 
 //  __deletefromset -- Remove a person from a sequence.
-//    deletefromset(SET, INDI, BOOL) -> VOID
+//    usage: deletefromset(SET, INDI, BOOL) -> VOID
 //--------------------------------------------------------------------------------------------------
 PValue __deletefromset (PNode *node, SymbolTable *stab, bool *eflg)
 {

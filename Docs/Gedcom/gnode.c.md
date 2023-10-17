@@ -12,10 +12,10 @@ Components making up gnode.c:
 |static int nodeFrees|The number of freed nodes.|
 |int numNodeFrees(void)|Return the number of freed nodes.|
 |static String fixup(String str)|Make a copy of the string in the heap and return it.|
-|static String fix_tag(String tag)|Return the copy of the tag from the tagTable.|
+|static String fix_tag(String tag)|Return the copy of the tag from the tagTable. This allows all GNodes to share single copies of the tags.|
 |static GNode *allocGNode(void)|Allocate a GNode.|
 |void freeGNode(GNode* node)|Free a GNode.|
-|GNode* createGNode(String key, String tag, String value, GNode* parent)|Create and initialize a GNode.|
+|GNode* createGNode(String key, String tag, String value, GNode* parent)|Create and initialize a GNode. *If this is the only function that needs allocGNode, allocGNode can be made static or its functionality placed in createGNode.*|
 |void freeGNodes(GNode* node)|Recursively free a tree of GNodes.|
 |int gnodeLevel(GNode* node)|Return the level of the GNode in its tree.|
 |GNode* fam_to_spouse(Database* database, GNode* fam, GNode* indi)|_Return the other spouse of a family. This function is out of place_.|

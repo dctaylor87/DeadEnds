@@ -4,30 +4,30 @@
 //  pnode.h -- Header file for the program node structure.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 31 May 2023.
+//  Last changed on 13 October 2023.
 //
 
 #ifndef pnode_h
 #define pnode_h
 
-typedef struct pval PValue;  // Handles circular definition.
+typedef struct PValue PValue;  // Forward reference.
 #include "standard.h"
 #include "symboltable.h"
 
-//  PNode -- Program Node. The parser builds syntax graphs of functions and procedures out of
-//    program nodes. They represent both statements and expressions. The interpreter interprets
-//    the program node graphs when running programs.
+//  PNode -- Program Node. The parser builds an abstract syntax tree for each procedure and 
+//    function it parses. The nodes of the trees are program nodes. They represent both statements
+//    and expressions. The interpreter interprets the trees when running programs.
 //--------------------------------------------------------------------------------------------------
-typedef struct pn PNode;
+typedef struct PNode PNode;
 typedef struct HashTable SymbolTable;
 
 // Program node types.
 //--------------------------------------------------------------------------------------------------
-typedef enum {
-    PNICons = 1, PNFCons, PNSCons, PNIdent, PNIf, PNWhile, PNBreak, PNContinue, PNReturn,
-    PNProcDef, PNProcCall, PNFuncDef, PNFuncCall, PNBltinCall, PNTraverse, PNNodes, PNFamilies,
-    PNSpouses, PNChildren, PNIndis, PNFams, PNSources, PNEvents, PNOthers, PNList, PNSequence,
-    PNTable, PNFathers, PNMothers, PNFamsAsChild, PNNotes
+typedef enum PNType{
+	PNICons = 1, PNFCons, PNSCons, PNIdent, PNIf, PNWhile, PNBreak, PNContinue, PNReturn,
+	PNProcDef, PNProcCall, PNFuncDef, PNFuncCall, PNBltinCall, PNTraverse, PNNodes, PNFamilies,
+	PNSpouses, PNChildren, PNIndis, PNFams, PNSources, PNEvents, PNOthers, PNList, PNSequence,
+	PNTable, PNFathers, PNMothers, PNFamsAsChild, PNNotes
 } PNType;
 
 //  BIFunc -- Type of a function pointer that takes a program node, symbol table, and boolean
@@ -35,36 +35,36 @@ typedef enum {
 //--------------------------------------------------------------------------------------------------
 typedef PValue (*BIFunc)(PNode *node, SymbolTable *symtable, bool* errflag);
 
-//  struct pn -- The program node structure.
+//  struct PNode -- The program node structure.
 //--------------------------------------------------------------------------------------------------
-struct pn {
-    // Fields found in all program nodes.
-    PNType type;        // Type of this program node.
-    PNode  *parent;     // Parent of this node; null in root nodes.
-    int    lineNumber;  // Line number of this node from its program file.
-    String fileName;    // Program file this node is from.
+struct PNode {
+	// Fields found in all program nodes.
+	PNType type;        // Type of this program node.
+	PNode  *parent;     // Parent of this node; null in root nodes.
+	int    lineNumber;  // Line number of this node from its program file.
+	String fileName;    // Program file this node is from.
 
-    PNode  *next;       // Next node in a list (e.g., statement blocks, arguments).
-    long   intCons;     // Integer (C long) constant.
-    double floatCons;   // Float (C double) constant.
-    String stringOne;   // String constant: pIdentifier, pProcName, pFuncName, pBuiltinName
+	PNode  *next;       // Next node in a list (e.g., statement blocks, arguments).
+	long   intCons;     // Integer (C long) constant.
+	double floatCons;   // Float (C double) constant.
+	String stringOne;   // String constant: pIdentifier, pProcName, pFuncName, pBuiltinName
 
-    PNode  *expression;
+	PNode  *expression;
 
-    // PNode expressions in loops.
-    PNode  *gnodeExpr;  // PNode expression that should resolve to a GNode.
-    PNode  *listExpr;    // PNode expression that must resolve to a List.
-    PNode  *setExpr;    // PNode expression that must resolve to a Set.
-    PNode  *sequenceExpr;      // PNode expression that must resolve to an IndiSet.
+	// PNode expressions in loops.
+	PNode  *gnodeExpr;  // PNode expression that should resolve to a GNode.
+	PNode  *listExpr;    // PNode expression that must resolve to a List.
+	PNode  *setExpr;    // PNode expression that must resolve to a Set.
+	PNode  *sequenceExpr;      // PNode expression that must resolve to an IndiSet.
 
-    PNode *pnodeOne;    // pThenState, pLoopState, pFuncBody, pProcBody.
-    PNode *pnodeTwo;    // pElseState.
+	PNode *pnodeOne;    // pThenState, pLoopState, pFuncBody, pProcBody.
+	PNode *pnodeTwo;    // pElseState.
 
-    BIFunc builtinFunc;  // Pointer to a built-in function.
+	BIFunc builtinFunc;  // Pointer to a built-in function.
 
-    String idenOne;
-    String idenTwo;
-    String idenThree;
+	String idenOne;
+	String idenTwo;
+	String idenThree;
 };
 
 // Mnemonic names for the program node fields.
@@ -144,11 +144,11 @@ void showPNode(PNode*);
 
 //  BuiltIn -- Structure that holds built-in functions.
 //--------------------------------------------------------------------------------------------------
-typedef struct {
-    String name;    //  Name of the function.
-    int minParams;  //  Minimum number of parameters to the function.
-    int maxParams;  //  Maximum number of parameters to the function.
-    BIFunc func;    //  Pointer to the C function that implements the function.
+typedef struct BuiltIn {
+	String name;    //  Name of the function.
+	int minParams;  //  Minimum number of parameters to the function.
+	int maxParams;  //  Maximum number of parameters to the function.
+	BIFunc func;    //  Pointer to the C function that implements the function.
 } BuiltIn;
 
 extern BuiltIn builtIns[];  //  Array of built-in functions.

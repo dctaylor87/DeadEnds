@@ -19,7 +19,7 @@
 //    MNOTE: keys are always present and belong to the element; names are present for persons and
 //    belong to the element; values do not belong to the element.
 //--------------------------------------------------------------------------------------------------
-typedef struct stag {
+typedef struct SequenceEl {
     String key;     // Person or family key.  (TODO: Would it be better to use root GNodes here?)
     String name;    // Name of person.
     PValue *value;  // Any program value.
@@ -31,8 +31,8 @@ typedef struct stag {
 
 //  Sequence -- Data type for a person or family sequence (or list or set).
 //--------------------------------------------------------------------------------------------------
-typedef struct seq Sequence;
-struct seq {
+typedef struct Sequence Sequence;
+struct Sequence {
     int size;          // Current length of sequence.
     int max;           // Max length before resizing.
     int flags;         // Attribute flags.
