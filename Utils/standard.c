@@ -7,6 +7,24 @@
 //  Last changed on 6 October 2023.
 
 #include <stdlib.h>
+
+#include "config.h"
+
+#if defined(HAVE_MALLOC_SIZE)
+
+#if defined(HAVE_MALLOC_MALLOC_H)
+#include <malloc/malloc.h>
+#endif
+
+#elif defined(HAVE_MALLOC_USABLE_SIZE)
+
+#if defined(HAVE_MALLOC_H)
+#include <malloc.h>
+#endif
+#define malloc_size(ptr)	malloc_usable_size(ptr)
+
+#endif
+
 #include "standard.h"
 
 #define ALLOCLOGFILE "./alloc.log"
@@ -60,10 +78,13 @@ void *__alloc (size_t len, String file, int line)
 	char *p;
 	if (len == 0) return null;
 	ASSERT(p = malloc(len));
-	//if (loggingAllocs) {
-        //bytesAllocated += malloc_size(p);
-        //fprintf(allocLogFile, "A  %s\t%d\t%zu\t%ld\t%ld\n", lastSegment(file), line, len, malloc_size(p), (long) p);
-	//}
+#if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
+	if (loggingAllocs) {
+		bytesAllocated += malloc_size(p);
+		fprintf(allocLogFile, "A  %s\t%d\t%zu\t%zu\t%p\n",
+			lastSegment(file), line, len, malloc_size(p), (void *) p);
+	}
+#endif
 	return p;
 }
 
@@ -74,10 +95,13 @@ void __free (void* ptr, String file, int line)
 // String file  -- Name of the file deallocating the memory.
 // int line -- Line number in the file where deallocating.
 {
-	//if (loggingAllocs) {
-        //fprintf(allocLogFile, "F  %s\t%d\t%ld\t%ld\n", lastSegment(file), line, malloc_size(ptr), (long) ptr);
-        //bytesFreed += malloc_size(ptr);
-	//}
+#if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
+	if (loggingAllocs) {
+		fprintf(allocLogFile, "F  %s\t%d\t%zu\t%p\n",
+			lastSegment(file), line, malloc_size(ptr), ptr);
+		bytesFreed += malloc_size(ptr);
+	}
+#endif
 	free(ptr);
 }
 
