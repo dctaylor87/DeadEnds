@@ -5,11 +5,11 @@
 //  Created by Thomas Wetmore on 6/20/23.
 //
 
-#include "unicode.h"
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+
+#include "unicode.h"
 
 // Function to check if a code point is a combining character
 bool isCombiningCharacter(unsigned int codePoint) {
