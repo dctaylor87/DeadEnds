@@ -231,11 +231,13 @@ echo Looking for header files
 AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
 AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
+AC_CHECK_HEADERS( malloc/malloc.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
 AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
 AC_CHECK_FUNCS( backtrace backtrace_symbols )
+AC_CHECK_FUNCS( malloc_size malloc_usable_size )
 #AC_SEARCH_LIBS( sin, m )
 #AC_SEARCH_LIBS( cos, m )
 #AC_SEARCH_LIBS( tan, m )
