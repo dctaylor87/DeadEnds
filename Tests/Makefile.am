@@ -17,7 +17,7 @@ test_SOURCES = test.c
 
 # extra stuff for hashtabletest, hashtabletest, test
 
-LIBS = ../Interp/libinterp.a ../Parser/libparser.a \
+LIBS =  ../Parser/libparser.a ../Interp/libinterp.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
