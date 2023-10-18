@@ -15,12 +15,12 @@
 
 // Static functions defined in this file.
 //--------------------------------------------------------------------------------------------------
-static String filepath (CString name, CString path);  // Find a file in a path sequence.
+static CString filepath (CString name, CString path);  // Find a file in a path sequence.
 //static String lastpathname (String path);  // Return the last component of a path.
 
 // filepath -- Find a file in a sequence of paths.
 //--------------------------------------------------------------------------------------------------
-static String filepath (CString fileName, CString searchPath)
+static CString filepath (CString fileName, CString searchPath)
 // fileName -- Name of a file to search for and open.
 // searchPath -- Search path to use in finding the file.
 {
@@ -83,7 +83,7 @@ FILE *fopenpath (CString name, CString mode, CString path)
 // String name - Name of the file.
 // String path - Path variable that can be used to locate the file.
 {
-    String str;
+    CString str;
     if (!(str = filepath(name, path))) return null;
     return fopen(str, mode);
 }
