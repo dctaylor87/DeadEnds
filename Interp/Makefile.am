@@ -34,4 +34,5 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/Database/Includes
 
-AM_CLFAGS = -Wno-unused-but-set-variable -Wno-missing-braces
+#AM_CLFAGS = -Wno-unused-but-set-variable -Wno-missing-braces
+AM_CLFAGS =
