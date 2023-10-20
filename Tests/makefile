@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-g -c -Wall
+CFLAGS=-g -c -Wall -Wno-unused-function
 INCLUDES= -I../Utils/Includes -I../DataTypes/Includes -I../Parser/Includes -I../Interp/Includes -I../Gedcom/Includes -I../Database/Includes
 LIBLOCNS=-L../Utils/ -L../DataTypes/ -L../Parser/ -L../Interp -L../Gedcom -L../Database
 LIBS=-lutils -lparser -ldatatypes -linterp -lgedcom -ldatabase

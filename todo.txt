@@ -7,6 +7,10 @@ o  Subsume allocGNode into createGNode.
 13 Oct 2023
 o  Line 70 in Utils/path.c is a memory leak.
 
+20 Oct 2023
+o  Can we get rid of the compare function in hash tables, and do string compares on what
+   is returned by the getKey function on the two elements?
+
 ----------------------------------------------------
 CLOSED
 25 Sep 2023

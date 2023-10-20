@@ -443,10 +443,13 @@ InterpType interpFathers(PNode *node, SymbolTable* stab, PValue *pval)
         prog_error(node, "the first argument to fathers must be a person");
         return InterpError;
     }
-    FORFAMCS(indi, fam, husb, wife, nfams) {
+    int nfams = 0;
+    FORFAMCS(indi, fam)
+        GNode *husb = familyToHusband(fam);
+        if (husb == null) goto d;
         assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
         assignValueToSymbol(stab, node->fatherIden, PVALUE(PVFamily, uGNode, husb));
-        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, nfams));
+        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, ++nfams));
         InterpType irc = interpret(node->loopState, stab, pval);
         switch (irc) {
             case InterpContinue:
@@ -455,7 +458,7 @@ InterpType interpFathers(PNode *node, SymbolTable* stab, PValue *pval)
             default: return irc;
         }
     d:	    ;
-    }  ENDFAMCS
+    ENDFAMCS
     return InterpOkay;
 }
 
@@ -469,11 +472,14 @@ InterpType interpMothers (PNode *node, SymbolTable *stab, PValue *pval)
         prog_error(node, "the first argument to mothers must be a person");
         return InterpError;;
     }
-    FORFAMCS(indi, fam, husb, wife, nfams) {
+    int nfams = 0;
+    FORFAMCS(indi, fam) {
+        GNode *wife = familyToWife(fam);
+        if (wife == null) goto d;
         //  Assign the current loop identifier valujes to the symbol table.
         assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
         assignValueToSymbol(stab, node->motherIden, PVALUE(PVFamily, uGNode, wife));
-        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, nfams));
+        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, ++nfams));
 
         // Intepret the body of the loop.
         InterpType irc = interpret(node->loopState, stab, pval);
@@ -500,9 +506,10 @@ InterpType interpParents(PNode *node, SymbolTable *stab, PValue *pval)
         prog_error(node, "the first argument to parents must be a person");
         return InterpError;
     }
-    FORFAMCS(indi, fam, husb, wife, nfams) {
+    int nfams = 0;
+    FORFAMCS(indi, fam) {
         assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
-        assignValueToSymbol(stab, node->countIden,  PVALUE(PVInt, uInt, nfams));
+        assignValueToSymbol(stab, node->countIden,  PVALUE(PVInt, uInt, ++nfams));
         irc = interpret(node->loopState, stab, pval);
         switch (irc) {
             case InterpContinue:

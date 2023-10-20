@@ -623,11 +623,11 @@ Sequence *personToFathers(GNode *indi)
     if (!indi) return null;
     Sequence *fathers = createSequence();
 
-    FORFAMCS(indi, fam, fath, moth, num1) {  // For each family the person is a child in...
-        FORHUSBS(fam, husb, num2) {  // For each husband in that family...
+    FORFAMCS(indi, fam)  // For each family the person is a child in...
+        FORHUSBS(fam, husb, num2)  // For each husband in that family...
             appendToSequence(fathers, personToKey(husb), null, null);  // Add him to the sequence.
-        } ENDHUSBS
-    } ENDFAMCS
+        ENDHUSBS
+    ENDFAMCS
 
     if (lengthSequence(fathers) > 0) return fathers;
     deleteSequence(fathers, false);
@@ -641,11 +641,11 @@ Sequence *personToMothers (GNode* indi)
 {
     if (!indi) return null;
     Sequence *mothers = createSequence();
-    FORFAMCS(indi, fam, fath, moth, num1) {  // For each family the person is a child in...
-        FORWIFES(fam, wife, num2) {  // For each wife in that family...
+    FORFAMCS(indi, fam)  // For each family the person is a child in...
+        FORWIFES(fam, wife, num2)  // For each wife in that family...
             appendToSequence(mothers, personToKey(wife), null, null);  // Add her to the sequence.
-        } ENDWIFES
-    } ENDFAMCS
+        ENDWIFES
+    ENDFAMCS
     if (lengthSequence(mothers) > 0) return mothers;
     deleteSequence(mothers, false);
     return null;
@@ -668,7 +668,7 @@ Sequence *personToFamilies (GNode* person, bool fams)
             appendToSequence(families, key, null, null);
         } ENDFAMSS
     } else {
-        FORFAMCS(person, family, father, mother, num) {
+        FORFAMCS(person, family) {
             key = familyToKey(family);
             appendToSequence(families, key, null, null);
         } ENDFAMCS
