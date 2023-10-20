@@ -10,6 +10,8 @@
 //  Last changed on 13 October 2023.
 //
 
+#include <ansidecl.h>
+
 #include "interp.h"
 #include "list.h"
 #include "builtintable.h"

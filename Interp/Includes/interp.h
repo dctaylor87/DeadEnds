@@ -72,7 +72,7 @@ void free_all_pnodes(void);
 void free_pnode_tree(PNode*);
 String get_date(void);
 PNode *iden_node(String);
-bool iistype(PNode*, int);
+bool iistype(PNode*, PNType);
 int num_params(PNode*);
 void prog_error(PNode*, String, ...);
 //void show_one_pnode(PNode*);

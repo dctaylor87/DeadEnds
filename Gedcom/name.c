@@ -8,6 +8,8 @@
 //  Last changed on 10 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "name.h"
 #include "gnode.h"
@@ -99,7 +101,7 @@ int getFirstInitial(String name)
 //  soundex -- Return the Soundex code of a surname.
 //    MNOTE: The soundex code is returned in static memory.
 //--------------------------------------------------------------------------------------------------
-String soundex(String name)
+String soundex(CString name)
 //  name -- Surname to find the Soundex code for.
 {
     static char scratch[MAXNAMELEN];
@@ -107,7 +109,7 @@ String soundex(String name)
     int c, j;
     if (!name || strlen(name) > MAXNAMELEN || !strcmp(name, "____"))
         return "Z999";
-    String p = name;
+    CString p = name;
     String q = scratch;
     while ((c = *p++))
         *q++ = toupper(c);
@@ -469,7 +471,7 @@ String trimName(String name, int len)
     int i, sdex = -1, nparts;
     nameToParts(name, parts);
     name = partsToName(parts);
-    if (strlen(name) <= len + 2) return name;
+    if (strlen(name) <= (size_t)len + 2) return name;
     for (i = 0; i < MAXPARTS; i++) {
         if (!parts[i]) break;
         if (*parts[i] == '/') sdex = i;
@@ -479,17 +481,17 @@ String trimName(String name, int len)
     for (i = sdex-1; i >= 0; --i) {
         *(parts[i] + 1) = 0;
         name = partsToName(parts);
-        if (strlen(name) <= len + 2) return name;
+        if (strlen(name) <= (size_t)len + 2) return name;
     }
     for (i = sdex-1; i >= 1; --i) {
         parts[i] = null;
         name = partsToName(parts);
-        if (strlen(name) <= len + 2) return name;
+        if (strlen(name) <= (size_t)len + 2) return name;
     }
     for (i = nparts-1; i > sdex; --i) {
         parts[i] = null;
         name = partsToName(parts);
-        if (strlen(name) <= len + 2) return name;
+        if (strlen(name) <= (size_t)len + 2) return name;
     }
     return name;
 }

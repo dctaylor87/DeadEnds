@@ -7,6 +7,8 @@
 //  Last changed on 8 February 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "gnode.h"
 #include "nodeutils.h"

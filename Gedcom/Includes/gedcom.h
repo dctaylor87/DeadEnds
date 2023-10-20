@@ -71,12 +71,16 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
 
 //  FORFAMSS / ENDFAMSS -- Iterator for a person's families as a spouse.
 //--------------------------------------------------------------------------------------------------
+// NOTE: depending on code inserted between FORFAMSS and ENDFAMSS, some
+// variables might be unused, hence the ATTRIBUTE_UNUSED.
 #define FORFAMSS(indi, fam, spouse, num)\
     {\
     GNode* __node = FAMS(indi);\
     int __sex = SEXV(indi);\
-    GNode *fam, *spouse;\
-    int num = 0;\
+    GNode *fam;\
+    GNode *spouse ATTRIBUTE_UNUSED;\
+    int num ATTRIBUTE_UNUSED;\
+    num = 0;\
     while (__node) {\
         fam = keyToFamily(rmvat(__node->value), theDatabase);\
         ASSERT(fam);\
@@ -95,11 +99,16 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
 
 // FORFAMCS / ENDFAMCS -- Iterator for a person's families as a child.
 //--------------------------------------------------------------------------------------------------
+// NOTE: depending on code inserted between FORFAMCS and ENDFAMCS, some
+// variables might be unused, hence the ATTRIBUTE_UNUSED.
 #define FORFAMCS(indi, fam, fath, moth, num)\
 {\
     GNode* __node = FAMC(indi);\
-    GNode *fam, *fath, *moth;\
-    int num = 0;\
+    GNode *fam;\
+    GNode *fath ATTRIBUTE_UNUSED;\
+    GNode *moth ATTRIBUTE_UNUSED;\
+    int num ATTRIBUTE_UNUSED;\
+    num = 0;\
     while (__node) {\
         fam = keyToFamily(rmvat(__node->value), theDatabase);\
         ASSERT(fam);\
@@ -118,7 +127,8 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
 //--------------------------------------------------------------------------------------------------
 #define FORTAGVALUES(root, tagg, node, value)\
 {\
-    GNode *node, *__node = root->child;\
+    GNode *node ATTRIBUTE_UNUSED;\
+    GNode *__node = root->child;\
     String value, __value;\
     while (__node) {\
         while (__node && strcmp(tagg, __node->tag))\

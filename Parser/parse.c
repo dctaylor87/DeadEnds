@@ -7,6 +7,8 @@
 //  Last changed on 7 July 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "parse.h"
 #include <stdarg.h>
 #include "functiontable.h"

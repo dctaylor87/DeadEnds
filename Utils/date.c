@@ -23,7 +23,7 @@ static void format_mod(int, String*);
 static String format_day(int, int);
 static String format_month(int, int);
 static String format_year(int, int);
-static void set_date_string(String);
+static void set_date_string(CString);
 static int get_date_tok(int*, String*);
 static void init_monthtbl(void);
 
@@ -54,7 +54,7 @@ static struct {
     { "to", "TO", "to", "TO" },             /*  7 */
 };
 
-static String sstr = null;
+static CString sstr = null;
 static StringTable *monthtbl = null;
 
 /*==========================================
@@ -86,7 +86,7 @@ static StringTable *monthtbl = null;
  * cmplx - if TRUE, then treat string as complex, including
  *         date modifiers, ranges, and/or double-dating
  *========================================*/
-String format_date (String str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx)
+String format_date (CString str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx)
 {
     int mod, da, mo, yr;
     String sda, smo, syr;
@@ -415,7 +415,7 @@ format_year (int yr,
 //  extract_date -- Extract date from free format string
 //--------------------------------------------------------------------------------------------------
 void
-extract_date (String str,
+extract_date (CString str,
               int *pmod,
               int *pda,
               int *pmo,
@@ -464,7 +464,7 @@ combine:
 
 //  set_date_string -- Initialize the date extraction string.
 //--------------------------------------------------------------------------------------------------
-static void set_date_string (String str)
+static void set_date_string (CString str)
 {
     sstr = str;
     if (!monthtbl) init_monthtbl();

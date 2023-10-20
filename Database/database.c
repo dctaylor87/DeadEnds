@@ -10,6 +10,8 @@
 //  Last changed 11 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "database.h"
 #include "gnode.h"
 #include "name.h"

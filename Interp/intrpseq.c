@@ -8,6 +8,8 @@
 //  Last changed on 19 June 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include <stdio.h>
 #include "standard.h"
 #include "symboltable.h"

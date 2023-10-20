@@ -7,6 +7,8 @@
 //  Last changed on 10 November 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "lineage.h"
 #include "gnode.h"
 #include "name.h"

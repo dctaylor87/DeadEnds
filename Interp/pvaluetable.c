@@ -8,6 +8,8 @@
 //  Last changed on 21 April 2023.
 //
 
+#include <ansidecl.h>
+
 #include "standard.h"
 #include "pvaluetable.h"
 

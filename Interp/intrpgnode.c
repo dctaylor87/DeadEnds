@@ -8,6 +8,8 @@
 //  Last changed on 8 April 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "interp.h"
 #include "pnode.h"

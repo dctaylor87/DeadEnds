@@ -10,6 +10,8 @@
 //  Created by Thomas Wetmore on 12 November 2022.
 //  Last changed on 10 November 2023.
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "gnode.h"
 #include "nodeutils.h"
@@ -157,7 +159,7 @@ String personToEvent(GNode* node, String tag, String head, int len, bool shorten
 		scratch[n] = '.';
 		scratch[++n] = 0;
 	}
-	if (n > len) scratch[len] = 0;
+	if ((int)n > len) scratch[len] = 0;
 	return scratch;
 }
 

@@ -9,6 +9,8 @@
 //  Last changed on 22 April 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "nameindex.h"
 #include "name.h"
 #include "sort.h"

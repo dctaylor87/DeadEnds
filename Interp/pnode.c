@@ -8,6 +8,8 @@
 //  Last changed on 3 June 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "pnode.h"
 #include "standard.h"
 #include "hashtable.h"

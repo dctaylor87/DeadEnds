@@ -9,6 +9,8 @@
 //  Last changed on 7 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include <stdarg.h>
 #include "symboltable.h"
 #include "functiontable.h"

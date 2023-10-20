@@ -89,9 +89,12 @@ void showSequence(Sequence*); // Show the contents of a sequence by pringing key
 
 //  FORSEQUENCE -- Macro that iterates over a sequence in its current order.
 //--------------------------------------------------------------------------------------------------
+// NOTE: depending on code inserted between FORSEQUENCE and ENDSEQUENCE, some
+// variables might be unused, hence the ATTRIBUTE_UNUSED.
+
 #define FORSEQUENCE(s,e,i)\
-{   int i;\
-    SequenceEl e, *_d;\
+{   int i ATTRIBUTE_UNUSED;\
+    SequenceEl e, *_d;				\
     _d = IData((Sequence*)s);\
     for (int _i = 0, _n = ((Sequence*)s)->size; _i < _n; _i++) {\
         e = _d[_i]; \

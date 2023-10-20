@@ -7,6 +7,8 @@
 //  Last changed on 11 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "gedcom.h"
 
 RecordType recordType(GNode *root)
@@ -36,7 +38,7 @@ int compareRecordKeys(Word p, Word q)
     ASSERT(strlen(a) > 1 && strlen(b) > 1);
     if (a[0] != b[0]) return a[0] - b[0];
     if (strlen(a) != strlen(b)) return (int) (strlen(a) - strlen(b));
-    for (int i = 1; i < strlen(a); i++) {
+    for (int i = 1; i < (int)strlen(a); i++) {
         if (a[i] != b[i]) return a[i] - b[i];
     }
     return 0;

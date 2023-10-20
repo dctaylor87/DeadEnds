@@ -7,6 +7,8 @@
 //  Last changed on 3 July 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "readnode.h"
 #include "stringtable.h"
 

@@ -24,7 +24,7 @@ String manipulateName(String, bool caps, bool reg, int maxlen);  // Manipulate a
 String getSurname(String);  // Get the surname of a Gedcom name.
 String getGivenNames(String);  // Get the given names of a Gedcom name.
 int getFirstInitial(String name);  // Get the first initial of a Gedcom name.
-String soundex(String surname);  // Get the Soundex code of a Gedcom surname.
+String soundex(CString surname);  // Get the Soundex code of a Gedcom surname.
 extern bool remove_name (String name, String key); // Remove entry from name record.
 String nameToNameKey(String name);  // Convert a partial or full Gedcom name to a name key.
 int compareNames(String name1, String name2); // Compare two Gedcom names.

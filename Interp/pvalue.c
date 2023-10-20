@@ -8,6 +8,8 @@
 //  Last changed on 15 May 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "pvalue.h"
 #include "standard.h"
 #include "gedcom.h"
@@ -339,7 +341,7 @@ PValue eqPValues (PValue val1, PValue val2, bool* eflg)
     //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
     if (*eflg) return nullPValue;
     bool b = false;  // False until proven true.
-    int type = val1.type;
+    PVType type = val1.type;
     if (type != val2.type) {
         *eflg = true;
         return nullPValue;
@@ -365,7 +367,7 @@ PValue nePValues(PValue val1, PValue val2, bool* eflg)
     //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
     if (*eflg) return nullPValue;
     bool b = false;  // False until proven true.
-    int type = val1.type;
+    PVType type = val1.type;
     if (type != val2.type) {
         *eflg = true;
         return nullPValue;
@@ -390,7 +392,7 @@ PValue lePValues(PValue val1, PValue val2, bool* eflg)
     //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
     if (*eflg) return nullPValue;
     bool b = false;  // False until proven true.
-    int type = val1.type;
+    PVType type = val1.type;
     if (type != val2.type) {
         *eflg = true;
         return nullPValue;
@@ -413,7 +415,7 @@ PValue gePValues (PValue val1, PValue val2, bool* eflg)
     //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
     if (*eflg) return nullPValue;
     bool b = false;  // False until proven true.
-    int type = val1.type;
+    PVType type = val1.type;
     if (type != val2.type) {
         *eflg = true;
         return nullPValue;
@@ -438,7 +440,7 @@ PValue ltPValues(PValue val1, PValue val2, bool* eflg)
     //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
     if (*eflg) return nullPValue;
     bool b = false;  // False until proven true.
-    int type = val1.type;
+    PVType type = val1.type;
     if (type != val2.type) {
         *eflg = true;
         return nullPValue;
@@ -462,7 +464,7 @@ PValue gtPValues(PValue val1, PValue val2, bool* eflg)
     //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
     if (*eflg) return nullPValue;
     bool b = false;  // False until proven true.
-    int type = val1.type;
+    PVType type = val1.type;
     if (type != val2.type) {
         *eflg = true;
         return nullPValue;

@@ -8,6 +8,8 @@
 //  Last changed on 8 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "sequence.h"
 #include "gnode.h"
@@ -888,7 +890,6 @@ Sequence *spouseSequence(Sequence *sequence)
 //--------------------------------------------------------------------------------------------------
 void sequenceToGedcom(Sequence *seq)
 {
-    int sex;
     GNode *indi, *husb, *wife, *chil, *rest, *famc, *fref;
     bool addfam;
     String tag, dkey;
@@ -903,7 +904,6 @@ void sequenceToGedcom(Sequence *seq)
     ENDSEQUENCE
     FORSEQUENCE(seq, el, num) {
         indi = keyToPerson(el->key, theDatabase);
-        sex = SEXV(indi);
         write_nonlink_indi(indi);
         famc = personToFamilyAsChild(indi);
         if (!famc) goto c;

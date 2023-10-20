@@ -9,6 +9,8 @@
 //  Last changed on 31 May 2023.
 //
 
+#include <ansidecl.h>
+
 #include "pvaluetable.h"
 #include "builtintable.h"
 #include "interp.h"

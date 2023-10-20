@@ -7,6 +7,8 @@
 //  Last changed on 8 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "pnode.h"
 #include "pvalue.h"
@@ -432,7 +434,8 @@ PValue __indi(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  firstindi -- Return the first person in the database.
 //    usage: firstindi() -> INDI
 //--------------------------------------------------------------------------------------------------
-PValue __firstindi (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __firstindi (PNode *node ATTRIBUTE_UNUSED,
+		    SymbolTable *stab ATTRIBUTE_UNUSED, bool *eflg)
 {
     static char key[10];  // Static buffer used to hold person keys.
     int i = 0;

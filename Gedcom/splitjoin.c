@@ -9,6 +9,8 @@
 //  Last changed on 10 September 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "gnode.h"
 #include "splitjoin.h"

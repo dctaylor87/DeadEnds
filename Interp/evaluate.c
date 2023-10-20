@@ -15,6 +15,7 @@
 //  Created by Thomas Wetmore on 15 December 2022.
 //  Last changed on 31 May 2023.
 //
+#include <ansidecl.h>
 
 #include "evaluate.h"
 #include "standard.h"
@@ -82,7 +83,7 @@ PValue evaluate(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 //  evaluateIdent -- Evaluate an identifier by looking it up in the symbol tables.
 //--------------------------------------------------------------------------------------------------
-PValue evaluateIdent(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue evaluateIdent(PNode *pnode, SymbolTable *symtab, bool* errflg ATTRIBUTE_UNUSED)
 //  pnode -- Program node holding an identifier.
 //  symtab -- Local symbol table.
 //  errflag -- Error flag.
@@ -319,7 +320,7 @@ GNode* evaluateGNode(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 // iistype -- See if a program node has the specified type.
 //--------------------------------------------------------------------------------------------------
-bool iistype (PNode *pnode, int type)
+bool iistype (PNode *pnode, PNType type)
 {
     return pnode->type == type;
 }

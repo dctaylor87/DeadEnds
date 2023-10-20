@@ -7,6 +7,8 @@
 //  Last changed on 17 June 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "symboltable.h"
 #include "gedcom.h"

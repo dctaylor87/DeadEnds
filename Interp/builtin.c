@@ -7,6 +7,7 @@
 //  Created by Thomas Wetmore on 14 December 2022.
 //  Last changed on 14 May 2023.
 //
+#include <ansidecl.h>
 
 #include "standard.h"
 #include "gnode.h"    // GNode.
@@ -576,7 +577,9 @@ PValue __copyfile (PNode *node, SymbolTable *stab, bool *eflg)
 //  __nl -- Newline function
 //    usage: nl() -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __nl(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __nl(PNode *pnode ATTRIBUTE_UNUSED,
+	    SymbolTable *symtab ATTRIBUTE_UNUSED,
+	    bool* errflg ATTRIBUTE_UNUSED)
 {
     return newlinePValue;
 }
@@ -584,7 +587,9 @@ PValue __nl(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __space -- Space function
 //    usage: sp() -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __space(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __space(PNode *pnode ATTRIBUTE_UNUSED,
+	       SymbolTable *symtab ATTRIBUTE_UNUSED,
+	       bool* errflg ATTRIBUTE_UNUSED)
 {
     return spacePValue;
 }
@@ -592,7 +597,9 @@ PValue __space(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __qt -- Double quote function
 //    usage: qt() -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __qt(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __qt(PNode *pnode ATTRIBUTE_UNUSED,
+	    SymbolTable *symtab ATTRIBUTE_UNUSED,
+	    bool* errflg ATTRIBUTE_UNUSED)
 {
     return quotePValue;
 }
@@ -610,7 +617,9 @@ PValue __children(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 //  __version -- Return the version of the DeadEnds program.
 //--------------------------------------------------------------------------------------------------
-PValue __version(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __version(PNode *pnode ATTRIBUTE_UNUSED,
+		 SymbolTable *symtab ATTRIBUTE_UNUSED,
+		 bool* errflg ATTRIBUTE_UNUSED)
 {
     extern String version;
     return PVALUE(PVString, uString, version);
@@ -618,7 +627,12 @@ PValue __version(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 //  __noop -- Used for builtins that have been removed (e.g., lock, unlock).
 //--------------------------------------------------------------------------------------------------
-PValue __noop(PNode *pnode, SymbolTable *symtab, bool* errflg) { return nullPValue; }
+PValue __noop(PNode *pnode ATTRIBUTE_UNUSED,
+	      SymbolTable *symtab ATTRIBUTE_UNUSED,
+	      bool* errflg ATTRIBUTE_UNUSED)
+{
+  return nullPValue;
+}
 
 //  FUNCTIONS ORIGINALLY FOUND IN INTERP/WRITE.C //
 

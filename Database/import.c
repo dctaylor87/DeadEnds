@@ -7,6 +7,8 @@
 //  Last changed on 10 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "import.h"
 #include "gnode.h"
@@ -116,7 +118,7 @@ bool importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
     return true;
 }
 
-Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog)
+Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog ATTRIBUTE_UNUSED)
 {
 	if (debugging) printf("Entered simpleImportFromFile\n");
     //  Create a new database to hold this file's records.

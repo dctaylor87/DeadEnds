@@ -8,6 +8,8 @@
 //  Last changed on 2 May 2023
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "gnode.h"
 #include "writenode.h"

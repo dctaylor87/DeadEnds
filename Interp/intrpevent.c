@@ -6,6 +6,8 @@
 //  Last changed on 17 March 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "standard.h"
 #include "pnode.h"
 #include "pvalue.h"

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "standard.h"
 
-void extract_date(String, int*, int*, int*, int*, String*);
+String format_date (CString str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx);
+void extract_date(CString, int*, int*, int*, int*, String*);
 
 #endif /* date_h */

@@ -9,6 +9,8 @@
 //  Last changed on 17 October 2023.
 //
 
+#include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
 #include "recordindex.h"
 #include "list.h"
 #include "sort.h"

@@ -83,6 +83,7 @@ extern PValue __indi(PNode*, SymbolTable*, bool*);
 extern PValue __indiset(PNode*, SymbolTable*, bool*);
 extern PValue __inode(PNode*, SymbolTable*, bool*);
 extern PValue __insert(PNode*, SymbolTable*, bool*);
+extern PValue __inset(PNode*, SymbolTable*, bool*);
 extern PValue __intersect(PNode*, SymbolTable*, bool*);
 extern PValue __key(PNode*, SymbolTable*, bool*);
 extern PValue __keysort(PNode*, SymbolTable*, bool*);
