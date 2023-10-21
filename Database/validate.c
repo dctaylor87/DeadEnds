@@ -7,6 +7,8 @@
 //  Last changed on 17 October 2023.
 //
 
+#include <ansidecl.h>
+
 #include "validate.h"
 #include "gnode.h"
 #include "gedcom.h"
@@ -16,11 +18,11 @@
 
 bool validateDatabase(Database*);
 
-static Database *theDatabase;
+//static Database *theDatabase;
 
 static bool debugging = true;
 
-static bool validatePersonIndex();
+static bool validatePersonIndex(void);
 static void validatePerson(GNode*);
 static void validateFamily(GNode*, RecordIndex*);
 static void validateSource(GNode*, RecordIndex*);
