@@ -12,6 +12,6 @@
 
 #include "database.h"
 
-static bool validateDatabase(Database*);
+extern bool validateDatabase(Database*);
 
 #endif // validate_h

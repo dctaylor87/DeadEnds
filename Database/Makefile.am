@@ -2,7 +2,7 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # not sure that this matters...
-CC=clang
+#CC=clang
 
 # Makefile for the DeadEnds Database library
 
@@ -12,7 +12,8 @@ libdatabase_a_SOURCES = \
 	database.c \
 	nameindex.c \
 	recordindex.c \
-	import.c
+	import.c \
+	validate.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
@@ -20,4 +21,5 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/Utils/Includes
 
-AM_CFLAGS = -Wno-unused-function
+#AM_CFLAGS = -Wno-unused-function -Wno-unused-but-set-variable
+AM_CFLAGS =

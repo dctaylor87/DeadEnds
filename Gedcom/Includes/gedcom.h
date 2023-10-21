@@ -99,9 +99,10 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
 
 // FORFAMCS / ENDFAMCS -- Iterator for a person's families as a child.
 //--------------------------------------------------------------------------------------------------
+
 // NOTE: depending on code inserted between FORFAMCS and ENDFAMCS, some
 // variables might be unused, hence the ATTRIBUTE_UNUSED.
-#define FORFAMCS(indi, fam, fath, moth, num)\
+#define OLDFORFAMCS(indi, fam, fath, moth, num)\
 {\
     GNode* __node = FAMC(indi);\
     GNode *fam;\
@@ -116,7 +117,24 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
         moth = familyToWife(fam);\
         num++;\
         {
-#define ENDFAMCS\
+#define OLDENDFAMCS\
+        }\
+        __node = __node->sibling;\
+        if (__node && nestr(__node->tag, "FAMC")) __node = null;\
+    }\
+}
+
+
+#define FORFAMCS(person, family)\
+{\
+    GNode *__node = FAMC(person);\
+    GNode *family;\
+    while (__node) {\
+        family = keyToFamily(rmvat(__node->value), theDatabase);\
+        ASSERT(family);\
+        {
+
+    #define ENDFAMCS\
         }\
         __node = __node->sibling;\
         if (__node && nestr(__node->tag, "FAMC")) __node = null;\

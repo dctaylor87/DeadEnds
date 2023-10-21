@@ -35,7 +35,7 @@ int compareRecordKeys(Word p, Word q)
     String a = (String) p;
     String b = (String) q;
 
-    ASSERT(strlen(a) > 1 && strlen(b) > 1);
+    ASSERT(strlen(a) > 1 && strlen(b) > 1);  // Is this strictly necessary?
     if (a[0] != b[0]) return a[0] - b[0];
     if (strlen(a) != strlen(b)) return (int) (strlen(a) - strlen(b));
     for (int i = 1; i < (int)strlen(a); i++) {

@@ -2,7 +2,7 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # not sure that this matters...
-CC=clang
+#CC=clang
 
 # what are we going to build?
 bin_PROGRAMS = test hashtabletest stringtabletest
@@ -32,8 +32,11 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/Database/Includes
 
+#AM_CFLAGS = -Wno-unused-function
+
 # these dependencies are so that building just the tests plus whatever
-# they depend upon will work
+# they depend upon will work.  It will only try to build the library
+# if it does not exist.
 
 ../DataTypes/libdatatypes.a:
 	${MAKE} -C ../DataTypes libdatatypes.a

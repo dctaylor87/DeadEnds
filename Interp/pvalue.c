@@ -5,7 +5,7 @@
 //    DeadEnds programs.
 //
 //  Created by Thomas Wetmore on 15 December 22.
-//  Last changed on 15 May 2023.
+//  Last changed on 17 October 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -21,30 +21,30 @@ extern const PValue nullPValue;  // Defined in builtin.c
 //--------------------------------------------------------------------------------------------------
 bool isGNodeType(PVType type)
 {
-    return type >= PVGNode && type <= PVOther;
+	return type >= PVGNode && type <= PVOther;
 }
 
 // ptypes -- Array of the PValue type names for debug printing.
 //--------------------------------------------------------------------------------------------------
 static char *ptypes[] = {
-    "PVNull", "PVAny", "PVInt", "PVFloat", "PVBool", "PVString", "PVGNode", "PVPerson",
-    "PVFamily", "PVSource", "PVEvent", "PVOther", "PVList", "PVTable", "PVSequence"};
+	"PVNull", "PVAny", "PVInt", "PVFloat", "PVBool", "PVString", "PVGNode", "PVPerson",
+	"PVFamily", "PVSource", "PVEvent", "PVOther", "PVList", "PVTable", "PVSequence"};
 
 //static int bool_to_int(bool);  // Convert an integer to a boolean.
 //static double bool_to_float(bool);  // Convert a real number to a boolean.
 
 static bool isZero(PValue);
-bool isZeroVUnion(VUnion);
+bool isZeroVUnion(PVType, VUnion);
 
 //  allocPValue -- Allocate a program value in the heap. Program values are normally value types,
 //    but when there are stored in tables or lists they need to be in the heap.
 //--------------------------------------------------------------------------------------------------
 PValue *allocPValue(PVType type, VUnion value)
 {
-    PValue* ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
-    ppvalue->type = type;
-    ppvalue->value = value;
-    return ppvalue;
+	PValue* ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
+	ppvalue->type = type;
+	ppvalue->value = value;
+	return ppvalue;
 }
 
 //  freePValue -- Free a PValue that has been allocated. Only PValues in symbol tables and
@@ -53,26 +53,26 @@ PValue *allocPValue(PVType type, VUnion value)
 //--------------------------------------------------------------------------------------------------
 void freePValue(PValue* ppvalue)
 {
-    switch (ppvalue->type) {
-        case PVString:
-            if (ppvalue->value.uString) stdfree(ppvalue->value.uString);
-            break;
-        case PVSequence:
-            deleteSequence(ppvalue->value.uSequence, false);
-            break;
-        default:
-            break;
-    }
-    stdfree(ppvalue);
+	switch (ppvalue->type) {
+		case PVString:
+			if (ppvalue->value.uString) stdfree(ppvalue->value.uString);
+			break;
+		case PVSequence:
+			deleteSequence(ppvalue->value.uSequence, false);
+			break;
+		default:
+			break;
+	}
+	stdfree(ppvalue);
 }
 
 // copyPValue -- Copy a program value.
 //--------------------------------------------------------------------------------------------------
 PValue *copyPValue(PValue pvalue)
 {
-    PValue *ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
-    memcpy(ppvalue, &pvalue, sizeof(PValue));
-    return ppvalue;
+	PValue *ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
+	memcpy(ppvalue, &pvalue, sizeof(PValue));
+	return ppvalue;
 }
 
 //PValue copyPValue(PValue pvalue)
@@ -86,17 +86,17 @@ PValue *copyPValue(PValue pvalue)
 //--------------------------------------------------------------------------------------------------
 void setPValue(PValue pvalue, int type, VUnion value)
 {
-    if (pvalue.type == PVString && pvalue.value.uString) stdfree(pvalue.value.uString);
-    pvalue.type = type;
-    if (type == PVString && value.uString) value.uString = strsave(value.uString);
-    pvalue.value = value;
+	if (pvalue.type == PVString && pvalue.value.uString) stdfree(pvalue.value.uString);
+	pvalue.type = type;
+	if (type == PVString && value.uString) value.uString = strsave(value.uString);
+	pvalue.value = value;
 }
 
 //  numericPValue -- See if a PValue is numeric.
 //--------------------------------------------------------------------------------------------------
 bool numericPValue(PValue value)
 {
-    return value.type == PVInt || value.type == PVFloat;
+	return value.type == PVInt || value.type == PVFloat;
 }
 
 // eq_conform_pvalues -- Make the types of two program expression values conform for doing
@@ -133,16 +133,16 @@ bool numericPValue(PValue value)
 //--------------------------------------------------------------------------------------------------
 void coercePValue(PValue* pvalue, int newType, bool* eflg)
 {
-    int curType = pvalue->type;
-    if (curType == newType) return;  //  Nothing to do.
+	int curType = pvalue->type;
+	if (curType == newType) return;  //  Nothing to do.
 
-    // Handle PVInt to PVFloat.
-    if (newType == PVFloat && curType == PVInt) {
-        pvalue->type = newType;
-        pvalue->value.uFloat = (float) pvalue->value.uInt;
-    }
-    printf("DID NOT COERCE FROM %d to %d\n", curType, newType);
-    return;
+	// Handle PVInt to PVFloat.
+	if (newType == PVFloat && curType == PVInt) {
+		pvalue->type = newType;
+		pvalue->value.uFloat = (float) pvalue->value.uInt;
+	}
+	printf("DID NOT COERCE FROM %d to %d\n", curType, newType);
+	return;
 //    if (*eflg) return;
 //    if (!is_pvalue(pvalue)) { *eflg = true; return; }
 //    // If the types are the same there is nothing to do.
@@ -219,86 +219,86 @@ void coercePValue(PValue* pvalue, int newType, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 bool isPValue(PValue pvalue)
 {
-    return pvalue.type >= PVNull && pvalue.type <= PVSequence;
+	return pvalue.type >= PVNull && pvalue.type <= PVSequence;
 }
 
 //  isRecordType -- Check if a program value type is a Gedcom node type.
 //--------------------------------------------------------------------------------------------------
 bool isRecordType(PVType type)
 {
-    return type >= PVPerson && type <= PVOther;
+	return type >= PVPerson && type <= PVOther;
 }
 
 //  addPValues -- Add two program values and return their sum.
 //--------------------------------------------------------------------------------------------------
 PValue addPValues (PValue val1, PValue val2, bool* eflg)
 {
-    PVType type1 = val1.type, type2 = val2.type;
-    if (type1 != type2 || (type1 != PVInt && type1 != PVFloat)) {
-        *eflg = true;
-        return nullPValue;
-    }
-    if (type1 == PVInt)
-        return PVALUE(PVInt, uInt, val1.value.uInt+val2.value.uInt);
-    else
-        return PVALUE(PVFloat, uFloat, val1.value.uFloat+val2.value.uFloat);
+	PVType type1 = val1.type, type2 = val2.type;
+	if (type1 != type2 || (type1 != PVInt && type1 != PVFloat)) {
+		*eflg = true;
+		return nullPValue;
+	}
+	if (type1 == PVInt)
+		return PVALUE(PVInt, uInt, val1.value.uInt+val2.value.uInt);
+	else
+		return PVALUE(PVFloat, uFloat, val1.value.uFloat+val2.value.uFloat);
 }
 
 //  subPValues -- Subtract two program values and return their difference.
 //--------------------------------------------------------------------------------------------------
 PValue subPValues (PValue val1, PValue val2, bool* eflg)
 {
-    PVType type1 = val1.type, type2 = val2.type;
-    if (type1 != type2 || (type1 != PVInt && type1 != PVFloat)) {
-        *eflg = true;
-        return nullPValue;
-    }
-    if (type1 == PVInt)
-        return PVALUE(PVInt, uInt, val1.value.uInt-val2.value.uInt);
-    else
-        return PVALUE(PVFloat, uFloat, val1.value.uFloat-val2.value.uFloat);
+	PVType type1 = val1.type, type2 = val2.type;
+	if (type1 != type2 || (type1 != PVInt && type1 != PVFloat)) {
+		*eflg = true;
+		return nullPValue;
+	}
+	if (type1 == PVInt)
+		return PVALUE(PVInt, uInt, val1.value.uInt-val2.value.uInt);
+	else
+		return PVALUE(PVFloat, uFloat, val1.value.uFloat-val2.value.uFloat);
 }
 
 // mulPValues -- Multiply two program values and return their product.
 //--------------------------------------------------------------------------------------------------
 PValue mulPValues (PValue val1, PValue val2, bool* eflg)
 {
-    PVType type1 = val1.type, type2 = val2.type;
-    if (type1 != type2 || (type1 != PVInt && type1 != PVFloat)) {
-        *eflg = true;
-        return nullPValue;
-    }
-    if (type1 == PVInt)
-        return PVALUE(PVInt, uInt, val1.value.uInt*val2.value.uInt);
-    else
-        return PVALUE(PVFloat, uFloat, val1.value.uFloat*val2.value.uFloat);
+	PVType type1 = val1.type, type2 = val2.type;
+	if (type1 != type2 || (type1 != PVInt && type1 != PVFloat)) {
+		*eflg = true;
+		return nullPValue;
+	}
+	if (type1 == PVInt)
+		return PVALUE(PVInt, uInt, val1.value.uInt*val2.value.uInt);
+	else
+		return PVALUE(PVFloat, uFloat, val1.value.uFloat*val2.value.uFloat);
 }
 
 // divPValues -- Divide two PValues and return the quotient.
 //--------------------------------------------------------------------------------------------------
 PValue divPValues(PValue val1, PValue val2, bool* eflg)
 {
-    PVType type1 = val1.type, type2 = val2.type;
-    if (type1 != type2 || (type1 != PVInt && type1 != PVFloat) || isZero(val2)) {
-        *eflg = true;
-        return nullPValue;
-    }
-    if (type1 == PVInt)
-        return PVALUE(PVInt, uInt, val1.value.uInt/val2.value.uInt);
-    else
-        return PVALUE(PVFloat, uFloat, val1.value.uFloat/val2.value.uFloat);
+	PVType type1 = val1.type, type2 = val2.type;
+	if (type1 != type2 || (type1 != PVInt && type1 != PVFloat) || isZero(val2)) {
+		*eflg = true;
+		return nullPValue;
+	}
+	if (type1 == PVInt)
+		return PVALUE(PVInt, uInt, val1.value.uInt/val2.value.uInt);
+	else
+		return PVALUE(PVFloat, uFloat, val1.value.uFloat/val2.value.uFloat);
 }
 
 //  modPValues -- Take the modulus of two PValues. Both values must be integers.
 //--------------------------------------------------------------------------------------------------
 PValue modPValues (PValue val1, PValue val2, bool* eflg)
 {
-    PVType type1 = val1.type, type2 = val2.type;
-    if (type1 != type2 || type2 != PVInt || isZero(val2)) {
-        *eflg = true;
-        return nullPValue;
-    }
-    return PVALUE(PVInt, uInt, val1.value.uInt%val2.value.uInt);
+	PVType type1 = val1.type, type2 = val2.type;
+	if (type1 != type2 || type2 != PVInt || isZero(val2)) {
+		*eflg = true;
+		return nullPValue;
+	}
+	return PVALUE(PVInt, uInt, val1.value.uInt%val2.value.uInt);
 }
 
 //  exp_pvalues -- Exponentiation. Raise the first number to the power of the second. They must
@@ -306,29 +306,29 @@ PValue modPValues (PValue val1, PValue val2, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue expPValues (PValue val1, PValue val2, bool* eflg)
 {
-    PVType type1 = val1.type, type2 = val2.type;
-    if (type1 != type2 || type2 != PVInt) {
-        *eflg = true;
-        return nullPValue;
-    }
-    long prod = 1;
-    long base = val1.value.uInt;
-    long exp = val2.value.uInt;
-    for (int i = 0; i < exp; i++) {
-        prod *= base;
-    }
-    return PVALUE(PVInt, uInt, prod);
+	PVType type1 = val1.type, type2 = val2.type;
+	if (type1 != type2 || type2 != PVInt) {
+		*eflg = true;
+		return nullPValue;
+	}
+	long prod = 1;
+	long base = val1.value.uInt;
+	long exp = val2.value.uInt;
+	for (int i = 0; i < exp; i++) {
+		prod *= base;
+	}
+	return PVALUE(PVInt, uInt, prod);
 }
 
 //  iszero -- Return true if a numeric PValue is zero. Otherwise return false.
 //--------------------------------------------------------------------------------------------------
 static bool isZero(PValue value)
 {
-    switch (value.type) {
-        case PVInt: return value.value.uInt == 0;
-        case PVFloat: return value.value.uFloat == 0.0;
-        default: return false;
-    }
+	switch (value.type) {
+		case PVInt: return value.value.uInt == 0;
+		case PVFloat: return value.value.uFloat == 0.0;
+		default: return false;
+	}
 }
 
 // eqPValues -- See if two PValue are equal.
@@ -338,22 +338,22 @@ PValue eqPValues (PValue val1, PValue val2, bool* eflg)
 // val2 -- Right operand.
 // eflg -- Returned error flag.
 {
-    //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
-    if (*eflg) return nullPValue;
-    bool b = false;  // False until proven true.
-    PVType type = val1.type;
-    if (type != val2.type) {
-        *eflg = true;
-        return nullPValue;
-    }
-    switch (type) {
-        case PVInt: b = val1.value.uInt == val2.value.uInt; break;
-        case PVFloat: b = val1.value.uFloat = val2.value.uFloat; break;
-        case PVString: b = eqstr(val1.value.uString, val2.value.uString); break;
-        // TODO: ADD MORE CASES AS DEVELOPMENT CONTINUES. I.E., THE RECORD TYPES.
-        default: break;
-    }
-    return PVALUE(PVBool, uBool, b);
+	//num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
+	if (*eflg) return nullPValue;
+	bool b = false;  // False until proven true.
+	PVType type = val1.type;
+	if (type != val2.type) {
+		*eflg = true;
+		return nullPValue;
+	}
+	switch (type) {
+		case PVInt: b = val1.value.uInt == val2.value.uInt; break;
+		case PVFloat: b = val1.value.uFloat = val2.value.uFloat; break;
+		case PVString: b = eqstr(val1.value.uString, val2.value.uString); break;
+		// TODO: ADD MORE CASES AS DEVELOPMENT CONTINUES. I.E., THE RECORD TYPES.
+		default: break;
+	}
+	return PVALUE(PVBool, uBool, b);
 }
 
 // nePValues -- See if two PValues are not equal. First PValue is converted to a PVBool value
@@ -364,22 +364,22 @@ PValue nePValues(PValue val1, PValue val2, bool* eflg)
 //  val2 -- Right operand.
 //  eflg -- Returned error flag.
 {
-    //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
-    if (*eflg) return nullPValue;
-    bool b = false;  // False until proven true.
-    PVType type = val1.type;
-    if (type != val2.type) {
-        *eflg = true;
-        return nullPValue;
-    }
-    switch (type) {
-        case PVInt: b = val1.value.uInt != val2.value.uInt; break;
-        case PVFloat: b = val1.value.uFloat != val2.value.uFloat; break;
-        case PVString: b = nestr(val1.value.uString, val2.value.uString); break;
-        // TODO: ADD MORE CASES AS DEVELOPMENT CONTINUES. I.E., THE RECORD TYPES.
-        default: break;
-    }
-    return PVALUE(PVBool, uBool, b);
+	//num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
+	if (*eflg) return nullPValue;
+	bool b = false;  // False until proven true.
+	PVType type = val1.type;
+	if (type != val2.type) {
+		*eflg = true;
+		return nullPValue;
+	}
+	switch (type) {
+		case PVInt: b = val1.value.uInt != val2.value.uInt; break;
+		case PVFloat: b = val1.value.uFloat != val2.value.uFloat; break;
+		case PVString: b = nestr(val1.value.uString, val2.value.uString); break;
+		// TODO: ADD MORE CASES AS DEVELOPMENT CONTINUES. I.E., THE RECORD TYPES.
+		default: break;
+	}
+	return PVALUE(PVBool, uBool, b);
 }
 
 //  lePValues -- Check <= relation between PValues.
@@ -389,21 +389,21 @@ PValue lePValues(PValue val1, PValue val2, bool* eflg)
 //  val2 -- Right operand.
 //  eflg -- Returned error flag.
 {
-    //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
-    if (*eflg) return nullPValue;
-    bool b = false;  // False until proven true.
-    PVType type = val1.type;
-    if (type != val2.type) {
-        *eflg = true;
-        return nullPValue;
-    }
+	//num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
+	if (*eflg) return nullPValue;
+	bool b = false;  // False until proven true.
+	PVType type = val1.type;
+	if (type != val2.type) {
+		*eflg = true;
+		return nullPValue;
+	}
 	switch (type) {
 		case PVInt: b = val1.value.uInt <= val2.value.uInt; break;
 		case PVFloat: b = val1.value.uFloat <= val2.value.uFloat; break;
-        case PVString: b = (strcmp(val1.value.uString, val2.value.uString) <= 0); break;
-        default: break;
+		case PVString: b = (strcmp(val1.value.uString, val2.value.uString) <= 0); break;
+		default: break;
 	}
-    return PVALUE(PVBool, uBool, b);
+	return PVALUE(PVBool, uBool, b);
 }
 
 //  gePValues -- Check >= relation between PValues.
@@ -412,21 +412,21 @@ PValue gePValues (PValue val1, PValue val2, bool* eflg)
 //  val1, val2 -- Left and right operands.
 //  eflg -- Returned error flag.
 {
-    //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
-    if (*eflg) return nullPValue;
-    bool b = false;  // False until proven true.
-    PVType type = val1.type;
-    if (type != val2.type) {
-        *eflg = true;
-        return nullPValue;
-    }
-    switch (type) {
-        case PVInt: b = val1.value.uInt <= val2.value.uInt; break;
-        case PVFloat: b = val1.value.uFloat <= val2.value.uFloat; break;
-        case PVString: b = (strcmp(val1.value.uString, val2.value.uString) >= 0); break;
-        default: break;
-    }
-    return PVALUE(PVBool, uBool, b);
+	//num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
+	if (*eflg) return nullPValue;
+	bool b = false;  // False until proven true.
+	PVType type = val1.type;
+	if (type != val2.type) {
+		*eflg = true;
+		return nullPValue;
+	}
+	switch (type) {
+		case PVInt: b = val1.value.uInt <= val2.value.uInt; break;
+		case PVFloat: b = val1.value.uFloat <= val2.value.uFloat; break;
+		case PVString: b = (strcmp(val1.value.uString, val2.value.uString) >= 0); break;
+		default: break;
+	}
+	return PVALUE(PVBool, uBool, b);
 }
 
 // ltPValues -- Check < relation between PValues. The operands must have the same
@@ -437,21 +437,21 @@ PValue ltPValues(PValue val1, PValue val2, bool* eflg)
 // val2 -- Right operand.
 // eflg -- Returned error flag.
 {
-    //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
-    if (*eflg) return nullPValue;
-    bool b = false;  // False until proven true.
-    PVType type = val1.type;
-    if (type != val2.type) {
-        *eflg = true;
-        return nullPValue;
-    }
-    switch (type) {
-        case PVInt: b = val1.value.uInt < val2.value.uInt; break;
-        case PVFloat: b = val1.value.uFloat < val2.value.uFloat; break;
-        case PVString: b = (strcmp(val1.value.uString, val2.value.uString) < 0); break;
-        default: break;
-    }
-    return PVALUE(PVBool, uBool, b);
+	//num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
+	if (*eflg) return nullPValue;
+	bool b = false;  // False until proven true.
+	PVType type = val1.type;
+	if (type != val2.type) {
+		*eflg = true;
+		return nullPValue;
+	}
+	switch (type) {
+		case PVInt: b = val1.value.uInt < val2.value.uInt; break;
+		case PVFloat: b = val1.value.uFloat < val2.value.uFloat; break;
+		case PVString: b = (strcmp(val1.value.uString, val2.value.uString) < 0); break;
+		default: break;
+	}
+	return PVALUE(PVBool, uBool, b);
 }
 
 // gtPValues -- Check > relation between PValues.
@@ -461,64 +461,64 @@ PValue gtPValues(PValue val1, PValue val2, bool* eflg)
 // val2 -- Left PValue operand of >.
 // eflg -- Returned error flag if needed.
 {
-    //num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
-    if (*eflg) return nullPValue;
-    bool b = false;  // False until proven true.
-    PVType type = val1.type;
-    if (type != val2.type) {
-        *eflg = true;
-        return nullPValue;
-    }
-    switch (type) {
-        case PVInt: b = val1.value.uInt > val2.value.uInt; break;
-        case PVFloat: b = val1.value.uFloat > val2.value.uFloat; break;
-        case PVString: b = (strcmp(val1.value.uString, val2.value.uString) > 0); break;
-        default: break;
-    }
-    return PVALUE(PVBool, uBool, b);
+	//num_conform_pvalues(val1, val2, eflg);  // TODO: GET THIS CHECK OR SOMETHING SIMILAR INCORPORATED
+	if (*eflg) return nullPValue;
+	bool b = false;  // False until proven true.
+	PVType type = val1.type;
+	if (type != val2.type) {
+		*eflg = true;
+		return nullPValue;
+	}
+	switch (type) {
+		case PVInt: b = val1.value.uInt > val2.value.uInt; break;
+		case PVFloat: b = val1.value.uFloat > val2.value.uFloat; break;
+		case PVString: b = (strcmp(val1.value.uString, val2.value.uString) > 0); break;
+		default: break;
+	}
+	return PVALUE(PVBool, uBool, b);
 }
 
 //  incrPValue -- Increment a PValue. The PValue must be a PVInt, else error flag is set.
 //--------------------------------------------------------------------------------------------------
 PValue incrPValue(PValue pvalue, bool* eflg)
 {
-    ASSERT(!*eflg);
-    if (pvalue.type == PVInt)
-        return PVALUE(PVInt, uInt, pvalue.value.uInt + 1);
-        //return (PValue) { .pvType = PVInt, pv(.uInt = pvalue.pvValue.uInt + 1) };
-    else {
-        *eflg = true;
-        return nullPValue;
-    }
+	ASSERT(!*eflg);
+	if (pvalue.type == PVInt)
+		return PVALUE(PVInt, uInt, pvalue.value.uInt + 1);
+		//return (PValue) { .pvType = PVInt, pv(.uInt = pvalue.pvValue.uInt + 1) };
+	else {
+		*eflg = true;
+		return nullPValue;
+	}
 }
 
 //  decrPValue -- Decrement a PValue. The PValue must be a PVInt, else error flag is set.
 //--------------------------------------------------------------------------------------------------
 PValue decrPValue(PValue pvalue, bool* eflg)
 {
-    ASSERT(!*eflg);
-    if (pvalue.type == PVInt)
-        return PVALUE(PVInt, uInt, pvalue.value.uInt - 1);
-        //return (PValue) { .pvType = PVInt, pv(.uInt = pvalue.pvValue.uInt - 1) };
-    else {
-        *eflg = true;
-        return nullPValue;
-    }
+	ASSERT(!*eflg);
+	if (pvalue.type == PVInt)
+		return PVALUE(PVInt, uInt, pvalue.value.uInt - 1);
+		//return (PValue) { .pvType = PVInt, pv(.uInt = pvalue.pvValue.uInt - 1) };
+	else {
+		*eflg = true;
+		return nullPValue;
+	}
 }
 
 // negPValue -- Negate a PValue. The PValue must be a PVInt or PVFloat, else error flag is set.
 //--------------------------------------------------------------------------------------------------
 PValue negPValue(PValue value, bool* eflg)
 {
-    if (*eflg) return nullPValue;
-    if (value.type == PVInt)
-        return PVALUE(PVInt, uInt, -value.value.uInt);
-        //return (PValue) { .pvType = PVInt, pv(.uInt = -value.pvValue.uInt) };
-    if (value.type == PVFloat)
-        return PVALUE(PVFloat, uFloat, -value.value.uFloat);
-        //return (PValue) { .pvType = PVFloat, pv(.uInt = -value.pvValue.uFloat) };
-    *eflg = true;
-    return nullPValue;
+	if (*eflg) return nullPValue;
+	if (value.type == PVInt)
+		return PVALUE(PVInt, uInt, -value.value.uInt);
+		//return (PValue) { .pvType = PVInt, pv(.uInt = -value.pvValue.uInt) };
+	if (value.type == PVFloat)
+		return PVALUE(PVFloat, uFloat, -value.value.uFloat);
+		//return (PValue) { .pvType = PVFloat, pv(.uInt = -value.pvValue.uFloat) };
+	*eflg = true;
+	return nullPValue;
 }
 
 //  showPValue -- Debugging routine that shows a PValue.
@@ -556,28 +556,28 @@ void showPValue(PValue pvalue)
 //--------------------------------------------------------------------------------------------------
 String pvalueToString(PValue pvalue, bool showType)
 {
-    PVType type = pvalue.type;
-    VUnion value = pvalue.value;
-    static char scratch[1024];
-    char *p = scratch;
-    if (showType) {
-        sprintf(p, "%s: ", ptypes[type]);
-        p += strlen(p);
-    }
-    switch (type) {
-        case PVInt: sprintf(p, "%ld", value.uInt); break;
-        case PVFloat: sprintf(p, "%f", value.uFloat); break;
-        case PVString: sprintf(p, "%s", value.uString); break;
-        case PVBool: sprintf(p, "%s", value.uBool ? "true" : "false"); break;
-        case PVPerson:
-        case PVFamily:
-        case PVSource:
-        case PVEvent:
-        case PVOther:
-        case PVGNode: sprintf(p, "%s", gnodeToString(value.uGNode, gnodeLevel(value.uGNode))); break;
-        case PVAny: sprintf(p, "any"); break;
-        case PVNull: sprintf(p, "null"); break;
-        default: sprintf(p, "not implemented");
-    }
-    return strsave(scratch);
+	PVType type = pvalue.type;
+	VUnion value = pvalue.value;
+	static char scratch[1024];
+	char *p = scratch;
+	if (showType) {
+		sprintf(p, "%s: ", ptypes[type]);
+		p += strlen(p);
+	}
+	switch (type) {
+		case PVInt: sprintf(p, "%ld", value.uInt); break;
+		case PVFloat: sprintf(p, "%f", value.uFloat); break;
+		case PVString: sprintf(p, "%s", value.uString); break;
+		case PVBool: sprintf(p, "%s", value.uBool ? "true" : "false"); break;
+		case PVPerson:
+		case PVFamily:
+		case PVSource:
+		case PVEvent:
+		case PVOther:
+		case PVGNode: sprintf(p, "%s", gnodeToString(value.uGNode, gnodeLevel(value.uGNode))); break;
+		case PVAny: sprintf(p, "any"); break;
+		case PVNull: sprintf(p, "null"); break;
+		default: sprintf(p, "not implemented");
+	}
+	return strsave(scratch);
 }

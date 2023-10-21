@@ -99116,14 +99116,6 @@
 2 SOUR JCW
 1 FAMC @F1188@
 1 FAMS @F1446@
-0 @I4188@ INDI
-1 NAME Joseph /Bacon/
-1 SEX M
-1 BIRT
-2 PLAC Middletown, Connecticut
-2 SOUR John Stewart
-1 SOUR JCW
-1 FAMS @F1189@
 0 @I4189@ INDI
 1 NAME Bethiah /Bacon/
 1 SEX F
