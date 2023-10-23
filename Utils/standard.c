@@ -35,7 +35,7 @@ static bool loggingAllocs = false; // Whether currently logging.
 static long bytesAllocated = 0;
 static long bytesFreed = 0;
 
-String version = "deadends.1.0.0";
+CString version = "deadends.1.0.0";
 
 static String lastSegment(String path);
 

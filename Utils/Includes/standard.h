@@ -92,6 +92,8 @@ void __logAllocations(bool);  // Turn allocation logging on and off.
 void __fatal(String, int); // standard.c
 //void __assert(bool, String, int);  // standard.c
 
+extern CString version;		// standard.c
+
 // These macros are used for character types in the chartype() function.
 #define WHITE  ' '
 #define LETTER 'a'

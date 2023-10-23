@@ -621,7 +621,6 @@ PValue __version(PNode *pnode ATTRIBUTE_UNUSED,
 		 SymbolTable *symtab ATTRIBUTE_UNUSED,
 		 bool* errflg ATTRIBUTE_UNUSED)
 {
-    extern String version;
     return PVALUE(PVString, uString, version);
 }
 
