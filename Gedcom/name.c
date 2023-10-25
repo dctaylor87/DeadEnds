@@ -14,6 +14,7 @@
 #include "name.h"
 #include "gnode.h"
 #include "nameindex.h"
+#include "database.h"
 
 static int old = 0;
 
@@ -29,8 +30,6 @@ static void cmpsqueeze (String in, String out);
 static String nameSurnameFirst(String);
 
 //extern NameIndex *nameIndex;
-
-extern Database *theDatabase;
 
 //  nameToNameKey - Convert Gedcom name or partial name to a name key. A name key is six
 //    characters and consists of the name's first initial and the soundex of the surname.

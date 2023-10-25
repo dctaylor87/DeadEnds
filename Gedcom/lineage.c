@@ -12,8 +12,7 @@
 #include "lineage.h"
 #include "gnode.h"
 #include "name.h"
-
-extern Database *theDatabase;
+#include "database.h"
 
 static bool debugging = false;
 

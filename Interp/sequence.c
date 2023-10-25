@@ -21,6 +21,7 @@
 #include "splitjoin.h"
 #include "stringtable.h"
 #include "sort.h"
+#include "database.h"
 
 static bool debugging = true;
 
@@ -29,7 +30,6 @@ static void new_write_node (int levl, GNode* node, bool list);
 static void write_family (String key, StringTable *itab);
 
 //extern RecordIndex *theIndex;
-extern Database *theDatabase;
 
 //  Compare functions used when sorting sequences of persons.
 //--------------------------------------------------------------------------------------------------

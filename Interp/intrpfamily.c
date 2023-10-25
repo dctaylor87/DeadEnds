@@ -17,7 +17,6 @@
 #include "builtintable.h"
 
 //extern RecordIndex *theIndex;
-extern Database *theDatabase;
 
 //  __marriage -- Return the first marriage event of a family.
 //    usage: marriage(FAM) -> EVENT

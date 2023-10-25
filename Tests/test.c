@@ -12,6 +12,7 @@
 #include "pnode.h"
 #include "errors.h"
 #include "sequence.h"
+#include "database.h"
 
 //static bool debugging = false;
 
@@ -21,7 +22,6 @@ static FILE *outputFile = null;
 extern String currentProgramFileName;
 extern int currentProgramLineNumber;
 extern FunctionTable *procedureTable;
-extern Database *theDatabase;
 
 extern Database *simpleImportFromFile(FILE*, ErrorLog*);
 static void sequenceTests(FILE*);

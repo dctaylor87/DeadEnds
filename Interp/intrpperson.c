@@ -21,7 +21,6 @@
 #include "builtintable.h"
 
 //extern RecordIndex *theIndex;
-extern Database *theDatabase;
 
 // __name -- Get a person's name.
 //   usage: name(INDI [,BOOL]) -> STRING
