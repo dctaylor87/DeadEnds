@@ -1,0 +1,63 @@
+The following instructions assume that your DeadEnds is in a Git
+repository.  If you received a distribution [none has occurred as
+yet], then some of these steps can be skipped, but it won't hurt to
+perform them.
+
+. cd to the top of the workspace and type the following two commands:
+
+  automake
+  autoheader
+  autoconf
+
+The automake command generates Makefile.in files that will
+be used by configure (in a later step) to generate the makefiles.
+
+The autoheader file generates the config.h.in file.
+
+The autoconf command generates the configure command.
+
+. pick a directory where you wish to do the build.
+
+NOTE: While building inside the source workspace does work, it is
+strongly discouraged.
+
+. cd /to/the/top/of/the/build/location and type
+
+  /path/to/the/top/of/the/source/tree/configure
+
+NOTE: giving a relative path is permissible.  For example, if you have
+decided to have your build tree as a directory in the directory that
+contains DeadEnds, then the following will work (assuming the DeadEnds
+directory is called DeadEnds, other modify as appropriate):
+
+  ../DeadEnds/configure
+
+The configure script supports a gazillion options.  To see what they
+are, type --help to the configure command.
+
+The configure script generates the Makefile's from the Makefile.in's.
+And config.h from config.h.in.
+
+. once configure finishes, type
+
+  make
+
+Once everything has built, it can normally be installed with
+
+  make install
+
+But, DeadEnds does not currently have anything to install.  In the
+future it might.
+
+NOTE: You should NOT edit the Makefile.in files.  They are *GENERATED*
+by automake from the corresponding Makefile.am files and some other
+inputs.  If you edit them, your changes *WILL* be lost the next time
+automake is run.
+
+Similarly, the configure script is *GENERATED* from configure.ac and
+other inputs by autoconf.  Any changes made *WILL* be lost the next
+time that autoconf is run.  If you need changes, you should probably
+edit configure.ac and rerun autoconf.
+
+And, config.h.in is also a *GENERATED* file.  If you edit it, your
+changes *WILL* be lost.
