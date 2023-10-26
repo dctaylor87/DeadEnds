@@ -5,7 +5,7 @@
 #CC=clang
 
 # what are we going to build?
-bin_PROGRAMS = test hashtabletest stringtabletest
+bin_PROGRAMS = test hashtabletest stringtabletest testpython
 
 # what goes into hashtabletest, stringtabletest, test:
 
@@ -15,24 +15,46 @@ stringtabletest_SOURCES = teststringtable.c
 
 test_SOURCES = test.c
 
+testpython_SOURCES = testpython.c
+
 # extra stuff for hashtabletest, hashtabletest, test
 
-LIBS =  ../Parser/libparser.a ../Interp/libinterp.a \
+# Ordering:
+# Utils has to go before DataTypes due to searchIntegerTable, insertInIntegerTable
+# Parser has to go before Interp
+# 
+# 
+LIBS =  ../Python/libpyllines.a \
+	../Parser/libparser.a ../Interp/libinterp.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
-	../DataTypes/libdatatypes.a ../Utils/libutils.a
+	../Utils/libutils.a ../DataTypes/libdatatypes.a \
+	$(PYTHON_LIBS)
 
 # $(top_builddir)        for files in the build tree
 # $(top_srcdir)          for files in the source tree
 
+# Flags needed to compile Python code
+PYTHON_CPPFLAGS = @PYTHON_CPPFLAGS@
+PYTHON_CFLAGS = @PYTHON_CFLAGS@
+
+# Flags needed to link Python code
+PYTHON_LIBS = @PYTHON_LIBS@
+
 AM_CPPFLAGS = \
+	-I$(top_srcdir) \
+	-I$(top_srcdir)/Python/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Parser/Includes \
 	-I$(top_srcdir)/Interp/Includes \
 	-I$(top_srcdir)/Gedcom/Includes \
-	-I$(top_srcdir)/Database/Includes
+	-I$(top_srcdir)/Database/Includes \
+	$(PYTHON_CPPFLAGS)
+
+DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 
 #AM_CFLAGS = -Wno-unused-function
+AM_CFLAGS = $(PYTHON_CFLAGS)
 
 # these dependencies are so that building just the tests plus whatever
 # they depend upon will work.  It will only try to build the library
