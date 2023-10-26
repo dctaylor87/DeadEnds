@@ -12,7 +12,7 @@
 
 typedef struct HashTable HashTable;  // Forward reference needed.
 typedef struct Database Database;
-typedef enum st SexType;
+typedef enum SexType SexType;
 
 #include "standard.h"
 #include "gedcom.h"
@@ -24,12 +24,12 @@ typedef enum st SexType;
 //--------------------------------------------------------------------------------------------------
 typedef struct GNode GNode;
 struct GNode {
-    String key;     // Record key; only root nodes use this field; @-signs are removed.
-    String tag;     // Line tag; all nodes use this field.
-    String value;   // Line value; values are optional.
-    GNode *parent;  // Parent node; all nodes except roots use this field.
-    GNode *child;   // First child none of this node, if any.
-    GNode *sibling; // Next sibling node of this node, if any.
+	String key;     // Record key; only root nodes use this field; @-signs are removed.
+	String tag;     // Line tag; all nodes use this field.
+	String value;   // Line value; values are optional.
+	GNode *parent;  // Parent node; all nodes except roots use this field.
+	GNode *child;   // First child none of this node, if any.
+	GNode *sibling; // Next sibling node of this node, if any.
 };
 
 //String fileof = (String) "The file is as positioned at EOF.";

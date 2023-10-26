@@ -6,7 +6,7 @@
 //    may interpret a node directly, or call a more specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 7 October 2023.
+//  Last changed on 21 October 2023.
 //
 
 #include <stdarg.h>
@@ -414,10 +414,16 @@ InterpType interpFamilies(PNode *node, SymbolTable* stab, PValue *pval)
         prog_error(node, "the first argument to families must be a person");
         return InterpError;
     }
-    FORFAMSS(indi, fam, spouse, nfams) {
+    GNode *spouse = null;
+    int count = 0;
+    FORFAMSS(indi, fam) {
         assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
+        SexType sex = SEXV(indi);
+        if (sex == sexMale) spouse = familyToWife(fam);
+        else if (sex == sexFemale) spouse = familyToHusband(fam);
+        else spouse = null;
         assignValueToSymbol(stab, node->spouseIden, PVALUE(PVPerson, uGNode, spouse));
-        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, nfams));
+        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, ++count));
         InterpType irc = interpret(node->loopState, stab, pval);
         switch (irc) {
             case InterpContinue:

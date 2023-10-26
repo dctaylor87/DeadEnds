@@ -408,6 +408,7 @@ PValue __descendentset (PNode *programNode, SymbolTable *symbolTable, bool *eflg
 //--------------------------------------------------------------------------------------------------
 PValue __gengedcom(PNode *programNode, SymbolTable *symbolTable, bool *eflg)
 {
+    printf("Inside __gengedcom\n");
     ASSERT(programNode && programNode->arguments && !programNode->arguments->next && symbolTable);
 
     //  The argument must evaluate to a sequence.
