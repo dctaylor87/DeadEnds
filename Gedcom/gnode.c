@@ -377,6 +377,9 @@ bool traverseNodes (GNode* node, bool (*func)(GNode*))
 	return true;
 }
 
+#define FORTRAVERSE(root, node)\
+	GNode *node = root;
+
 //  countNodes -- Return the number of gedcom nodes in a record tree.
 //--------------------------------------------------------------------------------------------------
 int countNodes(GNode* node)

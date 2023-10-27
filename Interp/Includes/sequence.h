@@ -71,9 +71,9 @@ Sequence *personToFamilies(GNode *person, bool);  //  Return sequence of a perso
 Sequence *nameToSequence(String name, NameIndex*);  //  Return sequence of persons who match a name.
 Sequence *refn_to_indiseq(String refn);
 
-Sequence *unionSequence(Sequence *one, Sequence *two);
-Sequence *intersectSequence(Sequence *one, Sequence *two); 
-Sequence *differenceSequence(Sequence *one, Sequence *two);
+Sequence *unionSequence(Sequence*, Sequence*);
+Sequence *intersectSequence(Sequence*, Sequence*); 
+Sequence *differenceSequence(Sequence*, Sequence*);
 
 Sequence *childSequence(Sequence*);
 Sequence *parentSequence(Sequence*);

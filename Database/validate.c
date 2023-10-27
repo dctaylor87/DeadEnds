@@ -4,7 +4,7 @@
 //  validate.c -- Functions that validate Gedcom records.
 //
 //  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 17 October 2023.
+//  Last changed on 21 October 2023.
 //
 
 #include <ansidecl.h>
@@ -23,17 +23,17 @@ bool validateDatabase(Database*);
 static bool debugging = true;
 
 static bool validatePersonIndex(void);
+static bool validateFamilyIndex(void);
 static void validatePerson(GNode*);
-static void validateFamily(GNode*, RecordIndex*);
-static void validateSource(GNode*, RecordIndex*);
-static void validateEvent(GNode*, RecordIndex*);
-static void validateOther(GNode*, RecordIndex*);
+static void validateFamily(GNode*);
+static void validateSource(GNode*);
+static void validateEvent(GNode*);
+static void validateOther(GNode*);
 
 static GNode *getFamily(String key, RecordIndex*);
 static GNode *getPerson(String key, RecordIndex*);
 
 int numValidations = 0;  //  DEBUG.
-int abc = 4;
 
 //  validateDatabase
 //--------------------------------------------------------------------------------------------------
@@ -42,18 +42,13 @@ bool validateDatabase(Database *database)
 	ASSERT(database);
 	theDatabase = database;
 	validatePersonIndex();
-	//bool isOkay = true;
-	//if (!validateIndex(database->personIndex)) isOkay = false;
-	//if (!validateIndex(database->familyIndex)) isOkay = false;
+	validateFamilyIndex();
 	//if (!validateIndex(database->sourceIndex)) isOkay = false;
 	//if (!validateIndex(database->eventIndex)) isOkay = false;
 	//if (!validateIndex(database->otherIndex)) isOkay = false;
 	//return isOkay;
 	return true;
 }
-
-
-int xyz = 8;
 
 //  validatePersonIndex -- Validate the person index of the current database.
 //-------------------------------------------------------------------------------------------------
@@ -66,55 +61,16 @@ bool validatePersonIndex(void)
 	return true;
 }
 
-//  validateIndex -- Validate the records in a record index. The index should include all the
-//    records from a closed Gedcom file.
+//  validateFamilyIndex -- Validate the family index of the current database.
 //-------------------------------------------------------------------------------------------------
-static bool validateIndex(RecordIndex *index)
+bool validateFamilyIndex(void)
 {
-	//  Iterate through the records in the index.
-	int bucketIndex, elementIndex;
-	Word element = firstInHashTable(index, &bucketIndex, &elementIndex);
-	while (element) {
-		GNode* root = ((RecordIndexEl*) element)->root;
-		switch (recordType(root)) {
-		case GRPerson:
-		case GRFamily:
-		case GRSource:
-		case GREvent:
-		case GROther:
-		case GRHeader:
-		case GRTrailer:
-
-		case GRUnknown:
-			break;
-		}
-		element = nextInHashTable(index, &bucketIndex, &elementIndex);
-	}
+	FORHASHTABLE(theDatabase->familyIndex, element)
+		GNode *family = ((RecordIndexEl*) element)->root;
+		validateFamily(family);
+	ENDHASHTABLE
 	return true;
 }
-
-//  validateRecordIndex -- Validate the Gedcom records in a record index. The index should
-//    hold all the records from a closed Gedcom file.
-//--------------------------------------------------------------------------------------------------
-// void validateRecordIndex(RecordIndex *index, ErrorLog *errorLog)
-// {
-// 	int bucketIndex, elementIndex;
-// 	Word element = firstInHashTable(index, &bucketIndex, &elementIndex);
-// 	while (element) {
-// 		GNode *root = ((RecordIndexEl*) element)->root;
-// 		switch (recordType(root)) {
-// 			case GRPerson:  validatePerson(root, index); break;
-// 			case GRFamily:  validateFamily(root, index); break;
-// 			case GRSource:  validateSource(root, index); break;
-// 			case GREvent:   validateEvent(root, index); break;
-// 			case GROther:   validateOther(root, index); break;
-// 			case GRUnknown:
-// 			case GRHeader:
-// 			case GRTrailer: break;
-// 		}
-// 		element = nextInHashTable(index, &bucketIndex, &elementIndex);
-// 	}
-// }
 
 extern String nameString(String);
 
@@ -122,24 +78,15 @@ extern String nameString(String);
 //--------------------------------------------------------------------------------------------------
 static void validatePerson(GNode *person)
 {
-	GNode *nameNode = NAME(person);
-	String name = "whoops";
-	if (nameNode && nameNode->value) name = nameString(nameNode->value);
-	if (debugging) {
-		printf("---------------------------------\nvalidatePerson: Validating %s %s\n",
-			   person->key, name);
-	}
-
-	//  Loop through the families the person is a child in. The person must be a child in each.
-	if (debugging) printf("Doing the FAMC part.\n");
-
+	if (debugging) { printf("Validating %s %s\n", person->key, NAME(person)->value); }
+	
+	//  Loop through the families the person should be a child in, checking that the person is a
+	//    child in each.
 	FORFAMCS(person, family)
-		if (debugging) printf("Person is a child in family %s.\n", family->key);
+		//if (debugging) printf("Person is a child in family %s.\n", family->key);
 		int numOccurrences = 0;
 		FORCHILDREN(family, child, count)
-			if (debugging) {
-				printf("    Child %d: %s %s\n", count, child->key, NAME(child)->value);
-			}
+			//if (debugging) { printf("    Child %d: %s %s\n", count, child->key, NAME(child)->value); }
 			if (person == child) numOccurrences++;
 		ENDCHILDREN
 		if (numOccurrences != 1) printf("ERROR ERROR ERROR\n");
@@ -147,7 +94,7 @@ static void validatePerson(GNode *person)
 
 	//  Loop through the families the person is a spouse in. Each family should have a HUSB or
 	//    WIFE node that refers back to the person.
-	if (debugging) printf("Doing the FAMS part.\n");
+	//if (debugging) printf("Doing the FAMS part.\n");
 	SexType sex = SEXV(person);
 	FORFAMILIES(person, family, count) {
 		if (debugging) printf("  person should be a spouse in family %s.\n", family->key);
@@ -169,26 +116,26 @@ static void validatePerson(GNode *person)
 //  validateFamily -- Validate a family node tree record. Check all HUSB, WIFE and CHIL links
 //    to persons.
 //--------------------------------------------------------------------------------------------------
-static void validateFamily(GNode *family, RecordIndex *index)
+static void validateFamily(GNode *family)
 {
 	if (debugging) {
 		printf("validateFamily(%s)\n", family->key);
 	}
 	// For each HUSB line in the family (multiples in non-traditional cases).
-	FORHUSBS(family, husband, n) {
+	FORHUSBS(family, husband)
 		// The husband must have one FAMS link back to this family.
 		int numOccurences = 0;
-		FORFAMSS(husband, fam, spouse, m) {
+		FORFAMSS(husband, fam)
 			numValidations++;
 			if (family == fam) numOccurences++;
-		} ENDFAMSS
+		ENDFAMSS
 		ASSERT(numOccurences == 1);
-	} ENDHUSBS
+	ENDHUSBS
 
 	//  For each WIFE line in the family (multiples in non-traditional cases)...
 	FORWIFES(family, wife, n) {
 		int numOccurences = 0;
-		FORFAMSS(wife, fam, spouse, m) {
+		FORFAMSS(wife, fam) {
 			numValidations++;
 			if (family == fam) numOccurences++;
 		} ENDFAMSS
@@ -211,11 +158,11 @@ static void validateFamily(GNode *family, RecordIndex *index)
 	//  Validate all other links.
 }
 
-void validateSource(GNode *source, RecordIndex *index) {}
+void validateSource(GNode *source) {}
 
-void validateEvent(GNode *event, RecordIndex *index) {}
+void validateEvent(GNode *event) {}
 
-void validateOther(GNode *other, RecordIndex *index) {}
+void validateOther(GNode *other) {}
 
 
 static GNode *getFamily(String key, RecordIndex *index)

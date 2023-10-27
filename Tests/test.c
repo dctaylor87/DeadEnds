@@ -56,14 +56,14 @@ int main()
 	parseProgram("llprogram", "../Reports");
 
 	//  Create a PNProcCall node to call the main procedure with
-	//currentProgramFileName = "internal";
-	//currentProgramLineNumber = 1;
-	//PNode *pnode = procCallPNode("main", null);
+	currentProgramFileName = "internal";
+	currentProgramLineNumber = 1;
+	PNode *pnode = procCallPNode("main", null);
 
 	//  Call the main procedure.
-	//SymbolTable *symbolTable = createSymbolTable();
-	//PValue returnPvalue;
-	//interpret(pnode, symbolTable, &returnPvalue);
+	SymbolTable *symbolTable = createSymbolTable();
+	PValue returnPvalue;
+	interpret(pnode, symbolTable, &returnPvalue);
 }
 
 static int compare(Word a, Word b)

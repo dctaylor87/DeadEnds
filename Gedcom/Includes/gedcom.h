@@ -4,7 +4,7 @@
 //  gedcom.h
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 13 October 2023.
+//  Last changed on 25 October 2023.
 //
 
 #ifndef gedcom_h
@@ -16,7 +16,7 @@ typedef struct GNode GNode;  //  Forward reference.
 
 //  SexType -- Enumeration for sex types.
 //--------------------------------------------------------------------------------------------------
-typedef enum st {
+typedef enum SexType {
     sexMale = 1, sexFemale, sexUnknown
 } SexType;
 
@@ -73,7 +73,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
 //--------------------------------------------------------------------------------------------------
 // NOTE: depending on code inserted between FORFAMSS and ENDFAMSS, some
 // variables might be unused, hence the ATTRIBUTE_UNUSED.
-#define FORFAMSS(indi, fam, spouse, num)\
+#define OLDFORFAMSS(indi, fam, spouse, num)\
     {\
     GNode* __node = FAMS(indi);\
     int __sex = SEXV(indi);\
@@ -91,7 +91,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
         num++;\
         {
 
-#define ENDFAMSS \
+#define OLDENDFAMSS \
         }\
         __node = __node->sibling;\
         if (__node && nestr(__node->tag, "FAMS")) __node = null;\
@@ -141,6 +141,23 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     }\
 }
 
+#define FORFAMSS(person, family)\
+{\
+    GNode *__node = FAMS(person);\
+    GNode *family;\
+    while (__node) {\
+        family = keyToFamily(rmvat(__node->value), theDatabase);\
+        ASSERT(family);\
+        {
+
+#define ENDFAMSS\
+        }\
+        __node = __node->sibling;\
+        if (__node && nestr(__node->tag, "FAMS")) __node = null;\
+    }\
+}
+
+
 //  FORTAGVALUES -- Iterate a list of nodes looking for a particular tag.
 //--------------------------------------------------------------------------------------------------
 #define FORTAGVALUES(root, tagg, node, value)\
@@ -164,20 +181,17 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
 
 //  FORHUSBS -- Iterate over the husbands in one family; handles non-traditional families.
 //--------------------------------------------------------------------------------------------------
-#define FORHUSBS(fam, husb, num)\
+#define FORHUSBS(fam, husb)\
 {\
     GNode* __node = findTag(fam->child, "HUSB");\
     GNode* husb=0;\
     String __key=0;\
-    int num = 0;\
     while (__node) {\
         __key = rmvat(__node->value);\
         if (!__key || !(husb = keyToPerson(__key, theDatabase))) {\
-            ++num;\
             __node = __node->sibling;\
             continue;\
         }\
-        ++num;\
         {
 #define ENDHUSBS\
         }\

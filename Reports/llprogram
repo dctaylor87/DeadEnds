@@ -6,7 +6,11 @@ proc main()
 	}
 
 	set(indi, indi("I1"))
-	call ahnen(indi)
+	indiset(a)
+	addtoset(a, indi, 0)
+	set(a,union(a,ancestorset(a)))
+	gengedcom(a)
+	/*call ahnen(indi)*/
 }
 
 proc ahnen(indi)

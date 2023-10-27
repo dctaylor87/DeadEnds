@@ -4,7 +4,7 @@
 //  functable.c -- Table of the built-in functions in the DeadEnds programming language.
 //
 //  Created by Thomas Wetmore on 10 January 2023.
-//  Last changed on 17 June 2023.
+//  Last changed on 26 October 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -76,7 +76,7 @@ BuiltIn builtIns[] = {
 //{ "fnode",        1,    1,    __fnode },
   { "fullname",     4,    4,    __fullname },
   { "ge",           2,    2,    __ge },
-//{ "gengedcom",    1,    1,    __gengedcom },
+  { "gengedcom",    1,    1,    __gengedcom },
 //{ "genindiset",   2,    2,    __genindiset },
   { "getel",        2,    2,    __getel },
 //{ "getfam",       1,    1,    __getfam },
