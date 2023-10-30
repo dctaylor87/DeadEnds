@@ -23,11 +23,11 @@ typedef struct SequenceEl {
     String key;     // Person or family key.  (TODO: Would it be better to use root GNodes here?)
     String name;    // Name of person.
     PValue *value;  // Any program value.
-    int keyInt;     // Key as an integer.
+    //int keyInt;     // Key as an integer.
 }
 *SequenceEl;
 
-#define spri(s) ((s)->keyInt)  // Key as integer.
+//#define spri(s) ((s)->keyInt)  // Key as integer.
 
 //  Sequence -- Data type for a person or family sequence (or list or set).
 //--------------------------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ Sequence *ancestorSequence(Sequence*);
 Sequence *descendentSequence(Sequence*); 
 Sequence *siblingSequence(Sequence*, bool);
 
-void sequenceToGedcom(Sequence*);
+void sequenceToGedcom(Sequence*, FILE*);
 
 // Kind of for debugging.
 void showSequence(Sequence*); // Show the contents of a sequence by pringing keys and names.for

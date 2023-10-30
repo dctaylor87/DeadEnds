@@ -77,7 +77,6 @@ void insertInNameIndex(NameIndex *index, String nameKey, String personKey)
         appendToBucket(bucket, element);
     }
     //  Add the person key to element's set of person keys.
-    //    MNOTE: personKey is in data space (in the rmvat function), so it must be saved.
     if (!isInSet(element->recordKeys, personKey))
         addToSet(element->recordKeys, strsave(personKey));  //  MNOTE: personKey is in data space.
 }

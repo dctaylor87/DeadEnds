@@ -4,7 +4,7 @@
 //  lineage.c -- Operations on Gedcom nodes based on genealogical relationsips and properties.
 //
 //  Created by Thomas Wetmore on 17 February 2023.
-//  Last changed on 10 November 2023.
+//  Last changed on 29 October 2023.
 //
 
 #include "lineage.h"
@@ -48,7 +48,7 @@ GNode* personToPreviousSibling(GNode* indi)
 	while (node && eqstr("CHIL", node->tag)) {
 		if (eqstr(indi->key, node->value)) {  // Found the person as a child.
 			if (!prev) return null;  // There is no previous sibling.
-			return keyToPerson(rmvat(prev->value), theDatabase);  // There is a previous sibling.
+			return keyToPerson(prev->value, theDatabase);  // There is a previous sibling.
 		}
 		prev = node;
 		node = node->sibling;  //  Move to the next CHIL node.
@@ -77,7 +77,7 @@ GNode* personToNextSibling(GNode* indi)
 	if (!node) return null;
 	node = node->sibling;
 	if (!node || nestr("CHIL", node->tag)) return null;
-	return keyToPerson(rmvat(node->value), theDatabase);
+	return keyToPerson(node->value, theDatabase);
 }
 
 //  familyToHusband -- Return the first husband of a family. This is the first HUSB in the
@@ -93,7 +93,7 @@ GNode* familyToHusband(GNode* node)
 	if (debugging) {
 		printf("familyToHusband found person %s\n", node->value);
 	}
-	return keyToPerson(rmvat(node->value), theDatabase);
+	return keyToPerson(node->value, theDatabase);
 }
 
 //  familyToWife -- Return the first wife of a family. This is the first WIFE in the FAM record.
@@ -108,7 +108,7 @@ GNode *familyToWife(GNode* node)
 	if (debugging) {
 		printf("familyToWife found person %s\n", node->value);
 	}
-	return keyToPerson(rmvat(node->value), theDatabase);
+	return keyToPerson(node->value, theDatabase);
 }
 
 //  Return the first spouse with a given sex from a family.
@@ -142,7 +142,7 @@ GNode* familyToFirstChild(GNode* node)
 {
 	if (!node) return null;
 	if (!(node = CHIL(node))) return null;
-	return keyToPerson(rmvat(node->value), theDatabase);
+	return keyToPerson(node->value, theDatabase);
 }
 
 //  familyToLastChild -- Return the last child of a family if any.
@@ -157,7 +157,7 @@ GNode* familyToLastChild(GNode* node)
 		if (eqstr(node->tag, "CHIL")) chil = node;
 		node = node->sibling;
 	}
-	return keyToPerson(rmvat(chil->value), theDatabase);
+	return keyToPerson(chil->value, theDatabase);
 }
 
 //  numberOfSpouses -- Returns the number of spouses of a person.
@@ -194,7 +194,7 @@ GNode* personToFamilyAsChild(GNode* person)
 {
 	if (!person) return null;
 	if (!(person = FAMC(person))) return null;
-	return keyToFamily(rmvat(person->value), theDatabase);
+	return keyToFamily(person->value, theDatabase);
 }
 
 //  personToName -- Return the name of a person. From the value of the first NAME node in the

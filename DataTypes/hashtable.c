@@ -214,6 +214,7 @@ void sortBucket(Bucket *bucket, int(*compare)(Word, Word), String(*getKey)(Word)
 //--------------------------------------------------------------------------------------------------
 bool isInHashTable(HashTable *table, String key)
 {
+    ASSERT(table && key);
     return searchHashTable(table, key) != null;
 }
 

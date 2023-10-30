@@ -1,15 +1,28 @@
 proc main()
 {
-	"Hello, World" nl() nl() nl()
-	forindi(indi, count) {
-		d(count) sp() name(indi) nl()
-	}
-
-	set(indi, indi("I1"))
+	set(i, indi("@I1@"))
 	indiset(a)
-	addtoset(a, indi, 0)
-	set(a,union(a,ancestorset(a)))
-	gengedcom(a)
+	addtoset(a, i, 0)
+	"Set a with just me has length " d(lengthset(a)) nl()
+	indiset(d)
+	set(d, descendentset(a))
+	"Set d with my descendents has length " d(lengthset(d)) nl()
+	set(a, union(a, d))
+	"Set d with me and my descendents has length " d(lengthset(a)) nl()
+
+
+	indiset(l)
+	set(i, indi("@I2@"))
+	addtoset(l, i, 0)
+	set(l, union(l, ancestorset(l)))
+	"Luann and her ancestors total " d(lengthset(l)) " persons." nl()
+
+	indiset(m)
+	addtoset(m, i, 0)
+	set(m, ancestorset(m))
+	"Luann has " d(lengthset(m)) " ancestors." nl()
+
+	/*gengedcom(a)*/
 	/*call ahnen(indi)*/
 }
 

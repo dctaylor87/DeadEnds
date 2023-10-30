@@ -33,10 +33,9 @@ static void deleteRecordIndexEl(Word word)
 }
 
 //  recordIndexElKey -- Return the key of record index element. This is the key of the root node.
-//  NOTE: Doesn't this mean that the key has @signs at each end?
 //--------------------------------------------------------------------------------------------------
 static String recordIndexElKey(Word word) {
-	return rmvat(((RecordIndexEl*) word)->root->key);
+	return ((RecordIndexEl*) word)->root->key;
 }
 
 //  createRecordIndex -- Create a record index. A record index is a hash table with its functions
@@ -54,11 +53,9 @@ void deleteRecordIndex(RecordIndex *index)
 	deleteHashTable(index);
 }
 
-//  insertInRecordIndex -- Add a (key, root) element to a record index.
-//  MNOTE: Keys come from the root node, but have the @-signs stripped. This function
-//    saves a copy of the key in the table. When elements of the index are deleted the
-//    key strings should also be.
-//  TODO: Shouldn't this function just create an element and then delegate to the hash table's
+//  insertInRecordIndex -- Add a (key, root) element to a record index. This function saves a
+//    copy of the key in the table. When elements are deleted the key strings should also be.
+//    TODO: Shouldn't this function create an element and then delegate to the hash table.
 //--------------------------------------------------------------------------------------------------
 static int recordInsertCount = 0;  //  Used for debugging.
 void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
