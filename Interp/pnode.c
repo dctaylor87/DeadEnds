@@ -16,6 +16,7 @@
 #include "functiontable.h"
 #include "gedcom.h"
 #include "interp.h"
+#include "parse.h"
 
 static bool debugging = false;
 
@@ -31,8 +32,6 @@ String pnodeTypes[] = {
 // External global variable not declared in header files.
 //--------------------------------------------------------------------------------------------------
 extern FunctionTable *functionTable;  // parse.c
-extern String currentProgramFileName;  // parse.c; used to set the file name of PNodes.
-extern int currentProgramLineNumber;;   // parse.c; used to set the line numbers of PNodes.
 
 // showPNode -- Show a PNode. For debugging.
 //--------------------------------------------------------------------------------------------------

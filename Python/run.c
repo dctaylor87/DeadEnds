@@ -43,7 +43,7 @@ static int execute_script (CNSTRING script);
 static char **script_array;
 
 /* how many scripts we've seen */
-int nscripts = 0;
+static int nscripts = 0;
 
 /* so that one time initialization is only run once */
 static int initialized = 0;

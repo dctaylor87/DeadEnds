@@ -20,15 +20,17 @@ testpython_SOURCES = testpython.c
 # extra stuff for hashtabletest, hashtabletest, test
 
 # Ordering:
-# Utils has to go before DataTypes due to searchIntegerTable, insertInIntegerTable
 # Parser has to go before Interp
+# Database has to go before GEDCOM
+# Utils has to go before DataTypes due to searchIntegerTable,insertInIntegerTable
 # 
 # 
-LIBS =  ../Python/libpyllines.a \
+LDADD =  ../Python/libpyllines.a \
 	../Parser/libparser.a ../Interp/libinterp.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
-	../Utils/libutils.a ../DataTypes/libdatatypes.a \
-	$(PYTHON_LIBS)
+	../DataTypes/libdatatypes.a ../Utils/libutils.a
+
+LIBS =  $(PYTHON_LIBS)
 
 # $(top_builddir)        for files in the build tree
 # $(top_srcdir)          for files in the source tree
@@ -41,7 +43,7 @@ PYTHON_CFLAGS = @PYTHON_CFLAGS@
 PYTHON_LIBS = @PYTHON_LIBS@
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir) \
+	-I$(top_builddir) \
 	-I$(top_srcdir)/Python/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \

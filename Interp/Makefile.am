@@ -28,6 +28,7 @@ libinterp_a_SOURCES = \
 	builtinlist.c
 
 AM_CPPFLAGS = \
+	-I$(top_srcdir)/Parser/Includes \
 	-I$(top_srcdir)/Interp/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \

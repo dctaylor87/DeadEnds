@@ -620,6 +620,7 @@ AC_CONFIG_FILES([Makefile \
         Gedcom/Makefile \
         Interp/Makefile \
         Parser/Makefile \
+        Programs/Makefile \
         Python/Makefile \
         DataTypes/Makefile \
         Utils/Makefile \

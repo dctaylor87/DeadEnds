@@ -27,7 +27,7 @@ typedef enum InterpType {
 void initializeInterpreter(Database*);
 void initset(void);
 void initrassa(void);
-void parseProgram(String fileName, String searchPath);
+void parseProgram(CString fileName, CString searchPath);
 void finishInterpreter(void);
 void finishrassa(void);
 void progmessage(char*);

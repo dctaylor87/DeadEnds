@@ -12,6 +12,9 @@
 
 #include "standard.h"  // String.
 
-void parseProgram(String fileName, String searchPath);  // Parse fileName found in searchPath.
+void parseProgram(CString fileName, CString searchPath);// Parse fileName found in searchPath.
+extern CString currentProgramFileName;			// Name of file being parsed.
+extern int currentProgramLineNumber;			// Current line number in file being parsed.
+extern FILE *currentProgramFile;
 
 #endif // parse_h

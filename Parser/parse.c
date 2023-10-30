@@ -29,12 +29,10 @@ SymbolTable *globalTable;             //  Table of global variables.
 FunctionTable *functionTable;         //  Table of user-defined functions.
 FunctionTable *procedureTable;        //  Table of user-defined procedures.
 List *pendingFileList;                //  List of names of the files to be parsed.
-String currentProgramFileName = null; //  Name of file being parsed
 FILE *currentProgramFile = null;      //  File structure of the file being parsed.
-int currentProgramLineNumber = 1;     //  Current line number in file being parsed.
 
 //  parseFile -- Parse a single file. Private to this file.
-static void parseFile(String fileName, String searchPath);
+static void parseFile(CString fileName, CString searchPath);
 
 //  parseProgram -- Parse a DeadEnds program and prepare it for interpreting. The name of the
 //    file with the main procedure is passed in with the search path to find it. This is the
@@ -43,7 +41,7 @@ static void parseFile(String fileName, String searchPath);
 //    calls parseFile on each file, which in turn uses the yacc-generated yyparse function to
 //    do the actual parsing. (The main procedure does not have to be in the first file.)
 //--------------------------------------------------------------------------------------------------
-void parseProgram(String fileName, String searchPath)
+void parseProgram(CString fileName, CString searchPath)
 //  fileName -- Name of the first file to parse; normally has the main procedure.
 //  searchPath -- Search path for finding the files.
 {
@@ -100,7 +98,7 @@ void parseProgram(String fileName, String searchPath)
 
 //  parseFile - Parse a program file. The function calls the yacc-generated yyparse function.
 //--------------------------------------------------------------------------------------------------
-static void parseFile(String fileName, String searchPath)
+static void parseFile(CString fileName, CString searchPath)
 //  fileName -- Name of the file to parse.
 //  searchPath -- Searchpath used to locate the file.
 {

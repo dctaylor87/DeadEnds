@@ -19,8 +19,6 @@
 static FILE *gedcomFile = null;
 static FILE *outputFile = null;
 
-extern String currentProgramFileName;
-extern int currentProgramLineNumber;
 extern FunctionTable *procedureTable;
 
 extern Database *simpleImportFromFile(FILE*, ErrorLog*);
