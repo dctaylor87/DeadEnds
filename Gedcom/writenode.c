@@ -16,8 +16,8 @@
 
 // Static functions defined in this file.
 //--------------------------------------------------------------------------------------------------
-static void writeGNodes(FILE*, int level, GNode*, bool indent, bool kids, bool sibs);
-static void writeGNode(FILE*, int level, GNode*, bool indent);
+void writeGNodes(FILE*, int level, GNode*, bool indent, bool kids, bool sibs);
+void writeGNode(FILE*, int level, GNode*, bool indent);
 static String swriteGNodes(int level, GNode*, String);
 static String swriteGNode(int level, GNode*, String);
 static int nodeStringLength(int, GNode*);
@@ -44,7 +44,7 @@ bool gnodesToFile(int level, GNode* gnode, String fileName, bool indent)
 
 //  writeGNode -- Write a single gedcom node to a file. Called by writeGNodes.
 //--------------------------------------------------------------------------------------------------
-static void writeGNode(FILE *fp, int level, GNode* gnode, bool indent)
+void writeGNode(FILE *fp, int level, GNode* gnode, bool indent)
 //  fp -- Output file.
 //  level -- Level of the node.
 //  gnode -- Node to write.
@@ -60,7 +60,7 @@ static void writeGNode(FILE *fp, int level, GNode* gnode, bool indent)
 
 //  writeGNodes -- Write a node tree or forest to a Gedcom file. Recurse to children and siblings.
 //--------------------------------------------------------------------------------------------------
-static void writeGNodes(FILE *fp, int level, GNode* gnode, bool indent, bool kids, bool sibs)
+void writeGNodes(FILE *fp, int level, GNode* gnode, bool indent, bool kids, bool sibs)
 // fp -- Output file.
 // level -- Level of the GNode of this call.
 // gnode -- GNode of this call.

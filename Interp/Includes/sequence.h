@@ -4,7 +4,7 @@
 //  sequence.h -- Header file for the Sequence datatype.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 24 May 2023.
+//  Last changed on 31 October 2023.
 //
 
 #ifndef sequence_h
@@ -20,23 +20,22 @@
 //    belong to the element; values do not belong to the element.
 //--------------------------------------------------------------------------------------------------
 typedef struct SequenceEl {
-    String key;     // Person or family key.  (TODO: Would it be better to use root GNodes here?)
-    String name;    // Name of person.
-    PValue *value;  // Any program value.
-    int keyInt;     // Key as an integer.
+	String key;     // Person or family key.  (TODO: Would it be better to use root GNodes here?)
+	String name;    // Name of person.
+	PValue *value;  // Any program value.
 }
 *SequenceEl;
 
-#define spri(s) ((s)->keyInt)  // Key as integer.
+//#define spri(s) ((s)->keyInt)  // Key as integer.
 
 //  Sequence -- Data type for a person or family sequence (or list or set).
 //--------------------------------------------------------------------------------------------------
 typedef struct Sequence Sequence;
 struct Sequence {
-    int size;          // Current length of sequence.
-    int max;           // Max length before resizing.
-    int flags;         // Attribute flags.
-    SequenceEl *data;  // Sequence of items. TODO: Should this be replaced with the new List type?
+	int size;          // Current length of sequence.
+	int max;           // Max length before resizing.
+	int flags;         // Attribute flags.
+	SequenceEl *data;  // Sequence of items. TODO: Should this be replaced with the new List type?
 };
 
 #define IData(s)  ((s)->data)
@@ -82,7 +81,7 @@ Sequence *ancestorSequence(Sequence*);
 Sequence *descendentSequence(Sequence*); 
 Sequence *siblingSequence(Sequence*, bool);
 
-void sequenceToGedcom(Sequence*);
+void sequenceToGedcom(Sequence*, FILE*);
 
 // Kind of for debugging.
 void showSequence(Sequence*); // Show the contents of a sequence by pringing keys and names.for
@@ -94,7 +93,7 @@ void showSequence(Sequence*); // Show the contents of a sequence by pringing key
 
 #define FORSEQUENCE(s,e,i)\
 {   int i ATTRIBUTE_UNUSED;\
-    SequenceEl e, *_d;				\
+    SequenceEl e, *_d;\
     _d = IData((Sequence*)s);\
     for (int _i = 0, _n = ((Sequence*)s)->size; _i < _n; _i++) {\
         e = _d[_i]; \

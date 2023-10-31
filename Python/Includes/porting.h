@@ -28,8 +28,8 @@ typedef const char *	CNSTRING;
 #define RECORD		RecordIndexEl *
 
 #define nztop(record)	((record)->root)
-#define nzkey(record)	((record)->key) /* *OR* record->root->key, which? */
-#define nztype(record)	((record)->key[0])
+#define nzkey(record)	((record)->root->key)
+#define nztype(record)	((record)->root->key[0])
 
 #define DOSURCAP	true
 #define NOSURCAP	false
@@ -80,6 +80,8 @@ typedef const char *	CNSTRING;
 #define qkey_to_srecord(key)	keyToSourceRecord(key, theDatabase)
 #define qkey_to_erecord(key)	keyToEventRecord(key, theDatabase)
 #define qkey_to_orecord(key)	keyToOtherRecord(key, theDatabase)
+
+#define rmvat(key)		(key)
 
 #define node_to_record(node)	_llpy_node_to_record(node)
 

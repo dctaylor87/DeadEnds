@@ -3,7 +3,7 @@
 //  JustParsing
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 8 October 2023.
+//  Last changed on 29 October 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -23,11 +23,11 @@
 //--------------------------------------------------------------------------------------------------
 PValue __marriage (PNode *pnode, SymbolTable *symtab, bool* errflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
-    if (*errflg || !fam) return nullPValue;
-    GNode* event = MARR(fam);
-    return event ? PVALUE(PVEvent, uGNode, event) : nullPValue;
+	ASSERT(pnode && symtab);
+	GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
+	if (*errflg || !fam) return nullPValue;
+	GNode* event = MARR(fam);
+	return event ? PVALUE(PVEvent, uGNode, event) : nullPValue;
 }
 
 //  __husband -- Find the first husband of a family.
@@ -35,12 +35,12 @@ PValue __marriage (PNode *pnode, SymbolTable *symtab, bool* errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __husband(PNode *pnode, SymbolTable *symtab, bool* errflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
-    if (*errflg || !fam) return nullPValue;
-    GNode* husband = familyToHusband(fam);
-    if (!husband) return nullPValue;
-    return PVALUE(PVPerson, uGNode, husband);
+	ASSERT(pnode && symtab);
+	GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
+	if (*errflg || !fam) return nullPValue;
+	GNode* husband = familyToHusband(fam);
+	if (!husband) return nullPValue;
+	return PVALUE(PVPerson, uGNode, husband);
 }
 
 //__wife -- Find the first wife of a family.
@@ -48,12 +48,12 @@ PValue __husband(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __wife(PNode *pnode, SymbolTable *symtab, bool* errflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
-    if (*errflg || !fam) return nullPValue;
-    GNode* wife = familyToWife(fam);
-    if (!wife) return nullPValue;
-    return PVALUE(PVPerson, uGNode, wife);
+	ASSERT(pnode && symtab);
+	GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
+	if (*errflg || !fam) return nullPValue;
+	GNode* wife = familyToWife(fam);
+	if (!wife) return nullPValue;
+	return PVALUE(PVPerson, uGNode, wife);
 }
 
 //  __nchildren -- Find the number of children in a family.
@@ -61,16 +61,16 @@ PValue __wife(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __nchildren (PNode *pnode, SymbolTable *symtab, bool* eflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
-    if (*eflg || !fam) return nullPValue;
-    int count = 0;
-    GNode* this = CHIL(fam);
-    while (this && eqstr("CHIL", this->tag)) {
-        count++;
-        this = this->sibling;
-    }
-    return PVALUE(PVInt, uInt, (long) count);
+	ASSERT(pnode && symtab);
+	GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
+	if (*eflg || !fam) return nullPValue;
+	int count = 0;
+	GNode* this = CHIL(fam);
+	while (this && eqstr("CHIL", this->tag)) {
+		count++;
+		this = this->sibling;
+	}
+	return PVALUE(PVInt, uInt, (long) count);
 }
 
 
@@ -79,12 +79,12 @@ PValue __nchildren (PNode *pnode, SymbolTable *symtab, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __firstchild(PNode *pnode, SymbolTable *symtab, bool* eflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
-    if (*eflg || !fam) return nullPValue;
-    GNode* child = familyToFirstChild(fam);
-    if (!child) return nullPValue;
-    return PVALUE(PVPerson, uGNode, child);
+	ASSERT(pnode && symtab);
+	GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
+	if (*eflg || !fam) return nullPValue;
+	GNode* child = familyToFirstChild(fam);
+	if (!child) return nullPValue;
+	return PVALUE(PVPerson, uGNode, child);
 }
 
 //  __lastchild -- Return the last child of a family.
@@ -92,12 +92,12 @@ PValue __firstchild(PNode *pnode, SymbolTable *symtab, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __lastchild(PNode *pnode, SymbolTable *symtab, bool* eflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
-    if (*eflg || !fam) return nullPValue;
-    GNode* child = familyToLastChild(fam);
-    if (!child) return nullPValue;
-    return PVALUE(PVPerson, uGNode, child);
+	ASSERT(pnode && symtab);
+	GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
+	if (*eflg || !fam) return nullPValue;
+	GNode* child = familyToLastChild(fam);
+	if (!child) return nullPValue;
+	return PVALUE(PVPerson, uGNode, child);
 }
 
 ///*================================
@@ -115,23 +115,23 @@ PValue __lastchild(PNode *pnode, SymbolTable *symtab, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __fam(PNode *pnode, SymbolTable *symtab, bool* eflg)
 {
-    ASSERT(pnode && symtab);
-    // The argument must be a string.
-    PValue value = evaluate(pnode->arguments, symtab, eflg);
-    if (value.type != PVString) {
-        printf("the argument must be a string\n");
-        *eflg = true;
-        return nullPValue;
-    }
-    String key = value.value.uString;
+	ASSERT(pnode && symtab);
+	// The argument must be a string.
+	PValue value = evaluate(pnode->arguments, symtab, eflg);
+	if (value.type != PVString) {
+		printf("the argument must be a string\n");
+		*eflg = true;
+		return nullPValue;
+	}
+	String key = value.value.uString;
 
-    //  Search the database for the family with the key.
-    GNode* family = keyToFamily(rmvat(key), theDatabase);
-    if (!family) {
-        printf("Could not find a family with key %s.\n", key);
-        return nullPValue;
-    }
-    return PVALUE(PVFamily, uGNode, family);
+	//  Search the database for the family with the key.
+	GNode* family = keyToFamily(key, theDatabase);
+	if (!family) {
+		printf("Could not find a family with key %s.\n", key);
+		return nullPValue;
+	}
+	return PVALUE(PVFamily, uGNode, family);
 }
 
 /*=============================================

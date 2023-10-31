@@ -360,25 +360,19 @@ GNode* copy_nodes (GNode* node, bool kids, bool sibs)
 	return new;
 }
 
-// traverseNodes -- Traverse the Nodes in a Node tree calling a function on each.
+// traverseNodes -- Traverse the nodes of a Gedcom record tree calling a function on each.
 //--------------------------------------------------------------------------------------------------
-bool traverseNodes (GNode* node, bool (*func)(GNode*))
-// Node node -- Root of tree to traverse.
-// bool (*func)(Node) -- Function to call at each Node. If it returns false stop the traverse.
+void traverseNodes (GNode* node, int level, bool (*func)(GNode*, int))
+//  node -- Current node in tree.
+//  level -- Level of the node.
+//  func -- Function to call at node. If it returns false don't go deeper.
 {
-	if (func == null) return false;  // Nothing to do if there is no function.
-	while (node) {
-		if (!(*func)(node)) return false;
-		if (node->child) {
-			if (!traverseNodes(node->child, func)) return false;
-		}
-		node = node->sibling;
+	if (func == null) return; // Nothing to do if there is no function.
+	for (; node; node = node->sibling) {
+		if (!(*func)(node, level)) continue;
+		if (node->child) traverseNodes(node->child, level+1, func);
 	}
-	return true;
 }
-
-#define FORTRAVERSE(root, node)\
-	GNode *node = root;
 
 //  countNodes -- Return the number of gedcom nodes in a record tree.
 //--------------------------------------------------------------------------------------------------
@@ -422,7 +416,7 @@ GNode* fatherNodes (Database* database, GNode* faml)
 	GNode *old = null, *new = null;
 	while (faml) {
 		ASSERT(eqstr("FAMC", faml->tag) || eqstr("FAMS", faml->tag));
-		GNode *fam = keyToFamily(rmvat(faml->tag), database);
+		GNode *fam = keyToFamily(faml->tag, database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, husb, false, true);
@@ -443,7 +437,7 @@ GNode* mother_nodes (Database *database, GNode *faml)
 	GNode *old = null, *new = null;
 	while (faml) {
 		ASSERT(eqstr("FAMC", faml->tag) || eqstr("FAMS", faml->tag));
-		GNode *fam = keyToFamily(rmvat(faml->tag), database);
+		GNode *fam = keyToFamily(faml->tag, database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, wife, false, true);
@@ -466,7 +460,7 @@ GNode* children_nodes(Database *database, GNode *faml)
 	GNode *old = null, *new = null;
 	while (faml) {
 		ASSERT(eqstr("FAMC", faml->tag) || eqstr("FAMS", faml->tag));
-		GNode *fam = keyToFamily(rmvat(faml->tag), database);
+		GNode *fam = keyToFamily(faml->tag, database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, chil, false, true);
@@ -488,7 +482,7 @@ GNode* parents_nodes(Database *database, GNode* family)
 	GNode *old = null, *new = null;
 	while (family) {
 		ASSERT(eqstr("FAMC", family->tag) || eqstr("FAMS", family->tag));
-		GNode *fam = keyToFamily(rmvat(family->value), database);
+		GNode *fam = keyToFamily(family->value, database);
 		ASSERT(fam);
 		splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 		new = union_nodes(old, husb, false, true);

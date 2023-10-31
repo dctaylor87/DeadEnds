@@ -24,21 +24,14 @@ RecordType recordType(GNode *root)
     return GROther;
 }
 
-//  compareRecordKeys -- Compare function to use in Sets and Lists holding Gedcom record keys
-//   (minus the @-signs). Assume that all record keys start with a letter followed by digits.
-//   Instead of treating the keys as simple Strings, this routine assumes that the characters
-//   after the initial letter will be digits without leading zeros. The keys are sorted by this
-//   numeric value. If the 'digits' are not digits sorting will be alphabetic.
+//  compareRecordKeys -- Compare function to use in Sets and Lists holding Gedcom record keys.
+//   Longer keys sort after shorter keys.
 //--------------------------------------------------------------------------------------------------
-int compareRecordKeys(Word p, Word q)
+int compareRecordKeys(String a, String b)
 {
-    String a = (String) p;
-    String b = (String) q;
-
     ASSERT(strlen(a) > 1 && strlen(b) > 1);  // Is this strictly necessary?
-    if (a[0] != b[0]) return a[0] - b[0];
     if (strlen(a) != strlen(b)) return (int) (strlen(a) - strlen(b));
-    for (int i = 1; i < (int)strlen(a); i++) {
+    for (int i = 0; i < (int)strlen(a); i++) {
         if (a[i] != b[i]) return a[i] - b[i];
     }
     return 0;

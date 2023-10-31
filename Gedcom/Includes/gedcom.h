@@ -4,7 +4,7 @@
 //  gedcom.h
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 25 October 2023.
+//  Last changed on 29 October 2023.
 //
 
 #ifndef gedcom_h
@@ -20,8 +20,8 @@ typedef enum SexType {
     sexMale = 1, sexFemale, sexUnknown
 } SexType;
 
-#define personToKey(indi) rmvat(indi->key)
-#define familyToKey(fam)  rmvat(fam->key)
+#define personToKey(indi) (indi->key)
+#define familyToKey(fam)  (fam->key)
 
 //  RecordType -- Enumeration of supported DeadEnds record types.
 //--------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ typedef enum {
 
 RecordType recordType(GNode *root);  // Return the type of a Gedcom record tree.
 
-int compareRecordKeys(Word p, Word q);  // gedcom.c
+int compareRecordKeys(String, String);  // gedcom.c
 
 // FORCHILDREN / ENDCHILDREN -- Iterator for the children of a family.
 //--------------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode* childd;\
     int num = 0;\
     while (__node) {\
-        childd = keyToPerson(rmvat(__node->value), theDatabase);\
+        childd = keyToPerson(__node->value, theDatabase);\
         ASSERT(childd);\
         num++;\
         {
@@ -59,7 +59,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode *fam;\
     int num = 0;\
     while (__node) {\
-        fam = keyToFamily(rmvat(__node->value), theDatabase);\
+        fam = keyToFamily(__node->value, theDatabase);\
         ASSERT(fam);\
         {
 #define ENDFAMILIES\
@@ -82,7 +82,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     int num ATTRIBUTE_UNUSED;\
     num = 0;\
     while (__node) {\
-        fam = keyToFamily(rmvat(__node->value), theDatabase);\
+        fam = keyToFamily(__node->value, theDatabase);\
         ASSERT(fam);\
         if (__sex == sexMale)\
             spouse = familyToWife(fam);\
@@ -111,7 +111,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     int num ATTRIBUTE_UNUSED;\
     num = 0;\
     while (__node) {\
-        fam = keyToFamily(rmvat(__node->value), theDatabase);\
+        fam = keyToFamily(__node->value, theDatabase);\
         ASSERT(fam);\
         fath = familyToHusband(fam);\
         moth = familyToWife(fam);\
@@ -130,7 +130,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode *__node = FAMC(person);\
     GNode *family;\
     while (__node) {\
-        family = keyToFamily(rmvat(__node->value), theDatabase);\
+        family = keyToFamily(__node->value, theDatabase);\
         ASSERT(family);\
         {
 
@@ -146,7 +146,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode *__node = FAMS(person);\
     GNode *family;\
     while (__node) {\
-        family = keyToFamily(rmvat(__node->value), theDatabase);\
+        family = keyToFamily(__node->value, theDatabase);\
         ASSERT(family);\
         {
 
@@ -187,7 +187,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     GNode* husb=0;\
     String __key=0;\
     while (__node) {\
-        __key = rmvat(__node->value);\
+        __key = __node->value;\
         if (!__key || !(husb = keyToPerson(__key, theDatabase))) {\
             __node = __node->sibling;\
             continue;\
@@ -209,7 +209,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     String __key = null;\
     int num = 0;\
     while (__node) {\
-        __key = rmvat(__node->value);\
+        __key = __node->value;\
         if (!__key || !(wife = keyToPerson(__key, theDatabase))) {\
             ++num;\
             __node = __node->sibling;\
@@ -237,7 +237,7 @@ int compareRecordKeys(Word p, Word q);  // gedcom.c
     int num = 0;\
     while (__fnode) {\
         spouse = null;\
-        fam = keyToFamily(rmvat(__fnode->value), theDatabase);\
+        fam = keyToFamily(__fnode->value, theDatabase);\
         if (__sex == sexMale)\
             spouse = familyToWife(fam);\
         else\

@@ -39,10 +39,7 @@ A Sequence is a data type defined in the Interp library that provides the sequen
 |Sequence *ancestorSequence(Sequence\*)|Create the ancestor Sequence of a given Sequence. The persons in the original Sequence are not in the ancestor Sequence unless they are also an ancestor of someone in the original Sequence.|
 |Sequence *descendentSequence(Sequence\*)|Create the descendant Sequence of the given Sequence. The persons in the original Sequence are not in the descendent Sequence unless they are also a descendent of someone in the original Sequence.|
 |Sequence \*spouseSequence(Sequence\*)|Create the spouses Sequence of a Sequence|
-|void sequenceToGedcom(Sequence\*)|Generate Gedcom file from a sequence. Only persons in the sequence are written to the file. Families with at least two persons in the sequence are also written to the file. Other persons referred to in the families are not included.|
-|static void write_nonlink_indi(GNode* person)|Write person minus linking info.|
-|static void new_write_node (int level, GNode\*, bool list)|Recursively write nodes to file. *TODO: consolidate with write_node?*|
-|static void write_family (String key, StringTable \*itab)|Write family record to file.|
+|void sequenceToGedcom(Sequence\*, FILE*)|Generate Gedcom file from a sequence. Only persons in the sequence are written to the file. Families with at least two persons in the sequence are also written to the file. Other persons referred to in the families are not included.|
 |Sequence \*nameToSequence(String name, NameIndex\*)|Return the Sequence of persons who match a name. The name must be formatted as a Gedcom name. However, if the first letter of the given names is a '*', the given name is treated as a wild card, and the Sequencce will contain all persons that match the surname.|
 |static void format_indiseq (Sequence\*, bool famp, bool marr)|Format print lines of Sequence. *Commented out*.|
 |Sequence *refn_to_indiseq (ukey)|Return indiseq whose user references match. *Commented out*.|

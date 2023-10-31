@@ -38,8 +38,8 @@ Components making up gnode.c:
 |GNode* mother_nodes (Database *database, GNode *faml)|Given a list of FAMS or FAMC nodes, return the list of WIFE nodes they contain. _Requires theDatabase_.|
 |GNode* children_nodes(Database \*database, GNode *faml)|Given a list of FAMS or FAMC nodes, return the list of CHIL nodes they contain. _Requires theDatabase_.|
 |GNode* parents_nodes(Database \*database, GNode* family)|Given a list of FAMS or FAMC nodes, return the list of HUSB and WIFE nodes they contain. _Requires theDatabase_.|
-|String addat (String string)|Add at-signs to both ends of a string.|
-|String rmvat (String string)|Remove at-signs from both ends of a string.|
+|String addat (String string)|Add at-signs to both ends of a string. *No longer used*.|
+|String rmvat (String string)|Remove at-signs from both ends of a string. *No longer used*.|
 |bool isKey(String str)|Return true if a string has at-signs at both ends.|
 |GNode* findTag(GNode* node, String tag)|Search a list of nodes for the first with a specific tag. Return that node. If a node with the tag is not found, return null|
 |SexType val_to_sex (GNode* node)|Convert value of node to enumerated sex value.|

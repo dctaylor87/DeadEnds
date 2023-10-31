@@ -4,7 +4,7 @@
 //  recordindex.h -- Defines the record index as a hash table.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 18 October 2023.
+//  Last changed on 31 October 2023.
 //
 
 #ifndef recordindex_h
@@ -21,8 +21,6 @@ typedef struct RecordIndexEl RecordIndexEl;
 //--------------------------------------------------------------------------------------------------
 
 typedef struct RecordIndexEl {
-	String key;   //  The key (minus @-signs) of the record.
-	unsigned char flags;  // Flags -- to be defined.
 	GNode *root;  //  The root node of the record.
 }  RecordIndexEl;
 

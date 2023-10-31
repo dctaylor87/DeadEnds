@@ -131,7 +131,6 @@ Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog ATTRIBUTE_UNUSED)
     GNode *root = firstNodeTreeFromFile(file, &msg);
     while (root) {
         recordCount++;
-	//if (debugging) printf("Just read record %d\n", recordCount);
         storeRecord(database, root);
         root = nextNodeTreeFromFile(file, &msg);
     }
@@ -294,7 +293,7 @@ void rekeyIndex(RecordIndex *index, StringTable *rekeyMap)
     map = rekeyMap;
     RecordIndexEl *element = (RecordIndexEl*) firstInHashTable(index, &i, &j);
     while (element) {
-        traverseNodes(element->root, rekeyTraverseFunction);
+        traverseNodes(element->root, 0, rekeyTraverseFunction);
         rekeyTraverseFunction(element->root);
         element = (RecordIndexEl*) nextInHashTable(index, &i, &j);
     }

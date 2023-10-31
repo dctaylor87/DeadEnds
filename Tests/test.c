@@ -1,7 +1,7 @@
 //  test.c -- Test program.
 //
 //  Created by Thomas Wetmore on 5 October 2923.
-//  Last changed on 20 October 2023.
+//  Last changed on 31 October 2023.
 
 #include <stdio.h>
 #include "standard.h"
@@ -20,29 +20,28 @@ static FILE *gedcomFile = null;
 static FILE *outputFile = null;
 
 extern FunctionTable *procedureTable;
+extern Database *theDatabase;  // The database to use in the tests.
 
 extern Database *simpleImportFromFile(FILE*, ErrorLog*);
-static void sequenceTests(FILE*);
+static void createDatabaseTest(void);
+static void listTest(FILE*);
 static void forHashTableTest(void);
+static void parseAndRunProgramTest(void);
 
 extern bool validateDatabase(Database*);
 
 int main()
 {
-	//  Create a database from the main.ged file.
-	gedcomFile = fopen("../Gedfiles/main.ged", "r");
-	//gedcomFile = fopen("../Gedfiles/TWetmoreLine.ged", "r");
-	ASSERT(gedcomFile);
-	outputFile = fopen("./Outputs/output.txt", "w");
-	ASSERT(outputFile);
-	ErrorLog errorLog;
-	theDatabase = simpleImportFromFile(gedcomFile, &errorLog);
-	ASSERT(theDatabase);
-	printf("The number of persons in the database is %d.\n", numberPersons(theDatabase));
-	printf("The number of families in the database is %d.\n", numberFamilies(theDatabase));
-	//sequenceTests(outputFile);
+	printf("createDatabaseTest\n");
+	createDatabaseTest();
+	printf("listTest\n"); fflush(stdout);
+	listTest(outputFile);
+	printf("forHashTableTest\n"); fflush(stdout);
 	forHashTableTest();
-	validateDatabase(theDatabase);
+	printf("parseAndRunProgramTest\n"); fflush(stdout);
+	parseAndRunProgramTest();
+
+	//validateDatabase(theDatabase);
 
 	// Show all the persons in the database.
 	//  Iterate through the person index.
@@ -50,10 +49,81 @@ int main()
 	//showRecordIndex(theDatabase->personIndex);
 	//showRecordIndex(theDatabase->familyIndex);
 
-	//  Parse a simple LifeLines "hello, world" program.
-	parseProgram("llprogram", "../Reports");
+	
+}
 
-	//  Create a PNProcCall node to call the main procedure with
+//  createDatabaseTest -- Creates a test database from a Gedcom file.
+//-------------------------------------------------------------------------------------------------
+void createDatabaseTest()
+{
+	//  Create a database from the main.ged file.
+	gedcomFile = fopen("../Gedfiles/main.ged", "r");
+	//gedcomFile = fopen("../Gedfiles/TWetmoreLine.ged", "r");
+	outputFile = fopen("./Outputs/output.txt", "w");
+	ErrorLog errorLog;
+	theDatabase = simpleImportFromFile(gedcomFile, &errorLog);
+	printf("The number of persons in the database is %d.\n", numberPersons(theDatabase));
+	printf("The number of families in the database is %d.\n", numberFamilies(theDatabase));
+}
+
+//  compare -- Compare function required by the testList function that follows.
+//-------------------------------------------------------------------------------------------------
+static int compare(Word a, Word b)
+{
+	return compareRecordKeys(((GNode*) a)->key, ((GNode*) b)->key);
+}
+
+//  listTest -- Create a list of all the persons in the database, sort the list, and
+//    print the tags of the records in the sorted order.
+//-------------------------------------------------------------------------------------------------
+void listTest(FILE *outputFile)
+{
+	fprintf(outputFile, "\nStart of listTest\n");
+	int i, j;
+	GNode *person;
+	//  Create a List of all the persons in the database.
+	List *personList = createList(compare, null, null);
+	Word element = firstInHashTable(theDatabase->personIndex, &i, &j);
+	while (element) {
+		person = ((RecordIndexEl*) element)->root;
+		appendListElement(personList, person);
+		element = nextInHashTable(theDatabase->personIndex, &i, &j);
+	}
+	printf("The list has %d elements in it.\n", lengthList(personList));
+	sortList(personList, true);
+	int count = 0;
+	FORLIST(personList, person)
+		fprintf(outputFile, "%s\n", ((GNode*) person)->key);
+		count++;
+	ENDLIST
+	fprintf(outputFile, "%d persons are in the list\n", count);
+	fprintf(outputFile, "End of listTest\n\n");
+}
+
+//  forHashTableTest -- Tests the FORHASHTABLE macro by showing all the persons in the database's
+//    person index.
+//-------------------------------------------------------------------------------------------------
+void forHashTableTest(void)
+{
+	fprintf(outputFile, "\nStart of FORHASHTABLE test\n");
+	int numberPersons = 0;
+	FORHASHTABLE(theDatabase->personIndex, element)
+		numberPersons++;
+		RecordIndexEl *rel = (RecordIndexEl*) element;
+		GNode *person = rel->root;
+		fprintf(outputFile, "%s: %s\n", person->key, NAME(person)->value);
+	ENDHASHTABLE
+	fprintf(outputFile, "%d persons were found in the index.\n", numberPersons);
+	fprintf(outputFile, "End of FORHASHTABLE test\n\n");
+}
+
+//  parseAndRunProgramTest -- Parse a DeadEndScript program and run it. In order to call the
+//    main procedure of a DeadEndScript, create a PNProcCall program node, and interpret it.
+//-------------------------------------------------------------------------------------------------
+void parseAndRunProgramTest(void)
+{
+	parseProgram("llprogram", "../Reports");
+	//  Create a PNProcCall node to call the main procedure.
 	currentProgramFileName = "internal";
 	currentProgramLineNumber = 1;
 	PNode *pnode = procCallPNode("main", null);
@@ -62,42 +132,4 @@ int main()
 	SymbolTable *symbolTable = createSymbolTable();
 	PValue returnPvalue;
 	interpret(pnode, symbolTable, &returnPvalue);
-}
-
-static int compare(Word a, Word b)
-{
-	String key1 = ((GNode*) a)->key;
-	String key2 = ((GNode*) b)->key;
-	ASSERT(key1 && key2);
-	return compareRecordKeys(key1, key2);
-}
-
-void sequenceTests(FILE *outputFile)
-{
-	int i, j;
-	printf("Hello, world!\n");
-	//  Create a List of all the persons in the database.
-	List *personList = createList(compare, null, null);
-	GNode* person = firstInHashTable(theDatabase->personIndex, &i, &j);
-	while (person) {
-		appendListElement(personList, person);
-		person = nextInHashTable(theDatabase->personIndex, &i, &j);
-	}
-	printf("The list has %d elements in it.\n", lengthList(personList));
-	sortList(personList, true);
-	FORLIST(personList, person)
-		fprintf(outputFile, "%s\n", ((GNode*) person)->key);
-	ENDLIST
-}
-
-void forHashTableTest(void)
-{
-	int numberValidated = 0;
-	FORHASHTABLE(theDatabase->personIndex, element)
-		numberValidated++;
-		RecordIndexEl *rel = (RecordIndexEl*) element;
-		GNode *person = rel->root;
-		fprintf(outputFile, "%s: %s\n", person->key, NAME(person)->value);
-	ENDHASHTABLE
-	fprintf(outputFile, "%d persons were validated.\n", numberValidated);
 }

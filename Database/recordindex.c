@@ -6,7 +6,7 @@
 //    type. The type RecordIndex is a synonym of HashTable.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 17 October 2023.
+//  Last changed on 31 October 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -20,8 +20,8 @@
 //--------------------------------------------------------------------------------------------------
 static int compareRecordIndexEls(Word leftEl, Word rightEl)
 {
-	String a = ((RecordIndexEl*) leftEl)->key;
-	String b = ((RecordIndexEl*) rightEl)->key;
+	String a = ((RecordIndexEl*) leftEl)->root->key;
+	String b = ((RecordIndexEl*) rightEl)->root->key;
 	return strcmp(a, b);
 }
 
@@ -30,15 +30,13 @@ static int compareRecordIndexEls(Word leftEl, Word rightEl)
 static void deleteRecordIndexEl(Word word)
 {
 	RecordIndexEl* element = (RecordIndexEl*) word;
-	stdfree(element->key);
 	stdfree(element);
 }
 
 //  recordIndexElKey -- Return the key of record index element. This is the key of the root node.
-//  NOTE: Doesn't this mean that the key has @signs at each end?
 //--------------------------------------------------------------------------------------------------
 static String recordIndexElKey(Word word) {
-	return rmvat(((RecordIndexEl*) word)->root->key);
+	return ((RecordIndexEl*) word)->root->key;
 }
 
 //  createRecordIndex -- Create a record index. A record index is a hash table with its functions
@@ -56,11 +54,9 @@ void deleteRecordIndex(RecordIndex *index)
 	deleteHashTable(index);
 }
 
-//  insertInRecordIndex -- Add a (key, root) element to a record index.
-//  MNOTE: Keys come from the root node, but have the @-signs stripped. This function
-//    saves a copy of the key in the table. When elements of the index are deleted the
-//    key strings should also be.
-//  TODO: Shouldn't this function just create an element and then delegate to the hash table's
+//  insertInRecordIndex -- Add a (key, root) element to a record index. This function saves a
+//    copy of the key in the table. When elements are deleted the key strings should also be.
+//    TODO: Shouldn't this function create an element and then delegate to the hash table.
 //--------------------------------------------------------------------------------------------------
 static int recordInsertCount = 0;  //  Used for debugging.
 void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
@@ -83,7 +79,7 @@ void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
 	// TODO. Note the index pointer is null above. If we used it, we could insert faster below.
 	if (!element) {
 		element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
-		element->key = strsave(key);
+		//element->key = strsave(key);
 		element->root = root;  //  MNOTE: Not copied, records persist.
 		appendToBucket(bucket, element);
 	} //else {
@@ -103,7 +99,7 @@ int getRecordInsertCount(void)
 //  searchRecordIndex -- Search a record index for a key, and return the associated node tree.
 //--------------------------------------------------------------------------------------------------
 GNode* searchRecordIndex(RecordIndex *index, String key)
-// index -- Record index to for the key in.
+// index -- Record index to search for the key in.
 // key -- Key of record to search for.
 {
 	ASSERT(index && key);

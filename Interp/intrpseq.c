@@ -70,7 +70,7 @@ PValue __addtoset(PNode *programNode, SymbolTable *symbolTable, bool *errflg)
     }
 
     // Get the person's key.
-    String key = rmvat(indi->key);
+    String key = indi->key;
     if (!key || *key == 0) {
         *errflg = true;
         prog_error(programNode, "could not get the key of the person.");
@@ -138,7 +138,7 @@ PValue __inset (PNode *programNode, SymbolTable *systemTable, bool *eflg)
     if (!indi) return falsePValue;
 
     // Both arguments are okay, so search the sequence.
-    String key = rmvat(indi->key);
+    String key = indi->key;
     //  MNOTE: No need to save key.
     return isInSequence(seq, key) ? truePValue : falsePValue;
 }
@@ -169,7 +169,7 @@ PValue __deletefromset (PNode *node, SymbolTable *stab, bool *eflg)
     GNode *indi = value2.value.uGNode;
     if (!indi) return falsePValue;
     //  MNOTE: No need to save key.
-    String key = rmvat(indi->key);
+    String key = indi->key;
     if (!key || *key == 0) return nullPValue;
 
     // Get the boolean argument. If true remove all elements with the key, else just the first.
@@ -422,6 +422,6 @@ PValue __gengedcom(PNode *programNode, SymbolTable *symbolTable, bool *eflg)
     }
 
     //  Generate a Gedcom file from the persons in the sequence.
-    sequenceToGedcom(val.value.uSequence);
+    sequenceToGedcom(val.value.uSequence, null);  // Null sends to stdout.
     return nullPValue;
 }
