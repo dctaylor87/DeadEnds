@@ -6,7 +6,7 @@
 //    indiseq data type of DeadEndsScript.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 29 October 2023.
+//  Last changed on 31 October 2023.
 //
 
 #include "standard.h"
@@ -214,7 +214,6 @@ static int nameCompare(SequenceEl el1, SequenceEl el2)
 {
 	int rel = compareNames(el1->name, el2->name);
 	if (rel) return rel;  // If names are not equal return their relationship.
-	//return spri(el1) - spri(el2);  // Otherwise break ties with integer keys.
 	return compareRecordKeys(el1->key, el2->key);
 }
 
@@ -224,7 +223,6 @@ static int keyCompare(SequenceEl el1, SequenceEl el2)
 //  el1, el2 -- The elements with integer keys to be compared.
 {
 	return compareRecordKeys(el1->key, el2->key);
-	//return spri(el1) - spri(el2);  // Compare the integer keys.
 }
 
 //  valueCompare -- Compare two elements of a sequence by their values. TODO: This must be
@@ -246,12 +244,6 @@ void nameSortSequence(Sequence *seq)
 	// The sequence may be sorted.
 	if (seq->max & NAMESORT) return;
 
-	// Make sure the integer key values are available if there are ties to break.
-	// TODO: Create a new flag to mean the integer keys have been computed.
-	//FORSEQUENCE(seq, el, num)
-		//spri(el) = atoi(el->key + 1);
-	//ENDSEQUENCE
-
 	// Perform the sort and set the flags.
 	sequenceSort((Word*)IData(seq), seq->size, (int(*)(Word, Word))nameCompare);
 	quickSort(0, seq->size - 1);
@@ -266,10 +258,6 @@ void keySortSequence(Sequence *seq)
 //  seq -- Sequence to be sorted.
 {
 	if (seq->max & KEYSORT) return;
-	// Set the numeric key fields from the string key fields.
-	//FORSEQUENCE(seq, el, num)
-		//spri(el) = atoi(el->key + 1);  // + 1 to get by the initial @-sign.
-	//ENDSEQUENCE
 	sequenceSort((Word*)IData(seq), seq->size, (int(*)(Word, Word))keyCompare);
 	quickSort(0, seq->size - 1);
 	seq->max &= ~NAMESORT;
@@ -314,7 +302,6 @@ Sequence *uniqueSequence(Sequence *sequence)
 	int i, j;
 	for (j = 0, i = 1; i < n; i++) {
 		if (nestr(d[i]->key, d[j]->key)) {
-		// if (spri(d[i]) != spri(d[j])) {
 			appendToSequence(unique, strsave(d[i]->key), null, null);
 			j = i;
 		}
@@ -339,7 +326,6 @@ void uniqueSequenceInPlace(Sequence *sequence)
 	if (!(sequence->flags & KEYSORT)) keySortSequence(sequence);
 	for (j = 0, i = 1; i < n; i++)
 		if (nestr(d[i]->key, d[j]->key)) d[++j] = d[i];
-		//if (spri(d[i]) != spri(d[j])) d[++j] = d[i];
 	sequence->size = j + 1;
 	sequence->flags |= UNIQUED;
 }
@@ -366,7 +352,6 @@ Sequence *unionSequence(Sequence *one, Sequence *two)
 	int i = 0, j = 0, rel;
 	while (i < n && j < m) {
 		if ((rel = compareRecordKeys(u[i]->key, v[j]->key)) < 0) {
-		//if ((rel = spri(u[i]) - spri(v[j])) < 0) {
 			appendToSequence(three, (u[i])->key, null, u[i]->value);
 			i++;
 		} else if (rel > 0) {
@@ -385,9 +370,6 @@ Sequence *unionSequence(Sequence *one, Sequence *two)
 		appendToSequence(three, (v[j])->key, null, v[j]->value);
 		j++;
 	}
-	//FORSEQUENCE(three, el, num)
-		//spri(el) = atoi(el->key + 1);
-	//ENDSEQUENCE
 	three->flags = KEYSORT|UNIQUED;
 	return three;
 }
@@ -427,9 +409,6 @@ Sequence *intersectSequence(Sequence *one, Sequence *two)
 			i++; j++;
 		}
 	}
-	//FORSEQUENCE(three, el, num)
-		//spri(el) = atoi(el->key + 1);
-	//ENDSEQUENCE
 	three->flags = KEYSORT|UNIQUED;
 	return three;
 }
@@ -469,9 +448,6 @@ Sequence *differenceSequence (Sequence *one, Sequence *two)
 		appendToSequence(three, (u[i])->key, null, u[i]->value);
 		i++;
 	}
-	//FORSEQUENCE(three, el, num)
-		//spri(el) = atoi(el->key + 1);
-	//ENDSEQUENCE
 	three->flags = KEYSORT|UNIQUED;
 	return three;
 }
@@ -791,10 +767,9 @@ Sequence *descendentSequence(Sequence *startSequence)
 	Sequence *descendentSequence = createSequence();  //  Sequence of all descendents to return.
 
 	//  Initialize the descendent queue with the keys of the persons in the start sequence.
-	FORSEQUENCE(startSequence, element, count) {
+	FORSEQUENCE(startSequence, element, count)
 		enqueueList(descendentQueue, /*(Word)*/ element->key);
-	} ENDSEQUENCE
-	if (debugging) printf("descendentQueue begins with %d persons.\n", lengthList(descendentQueue));
+	ENDSEQUENCE
 
 	//  Dequeue the next person in the descendent queue.
 	while (!isEmptyList(descendentQueue)) {
@@ -805,15 +780,14 @@ Sequence *descendentSequence(Sequence *startSequence)
 		FORFAMSS(person, family) {
 			if (isInHashTable(familyKeys, familyKey = familyToKey(family))) goto a;
 			insertInStringTable(familyKeys, strsave(familyKey), null);
-			FORCHILDREN(family, child, num) {
+			FORCHILDREN(family, child, num)
 				if (!isInHashTable(descendentKeys, descendentKey = personToKey(child))) {
-					if (debugging) printf("Adding to descendent sequence.\n");
 					appendToSequence(descendentSequence, descendentKey, null, null);
 					//  MNOTE: strsave required -- lists don't save their elements.
 					enqueueList(descendentQueue, strsave(descendentKey));
 					insertInStringTable(descendentKeys, descendentKey, null);
 				}
-			} ENDCHILDREN
+			ENDCHILDREN
 		a:;
 		} ENDFAMSS
 	}

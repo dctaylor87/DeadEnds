@@ -1,7 +1,7 @@
 //  test.c -- Test program.
 //
 //  Created by Thomas Wetmore on 5 October 2923.
-//  Last changed on 20 October 2023.
+//  Last changed on 31 October 2023.
 
 #include <stdio.h>
 #include "standard.h"
@@ -67,14 +67,11 @@ void createDatabaseTest()
 	printf("The number of families in the database is %d.\n", numberFamilies(theDatabase));
 }
 
-//  compare -- Compare function required by the testList function following.
+//  compare -- Compare function required by the testList function that follows.
 //-------------------------------------------------------------------------------------------------
 static int compare(Word a, Word b)
 {
-	String key1 = ((GNode*) a)->key;
-	String key2 = ((GNode*) b)->key;
-	ASSERT(key1 && key2);
-	return compareRecordKeys(key1, key2);
+	return compareRecordKeys(((GNode*) a)->key, ((GNode*) b)->key);
 }
 
 //  listTest -- Create a list of all the persons in the database, sort the list, and
@@ -82,31 +79,43 @@ static int compare(Word a, Word b)
 //-------------------------------------------------------------------------------------------------
 void listTest(FILE *outputFile)
 {
+	fprintf(outputFile, "\nStart of listTest\n");
 	int i, j;
+	GNode *person;
 	//  Create a List of all the persons in the database.
 	List *personList = createList(compare, null, null);
-	GNode* person = firstInHashTable(theDatabase->personIndex, &i, &j);
-	while (person) {
+	Word element = firstInHashTable(theDatabase->personIndex, &i, &j);
+	while (element) {
+		person = ((RecordIndexEl*) element)->root;
 		appendListElement(personList, person);
-		person = nextInHashTable(theDatabase->personIndex, &i, &j);
+		element = nextInHashTable(theDatabase->personIndex, &i, &j);
 	}
 	printf("The list has %d elements in it.\n", lengthList(personList));
 	sortList(personList, true);
+	int count = 0;
 	FORLIST(personList, person)
 		fprintf(outputFile, "%s\n", ((GNode*) person)->key);
+		count++;
 	ENDLIST
+	fprintf(outputFile, "%d persons are in the list\n", count);
+	fprintf(outputFile, "End of listTest\n\n");
 }
 
+//  forHashTableTest -- Tests the FORHASHTABLE macro by showing all the persons in the database's
+//    person index.
+//-------------------------------------------------------------------------------------------------
 void forHashTableTest(void)
 {
-	int numberValidated = 0;
+	fprintf(outputFile, "\nStart of FORHASHTABLE test\n");
+	int numberPersons = 0;
 	FORHASHTABLE(theDatabase->personIndex, element)
-		numberValidated++;
+		numberPersons++;
 		RecordIndexEl *rel = (RecordIndexEl*) element;
 		GNode *person = rel->root;
 		fprintf(outputFile, "%s: %s\n", person->key, NAME(person)->value);
 	ENDHASHTABLE
-	fprintf(outputFile, "%d persons were validated.\n", numberValidated);
+	fprintf(outputFile, "%d persons were found in the index.\n", numberPersons);
+	fprintf(outputFile, "End of FORHASHTABLE test\n\n");
 }
 
 //  parseAndRunProgramTest -- Parse a DeadEndScript program and run it. In order to call the

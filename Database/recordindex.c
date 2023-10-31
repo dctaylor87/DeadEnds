@@ -6,7 +6,7 @@
 //    type. The type RecordIndex is a synonym of HashTable.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 17 October 2023.
+//  Last changed on 31 October 2023.
 //
 
 #include "recordindex.h"
@@ -18,8 +18,8 @@
 //--------------------------------------------------------------------------------------------------
 static int compareRecordIndexEls(Word leftEl, Word rightEl)
 {
-	String a = ((RecordIndexEl*) leftEl)->key;
-	String b = ((RecordIndexEl*) rightEl)->key;
+	String a = ((RecordIndexEl*) leftEl)->root->key;
+	String b = ((RecordIndexEl*) rightEl)->root->key;
 	return strcmp(a, b);
 }
 
@@ -28,7 +28,6 @@ static int compareRecordIndexEls(Word leftEl, Word rightEl)
 static void deleteRecordIndexEl(Word word)
 {
 	RecordIndexEl* element = (RecordIndexEl*) word;
-	stdfree(element->key);
 	stdfree(element);
 }
 
@@ -78,7 +77,7 @@ void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
 	// TODO. Note the index pointer is null above. If we used it, we could insert faster below.
 	if (!element) {
 		element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
-		element->key = strsave(key);
+		//element->key = strsave(key);
 		element->root = root;  //  MNOTE: Not copied, records persist.
 		appendToBucket(bucket, element);
 	} //else {
@@ -98,7 +97,7 @@ int getRecordInsertCount(void)
 //  searchRecordIndex -- Search a record index for a key, and return the associated node tree.
 //--------------------------------------------------------------------------------------------------
 GNode* searchRecordIndex(RecordIndex *index, String key)
-// index -- Record index to for the key in.
+// index -- Record index to search for the key in.
 // key -- Key of record to search for.
 {
 	ASSERT(index && key);
