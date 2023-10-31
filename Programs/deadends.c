@@ -121,8 +121,8 @@ main (int argc, char *argv[])
 	  exit (1);
 	}
     }
-  if (! have_python_scripts && ! python_interactive)
-    print_usage (1);		/* either -p or -P is required */
+  if (! have_python_scripts && ! python_interactive && ! have_deadend_scripts)
+    print_usage (1);		/* either -p or -P or -x is required */
 
   cmd_line_db = argv[optind];
 
@@ -137,6 +137,19 @@ main (int argc, char *argv[])
     }
 
   theDatabase = simpleImportFromFile (db_file, &error_log);
+  if (! theDatabase)
+    {
+      fprintf (stderr, "%s: import failed\n", ProgName);
+      /* XXX figure out how to print 'error_log' XXX */
+      exit (1);
+    }
+  if (have_deadend_scripts)
+    {
+      int status = deadend_execute_scripts (0);
+      if (status < 0)
+	fprintf (stderr, "%s: DeadEnds script failed, status = %d\n",
+		 ProgName, status);
+    }
   if (have_python_scripts)
     {
       int status = llpy_execute_scripts (0);
