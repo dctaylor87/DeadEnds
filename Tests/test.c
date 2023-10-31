@@ -23,7 +23,7 @@ extern FunctionTable *procedureTable;
 
 extern Database *simpleImportFromFile(FILE*, ErrorLog*);
 static void sequenceTests(FILE*);
-static void forHashTableTest();
+static void forHashTableTest(void);
 
 extern bool validateDatabase(Database*);
 

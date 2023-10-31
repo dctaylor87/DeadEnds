@@ -22,7 +22,7 @@ static int execute_script (CString script);
 /* start of code */
 
 /* array of scripts seen on the command line, in the order seen */
-static char **script_array;
+static const char **script_array;
 
 static const char *search_path = ".:../Gedfiles:$LLSCRIPTS:$HOME";
 
@@ -45,9 +45,9 @@ deadend_register_script (CString script)
   const char **new_array;
 
   if (nscripts)
-    new_array = (char **)realloc ((void *)script_array, (nscripts + 1) * sizeof (char *));
+    new_array = (const char **)realloc ((void *)script_array, (nscripts + 1) * sizeof (char *));
   else
-    new_array = (char **)malloc (sizeof (char *));
+    new_array = (const char **)malloc (sizeof (char *));
 
   if (! new_array)
     return (-1);		/* malloc / realloc failed! */

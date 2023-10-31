@@ -20,6 +20,7 @@ GNode* personToNextSibling(GNode*);  //  Return the next sibling of a person.
 GNode* familyToHusband(GNode*);  //  Return the first husband of a family.
 GNode* familyToWife(GNode*);  //  Return the first wife of a family.
 GNode *familyToSpouse(GNode*, SexType);  // Return first spouse of given sex.
+GNode *personToSpouse(GNode *person, GNode *family);  // Return the first spouse from the...
 GNode* familyToFirstChild(GNode*);  //  Return the first child of a family.
 GNode* familyToLastChild(GNode*);  //  Return the last child of a family.
 String personToName(GNode*, int);  //  Return the first name of a person.

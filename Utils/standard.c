@@ -121,7 +121,7 @@ void alloc_out(String str)
 
 // strsave -- Save a copy of a String on the heap. Return the pointer to the copy.
 //--------------------------------------------------------------------------------------------------
-String strsave(String string) { return strcpy(stdalloc(strlen(string) + 1), string); }
+String strsave(CString string) { return strcpy(stdalloc(strlen(string) + 1), string); }
 
 // strconcat -- Catenate two strings and return a new String on the heap with the value.
 //--------------------------------------------------------------------------------------------------
