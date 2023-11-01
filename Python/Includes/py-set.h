@@ -6,13 +6,13 @@
    of 'record'.  spouse is an addref'd RECORD and needs to be
    release_record'ed if it is not saved. */
 
-#define FORSPOUSES_RECORD(record,spouse)	\
+#define FORSPOUSES_RECORD(record,spouse_r) \
 	{\
 	  NODE _fam = 0; \
 	  INT _num = 0; \
 	  NODE _indi = nztop (record);	\
 	  FORSPOUSES(_indi,_spouse,_fam,_num) \
-	    spouse = node_to_record (_spouse);
+	    spouse_r = node_to_record (_spouse);
 
 #define ENDSPOUSES_RECORD \
 	  ENDSPOUSES \

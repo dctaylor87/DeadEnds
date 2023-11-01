@@ -24,13 +24,15 @@ RecordIndexEl *
 _llpy_node_to_record (GNode *node)
 {
   GNode *top = node;
-  RecordIndex *index;
 
   while (top->parent)
     top = top->parent;
 
   if (! top->key)
     return NULL;		/* without the key we can't find the record! */
+
+#if 0
+  RecordIndex *index;
 
   switch (top->key[0])
     {
@@ -51,4 +53,25 @@ _llpy_node_to_record (GNode *node)
       break;
     }
   return ((RecordIndexEl *)searchHashTable ((HashTable *)index, top->key));
+#else
+  /* we can no longer assume that the first character of the key tells
+     us the record type, so we have to search ALL the key indexes */
+  RecordIndexEl *record;
+
+  record = ((RecordIndexEl *)searchHashTable
+	    ((HashTable *)theDatabase->personIndex, top->key));
+  if (! record)
+    record = ((RecordIndexEl *)searchHashTable
+	      ((HashTable *)theDatabase->familyIndex, top->key));
+  if (! record)
+    record = ((RecordIndexEl *)searchHashTable
+	      ((HashTable *)theDatabase->sourceIndex, top->key));
+  if (! record)
+    record = ((RecordIndexEl *)searchHashTable
+	      ((HashTable *)theDatabase->eventIndex, top->key));
+  if (! record)
+    record = ((RecordIndexEl *)searchHashTable
+	      ((HashTable *)theDatabase->otherIndex, top->key));
+  return (record);
+#endif  
 }

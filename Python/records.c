@@ -33,6 +33,194 @@ static PyObject *llpy_keynum_to_record (PyObject *self, PyObject *args, PyObject
 
 /* start of code */
 
+#if defined(DEADENDS)
+static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
+{
+  static char *keywords[] = { "key", "type", NULL };
+  const char *key = 0;
+  const char *type = 0;
+  int int_type = 0;
+  RECORD record;
+  LLINES_PY_RECORD *py_record;
+  int use_keybuf = 0;
+  int added_at = 0;
+  int ndx;
+
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "s|z", keywords, &key, &type))
+    return NULL;
+
+  char key_buffer[strlen(key) + 3];
+
+  /* convenience -- add '@'s if needed; convert to uppercase */
+  if (key[0] != '@')
+    {
+      key_buffer[0] = '@';
+      added_at = 1;
+    }
+  for (ndx = 0; key[ndx]; ndx++)
+    key_buffer[ndx + added_at] = toupper(key[ndx]);
+  if (added_at)
+    key_buffer[ndx++ + added_at] = '@';
+
+  key_buffer[ndx + added_at] = 0;
+
+  if (type && (type[0] != 0))
+    {
+      /* if type was specified and is not the empty string, we search
+	 only those types of records */
+      switch (type[0])
+	{
+	case 'F':
+	  if (eqstr (type, "FAM"))
+	    {
+	      int_type = 'F';
+	      break;
+	    }
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+
+	case 'I':
+	  if (eqstr (type, "INDI"))
+	    {
+	      int_type = 'I';
+	      break;
+	    }
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+
+	case 'S':
+	  if (eqstr (type, "SOUR"))
+	    {
+	      int_type = 'S';
+	      break;
+	    }
+	  else if (eqstr (type, "SUBM") || (eqstr (type, "SNOTE")))
+	    {
+	      int_type = 'O';
+	      break;
+	    }
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+
+	case 'E':
+	  if (eqstr (type, "EVEN"))
+	    {
+	      int_type = 'E';
+	      break;
+	    }
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+
+	case 'R':
+	  if (eqstr (type, "REPO"))
+	    {
+	      int_type = 'X';
+	      break;
+	    }
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+
+	case 'O':
+	  if (eqstr (type, "OBJE"))
+	    {
+	      int_type = 'X';
+	      break;
+	    }
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+
+	default:
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");
+	  return NULL;
+	}
+
+      /* if the key has a prefix, verify that it matches the computed type */
+      if (! isdigit (key[0]) && (key[0] != int_type))
+	{
+	  /* key has prefix, but it does not match type's prefix */
+	  PyErr_SetString (PyExc_ValueError, "key_to_record: key's prefix incompatible with type");
+	  return NULL;
+	}
+    }
+
+  switch (int_type)
+    {
+    case 'I':
+      record = qkey_to_irecord (key_buffer);
+      break;
+    case 'F':
+      record = qkey_to_frecord (key_buffer);
+      break;
+    case 'S':
+      record = qkey_to_srecord (key_buffer);
+      break;
+    case 'E':
+      record = qkey_to_erecord (key_buffer);
+      break;
+    case 'X':
+      record = qkey_to_orecord (key_buffer);
+      break;
+    default:
+      /* caller did not specify a type, try them all until we find it.
+	 If all fail, we will return None */
+      int_type = 'I';
+      record = qkey_to_irecord (key_buffer);
+      if (! record)
+	{
+	  int_type = 'F';
+	  record = qkey_to_frecord (key_buffer);
+	}
+      if (! record)
+	{
+	  int_type = 'S';
+	  record = qkey_to_srecord (key_buffer);
+	}
+      if (! record)
+	{
+	  int_type = 'E';
+	  record = qkey_to_erecord (key_buffer);
+	}
+      if (! record)
+	{
+	  int_type = 'X';
+	  record = qkey_to_orecord (key_buffer);
+	}
+    }
+
+  if (! record)
+    Py_RETURN_NONE;		/* that keynum has no record */
+
+  switch (int_type)
+    {
+    case 'I':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_individual_type);
+      break;
+    case 'F':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_family_type);
+      break;
+    case 'S':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_source_type);
+      break;
+    case 'E':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_event_type);
+      break;
+    case 'X':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_other_type);
+      break;
+    }
+  if (! py_record)
+    return NULL;
+
+  py_record->llr_record = record;
+  py_record->llr_type = int_type;
+  return ((PyObject *) py_record);
+}
+#else
 static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
   static char *keywords[] = { "key", "type", NULL };
@@ -185,12 +373,24 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   switch (int_type)
     {
     case 'I':
-    case 'F':
-    case 'S':
-    case 'E':
-    case 'X':
       py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
 						     &llines_individual_type);
+      break;
+    case 'F':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_family_type);
+      break;
+    case 'S':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_source_type);
+      break;
+    case 'E':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_event_type);
+      break;
+    case 'X':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_other_type);
       break;
     }
   if (! py_record)
@@ -200,6 +400,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   py_record->llr_type = int_type;
   return ((PyObject *) py_record);
 }
+#endif
 
 static PyObject *llpy_keynum_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {

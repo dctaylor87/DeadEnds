@@ -548,15 +548,23 @@ static PyObject *llpy_nspouses (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
    Returns the number of families (as spouse/parent) of INDI.
 
-   NOTE: sensitive to Lifelines GEDCOM format which puts FAMS links
-   *LAST*.  If this changes, this breaks.  */
+   NOTE: LifeLines version is sensitive to Lifelines GEDCOM format
+   which puts FAMS links *LAST*.  If this changes, this breaks.
+
+   DeadEnds version does NOT make this assumption.  */
 
 static PyObject *llpy_nfamilies (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE indi_node = nztop (indi->llr_record);
+#if defined(DEADENDS)
+  int count = 0;
+  for (GNode *node = indi_node->child; node; node = node->sibling)
+    if (eqstr (node->tag, "FAMS"))
+      count++;
+#else
   int count = length_nodes (FAMS (indi_node));
-
+#endif
   return (Py_BuildValue ("I", count));
 }
 
@@ -863,8 +871,27 @@ static PyObject *llpy_spouseset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args
 static int add_spouses (PyObject *item, PyObject *output_set)
 {
   RECORD record = ((LLINES_PY_RECORD *)item)->llr_record;
-  RECORD spouse;
 
+#if defined(DEADENDS)
+  RECORD spouse_r;
+  NODE indi = nztop (record);
+
+  FORSPOUSES(indi, spouse, fam, num)
+    spouse_r = node_to_record (spouse);
+
+    LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
+    if (! new_indi)
+      return (-1);
+
+    new_indi->llr_type = LLINES_TYPE_INDI;
+    new_indi->llr_record = spouse_r;
+
+    if (PySet_Add (output_set, (PyObject *)new_indi) < 0)
+      return (-2);
+
+  ENDSPOUSES
+#else
+  RECORD spouse;
   FORSPOUSES_RECORD(record,spouse)
 
     LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
@@ -878,7 +905,7 @@ static int add_spouses (PyObject *item, PyObject *output_set)
       return (-2);
 
   ENDSPOUSES_RECORD
-
+#endif
   return (0);
 }
 
