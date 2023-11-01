@@ -242,7 +242,7 @@ int compareRecordKeys(String, String);  // gedcom.c
             spouse = familyToWife(fam);\
         else\
             spouse = familyToHusband(fam);\
-            if (spouse != null) {\
+        if (spouse != null) {\
             num++;\
             {
 #define ENDSPOUSES\
