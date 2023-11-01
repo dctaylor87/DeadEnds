@@ -25,7 +25,7 @@ testpython_SOURCES = testpython.c
 # Utils has to go before DataTypes due to searchIntegerTable,insertInIntegerTable
 # 
 # 
-LDADD =  ../Python/libpyllines.a \
+LDADD = ../Python/libpyllines.a \
 	../Parser/libparser.a ../Interp/libinterp.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a

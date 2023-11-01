@@ -14,11 +14,14 @@ deadends_SOURCES = deadends.c de-scripts.c
 # Utils has to go before DataTypes due to searchIntegerTable,insertInIntegerTable
 # 
 # 
-LIBS =  ../Python/libpyllines.a \
+LDADD = ../Python/libpyllines.a \
 	../Parser/libparser.a ../Interp/libinterp.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
-	../Utils/libutils.a ../DataTypes/libdatatypes.a \
-	$(PYTHON_LIBS)
+	../DataTypes/libdatatypes.a ../Utils/libutils.a
+
+#	../Utils/libutils.a ../DataTypes/libdatatypes.a
+
+LIBS =  $(PYTHON_LIBS)
 
 # $(top_builddir)        for files in the build tree
 # $(top_srcdir)          for files in the source tree
