@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 10 October 2023.
+//  Last changed on 1 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -264,7 +264,7 @@ static String updateKeyMap(GNode *root, StringTable *rekeyMap)
 //    for values with key syntax (surrounded by @-signs) and remaps them.
 //--------------------------------------------------------------------------------------------------
 static StringTable *map;
-static bool rekeyTraverseFunction(GNode* node)
+static bool rekeyTraverseFunction(GNode* node, int level)
 {
     //printf("rekeyTraverseFunction called.\n");
     if (isKey(node->value)) {
@@ -294,7 +294,6 @@ void rekeyIndex(RecordIndex *index, StringTable *rekeyMap)
     RecordIndexEl *element = (RecordIndexEl*) firstInHashTable(index, &i, &j);
     while (element) {
         traverseNodes(element->root, 0, rekeyTraverseFunction);
-        rekeyTraverseFunction(element->root);
         element = (RecordIndexEl*) nextInHashTable(index, &i, &j);
     }
 }

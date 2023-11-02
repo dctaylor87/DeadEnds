@@ -1,7 +1,8 @@
 //  test.c -- Test program.
+
 //
 //  Created by Thomas Wetmore on 5 October 2923.
-//  Last changed on 31 October 2023.
+//  Last changed on 1 November 2023.
 
 #include <stdio.h>
 #include "standard.h"
@@ -30,26 +31,23 @@ static void parseAndRunProgramTest(void);
 
 extern bool validateDatabase(Database*);
 
-int main()
+int main(void)
 {
 	printf("createDatabaseTest\n");
 	createDatabaseTest();
-	printf("listTest\n"); fflush(stdout);
+	printf("listTest\n");
 	listTest(outputFile);
-	printf("forHashTableTest\n"); fflush(stdout);
+	printf("forHashTableTest\n");
 	forHashTableTest();
-	printf("parseAndRunProgramTest\n"); fflush(stdout);
+	printf("parseAndRunProgramTest\n");
 	parseAndRunProgramTest();
-
+	printf("indexNamesTest\n");
+	indexNames(theDatabase);
+	//printf("validateDatabaseTest\n");
 	//validateDatabase(theDatabase);
-
-	// Show all the persons in the database.
-	//  Iterate through the person index.
 
 	//showRecordIndex(theDatabase->personIndex);
 	//showRecordIndex(theDatabase->familyIndex);
-
-	
 }
 
 //  createDatabaseTest -- Creates a test database from a Gedcom file.
@@ -58,8 +56,10 @@ void createDatabaseTest()
 {
 	//  Create a database from the main.ged file.
 	gedcomFile = fopen("../Gedfiles/main.ged", "r");
+	//gedcomFile = fopen("/Users/ttw4/Desktop/DeadEndsCloneOne/CloneOne/CloneOne/Gedfiles/main.ged", "r");
 	//gedcomFile = fopen("../Gedfiles/TWetmoreLine.ged", "r");
 	outputFile = fopen("./Outputs/output.txt", "w");
+	//outputFile = fopen("/Users/ttw4/Desktop/output.txt", "w");
 	ErrorLog errorLog;
 	theDatabase = simpleImportFromFile(gedcomFile, &errorLog);
 	printf("The number of persons in the database is %d.\n", numberPersons(theDatabase));
@@ -73,13 +73,13 @@ static int compare(Word a, Word b)
 	return compareRecordKeys(((GNode*) a)->key, ((GNode*) b)->key);
 }
 
-//  listTest -- Create a list of all the persons in the database, sort the list, and
-//    print the tags of the records in the sorted order.
+//  listTest -- Create a list of all the persons in the database, sort the list by tags, and
+//    print the record tags in sorted order.
 //-------------------------------------------------------------------------------------------------
 void listTest(FILE *outputFile)
 {
 	fprintf(outputFile, "\nStart of listTest\n");
-	int i, j;
+	int i, j;  //  State variables used to iterate the person index hash table.
 	GNode *person;
 	//  Create a List of all the persons in the database.
 	List *personList = createList(compare, null, null);

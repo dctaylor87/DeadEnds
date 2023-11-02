@@ -20,10 +20,10 @@ Set *createSet(int (*compare)(Word, Word), void (*delete)(Word))
 //  compare -- Function that compares pairs of elements; manadatory.
 //  delete -- Function to call on elements when they are removed; optional.
 {
-    ASSERT(compare);
-    Set *set = (Set*) stdalloc(sizeof(Set));
-    set->list = createList(compare, delete, null);
-    return set;
+	ASSERT(compare);
+	Set *set = (Set*) stdalloc(sizeof(Set));
+	set->list = createList(compare, delete, null);
+	return set;
 }
 
 // deleteSet -- Remove a set.
@@ -31,8 +31,8 @@ Set *createSet(int (*compare)(Word, Word), void (*delete)(Word))
 void deleteSet(Set *set)
 //  set -- Set to remove.
 {
-    deleteList(set->list);
-    stdfree(set);
+	deleteList(set->list);
+	stdfree(set);
 }
 
 //  addToSet -- Add an element to a set if it is not already there.
@@ -42,9 +42,9 @@ void addToSet(Set *set, Word element)
 //  set -- Set to add the element to.
 //  element -- Element to add to the set if it is not already there.
 {
-    int index;
-    Word entry = searchList(set->list, element, &index);
-    if (!entry) insertListElement(set->list, index, element);
+	int index;
+	Word entry = searchList(set->list, element, &index);
+	if (!entry) insertListElement(set->list, index, element);
 }
 
 // Check if an element is in a set.
@@ -56,13 +56,13 @@ bool isInSet(Set *set, Word element) { return isInList(set->list, element); }
 //--------------------------------------------------------------------------------------------------
 void removeFromSet(Set *set, Word element)
 {
-    int index;
-    Word entry = searchList(set->list, element, &index);
-    if (!entry) return;
-    for (int i = index; i < set->list->length - 1; i++) {
-        set->list[i] = set->list[i + 1];
-    }
-    set->list->length--;
+	int index;
+	Word entry = searchList(set->list, element, &index);
+	if (!entry) return;
+	for (int i = index; i < set->list->length - 1; i++) {
+		set->list[i] = set->list[i + 1];
+	}
+	set->list->length--;
 }
 
 // iterateSet -- Iterate the elements of a set, calling a function on each.

@@ -4,5 +4,9 @@
         "__tree": "c",
         "map": "c",
         "unordered_map": "c"
+    },
+    
+    "files.exclude": {
+        "**/llprogram": true
     }
 }

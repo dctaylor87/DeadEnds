@@ -132,7 +132,7 @@ GNode *personToSpouse(GNode *person, GNode *family)
 //            such a spouse.
 {
 	if (debugging) printf("personToSpouse called on person %s\n", person->key);
-	
+	return null;	
 }
 
 //  familyToFirstChild -- Return the first child of a family. This is the first CHIL in the FAM

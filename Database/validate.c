@@ -4,7 +4,7 @@
 //  validate.c -- Functions that validate Gedcom records.
 //
 //  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 21 October 2023.
+//  Last changed on 1 November 2023.
 //
 
 #include <ansidecl.h>
