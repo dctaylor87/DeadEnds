@@ -534,7 +534,6 @@ static PyObject *llpy_nspouses (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE node = nztop (indi->llr_record);
-  INT nspouses = 0;		/* throw away, used by macro */
   INT nactual = 0;
 
   FORSPOUSES(node, spouse, fam, nspouses)

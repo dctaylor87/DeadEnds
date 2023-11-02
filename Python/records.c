@@ -42,7 +42,6 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   int int_type = 0;
   RECORD record;
   LLINES_PY_RECORD *py_record;
-  int use_keybuf = 0;
   int added_at = 0;
   int ndx;
 
