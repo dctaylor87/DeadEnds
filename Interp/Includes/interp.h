@@ -70,7 +70,6 @@ GNode* evaluateGNode(PNode*, SymbolTable*, bool*);
 String format_date(String, int, int, int, int, bool);
 void free_all_pnodes(void);
 void free_pnode_tree(PNode*);
-String get_date(void);
 PNode *iden_node(String);
 bool iistype(PNode*, PNType);
 int num_params(PNode*);
