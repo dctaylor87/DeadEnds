@@ -7,7 +7,7 @@
 //    list is created.
 //
 //  Created by Thomas Wetmore on 22 November 2022.
-//  Last changed on 13 October 2023.
+//  Last changed on 1 November 2023.
 //
 
 #include "list.h"
@@ -26,124 +26,124 @@ List *createList(int (*compare)(Word, Word), void (*delete)(Word), String(*getKe
 //  delete -- Optional delete function for elements.
 //  getkey -- Optional get key function for elements.
 {
-    List *list = (List*) stdalloc(sizeof(List));
-    list->isSorted = true;  // An empty List is a sorted List.
-    list->keepSorted = false;  // By default don't keep the list sorted.
-    list->sortThreshold = 30;  // A reasonable value if the list is sorted.
-    list->length = 0;
-    list->maxLength = INITIAL_SIZE_LIST_DATA_BLOCK;
-    list->data = (Word) stdalloc(INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(Word));
-    list->compare = compare;
-    // If there is a compare function assume the list should be sorted.
-    if (compare) list->keepSorted = true;
-    list->delete = delete;
-    list->getKey = getKey;
-    return list;
+	List *list = (List*) stdalloc(sizeof(List));
+	list->isSorted = true;  // An empty List is a sorted List.
+	list->keepSorted = false;  // By default don't keep the list sorted.
+	list->sortThreshold = 30;  // A reasonable value if the list is sorted.
+	list->length = 0;
+	list->maxLength = INITIAL_SIZE_LIST_DATA_BLOCK;
+	list->data = (Word) stdalloc(INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(Word));
+	list->compare = compare;
+	// If there is a compare function assume the list should be sorted.
+	if (compare) list->keepSorted = true;
+	list->delete = delete;
+	list->getKey = getKey;
+	return list;
 }
 
 //  deleteList -- Delete a list. If there is a delete function call it on each element.
 //--------------------------------------------------------------------------------------------------
 void deleteList(List *list)
 {
-    ASSERT(list);
-    if (list->delete) {
-        for (int i = 0; i < list->length; i++) {
-            list->delete(list->data[i]);
-        }
-    }
-    stdfree(list->data);  // Free the list's elements.
-    stdfree(list);  // Free the list.
+	ASSERT(list);
+	if (list->delete) {
+		for (int i = 0; i < list->length; i++) {
+			list->delete(list->data[i]);
+		}
+	}
+	stdfree(list->data);  // Free the list's elements.
+	stdfree(list);  // Free the list.
 }
 
 //  emptyList -- Make a list empty. If there is a delete function call it on each element.
 //--------------------------------------------------------------------------------------------------
 void emptyList(List *list)
 {
-    if (!list) return;
-    if (list->delete) {
-        for (int i = 0; i < list->length; i++) {
-            list->delete(list->data[i]);
-        }
-    }
-    list->length = 0;
+	if (!list) return;
+	if (list->delete) {
+		for (int i = 0; i < list->length; i++) {
+			list->delete(list->data[i]);
+		}
+	}
+	list->length = 0;
 }
 
 //  isEmptyList -- See if a list is empty.
 //--------------------------------------------------------------------------------------------------
 bool isEmptyList(List *list)
 {
-    return list->length <= 0;
+	return list->length <= 0;
 }
 
 //  appendListElement -- Add a new value to the end of the list.
 //--------------------------------------------------------------------------------------------------
 void appendListElement(List *list, Word value)
 {
-    ASSERT(list);
-    list->isSorted = false;
-    if (list->length >= list->maxLength) growList(list);
-    list->data[(list->length)++] = value;
+	ASSERT(list);
+	list->isSorted = false;
+	if (list->length >= list->maxLength) growList(list);
+	list->data[(list->length)++] = value;
 }
 
 //  prependListElement -- Add a new element to the start of the list.
 //--------------------------------------------------------------------------------------------------
 void prependListElement(List *list, Word value)
 {
-    ASSERT(list);
-    list->isSorted = false;
-    int length = list->length;
-    if (length >= list->maxLength) growList(list);
-    Word* data = list->data;
-    for (int i = length; i > 0; i--) {
-        data[i] = data[i - 1];
-    }
-    data[0] = value;
-    (list->length)++;
+	ASSERT(list);
+	list->isSorted = false;
+	int length = list->length;
+	if (length >= list->maxLength) growList(list);
+	Word* data = list->data;
+	for (int i = length; i > 0; i--) {
+		data[i] = data[i - 1];
+	}
+	data[0] = value;
+	(list->length)++;
 }
 
 //  setListElement -- Set a specific element in a list.
 //--------------------------------------------------------------------------------------------------
 void setListElement(List *list, int index, Word value)
 {
-    ASSERT(list && index >= 0 && index < list->length);
-    list->data[index] = value;
+	ASSERT(list && index >= 0 && index < list->length);
+	list->data[index] = value;
 }
 
 //  getListElement -- Get a specific element from a list.
 //--------------------------------------------------------------------------------------------------
 Word getListElement(List *list, int index)
 {
-    ASSERT(list && index >= 0 && index < list->length);
-    return list->data[index];
+	ASSERT(list && index >= 0 && index < list->length);
+	return list->data[index];
 }
 
 //  insertListElement -- Insert an element into a list at a specified location.
 //--------------------------------------------------------------------------------------------------
 bool insertListElement(List *list, int index, Word value)
 {
-    ASSERT(list && index >= 0 && index < list->length);
-    list->isSorted = false;
-    (list->data)[index] = value;
-    return true;
+	ASSERT(list && index >= 0 && index <= list->length);
+	list->isSorted = false;
+	(list->data)[index] = value;
+	return true;
 }
 
 //  insertSortedListElement -- Insert an element into its proper location in a sorted List.
 //--------------------------------------------------------------------------------------------------
 bool insertSortedListElement(List *list, Word value)
 {
-    //  Be sure the list exists, should be sorted, and has a compare function.
-    ASSERT(list && list->keepSorted && list->compare);
+	//  Be sure the list exists, should be sorted, and has a compare function.
+	ASSERT(list && list->keepSorted && list->compare);
 
-    // If the list isn't sorted, sort it before inserting.
-    if (!list->isSorted) sortList(list, true);
+	// If the list isn't sorted, sort it before inserting.
+	if (!list->isSorted) sortList(list, true);
 
-    //  Search the list for the value. If there or not there insert at the returned index. This
-    //    can allow duplicates to occur.
-    int index;
-    searchList(list, value, &index);
-    insertListElement(list, index, value);
-    list->isSorted = true;
-    return true;
+	//  Search the list for the value. If there or not there insert at the returned index. This
+	//    can allow duplicates to occur.
+	int index;
+	searchList(list, value, &index);
+	insertListElement(list, index, value);
+	list->isSorted = true;
+	return true;
 }
 
 //  removeListElement -- Remove an indexed value from a list. This does not affect the sorted
@@ -152,33 +152,33 @@ bool insertSortedListElement(List *list, Word value)
 //--------------------------------------------------------------------------------------------------
 Word removeListElement(List *list, int index)
 {
-    ASSERT(list && index >= 0);
-    int length = list->length;
-    if (length == 0) return null;
-    Word* array = list->data;
-    Word element = array[index];  // Element to remove from  list.
-    for (; index < length - 1; index++)
-        array[index] = array[index + 1];  // Fill the hole.
-    (list->length)--;
-    return element;
+	ASSERT(list && index >= 0);
+	int length = list->length;
+	if (length == 0) return null;
+	Word* array = list->data;
+	Word element = array[index];  // Element to remove from  list.
+	for (; index < length - 1; index++)
+		array[index] = array[index + 1];  // Fill the hole.
+	(list->length)--;
+	return element;
 }
 
 //  removeFirstListElement -- Remove the first element from a list.
 //-------------------------------------------------------------------------------------------------
 Word removeFirstListElement(List *list)
 {
-    ASSERT(list);
-    if (list->length <= 0) return null;
-    return removeListElement(list, 0);
+	ASSERT(list);
+	if (list->length <= 0) return null;
+	return removeListElement(list, 0);
 }
 
 //  removeLastListElement -- Remove the last element from a list.
 //-------------------------------------------------------------------------------------------------
 Word removeLastListElement(List *list)
 {
-    ASSERT(list);
-    if (list->length <= 0) return null;
-    return removeListElement(list, list->length - 1);
+	ASSERT(list);
+	if (list->length <= 0) return null;
+	return removeListElement(list, list->length - 1);
 }
 
 //  showList -- Show the contents of a List. Intended for debugging. If the describe function is
@@ -189,11 +189,11 @@ void showList(List *list, String (*describe)(Word))
 //  list -- List to show.
 //  describe -- Function to the print each element in the list.
 {
-    printf("Show a list: curlen = %d; maxlen = %d\n", list->length, list->maxLength);
-    for (int i = 0; i < list->length; i++) {
-        if (describe) printf("%s\n", describe(list->data[i]));
-        else printf("%s\n", (String) list->data[i]);
-    }
+	printf("Show a list: curlen = %d; maxlen = %d\n", list->length, list->maxLength);
+	for (int i = 0; i < list->length; i++) {
+		if (describe) printf("%s\n", describe(list->data[i]));
+		else printf("%s\n", (String) list->data[i]);
+	}
 }
 
 //  uniqueList -- Remove duplicates from a List. The List is sorted if it is not already.
@@ -202,17 +202,17 @@ void showList(List *list, String (*describe)(Word))
 //--------------------------------------------------------------------------------------------------
 void uniqueList(List *list)
 {
-    // The List must exist and must have a compare function.
-    ASSERT(list && list->compare);
-    if (!list->isSorted) sortList(list, true);
-    Word* d = list->data;
-    int i, j;
-    for (j = 0, i = 1; i < list->length; i++) {
-        if (list->compare(d[i], d[j]) != 0) {
-            if (i != j + 1) d[++j] = d[i];
-        }
-    }
-    list->length = j + 1;
+	// The List must exist and must have a compare function.
+	ASSERT(list && list->compare);
+	if (!list->isSorted) sortList(list, true);
+	Word* d = list->data;
+	int i, j;
+	for (j = 0, i = 1; i < list->length; i++) {
+		if (list->compare(d[i], d[j]) != 0) {
+			if (i != j + 1) d[++j] = d[i];
+		}
+	}
+	list->length = j + 1;
 }
 
 //  isInList -- Check if an element is in the list. The List is sorted if it is not already. The
@@ -220,19 +220,19 @@ void uniqueList(List *list)
 //--------------------------------------------------------------------------------------------------
 Word isInList(List *list, Word value)
 {
-    // List must exist and be sortable.
-    ASSERT(list && list->compare);
-    if (!list->isSorted) sortList(list, false);
-    return searchList(list, value, null);
+	// List must exist and be sortable.
+	ASSERT(list && list->compare);
+	if (!list->isSorted) sortList(list, false);
+	return searchList(list, value, null);
 }
 
 //  iterateList -- Iterate the elements of a list doing something.
 //--------------------------------------------------------------------------------------------------
 void iterateList(List *list, void(*iterate)(Word))
 {
-    if (!iterate) return;  // Do nothing if there is no iteration function.
-    for (int i = 0; i < list->length; i++)
-        (*iterate)(list->data[i]);
+	if (!iterate) return;  // Do nothing if there is no iteration function.
+	for (int i = 0; i < list->length; i++)
+		(*iterate)(list->data[i]);
 }
 
 //  lengthList -- Return the length of the list.
@@ -244,11 +244,11 @@ int lengthList(List *list) { return list->length; }
 //--------------------------------------------------------------------------------------------------
 static void growList(List *list)
 {
-    int newLength = list->maxLength = (3*list->maxLength)/2;
-    Word newData = stdalloc(newLength*sizeof(Word));
-    memcpy(newData, list->data, (list->length)*sizeof(Word));
-    stdfree(list->data);
-    list->data = newData;
+	int newLength = list->maxLength = (3*list->maxLength)/2;
+	Word newData = stdalloc(newLength*sizeof(Word));
+	memcpy(newData, list->data, (list->length)*sizeof(Word));
+	stdfree(list->data);
+	list->data = newData;
 }
 
 //  sortList -- Sort a list. If force is true sort the list regardless of its length. If force
@@ -258,23 +258,23 @@ void sortList(List *list, bool force)
 //  list -- List to sort.
 //  force -- If true always sort; else sort if at or above threshold.
 {
-    if (debugging) printf("sortList: on list of length %d\n", list->length);
-    ASSERT(list && list->compare);
-    if (!list->keepSorted) {
-        if (debugging) printf("sortList: list is not to be sorted: returning.\n");
-        return;
-    }
-    if (list->isSorted) {
-        if (debugging) printf("sortList: list is sorted so returning\n");
-        return;
-    }
-    if (!force && list->length < list->sortThreshold) {
-        if (debugging) printf("sortList: list is below threshold so not being sorted\n");
-        return;
-    }
-    if (debugging) printf("sortList: data is being sorted.\n");
-    ldata = list->data;    //  ldata and lcmp are globals used by the quickSort function.
-    lcmp = list->compare;  //    TODO: Would be nice to not need this artifice.
-    quickSort(0, list->length - 1);
-    list->isSorted = true;
+	if (debugging) printf("sortList: on list of length %d\n", list->length);
+	ASSERT(list && list->compare);
+	if (!list->keepSorted) {
+		if (debugging) printf("sortList: list is not to be sorted: returning.\n");
+		return;
+	}
+	if (list->isSorted) {
+		if (debugging) printf("sortList: list is sorted so returning\n");
+		return;
+	}
+	if (!force && list->length < list->sortThreshold) {
+		if (debugging) printf("sortList: list is below threshold so not being sorted\n");
+		return;
+	}
+	if (debugging) printf("sortList: data is being sorted.\n");
+	ldata = list->data;    //  ldata and lcmp are globals used by the quickSort function.
+	lcmp = list->compare;  //    TODO: Would be nice to not need this artifice.
+	quickSort(0, list->length - 1);
+	list->isSorted = true;
 }

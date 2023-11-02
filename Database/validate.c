@@ -4,7 +4,7 @@
 //  validate.c -- Functions that validate Gedcom records.
 //
 //  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 21 October 2023.
+//  Last changed on 1 November 2023.
 //
 
 #include "validate.h"
@@ -20,8 +20,8 @@ static Database *theDatabase;
 
 static bool debugging = true;
 
-static bool validatePersonIndex();
-static bool validateFamilyIndex();
+static bool validatePersonIndex(void);
+static bool validateFamilyIndex(void);
 static void validatePerson(GNode*);
 static void validateFamily(GNode*);
 static void validateSource(GNode*);

@@ -7,7 +7,7 @@
 //    records is also done.
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed 29 October 2023.
+//  Last changed 1 November 2023.
 //
 
 #include "database.h"
@@ -89,17 +89,17 @@ int numberOthers(Database *database)
 //  keyToPerson -- Get a person record from a database.
 //--------------------------------------------------------------------------------------------------
 GNode* keyToPerson(String key, Database *database)
-//  key -- Key of person record. The @-signs are not part of the database key.
+//  key -- Key of person record.
 //  index -- Record index to search for the person.
 {
-	RecordIndexEl* element = searchHashTable(database->personIndex, key);
+	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(database->personIndex, key);
 	return element ? element->root : null;
 }
 
 //  keyToFamily -- Get a family record from a record index.
 //--------------------------------------------------------------------------------------------------
 GNode* keyToFamily(String key, Database *database)
-//  key -- Key of family record. The @-signs are not part of the key.
+//  key -- Key of family record.
 //  index -- Record index to search for the family.
 {
 	//if (debugging) printf("keyToFamily called with key: %s\n", key);
@@ -111,7 +111,7 @@ GNode* keyToFamily(String key, Database *database)
 //--------------------------------------------------------------------------------------------------
 GNode *keyToSource(String key, Database *database)
 {
-	RecordIndexEl* element = searchHashTable(database->sourceIndex, key);
+	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(database->sourceIndex, key);
 	return element ? element->root : null;
 }
 
@@ -119,7 +119,7 @@ GNode *keyToSource(String key, Database *database)
 //--------------------------------------------------------------------------------------------------
 GNode *keyToEvent(String key, Database *database)
 {
-	RecordIndexEl *element = searchHashTable(database->eventIndex, key);
+	RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->eventIndex, key);
 	return element ? element->root : null;
 }
 
@@ -181,16 +181,25 @@ void indexNames(Database* database)
 	int i, j;  //  State variables.
 	static int count = 0;
 
+	//  DEBUG
+	printf("indexNames\n");
+
 	//  Get the first entry in the person index.
 	RecordIndexEl* entry = firstInHashTable(database->personIndex, &i, &j);
 	while (entry) {
 		GNode* root = entry->root;
 		//  MNOTE: The key is heapified in insertInNameIndex.
 		String recordKey = root->key;
+		//  DEBUG
+		//printf("indexNames: recordKey: %s\n", recordKey);
 		for (GNode* name = NAME(root); name && eqstr(name->tag, "NAME"); name = name->sibling) {
 			if (name->value) {
+				//  DEBUG
+				//printf("indexNames: name->value: %s\n", name->value);
 				//  MNOTE: nameKey is in data space. It is heapified in insertInNameIndex.
 				String nameKey = nameToNameKey(name->value);
+				//  DEBUG
+				//printf("indexNames: nameKey: %s\n", nameKey);
 				insertInNameIndex(database->nameIndex, nameKey, recordKey);
 				count++;
 			}
@@ -200,7 +209,7 @@ void indexNames(Database* database)
 		entry = nextInHashTable(database->personIndex, &i, &j);
 	}
 	showNameIndex(database->nameIndex);
-	printf("The number of names printed was %d\n", count);
+	printf("The number of names indexed was %d\n", count);
 }
 
 //  Some debugging functions.
