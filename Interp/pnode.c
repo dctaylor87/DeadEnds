@@ -86,6 +86,9 @@ static PNode *allocPNode(int type)
     if (debugging) {
         printf("allocPNode(%d) %s, %d\n", type, currentProgramFileName, currentProgramLineNumber);
     }
+    // make sure all fields we don't explicitly initialize are zero
+    bzero ((void *)node, sizeof (*node));
+
     // Initialize the type, filename, and linenumber fields.
     node->type = type;
     node->fileName = strsave(currentProgramFileName);  // TODO: MEMORY!!!!!!!!!
