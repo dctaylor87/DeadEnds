@@ -37,7 +37,7 @@
 static void print_usage (int status);
 static void print_version (void);
 
-const char *optstring = "hvp:Px";
+const char *optstring = "hvp:Px:";
 
 const struct option longopts[] =
   {
