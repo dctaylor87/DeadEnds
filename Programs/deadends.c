@@ -33,24 +33,34 @@
 #include "llpy-externs.h"
 #include "deadends.h"
 
+/* XXX These paths are simplistic and *SHOULD* be changed.  They are
+   here to give us some not totally unreasonable default.  They can be
+   overridden by environment variables and finally by command line
+   switches. XXX */
+
+const char *DEADENDS_search_path = ".:/usr/share/deadends:/usr/share/lifelines";
+const char *GEDCOM_search_path = ".";
+const char *PYTHON_search_path = "."; /* XXX not currently used XXX */
+
 /* forward references */
 static void print_usage (int status);
 static void print_version (void);
+static int parse_option (const char *option);
 
-const char *optstring = "hvp:Px:";
+const char *optstring = "hI:vp:Px:";
 
 const struct option longopts[] =
   {
     { "deadend-script",     required_argument, 0, 'x' },
     { "help",               no_argument,       0, 'h' },
-    { "version",            no_argument,       0, 'v' },
+    { "option",             required_argument, 0, 'I' },
     { "python-interactive", no_argument,       0, 'P' },
     { "python-script",      required_argument, 0, 'p' },
+    { "version",            no_argument,       0, 'v' },
     { NULL,                 0,                 0, 0 }
   };
 
 const char *ProgName;
-const char *searchpath = ".:../Gedfiles:$LLDATABASES:$HOME";
 
 int
 main (int argc, char *argv[])
@@ -63,6 +73,7 @@ main (int argc, char *argv[])
   char *cmd_line_db;
   FILE *db_file;
   ErrorLog error_log;
+  const char *env;
 
   ProgName = argv[0];
 
@@ -77,6 +88,18 @@ main (int argc, char *argv[])
   textdomain(PACKAGE);
 #endif
 
+  env = getenv ("DEGEDCOM");
+  if (env)
+    GEDCOM_search_path = env;
+
+  env = getenv ("DESCRIPTS");
+  if (env)
+    DEADENDS_search_path = env;
+
+  env = getenv ("DEPYTHON");
+  if (env)
+    PYTHON_search_path = env;
+
   opterr = 0;			/* we prefer to print our own messages */
   while ((opt = getopt_long (argc, argv, optstring, longopts, &longindex)) != -1)
     {
@@ -90,6 +113,14 @@ main (int argc, char *argv[])
 	  print_version ();
 	  break;
 	  
+	case 'I':
+	  if (parse_option (optarg) < 0)
+	    {
+	      fprintf (stderr, "%s: unrecognized option: '%s'\n", ProgName, optarg);
+	      print_usage(1);
+	    }
+	  break;
+
 	case 'p':
 	  llpy_register_script (optarg);
 	  have_python_scripts = 1;
@@ -128,7 +159,7 @@ main (int argc, char *argv[])
 
   /* XXX insert code to open cmd_line_db XXX */
 
-  db_file = fopenpath (cmd_line_db, "r", searchpath);
+  db_file = fopenpath (cmd_line_db, "r", GEDCOM_search_path);
   if (! db_file)
     {
       fprintf (stderr, "%s: fopenpath failed to open '%s': %s\n",
@@ -143,6 +174,7 @@ main (int argc, char *argv[])
       /* XXX figure out how to print 'error_log' XXX */
       exit (1);
     }
+
   if (have_deadend_scripts)
     {
       int status = deadend_execute_scripts (0);
@@ -150,6 +182,10 @@ main (int argc, char *argv[])
 	fprintf (stderr, "%s: DeadEnds script failed, status = %d\n",
 		 ProgName, status);
     }
+
+  /* so that output above and Python output is not intermixed */
+  fflush (stdout);
+
   if (have_python_scripts)
     {
       int status = llpy_execute_scripts (0);
@@ -164,6 +200,9 @@ main (int argc, char *argv[])
 	fprintf (stderr, "%s: Python interactive returned status = %d\n",
 		 ProgName, status);
     }
+  if (python_interactive || have_python_scripts)
+    llpy_python_terminate ();
+
   return (0);
 }
 
@@ -183,6 +222,10 @@ print_usage (int status)
   fprintf (stream, "\tPrint a help (usage) message and exit\n");
   fprintf (stream, "--version | -v\n");
   fprintf (stream, "\tPrint version information and exit\n");
+  fprintf (stream, "--option | -I OPTION=VALUE\n");
+  fprintf (stream, "\trecognized OPTIONS are: DEADENDS, GEDCOM, and PYTHON\n");
+  fprintf (stream, "\tand specify search paths for DeadEnds scripts, GEDCOM\n");
+  fprintf (stream, "\tfiles, and Python scripts, respectively\n");
 
   exit (status);
 }
@@ -192,4 +235,38 @@ print_version (void)
 {
   fprintf (stdout, "%s\n", version);
   exit (0);
+}
+
+static int
+parse_option (const char *option)
+{
+  switch (option[0])
+    {
+    case 'D':
+      if (strncmp ("DEADENDS=", option, 9) == 0)
+	{
+	  DEADENDS_search_path = &option[9];
+	  return (0);
+	}
+      return (-1);
+
+    case 'G':
+      if (strncmp ("GEDCOM=", option, 7) == 0)
+	{
+	  GEDCOM_search_path = &option[7];
+	  return (0);
+	}
+      return (-1);
+
+    case 'P':
+      if (strncmp ("PYTHON=", option, 7) == 0)
+	{
+	  PYTHON_search_path = &option[7];
+	  return (0);
+	}
+      return (-1);
+
+    default:
+      return (-1);
+    }
 }

@@ -24,8 +24,6 @@ static int execute_script (CString script);
 /* array of scripts seen on the command line, in the order seen */
 static const char **script_array;
 
-static const char *search_path = ".:../Gedfiles:$LLSCRIPTS:$HOME";
-
 /* how many scripts we've seen */
 static int nscripts = 0;
 
@@ -98,7 +96,7 @@ static int
 execute_script (CString report_name)
 {
   // parse a DeadEnds script
-  parseProgram (report_name, search_path);
+  parseProgram (report_name, DEADENDS_search_path);
 
   //  Create a PNProcCall node to call the main procedure with
   currentProgramFileName = report_name;
