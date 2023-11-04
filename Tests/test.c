@@ -49,11 +49,12 @@ int main(void)
 
 	//showRecordIndex(theDatabase->personIndex);
 	//showRecordIndex(theDatabase->familyIndex);
+	return 0;
 }
 
 //  createDatabaseTest -- Creates a test database from a Gedcom file.
 //-------------------------------------------------------------------------------------------------
-void createDatabaseTest()
+void createDatabaseTest(void)
 {
 	//  Create a database from the main.ged file.
 	gedcomFile = fopen("../Gedfiles/main.ged", "r");

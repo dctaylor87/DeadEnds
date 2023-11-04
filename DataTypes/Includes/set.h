@@ -4,7 +4,7 @@
 //  set.h -- Header file for the Set type.
 //
 //  Created by Thomas Wetmore on 22 November 2022.
-//  Last changed on 25 September 2023.
+//  Last changed on 3 November 2023.
 //
 
 #ifndef set_h
@@ -26,7 +26,7 @@ typedef struct Set {
 // TODO: REMOVE FROM SET NOT YET WRITTEN.
 //--------------------------------------------------------------------------------------------------
 int lengthSet(Set*);  // Return the number of elements in the Set.
-Set *createSet(int(*compare)(Word, Word), void(*delete)(Word));  // Create a new Set.
+Set *createSet(int(*compare)(Word, Word), void(*delete)(Word), String(*getKey)(Word));  // Create a new Set.
 void deleteSet(Set*);  // Remove a Set, calling the delete function, if any, on each element.
 void addToSet(Set*, Word);  // Add an element (if new) to the Set.
 bool isInSet(Set*, Word);  // Check if an element is in the Set.
