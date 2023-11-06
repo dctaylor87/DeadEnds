@@ -5,7 +5,7 @@
 #CC=clang
 
 # what are we going to build?
-bin_PROGRAMS = test hashtabletest stringtabletest testpython
+bin_PROGRAMS = test hashtabletest stringtabletest testset testpython
 
 # what goes into hashtabletest, stringtabletest, test:
 
@@ -14,6 +14,8 @@ hashtabletest_SOURCES = testhashtable.c
 stringtabletest_SOURCES = teststringtable.c
 
 test_SOURCES = test.c
+
+testset_SOURCES = testset.c
 
 testpython_SOURCES = testpython.c
 
