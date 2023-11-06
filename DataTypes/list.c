@@ -123,7 +123,18 @@ bool insertListElement(List *list, int index, Word value)
 {
 	ASSERT(list && index >= 0 && index <= list->length);
 	list->isSorted = false;
+	int length = list->length;
+	if (index == length) {
+		appendListElement(list, value);
+		return true;
+	}
+	if (length >= list->maxLength) growList(list);
+	// Shift elements to make space for the new element
+	for (int i = list->length; i > index; i--) {
+		(list->data)[i] = (list->data)[i - 1];
+	}
 	(list->data)[index] = value;
+	(list->length)++;
 	return true;
 }
 

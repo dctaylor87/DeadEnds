@@ -7,7 +7,7 @@
 //  kept unique via the compare function.
 //
 //  Created by Thomas Wetmore on 22 November 2022.
-//  Last changed 3 September 2023.
+//  Last changed 4 November 2023.
 //
 
 #include "set.h"
@@ -16,13 +16,13 @@
 
 // createSet -- Create a set.
 //--------------------------------------------------------------------------------------------------
-Set *createSet(int (*compare)(Word, Word), void (*delete)(Word))
+Set *createSet(int (*compare)(Word, Word), void (*delete)(Word), String(*getKey)(Word))
 //  compare -- Function that compares pairs of elements; manadatory.
 //  delete -- Function to call on elements when they are removed; optional.
 {
 	ASSERT(compare);
 	Set *set = (Set*) stdalloc(sizeof(Set));
-	set->list = createList(compare, delete, null);
+	set->list = createList(compare, delete, getKey);
 	return set;
 }
 
@@ -36,7 +36,7 @@ void deleteSet(Set *set)
 }
 
 //  addToSet -- Add an element to a set if it is not already there.
-//    TODO: SHOULD NAME BE CHANGED TO INSERTSET TO BE CONSISTEN WITH OTHER TYPES?
+//    TODO: SHOULD NAME BE CHANGED TO INSERTSET TO BE CONSISTENT WITH OTHER TYPES?
 //--------------------------------------------------------------------------------------------------
 void addToSet(Set *set, Word element)
 //  set -- Set to add the element to.
@@ -47,9 +47,12 @@ void addToSet(Set *set, Word element)
 	if (!entry) insertListElement(set->list, index, element);
 }
 
-// Check if an element is in a set.
+// Check if an element is in a set. Delegate to the list. Delegate to the list.
 //--------------------------------------------------------------------------------------------------
-bool isInSet(Set *set, Word element) { return isInList(set->list, element); }
+bool isInSet(Set *set, Word element)
+{
+	return isInList(set->list, element);
+}
 
 //  removeFromSet -- Remove an element from a set.
 //    NOTE: Shouldn't this use removeFromList?
@@ -65,14 +68,23 @@ void removeFromSet(Set *set, Word element)
 	set->list->length--;
 }
 
-// iterateSet -- Iterate the elements of a set, calling a function on each.
+// iterateSet -- Iterate the elements of a set, calling a function on each. Delegate to the list.
 //--------------------------------------------------------------------------------------------------
-void iterateSet(Set *set, void (*iterate)(Word)) { iterateList(set->list, iterate); }
+void iterateSet(Set *set, void (*iterate)(Word))
+{
+	iterateList(set->list, iterate);
+}
 
-// lengthSet -- Return the number of elements in a set.
+// lengthSet -- Return the number of elements in a set. Delegate to the list.
 //--------------------------------------------------------------------------------------------------
-int lengthSet(Set *set) { return lengthList(set->list); }
+int lengthSet(Set *set)
+{
+	return lengthList(set->list);
+}
 
-// showSet -- Show the contents of a set using a describe function.
+// showSet -- Show the contents of a set using a describe function. Delegate to the list.
 //--------------------------------------------------------------------------------------------------
-void showSet(Set *set, String (*describe)(Word)) { showList(set->list, describe); }
+void showSet(Set *set, String (*describe)(Word))
+{
+	showList(set->list, describe);
+}

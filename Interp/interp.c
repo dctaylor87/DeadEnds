@@ -99,7 +99,7 @@ InterpType interpret(PNode *programNode, SymbolTable *symbolTable, PValue *retur
 			case PNICons:
 			case PNFCons:
 				break;
-				
+
 			//  Identifiers are interpreted by looking them up in the symbol tables; if they
 			//    have a string value, that value is written to the output.
 			case PNIdent:

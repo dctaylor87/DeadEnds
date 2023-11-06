@@ -11,6 +11,14 @@ o  Line 70 in Utils/path.c is a memory leak.
 o  Can we get rid of the compare function in hash tables, and do string compares on what
    is returned by the getKey function on the two elements?
 
+2 Nov 2023
+o  Debug problems with Sets as found while getting the name sequence to work. Current
+   implementation seems to allow duplicates in some situations.
+o  Use something like LLPATH to allow VS Code and Xcode versions of the program to run
+   without hard code changes.
+o  Looks like errors in scripts do not prevent them from being run.
+o  Make sure that Sequence Elements now hold pointers to roots rather than keys.
+
 ----------------------------------------------------
 CLOSED
 25 Sep 2023

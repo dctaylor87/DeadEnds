@@ -79,7 +79,7 @@ extern String nameString(String);
 static void validatePerson(GNode *person)
 {
 	if (debugging) { printf("Validating %s %s\n", person->key, NAME(person)->value); }
-	
+
 	//  Loop through the families the person should be a child in, checking that the person is a
 	//    child in each.
 	FORFAMCS(person, family)

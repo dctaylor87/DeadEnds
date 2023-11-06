@@ -6,7 +6,7 @@
 //    keys to the list of keys of the persons who have names that map to the name key.
 //
 //  Created by Thomas Wetmore on 26 November 2022.
-//  Last changed on 1 November 2023.
+//  Last changed on 4 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -17,7 +17,7 @@
 #include "set.h"
 #include "gedcom.h"
 
-// NameKeys -- Compare two name keys.
+// NameKeys -- Compare two name keys. This uses the standard strcmp.
 //--------------------------------------------------------------------------------------------------
 static int compareNameKeys(Word leftEl, Word rightEl)
 {
@@ -28,7 +28,10 @@ static int compareNameKeys(Word leftEl, Word rightEl)
 
 // getNameKey -- Get the name key of an element.
 //--------------------------------------------------------------------------------------------------
-static String getNameKey(Word element) { return ((NameElement*) element)->nameKey; }
+static String getNameKey(Word element)
+{
+	return ((NameElement*) element)->nameKey;
+}
 
 //  deleteNameElement
 //--------------------------------------------------------------------------------------------------
@@ -54,13 +57,18 @@ void deleteNameIndex(NameIndex *nameIndex)
 	deleteHashTable(nameIndex);
 }
 
+//  compareRecordKeysInSets -- Compare two record keys in a set of record keys in a name index.
+//    Uses compareRecordKeys.
+//-------------------------------------------------------------------------------------------------
 static int compareRecordKeysInSets(Word a, Word b)
 { 
 	return compareRecordKeys((String) a, (String) b);
 }
 
+static String getRecordKey(Word element) { return (String) element; }
+
 //  insertNameIndex -- Add a (name key, person key) pair to a name index.
-//    MNOTE: nameKey is newly allocated; personKey is in static memory.
+//    MNOTE: Describe the memory situration of the two parameters.
 //--------------------------------------------------------------------------------------------------
 void insertInNameIndex(NameIndex *index, String nameKey, String personKey)
 //  index -- Name index to update.
@@ -88,7 +96,7 @@ void insertInNameIndex(NameIndex *index, String nameKey, String personKey)
 		//printf("insertInNameIndex: element for nameKey %s doesn't exist.\n", nameKey);
 		element = (NameElement*) stdalloc(sizeof(NameElement));
 		element->nameKey = strsave(nameKey);  // MNOTE: nameKey is in data space.
-		element->recordKeys = createSet(compareRecordKeysInSets, null);
+		element->recordKeys = createSet(compareRecordKeysInSets, null, getRecordKey);
 		appendToBucket(bucket, element);
 	}
 	//  Add the person key to element's set of person keys.
