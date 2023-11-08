@@ -1,4 +1,41 @@
-# hashtable.h
+# HashTable
+
+Implements a HashTable, an array of MAX_HASH Buckets. Each Bucket is a list of elements with the same hash value. Elements are defined by the user. The user provides a compare function used to keep the elements in the Buckets sorted.
+```
+typedef struct HashTable {
+	int (*compare)(Word, Word);
+	void (*delete)(Word);
+	String(*getKey)(Word);
+	Bucket *buckets[MAX_HASH];
+	int count;
+} HashTable;
+```
+|Field|Description|
+|:---|:---|
+|compare|Function that compares two elements in a bucket.|
+|delete|Function to delete an element.|
+|getKey|Function to get an element's key.|
+|buckets|Array of MAX_HASH buckets.|
+|count|Number of elements in the table.|
+
+HashTables consist of Buckets. Each Bucket holds an array of elements. Each Bucket holds an array of elements. The elements are treated as Words (void\* pointers). When a Bucket's size reaches the sort threshold the elements are sorted using the table's compare function.
+
+```
+typedef struct Bucket {
+	int length;
+	int maxLength;
+	bool sorted;
+	Word *elements;
+} Bucket;
+```
+|Field|Description|
+|:---|:---|
+|length|Current length of this Bucket (number of elements in the Bucket).|
+|maxLength|Maximum length this Bucket can be before reallocation.|
+|sorted|True when this Bucket is sorted.|
+|elements|Array of elements in this Bucket.|
+
+The user interface to HashTable is:
 
 |Component|Description|
 |:---|:---|

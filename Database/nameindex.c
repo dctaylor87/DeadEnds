@@ -59,7 +59,7 @@ void deleteNameIndex(NameIndex *nameIndex)
 //    Uses compareRecordKeys.
 //-------------------------------------------------------------------------------------------------
 static int compareRecordKeysInSets(Word a, Word b)
-{ 
+{
 	return compareRecordKeys((String) a, (String) b);
 }
 

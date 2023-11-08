@@ -21,6 +21,7 @@ typedef HashTable RecordIndex;
 //  Database -- Database structure for genealogical data encoded in Gedcom form.
 //--------------------------------------------------------------------------------------------------
 typedef struct Database {
+    String fileName;  // Name of Gedcom file this database was built from.
     RecordIndex *personIndex;
     RecordIndex *familyIndex;
     RecordIndex *sourceIndex;
@@ -29,7 +30,7 @@ typedef struct Database {
     NameIndex *nameIndex;
 } Database;
 
-Database *createDatabase(void);  //  Create an empty database.
+Database *createDatabase(String fileName);  //  Create an empty database.
 void deleteDatabase(Database*);  //  Delete a database.
 
 void indexNames(Database*);      //  Index person names after reading the Gedcom file.

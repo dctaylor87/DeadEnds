@@ -35,7 +35,7 @@ int fileLine = 0;  // Current line in the file being read.
 //    a problems is found. Returns a code of be OKAY, DONE, or ERROR. The function uses fgets()
 //    to read lines from the file.
 //--------------------------------------------------------------------------------------------------
-int fileToLine(FILE *file, int *plevel, String *pkey, String *ptag, String *pvalue,
+static int fileToLine(FILE *file, int *plevel, String *pkey, String *ptag, String *pvalue,
                String *pmessage)
 //  file -- File to read the line from.
 //  plevel -- (out) Pointer to level of the returned line.
