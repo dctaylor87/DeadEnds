@@ -23,7 +23,7 @@ static bool debugging = true;
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
-Database *createDatabase(String fileName)
+Database *createDatabase(CString fileName)
 {
 	Database *database = (Database*) stdalloc(sizeof(Database));
 	database->fileName = fileName;

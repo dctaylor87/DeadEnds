@@ -36,7 +36,7 @@ typedef struct {
 #define ErrorLog List
 
 extern ErrorLog *createErrorLog(void);
-extern Error *createError(ErrorType type, String fileName, int lineNumber, String message);
-extern void addErrorToLog(ErrorLog* log, ErrorType, String, int, String);
+extern Error *createError(ErrorType type, CString fileName, int lineNumber, String message);
+extern void addErrorToLog(ErrorLog* log, ErrorType, CString, int, String);
 
 #endif // errors_h

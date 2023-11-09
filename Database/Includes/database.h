@@ -32,7 +32,7 @@ typedef struct Database {
 
 extern Database *theDatabase;
 
-Database *createDatabase(String fileName);  //  Create an empty database.
+Database *createDatabase(CString fileName);  //  Create an empty database.
 void deleteDatabase(Database*);  //  Delete a database.
 
 void indexNames(Database*);      //  Index person names after reading the Gedcom file.

@@ -34,8 +34,6 @@ static void outputErrorLog(ErrorLog* errorLog);
 static void setupDatabase(List *recordIndexes);
 static void addIndexToDatabase(RecordIndex *index, Database *database);
 
-Database *importFromFile(String, ErrorLog*);
-
 // Error messages defined elsewhere.
 extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, dbrdon;
 
@@ -70,7 +68,7 @@ bool importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 //  importFromFile -- Import the records from a Gedcom file into an index. After reading the
 //    records rekey the records.
 //--------------------------------------------------------------------------------------------------
-Database *importFromFile(String fileName, ErrorLog *errorLog)
+Database *importFromFile(CString fileName, ErrorLog *errorLog)
 {
 	if (debugging) printf("Entered simpleImportFromFile\n");
 	ASSERT(fileName);
@@ -80,6 +78,11 @@ Database *importFromFile(String fileName, ErrorLog *errorLog)
 		return null;
 	}
 
+	return importFromFileFP (file, fileName, errorLog);
+}
+
+Database *importFromFileFP (FILE *file, CString fileName, ErrorLog *errorLog)
+{
 	Database *database = createDatabase(fileName);
 
 	String errorMessage;

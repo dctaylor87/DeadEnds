@@ -64,7 +64,7 @@ ErrorLog *createErrorLog(void)
 
 //  createError -- Create an error.
 //--------------------------------------------------------------------------------------------------
-Error *createError(ErrorType type, String fileName, int lineNumber, String message)
+Error *createError(ErrorType type, CString fileName, int lineNumber, String message)
 {
 	Error *error = (Error*) stdalloc(sizeof(Error));
 	error->type = type;
@@ -76,7 +76,7 @@ Error *createError(ErrorType type, String fileName, int lineNumber, String messa
 
 //  addErrorToLog -- Add an error to an error log.
 //--------------------------------------------------------------------------------------------------
-void addErrorToLog(ErrorLog *errorLog, ErrorType errorType, String fileName, int lineNumber,
+void addErrorToLog(ErrorLog *errorLog, ErrorType errorType, CString fileName, int lineNumber,
 	String message)
 {
 	appendListElement(errorLog, createError(errorType, fileName, lineNumber, message));

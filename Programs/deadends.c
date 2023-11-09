@@ -167,7 +167,7 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  theDatabase = simpleImportFromFile (db_file, &error_log);
+  theDatabase = importFromFileFP (db_file, cmd_line_db, &error_log);
   if (! theDatabase)
     {
       fprintf (stderr, "%s: import failed\n", ProgName);

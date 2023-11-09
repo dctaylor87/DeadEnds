@@ -16,6 +16,7 @@
 #include "database.h"
 
 bool importFromFiles(String fileNames[], int count, ErrorLog*);
-extern Database *simpleImportFromFile(FILE* file, ErrorLog *errorLog);
+extern Database *importFromFile(CString fileName, ErrorLog *errorLog);
+extern Database *importFromFileFP(FILE* file, CString fileName, ErrorLog *errorLog);
 
 #endif // import_h
