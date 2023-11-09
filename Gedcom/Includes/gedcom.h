@@ -53,11 +53,10 @@ int compareRecordKeys(String, String);  // gedcom.c
     }}
 
 //  FORFAMCS / ENDFAMCS
-#define FORFAMILIES(indi, fam, num)\
+#define FORFAMILIES(indi, fam)\
 {\
     GNode *__node = FAMS(indi);\
     GNode *fam;\
-    int num = 0;\
     while (__node) {\
         fam = keyToFamily(__node->value, theDatabase);\
         ASSERT(fam);\

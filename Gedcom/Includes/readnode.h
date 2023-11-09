@@ -4,7 +4,7 @@
 //  readnode.h -- Header file for routines and variables that read Gedcom files.
 //
 //  Created by Thomas Wetmore on 17 December 2022.
-//  Last changed on 26 April 2023.
+//  Last changed on 6 November 2023.
 //
 
 #ifndef readnode_h
@@ -13,17 +13,16 @@
 #include "standard.h"
 #include "gnode.h"
 
-// Return codes used by the functions that extract Gedcom nodes from Gedcom files.
+// Return codes used by functions that extract Gedcom nodes from Gedcom data.
 //--------------------------------------------------------------------------------------------------
 #define OKAY  1
 #define ERROR 0
 #define DONE -1
 
-// Global variables defined in readnode.c
+// Current line number in file being read.
 extern int fileLine;  // Current line number in file being read.
 
-//static bool stringToLine(String*, int*, String*, String*, String*);
-//static bufferToLine(String, int*, String*, String*, String*, String*)
-int fileToLine(FILE *fp, int *plev, String *pxref, String *ptag, String *pval, String *pmsg);
+GNode* firstNodeTreeFromFile(FILE*, String*);
+GNode* nextNodeTreeFromFile(FILE*, String*);
 
-#endif /* readnode_h */
+#endif

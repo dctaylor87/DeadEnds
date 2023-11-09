@@ -4,7 +4,7 @@
 //  validate.c -- Functions that validate Gedcom records.
 //
 //  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 1 November 2023.
+//  Last changed on 5 November 2023.
 //
 
 #include <ansidecl.h>
@@ -16,7 +16,7 @@
 #include "lineage.h"
 #include "errors.h"
 
-bool validateDatabase(Database*);
+bool validateDatabase(Database*, ErrorLog*);
 
 //static Database *theDatabase;
 
@@ -37,7 +37,7 @@ int numValidations = 0;  //  DEBUG.
 
 //  validateDatabase
 //--------------------------------------------------------------------------------------------------
-bool validateDatabase(Database *database)
+bool validateDatabase(Database *database, ErrorLog *errorLog)
 {
 	ASSERT(database);
 	theDatabase = database;
@@ -80,8 +80,7 @@ static void validatePerson(GNode *person)
 {
 	if (debugging) { printf("Validating %s %s\n", person->key, NAME(person)->value); }
 
-	//  Loop through the families the person should be a child in, checking that the person is a
-	//    child in each.
+	//  Loop through the families the person should be a child in.
 	FORFAMCS(person, family)
 		//if (debugging) printf("Person is a child in family %s.\n", family->key);
 		int numOccurrences = 0;
@@ -92,13 +91,11 @@ static void validatePerson(GNode *person)
 		if (numOccurrences != 1) printf("ERROR ERROR ERROR\n");
 	ENDFAMCS
 
-	//  Loop through the families the person is a spouse in. Each family should have a HUSB or
-	//    WIFE node that refers back to the person.
+	//  Loop through the families the person is a spouse in.
 	//if (debugging) printf("Doing the FAMS part.\n");
 	SexType sex = SEXV(person);
-	FORFAMILIES(person, family, count) {
+	FORFAMILIES(person, family) {
 		if (debugging) printf("  person should be a spouse in family %s.\n", family->key);
-		unused(count);
 		GNode *parent = null;
 		if (sex == sexMale) {
 			parent = familyToHusband(family);

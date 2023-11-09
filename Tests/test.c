@@ -23,13 +23,14 @@ static FILE *outputFile = null;
 extern FunctionTable *procedureTable;
 extern Database *theDatabase;  // The database to use in the tests.
 
-extern Database *simpleImportFromFile(FILE*, ErrorLog*);
+extern Database *importFromFile(String, ErrorLog*);
 static void createDatabaseTest(void);
 static void listTest(FILE*);
 static void forHashTableTest(void);
 static void parseAndRunProgramTest(void);
+static void validateDatabaseTest(void);
 
-extern bool validateDatabase(Database*);
+extern bool validateDatabase(Database*, ErrorLog*);
 
 int main(void)
 {
@@ -44,7 +45,7 @@ int main(void)
 	printf("indexNamesTest\n");
 	indexNames(theDatabase);
 	//printf("validateDatabaseTest\n");
-	//validateDatabase(theDatabase);
+	validateDatabaseTest();
 
 	//showRecordIndex(theDatabase->personIndex);
 	//showRecordIndex(theDatabase->familyIndex);
@@ -61,8 +62,8 @@ void createDatabaseTest(void)
 	//gedcomFile = fopen("../Gedfiles/TWetmoreLine.ged", "r");
 	outputFile = fopen("./Outputs/output.txt", "w");
 	//outputFile = fopen("/Users/ttw4/Desktop/output.txt", "w");
-	ErrorLog errorLog;
-	theDatabase = simpleImportFromFile(gedcomFile, &errorLog);
+	ErrorLog *errorLog = createErrorLog();
+	theDatabase = importFromFile("../Gedfiles/main.ged", errorLog);
 	printf("The number of persons in the database is %d.\n", numberPersons(theDatabase));
 	printf("The number of families in the database is %d.\n", numberFamilies(theDatabase));
 }
@@ -133,4 +134,10 @@ void parseAndRunProgramTest(void)
 	SymbolTable *symbolTable = createSymbolTable();
 	PValue returnPvalue;
 	interpret(pnode, symbolTable, &returnPvalue);
+}
+
+void validateDatabaseTest(void)
+{
+	ErrorLog* errorLog = createErrorLog();
+	validateDatabase(theDatabase, errorLog);
 }

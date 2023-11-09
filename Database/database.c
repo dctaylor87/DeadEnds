@@ -23,9 +23,10 @@ static bool debugging = true;
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
-Database *createDatabase(void)
+Database *createDatabase(String fileName)
 {
 	Database *database = (Database*) stdalloc(sizeof(Database));
+	database->fileName = fileName;
 	database->personIndex = createRecordIndex();
 	database->familyIndex = createRecordIndex();
 	database->sourceIndex = createRecordIndex();
@@ -263,7 +264,7 @@ void indexNames(Database* database)
 		//  Get the next entry in the person index.
 		entry = nextInHashTable(database->personIndex, &i, &j);
 	}
-	showNameIndex(database->nameIndex);
+	//showNameIndex(database->nameIndex);
 	printf("The number of names indexed was %d\n", count);
 }
 
