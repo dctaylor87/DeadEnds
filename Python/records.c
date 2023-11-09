@@ -95,7 +95,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 	    }
 	  else if (eqstr (type, "SUBM") || (eqstr (type, "SNOTE")))
 	    {
-	      int_type = 'O';
+	      int_type = 'X';
 	      break;
 	    }
 	  PyErr_SetString (PyExc_ValueError, "key_to_record: TYPE has a bad value");

@@ -12,6 +12,7 @@ libpyllines_a_SOURCES = \
 	python-to-c.c python-to-c.h \
 	database.c database.h \
 	event.c \
+	export.c \
 	family.c family.h \
 	iter.c \
 	nodes.c \

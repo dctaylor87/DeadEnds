@@ -348,6 +348,7 @@ PyInit_llines(void)
   llpy_nodes_init ();
   llpy_records_init ();
   llpy_event_init ();
+  llpy_person_init ();
 
   return (module);
 }
