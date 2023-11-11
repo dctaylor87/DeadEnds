@@ -1,7 +1,7 @@
 //  testset.c -- Test program for the Set data type.
 //
 //  Created by Thomas Wetmore on 3 November 2023.
-//  Last changed on 5 November 2023.
+//  Last changed on 11 November 2023.
 
 #include <stdio.h>
 #include "set.h"
@@ -29,4 +29,5 @@ int main (void)
 		showSet(set, null);
 		printf("\n");
 	}
+	return 0;
 }

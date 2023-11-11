@@ -2,3 +2,4 @@
 *.a
 Tests/*test
 *output*
+Tests/testset

@@ -3,7 +3,8 @@
         "__hash_table": "c",
         "__tree": "c",
         "map": "c",
-        "unordered_map": "c"
+        "unordered_map": "c",
+        "__node_handle": "c"
     },
     
     "files.exclude": {

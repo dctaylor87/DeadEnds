@@ -1,11 +1,13 @@
 # Read Node
-Functions in readnode.c read Gedcom from files and strings. Reading from strings is needed in LifeLines because its database records are strings. DeadEnds keeps its records in GNode tree form so the string reading function, *stringToLine*, may not be needed.
+Functions in readnode.c read Gedcom from files and strings. 
 
 A key function in readnode.c is the static function *bufferToLine*, which processes strings that hold single Gedcom lines. This function is called by both *fileToLine* and *stringToLine*, which allows the file handling and string handling functions to avoid duplicated code.
 
 The higher level functions in this file, those that used by external code, are *firstNodeTreeFromFile* and *nextNodeTreeFromFile*.
 
 The last argument to many of the functions is a pointer to an error message. I am debating changing this to an error object. In the current implementation, higher level code, specifically importing code, must transform these error messages into error objects to be placed in an error log.
+
+(Reading Gedcom from strings is needed in *LifeLines*, because its database records are strings. *DeadEnds* keeps its records in GNode form so the string reading function in this file, *stringToLine*, is not needed [yet] in *DeadEnds*.)
 
 |Component|Description|
 |:---|:---|

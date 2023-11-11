@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 7 November 2023.
+//  Last changed on 11 November 2023.
 //
 
 #include "standard.h"
@@ -42,14 +42,13 @@ static bool debugging = true;
 
 //  importFromFiles -- Import Gedcom files into a list of Databases. This function not yet used.
 //--------------------------------------------------------------------------------------------------
-bool importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
+List *importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 //  filesNames -- Names of the files to import.
 //  count -- Number of files to import.
 //  errorLog -- Error log.
 {
 	//  Create a list Databases, one for each Gedcom file that is read successfully.
 	List *listOfDatabases = createList(null, null, null);
-	unused(listOfDatabases);
 
 	//  Loop through the file names importing each into a Database.
 	for (int i = 0; i < count; i++) {
@@ -60,9 +59,10 @@ bool importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 				printf("There should be errors in the log that say what's wrong.\n");
 			}
 			continue;
+			appendListElement(listOfDatabases, database);
 		}
 	}
-	return true;
+	return listOfDatabases;
 }
 
 //  importFromFile -- Import the records from a Gedcom file into an index. After reading the
@@ -87,7 +87,7 @@ Database *importFromFile(String fileName, ErrorLog *errorLog)
 	GNode *root = firstNodeTreeFromFile(file, &errorMessage);
 	while (root) {
 		recordCount++;
-		storeRecord(database, root);
+		storeRecord(database, normalizeNodeTree(root));
 		root = nextNodeTreeFromFile(file, &errorMessage);
 	}
 	printf("Read %d records.\n", recordCount);
@@ -104,7 +104,7 @@ static GNode *normalizeNodeTree(GNode *root)
 //  root -- Root of a gedcom node tree record.
 {
 	//  Don't worry about HEAD or TRLR records.
-	if (eqstr("HEAD", root->tag) || eqstr("TRLR", root->tag)) return null;
+	if (eqstr("HEAD", root->tag) || eqstr("TRLR", root->tag)) return root;
 
 	//  Normalize the node tree records to standard format.
 	switch (recordType(root)) {

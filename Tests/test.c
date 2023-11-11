@@ -1,8 +1,8 @@
 //  test.c -- Test program.
 
 //
-//  Created by Thomas Wetmore on 5 October 2923.
-//  Last changed on 1 November 2023.
+//  Created by Thomas Wetmore on 5 October 2023.
+//  Last changed on 11 November 2023.
 
 #include <stdio.h>
 #include "standard.h"
@@ -13,6 +13,7 @@
 #include "pnode.h"
 #include "errors.h"
 #include "sequence.h"
+#include "list.h"
 
 //static bool debugging = false;
 
@@ -30,6 +31,7 @@ static void listTest(FILE*);
 static void forHashTableTest(void);
 static void parseAndRunProgramTest(void);
 static void validateDatabaseTest(void);
+static void forTraverseTest(void);
 
 extern bool validateDatabase(Database*, ErrorLog*);
 
@@ -45,8 +47,10 @@ int main(void)
 	parseAndRunProgramTest();
 	printf("indexNamesTest\n");
 	indexNames(theDatabase);
-	//printf("validateDatabaseTest\n");
+	printf("validateDatabaseTest\n");
 	validateDatabaseTest();
+	printf("forTraverseTest\n");
+	forTraverseTest();
 
 	//showRecordIndex(theDatabase->personIndex);
 	//showRecordIndex(theDatabase->familyIndex);
@@ -141,4 +145,14 @@ void validateDatabaseTest(void)
 {
 	ErrorLog* errorLog = createErrorLog();
 	validateDatabase(theDatabase, errorLog);
+}
+
+//  forTraverseTest -- Check that the FORTRAVERSE macro works.
+//-------------------------------------------------------------------------------------------------
+static void forTraverseTest(void)
+{
+	GNode *person = keyToPerson("@I1@", theDatabase);
+	FORTRAVERSE(person, node)
+		printf("%s\n", node->tag);
+	ENDTRAVERSE
 }
