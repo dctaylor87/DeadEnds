@@ -4,7 +4,7 @@
 //  gedcom.h
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 29 October 2023.
+//  Last changed on 11 November 2023.
 //
 
 #ifndef gedcom_h
@@ -13,6 +13,7 @@
 typedef struct GNode GNode;  //  Forward reference.
 #include "standard.h"
 #include "gnode.h"
+#include "list.h"
 
 //  SexType -- Enumeration for sex types.
 //--------------------------------------------------------------------------------------------------
@@ -251,6 +252,23 @@ int compareRecordKeys(String, String);  // gedcom.c
         if(__fnode && nestr("FAMS", __fnode->tag)) __fnode = null;\
     }\
 }
+
+#define FORTRAVERSE(root, node)\
+{\
+    GNode* node = root;\
+    List *stack = createList(null, null, null);\
+    prependListElement(stack, node);\
+    while (!isEmptyList(stack)) {\
+        node = removeFirstListElement(stack);\
+        {\
+
+#define ENDTRAVERSE\
+        }\
+        if (node->sibling) prependListElement(stack, node->sibling);\
+        if (node->child) prependListElement(stack, node->child);\
+    }\
+    deleteList(stack);\
+}\
 
 //  Macros that return specific gedcom nodes from a record tree.
 //--------------------------------------------------------------------------------------------------

@@ -3,3 +3,4 @@
 Tests/*test
 Makefile.in
 *output*
+Tests/testset
