@@ -14,6 +14,9 @@
 #endif
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
+#include "porting.h"
+
 #include "hashtable.h"
 #include "database.h"
 #include "recordindex.h"

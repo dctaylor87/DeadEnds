@@ -349,6 +349,7 @@ PyInit_llines(void)
   llpy_records_init ();
   llpy_event_init ();
   llpy_person_init ();
+  llpy_export_init ();
 
   return (module);
 }

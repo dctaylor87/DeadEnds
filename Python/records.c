@@ -23,6 +23,7 @@
 #include "indiseq.h"		/* INDISEQ */
 #include "liflines.h"
 #endif
+
 #include "python-to-c.h"
 #include "types.h"
 
@@ -41,27 +42,10 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   const char *type = 0;
   int int_type = 0;
   RECORD record;
-  LLINES_PY_RECORD *py_record;
-  int added_at = 0;
-  int ndx;
+  LLINES_PY_RECORD *py_record = 0;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "s|z", keywords, &key, &type))
     return NULL;
-
-  char key_buffer[strlen(key) + 3];
-
-  /* convenience -- add '@'s if needed; convert to uppercase */
-  if (key[0] != '@')
-    {
-      key_buffer[0] = '@';
-      added_at = 1;
-    }
-  for (ndx = 0; key[ndx]; ndx++)
-    key_buffer[ndx + added_at] = toupper(key[ndx]);
-  if (added_at)
-    key_buffer[ndx++ + added_at] = '@';
-
-  key_buffer[ndx + added_at] = 0;
 
   if (type && (type[0] != 0))
     {
@@ -141,6 +125,66 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 	  return NULL;
 	}
     }
+  record = __llpy_key_to_record (key, int_type);
+
+  if (! record)
+    Py_RETURN_NONE;		/* that keynum has no record */
+
+  switch (int_type)
+    {
+    case 'I':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_individual_type);
+      break;
+    case 'F':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_family_type);
+      break;
+    case 'S':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_source_type);
+      break;
+    case 'E':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_event_type);
+      break;
+    case 'X':
+      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
+						     &llines_other_type);
+      break;
+    }
+
+  if (! py_record)
+    return NULL;
+
+  py_record->llr_record = record;
+  py_record->llr_type = int_type;
+  return ((PyObject *) py_record);
+}
+
+RECORD __llpy_key_to_record (CString key, int int_type)
+{
+  RECORD record;
+  int added_at = 0;
+  int ndx;
+
+  char key_buffer[strlen(key) + 3];
+
+  if (! key || (key[0] == '\0'))
+    return NULL;
+
+  /* convenience -- add '@'s if needed; convert to uppercase */
+  if (key[0] != '@')
+    {
+      key_buffer[0] = '@';
+      added_at = 1;
+    }
+  for (ndx = 0; key[ndx]; ndx++)
+    key_buffer[ndx + added_at] = toupper(key[ndx]);
+  if (added_at)
+    key_buffer[ndx++ + added_at] = '@';
+
+  key_buffer[ndx + added_at] = 0;
 
   switch (int_type)
     {
@@ -185,40 +229,9 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 	  record = qkey_to_orecord (key_buffer);
 	}
     }
-
-  if (! record)
-    Py_RETURN_NONE;		/* that keynum has no record */
-
-  switch (int_type)
-    {
-    case 'I':
-      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
-						     &llines_individual_type);
-      break;
-    case 'F':
-      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
-						     &llines_family_type);
-      break;
-    case 'S':
-      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
-						     &llines_source_type);
-      break;
-    case 'E':
-      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
-						     &llines_event_type);
-      break;
-    case 'X':
-      py_record = (LLINES_PY_RECORD *) PyObject_New (LLINES_PY_RECORD,
-						     &llines_other_type);
-      break;
-    }
-  if (! py_record)
-    return NULL;
-
-  py_record->llr_record = record;
-  py_record->llr_type = int_type;
-  return ((PyObject *) py_record);
+  return record;
 }
+
 #else
 static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {

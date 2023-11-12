@@ -24,12 +24,19 @@ extern void llpy_person_init (void);
 extern void llpy_nodes_init (void);
 extern void llpy_records_init (void);
 extern void llpy_event_init (void);
+extern void llpy_export_init (void);
 
 /* XXX TODO: make this a bitmask XXX */
 extern int llpy_debug;
 
 extern PyObject *_llpy_key (PyObject *self, PyObject *args, PyObject *kw);
 extern PyObject *_llpy_top_node (PyObject *self, PyObject *args);
+extern RECORD __llpy_key_to_record (CString key, int int_type);
+
+extern int _py_traverse_nodes (GNode *node, int level,
+			       int (*func)(GNode *, int, void *),
+			       void *extra);
+
 
 #if defined(DEADENDS)
 extern RecordIndexEl *_llpy_node_to_record (GNode *node);
