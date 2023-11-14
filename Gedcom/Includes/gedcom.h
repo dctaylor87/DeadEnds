@@ -4,7 +4,7 @@
 //  gedcom.h
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 11 November 2023.
+//  Last changed on 13 November 2023.
 //
 
 #ifndef gedcom_h
@@ -26,7 +26,7 @@ typedef enum SexType {
 
 //  RecordType -- Enumeration of supported DeadEnds record types.
 //--------------------------------------------------------------------------------------------------
-typedef enum {
+typedef enum RecordType {
     GRUnknown = 0, GRPerson, GRFamily, GRSource, GREvent, GROther, GRHeader, GRTrailer
 } RecordType;
 
@@ -182,6 +182,7 @@ int compareRecordKeys(String, String);  // gedcom.c
             continue;\
         }\
         {
+
 #define ENDHUSBS\
         }\
         __node = __node->sibling;\

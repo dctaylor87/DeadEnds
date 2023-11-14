@@ -4,7 +4,7 @@
 //  validate.c -- Functions that validate Gedcom records.
 //
 //  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 5 November 2023.
+//  Last changed on 14 November 2023.
 //
 
 #include "validate.h"
@@ -20,13 +20,13 @@ static Database *theDatabase;
 
 static bool debugging = true;
 
-static bool validatePersonIndex(void);
-static bool validateFamilyIndex(void);
-static void validatePerson(GNode*);
-static void validateFamily(GNode*);
-static void validateSource(GNode*);
-static void validateEvent(GNode*);
-static void validateOther(GNode*);
+static bool validatePersonIndex(Database*, ErrorLog*);
+static bool validateFamilyIndex(Database*, ErrorLog*);
+static void validatePerson(GNode*, Database*, ErrorLog*);
+static void validateFamily(GNode*, Database*, ErrorLog*);
+static void validateSource(GNode*, Database*, ErrorLog*);
+static void validateEvent(GNode*, Database*, ErrorLog*);
+static void validateOther(GNode*, Database*, ErrorLog*);
 
 static GNode *getFamily(String key, RecordIndex*);
 static GNode *getPerson(String key, RecordIndex*);
@@ -39,8 +39,8 @@ bool validateDatabase(Database *database, ErrorLog *errorLog)
 {
 	ASSERT(database);
 	theDatabase = database;
-	validatePersonIndex();
-	validateFamilyIndex();
+	validatePersonIndex(database, errorLog);
+	//validateFamilyIndex(database, errorLog);
 	//if (!validateIndex(database->sourceIndex)) isOkay = false;
 	//if (!validateIndex(database->eventIndex)) isOkay = false;
 	//if (!validateIndex(database->otherIndex)) isOkay = false;
@@ -50,22 +50,22 @@ bool validateDatabase(Database *database, ErrorLog *errorLog)
 
 //  validatePersonIndex -- Validate the person index of the current database.
 //-------------------------------------------------------------------------------------------------
-bool validatePersonIndex(void)
+bool validatePersonIndex(Database *database, ErrorLog *errorLog)
 {
 	FORHASHTABLE(theDatabase->personIndex, element)
 		GNode* person = ((RecordIndexEl*) element)->root;
-		validatePerson(person);
+		validatePerson(person, database, errorLog);
 	ENDHASHTABLE
 	return true;
 }
 
 //  validateFamilyIndex -- Validate the family index of the current database.
 //-------------------------------------------------------------------------------------------------
-bool validateFamilyIndex(void)
+bool validateFamilyIndex(Database *database, ErrorLog *errorLog)
 {
 	FORHASHTABLE(theDatabase->familyIndex, element)
 		GNode *family = ((RecordIndexEl*) element)->root;
-		validateFamily(family);
+		validateFamily(family, database, errorLog);
 	ENDHASHTABLE
 	return true;
 }
@@ -74,11 +74,11 @@ extern String nameString(String);
 
 //  validatePerson -- Validate a person record. Check all FAMC and FAMS links to families.
 //--------------------------------------------------------------------------------------------------
-static void validatePerson(GNode *person)
+static void validatePerson(GNode *person, Database *database, ErrorLog *errorLog)
 {
 	if (debugging) { printf("Validating %s %s\n", person->key, NAME(person)->value); }
 
-	//  Loop through the families the person should be a child in.
+	//  Loop through the families the person is a child in.
 	FORFAMCS(person, family)
 		//if (debugging) printf("Person is a child in family %s.\n", family->key);
 		int numOccurrences = 0;
@@ -111,7 +111,7 @@ static void validatePerson(GNode *person)
 //  validateFamily -- Validate a family node tree record. Check all HUSB, WIFE and CHIL links
 //    to persons.
 //--------------------------------------------------------------------------------------------------
-static void validateFamily(GNode *family)
+static void validateFamily(GNode *family, Database *database, ErrorLog* errorLog)
 {
 	if (debugging) {
 		printf("validateFamily(%s)\n", family->key);
@@ -153,11 +153,11 @@ static void validateFamily(GNode *family)
 	//  Validate all other links.
 }
 
-void validateSource(GNode *source) {}
+void validateSource(GNode *source, Database *database, ErrorLog* errorLog) {}
 
-void validateEvent(GNode *event) {}
+void validateEvent(GNode *event, Database *database, ErrorLog* errorLog) {}
 
-void validateOther(GNode *other) {}
+void validateOther(GNode *other, Database *database, ErrorLog* errorLog) {}
 
 
 static GNode *getFamily(String key, RecordIndex *index)
