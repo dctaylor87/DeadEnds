@@ -38,7 +38,7 @@ int numValidations = 0;  //  DEBUG.
 bool validateDatabase(Database *database, ErrorLog *errorLog)
 {
 	ASSERT(database);
-	theDatabase = database;
+	theDatabase = database;  //  TODO: To be removed once databases are handled better.
 	validatePersonIndex(database, errorLog);
 	//validateFamilyIndex(database, errorLog);
 	//if (!validateIndex(database->sourceIndex)) isOkay = false;
@@ -52,7 +52,7 @@ bool validateDatabase(Database *database, ErrorLog *errorLog)
 //-------------------------------------------------------------------------------------------------
 bool validatePersonIndex(Database *database, ErrorLog *errorLog)
 {
-	FORHASHTABLE(theDatabase->personIndex, element)
+	FORHASHTABLE(database->personIndex, element)
 		GNode* person = ((RecordIndexEl*) element)->root;
 		validatePerson(person, database, errorLog);
 	ENDHASHTABLE

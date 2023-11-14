@@ -7,8 +7,10 @@ If no errors were found in the Gedcom syntax, or in the other single record chec
 ### bool validateDatabase(Database *database, ErrorLog *errorLog)
 *validateDatabase* is the top layer of the validation stack. It is passed in the database to validate and the error log to post any errors to. It calls the functions that specifically validate differnt regions of the database. These functions are *validatePersonIndex*, *validateFamilyIndex*, *validateSourceIndex*, *validateEventIndex* and *validateOtherIndex*.
 ### bool validatePersonIndex(void)
+*validatePersonInde* validates all the person in the person index.
 The signature needs to be put in final shape. It calls *validatePerson*.
 ### static void validatePerson(GNode *person)
+*validatePerson*
 {
 	FORHASHTABLE(theDatabase->personIndex, element)
 		GNode* person = ((RecordIndexEl*) element)->root;
