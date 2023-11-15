@@ -492,7 +492,11 @@ static PyObject *llpy_keynum_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObjec
       PyErr_SetString (PyExc_ValueError, "keynum_to_record: TYPE has a bad value");
       return NULL;
     }
+#if defined(DEADENDS)
+  snprintf (key_buffer, sizeof (key_buffer), "@%c%lu@", int_type, keynum);
+#else
   snprintf (key_buffer, sizeof (key_buffer), "%c%lu", int_type, keynum);
+#endif
 
   switch (int_type)
     {
