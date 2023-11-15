@@ -449,7 +449,7 @@ static struct PyMethodDef Lifelines_Date_Functions[] =
    { "dateformat",	(PyCFunction)llpy_dateformat, METH_VARARGS,
      "dateformat(INT) --> INT: set date format for stddate calls.\n\
 \t\t-1 (do not change format, just return existing format\n\
-\t\t0  (d0 mo yr)\n\
+\t\t0  (da mo yr)\n\
 \t\t1  (mo da, yr)\n\
 \t\t2  (mo/da/yr)\n\
 \t\t3  (da/mo/yr)\n\
