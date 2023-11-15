@@ -4,7 +4,7 @@
 //  intrpperson.c -- Built-in functions dealing with persons.
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 8 October 2023.
+//  Last changed on 14 November 2023.
 //
 
 #include "standard.h"
@@ -237,7 +237,7 @@ PValue __father(PNode *pnode, SymbolTable *symtab, bool* errflg)
 {
     GNode* person = evaluatePerson(pnode->arguments, symtab, errflg);
     if (*errflg || !person) return nullPValue;
-    GNode* father = personToFather(person);
+    GNode* father = personToFather(person, theDatabase);
     return father ? PVALUE(PVPerson, uGNode, father) : nullPValue;
 }
 
@@ -248,7 +248,7 @@ PValue __mother(PNode *pnode, SymbolTable *symtab, bool* errflg)
 {
     GNode* person = evaluatePerson(pnode->arguments, symtab, errflg);
     if (*errflg || !person) return nullPValue;
-    GNode* mother = personToMother(person);
+    GNode* mother = personToMother(person, theDatabase);
     return mother ? PVALUE(PVPerson, uGNode, mother) : nullPValue;
 }
 
@@ -259,7 +259,7 @@ PValue __nextsib(PNode *pnode, SymbolTable *symtab, bool* errflg)
 {
     GNode* indi = evaluatePerson(pnode->arguments, symtab, errflg);
     if (*errflg || !indi) return nullPValue;
-    GNode* sib = personToNextSibling(indi);
+    GNode* sib = personToNextSibling(indi, theDatabase);
     if (!sib) return nullPValue;
     return PVALUE(PVPerson, uGNode, sib);
 }
@@ -271,7 +271,7 @@ PValue __prevsib(PNode *pnode, SymbolTable *symtab, bool* eflg)
 {
     GNode* indi = evaluatePerson(pnode->arguments, symtab, eflg);
     if (*eflg || !indi) return nullPValue;
-    GNode* sib = personToPreviousSibling(indi);
+    GNode* sib = personToPreviousSibling(indi, theDatabase);
     if (!sib) return nullPValue;
     return PVALUE(PVPerson, uGNode, sib);
 }
@@ -352,7 +352,7 @@ PValue __nspouses(PNode *node, SymbolTable *stab, bool* eflg)
 {
     GNode *indi = evaluatePerson(node->arguments, stab, eflg);
     if (*eflg || !indi) return PVALUE(PVInt, uInt, 0);
-    return PVALUE(PVInt, uInt, numberOfSpouses(indi));
+    return PVALUE(PVInt, uInt, numberOfSpouses(indi, theDatabase));
 }
 
 // * __parents -- Find parents' family of person

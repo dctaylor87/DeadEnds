@@ -16,7 +16,7 @@
 
 bool validateDatabase(Database*, ErrorLog*);
 
-static Database *theDatabase;
+//static Database *theDatabase;
 
 static bool debugging = true;
 
@@ -28,8 +28,8 @@ static void validateSource(GNode*, Database*, ErrorLog*);
 static void validateEvent(GNode*, Database*, ErrorLog*);
 static void validateOther(GNode*, Database*, ErrorLog*);
 
-static GNode *getFamily(String key, RecordIndex*);
-static GNode *getPerson(String key, RecordIndex*);
+//static GNode *getFamily(String key, RecordIndex*);
+//static GNode *getPerson(String key, RecordIndex*);
 
 int numValidations = 0;  //  DEBUG.
 
@@ -38,7 +38,7 @@ int numValidations = 0;  //  DEBUG.
 bool validateDatabase(Database *database, ErrorLog *errorLog)
 {
 	ASSERT(database);
-	theDatabase = database;  //  TODO: To be removed once databases are handled better.
+	//theDatabase = database;  //  TODO: To be removed once databases are handled better.
 	validatePersonIndex(database, errorLog);
 	//validateFamilyIndex(database, errorLog);
 	//if (!validateIndex(database->sourceIndex)) isOkay = false;
@@ -63,7 +63,7 @@ bool validatePersonIndex(Database *database, ErrorLog *errorLog)
 //-------------------------------------------------------------------------------------------------
 bool validateFamilyIndex(Database *database, ErrorLog *errorLog)
 {
-	FORHASHTABLE(theDatabase->familyIndex, element)
+	FORHASHTABLE(database->familyIndex, element)
 		GNode *family = ((RecordIndexEl*) element)->root;
 		validateFamily(family, database, errorLog);
 	ENDHASHTABLE
@@ -79,31 +79,31 @@ static void validatePerson(GNode *person, Database *database, ErrorLog *errorLog
 	if (debugging) { printf("Validating %s %s\n", person->key, NAME(person)->value); }
 
 	//  Loop through the families the person is a child in.
-	FORFAMCS(person, family)
-		//if (debugging) printf("Person is a child in family %s.\n", family->key);
+	FORFAMCS(person, family, database)
+		if (debugging) printf("Person is a child in family %s.\n", family->key);
 		int numOccurrences = 0;
-		FORCHILDREN(family, child, count)
-			//if (debugging) { printf("    Child %d: %s %s\n", count, child->key, NAME(child)->value); }
+		FORCHILDREN(family, child, count, database)
+			if (debugging) { printf("    Child %d: %s %s\n", count, child->key, NAME(child)->value); }
 			if (person == child) numOccurrences++;
 		ENDCHILDREN
 		if (numOccurrences != 1) printf("ERROR ERROR ERROR\n");
 	ENDFAMCS
 
 	//  Loop through the families the person is a spouse in.
-	//if (debugging) printf("Doing the FAMS part.\n");
+	if (debugging) printf("Doing the FAMS part.\n");
 	SexType sex = SEXV(person);
-	FORFAMILIES(person, family) {
+	FORFAMILIES(person, family, database) {
 		if (debugging) printf("  person should be a spouse in family %s.\n", family->key);
 		GNode *parent = null;
 		if (sex == sexMale) {
-			parent = familyToHusband(family);
+			parent = familyToHusband(family, database);
 		} else if (sex == sexFemale) {
-			parent = familyToWife(family);
+			parent = familyToWife(family, database);
 		}
 		ASSERT(person == parent);  // TODO: SHOULD NOT BE AS ASSERT HERE: SHOULD BE AN ERROR.
 	} ENDFAMILIES
 
-	//printf("validate person: %s: %s\n", person->gKey, name);  //  REMOVE: FOR DEBUGGING.
+	printf("validate person: %s: \n", person->key);  //  REMOVE: FOR DEBUGGING.
 	//  Validate existance of NAME and SEX lines.
 	//  Find all other links in the record and validate them.
 }
@@ -117,10 +117,10 @@ static void validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 		printf("validateFamily(%s)\n", family->key);
 	}
 	// For each HUSB line in the family (multiples in non-traditional cases).
-	FORHUSBS(family, husband)
+	FORHUSBS(family, husband, database)
 		// The husband must have one FAMS link back to this family.
 		int numOccurences = 0;
-		FORFAMSS(husband, fam)
+		FORFAMSS(husband, fam, database)
 			numValidations++;
 			if (family == fam) numOccurences++;
 		ENDFAMSS
@@ -128,9 +128,9 @@ static void validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 	ENDHUSBS
 
 	//  For each WIFE line in the family (multiples in non-traditional cases)...
-	FORWIFES(family, wife, n) {
+	FORWIFES(family, wife, database) {
 		int numOccurences = 0;
-		FORFAMSS(wife, fam) {
+		FORFAMSS(wife, fam, database) {
 			numValidations++;
 			if (family == fam) numOccurences++;
 		} ENDFAMSS
@@ -138,9 +138,9 @@ static void validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 	} ENDWIFES
 
 	//  For each CHIL node in the family.
-	FORCHILDREN(family, child, n)
+	FORCHILDREN(family, child, n, database)
 		int numOccurences = 0;
-		FORFAMCS(child, fam)
+		FORFAMCS(child, fam, database)
 			numValidations++;
 			if (family == fam) numOccurences++;
 		ENDFAMCS

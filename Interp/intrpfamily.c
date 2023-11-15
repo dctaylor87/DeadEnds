@@ -3,7 +3,7 @@
 //  JustParsing
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 29 October 2023.
+//  Last changed on 14 November 2023.
 //
 
 #include "standard.h"
@@ -36,7 +36,7 @@ PValue __husband(PNode *pnode, SymbolTable *symtab, bool* errflg)
 	ASSERT(pnode && symtab);
 	GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
 	if (*errflg || !fam) return nullPValue;
-	GNode* husband = familyToHusband(fam);
+	GNode* husband = familyToHusband(fam, theDatabase);
 	if (!husband) return nullPValue;
 	return PVALUE(PVPerson, uGNode, husband);
 }
@@ -49,7 +49,7 @@ PValue __wife(PNode *pnode, SymbolTable *symtab, bool* errflg)
 	ASSERT(pnode && symtab);
 	GNode* fam = evaluateFamily(pnode->arguments, symtab, errflg);
 	if (*errflg || !fam) return nullPValue;
-	GNode* wife = familyToWife(fam);
+	GNode* wife = familyToWife(fam, theDatabase);
 	if (!wife) return nullPValue;
 	return PVALUE(PVPerson, uGNode, wife);
 }
@@ -80,7 +80,7 @@ PValue __firstchild(PNode *pnode, SymbolTable *symtab, bool* eflg)
 	ASSERT(pnode && symtab);
 	GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
 	if (*eflg || !fam) return nullPValue;
-	GNode* child = familyToFirstChild(fam);
+	GNode* child = familyToFirstChild(fam, theDatabase);
 	if (!child) return nullPValue;
 	return PVALUE(PVPerson, uGNode, child);
 }
@@ -93,7 +93,7 @@ PValue __lastchild(PNode *pnode, SymbolTable *symtab, bool* eflg)
 	ASSERT(pnode && symtab);
 	GNode* fam = evaluateFamily(pnode->arguments, symtab, eflg);
 	if (*eflg || !fam) return nullPValue;
-	GNode* child = familyToLastChild(fam);
+	GNode* child = familyToLastChild(fam, theDatabase);
 	if (!child) return nullPValue;
 	return PVALUE(PVPerson, uGNode, child);
 }

@@ -6,7 +6,7 @@
 //    may interpret a node directly, or call a more specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 1 November 2023.
+//  Last changed on 14 November 2023.
 //
 
 #include <stdarg.h>
@@ -355,7 +355,7 @@ InterpType interpChildren (PNode *pnode, SymbolTable *symtab, PValue* pval)
 		prog_error(pnode, "the first argument to children must be a family");
 		return InterpError;
 	}
-	FORCHILDREN(fam, chil, nchil) {
+	FORCHILDREN(fam, chil, nchil, theDatabase) {
 		assignValueToSymbol(symtab, pnode->childIden, PVALUE(PVPerson, uGNode, chil));
 		assignValueToSymbol(symtab, pnode->countIden, PVALUE(PVInt, uInt, nchil));
 		InterpType irc = interpret(pnode->loopState, symtab, pval);
@@ -385,7 +385,7 @@ InterpType interpSpouses(PNode *pnode, SymbolTable *symtab, PValue *pval)
 		prog_error(pnode, "the first argument to spouses must be a person");
 		return InterpError;
 	}
-	FORSPOUSES(indi, spouse, fam, nspouses) {
+	FORSPOUSES(indi, spouse, fam, nspouses, theDatabase) {
 		assignValueToSymbol(symtab, pnode->spouseIden, PVALUE(PVPerson, uGNode, spouse));
 		assignValueToSymbol(symtab, pnode->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(symtab, pnode->countIden, PVALUE(PVInt, uInt, nspouses));
@@ -416,11 +416,11 @@ InterpType interpFamilies(PNode *node, SymbolTable* stab, PValue *pval)
 	}
 	GNode *spouse = null;
 	int count = 0;
-	FORFAMSS(indi, fam) {
+	FORFAMSS(indi, fam, theDatabase) {
 		assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		SexType sex = SEXV(indi);
-		if (sex == sexMale) spouse = familyToWife(fam);
-		else if (sex == sexFemale) spouse = familyToHusband(fam);
+		if (sex == sexMale) spouse = familyToWife(fam, theDatabase);
+		else if (sex == sexFemale) spouse = familyToHusband(fam, theDatabase);
 		else spouse = null;
 		assignValueToSymbol(stab, node->spouseIden, PVALUE(PVPerson, uGNode, spouse));
 		assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, ++count));
@@ -450,8 +450,8 @@ InterpType interpFathers(PNode *node, SymbolTable* stab, PValue *pval)
 		return InterpError;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam)
-		GNode *husb = familyToHusband(fam);
+	FORFAMCS(indi, fam, theDatabase)
+		GNode *husb = familyToHusband(fam, theDatabase);
 		if (husb == null) goto d;
 		assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(stab, node->fatherIden, PVALUE(PVFamily, uGNode, husb));
@@ -479,8 +479,8 @@ InterpType interpMothers (PNode *node, SymbolTable *stab, PValue *pval)
 		return InterpError;;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam) {
-		GNode *wife = familyToWife(fam);
+	FORFAMCS(indi, fam, theDatabase) {
+		GNode *wife = familyToWife(fam, theDatabase);
 		if (wife == null) goto d;
 		//  Assign the current loop identifier valujes to the symbol table.
 		assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
@@ -513,7 +513,7 @@ InterpType interpParents(PNode *node, SymbolTable *stab, PValue *pval)
 		return InterpError;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam) {
+	FORFAMCS(indi, fam, theDatabase) {
 		assignValueToSymbol(stab, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(stab, node->countIden,  PVALUE(PVInt, uInt, ++nfams));
 		irc = interpret(node->loopState, stab, pval);

@@ -4,7 +4,7 @@
 //  gedcom.h
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 13 November 2023.
+//  Last changed on 14 November 2023.
 //
 
 #ifndef gedcom_h
@@ -36,13 +36,13 @@ int compareRecordKeys(String, String);  // gedcom.c
 
 // FORCHILDREN / ENDCHILDREN -- Iterator for the children of a family.
 //--------------------------------------------------------------------------------------------------
-#define FORCHILDREN(fam, childd, num) \
+#define FORCHILDREN(fam, childd, num, database) \
     {\
     GNode* __node = findTag(fam->child, "CHIL");\
     GNode* childd;\
     int num = 0;\
     while (__node) {\
-        childd = keyToPerson(__node->value, theDatabase);\
+        childd = keyToPerson(__node->value, database);\
         ASSERT(childd);\
         num++;\
         {
@@ -54,12 +54,12 @@ int compareRecordKeys(String, String);  // gedcom.c
     }}
 
 //  FORFAMCS / ENDFAMCS
-#define FORFAMILIES(indi, fam)\
+#define FORFAMILIES(indi, fam, database)\
 {\
     GNode *__node = FAMS(indi);\
     GNode *fam;\
     while (__node) {\
-        fam = keyToFamily(__node->value, theDatabase);\
+        fam = keyToFamily(__node->value, database);\
         ASSERT(fam);\
         {
 #define ENDFAMILIES\
@@ -81,7 +81,7 @@ int compareRecordKeys(String, String);  // gedcom.c
         fam = keyToFamily(__node->value, theDatabase);\
         ASSERT(fam);\
         if (__sex == sexMale)\
-            spouse = familyToWife(fam);\
+            spouse = familyToWife(fam, theDatabase);\
         else\
             spouse = familyToHusband(fam);\
         num++;\
@@ -115,12 +115,12 @@ int compareRecordKeys(String, String);  // gedcom.c
 }
 
 
-#define FORFAMCS(person, family)\
+#define FORFAMCS(person, family, database)\
 {\
     GNode *__node = FAMC(person);\
     GNode *family;\
     while (__node) {\
-        family = keyToFamily(__node->value, theDatabase);\
+        family = keyToFamily(__node->value, database);\
         ASSERT(family);\
         {
 
@@ -131,12 +131,12 @@ int compareRecordKeys(String, String);  // gedcom.c
     }\
 }
 
-#define FORFAMSS(person, family)\
+#define FORFAMSS(person, family, database)\
 {\
     GNode *__node = FAMS(person);\
     GNode *family;\
     while (__node) {\
-        family = keyToFamily(__node->value, theDatabase);\
+        family = keyToFamily(__node->value, database);\
         ASSERT(family);\
         {
 
@@ -170,14 +170,14 @@ int compareRecordKeys(String, String);  // gedcom.c
 
 //  FORHUSBS -- Iterate over the husbands in one family; handles non-traditional families.
 //--------------------------------------------------------------------------------------------------
-#define FORHUSBS(fam, husb)\
+#define FORHUSBS(fam, husb, database)\
 {\
     GNode* __node = findTag(fam->child, "HUSB");\
     GNode* husb=0;\
     String __key=0;\
     while (__node) {\
         __key = __node->value;\
-        if (!__key || !(husb = keyToPerson(__key, theDatabase))) {\
+        if (!__key || !(husb = keyToPerson(__key, database))) {\
             __node = __node->sibling;\
             continue;\
         }\
@@ -192,22 +192,18 @@ int compareRecordKeys(String, String);  // gedcom.c
 
 //  FORWIFES -- Iterate over the wives in one family; handles non-traditional families.
 //--------------------------------------------------------------------------------------------------
-#define FORWIFES(fam, wife, num)\
+#define FORWIFES(fam, wife, database)\
 {\
     GNode* __node = findTag(fam->child, "WIFE");\
     GNode* wife = null;\
     String __key = null;\
-    int num = 0;\
     while (__node) {\
         __key = __node->value;\
-        if (!__key || !(wife = keyToPerson(__key, theDatabase))) {\
-            ++num;\
+        if (!__key || !(wife = keyToPerson(__key, database))) {\
             __node = __node->sibling;\
             if (__node && nestr(__node->tag, "WIFE")) __node = null;\
                 continue;\
         }\
-        ASSERT(wife);\
-        num++;\
         {
 #define ENDWIFES\
         }\
@@ -218,7 +214,7 @@ int compareRecordKeys(String, String);  // gedcom.c
 
 //  FORSPOUSES -- Iterate over a person's spouses.
 //--------------------------------------------------------------------------------------------------
-#define FORSPOUSES(indi, spouse, fam, num)\
+#define FORSPOUSES(indi, spouse, fam, num, database)\
 {\
     GNode* __fnode = FAMS(indi);\
     int __sex = SEXV(indi);\
@@ -227,14 +223,15 @@ int compareRecordKeys(String, String);  // gedcom.c
     int num = 0;\
     while (__fnode) {\
         spouse = null;\
-        fam = keyToFamily(__fnode->value, theDatabase);\
+        fam = keyToFamily(__fnode->value, database);\
         if (__sex == sexMale)\
-            spouse = familyToWife(fam);\
+            spouse = familyToWife(fam, database);\
         else\
-            spouse = familyToHusband(fam);\
+            spouse = familyToHusband(fam, database);\
         if (spouse != null) {\
             num++;\
             {
+
 #define ENDSPOUSES\
             }\
         }\
