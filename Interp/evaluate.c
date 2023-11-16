@@ -21,9 +21,9 @@
 #include "standard.h"
 #include "symboltable.h"
 #include "functiontable.h"
+#include "pnode.h"
 #include "interp.h"
 #include "pvalue.h"
-#include "pnode.h"
 
 static bool debugging = false;
 

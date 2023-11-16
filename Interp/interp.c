@@ -14,8 +14,8 @@
 #include <stdarg.h>
 #include "symboltable.h"
 #include "functiontable.h"
-#include "interp.h"
 #include "pnode.h"
+#include "interp.h"
 #include "evaluate.h"
 #include "lineage.h"
 #include "pvalue.h"

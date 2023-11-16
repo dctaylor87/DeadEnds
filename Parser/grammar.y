@@ -15,6 +15,7 @@
 //#include "cache.h"
 //#include "indiseq.h"
 #include "list.h"
+#include "pnode.h"
 #include "interp.h"
 #include <stdlib.h>
 

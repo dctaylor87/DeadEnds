@@ -12,6 +12,7 @@
 
 #include <ansidecl.h>
 
+#include "pnode.h"
 #include "interp.h"
 #include "list.h"
 #include "builtintable.h"

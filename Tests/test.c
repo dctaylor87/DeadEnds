@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include "standard.h"
 #include "parse.h"
+#include "pnode.h"
 #include "interp.h"
 #include "functiontable.h"
 #include "recordindex.h"
-#include "pnode.h"
 #include "errors.h"
 #include "sequence.h"
 #include "database.h"

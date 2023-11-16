@@ -12,9 +12,10 @@
 #include "standard.h"
 #include "symboltable.h"
 #include "gedcom.h"
-#include "interp.h"
 
 #include "pnode.h"
+#include "interp.h"
+
 #include "builtintable.h"
 
 BuiltIn builtIns[] = {

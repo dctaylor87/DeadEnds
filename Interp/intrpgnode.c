@@ -11,8 +11,8 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include "standard.h"
-#include "interp.h"
 #include "pnode.h"
+#include "interp.h"
 #include "pvalue.h"
 #include "evaluate.h"
 #include "builtintable.h"

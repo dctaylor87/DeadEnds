@@ -14,7 +14,6 @@ typedef struct PValue PValue;  // Forward reference.
 typedef struct Context Context; 
 #include "standard.h"
 #include "symboltable.h"
-#include "interp.h"  // Context.
 
 //  PNode -- Program Node. The parser builds an abstract syntax tree for each procedure and 
 //    function it parses. The nodes of the trees are program nodes. They represent both statements

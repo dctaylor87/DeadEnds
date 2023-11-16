@@ -16,6 +16,7 @@
 #include "gnode.h"
 #include "lineage.h"
 #include "gedcom.h"
+#include "pnode.h"
 #include "interp.h"
 #include "name.h"
 #include "list.h"

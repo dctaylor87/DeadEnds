@@ -14,6 +14,7 @@
 #include "standard.h"
 #include "symboltable.h"
 #include "gedcom.h"
+#include "pnode.h"
 #include "interp.h"
 #include "sequence.h"
 #include "list.h"

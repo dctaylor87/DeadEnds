@@ -42,6 +42,8 @@ const char *DEADENDS_search_path = ".:/usr/share/deadends:/usr/share/lifelines";
 const char *GEDCOM_search_path = ".";
 const char *PYTHON_search_path = "."; /* XXX not currently used XXX */
 
+Database *theDatabase;
+
 /* forward references */
 static void print_usage (int status);
 static void print_version (void);
