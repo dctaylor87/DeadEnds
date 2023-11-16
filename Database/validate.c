@@ -16,8 +16,6 @@
 
 bool validateDatabase(Database*, ErrorLog*);
 
-//static Database *theDatabase;
-
 static bool debugging = true;
 
 static bool validatePersonIndex(Database*, ErrorLog*);
@@ -38,7 +36,6 @@ int numValidations = 0;  //  DEBUG.
 bool validateDatabase(Database *database, ErrorLog *errorLog)
 {
 	ASSERT(database);
-	//theDatabase = database;  //  TODO: To be removed once databases are handled better.
 	validatePersonIndex(database, errorLog);
 	//validateFamilyIndex(database, errorLog);
 	//if (!validateIndex(database->sourceIndex)) isOkay = false;
