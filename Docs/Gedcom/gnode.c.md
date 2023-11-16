@@ -5,7 +5,6 @@ Description of gnode.c.
 Components making up gnode.c:
 |Component|Description|
 |:---|:---|
-|extern Database *theDatabase|The current database. *We don't want this here, as any functions that need the database should not be in this file.*|
 |static StringTable *tagTable|Table of encountered tags. Used to store a single copy of each tag, shared by all GNodes with the tag.|
 |static int nodeAllocs|The number of allocated nodes.|
 |int numNodeAllocs(void)|Return the number of allocated nodes.|
@@ -34,10 +33,10 @@ Components making up gnode.c:
 |bool traverseNodes (GNode* node, bool (\*func)(GNode*))|Traverse a GNode tree calling a function on each node.|
 |int countNodes(GNode* node)|Return the number of nodes in a GNode tree. _Recursive_.|
 |GNode* find_node (GNode* parent, String tag, String value, GNode **plast)|Find child node with specific tag and value. Either or both of tag and value must be non-null.|
-|GNode* fatherNodes (Database* database, GNode* faml)|Given a list of FAMS or FAMC nodes, return the list of HUSB nodes they contain. _Requires theDatabase_.|
-|GNode* mother_nodes (Database *database, GNode *faml)|Given a list of FAMS or FAMC nodes, return the list of WIFE nodes they contain. _Requires theDatabase_.|
-|GNode* children_nodes(Database \*database, GNode *faml)|Given a list of FAMS or FAMC nodes, return the list of CHIL nodes they contain. _Requires theDatabase_.|
-|GNode* parents_nodes(Database \*database, GNode* family)|Given a list of FAMS or FAMC nodes, return the list of HUSB and WIFE nodes they contain. _Requires theDatabase_.|
+|GNode* fatherNodes (Database* database, GNode* faml)|Given a list of FAMS or FAMC nodes, return the list of HUSB nodes they contain.|
+|GNode* mother_nodes (Database *database, GNode *faml)|Given a list of FAMS or FAMC nodes, return the list of WIFE nodes they contain.|
+|GNode* children_nodes(Database \*database, GNode *faml)|Given a list of FAMS or FAMC nodes, return the list of CHIL nodes they contain.|
+|GNode* parents_nodes(Database \*database, GNode* family)|Given a list of FAMS or FAMC nodes, return the list of HUSB and WIFE nodes they contain.|
 |String addat (String string)|Add at-signs to both ends of a string. *No longer used*.|
 |String rmvat (String string)|Remove at-signs from both ends of a string. *No longer used*.|
 |bool isKey(String str)|Return true if a string has at-signs at both ends.|

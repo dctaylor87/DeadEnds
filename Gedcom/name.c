@@ -5,7 +5,7 @@
 //    static memory. Callers of those functions must be aware of the consequences.
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 10 October 2023.
+//  Last changed on 16 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -28,8 +28,6 @@ static String nextPiece(String name);
 static void cmpsqueeze (String in, String out);
 //static String nameString (String);
 static String nameSurnameFirst(String);
-
-//extern NameIndex *nameIndex;
 
 //  nameToNameKey - Convert Gedcom name or partial name to a name key. A name key is six
 //    characters and consists of the name's first initial and the soundex of the surname.
@@ -309,9 +307,9 @@ static void squeeze(String in, String out)
 //
 //  TODO: THIS USED TO ALSO FIND PERSONS WHO MATCHED A KEY.
 //--------------------------------------------------------------------------------------------------
-String* personKeysFromName(String name, NameIndex *index, int* pcount)
+String* personKeysFromName(String name, Database *database, int* pcount)
 //  name -- Name to search for.
-//  index -- Name index to use.
+//  database -- Database.
 //  pcount -- (out) Number of Persons with matching names.
 {
     //  This function uses listOfKeys as a state variable that holds the most recent list of keys.
@@ -332,7 +330,7 @@ String* personKeysFromName(String name, NameIndex *index, int* pcount)
 
     //  Get the record keys of the persons with names that share the name key of the input name.
     //  The set of keys is in the index -- no memory obligations.
-    Set *keySet = searchNameIndex(index, name);
+    Set *keySet = searchNameIndex(database->nameIndex, name);
 
     // If there are no keys there is nothing to do.
     if (!keySet || lengthSet(keySet) == 0) return null;
@@ -345,7 +343,7 @@ String* personKeysFromName(String name, NameIndex *index, int* pcount)
     String* keys = (String*) list->data;
     count = 0;
     for (int i = 0, n = list->length; i < n; i++) {
-        GNode* person = keyToPerson(keys[i], theDatabase);
+        GNode* person = keyToPerson(keys[i], database);
         for (GNode* node = NAME(person); node && eqstr(node->tag, "NAME"); node = node->sibling) {
             if (!compareNames(name, node->value)) continue;
             appendListElement(&listOfKeys, (Word) keys[i]);

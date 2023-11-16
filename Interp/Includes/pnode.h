@@ -4,15 +4,17 @@
 //  pnode.h -- Header file for the program node structure.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 13 October 2023.
+//  Last changed on 16 November 2023.
 //
 
 #ifndef pnode_h
 #define pnode_h
 
 typedef struct PValue PValue;  // Forward reference.
+typedef struct Context Context; 
 #include "standard.h"
 #include "symboltable.h"
+#include "interp.h"  // Context.
 
 //  PNode -- Program Node. The parser builds an abstract syntax tree for each procedure and 
 //    function it parses. The nodes of the trees are program nodes. They represent both statements
@@ -33,7 +35,7 @@ typedef enum PNType{
 //  BIFunc -- Type of a function pointer that takes a program node, symbol table, and boolean
 //    and returns a program pvalue.
 //--------------------------------------------------------------------------------------------------
-typedef PValue (*BIFunc)(PNode *node, SymbolTable *symtable, bool* errflag);
+typedef PValue (*BIFunc)(PNode *node, Context *context, bool* errflag);
 
 //  struct PNode -- The program node structure.
 //--------------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@
 //  intrpmath.c -- Arithmetic and logic built-in functions.
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 31 May 2023.
+//  Last changed on 16 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -18,13 +18,13 @@
 
 // Local helper function.
 //--------------------------------------------------------------------------------------------------
-static void evalBinary(PNode *pnode, SymbolTable *symTable, PValue* val1, PValue* val2, bool* eflag);
+static void evalBinary(PNode *pnode, Context *context, PValue* val1, PValue* val2, bool* eflag);
 
 // __add -- Built-in add operation, takes one to 32 arguments. Supports both integer (C long)
 //    and floating point (C double) and mixed operands.
 //    usage: add((INT|FLOAT) [,(INT|FLOAT)]+) -> (INT|FLOAT)
 //--------------------------------------------------------------------------------------------------
-PValue __add(PNode *pnode, SymbolTable *stab, bool* eflg)
+PValue __add(PNode *pnode, Context *context, bool* eflg)
 {
     PVType currentType = PVInt;  // Integer until the first floating argument appears.
     long intSum = 0;
@@ -33,7 +33,7 @@ PValue __add(PNode *pnode, SymbolTable *stab, bool* eflg)
 
     // Loop through the arguments.
     for (PNode *arg = pnode->arguments; arg; arg = arg->next) {
-        value = evaluate(arg, stab, eflg);
+        value = evaluate(arg, context, eflg);
         if (*eflg || (value.type != PVInt && value.type != PVFloat)) return nullPValue;
 
         // Allow mixed integer and floating point operands.
@@ -59,17 +59,17 @@ PValue __add(PNode *pnode, SymbolTable *stab, bool* eflg)
 //    usage: sub(INT, INT) -> INT
 //           sub(FLOAT, FLOAT) -> FLOAT
 //--------------------------------------------------------------------------------------------------
-PValue __sub(PNode *node, SymbolTable *stab, bool *eflg)
+PValue __sub(PNode *node, Context *context, bool *eflg)
 {
     PValue val1, val2;
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     return *eflg ? nullPValue : subPValues(val1, val2, eflg);
 }
 
 //  __mul -- Multiply operation
 //    usage: mul(INT|FLOAT [,INT|FLOAT]+) -> INT|FLOAT
 //--------------------------------------------------------------------------------------------------
-PValue __mul(PNode *pnode, SymbolTable *stab, bool *eflg)
+PValue __mul(PNode *pnode, Context *context, bool *eflg)
 {
     PVType currentType = PVInt;  //  Integer until any float argument is encountered.
     long intProd = 1;
@@ -78,7 +78,7 @@ PValue __mul(PNode *pnode, SymbolTable *stab, bool *eflg)
     
     // Loop through the arguments.
     for (PNode *arg = pnode->arguments; arg; arg = arg->next) {
-        value = evaluate(arg, stab, eflg);
+        value = evaluate(arg, context, eflg);
         if (*eflg || (value.type != PVInt && value.type != PVFloat)) return nullPValue;
 
         // Mixed integer and floating operands are okay.
@@ -104,39 +104,39 @@ PValue __mul(PNode *pnode, SymbolTable *stab, bool *eflg)
 //    usage: div(INT, INT) -> INT
 //           div(FLOAT, FLOAT) -> FLOAT
 //--------------------------------------------------------------------------------------------------
-PValue __div(PNode *node, SymbolTable *stab, bool* eflg)
+PValue __div(PNode *node, Context *context, bool* eflg)
 {
     PValue val1, val2;
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     return *eflg ? nullPValue : divPValues(val1, val2, eflg);
 }
 
 //  __mod -- Modulus builtin function.
 //    usage: mod(INT, INT) -> INT
 //--------------------------------------------------------------------------------------------------
-PValue __mod(PNode *node, SymbolTable *stab, bool* eflg)
+PValue __mod(PNode *node, Context *context, bool* eflg)
 {
     PValue val1, val2;
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     return *eflg ? nullPValue : modPValues(val1, val2, eflg);
 }
 
 //  __exp -- Exponentiation operation
 //    usage: exp(INT, INT) -> INT
 //--------------------------------------------------------------------------------------------------
-PValue __exp (PNode *node, SymbolTable *stab, bool* eflg)
+PValue __exp (PNode *node, Context *context, bool* eflg)
 {
     PValue val1, val2;
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     return *eflg ? nullPValue : expPValues(val1, val2, eflg);
 }
 
 //  __neg -- Negation operation
 //    usage: neg(INT) -> INT
 //--------------------------------------------------------------------------------------------------
-PValue __neg (PNode *node, SymbolTable *stab, bool* eflg)
+PValue __neg (PNode *node, Context *context, bool* eflg)
 {
-    PValue value = evaluate(node->arguments, stab, eflg);
+    PValue value = evaluate(node->arguments, context, eflg);
     if (*eflg) return nullPValue;
     return negPValue(value, eflg);
 }
@@ -144,7 +144,7 @@ PValue __neg (PNode *node, SymbolTable *stab, bool* eflg)
 //  __incr -- Increment variable. The variable must have an integer value.
 //    usage: incr(VARB) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __incr(PNode* pnode, SymbolTable *symtab, bool* errflg)
+PValue __incr(PNode* pnode, Context *context, bool* errflg)
 {
     // Get the identifier.
     pnode = pnode->arguments;
@@ -154,20 +154,20 @@ PValue __incr(PNode* pnode, SymbolTable *symtab, bool* errflg)
     if (!ident)  return nullPValue;
 
     // Make sure the identifier has an integer value.
-    PValue pvalue = getValueOfSymbol(symtab, ident);
+    PValue pvalue = getValueOfSymbol(context->symbolTable, ident);
     if (pvalue.type != PVInt) return nullPValue;
 
     // Increment the value of the identifier.
     *errflg = false;  // Innocent.
     pvalue.value.uInt += 1;
-    assignValueToSymbol(symtab, ident, pvalue);
+    assignValueToSymbol(context->symbolTable, ident, pvalue);
     return nullPValue;  // Increment does not return a value.
 }
 
 //  __decr -- Decrement variable
 //    usage: decr(VARB) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __decr(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __decr(PNode *pnode, Context *context, bool* errflg)
 {
     // Get the identifier.
     pnode = pnode->arguments;
@@ -177,23 +177,23 @@ PValue __decr(PNode *pnode, SymbolTable *symtab, bool* errflg)
     if (!ident) return nullPValue;
 
     // Make sure the identifier has an integer value.
-    PValue pvalue = getValueOfSymbol(symtab, ident);
+    PValue pvalue = getValueOfSymbol(context->symbolTable, ident);
     if (pvalue.type != PVInt) return nullPValue;
 
     // Decrement the value of the identifier.
     *errflg = false;  // Innocent.
     pvalue.value.uInt -= 1;
-    assignValueToSymbol(symtab, ident, pvalue);
+    assignValueToSymbol(context->symbolTable, ident, pvalue);
     return nullPValue;  // Decrement does not return a value.
 }
 
 //  __eq -- Equal operation
 //    usage: eq(NUMERIC, NUMERIC) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __eq(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __eq(PNode *pnode, Context *context, bool* errflg)
 {
     PValue val1, val2;
-    evalBinary(pnode, symtab, &val1, &val2, errflg);
+    evalBinary(pnode, context, &val1, &val2, errflg);
     if (*errflg) return nullPValue;
     bool result = false;
     if (val1.type ==  PVInt) result = val1.value.uInt == val2.value.uInt;
@@ -205,10 +205,10 @@ PValue __eq(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __ne -- Not equal operation
 //    usage: ne(NUMERIC, NUMERIC) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __ne(PNode* pnode, SymbolTable *symtab, bool* errflg)
+PValue __ne(PNode* pnode, Context *context, bool* errflg)
 {
     PValue val1, val2;
-    evalBinary(pnode, symtab, &val1, &val2, errflg);
+    evalBinary(pnode, context, &val1, &val2, errflg);
     if (*errflg) return nullPValue;
     bool result = false;
     if (val1.type ==  PVInt) result = val1.value.uInt != val2.value.uInt;
@@ -220,10 +220,10 @@ PValue __ne(PNode* pnode, SymbolTable *symtab, bool* errflg)
 //  __le -- Less or equal operation
 //    usage: le(ANY, ANY) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __le(PNode *node, SymbolTable *stab, bool* eflg)
+PValue __le(PNode *node, Context *context, bool* eflg)
 {
     PValue val1, val2;
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     // DEBUG
     //printf("Back from evalBinary: val1: %ld, val2: %ld", val1.pvValue.uInt, val2.pvValue.uInt);
     if (*eflg) return nullPValue;
@@ -237,10 +237,10 @@ PValue __le(PNode *node, SymbolTable *stab, bool* eflg)
 //  __ge -- Greater or equal operation
 //    usage: ge(ANY, ANY) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __ge(PNode* node, SymbolTable *stab, bool* eflg)
+PValue __ge(PNode* node, Context *context, bool* eflg)
 {
     PValue val1, val2;
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     if (*eflg) return nullPValue;
     bool result = false;
     if (val1.type ==  PVInt) result = val1.value.uInt >= val2.value.uInt;
@@ -252,10 +252,10 @@ PValue __ge(PNode* node, SymbolTable *stab, bool* eflg)
 //  __lt -- Less than operation
 //    usage: lt(NUMERIC,NUMERIC) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __lt(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __lt(PNode *pnode, Context *context, bool* errflg)
 {
     PValue val1, val2;
-    evalBinary(pnode, symtab, &val1, &val2, errflg);
+    evalBinary(pnode, context, &val1, &val2, errflg);
     if (*errflg) return nullPValue;
     bool result = false;
     if (val1.type ==  PVInt) result = val1.value.uInt < val2.value.uInt;
@@ -267,11 +267,11 @@ PValue __lt(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __gt -- Greater than operation
 //    usage: gt(NUMERIC, NUMERIC) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __gt(PNode *node, SymbolTable *stab, bool* eflg)
+PValue __gt(PNode *node, Context *context, bool* eflg)
 {
     PValue val1, val2;
     //showSymbolTable(stab);
-    evalBinary(node, stab, &val1, &val2, eflg);
+    evalBinary(node, context, &val1, &val2, eflg);
     if (*eflg) return nullPValue;
     bool result = false;
     if (val1.type ==  PVInt) result = val1.value.uInt > val2.value.uInt;
@@ -283,14 +283,14 @@ PValue __gt(PNode *node, SymbolTable *stab, bool* eflg)
 //  __and -- Logical and operation.
 //    usage: and(ANY [,ANY]+) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __and(PNode *node, SymbolTable *stab, bool* eflg)
+PValue __and(PNode *node, Context *context, bool* eflg)
 {
     PNode *arg = node->arguments;
-    PValue pvalue = evaluateBoolean(arg, stab, eflg);
+    PValue pvalue = evaluateBoolean(arg, context, eflg);
     if (*eflg) return nullPValue;
     bool bvalue = pvalue.value.uBool;
     while (bvalue && (arg = arg->next)) {
-        pvalue = evaluateBoolean(arg, stab, eflg);
+        pvalue = evaluateBoolean(arg, context, eflg);
         if (*eflg) return nullPValue;
         bvalue = bvalue && pvalue.value.uBool;
         if (!bvalue) return falsePValue;
@@ -301,14 +301,14 @@ PValue __and(PNode *node, SymbolTable *stab, bool* eflg)
 //  __or -- Or operation
 //    usage: or(ANY [,ANY]+) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __or (PNode *node, SymbolTable *stab, bool* eflg)
+PValue __or (PNode *node, Context *context, bool* eflg)
 {
     PNode *arg = node->arguments;
-    PValue pvalue = evaluateBoolean(arg, stab, eflg);
+    PValue pvalue = evaluateBoolean(arg, context, eflg);
     if (*eflg) return nullPValue;
     bool bvalue = pvalue.value.uBool;
     while (!bvalue && (arg = arg->next)) {
-        pvalue = evaluateBoolean(arg, stab, eflg);
+        pvalue = evaluateBoolean(arg, context, eflg);
         if (*eflg) return nullPValue;
         bvalue = bvalue || pvalue.value.uBool;
     }
@@ -317,7 +317,7 @@ PValue __or (PNode *node, SymbolTable *stab, bool* eflg)
 
 //  evalBinary -- Evaluate a binary expression.
 //--------------------------------------------------------------------------------------------------
-static void evalBinary(PNode *pnode, SymbolTable *symTable, PValue* val1, PValue* val2, bool* eflag)
+static void evalBinary(PNode *pnode, Context *context, PValue* val1, PValue* val2, bool* eflag)
 //  pnode -- Program node of a function or builtin call that takes two numeric arguments.
 //  stab -- Symbol table to lookup identifiers if needed.
 //  val1 -- (output) Program value of the evaluated first argument.
@@ -333,8 +333,8 @@ static void evalBinary(PNode *pnode, SymbolTable *symTable, PValue* val1, PValue
     if (!arg2) { *eflag = true; return; }
 
     // Evaluate the two arguments into PValues.
-    PValue pval1 = evaluate(arg1, symTable, eflag);
-    PValue pval2 = evaluate(arg2, symTable, eflag);
+    PValue pval1 = evaluate(arg1, context, eflag);
+    PValue pval2 = evaluate(arg2, context, eflag);
 
     // The two PValues must have the same type and be numeric.
     if (pval1.type != pval2.type || !numericPValue(pval1)) {

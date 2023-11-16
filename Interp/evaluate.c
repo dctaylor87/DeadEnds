@@ -47,24 +47,24 @@ static bool pvalueToBoolean(PValue pvalue);
 //  Program nodes are heap objects because they form graph structures that must persist after
 //    they are the parser builds them.
 //--------------------------------------------------------------------------------------------------
-PValue evaluate(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue evaluate(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node to evaluate.
 //  symtab -- Symbol table with the current values the variables.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
+    ASSERT(pnode && context);
     if (programDebugging) {
         printf("evaluate:%d ", pnode->lineNumber); showPNode(pnode);
     }
 
     //  Identifiers. Call evaluateIdent to look them up in the symbol tables.
-    if (pnode->type == PNIdent) return evaluateIdent(pnode, symtab, errflg);
+    if (pnode->type == PNIdent) return evaluateIdent(pnode, context, errflg);
 
     //  Built-in function calls. Call evaluateBuiltIn which calls the built-in's C code.
-    if (pnode->type == PNBltinCall) return evaluateBuiltin(pnode, symtab, errflg);
+    if (pnode->type == PNBltinCall) return evaluateBuiltin(pnode, context, errflg);
 
     //  User-defined function calls. Call evaluateUserFunction with the function's root node.
-    if (pnode->type == PNFuncCall) return evaluateUserFunc(pnode, symtab, errflg);
+    if (pnode->type == PNFuncCall) return evaluateUserFunc(pnode, context, errflg);
 
     *errflg = false;
     //  Integer (C long) constants. Evaluate directly.
@@ -83,12 +83,12 @@ PValue evaluate(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 //  evaluateIdent -- Evaluate an identifier by looking it up in the symbol tables.
 //--------------------------------------------------------------------------------------------------
-PValue evaluateIdent(PNode *pnode, SymbolTable *symtab, bool* errflg ATTRIBUTE_UNUSED)
+PValue evaluateIdent(PNode *pnode, Context *context, bool* errflg ATTRIBUTE_UNUSED)
 //  pnode -- Program node holding an identifier.
 //  symtab -- Local symbol table.
 //  errflag -- Error flag.
 {
-    ASSERT((pnode->type == PNIdent) && symtab);
+    ASSERT((pnode->type == PNIdent) && context);
     if (programDebugging)
         printf("evaluateIden: %d: %s\n", pnode->lineNumber, pnode->identifier);
 
@@ -97,7 +97,7 @@ PValue evaluateIdent(PNode *pnode, SymbolTable *symtab, bool* errflg ATTRIBUTE_U
     ASSERT(ident);
 
     // Look up the identifier in the symbol tables.
-    return getValueOfSymbol(symtab, ident);
+    return getValueOfSymbol(context->symbolTable, ident);
 }
 
 //  evaluateConditional -- Evaluate a conditional expression. Conditional expressions have the
@@ -105,12 +105,12 @@ PValue evaluateIdent(PNode *pnode, SymbolTable *symtab, bool* errflg ATTRIBUTE_U
 //    expression is assigned to it. This function is called from interpIfStatement and
 //    interpWhileStatement.
 //--------------------------------------------------------------------------------------------------
-bool evaluateConditional(PNode *pnode, SymbolTable *symtab, bool *errflg)
+bool evaluateConditional(PNode *pnode, Context *context, bool *errflg)
 //  pnode -- One or two Program nodes.
 //  symtab -- Symbol table.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
+    ASSERT(pnode && context);
     // Assume there is both an identifier and an expression.
     PNode *iden = pnode, *expr = pnode->next;
 
@@ -128,14 +128,14 @@ bool evaluateConditional(PNode *pnode, SymbolTable *symtab, bool *errflg)
     }
 
     // Evaluate the expression.
-    PValue value = evaluate(expr, symtab, errflg);
+    PValue value = evaluate(expr, context, errflg);
     if (*errflg) {
         prog_error(pnode, "There was an error evaluating the conditional expression.");
         return false;
     }
 
     // If there is an identifier, set it to the expression value.
-    if (iden) assignValueToSymbol(symtab, pnode->identifier, value);
+    if (iden) assignValueToSymbol(context->symbolTable, pnode->identifier, value);
 
     // The expression is used as a conditional, so coerce it to boolean.
     return pvalueToBoolean(value);
@@ -143,18 +143,18 @@ bool evaluateConditional(PNode *pnode, SymbolTable *symtab, bool *errflg)
 
 //  evaluateBuiltin -- Evaluate a built-in function by calling its C code.
 //--------------------------------------------------------------------------------------------------
-PValue evaluateBuiltin(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue evaluateBuiltin(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node holding a built-in function call with its arguments.
 //  symtab -- Local symbol table.
 //  errflg -- Error flag.
 {
     // Call the C function that implements the built-in.
-    return (*(BIFunc)pnode->builtinFunc)(pnode, symtab, errflg);
+    return (*(BIFunc)pnode->builtinFunc)(pnode, context, errflg);
 }
 
 //  evaluateUserFunc -- Evaluate a user defined function.
 //--------------------------------------------------------------------------------------------------
-PValue evaluateUserFunc(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node holding a user-defined function.
 //  symtab -- Local symbol table.
 //  errflg -- Error flag.
@@ -181,7 +181,7 @@ PValue evaluateUserFunc(PNode *pnode, SymbolTable *symtab, bool* errflg)
     while (arg && parm) {
         //bool eflg;
         //  Evaluate the current argument; return if there is an error.
-        PValue value = evaluate(arg, symtab, errflg);
+        PValue value = evaluate(arg, context, errflg);
         if (*errflg) {
             prog_error(pnode, "could not evaluate an argument expression");
             return nullPValue;
@@ -201,7 +201,7 @@ PValue evaluateUserFunc(PNode *pnode, SymbolTable *symtab, bool* errflg)
     }
     //  Iterpret the function's body. The return value is passed back as the third parameter.
     PValue value;
-    InterpType irc = interpret((PNode*) func->funcBody, newtab, &value);
+    InterpType irc = interpret((PNode*) func->funcBody, context, &value);
     deleteHashTable(newtab);
     switch (irc) {
         case InterpReturn:
@@ -220,15 +220,15 @@ PValue evaluateUserFunc(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  evaluateBoolean -- Evaluate an expression and convert it to a boolean program value using
 //    C-like rules. In all but the error case this returns truePValue or falsePValue.
 //--------------------------------------------------------------------------------------------------
-PValue evaluateBoolean(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue evaluateBoolean(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Expression to evaluate and interpret as a boolean.
 //  symtab -- Local symbol table.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
+    ASSERT(pnode && context);
 
     // Use the generic evaluator.
-    PValue pvalue = evaluate(pnode, symtab, errflg);
+    PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg) return nullPValue;
 
     // Interpret the returned value as a boolean.
@@ -277,13 +277,13 @@ static bool pvalueToBoolean(PValue pvalue)
 
 //  evaluatePerson -- Evaluate a person expression. Return the root node of the person if there.
 //--------------------------------------------------------------------------------------------------
-GNode* evaluatePerson(PNode *pnode, SymbolTable *symtab, bool* errflg)
+GNode* evaluatePerson(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node expression that should evaluate to a person root gedcom node.
-//  symtab -- Symbol table.
+//  context -- Symbol table.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
-    PValue pvalue = evaluate(pnode, symtab, errflg);
+    ASSERT(pnode && context);
+    PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg ||  pvalue.type != PVPerson) return null;
     GNode* indi = pvalue.value.uGNode;
     if (nestr("INDI", indi->tag)) return null;
@@ -292,13 +292,13 @@ GNode* evaluatePerson(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 // evaluateFamily -- Evaluate family expression. Return the root node of the family if there.
 //--------------------------------------------------------------------------------------------------
-GNode* evaluateFamily(PNode *pnode, SymbolTable *symtab, bool* errflg)
+GNode* evaluateFamily(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node expression that should evaluate to a family root gedcom node.
 //  symtab -- Symbol table.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
-    PValue pvalue = evaluate(pnode, symtab, errflg);
+    ASSERT(pnode && context);
+    PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg || pvalue.type != PVFamily) return null;
     GNode* fam = pvalue.value.uGNode;
     if (nestr("FAM", fam->tag)) return null;
@@ -307,13 +307,13 @@ GNode* evaluateFamily(PNode *pnode, SymbolTable *symtab, bool* errflg)
 
 //  evaluateGNode -- Evaluate any Gedcom node expression. Return the Gedcom node.
 //--------------------------------------------------------------------------------------------------
-GNode* evaluateGNode(PNode *pnode, SymbolTable *symtab, bool* errflg)
+GNode* evaluateGNode(PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node expression that should evaluate to an arbitrary Gedcom node.
-//  symtab -- Local symbol table.
+//  context -- Local symbol table.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
-    PValue pvalue = evaluate(pnode, symtab, errflg);
+    ASSERT(pnode && context);
+    PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg || !isGNodeType(pvalue.type)) return null;
     return pvalue.value.uGNode;
 }
@@ -341,12 +341,12 @@ int num_params (PNode *node)
 
 //  eval_and_coerce -- Generic evaluator and coercer.
 //--------------------------------------------------------------------------------------------------
-PValue eval_and_coerce(int type, PNode *node, SymbolTable *stab, bool* eflg)
+PValue eval_and_coerce(int type, PNode *node, Context *context, bool* eflg)
 // type -- Type to coerce to.
 // stab -- Local symbol table.
 // eflg -- Possible error flag.
 {
-    PValue pvalue = evaluate(node, stab, eflg);
+    PValue pvalue = evaluate(node, context, eflg);
     if (*eflg || pvalue.type == PVNull) {
         *eflg = true;
         return nullPValue;

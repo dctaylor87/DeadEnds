@@ -7,7 +7,7 @@
 //  MNOTE: Memory management is an issue to be dealt with carefully.
 //
 //  Created by Thomas Wetmore on 16 April 2023.
-//  Last changed on 13 October 2023.
+//  Last changed on 16 November 2023.
 //
 
 #include <ansidecl.h>
@@ -19,7 +19,7 @@
 //  __list -- Create a list.
 //    usage: list(IDENT) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __list(PNode *pnode, SymbolTable *stab, bool *eflg)
+PValue __list(PNode *pnode, Context *context, bool *eflg)
 {
     // Get the identifier.
     PNode *var = pnode->arguments;
@@ -34,7 +34,7 @@ PValue __list(PNode *pnode, SymbolTable *stab, bool *eflg)
     //  Create the list the identifier will refer to.
     List *list = createList(null, null, null);  //  compare, delete, getkey
     //  MNOTE: Shouldn't there be a delete function?
-    assignValueToSymbol(stab, ident, PVALUE(PVList, uList, list));
+    assignValueToSymbol(context->symbolTable, ident, PVALUE(PVList, uList, list));
     return nullPValue;
 }
 
@@ -42,11 +42,11 @@ PValue __list(PNode *pnode, SymbolTable *stab, bool *eflg)
 //    usage: push(LIST, ANY) -> VOID
 //    usage: enqueue(LIST, ANY) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __push(PNode *node, SymbolTable *stab, bool *eflg)
+PValue __push(PNode *node, Context *context, bool *eflg)
 {
     //  The first argument must be a list.
     PNode *arg = node->arguments;
-    PValue pvalue = evaluate(arg, stab, eflg);
+    PValue pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         *eflg = true;
         prog_error(node, "the first first argument to push/enqueue must be a list");
@@ -56,7 +56,7 @@ PValue __push(PNode *node, SymbolTable *stab, bool *eflg)
     ASSERT(list);
 
     //  The second argument must be a program value.
-    pvalue = evaluate(arg->next, stab, eflg);
+    pvalue = evaluate(arg->next, context, eflg);
     if (*eflg) {
         prog_error(node, "the second argument to push/enqueue must have a program value");
         return nullPValue;
@@ -73,10 +73,10 @@ PValue __push(PNode *node, SymbolTable *stab, bool *eflg)
 //  __requeue -- Add an element to back of a list.
 //    usage: requeue(LIST, ANY) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __requeue (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __requeue (PNode *node, Context *context, bool *eflg)
 {
     //  The first argument must be a list.
-    PValue pvalue = evaluate(node->arguments, stab, eflg);
+    PValue pvalue = evaluate(node->arguments, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(node, "the first argument to requeue must be a list");
         *eflg = true;
@@ -85,7 +85,7 @@ PValue __requeue (PNode *node, SymbolTable *stab, bool *eflg)
     List *list = pvalue.value.uList;
 
     //  The second argument must be a program value.
-    pvalue = evaluate(node->arguments->next, stab, eflg);
+    pvalue = evaluate(node->arguments->next, context, eflg);
     if (*eflg) {
         prog_error(node, "the second argument to requeue must be a program value");
         return nullPValue;
@@ -101,10 +101,10 @@ PValue __requeue (PNode *node, SymbolTable *stab, bool *eflg)
 //  __pop -- Pop an element from the front of a list.
 //    usage: pop(LIST) -> ANY
 //--------------------------------------------------------------------------------------------------
-PValue __pop(PNode *node, SymbolTable *symtab, bool *eflg)
+PValue __pop(PNode *node, Context *context, bool *eflg)
 {
     //  The first argument must be a list.
-    PValue pvalue = evaluate(node->arguments, symtab, eflg);
+    PValue pvalue = evaluate(node->arguments, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(node, "the argument to pop must be a list");
         *eflg = true;
@@ -124,10 +124,10 @@ PValue __pop(PNode *node, SymbolTable *symtab, bool *eflg)
 //  __dequeue -- Remove an element from the back of a list.
 //    usage dequeue(LIST) -> ANY
 //--------------------------------------------------------------------------------------------------
-PValue __dequeue(PNode *node, SymbolTable *symtab, bool *eflg)
+PValue __dequeue(PNode *node, Context *context, bool *eflg)
 {
     //  The argument must be a list.
-    PValue pvalue = evaluate(node->arguments, symtab, eflg);
+    PValue pvalue = evaluate(node->arguments, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(node, "the argument to pop must be a list");
         *eflg = true;
@@ -147,10 +147,10 @@ PValue __dequeue(PNode *node, SymbolTable *symtab, bool *eflg)
 //  __empty -- Check if a list is empty.
 //    usage: empty(LIST) -> BOOL
 //--------------------------------------------------------------------------------------------------
-PValue __empty (PNode *pnode, SymbolTable *stab, bool *eflg)
+PValue __empty (PNode *pnode, Context *context, bool *eflg)
 {
     //  The argument must be a list.
-    PValue pvalue = evaluate(pnode->arguments, stab, eflg);
+    PValue pvalue = evaluate(pnode->arguments, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(pnode, "the argument to empty is not a list");
         *eflg = true;
@@ -163,11 +163,11 @@ PValue __empty (PNode *pnode, SymbolTable *stab, bool *eflg)
 //  __getel -- Get the nth value from a list.
 //    usage: getel(LIST, INT) -> ANY
 //--------------------------------------------------------------------------------------------------
-PValue __getel (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __getel (PNode *node, Context *context, bool *eflg)
 {
     //  Get the list.
     PNode *arg = node->arguments;
-    PValue pvalue = evaluate(arg, stab, eflg);
+    PValue pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(node, "the first argument to getel must be a list");
         *eflg = true;
@@ -176,7 +176,7 @@ PValue __getel (PNode *node, SymbolTable *stab, bool *eflg)
     List *list = pvalue.value.uList;
 
     //  Get the index.
-    pvalue = evaluate(arg->next, stab, eflg);
+    pvalue = evaluate(arg->next, context, eflg);
     if (*eflg || pvalue.type != PVInt) {
         prog_error(node, "the second argument to getel must be an integer index");
         *eflg = true;
@@ -200,11 +200,11 @@ PValue __getel (PNode *node, SymbolTable *stab, bool *eflg)
 //  __setel -- Set nth value in list
 //    usage: setel(LIST, INT, ANY) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __setel (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __setel (PNode *node, Context *context, bool *eflg)
 {
     //  Get the list.
     PNode *arg = node->arguments;
-    PValue pvalue = evaluate(arg, stab, eflg);
+    PValue pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(node, "the first argument to setel must be a list");
         *eflg = true;
@@ -214,7 +214,7 @@ PValue __setel (PNode *node, SymbolTable *stab, bool *eflg)
 
     //  Get the index.
     arg = arg->next;
-    pvalue = evaluate(arg, stab, eflg);
+    pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVInt) {
         prog_error(node, "the second argument to setel must be a integer");
         *eflg = true;
@@ -231,7 +231,7 @@ PValue __setel (PNode *node, SymbolTable *stab, bool *eflg)
 
     //  Get the value.
     arg = arg->next;
-    pvalue = evaluate(arg, stab, eflg);
+    pvalue = evaluate(arg, context, eflg);
     if (*eflg) {
         prog_error(node, "the third argument to setel is in error");
         return nullPValue;
@@ -245,11 +245,11 @@ PValue __setel (PNode *node, SymbolTable *stab, bool *eflg)
 //  __length -- Find the length of a list.
 //    usage: length(LIST) -> INT
 //--------------------------------------------------------------------------------------------------
-PValue __length (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __length (PNode *node, Context *context, bool *eflg)
 {
     //  Get the list.
     PNode *arg = node->arguments;
-    PValue pvalue = evaluate(arg, stab, eflg);
+    PValue pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVList) {
         prog_error(node, "the first argument to setel must be a list");
         *eflg = true;
@@ -262,11 +262,11 @@ PValue __length (PNode *node, SymbolTable *stab, bool *eflg)
 //  interpForList -- Interpret list loop
 //    usage: forlist(LIST, ANY, INT) {BODY}
 //--------------------------------------------------------------------------------------------------
-InterpType interpForList(PNode *node, SymbolTable *stab, PValue *pval)
+InterpType interpForList(PNode *node, Context *context, PValue *pval)
 {
     //  Get the list.
     bool eflg = false;
-    PValue pvalue = evaluate(node->listExpr, stab, &eflg);
+    PValue pvalue = evaluate(node->listExpr, context, &eflg);
     if (eflg) {
         prog_error(node, "The first argument to forlist must be a list");
         return InterpError;
@@ -281,9 +281,9 @@ InterpType interpForList(PNode *node, SymbolTable *stab, PValue *pval)
 
     for (int i = 0; i < list->length; i++) {
         memcpy(&pvalue, (PValue*) list->data[i], sizeof(PValue));
-        assignValueToSymbol(stab, node->elementIden, pvalue);
-        assignValueToSymbol(stab, node->countIden, PVALUE(PVInt, uInt, count++));
-        switch (irc = interpret(node->loopState, stab, pval)) {
+        assignValueToSymbol(context->symbolTable, node->elementIden, pvalue);
+        assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, count++));
+        switch (irc = interpret(node->loopState, context, pval)) {
             case InterpContinue:
             case InterpOkay: goto i;
             case InterpBreak: return InterpOkay;
