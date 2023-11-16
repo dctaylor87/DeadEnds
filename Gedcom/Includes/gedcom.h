@@ -69,52 +69,6 @@ int compareRecordKeys(String, String);  // gedcom.c
     }\
 }
 
-//  FORFAMSS / ENDFAMSS -- Iterator for a person's families as a spouse.
-//--------------------------------------------------------------------------------------------------
-#define OLDFORFAMSS(indi, fam, spouse, num)\
-    {\
-    GNode* __node = FAMS(indi);\
-    int __sex = SEXV(indi);\
-    GNode *fam, *spouse;\
-    int num = 0;\
-    while (__node) {\
-        fam = keyToFamily(__node->value, theDatabase);\
-        ASSERT(fam);\
-        if (__sex == sexMale)\
-            spouse = familyToWife(fam, theDatabase);\
-        else\
-            spouse = familyToHusband(fam);\
-        num++;\
-        {
-
-#define OLDENDFAMSS \
-        }\
-        __node = __node->sibling;\
-        if (__node && nestr(__node->tag, "FAMS")) __node = null;\
-    }}
-
-// FORFAMCS / ENDFAMCS -- Iterator for a person's families as a child.
-//--------------------------------------------------------------------------------------------------
-#define OLDFORFAMCS(indi, fam, fath, moth, num)\
-{\
-    GNode* __node = FAMC(indi);\
-    GNode *fam, *fath, *moth;\
-    int num = 0;\
-    while (__node) {\
-        fam = keyToFamily(__node->value, theDatabase);\
-        ASSERT(fam);\
-        fath = familyToHusband(fam);\
-        moth = familyToWife(fam);\
-        num++;\
-        {
-#define OLDENDFAMCS\
-        }\
-        __node = __node->sibling;\
-        if (__node && nestr(__node->tag, "FAMC")) __node = null;\
-    }\
-}
-
-
 #define FORFAMCS(person, family, database)\
 {\
     GNode *__node = FAMC(person);\

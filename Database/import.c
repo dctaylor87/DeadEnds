@@ -22,8 +22,6 @@
 String currentGedcomFileName = null;
 int currentGedcomLineNumber = 1;
 
-Database *theDatabase = null;
-
 extern bool validateIndex(RecordIndex *index);
 static String updateKeyMap(GNode *root, StringTable* keyMap);
 static void rekeyDatabase(Database*, StringTable *keyMap);

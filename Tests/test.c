@@ -24,7 +24,6 @@ static FILE *outputFile = null;
 extern String currentProgramFileName;
 extern int currentProgramLineNumber;
 extern FunctionTable *procedureTable;
-//extern Database *theDatabase;  // The database to use in the tests.
 
 extern Database *importFromFile(String, ErrorLog*);
 static Database *createDatabaseTest(void);
@@ -55,8 +54,6 @@ int main(void)
 	printf("parseAndRunProgramTest\n");
 	parseAndRunProgramTest(database);
 
-	//showRecordIndex(theDatabase->personIndex);
-	//showRecordIndex(theDatabase->familyIndex);
 	return 0;
 }
 

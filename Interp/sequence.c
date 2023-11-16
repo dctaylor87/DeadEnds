@@ -23,7 +23,6 @@
 #include "writenode.h"
 
 static bool debugging = true;
-//Database *theDatabase = null;
 
 //  Compare functions used when sorting sequences of persons.
 //--------------------------------------------------------------------------------------------------
@@ -935,7 +934,7 @@ static void writeLimitedFamily (GNode *family)
 //    name is treated as a wild card, and the sequencce will contain all persons that match the
 //    surname.
 //--------------------------------------------------------------------------------------------------
-Sequence *nameToSequence(String name, NameIndex *index, Database *database)
+Sequence *nameToSequence(String name, Database *database)
 //  name -- Name.
 //  index -- Name index with the name information.
 {
@@ -946,7 +945,7 @@ Sequence *nameToSequence(String name, NameIndex *index, Database *database)
 
 	// Simple case -- the name does not start with a '*'.
 	if (*name != '*') {
-		String *keys = personKeysFromName(name, index, &num /*true*/);
+		String *keys = personKeysFromName(name, database, &num /*true*/);
 		if (num == 0) return null;
 		seq = createSequence(database);
 		for (int i = 0; i < num; i++)
@@ -960,7 +959,7 @@ Sequence *nameToSequence(String name, NameIndex *index, Database *database)
 	sprintf(scratch, "a/%s/", getSurname(name));
 	for (int c = 'a'; c <= 'z'; c++) {
 		scratch[0] = c;
-		String *keys = personKeysFromName(scratch, index, &num/*, true*/);
+		String *keys = personKeysFromName(scratch, database, &num/*, true*/);
 		if (num == 0) continue;
 		if (!seq) seq = createSequence(database);
 		for (int i = 0; i < num; i++) {
@@ -968,7 +967,7 @@ Sequence *nameToSequence(String name, NameIndex *index, Database *database)
 		}
 	}
 	scratch[0] = '$';
-	String *keys = personKeysFromName(scratch, index, &num/*, true*/);
+	String *keys = personKeysFromName(scratch, database, &num/*, true*/);
 	if (num) {
 		if (!seq) seq = createSequence(database);
 		for (int i = 0; i < num; i++) {

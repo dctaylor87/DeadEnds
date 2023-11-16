@@ -4,7 +4,7 @@
 //  sequence.h -- Header file for the Sequence datatype.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 15 November 2023.
+//  Last changed on 16 November 2023.
 //
 
 #ifndef sequence_h
@@ -68,7 +68,7 @@ Sequence *familyToFathers(GNode *family, Database*);  //  Return sequence of a f
 Sequence *familyToMothers(GNode *family, Database*);  //  Return sequence of a family's mothers.
 Sequence *personToSpouses(GNode *person, Database*);  //  Return sequence of a person's spouses.
 Sequence *personToFamilies(GNode *person, bool, Database*);  //  Return sequence of a person's families.
-Sequence *nameToSequence(String name, NameIndex*, Database*);  //  Return sequence of persons who match a name.
+Sequence *nameToSequence(String, Database*);  //  Return sequence of persons who match a name.
 Sequence *refn_to_indiseq(String refn);
 
 Sequence *unionSequence(Sequence*, Sequence*);

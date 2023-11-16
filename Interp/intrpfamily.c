@@ -3,7 +3,7 @@
 //  JustParsing
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 14 November 2023.
+//  Last changed on 16 November 2023.
 //
 
 #include "standard.h"
@@ -12,9 +12,6 @@
 #include "evaluate.h"
 #include "lineage.h"
 #include "database.h"
-
-//extern RecordIndex *theIndex;
-extern Database *theDatabase;
 
 //  __marriage -- Return the first marriage event of a family.
 //    usage: marriage(FAM) -> EVENT
@@ -36,7 +33,7 @@ PValue __husband(PNode *pnode, Context *context, bool* errflg)
 	ASSERT(pnode && context);
 	GNode* fam = evaluateFamily(pnode->arguments, context, errflg);
 	if (*errflg || !fam) return nullPValue;
-	GNode* husband = familyToHusband(fam, theDatabase);
+	GNode* husband = familyToHusband(fam, context->database);
 	if (!husband) return nullPValue;
 	return PVALUE(PVPerson, uGNode, husband);
 }
@@ -49,7 +46,7 @@ PValue __wife(PNode *pnode, Context *context, bool* errflg)
 	ASSERT(pnode && context);
 	GNode* fam = evaluateFamily(pnode->arguments, context, errflg);
 	if (*errflg || !fam) return nullPValue;
-	GNode* wife = familyToWife(fam, theDatabase);
+	GNode* wife = familyToWife(fam, context->database);
 	if (!wife) return nullPValue;
 	return PVALUE(PVPerson, uGNode, wife);
 }
@@ -80,7 +77,7 @@ PValue __firstchild(PNode *pnode, Context *context, bool* eflg)
 	ASSERT(pnode && context);
 	GNode* fam = evaluateFamily(pnode->arguments, context, eflg);
 	if (*eflg || !fam) return nullPValue;
-	GNode* child = familyToFirstChild(fam, theDatabase);
+	GNode* child = familyToFirstChild(fam, context->database);
 	if (!child) return nullPValue;
 	return PVALUE(PVPerson, uGNode, child);
 }
@@ -93,7 +90,7 @@ PValue __lastchild(PNode *pnode, Context *context, bool* eflg)
 	ASSERT(pnode && context);
 	GNode* fam = evaluateFamily(pnode->arguments, context, eflg);
 	if (*eflg || !fam) return nullPValue;
-	GNode* child = familyToLastChild(fam, theDatabase);
+	GNode* child = familyToLastChild(fam, context->database);
 	if (!child) return nullPValue;
 	return PVALUE(PVPerson, uGNode, child);
 }
@@ -124,7 +121,7 @@ PValue __fam(PNode *pnode, Context *context, bool* eflg)
 	String key = value.value.uString;
 
 	//  Search the database for the family with the key.
-	GNode* family = keyToFamily(key, theDatabase);
+	GNode* family = keyToFamily(key, context->database);
 	if (!family) {
 		printf("Could not find a family with key %s.\n", key);
 		return nullPValue;

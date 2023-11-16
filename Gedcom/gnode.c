@@ -21,9 +21,6 @@
 #include "readnode.h"
 #include "database.h"
 
-//  TODO: This file should not have any functions that require the database.
-//extern Database *theDatabase;
-
 //  Tag table. Ensures there are only two allocated strings for every tag. Created the first time
 //    fix_tag is called.
 static StringTable *tagTable = null;

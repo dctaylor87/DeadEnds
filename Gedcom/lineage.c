@@ -11,8 +11,6 @@
 #include "gnode.h"
 #include "name.h"
 
-//extern Database *theDatabase;
-
 static bool debugging = false;
 
 //  personToFather -- Return the father of a person. This is the first HUSB in the first FAMC

@@ -2,7 +2,6 @@
 
 |Component|Description|
 |:---|:---|
-|extern Database *theDatabase|The database.|
 |GNode* personToFather(GNode*, Database\*)|Return the father of a person.|
 |GNode* personToFather(GNode*, Database\*)|Return the father of a person.|
 |GNode* personToMother(GNode*)|Return the mother of a person.|
