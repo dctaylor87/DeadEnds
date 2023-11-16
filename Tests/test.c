@@ -1,7 +1,7 @@
 //  test.c -- Test program.
 //
 //  Created by Thomas Wetmore on 5 October 2023.
-//  Last changed on 12 November 2023.
+//  Last changed on 16 November 2023.
 
 #include <stdio.h>
 #include "standard.h"
@@ -30,7 +30,7 @@ extern Database *importFromFile(String, ErrorLog*);
 static Database *createDatabaseTest(void);
 static void listTest(Database*, FILE*);
 static void forHashTableTest(Database*);
-static void parseAndRunProgramTest(void);
+static void parseAndRunProgramTest(Database*);
 static void validateDatabaseTest(Database*);
 static void forTraverseTest(Database*);
 
@@ -52,6 +52,8 @@ int main(void)
 	validateDatabaseTest(database);
 	printf("forTraverseTest\n");
 	forTraverseTest(database);
+	printf("parseAndRunProgramTest\n");
+	parseAndRunProgramTest(database);
 
 	//showRecordIndex(theDatabase->personIndex);
 	//showRecordIndex(theDatabase->familyIndex);
@@ -131,18 +133,24 @@ void forHashTableTest(Database* database)
 //  parseAndRunProgramTest -- Parse a DeadEndScript program and run it. In order to call the
 //    main procedure of a DeadEndScript, create a PNProcCall program node, and interpret it.
 //-------------------------------------------------------------------------------------------------
-void parseAndRunProgramTest(void)
+void parseAndRunProgramTest(Database *database)
+//  database -- The database the script runs on.
 {
+#ifdef VSCODE
 	parseProgram("llprogram", "../Reports");
-	//  Create a PNProcCall node to call the main procedure.
+#else
+	parseProgram("llprogram", "/Users/ttw4/Desktop/DeadEnds/Reports/");
+#endif
+//  Create a PNProcCall node to call the main procedure.
 	currentProgramFileName = "internal";
 	currentProgramLineNumber = 1;
 	PNode *pnode = procCallPNode("main", null);
 
 	//  Call the main procedure.
 	SymbolTable *symbolTable = createSymbolTable();
+	Context *context = createContext(symbolTable, database);
 	PValue returnPvalue;
-	interpret(pnode, symbolTable, &returnPvalue);
+	interpret(pnode, context, &returnPvalue);
 }
 
 void validateDatabaseTest(Database *database)

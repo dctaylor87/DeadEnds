@@ -6,7 +6,7 @@
 //    hash table.
 //
 //  Created by Thomas Wetmore on 19 April 2023.
-//  Last changed on 31 May 2023.
+//  Last changed on 15 November 2023.
 //
 
 #include "pvaluetable.h"
@@ -15,7 +15,7 @@
 //  __table -- Create a program value table.
 //    usage: table(IDENT) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __table(PNode *pnode, SymbolTable *symtab, bool *eflg)
+PValue __table(PNode *pnode, Context *context, bool *eflg)
 {
     //  Get the identifier of the table.
     PNode *var = pnode->arguments;
@@ -27,14 +27,14 @@ PValue __table(PNode *pnode, SymbolTable *symtab, bool *eflg)
 
     //  Create the program value table and add it to the symbol table.
     PValueTable *pvtable = createPValueTable();
-    assignValueToSymbol(symtab, var->identifier, PVALUE(PVTable, uTable, pvtable));
+    assignValueToSymbol(context->symbolTable, var->identifier, PVALUE(PVTable, uTable, pvtable));
     return nullPValue;
 }
 
 //  __insert -- Add an element to a program value table.
 //    usage: insert(TAB, STRING, ANY) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __insert (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __insert (PNode *node, Context *context, bool *eflg)
 {
     //  Get the identifier of the table.
     PNode *arg = node->arguments;
@@ -45,7 +45,7 @@ PValue __insert (PNode *node, SymbolTable *stab, bool *eflg)
     }
 
     //  Get the table.
-    PValue pvalue = evaluate(arg, stab, eflg);
+    PValue pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVTable) {
         *eflg = true;
         prog_error(node, "the first argument to insert must identify a table");
@@ -63,7 +63,7 @@ PValue __insert (PNode *node, SymbolTable *stab, bool *eflg)
 
     //  Get the element to insert into the program value table.
     arg = arg->next;
-    pvalue = evaluate(arg, stab, eflg);
+    pvalue = evaluate(arg, context, eflg);
     if (*eflg) {
         prog_error(node, "the third argument to insert must be a value");
         return nullPValue;
@@ -77,11 +77,11 @@ PValue __insert (PNode *node, SymbolTable *stab, bool *eflg)
 //  __lookup -- Look up element in table
 //    usage: lookup(TAB, STRING) -> ANY
 //--------------------------------------------------------------------------------------------------
-PValue __lookup (PNode *node, SymbolTable *stab, bool *eflg)
+PValue __lookup (PNode *node, Context *context, bool *eflg)
 {
     //  Get the table.
     PNode *arg = node->arguments;
-    PValue pvalue = evaluate(arg, stab, eflg);
+    PValue pvalue = evaluate(arg, context, eflg);
     if (*eflg || pvalue.type != PVTable) {
         *eflg = true;
         prog_error(node, "the first argument to lookup must be a table");

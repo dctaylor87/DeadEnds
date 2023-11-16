@@ -4,7 +4,7 @@
 //  sequence.h -- Header file for the Sequence datatype.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 31 October 2023.
+//  Last changed on 15 November 2023.
 //
 
 #ifndef sequence_h
@@ -36,6 +36,7 @@ struct Sequence {
 	int max;           // Max length before resizing.
 	int flags;         // Attribute flags.
 	SequenceEl *data;  // Sequence of items. TODO: Should this be replaced with the new List type?
+	Database *database;  // Database the sequence comes from.
 };
 
 #define IData(s)  ((s)->data)
@@ -47,7 +48,7 @@ struct Sequence {
 #define UNIQUED   (1<<2)
 #define VALUESORT (1<<3)
 
-Sequence *createSequence(void);  // Create a sequence.
+Sequence *createSequence(Database*);  // Create a sequence.
 void deleteSequence(Sequence*, bool fval);  //  Delete a sequence.
 Sequence *copySequence(Sequence*);  //  Copy a sequence.
 int lengthSequence(Sequence*);  //  Return the length of a sequence.
@@ -59,21 +60,20 @@ void keySortSequence(Sequence*);  //  Sort a sequence by key.
 void valueSortSequence(Sequence*); //  Sort a sequence by value (not properly implemented).
 Sequence *uniqueSequence(Sequence*);  //  Return sequence uniqueued from another.
 
-Sequence *personToChildren(GNode *person);  //  Return sequence of a person's children.
-Sequence *personToFathers(GNode *person);   //  Return sequence of a person's fathers.
-Sequence *personToMothers(GNode *person);   //  Return sequence of a person's mothers.
-Sequence *familyToChildren(GNode *family);  //  Return sequence of a family's children.
-Sequence *familyToFathers(GNode *family);  //  Return sequence of a family's fathers.
-Sequence *familyToMothers(GNode *family);  //  Return sequence of a family's mothers.
-Sequence *personToSpouses(GNode *person);  //  Return sequence of a person's spouses.
-Sequence *personToFamilies(GNode *person, bool);  //  Return sequence of a person's families.
-Sequence *nameToSequence(String name, NameIndex*);  //  Return sequence of persons who match a name.
+Sequence *personToChildren(GNode *person, Database*);  //  Return sequence of a person's children.
+Sequence *personToFathers(GNode *person, Database*);   //  Return sequence of a person's fathers.
+Sequence *personToMothers(GNode *person, Database*);   //  Return sequence of a person's mothers.
+Sequence *familyToChildren(GNode *family, Database*);  //  Return sequence of a family's children.
+Sequence *familyToFathers(GNode *family, Database*);  //  Return sequence of a family's fathers.
+Sequence *familyToMothers(GNode *family, Database*);  //  Return sequence of a family's mothers.
+Sequence *personToSpouses(GNode *person, Database*);  //  Return sequence of a person's spouses.
+Sequence *personToFamilies(GNode *person, bool, Database*);  //  Return sequence of a person's families.
+Sequence *nameToSequence(String name, NameIndex*, Database*);  //  Return sequence of persons who match a name.
 Sequence *refn_to_indiseq(String refn);
 
 Sequence *unionSequence(Sequence*, Sequence*);
 Sequence *intersectSequence(Sequence*, Sequence*); 
 Sequence *differenceSequence(Sequence*, Sequence*);
-
 Sequence *childSequence(Sequence*);
 Sequence *parentSequence(Sequence*);
 Sequence *spouseSequence(Sequence*);

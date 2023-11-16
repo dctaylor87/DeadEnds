@@ -5,7 +5,7 @@
 //    nodes that hold gedcom nodes.
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 8 April 2023.
+//  Last changed on 17 November 2023.
 //
 
 #include "standard.h"
@@ -18,10 +18,10 @@
 //    usage: key(INDI|FAM) -> STRING
 //    NOTE: THIS IS A DIFFERENT INTERFACE THAN THAT USED BY LIFELINES.
 //--------------------------------------------------------------------------------------------------
-PValue __key(PNode *pnode, SymbolTable *symtab, bool* eflg)
+PValue __key(PNode *pnode, Context *context, bool* eflg)
 {
-    ASSERT(pnode && symtab);
-    PValue value = evaluate(pnode->arguments, symtab, eflg);
+    ASSERT(pnode && context);
+    PValue value = evaluate(pnode->arguments, context, eflg);
     if (*eflg || !isRecordType(value.type)) return nullPValue;
     GNode* gnode = value.value.uGNode;
     if (gnode && gnode->key) return PVALUE(PVString, uString, gnode->key);
@@ -31,10 +31,10 @@ PValue __key(PNode *pnode, SymbolTable *symtab, bool* eflg)
 //  __xref -- Return the xref (aka key) field of a GNode.
 //     usage: xref(NODE) -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __xref (PNode *pnode, SymbolTable *symtab, bool* eflg)
+PValue __xref (PNode *pnode, Context *context, bool* eflg)
 {
-    ASSERT(pnode && symtab);
-    PValue value = evaluate(pnode->arguments, symtab, eflg);
+    ASSERT(pnode && context);
+    PValue value = evaluate(pnode->arguments, context, eflg);
     if (*eflg || !isGNodeType(value.type)) return nullPValue;
     GNode* gnode = value.value.uGNode;
     if (!gnode->key) return nullPValue;
@@ -44,13 +44,13 @@ PValue __xref (PNode *pnode, SymbolTable *symtab, bool* eflg)
 //  __tag -- Return the tag field of a Gedcom node.
 //    usage: tag(NODE) -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __tag (PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __tag (PNode *pnode, Context *context, bool* errflg)
 //  pnode -- Program node of the tag builtin.
 //  symtab -- Local symbol table.
 //  errflg -- Error flag.
 {
-    ASSERT(pnode && symtab);
-    GNode *gnode = evaluateGNode(pnode->arguments, symtab, errflg);
+    ASSERT(pnode && context);
+    GNode *gnode = evaluateGNode(pnode->arguments, context, errflg);
     if (*errflg || !gnode) {
         *errflg = true;
         return nullPValue;
@@ -61,11 +61,11 @@ PValue __tag (PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __value -- Return the value field of a gedcom node. It may be empty.
 //    usage: value(NODE) -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __value (PNode *pnode, SymbolTable *symtab, bool* eflg)
+PValue __value (PNode *pnode, Context *context, bool* eflg)
 //  pnode -- Program node of the value builtin.
 {
-    ASSERT(pnode && symtab);
-    GNode *gnode = evaluateGNode(pnode->arguments, symtab, eflg);
+    ASSERT(pnode && context);
+    GNode *gnode = evaluateGNode(pnode->arguments, context, eflg);
     if (*eflg || !gnode) {
         *eflg = true;
         return nullPValue;
@@ -77,10 +77,10 @@ PValue __value (PNode *pnode, SymbolTable *symtab, bool* eflg)
 //  __parent -- Return the parent node of a gedcom node.
 //    usage: parent(NODE) -> NODE
 //--------------------------------------------------------------------------------------------------
-PValue __parent(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __parent(PNode *pnode, Context *context, bool* errflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* gnode = evaluateGNode(pnode->arguments, symtab, errflg);
+    ASSERT(pnode && context);
+    GNode* gnode = evaluateGNode(pnode->arguments, context, errflg);
     if (*errflg || !gnode) {
         *errflg = true;
         return nullPValue;
@@ -92,10 +92,10 @@ PValue __parent(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __child -- Return the child node of a gedcom node.
 //    usage: child(GNODE) -> GNODE
 //--------------------------------------------------------------------------------------------------
-PValue __child(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __child(PNode *pnode, Context *context, bool* errflg)
 {
-    ASSERT(pnode && symtab);
-    GNode* gnode = evaluateGNode(pnode->arguments, symtab, errflg);
+    ASSERT(pnode && context);
+    GNode* gnode = evaluateGNode(pnode->arguments, context, errflg);
     if (*errflg || !gnode) {
         *errflg = true;
         return nullPValue;
@@ -107,10 +107,10 @@ PValue __child(PNode *pnode, SymbolTable *symtab, bool* errflg)
 //  __sibling -- Return the sibling of a gedcom node.
 //    usage: sibling(NODE) -> NODE
 //--------------------------------------------------------------------------------------------------
-PValue __sibling(PNode *pnode, SymbolTable *symtab, bool* errflg)
+PValue __sibling(PNode *pnode, Context *context, bool* errflg)
 {
-    ASSERT(pnode && symtab);
-    GNode *gnode = evaluateGNode(pnode->arguments, symtab, errflg);
+    ASSERT(pnode && context);
+    GNode *gnode = evaluateGNode(pnode->arguments, context, errflg);
     if (*errflg || !gnode) {
         *errflg = true;
         return nullPValue;
