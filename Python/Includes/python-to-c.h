@@ -31,7 +31,7 @@ extern int llpy_debug;
 
 extern PyObject *_llpy_key (PyObject *self, PyObject *args, PyObject *kw);
 extern PyObject *_llpy_top_node (PyObject *self, PyObject *args);
-extern RECORD __llpy_key_to_record (CString key, int int_type);
+extern RECORD __llpy_key_to_record (CString key, int *int_type);
 
 extern int _py_traverse_nodes (GNode *node, int level,
 			       int (*func)(GNode *, int, void *),

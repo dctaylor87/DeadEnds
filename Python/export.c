@@ -289,8 +289,9 @@ static bool
 valid_submitter (CString submitter)
 {
   RECORD record;
+  int type = 'X';
 
-  record = __llpy_key_to_record (submitter, 'X');
+  record = __llpy_key_to_record (submitter, &type);
   if (! record)
     return false;
 

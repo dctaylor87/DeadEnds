@@ -125,7 +125,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 	  return NULL;
 	}
     }
-  record = __llpy_key_to_record (key, int_type);
+  record = __llpy_key_to_record (key, &int_type);
 
   if (! record)
     Py_RETURN_NONE;		/* that keynum has no record */
@@ -162,7 +162,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   return ((PyObject *) py_record);
 }
 
-RECORD __llpy_key_to_record (CString key, int int_type)
+RECORD __llpy_key_to_record (CString key, int *int_type)
 {
   RECORD record;
   int added_at = 0;
@@ -186,7 +186,7 @@ RECORD __llpy_key_to_record (CString key, int int_type)
 
   key_buffer[ndx + added_at] = 0;
 
-  switch (int_type)
+  switch (*int_type)
     {
     case 'I':
       record = qkey_to_irecord (key_buffer);
@@ -206,27 +206,44 @@ RECORD __llpy_key_to_record (CString key, int int_type)
     default:
       /* caller did not specify a type, try them all until we find it.
 	 If all fail, we will return None */
-      int_type = 'I';
+      *int_type = 'I';
       record = qkey_to_irecord (key_buffer);
-      if (! record)
+      if (record)
 	{
-	  int_type = 'F';
-	  record = qkey_to_frecord (key_buffer);
+	  *int_type = 'I';
+	  break;
 	}
-      if (! record)
+      else
+	record = qkey_to_frecord (key_buffer);
+
+      if (record)
 	{
-	  int_type = 'S';
-	  record = qkey_to_srecord (key_buffer);
+	  *int_type = 'F';
+	  break;
 	}
-      if (! record)
+      else
+	record = qkey_to_srecord (key_buffer);
+
+      if (record)
 	{
-	  int_type = 'E';
-	  record = qkey_to_erecord (key_buffer);
+	  *int_type = 'S';
+	  break;
 	}
-      if (! record)
+      else
+	record = qkey_to_erecord (key_buffer);
+
+      if (record)
 	{
-	  int_type = 'X';
-	  record = qkey_to_orecord (key_buffer);
+	  *int_type = 'E';
+	  break;
+	}
+      else
+	record = qkey_to_orecord (key_buffer);
+
+      if (record)
+	{
+	  *int_type = 'X';
+	  break;
 	}
     }
   return record;
