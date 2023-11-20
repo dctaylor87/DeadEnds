@@ -17,7 +17,7 @@
 #include "stringtable.h"
 #include "nameindex.h"
 
-//static bool debugging = true;
+static bool debugging = true;
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
@@ -126,36 +126,37 @@ GNode *keyToEvent(String key, Database *database)
 
 static int count = 0;  // Debugging.
 
-//  storeRecord -- Store a gedcom record in the database by adding it to the record index of
+//  storeRecord -- Store a Gedcom node tree in the database by adding it to the record index of
 //    its type. Return true if the record was added successfully.
 //--------------------------------------------------------------------------------------------------
-bool storeRecord(Database *database, GNode* root)
+bool storeRecord(Database *database, GNode* root, int lineNumber)
 //  database -- Database to add the record to
 //  root -- Root of a record tree to store in the database.
+//  lineNumber -- Line number in the Gedcom file where th record began.
 {
-	//if (debugging) printf("storeRecord called\n");
+	if (debugging) printf("storeRecord called\n");
 	ASSERT(root);
 	RecordType type = recordType(root);
-	//if (debugging) printf("type of record is %d\n", type);
+	if (debugging) printf("type of record is %d\n", type);
 	if (type == GRHeader || type == GRTrailer) return true;  // Ignore HEAD and TRLR records.
 	ASSERT(root->key);
 	count++;
 	String key = root->key;  // MNOTE: insertInRecord copies the key.
 	switch (type) {
 		case GRPerson:
-			insertInRecordIndex(database->personIndex, key, root);
+			insertInRecordIndex(database->personIndex, key, root, lineNumber);
 			return true;
 		case GRFamily:
-			insertInRecordIndex(database->familyIndex, key, root);
+			insertInRecordIndex(database->familyIndex, key, root, lineNumber);
 			return true;
 		case GRSource:
-			insertInRecordIndex(database->sourceIndex, key, root);
+			insertInRecordIndex(database->sourceIndex, key, root, lineNumber);
 			return true;
 		case GREvent:
-			insertInRecordIndex(database->eventIndex, key, root);
+			insertInRecordIndex(database->eventIndex, key, root, lineNumber);
 			return true;
 		case GROther:
-			insertInRecordIndex(database->otherIndex, key, root);
+			insertInRecordIndex(database->otherIndex, key, root, lineNumber);
 			return true;
 		default:
 			ASSERT(false);

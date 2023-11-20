@@ -4,7 +4,7 @@
 //  validate.c -- Functions that validate Gedcom records.
 //
 //  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 14 November 2023.
+//  Last changed on 16 November 2023.
 //
 
 #include "validate.h"
@@ -25,9 +25,6 @@ static void validateFamily(GNode*, Database*, ErrorLog*);
 static void validateSource(GNode*, Database*, ErrorLog*);
 static void validateEvent(GNode*, Database*, ErrorLog*);
 static void validateOther(GNode*, Database*, ErrorLog*);
-
-//static GNode *getFamily(String key, RecordIndex*);
-//static GNode *getPerson(String key, RecordIndex*);
 
 int numValidations = 0;  //  DEBUG.
 
@@ -83,7 +80,11 @@ static void validatePerson(GNode *person, Database *database, ErrorLog *errorLog
 			if (debugging) { printf("    Child %d: %s %s\n", count, child->key, NAME(child)->value); }
 			if (person == child) numOccurrences++;
 		ENDCHILDREN
-		if (numOccurrences != 1) printf("ERROR ERROR ERROR\n");
+		if (numOccurrences == 0) {
+			addErrorToLog(errorLog, createError(linkageError, database->fileName, 0, "Child not found"));
+		} else if (numOccurrences > 1) {
+			addErrorToLog(errorLog, createError(linkageError, database->fileName, 0, "Too many children found"));
+		}
 	ENDFAMCS
 
 	//  Loop through the families the person is a spouse in.
@@ -100,7 +101,7 @@ static void validatePerson(GNode *person, Database *database, ErrorLog *errorLog
 		ASSERT(person == parent);  // TODO: SHOULD NOT BE AS ASSERT HERE: SHOULD BE AN ERROR.
 	} ENDFAMILIES
 
-	printf("validate person: %s: \n", person->key);  //  REMOVE: FOR DEBUGGING.
+	if (debugging) printf("validate person: %s: \n", person->key);  //  REMOVE: FOR DEBUGGING.
 	//  Validate existance of NAME and SEX lines.
 	//  Find all other links in the record and validate them.
 }

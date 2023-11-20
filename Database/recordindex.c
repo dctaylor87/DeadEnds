@@ -57,10 +57,11 @@ void deleteRecordIndex(RecordIndex *index)
 //    TODO: Shouldn't this function create an element and then delegate to the hash table.
 //--------------------------------------------------------------------------------------------------
 static int recordInsertCount = 0;  //  Used for debugging.
-void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
+void insertInRecordIndex(RecordIndex *index, String key, GNode* root, int lineNumber)
 //  index -- Record index to add the (key, root) entry to.
 //  key -- Key (minus @-signs) of a Gedcom node record.
 //  root -- Root of the Gedom record.
+//  lineNumber -- Line number where the record was found in the Gedcom file.
 {
 	recordInsertCount++;  //  Debugging.
 	ASSERT(index && key && root);
@@ -79,6 +80,7 @@ void insertInRecordIndex(RecordIndex *index, String key, GNode* root)
 		element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
 		//element->key = strsave(key);
 		element->root = root;  //  MNOTE: Not copied, records persist.
+		element->lineNumber = lineNumber;
 		appendToBucket(bucket, element);
 	} //else {
 		//printf("The element exists\n");  //  Debugging.

@@ -4,7 +4,7 @@
 //  errors.c -- Code for handling DeadEnds errors.
 //
 //  Created by Thomas Wetmore on 4 July 2023.
-//  Last changed on 5 November 2023.
+//  Last changed on 20 November 2023.
 //
 
 #include "errors.h"
@@ -17,7 +17,7 @@
 //    not lexicographably.
 //--------------------------------------------------------------------------------------------------
 #define NUMKEYS 64
-static String getErrorKey(Word error)
+static String getErrKey(Word error)
 {
 	static char buffer[NUMKEYS][128];
 	static int dex = 0;
@@ -32,22 +32,20 @@ static String getErrorKey(Word error)
 	return scratch;
 }
 
-//  compareError -- Compare two errors for their placement in an error log.
+//  cmpError -- Compare two errors for their placement in an error log.
 //--------------------------------------------------------------------------------------------------
-static int compareError(Word errorOne, Word errorTwo)
+static int cmpError(Word errorOne, Word errorTwo)
 {
-	String key1 = getErrorKey(errorOne);
-	String key2 = getErrorKey(errorTwo);
+	String key1 = getErrKey(errorOne);
+	String key2 = getErrKey(errorTwo);
 	return strcmp(key1, key2);
 }
 
-//  deleteError -- Free up the memory for an error when an error log is freed.
+//  delError -- Free up the memory for an error when an error log is freed.
 //--------------------------------------------------------------------------------------------------
-static void deleteError(Word error)
+static void delError(Word error)
 {
-	String fileName = ((Error*) error)->fileName;
 	String message = ((Error*) error)->message;
-	if (fileName) stdfree(fileName);
 	if (message) stdfree(message);
 	stdfree(error);
 	return;
@@ -57,26 +55,41 @@ static void deleteError(Word error)
 //--------------------------------------------------------------------------------------------------
 ErrorLog *createErrorLog(void)
 {
-	ErrorLog *errorLog = createList(compareError, deleteError,  getErrorKey);
+	ErrorLog *errorLog = createList(cmpError, delError,  getErrKey);
 	errorLog->keepSorted = true;
 	return errorLog;
 }
 
-//  createError -- Create an error.
+//  createError -- Create an Error.
 //--------------------------------------------------------------------------------------------------
 Error *createError(ErrorType type, String fileName, int lineNumber, String message)
 {
 	Error *error = (Error*) stdalloc(sizeof(Error));
 	error->type = type;
-	error->fileName = strsave(fileName);
+	error->fileName = fileName;  // MNOTE: Not saved; do not free.
 	error->lineNumber = lineNumber;
 	error->message = strsave(message);
 	return error;
 }
 
+//  deleteError -- Delete an Error. MNOTE: Not freeing fileName.
+//-------------------------------------------------------------------------------------------------
+void deleteError (Error *error)
+{
+	if (error->message) stdfree(error->message);
+	stdfree(error);
+}
+
+//  addErrorToLog -- Add an Error to an ErrorLog.
+//-------------------------------------------------------------------------------------------------
+void addErrorToLog (ErrorLog *errorLog, Error *error)
+{
+	appendListElement(errorLog, error);
+}
+
 //  addErrorToLog -- Add an error to an error log.
 //--------------------------------------------------------------------------------------------------
-void addErrorToLog(ErrorLog *errorLog, ErrorType errorType, String fileName, int lineNumber,
+void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType, String fileName, int lineNumber,
 	String message)
 {
 	appendListElement(errorLog, createError(errorType, fileName, lineNumber, message));

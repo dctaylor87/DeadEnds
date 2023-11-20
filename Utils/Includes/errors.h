@@ -1,9 +1,9 @@
 //
 //  errors.h
-//  JustParsing
+//  DeadEnds
 //
 //  Created by Thomas Wetmore on 4 July 2023.
-//  Last changed on 5 July 2023.
+//  Last changed on 19 November 2023.
 //
 
 #ifndef errors_h
@@ -14,7 +14,7 @@
 
 //  ErrorType -- Types of errors.
 //--------------------------------------------------------------------------------------------------
-typedef enum {
+typedef enum ErrorType {
     systemError,
     syntaxError,
     gedcomError,
@@ -23,8 +23,7 @@ typedef enum {
 
 // Error -- structure for holding an error.
 //--------------------------------------------------------------------------------------------------
-
-typedef struct {
+typedef struct Error {
     ErrorType type;  //  Type of this error.
     String fileName;  //  Name of file, if any, containing the error.
     int lineNumber;  //  Line number in file, if any, where the error occurs.
@@ -36,7 +35,9 @@ typedef struct {
 #define ErrorLog List
 
 extern ErrorLog *createErrorLog(void);
+extern void deleteErrorLog(ErrorLog*);
 extern Error *createError(ErrorType type, String fileName, int lineNumber, String message);
-extern void addErrorToLog(ErrorLog* log, ErrorType, String, int, String);
+extern void deleteError(Error*);
+extern void addErrorToLog(ErrorLog*, Error*);
 
 #endif // errors_h

@@ -38,7 +38,7 @@ ErrorLog is a synonym of List. It is a specialized List type.
 |:---|:---|
 |ErrorLog \*createErrorLog(void)|Create an Error log.|
 |Error \*createError(ErrorType, String fname, int lineno, String message)|Create an Error.|
-|void addErrorToLog(ErrorLog*, ErrorType, String, int, String)|Create an Error and add it to a log.|
+|void addErrorToLog(ErrorLog\*, Error\*)|Add an Error to an ErrorLog.|
 
 ### Notes
 
