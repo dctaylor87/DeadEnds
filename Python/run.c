@@ -14,6 +14,7 @@
 #if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
+#include "llnls.h"
 #include "path.h"		/* fopenpath */
 #include "gnode.h"
 #include "recordindex.h"

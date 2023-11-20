@@ -18,6 +18,7 @@
 #if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
+#include "llnls.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
 #include "database.h"
