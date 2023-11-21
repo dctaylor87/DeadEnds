@@ -79,7 +79,7 @@ PValue eval_and_coerce(int, PNode*, Context*, bool*);
 //GNode* evaluateFamily(PNode*, Context*, bool*);
 GNode* evaluateGNode(PNode*, Context*, bool*);
 //void extract_date(String, int*, int*, int*, int*, String*);
-String format_date(String, int, int, int, int, bool);
+//String format_date(String, int, int, int, int, bool); // declared in date.h
 void free_all_pnodes(void);
 void free_pnode_tree(PNode*);
 PNode *iden_node(String);

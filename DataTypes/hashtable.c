@@ -24,7 +24,6 @@ static bool debugging = false;  //  Debugging flag.
 //  TODO: Can we make the tunnel dissapear?
 extern Word* ldata;
 extern int(*lcmp)(Word, Word);
-extern void quickSort(int left, int right);
 
 //  createHashTable -- Create a hash table.
 //--------------------------------------------------------------------------------------------------

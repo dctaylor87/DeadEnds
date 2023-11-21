@@ -15,8 +15,6 @@
 #include "gedcom.h"
 #include "builtintable.h"
 
-extern const PValue nullPValue;  // Defined in builtin.c
-
 //  isPVGNodeType -- Return true if a type is one of the PGNode types.
 //--------------------------------------------------------------------------------------------------
 bool isGNodeType(PVType type)

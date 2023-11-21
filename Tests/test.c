@@ -14,6 +14,8 @@
 #include "sequence.h"
 #include "database.h"
 #include "list.h"
+#include "import.h"
+#include "validate.h"
 
 //static bool debugging = false;
 
@@ -24,15 +26,12 @@ static FILE *outputFile = null;
 
 extern FunctionTable *procedureTable;
 
-extern Database *importFromFile(String, ErrorLog*);
 static Database *createDatabaseTest(void);
 static void listTest(Database*, FILE*);
 static void forHashTableTest(Database*);
 static void parseAndRunProgramTest(Database*);
 static void validateDatabaseTest(Database*);
 static void forTraverseTest(Database*);
-
-extern bool validateDatabase(Database*, ErrorLog*);
 
 int main(void)
 {

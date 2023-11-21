@@ -15,6 +15,7 @@
 #include "recordindex.h"
 #include "lineage.h"
 #include "errors.h"
+#include "name.h"
 
 bool validateDatabase(Database*, ErrorLog*);
 
@@ -68,8 +69,6 @@ bool validateFamilyIndex(Database *database, ErrorLog *errorLog)
 	ENDHASHTABLE
 	return true;
 }
-
-extern String nameString(String);
 
 //  validatePerson -- Validate a person record. Check all FAMC and FAMS links to families.
 //--------------------------------------------------------------------------------------------------

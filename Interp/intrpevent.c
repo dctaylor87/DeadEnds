@@ -13,6 +13,7 @@
 #include "pvalue.h"
 #include "evaluate.h"
 #include "builtintable.h"
+#include "date.h"
 
 static int daycode = 0;
 static int monthcode = 3;

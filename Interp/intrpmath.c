@@ -324,8 +324,6 @@ static void evalBinary(PNode *pnode, Context *context, PValue* val1, PValue* val
 //  val2 -- (output) Program value of the evaluated second argument.
 //  eflag -- (output) Error flag.
 {
-    extern bool numericPValue(PValue pvalue);
-
     // Get the two arguments as program nodes.
     PNode *arg1 = pnode->arguments;
     if (!arg1) { *eflag = true; return; }
