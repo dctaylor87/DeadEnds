@@ -108,7 +108,7 @@ static void parseFile(String fileName, String searchPath)
     // Set the global file name.
     currentProgramFileName = fileName;
     // Try to open the file for reading and handle errors.
-    currentProgramFile = fopenpath(fileName, "r", searchPath);
+    currentProgramFile = fopenPath(fileName, "r", searchPath);
     if (!currentProgramFile) {
         printf("Error: file \"%s\" not found.\n", fileName);
         currentProgramFileName = null;

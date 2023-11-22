@@ -4,7 +4,7 @@
 //  database.h
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed on 18 November 2023.
+//  Last changed on 22 November 2023.
 //
 
 #ifndef database_h
@@ -22,6 +22,7 @@ typedef HashTable RecordIndex;
 //--------------------------------------------------------------------------------------------------
 typedef struct Database {
     String fileName;  // Name of Gedcom file this database was built from.
+    String lastSegment;
     RecordIndex *personIndex;
     RecordIndex *familyIndex;
     RecordIndex *sourceIndex;

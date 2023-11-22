@@ -7,7 +7,7 @@
 //    records is also done.
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed 1 November 2023.
+//  Last changed 22 November 2023.
 //
 
 #include "database.h"
@@ -16,15 +16,17 @@
 #include "recordindex.h"
 #include "stringtable.h"
 #include "nameindex.h"
+#include "path.h"
 
-static bool debugging = true;
+static bool debugging = false;
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
 Database *createDatabase(String fileName)
 {
 	Database *database = (Database*) stdalloc(sizeof(Database));
-	database->fileName = fileName;
+	database->fileName = strsave(fileName);
+	database->lastSegment = strsave(lastPathSegment(fileName));
 	database->personIndex = createRecordIndex();
 	database->familyIndex = createRecordIndex();
 	database->sourceIndex = createRecordIndex();
@@ -183,8 +185,7 @@ void indexNames(Database* database)
 	int i, j;  //  State variables.
 	static int count = 0;
 
-	//  DEBUG
-	printf("indexNames\n");
+	if (debugging) printf("Start indexNames\n");
 
 	//  Get the first entry in the person index.
 	RecordIndexEl* entry = firstInHashTable(database->personIndex, &i, &j);
@@ -193,15 +194,13 @@ void indexNames(Database* database)
 		//  MNOTE: The key is heapified in insertInNameIndex.
 		String recordKey = root->key;
 		//  DEBUG
-		//printf("indexNames: recordKey: %s\n", recordKey);
+		if (debugging) printf("indexNames: recordKey: %s\n", recordKey);
 		for (GNode* name = NAME(root); name && eqstr(name->tag, "NAME"); name = name->sibling) {
 			if (name->value) {
-				//  DEBUG
-				//printf("indexNames: name->value: %s\n", name->value);
+				if (debugging) printf("indexNames: name->value: %s\n", name->value);
 				//  MNOTE: nameKey is in data space. It is heapified in insertInNameIndex.
 				String nameKey = nameToNameKey(name->value);
-				//  DEBUG
-				//printf("indexNames: nameKey: %s\n", nameKey);
+				if (debugging) printf("indexNames: nameKey: %s\n", nameKey);
 				insertInNameIndex(database->nameIndex, nameKey, recordKey);
 				count++;
 			}
@@ -211,7 +210,7 @@ void indexNames(Database* database)
 		entry = nextInHashTable(database->personIndex, &i, &j);
 	}
 	//showNameIndex(database->nameIndex);
-	printf("The number of names indexed was %d\n", count);
+	/*if (debugging) */ printf("The number of names indexed was %d\n", count);
 }
 
 //  Some debugging functions.

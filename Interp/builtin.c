@@ -5,7 +5,7 @@
 //    language.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 14 May 2023.
+//  Last changed on 22 November 2023.
 //
 
 #include "standard.h"
@@ -19,8 +19,8 @@
 #include "database.h"    // personIndex, familyIndex.
 #include "hashtable.h"
 //#include "gedcom.h"
-#include "evaluate.h"  // evaluate().
-#include "path.h"      // fopenpath().
+#include "evaluate.h"  // evaluate.
+#include "path.h"      // fopenPath.
 #include "symboltable.h"
 
 //#define Table SymbolTable
@@ -38,11 +38,11 @@ const PValue newlinePValue = PVALUE(PVString, uString, "\n");
 //--------------------------------------------------------------------------------------------------
 bool isZeroVUnion(PVType type, VUnion vunion)
 {
-    switch (type) {
-        case PVInt: return vunion.uInt == 0;
-        case PVFloat: return vunion.uFloat == 0;
-        default: return false;
-    }
+	switch (type) {
+		case PVInt: return vunion.uInt == 0;
+		case PVFloat: return vunion.uFloat == 0;
+		default: return false;
+	}
 }
 
 
@@ -174,9 +174,9 @@ bool isZeroVUnion(PVType type, VUnion vunion)
 //--------------------------------------------------------------------------------------------------
 PValue __strsoundex(PNode *expr, Context *context, bool* eflg)
 {
-    PValue pvalue = evaluate(expr->arguments, context, eflg);
-    if (*eflg || pvalue.type != PVString || !pvalue.value.uString) return nullPValue;
-    return PVALUE(PVString, uString, strsave(soundex(pvalue.value.uString)));
+	PValue pvalue = evaluate(expr->arguments, context, eflg);
+	if (*eflg || pvalue.type != PVString || !pvalue.value.uString) return nullPValue;
+	return PVALUE(PVString, uString, strsave(soundex(pvalue.value.uString)));
 }
 
 //  __set -- Assignment "statement".
@@ -184,13 +184,13 @@ PValue __strsoundex(PNode *expr, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __set(PNode *pnode, Context *context, bool* eflg)
 {
-    PNode *iden = pnode->arguments;
-    PNode *expr = iden->next;
-    if (iden->type != PNIdent) { *eflg = true; return nullPValue; }
-    PValue value = evaluate(expr, context, eflg);
-    if (*eflg) return nullPValue;
-    assignValueToSymbol(context->symbolTable, iden->identifier, value);
-    return nullPValue;
+	PNode *iden = pnode->arguments;
+	PNode *expr = iden->next;
+	if (iden->type != PNIdent) { *eflg = true; return nullPValue; }
+	PValue value = evaluate(expr, context, eflg);
+	if (*eflg) return nullPValue;
+	assignValueToSymbol(context->symbolTable, iden->identifier, value);
+	return nullPValue;
 }
 
 //  __d -- Return cardinal integer as a string.
@@ -198,24 +198,24 @@ PValue __set(PNode *pnode, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __d(PNode *expr, Context *context, bool* eflg)
 {
-    char scratch[20];
-    PValue value = evaluate(expr->arguments, context, eflg);
-    if (value.type == PVBool)
-        return PVALUE(PVString, uString, value.value.uBool ? "1" : "0");
-    if (*eflg || value.type != PVInt) return nullPValue;
-    sprintf(scratch, "%ld", value.value.uInt);
-    return PVALUE(PVString, uString, strsave(scratch));
+	char scratch[20];
+	PValue value = evaluate(expr->arguments, context, eflg);
+	if (value.type == PVBool)
+		return PVALUE(PVString, uString, value.value.uBool ? "1" : "0");
+	if (*eflg || value.type != PVInt) return nullPValue;
+	sprintf(scratch, "%ld", value.value.uInt);
+	return PVALUE(PVString, uString, strsave(scratch));
 }
 
 //  __f -- Return floating point value as a string.
 //---------------------------------------------------------------------------------------------------
 PValue __f(PNode *expr, Context *context, bool *errflg)
 {
-    char scratch[20];
-    PValue value = evaluate(expr->arguments, context, errflg);
-    if (*errflg || value.type != PVFloat) return nullPValue;
-    sprintf(scratch, "%4f", value.value.uFloat);
-    return PVALUE(PVString, uString, strsave(scratch));
+	char scratch[20];
+	PValue value = evaluate(expr->arguments, context, errflg);
+	if (*errflg || value.type != PVFloat) return nullPValue;
+	sprintf(scratch, "%4f", value.value.uFloat);
+	return PVALUE(PVString, uString, strsave(scratch));
 }
 
 //  __alpha -- Convert small integer (between 1 and 26) to a letter.
@@ -223,55 +223,55 @@ PValue __f(PNode *expr, Context *context, bool *errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __alpha(PNode *expr, Context *context, bool* eflg)
 {
-    char scratch[4];
-    PValue value = evaluate(expr->arguments, context, eflg);
-    if (*eflg || value.type != PVInt) return nullPValue;
-    long lvalue = value.value.uInt;
-    if (lvalue < 1 || lvalue > 26) return __d(expr, context, eflg);
-    sprintf(scratch, "%c", 'a' + (int) lvalue - 1);
-    value.type = PVString;
-    return PVALUE(PVString, uString, strsave(scratch));
+	char scratch[4];
+	PValue value = evaluate(expr->arguments, context, eflg);
+	if (*eflg || value.type != PVInt) return nullPValue;
+	long lvalue = value.value.uInt;
+	if (lvalue < 1 || lvalue > 26) return __d(expr, context, eflg);
+	sprintf(scratch, "%c", 'a' + (int) lvalue - 1);
+	value.type = PVString;
+	return PVALUE(PVString, uString, strsave(scratch));
 }
 
 //  __ord -- Convert a small integer to an ordinal string.
 //    usage: ord(INT) -> STRING
 //--------------------------------------------------------------------------------------------------
 static char *ordinals[] = {
-    "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
-    "tenth", "eleventh", "twelfth"
+	"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
+	"tenth", "eleventh", "twelfth"
 };
 PValue __ord(PNode *expr, Context *context, bool* eflg)
 {
-    char scratch[12];
-    PValue value = evaluate(expr->arguments, context, eflg);
-    if (*eflg || value.type != PVInt) return nullPValue;
-    long lvalue = value.value.uInt;
-    value.type = PVString;
-    if (lvalue < 1) return __d(expr, context, eflg);
-    if (lvalue > 12) {
-        sprintf(scratch, "%ldth", lvalue);
-        value.value.uString = strsave(scratch);
-    } else {
-        value.value.uString = strsave(ordinals[lvalue - 1]);
-    }
-    return value;
+	char scratch[12];
+	PValue value = evaluate(expr->arguments, context, eflg);
+	if (*eflg || value.type != PVInt) return nullPValue;
+	long lvalue = value.value.uInt;
+	value.type = PVString;
+	if (lvalue < 1) return __d(expr, context, eflg);
+	if (lvalue > 12) {
+		sprintf(scratch, "%ldth", lvalue);
+		value.value.uString = strsave(scratch);
+	} else {
+		value.value.uString = strsave(ordinals[lvalue - 1]);
+	}
+	return value;
 }
 
 //  __card -- Convert small integer to cardinal string
 //    usage: card(INT) -> STRING
 //--------------------------------------------------------------------------------------------------
 static char *cardinals[] = {
-    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-    "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
-    "eighteen", "nineteen", "twenty"
+	"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+	"eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+	"eighteen", "nineteen", "twenty"
 };
 PValue __card (PNode *expr, Context *context, bool* eflg)
 {
-    PValue value = evaluate(expr->arguments, context, eflg);
-    if (*eflg || value.type != PVInt) return nullPValue;
-    long lvalue = value.value.uInt;
-    if (lvalue < 0 || lvalue > 20) return __d(expr, context, eflg);
-    return PVALUE(PVString, uString, cardinals[lvalue]);
+	PValue value = evaluate(expr->arguments, context, eflg);
+	if (*eflg || value.type != PVInt) return nullPValue;
+	long lvalue = value.value.uInt;
+	if (lvalue < 0 || lvalue > 20) return __d(expr, context, eflg);
+	return PVALUE(PVString, uString, cardinals[lvalue]);
 }
 
 //  __roman -- Convert integer to Roman numeral. If out of Roman range return as simple string.
@@ -279,21 +279,21 @@ PValue __card (PNode *expr, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __roman(PNode *node, Context *context, bool* eflg)
 {
-    char scratch[256] = "";
-    static char* symbols[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i"};
-    static int values[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+	char scratch[256] = "";
+	static char* symbols[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i"};
+	static int values[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
 
-    PValue value = evaluate(node->arguments, context, eflg);
-    if (*eflg || value.type != PVInt) return nullPValue;
-    int num = (int) value.value.uInt;
-    if (num > 3999) return (PValue) __d(node, context, eflg);
-    for (int i = 0; num > 0; i++) {
-        while (num >= values[i]) {
-            strcat(scratch, symbols[i]);
-            num -= values[i];
-        }
-    }
-    return PVALUE(PVString, uString, strsave(scratch));
+	PValue value = evaluate(node->arguments, context, eflg);
+	if (*eflg || value.type != PVInt) return nullPValue;
+	int num = (int) value.value.uInt;
+	if (num > 3999) return (PValue) __d(node, context, eflg);
+	for (int i = 0; num > 0; i++) {
+		while (num >= values[i]) {
+			strcat(scratch, symbols[i]);
+			num -= values[i];
+		}
+	}
+	return PVALUE(PVString, uString, strsave(scratch));
 }
 
 //  __strcmp -- Compare two strings and return their relationship.
@@ -302,23 +302,23 @@ PValue __roman(PNode *node, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------b
 PValue __strcmp (PNode *pnode, Context *context, bool *eflg)
 {
-    PNode *arg = pnode->arguments;
-    PValue pvalue = evaluate(arg, context, eflg);
-    if (pvalue.type != PVString) {
-        prog_error(pnode, "the first argument to strcmp must be a string");
-        *eflg = true;
-        return nullPValue;
-    }
-    String str1 = pvalue.value.uString;
-    arg = arg->next;
-    pvalue = evaluate(arg, context, eflg);
-    if (pvalue.type != PVString) {
-        prog_error(pnode, "the second argument to strcmp must be a string");
-        *eflg = true;
-        return nullPValue;
-    }
-    String str2 = pvalue.value.uString;
-    return PVALUE(PVInt, uInt, (long) strcmp(str1, str2));
+	PNode *arg = pnode->arguments;
+	PValue pvalue = evaluate(arg, context, eflg);
+	if (pvalue.type != PVString) {
+		prog_error(pnode, "the first argument to strcmp must be a string");
+		*eflg = true;
+		return nullPValue;
+	}
+	String str1 = pvalue.value.uString;
+	arg = arg->next;
+	pvalue = evaluate(arg, context, eflg);
+	if (pvalue.type != PVString) {
+		prog_error(pnode, "the second argument to strcmp must be a string");
+		*eflg = true;
+		return nullPValue;
+	}
+	String str2 = pvalue.value.uString;
+	return PVALUE(PVInt, uInt, (long) strcmp(str1, str2));
 }
 
 //  __eqstr -- Compare two strings
@@ -326,22 +326,22 @@ PValue __strcmp (PNode *pnode, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __eqstr (PNode *node, Context *context, bool *eflg)
 {
-    PNode *arg = node->arguments;
-    PValue pvalue = evaluate(arg, context, eflg);
-    if (pvalue.type != PVString) {
-        prog_error(node, "the first argument to eqstr must be a string");
-        *eflg = true;
-        return nullPValue;
-    }
-    String left = pvalue.value.uString;
-    arg = arg->next;
-    pvalue = evaluate(arg, context, eflg);
-    if (pvalue.type != PVString) {
-        prog_error(node, "the second argument to eqstr must be a string");
-        *eflg = true;
-        return nullPValue;
-    }
-    return PVALUE(PVBool, uBool, eqstr(left, pvalue.value.uString));
+	PNode *arg = node->arguments;
+	PValue pvalue = evaluate(arg, context, eflg);
+	if (pvalue.type != PVString) {
+		prog_error(node, "the first argument to eqstr must be a string");
+		*eflg = true;
+		return nullPValue;
+	}
+	String left = pvalue.value.uString;
+	arg = arg->next;
+	pvalue = evaluate(arg, context, eflg);
+	if (pvalue.type != PVString) {
+		prog_error(node, "the second argument to eqstr must be a string");
+		*eflg = true;
+		return nullPValue;
+	}
+	return PVALUE(PVBool, uBool, eqstr(left, pvalue.value.uString));
 }
 
 //  __strtoint -- Convert string to integer
@@ -349,9 +349,9 @@ PValue __eqstr (PNode *node, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __strtoint (PNode *node, Context *context, bool *eflg)
 {
-    PValue value = evaluate(node->arguments, context, eflg);
-    if (*eflg || value.type != PVString || !value.value.uString) return nullPValue;
-    return PVALUE(PVInt, uInt, atoi(value.value.uString));
+	PValue value = evaluate(node->arguments, context, eflg);
+	if (*eflg || value.type != PVString || !value.value.uString) return nullPValue;
+	return PVALUE(PVInt, uInt, atoi(value.value.uString));
 }
 
 //  __not -- Not operation
@@ -359,9 +359,9 @@ PValue __strtoint (PNode *node, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __not (PNode *node, Context *context, bool *eflg)
 {
-    PValue value = evaluateBoolean(node->arguments, context, eflg);
-    if (*eflg || value.type != PVBool) return nullPValue;
-    return value.value.uBool ? falsePValue : truePValue;
+	PValue value = evaluateBoolean(node->arguments, context, eflg);
+	if (*eflg || value.type != PVBool) return nullPValue;
+	return value.value.uBool ? falsePValue : truePValue;
 }
 
 ///*================================
@@ -381,9 +381,9 @@ PValue __not (PNode *node, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __strlen (PNode *node, Context *context, bool* eflg)
 {
-    PValue value = evaluate(node->arguments, context, eflg);
-    if (*eflg || value.type != PVString) return nullPValue;
-    return PVALUE(PVInt, uInt, (long) strlen(value.value.uString));
+	PValue value = evaluate(node->arguments, context, eflg);
+	if (*eflg || value.type != PVString) return nullPValue;
+	return PVALUE(PVInt, uInt, (long) strlen(value.value.uString));
 }
 ///*==============================================
 // * __concat -- Catenate strings
@@ -424,9 +424,9 @@ PValue __strlen (PNode *node, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __lower(PNode *node, Context *context, bool* eflg)
 {
-    PValue val = evaluate(node->arguments, context, eflg);
-    if (*eflg || val.type != PVString) return nullPValue;
-    return PVALUE(PVString, uString, lower(val.value.uString));
+	PValue val = evaluate(node->arguments, context, eflg);
+	if (*eflg || val.type != PVString) return nullPValue;
+	return PVALUE(PVString, uString, lower(val.value.uString));
 }
 
 //  __upper -- Convert string to upper case.
@@ -434,9 +434,9 @@ PValue __lower(PNode *node, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __upper(PNode *node, Context *context, bool* eflg)
 {
-    PValue val = evaluate(node->arguments, context, eflg);
-    if (*eflg || val.type != PVString) return nullPValue;
-    return PVALUE(PVString, uString, upper(val.value.uString));
+	PValue val = evaluate(node->arguments, context, eflg);
+	if (*eflg || val.type != PVString) return nullPValue;
+	return PVALUE(PVString, uString, upper(val.value.uString));
 }
 
 //  __capitalize -- Capitalize a string.
@@ -444,9 +444,9 @@ PValue __upper(PNode *node, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __capitalize(PNode *node, Context *context, bool* eflg)
 {
-    PValue val = evaluate(node->arguments, context, eflg);
-    if (*eflg || val.type != PVString) return nullPValue;
-    return PVALUE(PVString, uString, capitalize(val.value.uString));
+	PValue val = evaluate(node->arguments, context, eflg);
+	if (*eflg || val.type != PVString) return nullPValue;
+	return PVALUE(PVString, uString, capitalize(val.value.uString));
 }
 
 ///*===================================
@@ -544,32 +544,32 @@ PValue __capitalize(PNode *node, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __copyfile (PNode *node, Context *context, bool *eflg)
 {
-    PValue pvalue = evaluate(node->arguments, context, eflg);
-    if (pvalue.type != PVString) {
-        prog_error(node, "the argument to copyfile must be a string");
-        *eflg = true;
-        return nullPValue;
-    }
-    String fileName = pvalue.value.uString;
-    if (!fileName || *fileName == 0) {
-        prog_error(node, "the argument to copyfile must be a string");
-        *eflg = true;
-        return nullPValue;
-    }
-    FILE *cfp = fopenpath(fileName, "r", ".:$HOME");
-    if (cfp == null) {
-        prog_error(node, "could not open file for copying");
-        *eflg = true;
-        return nullPValue;
-    }
-    //int c;
-    char buffer[1024];
-    while (fgets(buffer, 1024, cfp)) {
-        printf("%s", buffer);  // TODO: GOT TO CHANGE TO A MORE POUTPUT APPROACH.
-    }
-        //poutput(buffer);
-    fclose(cfp);
-    return nullPValue;
+	PValue pvalue = evaluate(node->arguments, context, eflg);
+	if (pvalue.type != PVString) {
+		prog_error(node, "the argument to copyfile must be a string");
+		*eflg = true;
+		return nullPValue;
+	}
+	String fileName = pvalue.value.uString;
+	if (!fileName || *fileName == 0) {
+		prog_error(node, "the argument to copyfile must be a string");
+		*eflg = true;
+		return nullPValue;
+	}
+	FILE *cfp = fopenPath(fileName, "r", ".:$HOME");
+	if (cfp == null) {
+		prog_error(node, "could not open file for copying");
+		*eflg = true;
+		return nullPValue;
+	}
+	//int c;
+	char buffer[1024];
+	while (fgets(buffer, 1024, cfp)) {
+		printf("%s", buffer);  // TODO: GOT TO CHANGE TO A MORE POUTPUT APPROACH.
+	}
+		//poutput(buffer);
+	fclose(cfp);
+	return nullPValue;
 }
 
 //  __nl -- Newline function
@@ -577,7 +577,7 @@ PValue __copyfile (PNode *node, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __nl(PNode *pnode, Context *context, bool* errflg)
 {
-    return newlinePValue;
+	return newlinePValue;
 }
 
 //  __space -- Space function
@@ -585,7 +585,7 @@ PValue __nl(PNode *pnode, Context *context, bool* errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __space(PNode *pnode, Context *context, bool* errflg)
 {
-    return spacePValue;
+	return spacePValue;
 }
 
 //  __qt -- Double quote function
@@ -593,26 +593,26 @@ PValue __space(PNode *pnode, Context *context, bool* errflg)
 //--------------------------------------------------------------------------------------------------
 PValue __qt(PNode *pnode, Context *context, bool* errflg)
 {
-    return quotePValue;
+	return quotePValue;
 }
 
 //  __children -- Return the sequence of children of a family
 //--------------------------------------------------------------------------------------------------
 PValue __children(PNode *pnode, Context *context, bool* errflg)
 {
-    GNode *family = evaluateFamily(pnode->arguments, context, errflg);
-    if (*errflg || !family) return nullPValue;
-    Sequence *children = familyToChildren(family, context->database);
-    if (!children) return nullPValue;
-    return PVALUE(PVSequence, uSequence, children);
+	GNode *family = evaluateFamily(pnode->arguments, context, errflg);
+	if (*errflg || !family) return nullPValue;
+	Sequence *children = familyToChildren(family, context->database);
+	if (!children) return nullPValue;
+	return PVALUE(PVSequence, uSequence, children);
 }
 
 //  __version -- Return the version of the DeadEnds program.
 //--------------------------------------------------------------------------------------------------
 PValue __version(PNode *pnode, Context *context, bool* errflg)
 {
-    extern String version;
-    return PVALUE(PVString, uString, version);
+	extern String version;
+	return PVALUE(PVString, uString, version);
 }
 
 //  __noop -- Used for builtins that have been removed (e.g., lock, unlock).
@@ -626,22 +626,22 @@ PValue __noop(PNode *pnode, Context *context, bool* errflg) { return nullPValue;
 //--------------------------------------------------------------------------------------------------
 PValue __createnode (PNode *node, Context *context, bool *eflg)
 {
-    PNode *tagNode = node->arguments, *valNode = node->arguments->next;
-    PValue tagValue = evaluate(tagNode, context, eflg);
-    if (tagValue.type != PVString) {
-        prog_error(node, "first argument to createnode must be a key string");
-        *eflg = true;
-        return nullPValue;
-    }
-    String tag = tagValue.value.uString;
-    PValue valValue = evaluate(valNode, context, eflg);
-    if (valValue.type != PVNull && valValue.type != PVString) {
-        prog_error(node, "the second argument to create node must be an optional string");
-        *eflg = true;
-        return nullPValue;
-    }
-    String val  = valValue.value.uString;
-    return PVALUE(PVGNode, uGNode, createGNode(null, tag, val, null));
+	PNode *tagNode = node->arguments, *valNode = node->arguments->next;
+	PValue tagValue = evaluate(tagNode, context, eflg);
+	if (tagValue.type != PVString) {
+		prog_error(node, "first argument to createnode must be a key string");
+		*eflg = true;
+		return nullPValue;
+	}
+	String tag = tagValue.value.uString;
+	PValue valValue = evaluate(valNode, context, eflg);
+	if (valValue.type != PVNull && valValue.type != PVString) {
+		prog_error(node, "the second argument to create node must be an optional string");
+		*eflg = true;
+		return nullPValue;
+	}
+	String val  = valValue.value.uString;
+	return PVALUE(PVGNode, uGNode, createGNode(null, tag, val, null));
 }
 
 //  __addnode -- Add a node to a Gedcom tree
@@ -649,39 +649,39 @@ PValue __createnode (PNode *node, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __addnode (PNode *node, Context *context, bool *eflg)
 {
-    PNode *arg1 = node->arguments, *arg2 = arg1->next, *arg3 = arg2->next;;
-    PValue this = evaluate(arg1, context, eflg);
-    if (*eflg || !isGNodeType(this.type)) {
-        *eflg = true;
-        prog_error(node, "the first argument to addnode must be an existing node");
-        return nullPValue;
-    }
-    GNode *thisNode = this.value.uGNode;
-    PValue parent = evaluate(arg2, context, eflg);
-    if (*eflg || !isGNodeType(parent.type)) {
-        *eflg = true;
-        prog_error(node, "the second argument to addnode must be an existing node");
-        return nullPValue;
-    }
-    GNode *parentNode = parent.value.uGNode;
-    PValue prev = evaluate(arg3, context, eflg);
-    if (*eflg || !isGNodeType(prev.type)) {
-        *eflg = true;
-        prog_error(node, "the third argument to addnode must be an existing node");
-        return nullPValue;
-    }
-    GNode *prevNode = prev.value.uGNode;
-    thisNode->parent = parentNode;
-    GNode *nextNode = null;
-    if (prevNode == null) {
-        nextNode = parentNode->child;
-        parentNode->child = thisNode;
-    } else {
-        nextNode = prevNode->sibling;
-        prevNode->sibling = thisNode;
-    }
-    thisNode->sibling = nextNode;
-    return nullPValue;
+	PNode *arg1 = node->arguments, *arg2 = arg1->next, *arg3 = arg2->next;;
+	PValue this = evaluate(arg1, context, eflg);
+	if (*eflg || !isGNodeType(this.type)) {
+		*eflg = true;
+		prog_error(node, "the first argument to addnode must be an existing node");
+		return nullPValue;
+	}
+	GNode *thisNode = this.value.uGNode;
+	PValue parent = evaluate(arg2, context, eflg);
+	if (*eflg || !isGNodeType(parent.type)) {
+		*eflg = true;
+		prog_error(node, "the second argument to addnode must be an existing node");
+		return nullPValue;
+	}
+	GNode *parentNode = parent.value.uGNode;
+	PValue prev = evaluate(arg3, context, eflg);
+	if (*eflg || !isGNodeType(prev.type)) {
+		*eflg = true;
+		prog_error(node, "the third argument to addnode must be an existing node");
+		return nullPValue;
+	}
+	GNode *prevNode = prev.value.uGNode;
+	thisNode->parent = parentNode;
+	GNode *nextNode = null;
+	if (prevNode == null) {
+		nextNode = parentNode->child;
+		parentNode->child = thisNode;
+	} else {
+		nextNode = prevNode->sibling;
+		prevNode->sibling = thisNode;
+	}
+	thisNode->sibling = nextNode;
+	return nullPValue;
 }
 
 //  __deletenode -- Remove node from GEDCOM tree
@@ -690,32 +690,32 @@ PValue __addnode (PNode *node, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __deletenode (PNode *node, Context *context, bool *eflg)
 {
-    PValue pvalue = evaluate(node->arguments, context, eflg);
-    if (*eflg || !isGNodeType(pvalue.type)) {
-        *eflg = true;
-        prog_error(node, "the argument to deletenode must be an existing node");
-        return nullPValue;
-    }
-    GNode *this = pvalue.value.uGNode;
-    // If this node has no parent, it is a root node, and they cannot be deleted.
-    if (!this->parent) {
-        *eflg = true;
-        prog_error(node, "the argument node is a root and cannot be deleted.");
-        return nullPValue;
-    }
-    GNode *parent = this->parent;
-    GNode *prev = null;
-    GNode *curs = parent->child;
-    while (curs && curs != this) {
-        prev = curs;
-        curs = curs->sibling;
-    }
-    if (curs == null) return nullPValue;
-    GNode *next = this->sibling;
-    if (prev == null)
-        parent->child = next;
-    else
-        prev->sibling = next;
-    return nullPValue;
+	PValue pvalue = evaluate(node->arguments, context, eflg);
+	if (*eflg || !isGNodeType(pvalue.type)) {
+		*eflg = true;
+		prog_error(node, "the argument to deletenode must be an existing node");
+		return nullPValue;
+	}
+	GNode *this = pvalue.value.uGNode;
+	// If this node has no parent, it is a root node, and they cannot be deleted.
+	if (!this->parent) {
+		*eflg = true;
+		prog_error(node, "the argument node is a root and cannot be deleted.");
+		return nullPValue;
+	}
+	GNode *parent = this->parent;
+	GNode *prev = null;
+	GNode *curs = parent->child;
+	while (curs && curs != this) {
+		prev = curs;
+		curs = curs->sibling;
+	}
+	if (curs == null) return nullPValue;
+	GNode *next = this->sibling;
+	if (prev == null)
+		parent->child = next;
+	else
+		prev->sibling = next;
+	return nullPValue;
 }
 

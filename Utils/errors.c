@@ -66,10 +66,19 @@ Error *createError(ErrorType type, String fileName, int lineNumber, String messa
 {
 	Error *error = (Error*) stdalloc(sizeof(Error));
 	error->type = type;
+	error->severity = severeError;  //  Override with setSeverityError.
 	error->fileName = fileName;  // MNOTE: Not saved; do not free.
 	error->lineNumber = lineNumber;
 	error->message = strsave(message);
 	return error;
+}
+
+//  setSeverityError -- Set the severity of an Error. By default severity is set to severeError.
+//    Use this function to alter this value.
+//-------------------------------------------------------------------------------------------------
+void setSeverityError(Error *error, ErrorSeverity severity)
+{
+	error->severity = severity;
 }
 
 //  deleteError -- Delete an Error. MNOTE: Not freeing fileName.

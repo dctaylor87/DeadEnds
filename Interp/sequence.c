@@ -6,7 +6,7 @@
 //    indiseq data type of DeadEndsScript.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 16 November 2023.
+//  Last changed on 22 November 2023.
 //
 
 #include "standard.h"
@@ -22,7 +22,7 @@
 #include "sort.h"
 #include "writenode.h"
 
-static bool debugging = true;
+static bool debugging = false;
 
 //  Compare functions used when sorting sequences of persons.
 //--------------------------------------------------------------------------------------------------
@@ -40,6 +40,7 @@ void baseFree(Word word) { stdfree(word); }
 //--------------------------------------------------------------------------------------------------
 Sequence *createSequence(Database *database)
 {
+	if (debugging) printf("createSequence");
 	Sequence *seq = (Sequence*) stdalloc(sizeof(Sequence));
 	seq->size = 0;
 	seq->max = 20;
