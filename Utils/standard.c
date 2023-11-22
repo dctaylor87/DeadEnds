@@ -76,6 +76,7 @@ void *__alloc (size_t len, String file, int line)
 	char *p;
 	if (len == 0) return null;
 	ASSERT(p = malloc(len));
+	/*
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
 		bytesAllocated += malloc_size(p);
@@ -83,6 +84,7 @@ void *__alloc (size_t len, String file, int line)
 			lastSegment(file), line, len, malloc_size(p), (void *) p);
 	}
 #endif
+	*/
 	return p;
 }
 
@@ -93,6 +95,7 @@ void __free (void* ptr, String file, int line)
 // String file  -- Name of the file deallocating the memory.
 // int line -- Line number in the file where deallocating.
 {
+  /*
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
 		fprintf(allocLogFile, "F  %s\t%d\t%zu\t%p\n",
@@ -100,6 +103,7 @@ void __free (void* ptr, String file, int line)
 		bytesFreed += malloc_size(ptr);
 	}
 #endif
+  */
 	free(ptr);
 }
 

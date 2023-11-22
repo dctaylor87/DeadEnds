@@ -37,6 +37,7 @@ AM_CPPFLAGS = \
 	-I$(top_builddir) \
 	-I$(top_srcdir)/Programs/Includes \
 	-I$(top_srcdir)/Python/Includes \
+	-I$(top_srcdir)/Lifelines/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Parser/Includes \

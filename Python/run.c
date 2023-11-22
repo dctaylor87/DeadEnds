@@ -15,7 +15,7 @@
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
-#include "path.h"		/* fopenpath */
+#include "path.h"		/* fopenPath */
 #include "gnode.h"
 #include "recordindex.h"
 #else
@@ -135,7 +135,7 @@ execute_script (CNSTRING report_name)
 
   path = getlloptstr ("LLPROGRAMS", ".");
 #if defined(DEADENDS)
-  report_fp = fopenpath (report_name, mode, path);
+  report_fp = fopenPath (report_name, mode, path);
 #else
   report_fp = fopenpath (report_name, mode, path, ext, utf8, &report_pathname);
 #endif

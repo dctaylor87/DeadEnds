@@ -25,6 +25,7 @@
 
 #include "porting.h"
 #include "standard.h"
+#include "llnls.h"
 #include "path.h"
 #include "gnode.h"
 #include "database.h"
@@ -161,10 +162,10 @@ main (int argc, char *argv[])
 
   /* XXX insert code to open cmd_line_db XXX */
 
-  db_file = fopenpath (cmd_line_db, "r", GEDCOM_search_path);
+  db_file = fopenPath (cmd_line_db, "r", GEDCOM_search_path);
   if (! db_file)
     {
-      fprintf (stderr, "%s: fopenpath failed to open '%s': %s\n",
+      fprintf (stderr, "%s: fopenPath failed to open '%s': %s\n",
 	       ProgName, cmd_line_db, strerror (errno));
       exit (1);
     }

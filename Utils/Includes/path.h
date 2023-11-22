@@ -13,7 +13,7 @@
 #include "standard.h"
 
 // fopenpath -- Open a file using a search path.
-FILE *fopenPath(String fileName, CString mode, CString searchPath);
+FILE *fopenPath(CString fileName, CString mode, CString searchPath);
 String lastPathSegment(String fileName);
 
 #endif /* path_h */

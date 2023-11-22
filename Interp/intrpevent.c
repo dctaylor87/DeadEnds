@@ -117,8 +117,6 @@ PValue __dateformat(PNode *node, Context *context, bool* eflg)
 
 PValue __stddate(PNode *node, Context *context, bool* eflg)
 {
-    extern String format_date(String, int, int, int, int, bool);
-
     PValue pvalue = evaluate(node->arguments, context, eflg);
     if (*eflg || !isGNodeType(pvalue.type)) return nullPValue;
     GNode* gnode = pvalue.value.uGNode;

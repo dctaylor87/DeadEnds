@@ -49,15 +49,15 @@ GNode *keyToEvent(CString key, Database*);   //  Get an event node from the data
 GNode *keyToOther(CString Key, Database*);   //  Get an other node from the database.
 
 //  Get a person record from the database.
-RecordIndexEl *keyToPersonRecord(CString key, Database*);
+extern RecordIndexEl *keyToPersonRecord(CString key, Database*);
 //  Get a family record from the database.
-RecordIndexEl *keyToFamilyRecord(CString key, Database*);
+extern RecordIndexEl *keyToFamilyRecord(CString key, Database*);
 //  Get a source record from the database.
-RecordIndexEl *keyToSourceRecord(CString key, Database*);
+extern RecordIndexEl *keyToSourceRecord(CString key, Database*);
 //  Get an event record from the database.
-RecordIndexEl *keyToEventRecord(CString key, Database*);
+extern RecordIndexEl *keyToEventRecord(CString key, Database*);
 //  Get an other record from the database.
-RecordIndexEl *keyToOtherRecord(CString Key, Database*);
+extern RecordIndexEl *keyToOtherRecord(CString Key, Database*);
 
 bool storeRecord(Database*, GNode*, int lineno);        //  Add a record to the database.
 
