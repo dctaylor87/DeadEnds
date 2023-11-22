@@ -17,14 +17,12 @@
 
 #define VSCODE
 
-static String gedcomFile = null;
-
 extern String currentProgramFileName;
 extern int currentProgramLineNumber;
 extern FunctionTable *procedureTable;
 
 extern Database *importFromFile(String, ErrorLog*);
-static Database *createDatabaseTest(int);
+static Database *createDatabaseTest(String, int, ErrorLog*);
 static void listTest(Database*, int);
 static void forHashTableTest(Database*, int);
 static void parseAndRunProgramTest(Database*, int);
@@ -36,9 +34,19 @@ extern bool validateDatabase(Database*, ErrorLog*);
 
 int main (void)
 {
-	int testNumber = 0;
+	#ifdef XCODE
+	String gedcomFile = "/Users/ttw4/Desktop/DeadEndsCloneOne/CloneOne/CloneOne/Gedfiles/main.ged";
+#else
+	String gedcomFile = "../Gedfiles/main.ged";
+#endif
 
-	Database *database = createDatabaseTest(++testNumber);
+	int testNumber = 0;
+	ErrorLog *errorLog = createErrorLog();
+	showErrorLog(errorLog);
+
+	Database *database = createDatabaseTest(gedcomFile, ++testNumber, errorLog);
+	showErrorLog(errorLog);
+	//return 0;  // EXPEDIENT.
 
 	listTest(database, ++testNumber);
 
@@ -59,19 +67,21 @@ int main (void)
 
 //  createDatabaseTest -- Creates a test database from a Gedcom file.
 //-------------------------------------------------------------------------------------------------
-Database *createDatabaseTest(int testNumber)
+Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorLog)
 {
-	printf("%d: START OF CREATE DATABASE TEST -- Create database from main.ged\n", testNumber);
-#ifdef XCODE
-	gedcomFile = "/Users/ttw4/Desktop/DeadEndsCloneOne/CloneOne/CloneOne/Gedfiles/main.ged";
-#else
-	gedcomFile = "../Gedfiles/main.ged";
-#endif
-	ErrorLog *errorLog = createErrorLog();
-	//printf("gedcomFile: %s\n", gedcomFile);
+	printf("%d: START OF CREATE DATABASE TEST -- Create database from %s\n", testNumber, gedcomFile);
+
+	//gedcomFile = "NOTAGEDCOMFILE";  // Override to test when there is no good file.
+	printf("gedcomFile: %s\n", gedcomFile);
 	String lastSegment = lastPathSegment(gedcomFile);
 	printf("lastPathSegment: %s\n", lastSegment);
 	Database *database = importFromFile(gedcomFile, errorLog);
+	if (!database) {
+		Error *error = createError(systemError, gedcomFile, 0, "Database was not created.");
+		error->severity = fatalError;
+		addErrorToLog(errorLog, error);
+		return null;
+	}
 	printf("The number of persons in the database is %d.\n", numberPersons(database));
 	printf("The number of families in the database is %d.\n", numberFamilies(database));
 	printf("END OF CREATE DATABASE TEST\n");

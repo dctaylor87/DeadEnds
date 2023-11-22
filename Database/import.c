@@ -62,7 +62,7 @@ Database *importFromFile(String fileName, ErrorLog *errorLog)
 	ASSERT(fileName);
 	FILE *file = fopen(fileName, "r");
 	if (!file) {
-		addErrorToLog(errorLog, createError(systemError, fileName, 0, "could not open file"));
+		addErrorToLog(errorLog, createError(systemError, fileName, 0, "Could not open file."));
 		return null;
 	}
 

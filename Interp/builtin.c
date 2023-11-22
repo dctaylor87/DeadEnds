@@ -558,7 +558,7 @@ PValue __copyfile (PNode *node, Context *context, bool *eflg)
 	}
 	FILE *cfp = fopenPath(fileName, "r", ".:$HOME");
 	if (cfp == null) {
-		prog_error(node, "could not open file for copying");
+		prog_error(node, "Could not open file for copying.");
 		*eflg = true;
 		return nullPValue;
 	}

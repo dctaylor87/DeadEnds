@@ -4,11 +4,13 @@
 //  errors.c -- Code for handling DeadEnds errors.
 //
 //  Created by Thomas Wetmore on 4 July 2023.
-//  Last changed on 20 November 2023.
+//  Last changed on 22 November 2023.
 //
 
 #include "errors.h"
 #include "list.h"
+
+static bool debugging = true;
 
 //  getErrorKey -- Get the comparison key of an error.
 //
@@ -109,8 +111,8 @@ void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType, String fileName, 
 static void showError (Error *error)
 {
 	switch (error->severity) {
-		case fatalError: printf("fatal: "); break;
-		case severeError: printf("severe: "); break;
+		case fatalError: printf("fatal "); break;
+		case severeError: printf("severe "); break;
 		case warningError: printf("warning: "); break;
 		case commentError: printf("comment: "); break;
 		default: printf("unknown (can't happen):"); break;
@@ -122,8 +124,8 @@ static void showError (Error *error)
 		case linkageError: printf("linkage error: "); break;
 		default: printf("unknown error (can't happen): "); break;
 	}
-	printf("fileName: %s: ", error->fileName ? error->fileName : "no filename");
-	printf("fileLine: %d: ", error->lineNumber);
+	printf("file: %s: ", error->fileName ? error->fileName : "no filename");
+	printf("line: %d: ", error->lineNumber);
 	printf("message: %s\n", error->message ? error->message : "no message");
 }
 
@@ -131,6 +133,7 @@ static void showError (Error *error)
 //-------------------------------------------------------------------------------------------------
 void showErrorLog (ErrorLog *errorLog)
 {
+	if (debugging) printf("showErrorLog: called on a log with %d Errors\n", lengthList(errorLog));
 	FORLIST(errorLog, error)
 		showError((Error*) error);
 	ENDLIST
