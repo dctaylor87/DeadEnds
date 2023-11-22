@@ -232,6 +232,7 @@ AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
 AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
 AC_CHECK_HEADERS( malloc.h malloc/malloc.h )
+AC_CHECK_HEADERS( langinfo.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
@@ -262,6 +263,53 @@ case $host in
     AC_CHECK_FUNCS( heapwalk _heapwalk )
     ;;
 esac
+
+dnl **************************************************************
+dnl Check for curses
+dnl **************************************************************
+
+dnl Since some distributions package wide and narrow functions
+dnl in separate libraries, we need to check for them separately.
+dnl We also need to search for a wide character routine, so that
+dnl we can warn if only a narrow version of curses is found.
+dnl
+dnl We search for libraries first, since its easier to tell if
+dnl the right libraries are installed than the right headers.
+
+echo Looking for curses libraries
+AC_CHECK_LIB(ncursesw, in_wch)
+if test "$ac_cv_lib_ncursesw_in_wch" = "yes"; then
+  echo Using ncursesw
+else
+  AC_CHECK_LIB(ncurses, in_wch)
+  if test "$ac_cv_lib_ncurses_in_wch" = "yes"; then
+    echo Using ncurses
+  else
+    AC_CHECK_LIB(cursesw, in_wch)
+    if test "$ac_cv_lib_cursesw_in_wch" = "yes"; then
+      echo Using cursesw
+    else
+      AC_CHECK_LIB(curses, in_wch)
+      if test "$ac_cv_lib_curses_in_wch" = "yes"; then
+        echo Using curses
+      else
+        case $host in
+          *mingw32*)
+            echo "Using LifeLines version of curses for Windows."
+          ;;
+          *)
+            echo "LifeLines requires a curses implementation with wide character support!"
+            exit
+          ;;
+        esac
+      fi
+    fi
+  fi
+fi
+
+dnl Check for headers
+echo Looking for curses headers
+AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
 
 dnl **************************************************************
 dnl Check for Python
@@ -619,6 +667,7 @@ AC_CONFIG_FILES([Makefile \
         Database/Makefile \
         Gedcom/Makefile \
         Interp/Makefile \
+        Lifelines/Makefile \
         Parser/Makefile \
         Programs/Makefile \
         Python/Makefile \
