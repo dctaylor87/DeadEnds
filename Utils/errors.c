@@ -103,3 +103,35 @@ void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType, String fileName, 
 {
 	appendListElement(errorLog, createError(errorType, fileName, lineNumber, message));
 }
+
+//  showError -- Show an Error on standard output.
+//-------------------------------------------------------------------------------------------------
+static void showError (Error *error)
+{
+	switch (error->severity) {
+		case fatalError: printf("fatal: "); break;
+		case severeError: printf("severe: "); break;
+		case warningError: printf("warning: "); break;
+		case commentError: printf("comment: "); break;
+		default: printf("unknown (can't happen):"); break;
+	}
+	switch (error->type) {
+		case systemError: printf("system error: "); break;
+		case syntaxError: printf("syntax error: "); break;
+		case gedcomError: printf("semantic error: "); break;
+		case linkageError: printf("linkage error: "); break;
+		default: printf("unknown error (can't happen): "); break;
+	}
+	printf("fileName: %s: ", error->fileName ? error->fileName : "no filename");
+	printf("fileLine: %d: ", error->lineNumber);
+	printf("message: %s\n", error->message ? error->message : "no message");
+}
+
+//  showErrorLog -- Show the contents of an ErrorLog on standard output.
+//-------------------------------------------------------------------------------------------------
+void showErrorLog (ErrorLog *errorLog)
+{
+	FORLIST(errorLog, error)
+		showError((Error*) error);
+	ENDLIST
+}

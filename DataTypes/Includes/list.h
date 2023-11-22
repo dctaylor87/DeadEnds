@@ -82,12 +82,21 @@ Word binarySearchList(List*, Word element, int *index);
 Word linearSearchListWithKey(List*, String key, int *index);
 Word binarySearchListWithKey(List*, String key, int *index);
 
-#define FORLIST(list, value)\
+#define OLDFORLIST(list, value)\
 {\
     PValue *value;\
     PValue **_pvalue = (PValue**) list->data;\
     for (int _i = 0; _i < list->length; _i++) {\
         value = _pvalue[_i];
+
+#define OLDENDLIST }}
+
+#define FORLIST(list, value)\
+{\
+    Word value;\
+    Word *_values = (Word*) list->data;\
+    for (int _i = 0; _i < list->length; _i++) {\
+        value = _values[_i];
 
 #define ENDLIST }}
 
