@@ -5,7 +5,7 @@
 //    specializing this hash table.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 31 October 2023.
+//  Last changed on 21 November 2023.
 //
 
 #include "hashtable.h"
@@ -392,25 +392,17 @@ int iterateHashTableWithPredicate(HashTable *table, bool (*predicate)(Word))
 	return count;
 }
 
-//  showHashTable -- Show the contents of a hash table. For debugging.
+//  showHashTable -- Show the contents of a hash table. Intended for debugging.
 //--------------------------------------------------------------------------------------------------
-void showHashTable(HashTable *table, void (*show)(Word))
+void showHashTable (HashTable *table, void (*show)(Word))
 {
-	ASSERT(table);
-	printf("Symbol Table at Location %p\n", table);
-	for (int i = 0; i < MAX_HASH; i++) {
-		Bucket *bucket = table->buckets[i];
-		//printf("Bucket %d\n", i);
-		if (!bucket || bucket->length <= 0) continue;
-		for (int j = 0; j < bucket->length; j++) {
-			printf("    %s", (table->getKey)(bucket->elements[j]));
-			if (show) {
-				printf(": ");
-				show(bucket->elements[j]);
-			}
-			printf("\n");
-		}
-	}
+	int count = 0;
+	FORHASHTABLE(table, element)
+		(*show)(element);
+		count++;
+		printf("\n");
+	ENDHASHTABLE
+	printf("showHashTable showed %d elements\n", count);
 }
 
 //  This file also implements some more specific hash tables;

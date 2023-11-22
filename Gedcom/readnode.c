@@ -4,60 +4,77 @@
 //  readnode.c -- Functions that read Gedcom nodes and node trees from files and strings.
 //
 //  Created by Thomas Wetmore on 17 December 2022.
-//  Last changed on 11 November 2023.
+//  Last changed on 19 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include "readnode.h"
 #include "stringtable.h"
+#include "errors.h"
+
+//  Return codes for fileToLine and bufferToLine.
+//-------------------------------------------------------------------------------------------------
+typedef enum ReadReturnCode {
+	ReadEOF = 0, ReadOkay, ReadError
+} ReadReturnCode;
 
 //  Error messages used in this file.
 //--------------------------------------------------------------------------------------------------
-static String fileof = (String) "The file is positioned at EOF.";
-static String reremp = (String) "Line %d: This line is empty; EOF?";
-static String rerlng = (String) "Line %d: This line is too long.";
-static String rernlv = (String) "Line %d: This line has no level number.";
-static String rerinc = (String) "Line %d: This line is incomplete.";
-static String rerbln = (String) "Line %d: This line has a bad link.";
+//static String fileof = (String) "The file is positioned at EOF.";
+//static String reremp = (String) "Line %d: This line is empty; EOF?";
+//static String rerlng = (String) "Line %d: This line is too long.";
+//static String rernlv = (String) "Line %d: This line has no level number.";
+//static String rerinc = (String) "Line %d: This line is incomplete.";
+//static String rerbln = (String) "Line %d: This line has a bad link.";
 //static String rernwt = (String) "Line %d: This line needs white space before tag.";
-static String rerilv = (String) "Line %d: This line has an illegal level.";
-static String rerwlv = (String) "The record begins at wrong level.";
+//static String rerilv = (String) "Line %d: This line has an illegal level.";
+//static String rerwlv = (String) "The record begins at wrong level.";
 
 //  Local static functions.
 //--------------------------------------------------------------------------------------------------
-static int bufferToLine (String, int*, String*, String*, String*, String*);
+static ReadReturnCode bufferToLine (String, int*, String*, String*, String*, Error**);
 
-//  Local static variables.
+//  Static variables that maintain state between some of the functions in here.
 //--------------------------------------------------------------------------------------------------
-int fileLine = 0;  // Current line in the file being read.
+static String fileName;  //  The name of the file being read.
+static int fileLine;  //  The current line number in the file.
+static int level;  //  The level on the last line read.
+static String key;  //  The key, if any, on the last line read.
+static String tag;  //  The tag on the last line read.
+static String value;  //  The value, if any, on the last line read.
+static bool ateof = false;  //  Whether the Gedcom file has reached end of file.
+static int fileLine = 0;  // Current line in the file being read.
 
 //  fileToLine -- Reads the next Gedcom line from a file. Empty lines are counted and ignored.
 //    The line is passed to bufferToLine for field extraction. An error message is returned if
 //    a problems is found. Returns a code of be OKAY, DONE, or ERROR. The function uses fgets()
 //    to read lines from the file.
 //--------------------------------------------------------------------------------------------------
-static int fileToLine(FILE *file, int *plevel, String *pkey, String *ptag, String *pvalue,
-			   String *pmessage)
+static ReadReturnCode fileToLine(FILE *file, int *level, String *key, String *tag, String *value,
+			   Error **error)
 //  file -- File to read the line from.
-//  plevel -- (out) Pointer to level of the returned line.
-//  pxref -- (out) Pointer to cross reference string of the returned line.
-//  ptag -- (out) Pointer to the tag string of the returned line.
-//  pval -- (out) Pointer to the value string of the returned line.
-//  pmsg -- (out) Pointer to an error message when things go wrong.
+//  level -- (out) Level of the returned line.
+//  key -- (out) Key (cross reference) of the returned line; can be null.
+//  tag -- (out) Tag of the returned line; manadatory.
+//  value -- (out) Value of the returned line; can be null.
+//  message -- (out) Error message when things go wrong.
 {
 	static char buffer[MAXLINELEN];  //  Buffer to store the line.
 	char *p = buffer;  //  Buffer cursor.
-	*pmessage = null;
+	*error = null;
 	while (true) {
 		//  Read a line from the file; if fgets returns 0 assume reading is over.
-		if (!(p = fgets(buffer, MAXLINELEN, file))) return DONE;
+		if (!(p = fgets(buffer, MAXLINELEN, file))) {
+			ateof = true;
+			return ReadEOF;
+		}
 		fileLine++;  // Increment the file line number.
 		if (!allwhite(p)) break; // If the line is all white continue to the next line.
 	}
 
 	// Read a line and convert it to field values. The values point to locations in the buffer.
-	return bufferToLine(p, plevel, pkey, ptag, pvalue, pmessage);
+	return bufferToLine(p, level, key, tag, value, error);
 }
 
 //  stringToLine -- Get the next Gedcom line as fields from a string holding one or more Gedcom
@@ -65,8 +82,8 @@ static int fileToLine(FILE *file, int *plevel, String *pkey, String *ptag, Strin
 //    string. If there are remaining characters the address of the next character is returned
 //    in ps
 //--------------------------------------------------------------------------------------------------
-static bool stringToLine(String *ps, int *plevel, String *pkey, String *ptag, String *pvalue,
-						 String *pmessage)
+/*static ReadReturnCode stringToLine(String *ps, int *plevel, String *pkey, String *ptag, String *pvalue,
+						 Error **error)
 //  ps -- (in/out) Pointer to string.
 //  plevel -- (out) Pointer to level.
 //  pxref -- (out) Pointer to cross reference string of this line.
@@ -75,7 +92,7 @@ static bool stringToLine(String *ps, int *plevel, String *pkey, String *ptag, St
 //  pmsg -- (out) Pointer to error message if anything goes wrong.
 {
 	String s0, s;
-	*pmessage = null;
+	*error = null;
 	s0 = s = *ps;
 	if (!s || *s == 0) return false;
 	while (*s && *s != '\n') s++;
@@ -85,15 +102,15 @@ static bool stringToLine(String *ps, int *plevel, String *pkey, String *ptag, St
 		*s = 0;
 		*ps = s + 1;
 	}
-	return bufferToLine(s0, plevel, pkey, ptag, pvalue, pmessage);
-}
+	return bufferToLine(s0, plevel, pkey, ptag, pvalue, error) == ReadOkay;
+}*/
 
 //  bufferToLine -- Process a Gedcom line, extracting the level, the key, if any, the tag, and
 //    the value, if any. The line may have a newline at the end. This function is called by both
 //    fileToLine and stringToLine.
 //--------------------------------------------------------------------------------------------------
-static int bufferToLine (String p, int* plevel, String* pkey, String* ptag, String* pvalue,
-						   String* pmessage)
+static ReadReturnCode bufferToLine (String p, int* plevel, String* pkey, String* ptag, String* pvalue,
+						   Error **error)
 //  p -- Gedcom line before processing. Within the function p is used as a cursor.
 //  plevel -- (out) Pointer to line's Gedcom level.
 //  pkey -- (out) Pointer to line's key if any.
@@ -101,25 +118,20 @@ static int bufferToLine (String p, int* plevel, String* pkey, String* ptag, Stri
 //  pvalue -- (out) Pointer to line's value, if any.
 //  pmessage -- (out) Pointer to error message, if any, in a static buffer.
 {
-	// Static buffer for returning error messages.
-	static char scratch[MAXLINELEN+40];
-
 	// Be sure a string was passed in.
 	if (!p || *p == 0) {
-		sprintf(scratch, reremp, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+		*error = createError(syntaxError, fileName, fileLine, "Empty string");
+		return ReadError;
 	}
 	// Initialize the output parameters.
-	*pmessage = *pkey = *pvalue = 0;
+	*pkey = *pvalue = 0;
 	// Strip trailing white space from the String. TODO: THIS SEEMS WASTEFUL.
 	striptrail(p);
 
-	// Check that the input string isn't too long.
+	// See if the input string is too long.
 	if (strlen(p) > MAXLINELEN) {
-		sprintf(scratch, rerlng, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+		*error = createError(syntaxError, fileName, fileLine, "Line is too long");
+		return ReadError;
 	}
 
 	// Get the level number. Pass any whitespace that precedes the level.
@@ -127,15 +139,12 @@ static int bufferToLine (String p, int* plevel, String* pkey, String* ptag, Stri
 
 	// The first non-white character must be a digit for the Gedcom's line level.
 	if (chartype(*p) != DIGIT) {
-		sprintf(scratch, rernlv, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+		*error = createError(syntaxError, fileName, fileLine, "Line does not begin with a level");
+		return ReadError;
 	}
 
 	// Use ascii arithmetic to convert the digit characters to integers.
 	int level = *p++ - '0';
-	
-	// Though extremely unlikely, handle levels with multiple digits.
 	while (chartype(*p) == DIGIT) level = level*10 + *p++ - '0';
 	
 	// Set the output level parameter to its value.
@@ -146,127 +155,107 @@ static int bufferToLine (String p, int* plevel, String* pkey, String* ptag, Stri
 
 	// If at the end of the string it is an error.
 	if (*p == 0) {
-		sprintf(scratch, rerinc, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+		*error = createError(syntaxError, fileName, fileLine, "Line is incomplete");
+		return ReadError;
 	}
 
 	// If @ is the first character, this line has a key.
-	if (*p != '@') goto gettag;  // No @-sign. Skip to the tag.
+	if (*p != '@') goto gettag;
 
-	// Get the key. Include the @-signs, considering them as syntactic sugar.
-	*pkey = p++;  // Don't skip the '@'. MNOTE: The returned key points into the original string.
-	if (*p == '@') {  // A Gedcom key of @@ is illegal.
-		sprintf(scratch, rerbln, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+	// Get the key including @'s.
+	*pkey = p++;  // MNOTE: Key points into the original string.
+	if (*p == '@') {  // @@ is illegal.
+		*error = createError(syntaxError, fileName, fileLine, "Illegal key (@@)");
+		return ReadError;
 	}
 	while (*p != '@' && *p != 0) p++;  // Read until the second @-sign.
 	//  If at the end of the string it is an error.
 	if (*p == 0) {
-		sprintf(scratch, rerinc, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+		*error = createError(syntaxError, fileName, fileLine, "Line is incomplete");
+		return ReadError;
 	}
 	//  p now points to the second @-sign. Put a space into the next character (which will be
 	//    between the 2nd @ and the first character of the tag).
 	if (*++p != ' ') {
-		sprintf(scratch, "%d: There must be a space between the key and the tag.\n", fileLine);
-		printf("There must be a space between the key and the tag.\n");
-		*pmessage = scratch;
+		*error = createError(syntaxError, fileName, fileLine, "There must be a space between the key and tag");
+		return ReadError;
 	}
 	*p++ = 0;
-	// There must be white space between the key and the tag.
-//    if (!iswhite(*p++)) {
-//        sprintf(scratch, rernwt, fileLine);
-//        *pmessage = scratch;
-//        return ERROR;
-//    }
 
 	// Get the tag field.
 gettag:
 	while (iswhite(*p)) p++;  // Allow additional white space.
 	if ((int) *p == 0) {
-		sprintf(scratch, rerinc, fileLine);
-		*pmessage = scratch;
-		return ERROR;
+		*error = createError(syntaxError, fileName, fileLine, "The line is incomplete");
+		return ReadError;
 	}
 	*ptag = p++;  // MNOTE: The returned tag points into the original string.
 	while (!iswhite(*p) && *p != 0) p++;
-	if (*p == 0) return OKAY;
+	if (*p == 0) return ReadOkay;
 	*p++ = 0;
 
 	// Get the value field.
 	while (iswhite(*p)) p++;
 	*pvalue = p;  // MNOTE: The returned value points into the original string.
-	return OKAY;
+	return ReadOkay;
 }
-
-//  Static variables that maintain state between firstNodeTreeFromFile and nextNodeTreeFromFile.
-//--------------------------------------------------------------------------------------------------
-static int level;
-static String key;
-static String tag;
-static String value;
-static bool ateof = false;
 
 // firstNodeTreeFromFile -- Convert first Gedcom record in a file to a gedcom node tree.
 //--------------------------------------------------------------------------------------------------
-GNode* firstNodeTreeFromFile (FILE* fp, String* pmsg)
-//  fp -- File that holds the gedcom records.
+GNode* firstNodeTreeFromFile (FILE *fp, int *lineNo, ErrorLog *errorLog)
+//  fp -- (in) File that holds Gedcom records.
 //  pmsg -- (out) Possible error message.
 //  peof -- (out) Set to true if the file is at end of file.
 {
-	//ateof = false;
+	ateof = false;
 	fileLine = 0;
-	*pmsg = null;
-	int rc = fileToLine(fp, &level, &key, &tag, &value, pmsg);
-	if (rc == DONE) {
+	Error *error = null;
+	ReadReturnCode rc = fileToLine(fp, &level, &key, &tag, &value, &error);
+	if (rc == ReadEOF) {
 		ateof = true;
-		*pmsg = fileof;
+		addErrorToLog(errorLog, createError(systemError, fileName, fileLine, "the file is empty"));
+		if (error) deleteError((Word) error);
 		return null;
-	} else if (rc == ERROR)
+	} else if (rc == ReadError) {
+		addErrorToLog(errorLog, error);
 		return null;
-	return nextNodeTreeFromFile(fp, pmsg);
+	}
+	return nextNodeTreeFromFile(fp, lineNo, errorLog);
 }
 
 //  nextNodeTreeFromFile -- Convert the next Gedcom record in a file to a Node tree.
 //--------------------------------------------------------------------------------------------------
-GNode* nextNodeTreeFromFile(FILE *fp, String *pmsg)
+GNode* nextNodeTreeFromFile(FILE *fp, int *lineNo, ErrorLog *errorLog)
 //  fp -- File that holds the Gedcom records.
 //  pmsg -- (out) Possible error message.
 //  peof -- (out) Set to true if the file is at end of file.
 {
-	int bcode, rc;
+	ReadReturnCode bcode, rc;
 	GNode *root, *node, *curnode;
-	static char scratch[100];
-	*pmsg = null;
-	//*peof = false;
-	// If file is at end return null.
-	if (ateof) {
-		//ateof = *peof = true;
-		*pmsg = fileof;
-		return null;
-	}
+	Error *error;
+	// If file is at end return EOF.
+	if (ateof) return null;
 
 	//  The first line in the record has been read and must have level 0.
 	int curlev = level;
 	if (curlev != 0)  {
-		*pmsg = rerwlv;
+		addErrorToLog(errorLog, createError(syntaxError, fileName, fileLine, "Record does not start at level 0"));
+		//  Read ahead for a line with level 0.
+		//while ((rc = fileToLine(fp, &level, &key, &value, &error)))
 		return null;
 	}
 
 	//  Create the root of a node tree.
 	root = curnode = createGNode(key, tag, value, null);
-	bcode = OKAY;
+	bcode = ReadOkay;
 
 	//  Read the lines of the current record and build its tree.
-	rc = fileToLine(fp, &level, &key, &tag, &value, pmsg);
-	while (rc == OKAY) {
+	rc = fileToLine(fp, &level, &key, &tag, &value, &error);
+	while (rc == ReadOkay) {
 
 		//  If the level is zero the the record has been read and built.
 		if (level == 0) {
-			bcode = DONE;
+			bcode = ReadOkay;
 			break;
 		}
 
@@ -289,9 +278,8 @@ GNode* nextNodeTreeFromFile(FILE *fp, String *pmsg)
 
 			// Check for an illegal level.
 			if (level < 0) {
-				sprintf(scratch, rerilv, fileLine);
-				*pmsg = scratch;
-				bcode = ERROR;
+				addErrorToLog(errorLog, createError(syntaxError, fileName, fileLine, "Illegal level"));
+				bcode = ReadError;
 				break;
 			}
 
@@ -306,20 +294,20 @@ GNode* nextNodeTreeFromFile(FILE *fp, String *pmsg)
 			curnode->sibling = node;
 			curnode = node;
 
-			//  Anything else is an error.
+		//  Anything else is an error.
 		} else {
-			sprintf(scratch, rerilv, fileLine);
-			*pmsg = scratch;
-			bcode = ERROR;
+			addErrorToLog(errorLog, createError(syntaxError, fileName, fileLine, "Illegal line"));
+			bcode = ReadError;
 			break;
 		}
 		//  The line was converted to a node and inserted. Read the next line and continue.
-		rc = fileToLine(fp, &level, &key, &tag, &value, pmsg);
+		rc = fileToLine(fp, &level, &key, &tag, &value, &error);
 	}
 
 	//  At the end of the loop. If the code was successful return the tree root.
-	if (bcode == DONE) return root;
-	if (bcode == ERROR || rc == ERROR) {
+	if (bcode == ReadOkay) return root;
+	if (bcode == ReadError || rc == ReadError) {
+		addErrorToLog(errorLog, error);
 		// If there were errors free all nodes rooted at root and return null.
 		freeGNodes(root);
 		return null;
@@ -332,7 +320,7 @@ GNode* nextNodeTreeFromFile(FILE *fp, String *pmsg)
 //    by LifeLines when reading records from its database to convert them to node tree format.
 //    So far not needed by DeadEnds because the records are never in a string format.
 //--------------------------------------------------------------------------------------------------
-GNode* stringToNodeTree(String str)
+/* GNode* stringToNodeTree(String str, ErrorLog *errorLog)
 {
 	int lev;
 	int lev0;
@@ -377,4 +365,4 @@ GNode* stringToNodeTree(String str)
 	if (!msg) return root;
 	freeGNodes(root);
 	return null;
-}
+} */

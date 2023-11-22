@@ -4,7 +4,7 @@
 //  recordindex.h -- Defines the record index as a hash table.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 31 October 2023.
+//  Last changed on 17 November 2023.
 //
 
 #ifndef recordindex_h
@@ -22,6 +22,7 @@ typedef struct RecordIndexEl RecordIndexEl;
 
 typedef struct RecordIndexEl {
 	GNode *root;  //  The root node of the record.
+	int lineNumber;  // Line number in original Gedcom file where the root node is located.
 }  RecordIndexEl;
 
 //  RecordIndex -- A record index is a hash table.
@@ -32,7 +33,7 @@ typedef HashTable RecordIndex;
 //--------------------------------------------------------------------------------------------------
 RecordIndex *createRecordIndex(void);                   //  Create a record index.
 void deleteRecordIndex(RecordIndex*);                   //  Delete a record index.
-void insertInRecordIndex(RecordIndex*, String, GNode*); //  Add an entry to a RecordIndex.
+void insertInRecordIndex(RecordIndex*, String, GNode*, int lineNumber); //  Add an entry to a RecordIndex.
 extern int getRecordInsertCount(void); // Return the record insert count.  For debugging.
 GNode* searchRecordIndex(RecordIndex*, String);         //  Search for an entry in a RecordIndex.
 void showRecordIndex(RecordIndex*);                     //  Show the contents of record index.

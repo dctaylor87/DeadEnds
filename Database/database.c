@@ -7,7 +7,7 @@
 //    records is also done.
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed 1 November 2023.
+//  Last changed 22 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -18,15 +18,17 @@
 #include "recordindex.h"
 #include "stringtable.h"
 #include "nameindex.h"
+#include "path.h"
 
-static bool debugging = true;
+static bool debugging = false;
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
 Database *createDatabase(CString fileName)
 {
 	Database *database = (Database*) stdalloc(sizeof(Database));
-	database->fileName = fileName;
+	database->fileName = strsave(fileName);
+	database->lastSegment = strsave(lastPathSegment(fileName));
 	database->personIndex = createRecordIndex();
 	database->familyIndex = createRecordIndex();
 	database->sourceIndex = createRecordIndex();
@@ -181,36 +183,37 @@ RecordIndexEl *keyToOtherRecord(CString key, Database *database)
 
 static int count = 0;  // Debugging.
 
-//  storeRecord -- Store a gedcom record in the database by adding it to the record index of
+//  storeRecord -- Store a Gedcom node tree in the database by adding it to the record index of
 //    its type. Return true if the record was added successfully.
 //--------------------------------------------------------------------------------------------------
-bool storeRecord(Database *database, GNode* root)
+bool storeRecord(Database *database, GNode* root, int lineNumber)
 //  database -- Database to add the record to
 //  root -- Root of a record tree to store in the database.
+//  lineNumber -- Line number in the Gedcom file where th record began.
 {
-	//if (debugging) printf("storeRecord called\n");
+	if (debugging) printf("storeRecord called\n");
 	ASSERT(root);
 	RecordType type = recordType(root);
-	//if (debugging) printf("type of record is %d\n", type);
+	if (debugging) printf("type of record is %d\n", type);
 	if (type == GRHeader || type == GRTrailer) return true;  // Ignore HEAD and TRLR records.
 	ASSERT(root->key);
 	count++;
 	String key = root->key;  // MNOTE: insertInRecord copies the key.
 	switch (type) {
 		case GRPerson:
-			insertInRecordIndex(database->personIndex, key, root);
+			insertInRecordIndex(database->personIndex, key, root, lineNumber);
 			return true;
 		case GRFamily:
-			insertInRecordIndex(database->familyIndex, key, root);
+			insertInRecordIndex(database->familyIndex, key, root, lineNumber);
 			return true;
 		case GRSource:
-			insertInRecordIndex(database->sourceIndex, key, root);
+			insertInRecordIndex(database->sourceIndex, key, root, lineNumber);
 			return true;
 		case GREvent:
-			insertInRecordIndex(database->eventIndex, key, root);
+			insertInRecordIndex(database->eventIndex, key, root, lineNumber);
 			return true;
 		case GROther:
-			insertInRecordIndex(database->otherIndex, key, root);
+			insertInRecordIndex(database->otherIndex, key, root, lineNumber);
 			return true;
 		default:
 			ASSERT(false);
@@ -237,8 +240,7 @@ void indexNames(Database* database)
 	int i, j;  //  State variables.
 	static int count = 0;
 
-	//  DEBUG
-	printf("indexNames\n");
+	if (debugging) printf("Start indexNames\n");
 
 	//  Get the first entry in the person index.
 	RecordIndexEl* entry = firstInHashTable(database->personIndex, &i, &j);
@@ -247,15 +249,13 @@ void indexNames(Database* database)
 		//  MNOTE: The key is heapified in insertInNameIndex.
 		String recordKey = root->key;
 		//  DEBUG
-		//printf("indexNames: recordKey: %s\n", recordKey);
+		if (debugging) printf("indexNames: recordKey: %s\n", recordKey);
 		for (GNode* name = NAME(root); name && eqstr(name->tag, "NAME"); name = name->sibling) {
 			if (name->value) {
-				//  DEBUG
-				//printf("indexNames: name->value: %s\n", name->value);
+				if (debugging) printf("indexNames: name->value: %s\n", name->value);
 				//  MNOTE: nameKey is in data space. It is heapified in insertInNameIndex.
 				String nameKey = nameToNameKey(name->value);
-				//  DEBUG
-				//printf("indexNames: nameKey: %s\n", nameKey);
+				if (debugging) printf("indexNames: nameKey: %s\n", nameKey);
 				insertInNameIndex(database->nameIndex, nameKey, recordKey);
 				count++;
 			}
@@ -265,7 +265,7 @@ void indexNames(Database* database)
 		entry = nextInHashTable(database->personIndex, &i, &j);
 	}
 	//showNameIndex(database->nameIndex);
-	printf("The number of names indexed was %d\n", count);
+	/*if (debugging) */ printf("The number of names indexed was %d\n", count);
 }
 
 //  Some debugging functions.

@@ -4,7 +4,7 @@
 //  database.h
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed on 7 October 2023.
+//  Last changed on 22 November 2023.
 //
 
 #ifndef database_h
@@ -22,6 +22,7 @@ typedef HashTable RecordIndex;
 //--------------------------------------------------------------------------------------------------
 typedef struct Database {
     String fileName;  // Name of Gedcom file this database was built from.
+    String lastSegment;
     RecordIndex *personIndex;
     RecordIndex *familyIndex;
     RecordIndex *sourceIndex;
@@ -58,7 +59,8 @@ RecordIndexEl *keyToEventRecord(CString key, Database*);
 //  Get an other record from the database.
 RecordIndexEl *keyToOtherRecord(CString Key, Database*);
 
-bool storeRecord(Database*, GNode*);        //  Add a record to the database.
+bool storeRecord(Database*, GNode*, int lineno);        //  Add a record to the database.
+
 void showTableSizes(Database*);          //  Show the sizes of the database tables. Debugging.
 void showPersonIndex(Database*);      //  Show the person index. Debugging.
 void showFamilyIndex(Database*);      //  Show the family index. Debugging.

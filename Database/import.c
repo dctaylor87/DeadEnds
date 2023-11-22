@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 11 November 2023.
+//  Last changed on 19 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -25,7 +25,6 @@ String currentGedcomFileName = null;
 int currentGedcomLineNumber = 1;
 
 static String updateKeyMap(GNode *root, StringTable* keyMap);
-static void rekeyDatabase(Database*, StringTable *keyMap);
 static void rekeyIndex(RecordIndex*, StringTable *keyMap);
 static void outputErrorLog(ErrorLog* errorLog);
 static void setupDatabase(List *recordIndexes);
@@ -37,41 +36,32 @@ extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, db
 static GNode *normalizeNodeTree (GNode*);
 static bool debugging = true;
 
-//  importFromFiles -- Import Gedcom files into a list of Databases. This function not yet used.
+//  importFromFiles -- Import Gedcom files into a list of Databases.
 //--------------------------------------------------------------------------------------------------
 List *importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 //  filesNames -- Names of the files to import.
 //  count -- Number of files to import.
 //  errorLog -- Error log.
 {
-	//  Create a list Databases, one for each Gedcom file that is read successfully.
 	List *listOfDatabases = createList(null, null, null);
+	Database *database = null;
 
-	//  Loop through the file names importing each into a Database.
 	for (int i = 0; i < count; i++) {
-		Database *database = importFromFile(fileNames[i], errorLog);
-		if (!database) {
-			if (debugging) {
-				printf("There was an error importing from file %s.\n", fileNames[i]);
-				printf("There should be errors in the log that say what's wrong.\n");
-			}
-			continue;
+		if ((database = importFromFile(fileNames[i], errorLog)))
 			appendListElement(listOfDatabases, database);
-		}
 	}
 	return listOfDatabases;
 }
 
-//  importFromFile -- Import the records from a Gedcom file into an index. After reading the
-//    records rekey the records.
+//  importFromFile -- Import the records in a Gedcom file into a Database.
 //--------------------------------------------------------------------------------------------------
 Database *importFromFile(CString fileName, ErrorLog *errorLog)
 {
-	if (debugging) printf("Entered simpleImportFromFile\n");
+	if (debugging) printf("Entered importFromFile\n");
 	ASSERT(fileName);
 	FILE *file = fopen(fileName, "r");
 	if (!file) {
-		addErrorToLog(errorLog, systemError, fileName, 0, "could not open file.");
+		addErrorToLog(errorLog, createError(systemError, fileName, 0, "Could not open file."));
 		return null;
 	}
 
@@ -81,18 +71,17 @@ Database *importFromFile(CString fileName, ErrorLog *errorLog)
 Database *importFromFileFP (FILE *file, CString fileName, ErrorLog *errorLog)
 {
 	Database *database = createDatabase(fileName);
-
-	String errorMessage;
-	int recordCount = 0;
+	int recordCount = 0;  // DEBUG: Remove after testing.
+	int lineNo;
 
 	//  Read the records and add them to the database.
-	GNode *root = firstNodeTreeFromFile(file, &errorMessage);
+	GNode *root = firstNodeTreeFromFile(file, &lineNo, errorLog);
 	while (root) {
-		recordCount++;
-		storeRecord(database, normalizeNodeTree(root));
-		root = nextNodeTreeFromFile(file, &errorMessage);
+		recordCount++;  // DEBUG: Remove after testing.
+		storeRecord(database, normalizeNodeTree(root), lineNo);
+		root = nextNodeTreeFromFile(file, &lineNo, errorLog);
 	}
-	printf("Read %d records.\n", recordCount);
+	if (debugging) printf("Read %d records.\n", recordCount);
 
 	return database;
 }

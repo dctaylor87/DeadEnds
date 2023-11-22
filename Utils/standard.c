@@ -4,7 +4,7 @@
 //  standard.c -- Standard routines.
 //
 //  Create by Thomas Wetmore on 7 November 2022.
-//  Last changed on 6 October 2023.
+//  Last changed on 22 November 2023.
 
 #include <stdlib.h>
 
@@ -36,8 +36,6 @@ static long bytesAllocated = 0;
 static long bytesFreed = 0;
 
 CString version = "deadends.1.0.0";
-
-static String lastSegment(String path);
 
 // logAllocations -- Turn allocation logging on or off. For developer use debugging memory issues.
 //--------------------------------------------------------------------------------------------------
@@ -292,21 +290,4 @@ bool allwhite (String p)
 {
     while (*p) if (!iswhite(*p++)) return false;
     return true;
-}
-
-// lastSegment -- Return the last segment of a Unix path.
-//--------------------------------------------------------------------------------------------------
-static String lastSegment(String path)
-// path -- Unix path string.
-{
-    bool done = false;
-    String p = path;
-    int c;
-    while (!done) {
-        // Move to the next slash or end of string.
-        String q = p;
-        while ((c = *p++) != 0 && c != '/') ;
-        if (c == 0) return q;
-    }
-    return null;
 }
