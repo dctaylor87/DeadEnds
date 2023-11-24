@@ -36,8 +36,3 @@ extern RECORD __llpy_key_to_record (CString key, int *int_type);
 extern int _py_traverse_nodes (GNode *node, int level,
 			       int (*func)(GNode *, int, void *),
 			       void *extra);
-
-
-#if defined(DEADENDS)
-extern RecordIndexEl *_llpy_node_to_record (GNode *node);
-#endif
