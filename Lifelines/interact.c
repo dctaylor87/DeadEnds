@@ -58,6 +58,7 @@
 #include "indiseq.h"
 #include "screen.h"
 #include "screeni.h"
+#include "cscurses.h"
 #include "messages.h"
 
 #endif
