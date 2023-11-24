@@ -27,6 +27,7 @@
 #include "llinesi.h"
 #include "liflines.h"
 #include "screen.h"
+#include "cscurses.h"
 #else
 
 #include "llstdlib.h"

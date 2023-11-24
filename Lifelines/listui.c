@@ -50,6 +50,7 @@
 #include "messages.h"
 #include "name.h"
 #include "screen.h"
+#include "cscurses.h"
 #else
 
 #include "llstdlib.h"

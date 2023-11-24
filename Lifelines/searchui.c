@@ -46,6 +46,8 @@
 #include "liflines.h"
 #include "messages.h"
 #include "screen.h"
+#include "screeni.h"
+#include "cscurses.h"
 #else
 
 #include "llstdlib.h"

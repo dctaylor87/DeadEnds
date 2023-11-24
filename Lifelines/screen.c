@@ -51,6 +51,7 @@
 #include "messages.h"
 #include "screen.h"
 #include "screeni.h"
+#include "cscurses.h"
 #include "messages.h"
 #include "codesets.h"
 

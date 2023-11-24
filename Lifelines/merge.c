@@ -53,6 +53,8 @@
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"
+
+#include "llpy-externs.h"
 #else
 
 #include "sys_inc.h"

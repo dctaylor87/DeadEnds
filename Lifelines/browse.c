@@ -59,6 +59,8 @@
 #include "messages.h"
 #include "screen.h"
 #include "splitjoin.h"
+
+#include "llpy-externs.h"
 #else
 
 #include "llstdlib.h"
