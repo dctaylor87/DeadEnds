@@ -2,6 +2,7 @@
    LifeLines and DeadEnds */
 
 typedef const char *	CNSTRING;
+typedef void *		VPTR;
 
 #define STRING		String
 
