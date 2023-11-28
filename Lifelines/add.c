@@ -53,9 +53,11 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
+#include "xlat.h"
 #include "uiprompts.h"
 #include "feedback.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"
@@ -406,10 +408,11 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 BOOLEAN
 prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 {
-	INT sex;
 #if defined(DEADENDS)
+	SexType sex;
 	GNode *spouse, *fam = nztop(frec);
 #else
+	INT sex;
 	NODE spouse, fam = nztop(frec);
 #endif
 
@@ -418,16 +421,22 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 		return FALSE;
 	}
 
-/* Identify spouse to add to family */
+	/* Identify spouse to add to family */
 
 	if (!sprec) sprec = ask_for_indi(_(qSidsadd), DOASK1);
 	if (!sprec) return FALSE;
 	spouse = nztop(sprec);
-	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
+#if defined(DEADENDS)
+	if ((sex = SEXV(spouse)) == sexUnknown) {
 		msg_error("%s", _(qSnosex));
 		return FALSE;
 	}
-
+#else
+	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
+	  msg_error("%s", _(qSnosex));
+	  return FALSE;
+	}
+#endif
 /* Identify family to add spouse to */
 
 	if (!fam) fam = nztop(ask_for_fam(_(qSidsinf), _(qSkchild)));
@@ -443,6 +452,16 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 #endif
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		join_fam(fam, fref, husb, wife, chil, rest);
+#if defined(DEADENDS)
+		if (sex == sexMale && husb) {
+			msg_error("%s", _(qShashsb));
+			return FALSE;
+		}
+		if (sex == sexFemale && wife) {
+			msg_error("%s", _(qShaswif));
+			return FALSE;
+		}
+#else
 		if (sex == SEX_MALE && husb) {
 			msg_error("%s", _(qShashsb));
 			return FALSE;
@@ -451,6 +470,7 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 			msg_error("%s", _(qShaswif));
 			return FALSE;
 		}
+#endif
 	}
 
 	if (conf && !ask_yes_or_no(_(qScfsadd)))
@@ -466,7 +486,11 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
  * (no user interaction)
  *=================================*/
 void
+#if defined(DEADENDS)
+add_spouse_to_fam (NODE spouse, NODE fam, SexType sex)
+#else
 add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
+#endif
 {
 /* Add HUSB or WIFE node to family */
 #if defined(DEADENDS)
@@ -475,7 +499,12 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
 #endif
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-	if (sex == SEX_MALE) {
+#if defined(DEADENDS)
+	if (sex == sexMale)
+#else
+	if (sex == SEX_MALE)
+#endif
+	{
 		prev = NULL;
 		this = husb;
 		while (this) {
@@ -502,7 +531,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	}
 	join_fam(fam, fref, husb, wife, chil, rest);
 
-/* Add FAMS node to spouse */
+	/* Add FAMS node to spouse */
 
 	fams = create_node(NULL, "FAMS", nxref(fam), spouse);
 	prev = NULL;
@@ -514,7 +543,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 	ASSERT(prev);
 	nsibling(prev) = fams;
 
-/* Write updated records to database */
+	/* Write updated records to database */
 
 	resolve_refn_links(spouse);
 	resolve_refn_links(fam);
@@ -586,12 +615,14 @@ add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
 RECORD
 add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 {
-	INT sex1 = 0;
-	INT sex2 = 0;
 #if defined(DEADENDS)
+	SexType sex1 = sexUnknown;
+	INT sex2 = sexUnknown;
 	GNode *spouse1, *spouse2, *child;
 	GNode *fam1, *fam2=0, *husb, *wife, *chil;
 #else
+	INT sex1 = 0;
+	INT sex2 = 0;
 	NODE spouse1, spouse2, child;
 	NODE fam1, fam2=0, husb, wife, chil;
 #endif
@@ -619,18 +650,29 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 		sprec1 = ask_for_indi(_(qSidsps1), NOASK1);
 	if (!sprec1) 
 		return NULL;
-	if ((sex1 = SEX(nztop(sprec1))) == SEX_UNKNOWN) {
+#if defined(DEADENDS)
+	if ((sex1 = SEXV(nztop(sprec1))) == sexUnknown)
+#else
+	if ((sex1 = SEX(nztop(sprec1))) == SEX_UNKNOWN)
+#endif
+	{
 		msg_error("%s", _(qSunksex));
 		return NULL;
 	}
 
-/* Identify optional spouse */
+	/* Identify optional spouse */
 
 	if (!sprec2)
 		sprec2 = ask_for_indi(_(qSidsps2), DOASK1);
 	if (sprec2) {
+#if defined(DEADENDS)
+		if ((sex2 = SEXV(nztop(sprec2))) == sexUnknown || 
+			(traditional && sex1 == sex2))
+#else
 		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || 
-			(traditional && sex1 == sex2)) {
+			(traditional && sex1 == sex2))
+#endif
+		{
 			msg_error("%s", _(qSnotopp));
 			return NULL;
 		}
@@ -648,6 +690,22 @@ editfam:
 	 * to do this we make slightly fib about the use of the
 	 * terms husb and wife in setting up spouse nodes
 	 */
+#if defined(DEADENDS)
+	if (sex1 == sex2 && sex2 == sexFemale) {
+	    husb = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	} else if (sex1 == sexMale ) {
+	    husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
+	} else if (sex2 == sexMale && sex1 != sexMale) {
+	    husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
+	}
+	if (sex1 == sexFemale && sex2 != sexFemale) {
+	    wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	} else if (sex2 == sexFemale) {
+	    wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
+	} else if (sex1 == sex2 && sex2 == sexMale) {
+	    wife = create_node(NULL, "HUSB", nxref(spouse2), fam1);
+	}
+#else
 	if (sex1 == sex2 && sex2 == SEX_FEMALE) {
 	    husb = create_node(NULL, "WIFE", nxref(spouse1), fam1);
 	} else if (sex1 == SEX_MALE ) {
@@ -662,6 +720,7 @@ editfam:
 	} else if (sex1 == sex2 && sex2 == SEX_MALE) {
 	    wife = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 	}
+#endif
 	if (child)
 		chil = create_node(NULL, "CHIL", nxref(child), fam1);
 
@@ -791,8 +850,13 @@ add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
 NODE
 add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 {
+#if defined(DEADENDS)
+	SexType sex1 = spouse1 ? SEXV(spouse1) : sexUnknown;
+	SexType sex2 = spouse1 ? SEXV(spouse2) : sexUnknown;
+#else
 	INT sex1 = spouse1 ? SEX(spouse1) : SEX_UNKNOWN;
 	INT sex2 = spouse1 ? SEX(spouse2) : SEX_UNKNOWN;
+#endif
 	NODE fam1, fam2, refn, husb, wife, chil, body;
 	NODE node;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
@@ -804,13 +868,21 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
 	husb = wife = chil = NULL;
 	if (spouse1) {
+#if defined(DEADENDS)
+		if (sex1 == sexMale)
+#else
 		if (sex1 == SEX_MALE)
+#endif
 			husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
 		else
 			wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
 	}
 	if (spouse2) {
+#if defined(DEADENDS)
+		if (sex2 == sexMale)
+#else
 		if (sex2 == SEX_MALE)
+#endif
 			husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 		else
 			wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);

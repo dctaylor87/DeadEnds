@@ -48,8 +48,11 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
+#include "hashtable.h"
+#include "xlat.h"
 #include "uiprompts.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"
@@ -130,7 +133,11 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
+#if defined(DEADENDS)
+	SexType sx2;
+#else
 	INT sx2;
+#endif
 	STRING msg, key;
  	BOOLEAN emp;
 
@@ -165,11 +172,17 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	}
 	fams1 = FAMS(indi1);
 	fams2 = FAMS(indi2);
+#if defined(DEADENDS)
+	if (fams1 && fams2 && SEXV(indi1) != SEXV(indi2)) {
+		msg_error("%s", _(qSnoxmrg));
+		return NULL;
+	}
+#else
 	if (fams1 && fams2 && SEX(indi1) != SEX(indi2)) {
 		msg_error("%s", _(qSnoxmrg));
 		return NULL;
 	}
-
+#endif
 
 /* sanity check lineage links */
 	check_indi_lineage_links(indi1);
@@ -194,9 +207,15 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	split_indi_old(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
 	indi2 = copy_nodes(indi2, TRUE, TRUE);
+#if defined(DEADENDS)
+	sx2 = sexUnknown;
+	if (fams1) sx2 = val_to_sex(sex1);
+	if (fams2) sx2 = val_to_sex(sex2);
+#else
 	sx2 = SEX_UNKNOWN;
 	if (fams1) sx2 = val_to_sex(sex1);
 	if (fams2) sx2 = val_to_sex(sex2);
+#endif
 
 /*CONDITION: 1s, 2s - build first version of merged person */
 
@@ -349,10 +368,17 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 		fam = key_to_fam(rmvat(nval(this)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
+#if defined(DEADENDS)
+		if (sx2 == sexMale)
+			head = that = husb;
+		else
+			head = that = wife;
+#else
 		if (sx2 == SEX_MALE)
 			head = that = husb;
 		else
 			head = that = wife;
+#endif
 		while (that) {
 			if (eqstr(nval(that), nxref(indi1))) {
 				next = nsibling(that);
@@ -368,10 +394,17 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 				that = nsibling(that);
 			}
 		}
+#if defined(DEADENDS)
+		if (sx2 == sexMale)
+			husb = head;
+		else
+			wife = head;
+#else
 		if (sx2 == SEX_MALE)
 			husb = head;
 		else
 			wife = head;
+#endif
 		join_fam(fam, fref, husb, wife, chil, rest);
 #if !defined(DEADENDS)
 		fam_to_dbase(fam);
@@ -387,7 +420,11 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 		fam = key_to_fam(rmvat(nval(this)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
+#if defined(DEADENDS)
+		that = (sx2 == sexMale) ? husb : wife;
+#else
 		that = (sx2 == SEX_MALE) ? husb : wife;
+#endif
 		while (that) {
 			if (eqstr(nval(that), nxref(indi1))) {
 				stdfree(nval(that));
@@ -783,7 +820,7 @@ sort_children (NODE chil1,
 static NODE
 remove_dupes (NODE list1, NODE list2)
 {
-#If defined(DEADENDS)
+#if defined(DEADENDS)
 	GNode *copy1 = copy_nodes(list1, TRUE, TRUE);
 	GNode *prev1, *next1, *curs1, *curs2;
 #else

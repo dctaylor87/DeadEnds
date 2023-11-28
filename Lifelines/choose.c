@@ -43,7 +43,9 @@
 #include "sequence.h"
 #include "uiprompts.h"
 #include "feedback.h"
+#include "errors.h"
 #include "liflines.h"
+#include "choose.h"
 #else
 
 #include "llstdlib.h"

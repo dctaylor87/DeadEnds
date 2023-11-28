@@ -47,6 +47,7 @@
 #include "uiprompts.h"
 #include "choose.h"
 #include "feedback.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"

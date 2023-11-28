@@ -25,7 +25,7 @@ typedef void *		VPTR;
 //#define store_record(key, rec, len)			storeRecord(
 //#define choose_from_indiseq(seq, ask1, titl1, titln)	chooseFromSequence(seq, ask1, titl1, titln)
 
-#define create_indiseq_null				createSequence(theDatabase)
+#define create_indiseq_null()				createSequence(theDatabase)
 
 //#define edit_add_event()
 //#define edit_add_source
@@ -64,6 +64,8 @@ typedef void *		VPTR;
 #define fam_to_children(node)		familyToChildren(node, theDatabase)
 #define fam_to_fathers(node)		familyToFathers(node, theDatabase)
 #define fam_to_mothers(node)		familyToMothers(node, theDatabase)
+#define fam_to_husb(node)		familyToHusband(node, theDatabase)
+#define fam_to_first_chil(node)		familyTOFirstChild(node, theDatabase)
 
 #define indi_to_children(node)		personToChildren(node, theDatabase)
 #define indi_to_families(node)		personToFamilies(node, theDatabase)
@@ -104,6 +106,7 @@ typedef void *		VPTR;
 #define uchar		u_char
 #define INT32		int32_t
 
+#define TABLE		HashTable *
 #define LIST		List *
 #define event_to_date(node,shorten)	eventToDate(node,shorten)
 #define givens(name)			getGivenNames(name)

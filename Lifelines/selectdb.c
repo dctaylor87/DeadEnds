@@ -42,6 +42,7 @@
 #include "uiprompts.h"
 #include "feedback.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #else

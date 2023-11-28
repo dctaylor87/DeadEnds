@@ -44,13 +44,16 @@
 #include "readwrite.h"
 
 #include "rfmt.h"
+#include "gnode.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "screen.h"
 #include "cscurses.h"
+#include "lineage.h"
 #else
 
 #include "llstdlib.h"
@@ -490,7 +493,12 @@ init_display_fam (RECORD frec, INT width)
 	/* if the only spouse is female, list in second slot
 	 * hiding the non-traditional behavior
 	 */
-	if (!wife && husb && SEX(husb) == SEX_FEMALE) {
+#if defined(DEADENDS)
+	if (!wife && husb && SEXV(husb) == sexFemale)
+#else
+	if (!wife && husb && SEX(husb) == SEX_FEMALE)
+#endif
+	{
 		wife = husb;
 		husb = 0;
 		iwife = ihusb;
@@ -501,7 +509,11 @@ init_display_fam (RECORD frec, INT width)
 
 	if (husbstatus == 1) {
 		INT avail = width - zs_len(famkey) - 3;
+#if defined(DEADENDS)
+		disp_person_name(Shusb, SEXV(husb)==sexMale?father:mother, ihusb, avail);
+#else
 		disp_person_name(Shusb, SEX(husb)==SEX_MALE?father:mother, ihusb, avail);
+#endif
 	} else {
 		zs_setf(Shusb, "%s:", father);
 		if (husbstatus == -1)
@@ -519,7 +531,11 @@ init_display_fam (RECORD frec, INT width)
 
 	if (wifestatus == 1) {
 		INT avail = width;
+#if defined(DEADENDS)
+		disp_person_name(Swife, SEXV(wife)==sexMale?father:mother, iwife, avail);
+#else
 		disp_person_name(Swife, SEX(wife)==SEX_MALE?father:mother, iwife, avail);
+#endif
 	} else {
 		zs_setf(Swife, "%s:", mother);
 		if (wifestatus == -1)

@@ -52,6 +52,7 @@
 #include "uiprompts.h"
 #include "choose.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #else

@@ -44,10 +44,14 @@
 
 #include "rfmt.h"
 #include "sequence.h"
+#include "xlat.h"
 #include "uiprompts.h"
 #include "feedback.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+#include "editing.h"
+#include "nodeutils.h"
 #else
 
 #include "llstdlib.h"

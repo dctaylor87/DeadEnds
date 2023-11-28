@@ -70,6 +70,7 @@ void showPValue(PValue value);
 bool isPValue(PValue value);
 bool isRecordType(PVType type);  // Return whether a PValue type is a Gedcom record type.
 bool isGNodeType(PVType type);  // Return whether a PValue is any kind of Gedcom line.
+bool isZeroVUnion(PVType type, VUnion vunion);
 
 //extern bool prog_debug;
 

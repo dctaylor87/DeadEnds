@@ -21,7 +21,7 @@
 #include "database.h"
 #include "recordindex.h"
 
-#include "python-to-c.h"
+#include "llpy-externs.h"
 
 RecordIndexEl *
 _llpy_node_to_record (GNode *node)

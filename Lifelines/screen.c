@@ -43,9 +43,12 @@
 
 #include "rfmt.h"
 #include "sequence.h"
+#include "hashtable.h"
+#include "xlat.h"
 #include "uiprompts.h"
 #include "choose.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "menuitem.h"
 #include "messages.h"
@@ -54,6 +57,7 @@
 #include "cscurses.h"
 #include "messages.h"
 #include "codesets.h"
+#include "listui.h"
 
 #else
 

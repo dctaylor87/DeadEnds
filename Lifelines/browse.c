@@ -54,6 +54,7 @@
 #include "feedback.h"
 #include "lineage.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "menuitem.h"
 #include "messages.h"

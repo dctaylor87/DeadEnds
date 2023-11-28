@@ -44,6 +44,7 @@
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "listui.h"
 #include "menuitem.h"

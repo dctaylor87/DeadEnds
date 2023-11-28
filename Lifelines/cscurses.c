@@ -25,6 +25,7 @@
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "screen.h"
 #include "cscurses.h"

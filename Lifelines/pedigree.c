@@ -29,6 +29,7 @@
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #else
 

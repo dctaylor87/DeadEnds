@@ -36,6 +36,7 @@
 #endif
 
 #include "python-to-c.h"
+#include "llpy-externs.h"
 #include "types.h"
 #include "person.h"
 #include "py-set.h"

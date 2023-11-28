@@ -48,10 +48,12 @@
 #include "choose.h"
 #include "feedback.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "menuitem.h"
 #include "messages.h"
 #include "screen.h"
+#include "lineage.h"
 #else
 
 #include "llstdlib.h"

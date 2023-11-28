@@ -17,7 +17,7 @@
 
 /* forward references */
 
-static int execute_script (CString script);
+static int execute_script (CString script, Database *database);
 
 /* start of code */
 
@@ -68,7 +68,7 @@ deadend_register_script (CString script)
    script -- something better than reading stdin for arguments. */
 
 int
-deadend_execute_scripts (int continue_on_failure)
+deadend_execute_scripts (int continue_on_failure, Database *database)
 {
   int saved_status = 0;
 
@@ -80,7 +80,7 @@ deadend_execute_scripts (int continue_on_failure)
 
   for (int cur_script = 0; cur_script < nscripts; cur_script++)
     {
-      int status = execute_script (script_array[cur_script]);
+      int status = execute_script (script_array[cur_script], database);
       if (status < 0)
 	{
 	  if (! continue_on_failure)
@@ -93,7 +93,7 @@ deadend_execute_scripts (int continue_on_failure)
 }
 
 static int
-execute_script (CString report_name)
+execute_script (CString report_name, Database *database)
 {
   // parse a DeadEnds script
   parseProgram (report_name, DEADENDS_search_path);
@@ -105,9 +105,10 @@ execute_script (CString report_name)
 
   //  Call the main procedure.
   SymbolTable *symbolTable = createSymbolTable();
+  Context *context = createContext (symbolTable, database);
 
   PValue returnPvalue;
-  interpret(pnode, symbolTable, &returnPvalue);
+  interpret(pnode, context, &returnPvalue);
 
   return (0);			/* XXX should interpret returnPvalue XXX */
 }

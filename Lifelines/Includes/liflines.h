@@ -44,7 +44,11 @@ extern void add_new_indi_to_db(RECORD indi0);
 extern void add_new_fam_to_db(NODE fam2, NODE spouse1, NODE spouse2, NODE child);
 void add_child_to_fam(NODE child, NODE fam, INT i);
 NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
+#if defined(DEADENDS)
+void add_spouse_to_fam(NODE spouse, NODE fam, SexType sex);
+#else
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
+#endif
 INT ask_child_order(NODE fam, PROMPTQ promptq, RFMT rfmt);
 STRING ask_for_indi_key(STRING, ASK1Q ask1);
 RECORD ask_for_indi(STRING ttl, ASK1Q ask1);
@@ -86,4 +90,7 @@ BOOLEAN select_database(STRING * dbrequested, INT alteration, STRING * perrmsg);
 /* miscutls.c */
 void sighand_cursesui(int sig);
 
+#if defined(DEADENDS)
+extern ErrorLog *globalErrorLog;
+#endif
 #endif /* _LIFLINES_H */

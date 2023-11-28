@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 
+bool gnodesToFile(int level, GNode* gnode, String fileName, bool indent);
 void writeGNodes(FILE*, int level, GNode*, bool indent, bool kids, bool sibs);
 void writeGNode(FILE*, int level, GNode*, bool indent);
 

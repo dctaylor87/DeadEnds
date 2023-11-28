@@ -180,7 +180,7 @@ main (int argc, char *argv[])
 
   if (have_deadend_scripts)
     {
-      int status = deadend_execute_scripts (0);
+      int status = deadend_execute_scripts (0, theDatabase);
       if (status < 0)
 	fprintf (stderr, "%s: DeadEnds script failed, status = %d\n",
 		 ProgName, status);

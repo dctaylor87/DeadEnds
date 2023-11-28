@@ -27,7 +27,9 @@
 
 #include "rfmt.h"
 #include "sequence.h"
+#include "hashtable.h"
 #include "uiprompts.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #else

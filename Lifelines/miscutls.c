@@ -48,6 +48,7 @@
 #include "uiprompts.h"
 #include "lineage.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #else
@@ -136,6 +137,29 @@ show_database_stats (void)
 /*======================================
  * sighand_cursesui -- Catch and handle signal (UI)
  *====================================*/
+#if defined(DEADENDS)
+void
+sighand_cursesui(int sig)
+{
+  char *sig_desc = strsignal (sig); /* localized signal description */
+  char *sig_format = _(qSsignal);   /* localized format string */
+  size_t len = strlen(sig_desc) + strlen(sig_format) + 20; /* 20 is overkill */
+  char abort_msg[len];
+
+  close_lifelines();
+  shutdown_ui(TRUE); /* pause */
+
+  showErrorLog(globalErrorLog);
+
+  /* build the message for ll_optional_abort to display */
+  snprintf (abort_msg, len, sig_format, sig, sig_desc);
+  ll_optional_abort(abort_msg);
+
+  exit(1);
+}
+
+#else
+
 void
 sighand_cursesui(HINT_PARAM_UNUSED int sig)
 {
@@ -166,14 +190,22 @@ sighand_cursesui(HINT_PARAM_UNUSED int sig)
 	zs_free(&zstr);
 	exit(1);
 }
+#endif
+
 /*======================================
  * sighand_cmdline - Catch and handle signal cleanly (command-line)
  *====================================*/
+#if defined(DEADENDS)
+void
+sighand_cmdline(int sig ATTRIBUTE_UNUSED)
+{
+  exit(1);
+}
+#else
 void
 sighand_cmdline(HINT_PARAM_UNUSED int sig)
 {
-#if !defined(DEADENDS)
 	closebtree(BTR);
-#endif
         exit(1);
 }
+#endif

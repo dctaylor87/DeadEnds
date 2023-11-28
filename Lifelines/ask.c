@@ -51,6 +51,7 @@
 #include "feedback.h"
 #include "rfmt.h"
 #include "llinesi.h"
+#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #else

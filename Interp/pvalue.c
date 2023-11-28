@@ -32,7 +32,6 @@ static char *ptypes[] = {
 //static double bool_to_float(bool);  // Convert a real number to a boolean.
 
 static bool isZero(PValue);
-bool isZeroVUnion(PVType, VUnion);
 
 //  allocPValue -- Allocate a program value in the heap. Program values are normally value types,
 //    but when there are stored in tables or lists they need to be in the heap.
