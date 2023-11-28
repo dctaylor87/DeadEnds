@@ -4,13 +4,16 @@
 //  standard.h -- Useful things.
 //
 //  Created by Thomas Wetmore on 1 November 2022.
-//  Last changed on 3 April 2023.
+//  Last changed on 26 November 2023.
 //
 
 #ifndef standard_h
 #define standard_h
 
 #define DEBUGALLOCS // EMPTY
+
+typedef char* String;
+typedef const char* CString;
 
 #include <sys/types.h>
 #include <stdlib.h>  // malloc, free, abort.
@@ -19,14 +22,14 @@
 #include <ctype.h>
 #include <stdbool.h>  // bool, true and false.
 #include <unistd.h>
+#include "path.h"
 
 #define MAXSTRINGSIZE 512
 
 // Useful typedefs.
 //--------------------------------------------------------------------------------------------------
 typedef void* Word;
-typedef char* String;
-typedef const char* CString;
+//typedef char* String;
 
 // CharacterType -- Characters are partitioned into different types.
 //--------------------------------------------------------------------------------------------------
@@ -103,7 +106,7 @@ extern CString version;		// standard.c
 #define null ((void*) 0)
 
 // Debugging aids.
-extern String last_segment(String);
-#define PH if(debugging) printf("%s %s %d\n", __FUNCTION__, last_segment(__FILE__), __LINE__);
+extern String lastPathSegment(String);
+#define PH if(debugging) printf("%s %s %d\n", __FUNCTION__, lastPathSegment(__FILE__), __LINE__);
 
 #endif

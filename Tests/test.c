@@ -1,7 +1,7 @@
 //  test.c -- Test program.
 //
 //  Created by Thomas Wetmore on 5 October 2023.
-//  Last changed on 22 November 2023.
+//  Last changed on 27 November 2023.
 
 #include <stdio.h>
 #include "standard.h"
@@ -19,8 +19,6 @@
 #include "validate.h"
 #include "path.h"
 
-#define VSCODE
-
 extern FunctionTable *procedureTable;
 
 static Database *createDatabaseTest(String, int, ErrorLog*);
@@ -30,38 +28,37 @@ static void parseAndRunProgramTest(Database*, int);
 static void validateDatabaseTest(Database*, int);
 static void forTraverseTest(Database*, int);
 static void showHashTableTest(HashTable*, int);
-static void indexNamesTest(Database *database, int);
+static void indexNamesTest(Database*, int);
 extern bool validateDatabase(Database*, ErrorLog*);
 
+//  main -- Main function for the batch program that tests the DeadEnds infrastructure software.
+//-------------------------------------------------------------------------------------------------
 int main (void)
 {
-	#ifdef XCODE
-	String gedcomFile = "/Users/ttw4/Desktop/DeadEndsCloneOne/CloneOne/CloneOne/Gedfiles/main.ged";
-#else
-	String gedcomFile = "../Gedfiles/main.ged";
-#endif
-
+	//String gedcomFile = "/Users/ttw4/Desktop/DeadEnds/Gedfiles/bad.ged";
+	//String gedcomFile = "/Users/ttw4/Desktop/DeadEnds/Gedfiles/main.ged";
+	//String gedcomFile = "/Users/ttw4/Desktop/DeadEnds/Gedfiles/notthere.ged";
+	String gedcomFile = "/Users/ttw4/Desktop/DeadEnds/Gedfiles/threezeros.ged";
 	int testNumber = 0;
 	ErrorLog *errorLog = createErrorLog();
-	showErrorLog(errorLog);
 
 	Database *database = createDatabaseTest(gedcomFile, ++testNumber, errorLog);
 	showErrorLog(errorLog);
 	//return 0;  // EXPEDIENT.
 
-	listTest(database, ++testNumber);
+	if (database) listTest(database, ++testNumber);
 
-	forHashTableTest(database, ++testNumber);
+	if (database) forHashTableTest(database, ++testNumber);
 
-	showHashTableTest(database->personIndex, ++testNumber);
+	if (database) showHashTableTest(database->personIndex, ++testNumber);
 
-	indexNamesTest(database, ++testNumber);
+	if (database) indexNamesTest(database, ++testNumber);
 
-	validateDatabaseTest(database, ++testNumber);
+	if (database) validateDatabaseTest(database, ++testNumber);
 
-	forTraverseTest(database, ++testNumber);
+	if (database) forTraverseTest(database, ++testNumber);
 
-	parseAndRunProgramTest(database, ++testNumber);
+	if (database) parseAndRunProgramTest(database, ++testNumber);
 
 	return 0;
 }
@@ -71,37 +68,28 @@ int main (void)
 Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorLog)
 {
 	printf("%d: START OF CREATE DATABASE TEST -- Create database from %s\n", testNumber, gedcomFile);
-
-	//gedcomFile = "NOTAGEDCOMFILE";  // Override to test when there is no good file.
-	printf("gedcomFile: %s\n", gedcomFile);
 	String lastSegment = lastPathSegment(gedcomFile);
 	printf("lastPathSegment: %s\n", lastSegment);
 	Database *database = importFromFile(gedcomFile, errorLog);
-	if (!database) {
-		Error *error = createError(systemError, gedcomFile, 0, "Database was not created.");
-		error->severity = fatalError;
-		addErrorToLog(errorLog, error);
-		return null;
-	}
 	printf("The number of persons in the database is %d.\n", numberPersons(database));
 	printf("The number of families in the database is %d.\n", numberFamilies(database));
 	printf("END OF CREATE DATABASE TEST\n");
 	return database;
 }
 
-//  compare -- Compare function required by the testList function that follows.
+//  compare -- Compare function needed by the listTest function that follows.
 //-------------------------------------------------------------------------------------------------
 static int compare(Word a, Word b)
 {
 	return compareRecordKeys(((GNode*) a)->key, ((GNode*) b)->key);
 }
 
-//  listTest -- Create a list of all the persons in the database, sort the list by tags, and
-//    print the record tags in sorted order.
+//  listTest -- Create a list of the persons in the database; sort the list by tags, and print
+//    the record tags in sorted order.
 //-------------------------------------------------------------------------------------------------
 void listTest(Database *database, int testNumber)
 {
-	printf("%d: START OF LIST TEST\n", testNumber);
+	printf("\n%d: START OF LIST TEST\n", testNumber);
 	int i, j;  //  State variables used to iterate the person index hash table.
 	GNode *person;
 	//  Create a List of all the persons in the database.
@@ -120,7 +108,7 @@ void listTest(Database *database, int testNumber)
 		count++;
 	ENDLIST
 	printf("%d persons are in the list\n", count);
-	printf("END OF LIST TEST\n\n");
+	printf("END OF LIST TEST\n");
 }
 
 //  forHashTableTest -- Tests the FORHASHTABLE macro by showing all the persons in the database's
@@ -128,7 +116,7 @@ void listTest(Database *database, int testNumber)
 //-------------------------------------------------------------------------------------------------
 void forHashTableTest(Database* database, int testNumber)
 {
-	printf("%d: START OF FORHASHTABLE test\n", testNumber);
+	printf("\n%d: START OF FORHASHTABLE test\n", testNumber);
 	int numberPersons = 0;
 	FORHASHTABLE(database->personIndex, element)
 		numberPersons++;
@@ -137,7 +125,7 @@ void forHashTableTest(Database* database, int testNumber)
 		printf("%s: %s\n", person->key, NAME(person)->value);
 	ENDHASHTABLE
 	printf("%d persons were found in the index.\n", numberPersons);
-	printf("END OF FORHASHTABLE TEST\n\n");
+	printf("END OF FORHASHTABLE TEST\n");
 }
 
 //  parseAndRunProgramTest -- Parse a DeadEndScript program and run it. In order to call the
@@ -146,12 +134,8 @@ void forHashTableTest(Database* database, int testNumber)
 void parseAndRunProgramTest(Database *database, int testNumber)
 //  database -- The database the script runs on.
 {
-	printf("%d: START OF PARSE AND RUN PROGRAM TEST\n", testNumber);
-#ifdef VSCODE
-	parseProgram("llprogram", "../Reports");
-#else
-	parseProgram("llprogram", "/Users/ttw4/Desktop/DeadEnds/Reports/");
-#endif
+	printf("\n%d: START OF PARSE AND RUN PROGRAM TEST\n", testNumber);
+
 //  Create a PNProcCall node to call the main procedure.
 	currentProgramFileName = "internal";
 	currentProgramLineNumber = 1;
@@ -169,7 +153,7 @@ void parseAndRunProgramTest(Database *database, int testNumber)
 //-------------------------------------------------------------------------------------------------
 void validateDatabaseTest(Database *database, int testNumber)
 {
-	printf("%d: START OF VALIDATE DATABASE TEST\n", testNumber);
+	printf("\n%d: START OF VALIDATE DATABASE TEST\n", testNumber);
 	ErrorLog* errorLog = createErrorLog();
 	validateDatabase(database, errorLog);
 	printf("END OF VALIDATE DATABASE TEST\n");
@@ -179,7 +163,7 @@ void validateDatabaseTest(Database *database, int testNumber)
 //-------------------------------------------------------------------------------------------------
 static void forTraverseTest(Database *database, int testNumber)
 {
-	printf("%d: START OF FORTRAVERSE TEST\n", testNumber);
+	printf("\n%d: START OF FORTRAVERSE TEST\n", testNumber);
 	GNode *person = keyToPerson("@I1@", database);
 	FORTRAVERSE(person, node)
 		printf("%s\n", node->tag);
@@ -198,14 +182,14 @@ static void showPersonName(Word element)
 
 static void showHashTableTest(RecordIndex *index, int testNumber)
 {
-	printf("%d: START OF SHOW HASH TABLE TEST\n", testNumber);
+	printf("\n%d: START OF SHOW HASH TABLE TEST\n", testNumber);
 	showHashTable(index, showPersonName);
 	printf("END OF SHOW HASH TABLE TEST\n");
 }
 
 static void indexNamesTest(Database *database, int testNumber)
 {
-	printf("%d: START OF INDEX NAMES TEST\n", testNumber);
+	printf("\n%d: START OF INDEX NAMES TEST\n", testNumber);
 	indexNames(database);
 	printf("END OF INDEX NAMES TEST\n");
 }

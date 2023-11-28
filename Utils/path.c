@@ -4,7 +4,7 @@
 //  path.c - Functions to manipulate UNIX file paths
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 20 January 2023.
+//  Last changed on 26 November 2023.
 //
 
 #include <unistd.h>  // access.
@@ -83,7 +83,8 @@ FILE *fopenPath (CString name, CString mode, CString path)
 	return fopen(str, mode);
 }
 
-// lastPathSegment -- Return the last componenet of a path.
+//  lastPathSegment -- Return the last component of a path.
+//    MNOTE: Returns pointer to an internal static buffer. Caller must deal with this.
 //--------------------------------------------------------------------------------------------------
 String lastPathSegment (String path)
 //  path -- Path to find the last component of.

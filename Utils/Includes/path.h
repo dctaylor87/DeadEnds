@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "standard.h"
 
-// fopenpath -- Open a file using a search path.
 FILE *fopenPath(CString fileName, CString mode, CString searchPath);
 String lastPathSegment(String fileName);
 

@@ -4,7 +4,7 @@
 //  database.h
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed on 22 November 2023.
+//  Last changed on 25 November 2023.
 //
 
 #ifndef database_h
@@ -42,6 +42,8 @@ int numberFamilies(Database*);   //  Return the number of families in the databa
 int numberSources(Database*);    //  Return the number of sources in the database.
 int numberEvents(Database*);     //  Return the number of events in the database.
 int numberOthers(Database*);     //  Return the number of other records in the database.
+
+bool isEmptyDatabase(Database*);  //  Return true if the database has no persons or families.
 GNode *keyToPerson(CString key, Database*);  //  Get a person node the database.
 GNode *keyToFamily(CString key, Database*);  //  Get a family node from the database.
 GNode *keyToSource(CString key, Database*);  //  Get a source node from the database.

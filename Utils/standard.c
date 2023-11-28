@@ -4,7 +4,7 @@
 //  standard.c -- Standard routines.
 //
 //  Create by Thomas Wetmore on 7 November 2022.
-//  Last changed on 22 November 2023.
+//  Last changed on 25 November 2023.
 
 #include <stdlib.h>
 
@@ -123,7 +123,10 @@ void alloc_out(String str)
 
 // strsave -- Save a copy of a String on the heap. Return the pointer to the copy.
 //--------------------------------------------------------------------------------------------------
-String strsave(CString string) { return strcpy(stdalloc(strlen(string) + 1), string); }
+String strsave(CString string) {
+	if (string == null || *string == 0) return null;
+	return strcpy(stdalloc(strlen(string) + 1), string);
+}
 
 // strconcat -- Catenate two strings and return a new String on the heap with the value.
 //--------------------------------------------------------------------------------------------------

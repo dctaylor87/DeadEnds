@@ -3,7 +3,7 @@
 //  DeadEnds
 //
 //  Created by Thomas Wetmore on 4 July 2023.
-//  Last changed on 22 November 2023.
+//  Last changed on 25 November 2023.
 //
 
 #ifndef errors_h
@@ -48,5 +48,6 @@ extern Error *createError(ErrorType type, CString fileName, int lineNumber, Stri
 extern void deleteError(Error*);
 extern void addErrorToLog(ErrorLog*, Error*);
 extern void showErrorLog(ErrorLog*);
+extern void showError(Error*);
 
 #endif // errors_h

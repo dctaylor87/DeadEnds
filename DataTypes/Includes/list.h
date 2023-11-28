@@ -13,7 +13,7 @@
 //    caller is responsible.
 //
 //  Created by Thomas Wetmore on 22 November 2022.
-//  Last changed on 4 July 2023.
+//  Last changed on 22 November 2023.
 //
 
 #ifndef list_h
@@ -77,7 +77,7 @@ extern void emptyList(List *list); // Make a list empty.
 bool isEmptyList(List*);  // Check if a list is empty.
 
 Word searchList(List*, Word element, int *index);
-// TODO: These four functions should be made static.
+// TODO: These four functions should be static.
 Word linearSearchList(List*, Word element, int *index);
 Word binarySearchList(List*, Word element, int *index);
 Word linearSearchListWithKey(List*, String key, int *index);
@@ -88,8 +88,11 @@ Word binarySearchListWithKey(List*, String key, int *index);
     Word value;\
     Word *_values = (Word*) list->data;\
     for (int _i = 0; _i < list->length; _i++) {\
-        value = _values[_i];
-
-#define ENDLIST }}
+        value = _values[_i];\
+        {
+#define ENDLIST\
+        }\
+    }\
+}
 
 #endif // list_h

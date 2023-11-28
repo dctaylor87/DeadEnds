@@ -4,7 +4,7 @@
 //  readnode.c -- Functions that read Gedcom nodes and node trees from files and strings.
 //
 //  Created by Thomas Wetmore on 17 December 2022.
-//  Last changed on 19 November 2023.
+//  Last changed on 27 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -12,6 +12,8 @@
 #include "readnode.h"
 #include "stringtable.h"
 #include "errors.h"
+
+static bool debugging = true;
 
 //  Return codes for fileToLine and bufferToLine.
 //-------------------------------------------------------------------------------------------------
@@ -202,13 +204,14 @@ gettag:
 
 // firstNodeTreeFromFile -- Convert first Gedcom record in a file to a gedcom node tree.
 //--------------------------------------------------------------------------------------------------
-GNode* firstNodeTreeFromFile (FILE *fp, int *lineNo, ErrorLog *errorLog)
+GNode* firstNodeTreeFromFile (FILE *fp, String fName, int *lineNo, ErrorLog *errorLog)
 //  fp -- (in) File that holds Gedcom records.
 //  pmsg -- (out) Possible error message.
 //  peof -- (out) Set to true if the file is at end of file.
 {
 	ateof = false;
-	fileLine = 0;
+	fileName = fName; // The file name is now in a static global used by lower level function to create
+	fileLine = 0;     //   error messages.
 	Error *error = null;
 	ReadReturnCode rc = fileToLine(fp, &level, &key, &tag, &value, &error);
 	if (rc == ReadEOF) {
@@ -296,7 +299,9 @@ GNode* nextNodeTreeFromFile(FILE *fp, int *lineNo, ErrorLog *errorLog)
 
 		//  Anything else is an error.
 		} else {
-			addErrorToLog(errorLog, createError(syntaxError, fileName, fileLine, "Illegal line"));
+			Error *error = createError(syntaxError, fileName, fileLine, "Illegal level");
+			if (debugging) showError(error);
+			addErrorToLog(errorLog, error);
 			bcode = ReadError;
 			break;
 		}
@@ -304,7 +309,7 @@ GNode* nextNodeTreeFromFile(FILE *fp, int *lineNo, ErrorLog *errorLog)
 		rc = fileToLine(fp, &level, &key, &tag, &value, &error);
 	}
 
-	//  At the end of the loop. If the code was successful return the tree root.
+	//  If successful return the tree root.
 	if (bcode == ReadOkay) return root;
 	if (bcode == ReadError || rc == ReadError) {
 		addErrorToLog(errorLog, error);

@@ -4,7 +4,7 @@
 //  gnode.h -- GNode datatype. GNodes represent lines in a Gedcom file. GNodes are heap objects.
 //
 //  Created by Thomas Wetmore on 4 November 2022.
-//  Last changed on 19 November 2023.
+//  Last changed on 25 November 2023.
 //
 
 #ifndef gnode_h
@@ -45,7 +45,6 @@ struct GNode {
 // Prototypes of functions defined in node.c
 //static String fixup(String str);
 //static String fix_tag(String str);
-//static Node allocGNode(void);  // Only called by create_node().
 //static void free_node(Node);
 
 // Application programming interface to this type.

@@ -32,7 +32,7 @@ IntegerTable *createIntegerTable(void)
 int searchIntegerTable(IntegerTable *table, String key)
 {
     IntegerElement *element = (IntegerElement*) searchHashTable(table, key);
-    return element ? element->value : __INT_MAX__; /* poor man's integer NAN */
+    return element ? element->value : __INT_MAX__;
 }
 
 //  insertInIntegerTable -- Insert a string key and integer value into an integer table.

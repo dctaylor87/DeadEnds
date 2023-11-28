@@ -1,14 +1,10 @@
 //
 //  DeadEnds Project
 //
-//  gnode.c -- Functions involving the Node type.
-//    TODO: This functions in this file should be partitioned into more files that keep functional
-//    areas together. This file should be for the basic functions that know nothing about Gedcom.
-//    There should be another file for reading and writing nodes. And another file for the more
-//    Gedcom-based operations.
+//  gnode.c -- Functions involving the GNode type.
 //
 //  Created by Thomas Wetmore on 12 November 2022.
-//  Last changed on 10 November 2023.
+//  Last changed on 25 November 2023.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
@@ -23,8 +19,7 @@
 #include "readnode.h"
 #include "database.h"
 
-//  Tag table. Ensures there are only two allocated strings for every tag. Created the first time
-//    fix_tag is called.
+//  Tag table. Ensures there is one persistent copy of each tag used in all GNode trees.
 static StringTable *tagTable = null;
 
 //  numNodeAllocs -- Return the number of nodes that have been allocated in the heap. Debugging.
@@ -43,83 +38,56 @@ int numNodeFrees(void)
 	return nodeFrees;
 }
 
-//  fixup -- Save non-tag strings. These strings are allocated in the heap via the system malloc.
-//--------------------------------------------------------------------------------------------------
-static String fixup(String str)
+static String getFromTagTable(String tag)
+//  tag -- Return the copy of this tag from the tag table.
 {
-	if (!str || *str == 0) return null;
-	return strsave(str);
-}
-
-//  fix_tag -- Returns the copy of the tag String that is in the heap. Tags never change so keep a
-//    single copy of each one. The tag passed in is usually in a static buffer. The copy of the tag
-//    returned is in the tag table and allocated in the heap.
-//--------------------------------------------------------------------------------------------------
-static String fix_tag(String tag)
-//  tag -- Return the copy of this tag that is in the tag table.
-{
-	// Need this function to work with or without the table -- a testing issue right now.
 	if (tagTable) return fixString(tagTable, tag);
 	tagTable = createStringTable();
 	return fixString(tagTable, tag);
 }
 
-//  allocGNode -- Allocate a gedcom node. Keep track of the number of allocations.
-//--------------------------------------------------------------------------------------------------
-static GNode* allocGNode(void)
-{
-	nodeAllocs++;
-	return (GNode*) stdalloc(sizeof(GNode));
-}
-
-//  freeGNode -- Free a gedcom node. Keep track of the number of frees.
-//    TODO: Should we not also free the key and value if there?
+//  freeGNode -- Free a GNode.
 //--------------------------------------------------------------------------------------------------
 void freeGNode(GNode* node)
 // node -- GNode to be freed.
 {
 	ASSERT(node);
 	if (node->key) stdfree(node->key);
-	//if (node->gValue) stdfree(node->gValue);  //  DEBUG: THIS CAUSES A CRASH.
+	if (node->value) stdfree(node->value);
 	nodeFrees++;
 	stdfree(node);
 }
 
-//  createGNode -- Create and initialize a gedcom node.
+//  createGNode -- Create, initialize and return a GNode.
 //--------------------------------------------------------------------------------------------------
 GNode* createGNode(String key, String tag, String value, GNode* parent)
-//  key -- The node's cross reference key; only level 0 GNodes have them.
-//  tag -- The node's tag; all nodes have them.
-//  value -- The node's value; some nodes have them, some don't.
-//  parent -- The node's parent node; only root nodes don't have them.
+//  key -- Cross reference key; only level 0 nodes have them.
+//  tag -- Tag; all nodes have them.
+//  value -- Value; optional.
+//  parent -- Parent node; root nodes don't have them.
 {
-	GNode* node = allocGNode();
-	node->key = fixup(key);
-	node->tag = fix_tag(tag);  // Tags go in a hash table to reduce String memory usage.
-	node->value = fixup(value);  // TODO: WHERE ARE WE GOING TO REMOVE @-SIGNS FROM CERTAIN VALUES?
+	nodeAllocs++;
+	GNode* node = (GNode*) stdalloc(sizeof(GNode));;
+	node->key = strsave(key);
+	node->tag = getFromTagTable(tag);  // Get persistent copy.
+	node->value = strsave(value);
 	node->parent = parent;
 	node->child = null;
 	node->sibling = null;
 	return node;
 }
 
-//  freeGNodes -- Free all Nodes in a tree or forest of Nodes. This function recurses through all
-//    the Nodes in the tree or forest and calls freeGNode on each.
+//  freeGNodes -- Free all GNodes in a tree or forest of GNodes. This function recurses through
+//    all the GNodes in the tree or forest and calls freeGNode on each.
 //--------------------------------------------------------------------------------------------------
 void freeGNodes(GNode* node)
-// node -- GNode to recursively free.
+// node -- Root GNode to free.
 {
 	while (node) {
-		// If this Node has children, recurse down a level.
-		if (node->child) freeGNodes(node->child);
-		// TODO: If keys eventually live in a hash table, the next line has to be removed.
-		if (node->key) stdfree(node->key);
-		if (node->value) stdfree(node->value);
-		// Tags are not freed. They are immortal and live in the tagTable.
-		// Move on the the sibling Node before freeing this Node.
-		GNode* sib = node->sibling;
+		if (node->child) freeGNodes(node->child);  // Recurse to children.
+		GNode* sibling = node->sibling;  // Tail recurse to siblings.
 		freeGNode(node);
-		node = sib;
+		node = sibling;
 	}
 }
 

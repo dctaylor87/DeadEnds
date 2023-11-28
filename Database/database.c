@@ -7,7 +7,7 @@
 //    records is also done.
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed 22 November 2023.
+//  Last changed 25 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -60,35 +60,43 @@ StringTable *keyMap;
 //--------------------------------------------------------------------------------------------------
 int numberPersons(Database *database)
 {
-	return sizeHashTable(database->personIndex);
+	return database ? sizeHashTable(database->personIndex) : 0;
 }
 
 // numberFamilies -- Return the number of families in a database.
 //--------------------------------------------------------------------------------------------------
 int numberFamilies(Database *database)
 {
-	return sizeHashTable(database->familyIndex);
+	return database ? sizeHashTable(database->familyIndex) : 0;
 }
 
 // numberSources -- Return the number of sources in a database.
 //--------------------------------------------------------------------------------------------------
 int numberSources(Database *database)
 {
-	return sizeHashTable(database->sourceIndex);
+	return database ? sizeHashTable(database->sourceIndex) : 0;
 }
 
 //  numberEvents -- Return the number of (top level) events in the database.
 //--------------------------------------------------------------------------------------------------
 int numberEvents(Database *database)
 {
-	return sizeHashTable(database->eventIndex);
+	return database ? sizeHashTable(database->eventIndex) : 0;
 }
 
 //  numberOthers -- Return the number of other records in the database.
 //--------------------------------------------------------------------------------------------------
 int numberOthers(Database *database)
 {
-	return sizeHashTable(database->otherIndex);
+	return database ? sizeHashTable(database->otherIndex) : 0;
+}
+
+
+//  isEmptyDatabase -- Return true if the database contains no persons or families.
+//-------------------------------------------------------------------------------------------------
+bool isEmptyDatabase (Database *database)
+{
+	return numberPersons(database) + numberFamilies(database) == 0;
 }
 
 //  keyToPerson -- Get a person record from a database.
@@ -189,7 +197,7 @@ static int count = 0;  // Debugging.
 bool storeRecord(Database *database, GNode* root, int lineNumber)
 //  database -- Database to add the record to
 //  root -- Root of a record tree to store in the database.
-//  lineNumber -- Line number in the Gedcom file where th record began.
+//  lineNumber -- Line number in the Gedcom file where the record began.
 {
 	if (debugging) printf("storeRecord called\n");
 	ASSERT(root);
@@ -264,7 +272,7 @@ void indexNames(Database* database)
 		//  Get the next entry in the person index.
 		entry = nextInHashTable(database->personIndex, &i, &j);
 	}
-	//showNameIndex(database->nameIndex);
+	showNameIndex(database->nameIndex);
 	/*if (debugging) */ printf("The number of names indexed was %d\n", count);
 }
 

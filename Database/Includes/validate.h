@@ -14,5 +14,6 @@
 #include "errors.h"
 
 extern bool validateDatabase(Database*, ErrorLog*);
+extern bool validateIndex(RecordIndex *index);
 
 #endif // validate_h

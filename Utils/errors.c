@@ -4,13 +4,11 @@
 //  errors.c -- Code for handling DeadEnds errors.
 //
 //  Created by Thomas Wetmore on 4 July 2023.
-//  Last changed on 22 November 2023.
+//  Last changed on 27 November 2023.
 //
 
 #include "errors.h"
 #include "list.h"
-
-static bool debugging = true;
 
 //  getErrorKey -- Get the comparison key of an error.
 //
@@ -95,6 +93,7 @@ void deleteError (Error *error)
 //-------------------------------------------------------------------------------------------------
 void addErrorToLog (ErrorLog *errorLog, Error *error)
 {
+	if (!error) return;
 	appendListElement(errorLog, error);
 }
 
@@ -108,7 +107,7 @@ void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType, CString fileName,
 
 //  showError -- Show an Error on standard output.
 //-------------------------------------------------------------------------------------------------
-static void showError (Error *error)
+void showError (Error *error)
 {
 	switch (error->severity) {
 		case fatalError: printf("fatal "); break;
@@ -133,7 +132,6 @@ static void showError (Error *error)
 //-------------------------------------------------------------------------------------------------
 void showErrorLog (ErrorLog *errorLog)
 {
-	if (debugging) printf("showErrorLog: called on a log with %d Errors\n", lengthList(errorLog));
 	FORLIST(errorLog, error)
 		showError((Error*) error);
 	ENDLIST

@@ -4,10 +4,13 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 19 November 2023.
+//  Last changed on 27 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+
+#include <unistd.h> // access
+#include <errno.h> // ENOENT
 
 #include "standard.h"
 #include "import.h"
@@ -20,9 +23,7 @@
 #include "validate.h"
 #include "errors.h"
 #include "readnode.h"
-
-String currentGedcomFileName = null;
-int currentGedcomLineNumber = 1;
+#include "path.h"
 
 static String updateKeyMap(GNode *root, StringTable* keyMap);
 static void rekeyIndex(RecordIndex*, StringTable *keyMap);
@@ -38,7 +39,7 @@ static bool debugging = true;
 
 //  importFromFiles -- Import Gedcom files into a list of Databases.
 //--------------------------------------------------------------------------------------------------
-List *importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
+List *importFromFiles(String filePaths[], int count, ErrorLog *errorLog)
 //  filesNames -- Names of the files to import.
 //  count -- Number of files to import.
 //  errorLog -- Error log.
@@ -47,7 +48,7 @@ List *importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 	Database *database = null;
 
 	for (int i = 0; i < count; i++) {
-		if ((database = importFromFile(fileNames[i], errorLog)))
+		if ((database = importFromFile(filePaths[i], errorLog)))
 			appendListElement(listOfDatabases, database);
 	}
 	return listOfDatabases;
@@ -55,29 +56,36 @@ List *importFromFiles(String fileNames[], int count, ErrorLog *errorLog)
 
 //  importFromFile -- Import the records in a Gedcom file into a Database.
 //--------------------------------------------------------------------------------------------------
-Database *importFromFile(CString fileName, ErrorLog *errorLog)
+Database *importFromFile(CString filePath, ErrorLog *errorLog)
 {
-	if (debugging) printf("Entered importFromFile\n");
-	ASSERT(fileName);
-	FILE *file = fopen(fileName, "r");
+	if (debugging) printf("Entered importFromFile with path %s\n", filePath);
+	ASSERT(filePath);
+	if (access(filePath, F_OK)) {
+		if (errno == ENOENT) {
+			addErrorToLog(errorLog, createError(systemError, filePath, 0, "File does not exist."));
+			return null;
+		}
+	}
+	String fileName = lastPathSegment(filePath); // MNOTE: strsave not needed.
+	FILE *file = fopen(filePath, "r");
 	if (!file) {
 		addErrorToLog(errorLog, createError(systemError, fileName, 0, "Could not open file."));
 		return null;
 	}
 
-	return importFromFileFP (file, fileName, errorLog);
+	return importFromFileFP (file, filePath, errorLog);
 }
 
-Database *importFromFileFP (FILE *file, CString fileName, ErrorLog *errorLog)
+Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 {
+	String fileName = lastPathSegment(filePath); // MNOTE: strsave not needed.
 	Database *database = createDatabase(fileName);
-	int recordCount = 0;  // DEBUG: Remove after testing.
-	int lineNo;
+	int recordCount = 0;
+	int lineNo; // Line number kept up to date by the nodeTreeFromFile functions.
 
 	//  Read the records and add them to the database.
-	GNode *root = firstNodeTreeFromFile(file, &lineNo, errorLog);
+	GNode *root = firstNodeTreeFromFile(file, fileName, &lineNo, errorLog);
 	while (root) {
-		recordCount++;  // DEBUG: Remove after testing.
 		storeRecord(database, normalizeNodeTree(root), lineNo);
 		root = nextNodeTreeFromFile(file, &lineNo, errorLog);
 	}

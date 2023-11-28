@@ -6,7 +6,7 @@
 //    keys to the list of keys of the persons who have names that map to the name key.
 //
 //  Created by Thomas Wetmore on 26 November 2022.
-//  Last changed on 4 November 2023.
+//  Last changed on 22 November 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -17,7 +17,7 @@
 #include "set.h"
 #include "gedcom.h"
 
-// NameKeys -- Compare two name keys. This uses the standard strcmp.
+//  compareNameKeys -- Compare two name keys. This uses the standard strcmp.
 //--------------------------------------------------------------------------------------------------
 static int compareNameKeys(Word leftEl, Word rightEl)
 {
@@ -26,7 +26,7 @@ static int compareNameKeys(Word leftEl, Word rightEl)
 	return strcmp(a, b);
 }
 
-// getNameKey -- Get the name key of an element.
+//  getNameKey -- Get the name key of an element.
 //--------------------------------------------------------------------------------------------------
 static String getNameKey(Word element)
 {
@@ -123,24 +123,21 @@ Set *searchNameIndex(NameIndex *index, String name)
 void showNameIndex(NameIndex *index)
 //  index -- Name index, a specialized hash table.
 {
-	ASSERT(index);
-	//  Iterate through the buckets.
 	for (int i = 0; i < MAX_HASH; i++) {
-		if (!index->buckets[i]) continue;  // Don't show anything for empty Buckets.
-		//  The ith Bucket has something in it.
+
+		if (!index->buckets[i]) continue;
 		Bucket *bucket = index->buckets[i];
-		//  A bucket contains a List of elements sorted by name key; get that list.
 		Word *elements = bucket->elements;
 		printf("Bucket %d:\n", i);
-		// Iterate through the elements of the ith Bucket.
+
 		for (int j = 0; j < bucket->length; j++) {
-			// An element is tuple of a name key and a set of person keys.
+
 			NameElement* element = elements[j];
-			printf("    Name key %s:\n", element->nameKey);
-			// Get the set of record keys in this element and show them.
+			printf("  Name key %s:\n", element->nameKey);
+
 			Set *recordKeys = element->recordKeys;
 			for (int k = 0; k < lengthSet(recordKeys); k++) {
-				printf("        %s\n", (String) recordKeys->list->data[k]);
+				printf("    %s\n", (String) recordKeys->list->data[k]);
 			}
 		}
 	}

@@ -81,7 +81,7 @@ void insertInRecordIndex(RecordIndex *index, String key, GNode* root, int lineNu
 	if (!element) {
 		element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
 		//element->key = strsave(key);
-		element->root = root;  //  MNOTE: Not copied, records persist.
+		element->root = root; //  MNOTE: Not copied, records persist.
 		element->lineNumber = lineNumber;
 		appendToBucket(bucket, element);
 	} //else {
