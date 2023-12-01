@@ -8,12 +8,14 @@
 #ifndef llinesi_h_included
 #define llinesi_h_included
 
+#if !defined(DEADENDS)
 #ifndef _GEDCOM_H
-//#include "gedcom.h"
+#include "gedcom.h"
 #endif
 
 #ifndef _INDISEQ_H
-//#include "indiseq.h"
+#include "indiseq.h"
+#endif
 #endif
 
 typedef struct tag_llrect {
@@ -135,6 +137,11 @@ void clear_status_display(void);
 /* searchui.c */
 INDISEQ invoke_search_menu(void);
 
+#if defined(DEADENDS)
+/* show.c */
+STRING indi_to_ped_fix(NODE indi, INT len);
+#endif
+
 /* swap.c */
 BOOLEAN swap_children(RECORD prnt, RECORD frec);
 BOOLEAN reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
@@ -147,7 +154,10 @@ INT browse_2fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 /* valgdcom.c */
 void addmissingkeys (INT);
 int check_stdkeys (void);
+
+#if !defined(DEADENDS) /* scan_header is only used by import.c and valgdcom.c */
 BOOLEAN scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
+#endif
 BOOLEAN validate_gedcom(IMPORT_FEEDBACK ifeed, FILE*);
 void validate_end_import(void);
 INT validate_get_warning_count(void);
