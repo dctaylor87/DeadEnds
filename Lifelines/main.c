@@ -54,6 +54,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "screen.h"
+#include "readwrite.h"
 #else
 
 #include "llstdlib.h"

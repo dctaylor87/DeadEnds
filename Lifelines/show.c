@@ -41,10 +41,10 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
-#include "readwrite.h"
 
 #include "rfmt.h"
 #include "gnode.h"
+#include "readwrite.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"
@@ -54,6 +54,7 @@
 #include "screen.h"
 #include "cscurses.h"
 #include "lineage.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"
@@ -341,7 +342,11 @@ init_display_indi (RECORD irec, INT width)
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
 	        if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
+#if defined(DEADENDS)
+			FORCHILDREN(fam, chld, nm, theDatabase)
+#else
 			FORCHILDREN(fam, chld, nm)
+#endif
 				if(chld) add_child_line(++nch, chld, width);
 			ENDCHILDREN
 		}
@@ -563,7 +568,11 @@ init_display_fam (RECORD frec, INT width)
 
 	Solen = 0;
 	nch = 0;
+#if defined(DEADENDS)
+	FORCHILDREN(fam, chld, nm, theDatabase)
+#else
 	FORCHILDREN(fam, chld, nm)
+#endif
 		add_child_line(++nch, chld, width);
 	ENDCHILDREN
 	release_record(ihusb);

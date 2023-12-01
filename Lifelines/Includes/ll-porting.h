@@ -58,24 +58,31 @@ typedef void *		VPTR;
 #define key_to_fam(key)		keyToFamily(key, theDatabase)
 #define key_to_indi(key)	keyToPerson(key, theDatabase)
 
+#define getlloptstr(property, default)	(getenv(property) ? getenv(property) : default) /* XXX */
+
 #define INDISEQ		Sequence *
 #define ISize(seq)	((seq)->size)
+
+/* elt is an SequenceEl (SORTEL) */
+#define element_skey(elt)		(elt->key)
 
 #define fam_to_children(node)		familyToChildren(node, theDatabase)
 #define fam_to_fathers(node)		familyToFathers(node, theDatabase)
 #define fam_to_mothers(node)		familyToMothers(node, theDatabase)
 #define fam_to_husb(node)		familyToHusband(node, theDatabase)
 #define fam_to_first_chil(node)		familyTOFirstChild(node, theDatabase)
+#define fam_to_key(fam)			familyToKey(fam)
 
 #define indi_to_children(node)		personToChildren(node, theDatabase)
-#define indi_to_families(node)		personToFamilies(node, theDatabase)
+#define indi_to_families(person, fams)	personToFamilies(person, fams, theDatabase)
 #define indi_to_fathers(node)		personToFathers(node, theDatabase)
 #define indi_to_mothers(node)		personToMothers(node, theDatabase)
 #define indi_to_spouses(node)		personToSpouses(node, theDatabase)
 
 #define indi_to_fath(node)		personToFather(node, theDatabase)
-#define indi_to_prev_sib(node)		personToPreviousSibling(node, theDatabase)
-#define indi_to_next_sib(node)		personToNextSibling(node, theDatabase)
+#define indi_to_moth(node)		personToMother(node, theDatabase)
+#define indi_to_prev_sib(record)	personToPreviousSibling((record->root), theDatabase)
+#define indi_to_next_sib(record)	personToNextSibling((record->root), theDatabase)
 
 #define indi_to_name(node, len)		personToName(node,len)
 
@@ -126,9 +133,17 @@ typedef void *		VPTR;
 #define num_evens()			numberEvents(theDatabase)
 #define num_othrs()			numberOthers(theDatabase)
 
+#define rmvat(key)		(key)
+
+#define node_to_record(node)	_llpy_node_to_record(node)
+#define node_to_key(node)	(rmvat(nxref(node)))
+#define normalize_rec(rec)	normalizeNodeTree(rec->root)
+
 /* we drop efmt -- era format */
 #define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) format_date(str,dfmt,mfmt,yfmt,sfmt,cmplx)
 
+#define HINT_PARAM_UNUSED		ATTRIBUTE_UNUSED
 #define HINT_PRINTF(fmt, args)		ATTRIBUTE_PRINTF(fmt, args)
 
 #define FORINDISEQ(seq,elt,ndx)		FORSEQUENCE(seq,elt,ndx)
+#define ENDINDISEQ			ENDSEQUENCE

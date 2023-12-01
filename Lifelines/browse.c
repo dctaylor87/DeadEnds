@@ -42,10 +42,10 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
-#include "readwrite.h"
 #include "options.h"
 
 #include "gnode.h"
+#include "readwrite.h"
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
@@ -60,6 +60,7 @@
 #include "messages.h"
 #include "screen.h"
 #include "splitjoin.h"
+#include "codesets.h"
 
 #include "llpy-externs.h"
 #else
@@ -293,7 +294,11 @@ goto_indi_child (RECORD irec, int childno)
 	NODE indi = nztop(irec);
 	if (!irec) return NULL;
 	FORFAMS(indi, fam, num1)
+#if defined(DEADENDS)
+		FORCHILDREN(fam, chil, num2, theDatabase)
+#else
 		FORCHILDREN(fam, chil, num2)
+#endif
 			i++;
 			if (i == childno) 
 				akeynum = nzkeynum(chil);
@@ -317,7 +322,11 @@ goto_fam_child (RECORD frec, int childno)
 	INT akeynum=0;
 	NODE fam = nztop(frec);
 	if (!frec) return NULL;
+#if defined(DEADENDS)
+	FORCHILDREN(fam, chil, num, theDatabase)
+#else
 	FORCHILDREN(fam, chil, num)
+#endif
 		i++;
 		if (i == childno) 
 			akeynum = nzkeynum(chil);

@@ -39,14 +39,15 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
-#include "readwrite.h"
 
 #include "gnode.h"
+#include "readwrite.h"
 #include "rfmt.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"
 #include "errors.h"
+#include "feedback.h"
 #include "liflines.h"
 #include "pvalue.h"
 #else

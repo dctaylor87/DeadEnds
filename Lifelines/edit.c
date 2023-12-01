@@ -53,6 +53,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "choose.h"
+#include "readwrite.h"
 #else
 
 #include "llstdlib.h"

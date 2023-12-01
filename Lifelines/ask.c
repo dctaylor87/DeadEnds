@@ -43,6 +43,7 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "sys_inc.h"
 
 #include "recordindex.h"
 #include "sequence.h"
@@ -54,6 +55,7 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"

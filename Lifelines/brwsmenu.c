@@ -25,6 +25,7 @@
 #include "feedback.h"
 #include "menuitem.h"
 #include "messages.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"

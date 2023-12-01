@@ -40,11 +40,11 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
-#include "readwrite.h"
 #include "options.h"
 
 #include "feedback.h"
 #include "gnode.h"
+#include "readwrite.h"
 #include "recordindex.h"
 
 #include "rfmt.h"
@@ -54,7 +54,9 @@
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
+#include "gedcom.h"
 #include "messages.h"
+#include "codesets.h"
 #else
 
 #include "sys_inc.h"

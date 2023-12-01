@@ -40,6 +40,7 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "sys_inc.h"
 
 #include "rfmt.h"
 #include "sequence.h"

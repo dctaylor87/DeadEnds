@@ -11,6 +11,9 @@
 
 
 extern STRING int_codeset;     /* internal codeset */
+#if defined(DEADENDS)
+extern BOOLEAN uu8;	       /* is int_codeset utf-8? */
+#endif
 
 extern STRING editor_codeset_out; /* output to editor */
 extern STRING editor_codeset_in;  /* input from editor */

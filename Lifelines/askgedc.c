@@ -30,6 +30,7 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+#include "readwrite.h"
 #else
 
 #include "standard.h"

@@ -23,11 +23,13 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "gnode.h"
 #include "readwrite.h"
 
 #include "feedback.h"
 #include "menuitem.h"
 #include "messages.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"

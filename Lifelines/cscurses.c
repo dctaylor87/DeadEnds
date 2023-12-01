@@ -29,6 +29,7 @@
 #include "liflines.h"
 #include "screen.h"
 #include "cscurses.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"

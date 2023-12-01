@@ -46,6 +46,8 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "sys_inc.h"
+#include "gnode.h"
 #include "readwrite.h"
 #include "options.h"
 
@@ -61,6 +63,9 @@
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"
+#include "codesets.h"
+#include "readwrite.h"
+#include "lineage.h"
 #else
 #include "llstdlib.h"
 #include "table.h"
@@ -617,7 +622,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 {
 #if defined(DEADENDS)
 	SexType sex1 = sexUnknown;
-	INT sex2 = sexUnknown;
+	SexType sex2 = sexUnknown;
 	GNode *spouse1, *spouse2, *child;
 	GNode *fam1, *fam2=0, *husb, *wife, *chil;
 #else

@@ -9,14 +9,14 @@ bin_PROGRAMS = llines
 
 llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	browse.c brwsmenu.c \
-	choose.c codesets.c cscurses.c delete.c dynmenu.c \
+	choose.c cscurses.c delete.c dynmenu.c \
 	edit.c interact.c \
 	lbrowse.c lines_usage.c listui.c \
 	main.c menuset.c merge.c miscutls.c \
 	newrecs.c pedigree.c \
 	scan.c screen.c searchui.c selectdb.c show.c swap.c \
 	tandem.c \
-	listui.h llinesi.h 
+	codesets.c equaliso.c valid.c
 
 PYTHON_LIBS = @PYTHON_LIBS@
 

@@ -37,6 +37,7 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "gnode.h"
 #include "readwrite.h"
 
 #include "rfmt.h"
@@ -49,6 +50,7 @@
 #include "screen.h"
 #include "screeni.h"
 #include "cscurses.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"

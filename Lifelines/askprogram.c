@@ -23,8 +23,9 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
-#include "readwrite.h"
 
+#include "gnode.h"
+#include "readwrite.h"
 #include "rfmt.h"
 #include "sequence.h"
 #include "hashtable.h"
@@ -32,6 +33,7 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+#include "codesets.h"
 #else
 
 #include "standard.h"
