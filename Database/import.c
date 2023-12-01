@@ -34,7 +34,6 @@ static void addIndexToDatabase(RecordIndex *index, Database *database);
 // Error messages defined elsewhere.
 extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, dbrdon;
 
-static GNode *normalizeNodeTree (GNode*);
 static bool debugging = true;
 
 //  importFromFiles -- Import Gedcom files into a list of Databases.
@@ -99,7 +98,7 @@ String noiref = (String) "FAM record has no INDI references; record ignored.\n";
 
 // normalizeNodeTree -- Normalize node tree records to standard format.
 //--------------------------------------------------------------------------------------------------
-static GNode *normalizeNodeTree(GNode *root)
+GNode *normalizeNodeTree(GNode *root)
 //  root -- Root of a gedcom node tree record.
 {
 	//  Don't worry about HEAD or TRLR records.

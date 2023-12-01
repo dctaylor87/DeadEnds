@@ -95,4 +95,7 @@ int numNodeFrees(void);
 //GNode* keyToPerson(String);
 //GNode* keyToFamily(String);
 
+// import.c
+extern GNode *normalizeNodeTree (GNode*);
+
 #endif /* node_h */
