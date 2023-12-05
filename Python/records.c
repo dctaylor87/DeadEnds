@@ -163,11 +163,29 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   return ((PyObject *) py_record);
 }
 
+/* __llpy_key_to_record --
+
+   Looks up 'key' in the current database.  If found, the
+   corresponding record is returned.  If not found, NULL is returned.
+
+   If 'int_type' is supplied and is one of 'I', 'F', 'S', 'E', 'X',
+   then the lookup is restricted to records of that type.  If int_type
+   is supplied and *int_type is not one of the aforementioned values
+   (e.g., 0), then *int_type is set to the type that was found.
+
+   XXX Should have a name that does not start with __llpy.
+
+   While it lives in the Python directory (and used to be part of the
+   llpy_key_to_record function), it is not Python specific and was
+   broken out of llpy_key_to_record so that it could also be used by
+   the DE port of the LL curses UI.  XXX */
+
 RECORD __llpy_key_to_record (CString key, int *int_type)
 {
   RECORD record;
   int added_at = 0;
   int ndx;
+  int type = 0;
 
   char key_buffer[strlen(key) + 3];
 
@@ -187,7 +205,10 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
 
   key_buffer[ndx + added_at] = 0;
 
-  switch (*int_type)
+  if (int_type)
+    type = *int_type;
+
+  switch (type)
     {
     case 'I':
       record = qkey_to_irecord (key_buffer);
@@ -207,43 +228,47 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
     default:
       /* caller did not specify a type, try them all until we find it.
 	 If all fail, we will return None */
-      *int_type = 'I';
       record = qkey_to_irecord (key_buffer);
       if (record)
 	{
-	  *int_type = 'I';
+	  if (int_type)
+	    *int_type = 'I';
 	  break;
 	}
-      else
-	record = qkey_to_frecord (key_buffer);
+
+      record = qkey_to_frecord (key_buffer);
 
       if (record)
 	{
-	  *int_type = 'F';
+	  if (int_type)
+	    *int_type = 'F';
 	  break;
 	}
-      else
-	record = qkey_to_srecord (key_buffer);
+
+      record = qkey_to_srecord (key_buffer);
 
       if (record)
 	{
-	  *int_type = 'S';
+	  if (int_type)
+	    *int_type = 'S';
 	  break;
 	}
-      else
-	record = qkey_to_erecord (key_buffer);
+
+      record = qkey_to_erecord (key_buffer);
 
       if (record)
 	{
-	  *int_type = 'E';
+	  if (int_type)
+	    *int_type = 'E';
 	  break;
 	}
-      else
-	record = qkey_to_orecord (key_buffer);
+
+      record = qkey_to_orecord (key_buffer);
 
       if (record)
 	{
-	  *int_type = 'X';
+	  if (int_type)
+	    *int_type = 'X';
 	  break;
 	}
     }
