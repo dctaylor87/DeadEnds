@@ -4,7 +4,7 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 27 November 2023.
+//  Last changed on 1 December 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -27,7 +27,6 @@
 
 static String updateKeyMap(GNode *root, StringTable* keyMap);
 static void rekeyIndex(RecordIndex*, StringTable *keyMap);
-static void outputErrorLog(ErrorLog* errorLog);
 static void setupDatabase(List *recordIndexes);
 static void addIndexToDatabase(RecordIndex *index, Database *database);
 
@@ -39,7 +38,7 @@ static bool debugging = true;
 //  importFromFiles -- Import Gedcom files into a list of Databases.
 //--------------------------------------------------------------------------------------------------
 List *importFromFiles(String filePaths[], int count, ErrorLog *errorLog)
-//  filesNames -- Names of the files to import.
+//  filesPaths -- Paths of the files to import.
 //  count -- Number of files to import.
 //  errorLog -- Error log.
 {
@@ -57,8 +56,8 @@ List *importFromFiles(String filePaths[], int count, ErrorLog *errorLog)
 //--------------------------------------------------------------------------------------------------
 Database *importFromFile(CString filePath, ErrorLog *errorLog)
 {
-	if (debugging) printf("Entered importFromFile with path %s\n", filePath);
-	ASSERT(filePath);
+	//  Make sure the file exists.
+	if (debugging) printf("    IMPORT FROM FILE: %s\n", filePath);
 	if (access(filePath, F_OK)) {
 		if (errno == ENOENT) {
 			addErrorToLog(errorLog, createError(systemError, filePath, 0, "File does not exist."));
@@ -66,6 +65,8 @@ Database *importFromFile(CString filePath, ErrorLog *errorLog)
 		}
 	}
 	String fileName = lastPathSegment(filePath); // MNOTE: strsave not needed.
+
+	//  Make sure the file can be opened.
 	FILE *file = fopen(filePath, "r");
 	if (!file) {
 		addErrorToLog(errorLog, createError(systemError, fileName, 0, "Could not open file."));
@@ -85,10 +86,19 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 	//  Read the records and add them to the database.
 	GNode *root = firstNodeTreeFromFile(file, fileName, &lineNo, errorLog);
 	while (root) {
-		storeRecord(database, normalizeNodeTree(root), lineNo);
+		storeRecord(database, normalizeNodeTree(root), lineNo, errorLog);
+		recordCount += 1;
 		root = nextNodeTreeFromFile(file, &lineNo, errorLog);
 	}
-	if (debugging) printf("Read %d records.\n", recordCount);
+	if (debugging) {
+		printf("Read %d records.\n", recordCount);
+		printf("There were %d errors importing file %s.\n", lengthList(errorLog), fileName);
+		showErrorLog(errorLog);
+	}
+	if (lengthList(errorLog) > 0) {
+		deleteDatabase(database);
+		return null;
+	}
 
 	return database;
 }
@@ -98,14 +108,12 @@ String noiref = (String) "FAM record has no INDI references; record ignored.\n";
 
 // normalizeNodeTree -- Normalize node tree records to standard format.
 //--------------------------------------------------------------------------------------------------
-GNode *normalizeNodeTree(GNode *root)
-//  root -- Root of a gedcom node tree record.
+GNode *normalizeNodeTree (GNode *root)
+//  root -- Root of a Gedcom node tree record.
 {
-	//  Don't worry about HEAD or TRLR records.
-	if (eqstr("HEAD", root->tag) || eqstr("TRLR", root->tag)) return root;
-
-	//  Normalize the node tree records to standard format.
 	switch (recordType(root)) {
+		case GRHeader: return root;
+		case GRTrailer: return root;
 		case GRPerson: return normalizePerson(root);
 		case GRFamily:  return normalizeFamily(root);
 		case GREvent: return normalizeEvent(root);
@@ -115,15 +123,3 @@ GNode *normalizeNodeTree(GNode *root)
 	}
 	return null;
 }
-
-//  outputErrorLog
-//--------------------------------------------------------------------------------------------------
-static void outputErrorLog(ErrorLog* errorLog)
-{
-	sortList(errorLog, true);
-	for (int index = 0; index < lengthList(errorLog); index++) {
-		Error *error = getListElement(errorLog, index);
-		printf("Error in file: %s at line %d: %s\n", error->fileName, error->lineNumber,
-			   error->message);
-	}
-}                                                                                      

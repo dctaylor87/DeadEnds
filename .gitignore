@@ -1,6 +1,14 @@
 *.o
 *.a
++*/.DS_store
++*test
++output.txt
++y.tab.c
++y.tab.h
++grammar.c
++testset.c
++teststringtable.c
++testoutput
 Tests/*test
 Makefile.in
-*output*
 Tests/testset

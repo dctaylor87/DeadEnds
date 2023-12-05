@@ -1,16 +1,4 @@
 {
-    "files.associations": {
-        "__hash_table": "c",
-        "__tree": "c",
-        "map": "c",
-        "unordered_map": "c",
-        "__node_handle": "c",
-        "typeinfo": "c",
-        "__bit_reference": "c",
-        "bitset": "c"
-    },
-    
-    "files.exclude": {
-        "**/llprogram": true
-    }
+    "terminal.integrated.fontSize": 11,
+    "editor.fontSize": 11
 }
