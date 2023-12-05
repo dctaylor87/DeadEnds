@@ -42,6 +42,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "translat.h"
 #include "rfmt.h"
 #include "gnode.h"
 #include "readwrite.h"
@@ -55,6 +56,7 @@
 #include "cscurses.h"
 #include "lineage.h"
 #include "codesets.h"
+#include "options.h"
 #else
 
 #include "llstdlib.h"
@@ -750,12 +752,12 @@ indi_to_ped_fix (NODE indi, INT len)
 	tmp1[ARRSIZE(tmp1) - 1] = 0;
 	
 	/* a long name may need to be truncated to fit on the screen */
-	len = min(len, (ARRSIZE(scratch) - 1));
+	len = min(len, ((int)ARRSIZE(scratch) - 1));
 	tmp1_length = (INT)strlen(tmp1);
 	name_length = len - tmp1_length - 1;
 	name_length = max(0, name_length);
 	name = indi_to_name(indi, name_length);
-	ASSERT(name_length + tmp1_length < ARRSIZE(scratch));
+	ASSERT(name_length + tmp1_length < (int)ARRSIZE(scratch));
 	strcpy(scratch, name);
 	strcat(scratch, tmp1);
 	return scratch;
@@ -915,7 +917,7 @@ person_display (NODE indi, NODE fam, INT len)
 	INT keyspace = max_keywidth() + 4; 
 	INT evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
-	if (len > ARRSIZE(scratch1)-1)
+	if (len > (int)ARRSIZE(scratch1)-1)
 		len = ARRSIZE(scratch1)-1;
 
 	/* keywidth for key, 2 for comma space, and split between name & events */
@@ -932,7 +934,7 @@ person_display (NODE indi, NODE fam, INT len)
 		namelen -= (namelen - temp);
 	}
 
-	if (evlen > ARRSIZE(scratch2)-1) /* don't overflow name buffer */
+	if (evlen > (int)ARRSIZE(scratch2)-1) /* don't overflow name buffer */
 		evlen = ARRSIZE(scratch2)-1;
 	if (fam) {
 		family_events(scratch2, indi, fam, evlen);

@@ -43,6 +43,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "translat.h"
 #include "gnode.h"
 #include "rfmt.h"
 #include "sequence.h"
@@ -55,6 +56,7 @@
 #include "messages.h"
 #include "screen.h"
 #include "readwrite.h"
+#include "options.h"
 #else
 
 #include "llstdlib.h"

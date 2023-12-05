@@ -16,7 +16,7 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	newrecs.c pedigree.c \
 	scan.c screen.c searchui.c selectdb.c show.c swap.c \
 	tandem.c \
-	codesets.c equaliso.c valid.c
+	codesets.c equaliso.c translat.c valid.c xlat.c
 
 PYTHON_LIBS = @PYTHON_LIBS@
 

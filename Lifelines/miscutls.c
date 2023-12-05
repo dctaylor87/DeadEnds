@@ -40,6 +40,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "translat.h"
 #include "feedback.h"
 #include "gnode.h"
 #include "recordindex.h"

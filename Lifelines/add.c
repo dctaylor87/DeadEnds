@@ -50,7 +50,9 @@
 #include "gnode.h"
 #include "readwrite.h"
 #include "options.h"
+#include "llpy-externs.h"
 
+#include "translat.h"
 #include "gnode.h"
 #include "recordindex.h"
 #include "rfmt.h"

@@ -6,5 +6,6 @@
 
 extern BOOLEAN immutable;
 extern BOOLEAN readonly;
+extern BOOLEAN keyflag;		/* whether to display key values */
 
 #endif

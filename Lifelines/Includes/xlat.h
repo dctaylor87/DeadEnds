@@ -20,3 +20,20 @@ struct tag_xlat;
 typedef struct tag_xlat *XLAT;
 
 extern XLAT transl_get_predefined_xlat(INT trnum);
+
+/* xlat.c */
+//extern BOOLEAN xl_do_xlat(XLAT xlat, ZSTR zstr);
+extern void xl_free_adhoc_xlats(void);
+extern void xl_free_xlats(void);
+//extern ZSTR xlat_get_description(XLAT xlat);
+extern CNSTRING xl_get_dest_codeset(XLAT xlat);
+extern TRANTABLE xl_get_legacy_tt(XLAT xlat);
+extern XLAT xl_get_null_xlat(void);
+extern INT xl_get_uparam(XLAT);
+extern XLAT xl_get_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
+extern BOOLEAN xl_is_xlat_valid(XLAT xlat);
+extern void xl_load_all_dyntts(CNSTRING ttpath);
+//extern void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
+extern void xl_release_xlat(XLAT xlat);
+extern void xl_set_uparam(XLAT, INT uparam);
+extern void xlat_shutdown(void);

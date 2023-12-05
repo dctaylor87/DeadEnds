@@ -38,6 +38,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "translat.h"
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"

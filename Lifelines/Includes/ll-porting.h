@@ -22,17 +22,21 @@ typedef void *		VPTR;
 #define nzkey(record)	((record)->root->key)
 #define nztype(record)	((record)->root->key[0])
 
+#define key_of_record(record)	nzkey(record) /* XXX revisit when REFNs are supported XXX */
+
 //#define store_record(key, rec, len)			storeRecord(
 //#define choose_from_indiseq(seq, ask1, titl1, titln)	chooseFromSequence(seq, ask1, titl1, titln)
 
-#define create_indiseq_null()				createSequence(theDatabase)
+#define create_indiseq_null()			createSequence(theDatabase)
 
 //#define edit_add_event()
 //#define edit_add_source
 //#define edit_add_other
 
-#define create_node(xref, tag, val, prnt)		createGNode(xref, tag, val, prnt)
-#define string_to_node(str)				stringToNodeTree(str)
+#define create_node(xref, tag, val, prnt)	createGNode(xref, tag, val, prnt)
+#define string_to_node(str)			stringToNodeTree(str)
+#define node_to_string(node)			gnodesToString(node)
+#define free_nodes(node)			freeGNodes(node)
 
 #define DOSURCAP	true
 #define NOSURCAP	false
@@ -41,6 +45,8 @@ typedef void *		VPTR;
 
 #define DOASK1		1
 #define NOASK1		0
+
+#define ARRSIZE(array)		ARRAYSIZE(array)
 
 #define release_record(record)		/* empty --= no current ref counts */
 
@@ -55,6 +61,9 @@ typedef void *		VPTR;
 #define qkey_to_erecord(key)	keyToEventRecord(key, theDatabase)
 #define qkey_to_orecord(key)	keyToOtherRecord(key, theDatabase)
 
+#define key_to_record(key)	__llpy_key_to_record(key, NULL)
+#define qkey_to_record(key)	__llpy_key_to_record(key, NULL)
+
 #define key_to_fam(key)		keyToFamily(key, theDatabase)
 #define key_to_indi(key)	keyToPerson(key, theDatabase)
 
@@ -62,6 +71,7 @@ typedef void *		VPTR;
 
 #define INDISEQ		Sequence *
 #define ISize(seq)	((seq)->size)
+#define length_indiseq(seq)	ISize(seq)
 
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)
@@ -70,7 +80,7 @@ typedef void *		VPTR;
 #define fam_to_fathers(node)		familyToFathers(node, theDatabase)
 #define fam_to_mothers(node)		familyToMothers(node, theDatabase)
 #define fam_to_husb(node)		familyToHusband(node, theDatabase)
-#define fam_to_first_chil(node)		familyTOFirstChild(node, theDatabase)
+#define fam_to_first_chil(node)		familyToFirstChild(node, theDatabase)
 #define fam_to_key(fam)			familyToKey(fam)
 
 #define indi_to_children(node)		personToChildren(node, theDatabase)
@@ -115,6 +125,9 @@ typedef void *		VPTR;
 
 #define TABLE		HashTable *
 #define LIST		List *
+
+#define create_list()			createList(NULL, NULL, NULL)
+
 #define event_to_date(node,shorten)	eventToDate(node,shorten)
 #define givens(name)			getGivenNames(name)
 #define getasurname(name)		getSurname(name)

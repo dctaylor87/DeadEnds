@@ -59,6 +59,7 @@
 #include "messages.h"
 #include "codesets.h"
 #include "listui.h"
+#include "list.h"
 
 #else
 

@@ -44,6 +44,7 @@
 #include "llnls.h"
 #include "options.h"
 
+#include "translat.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "recordindex.h"
@@ -61,6 +62,7 @@
 #include "screen.h"
 #include "splitjoin.h"
 #include "codesets.h"
+#include "options.h"
 
 #include "llpy-externs.h"
 #else

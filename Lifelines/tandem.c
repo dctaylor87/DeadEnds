@@ -42,6 +42,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "translat.h"
 #include "rfmt.h"
 #include "sequence.h"
 #include "uiprompts.h"

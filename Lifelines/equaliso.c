@@ -38,6 +38,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "translat.h"
 #include "gnode.h"
 #include "rfmt.h"
 #include "xlat.h"

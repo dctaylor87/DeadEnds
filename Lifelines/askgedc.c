@@ -22,6 +22,7 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "sys_inc.h"
 
 #include "rfmt.h"
 #include "sequence.h"
@@ -73,7 +74,7 @@ select_gedcoms (const struct dirent *entry)
 	CNSTRING goodexts[] = { ".ged", ".gedcom" };
 	INT i;
 	/* examine end of entry->d_name */
-	for (i=0; i<ARRSIZE(goodexts); ++i) {
+	for (i=0; i<(int)ARRSIZE(goodexts); ++i) {
 		CNSTRING entext = entry->d_name + strlen(entry->d_name) - strlen(goodexts[i]);
 		/* is it what we want ? use platform correct comparison, from path.c */
 		if (path_match(goodexts[i], entext))
@@ -115,14 +116,14 @@ add_gedcom_props (TABLE fileprops)
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */
-	for (i=0; i<ARRSIZE(tagsfound); ++i)
+	for (i=0; i<(int)ARRSIZE(tagsfound); ++i)
 		tagsfound[i] = 0;
 
 	/* now read line by line looking for metainfo */
 	while (NULL != fgets(str, sizeof(str), fp) && str[strlen(str)-1]=='\n' && line<20) {
 		STRING p;
 		chomp(str); /* trim trailing CR or LF */
-		for (i=0; i<ARRSIZE(f_tags); ++i) {
+		for (i=0; i<(int)ARRSIZE(f_tags); ++i) {
 			CNSTRING tag = f_tags[i];
 			if (tagsfound[i])
 				continue; /* already have this tag */
@@ -145,7 +146,7 @@ add_gedcom_props (TABLE fileprops)
 	fclose(fp);
 
 	/* add any metainfo we found to the property table */
-	for (i=0; i<ARRSIZE(tagsfound); ++i) {
+	for (i=0; i<(int)ARRSIZE(tagsfound); ++i) {
 		if (tagsfound[i]) {
 			add_prop_dnum(fileprops, f_tags[i], tagsfound[i]);
 			strfree(&tagsfound[i]);

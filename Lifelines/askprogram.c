@@ -112,7 +112,7 @@ add_program_props (TABLE fileprops)
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */
-	for (i=0; i<ARRSIZE(tagsfound); ++i)
+	for (i=0; i<(int)ARRSIZE(tagsfound); ++i)
 		tagsfound[i] = 0;
 
 	/* what charset is the data in this report ? :( */
@@ -135,7 +135,7 @@ add_program_props (TABLE fileprops)
 			/* pick up any tag values specified */
 			STRING p;
 			chomp(str); /* trim trailing CR or LF */
-			for (i=0; i<ARRSIZE(f_tags); ++i) {
+			for (i=0; i<(int)ARRSIZE(f_tags); ++i) {
 				CNSTRING tag = f_tags[i];
 				if (tagsfound[i])
 					continue; /* already have this tag */
@@ -159,7 +159,7 @@ add_program_props (TABLE fileprops)
 	fclose(fp);
 
 	/* add any metainfo we found to the property table */
-	for (i=0; i<ARRSIZE(tagsfound); ++i) {
+	for (i=0; i<(int)ARRSIZE(tagsfound); ++i) {
 		if (tagsfound[i]) {
 			/* TODO: translate tagsfound[i] with charset */
 			add_prop_dnum(fileprops, f_tags[i], tagsfound[i]);
