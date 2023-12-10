@@ -83,6 +83,7 @@ static PyObject *llpy_parent_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
   nrefcnt_inc(pnode);
   TRACK_NODE_REFCNT_INC(pnode);
   parent->lnn_type = node->lnn_type; /* 'inherit' type from previous node */
+  parent->lnn_database = node->lnn_database;
   parent->lnn_node = pnode;
 
   return (PyObject *)parent;
@@ -91,47 +92,48 @@ static PyObject *llpy_parent_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
 static PyObject *llpy_child_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *py_node = (LLINES_PY_NODE *) self;
+  LLINES_PY_NODE *new_py_node;
   NODE node = py_node->lnn_node;
-  int type;
 
   node = nchild (node);
   if (! node)
     Py_RETURN_NONE;		/* node has no children */
 
-  type = py_node->lnn_type;	/* save old type -- we are about to reuse py_node */
-  py_node = PyObject_New (LLINES_PY_NODE, &llines_node_type);
-  if (! py_node)
+  new_py_node = PyObject_New (LLINES_PY_NODE, &llines_node_type);
+  if (! new_py_node)
     return NULL;
 
   nrefcnt_inc(node);
   TRACK_NODE_REFCNT_INC(node);
-  py_node->lnn_type = type;
-  py_node->lnn_node = node;
 
-  return (PyObject *)py_node;
+  new_py_node->lnn_type = py_node->lnn_type;
+  new_py_node->lnn_database = py_node->lnn_database;
+  new_py_node->lnn_node = node;
+
+  return (PyObject *)new_py_node;
 }
 
 static PyObject *llpy_sibling_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *py_node = (LLINES_PY_NODE *) self;
+  LLINES_PY_NODE *new_py_node;
   NODE node = py_node->lnn_node;
-  int type;
 
   node = nsibling (node);
   if (! node)
     Py_RETURN_NONE;		/* node has no siblings */
 
-  type = py_node->lnn_type;	/* save old type -- we are about to reuse py_node */
-  py_node = PyObject_New (LLINES_PY_NODE, &llines_node_type);
+  new_py_node = PyObject_New (LLINES_PY_NODE, &llines_node_type);
   if (! py_node)
     return NULL;
 
   nrefcnt_inc(node);
   TRACK_NODE_REFCNT_INC(node);
-  py_node->lnn_type = type;
-  py_node->lnn_node = node;
+  new_py_node->lnn_type = py_node->lnn_type;
+  new_py_node->lnn_database = py_node->lnn_database;
+  new_py_node->lnn_node = node;
 
-  return (PyObject *)py_node;
+  return (PyObject *)new_py_node;
 }
 
 static PyObject *llpy_copy_node_tree (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
@@ -143,6 +145,7 @@ static PyObject *llpy_copy_node_tree (PyObject *self, PyObject *args ATTRIBUTE_U
     return NULL;
 
   copy->lnn_type = node->lnn_type;
+  copy->lnn_database = node->lnn_database;
   copy->lnn_node = copy_nodes (node->lnn_node, TRUE, TRUE);
   nrefcnt_inc(copy->lnn_node);
   TRACK_NODE_REFCNT_INC(copy->lnn_node);
@@ -343,6 +346,7 @@ static PyObject *llpy_create_node (PyObject *self ATTRIBUTE_UNUSED, PyObject *ar
   nrefcnt_inc(node);
   TRACK_NODE_REFCNT_INC(node);
   py_node->lnn_node = node;
+  py_node->lnn_database = 0;	/* not currently part of any database! */
   py_node->lnn_type = 0;	/* unknown */
 
   return ((PyObject *)py_node);
@@ -390,6 +394,7 @@ static PyObject *llpy_nodeiter (PyObject *self, PyObject *args, PyObject *kw)
   iter->ni_cur_node = NULL;
   iter->ni_type = type;
   iter->ni_level = 0;
+  iter->ni_database = ((LLINES_PY_NODE *)self)->lnn_database;
   if ((tag == 0) || (*tag == '\0'))
     iter->ni_tag = 0;
   else
@@ -462,10 +467,10 @@ static struct PyMethodDef Lifelines_Node_Methods[] =
      "(NODE).add_node([parent],[prev]) --> NODE.  Modifies node to have\n\
 parent PARENT and previous sibling PREV.  Returns modified NODE" },
    { "detach_node",	(PyCFunction)llpy_detach_node, METH_NOARGS,
-     "(NODE).detach_node(void) --> NODE.  Detach NODE from its tree.\n\
+     "(NODE).detach_node(void) --> NODE.  Detach NODE from its tree.\n\n\
 It is (currently) an error for it to be the top-node of the tree." },
    { "nodeiter",	(PyCFunction)llpy_nodeiter, METH_VARARGS | METH_KEYWORDS,
-     "nodeiter(type, [tag]) --> Iterator over node tree.\n\
+     "nodeiter(type, [tag]) --> Iterator over node tree.\n\n\
 TYPE is an int -- one of ITER_CHILDREN or ITER_TRAVERSE.\n\
 TAG, if specified, restricts the iterator to just those nodes having that tag." },
 

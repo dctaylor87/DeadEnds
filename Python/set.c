@@ -75,6 +75,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
     }
   while ((py_indi = PyIter_Next (iterator)))
     {
+      Database *database;
       RECORD indi;
       NODE node;
 
@@ -83,6 +84,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	  /* raise exception */
 	}
 
+      database = ((LLINES_PY_RECORD *)py_indi)->llr_database;
       indi = ((LLINES_PY_RECORD *)py_indi)->llr_record;
 
       /* for most individuals, the for loop stops after one iteration */
@@ -91,7 +93,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	   famc = findTag (famc->sibling, "FAMC"))
 	{
 	  /* famc points to a family that indi is a child in */
-	  node = keyToFamily (nval(famc), theDatabase); /* top node of family */
+	  node = keyToFamily (nval(famc), database); /* top node of family */
 
 	  /* for each child of that family... */
 	  for (NODE child = findTag (node->child, "CHIL");
@@ -120,6 +122,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 		    }
 		  new_indi->llr_type = LLINES_TYPE_INDI;
 		  new_indi->llr_record = sibling;
+		  new_indi->llr_database = database;
 		  status = PySet_Add (output, (PyObject *)new_indi);
 		  if (status < 0)
 		    {
@@ -419,13 +422,13 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
 static struct PyMethodDef Lifelines_Set_Functions[] =
   {
    { "siblingset",	(PyCFunction)llpy_siblingset, METH_VARARGS | METH_KEYWORDS,
-     "siblingset(set) --> SET of INDIs.\n\
+     "siblingset(set) --> SET of INDIs.\n\n\
 Returns the set of all siblings of the INDIs in the input SET.\n\
 NOTE: an INDI is NOT a sibling to himself/herself." },
    { "ancestorset",	(PyCFunction)llpy_ancestorset, METH_VARARGS | METH_KEYWORDS,
-     "ancestorset(SET) --> SET. Returns the set of ancestors of the input set." },
+     "ancestorset(set) --> SET. Returns the set of ancestors of the input set." },
    { "parentset",	(PyCFunction)llpy_parentset, METH_VARARGS | METH_KEYWORDS,
-     "parentset(SET) --> SET.  Returns the parents of the input INDIs." },
+     "parentset(set) --> SET.  Returns the parents of the input INDIs." },
    { NULL, 0, 0, NULL }		/* sentinel */
   };
 

@@ -31,6 +31,14 @@ extern int llpy_debug;
 
 extern PyObject *_llpy_key (PyObject *self, PyObject *args, PyObject *kw);
 extern PyObject *_llpy_top_node (PyObject *self, PyObject *args);
+
+/* commonality of the 10 record iterators */
+extern PyObject *_llpy_create_record_iterator (Database *database, int record_type);
+
+/* commonality of the two export functions */
+extern PyObject *_llpy_export (Database *database, CString filename,
+			       CString gedcom_version, CString submitter);
+
 extern RECORD __llpy_key_to_record (CString key, int *int_type);
 
 extern int _py_traverse_nodes (GNode *node, int level,

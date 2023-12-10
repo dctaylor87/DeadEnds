@@ -294,6 +294,7 @@ static PyObject *llpy_birth (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   nrefcnt_inc(birth);
   TRACK_NODE_REFCNT_INC(birth);
   event->lnn_node = birth;
+  event->lnn_database = indi->llr_database;
   event->lnn_type = LLINES_TYPE_INDI;
 
   return (PyObject *)event;
@@ -321,6 +322,7 @@ static PyObject *llpy_death (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   nrefcnt_inc(death);
   TRACK_NODE_REFCNT_INC(death);
   event->lnn_node = death;
+  event->lnn_database = indi->llr_database;
   event->lnn_type = LLINES_TYPE_INDI;
 
   return (PyObject *)event;
@@ -348,6 +350,7 @@ static PyObject *llpy_burial (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   nrefcnt_inc(burial);
   TRACK_NODE_REFCNT_INC(burial);
   event->lnn_node = burial;
+  event->lnn_database = indi->llr_database;
   event->lnn_type = LLINES_TYPE_INDI;
 
   return (PyObject *)event;
@@ -361,7 +364,8 @@ static PyObject *llpy_burial (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_father (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
-  NODE indi_node = indi_to_fath(nztop (indi->llr_record));
+  Database *database = indi->llr_database;
+  NODE indi_node = personToFather(nztop (indi->llr_record), database);
   LLINES_PY_RECORD *father;
 
   if (! indi_node)
@@ -371,7 +375,8 @@ static PyObject *llpy_father (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (! father)
     return NULL;
 
-  father->llr_record = node_to_record (indi_node);
+  father->llr_record = _llpy_node_to_record (indi_node, database);
+  father->llr_database = database;
   father->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)father;
@@ -385,7 +390,8 @@ static PyObject *llpy_father (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_mother (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
-  NODE indi_node = indi_to_moth(nztop (indi->llr_record));
+  Database *database = indi->llr_database;
+  NODE indi_node = personToMother(nztop (indi->llr_record), database);
   LLINES_PY_RECORD *mother;
 
   if (! indi_node)
@@ -395,7 +401,8 @@ static PyObject *llpy_mother (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (! mother)
     return NULL;
 
-  mother->llr_record = node_to_record (indi_node);
+  mother->llr_record = _llpy_node_to_record (indi_node, database);
+  mother->llr_database = database;
   mother->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)mother;
@@ -409,6 +416,7 @@ static PyObject *llpy_mother (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_nextsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
+  Database *database = indi->llr_database;
   NODE indi_node = indi_to_next_sib_old (nztop (indi->llr_record));
   LLINES_PY_RECORD *sibling;
 
@@ -416,7 +424,8 @@ static PyObject *llpy_nextsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
     Py_RETURN_NONE;		/* no person in the role */
 
   sibling = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
-  sibling->llr_record = node_to_record (indi_node);
+  sibling->llr_database = database;
+  sibling->llr_record = _llpy_node_to_record (indi_node, database);
   sibling->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)sibling;
@@ -430,6 +439,7 @@ static PyObject *llpy_nextsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_prevsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
+  Database *database = indi->llr_database;
   NODE indi_node = indi_to_prev_sib_old (nztop (indi->llr_record));
   LLINES_PY_RECORD *sibling;
 
@@ -437,7 +447,8 @@ static PyObject *llpy_prevsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
     Py_RETURN_NONE;		/* no person in the role */
 
   sibling = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
-  sibling->llr_record = node_to_record (indi_node);
+  sibling->llr_database = database;
+  sibling->llr_record = _llpy_node_to_record (indi_node, database);
   sibling->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)sibling;
@@ -535,10 +546,11 @@ static PyObject *llpy_pronoun (PyObject *self, PyObject *args, PyObject *kw)
 static PyObject *llpy_nspouses (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
+  Database *database = indi->llr_database;
   NODE node = nztop (indi->llr_record);
   INT nactual = 0;
 
-  FORSPOUSES(node, spouse, fam, nspouses, theDatabase)
+  FORSPOUSES(node, spouse, fam, nspouses, database)
     ++nactual;
   ENDSPOUSES
 
@@ -574,6 +586,7 @@ static PyObject *llpy_nfamilies (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 static PyObject *llpy_parents (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
+  Database *database = indi->llr_database;
   NODE indi_node = nztop (indi->llr_record);
   NODE fam_node = indi_to_famc (indi_node);
   LLINES_PY_RECORD *fam;
@@ -583,7 +596,8 @@ static PyObject *llpy_parents (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
   fam = PyObject_New (LLINES_PY_RECORD, &llines_family_type);
   fam->llr_type = LLINES_TYPE_FAM;
-  fam->llr_record = node_to_record (fam_node);
+  fam->llr_database = database;
+  fam->llr_record = _llpy_node_to_record (fam_node, database);
 
   return (PyObject *)fam;
 }
@@ -874,11 +888,12 @@ static int add_spouses (PyObject *item, PyObject *output_set)
   RECORD record = ((LLINES_PY_RECORD *)item)->llr_record;
 
 #if defined(DEADENDS)
+  Database *database = ((LLINES_PY_RECORD *)item)->llr_database;
   RECORD spouse_r;
   NODE indi = nztop (record);
 
-  FORSPOUSES(indi, spouse, fam, num, theDatabase)
-    spouse_r = node_to_record (spouse);
+  FORSPOUSES(indi, spouse, fam, num, database)
+    spouse_r = _llpy_node_to_record (spouse, database);
 
     LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
     if (! new_indi)
@@ -886,6 +901,7 @@ static int add_spouses (PyObject *item, PyObject *output_set)
 
     new_indi->llr_type = LLINES_TYPE_INDI;
     new_indi->llr_record = spouse_r;
+    new_indi->llr_database = database;
 
     if (PySet_Add (output_set, (PyObject *)new_indi) < 0)
       return (-2);
@@ -1093,6 +1109,7 @@ static int add_children (PyObject *obj, PyObject *working_set, PyObject *output_
 {
   int status;
   RECORD record;
+  Database *database;
 
   if (output_set)
     {
@@ -1123,9 +1140,10 @@ static int add_children (PyObject *obj, PyObject *working_set, PyObject *output_
      working_set */
 
   record = ((LLINES_PY_RECORD *)obj)->llr_record;
+  database = ((LLINES_PY_RECORD *)obj)->llr_database;
 
   FORFAMS_RECORD(record, fam)
-    FORCHILDREN_RECORD(fam, child)
+    FORCHILDREN_RECORD(fam, child, database)
     /* wrap the child in a PyObject and put him/her into working_set */
       LLINES_PY_RECORD *indi_rec = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
@@ -1133,6 +1151,7 @@ static int add_children (PyObject *obj, PyObject *working_set, PyObject *output_
 	return (-1);		/* caller will clean up */
 
       indi_rec->llr_type = LLINES_TYPE_INDI;
+      indi_rec->llr_database = database;
       indi_rec->llr_record = child;
       if (PySet_Add (working_set, (PyObject *)indi_rec) < 0)
 	return (-2);
@@ -1233,18 +1252,18 @@ static struct PyMethodDef Lifelines_Person_Methods[] =
    /* Person Functions */
 
    { "name",		(PyCFunction)llpy_name, METH_VARARGS | METH_KEYWORDS,
-     "name([CAPS]) -->NAME; returns the name found on the first '1 NAME' line.\n\
+     "name([caps]) -->NAME; returns the name found on the first '1 NAME' line.\n\n\
 If CAPS (optional) is True (default), the surname is made all capitals." },
    { "fullname",	(PyCFunction)llpy_fullname, METH_VARARGS | METH_KEYWORDS,
-     "fullname(bool1, bool2, int) -->" },
+     "fullname([upcase], [keep_order], [max_length]) -->" },
    { "surname",		(PyCFunction)llpy_surname, METH_NOARGS,
-     "surname(void) --> STRING: returns the surname as found in the first '1 NAME'\n\
-line.  Slashes are removed." },
+     "surname(void) --> STRING: returns the surname as found in the first '1 NAME' line.\n\n\
+Slashes are removed." },
    { "givens",		(PyCFunction)llpy_givens, METH_NOARGS,
      "givens(void) --> STRING: returns the given names of the person in the\n\
 same order and format as found in the first '1 NAME' line of the record." },
    { "trimname",	(PyCFunction)llpy_trimname, METH_VARARGS | METH_KEYWORDS,
-     "trimname(MAX_LENGTH) --> STRING; returns name trimmed to MAX_LENGTH." },
+     "trimname(max_length) --> STRING; returns name trimmed to MAX_LENGTH." },
    { "birth",		(PyCFunction)llpy_birth, METH_NOARGS,
      "birth(void) -> NODE: First birth event of INDI; None if no event is found." },
    { "death",		(PyCFunction)llpy_death, METH_NOARGS,
@@ -1316,11 +1335,11 @@ through user interface.  Returns None if individual has no spouses or user cance
      "spouses(void) --> SET.  Returns set of spouses of INDI." },
 
    { "top_node", (PyCFunction)_llpy_top_node, METH_NOARGS,
-     "top_nodevoid) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
+     "top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
 
 #if !defined(DEADENDS)
    { "sync", (PyCFunction)llpy_sync_indi, METH_NOARGS,
-     "sync(void) --> BOOLEAN.  Writes modified INDI to database.\n\
+     "sync(void) --> BOOLEAN.  Writes modified INDI to database.\n\n\
 Returns success or failure." },
 #endif
 
@@ -1330,11 +1349,11 @@ Returns success or failure." },
 static struct PyMethodDef Lifelines_Person_Functions[] =
   {
    { "descendantset",	(PyCFunction)llpy_descendantset, METH_VARARGS | METH_KEYWORDS,
-     "descendantset(SET) --> SET.  Returns the set of descendants of the input set." },
+     "descendantset(set) --> SET.  Returns the set of descendants of the input set." },
    { "childset",	(PyCFunction)llpy_childset, METH_VARARGS | METH_KEYWORDS,
-     "childset(SET) --> SET.  Returns the set of INDIs that are children of the input INDIs." },
+     "childset(set) --> SET.  Returns the set of INDIs that are children of the input INDIs." },
    { "spouseset",	(PyCFunction)llpy_spouseset, METH_VARARGS | METH_KEYWORDS,
-     "spouseset(SET) --> SET.  Returns the set of INDIs that are spouses of the input INDIs." },
+     "spouseset(set) --> SET.  Returns the set of INDIs that are spouses of the input INDIs." },
    { NULL, 0, 0, NULL }		/* sentinel */
   };
 

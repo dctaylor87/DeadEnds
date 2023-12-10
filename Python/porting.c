@@ -24,7 +24,7 @@
 #include "llpy-externs.h"
 
 RecordIndexEl *
-_llpy_node_to_record (GNode *node)
+_llpy_node_to_record (GNode *node, Database *database)
 {
   GNode *top = node;
 
@@ -40,19 +40,19 @@ _llpy_node_to_record (GNode *node)
   switch (top->key[0])
     {
     case 'I':
-      index = theDatabase->personIndex;
+      index = database->personIndex;
       break;
     case 'F':
-      index = theDatabase->familyIndex;
+      index = database->familyIndex;
       break;
     case 'S':
-      index = theDatabase->sourceIndex;
+      index = database->sourceIndex;
       break;
     case 'E':
-      index = theDatabase->eventIndex;
+      index = database->eventIndex;
       break;
     default:
-      index = theDatabase->otherIndex;
+      index = database->otherIndex;
       break;
     }
   return ((RecordIndexEl *)searchHashTable ((HashTable *)index, top->key));
@@ -62,19 +62,19 @@ _llpy_node_to_record (GNode *node)
   RecordIndexEl *record;
 
   record = ((RecordIndexEl *)searchHashTable
-	    ((HashTable *)theDatabase->personIndex, top->key));
+	    ((HashTable *)database->personIndex, top->key));
   if (! record)
     record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)theDatabase->familyIndex, top->key));
+	      ((HashTable *)database->familyIndex, top->key));
   if (! record)
     record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)theDatabase->sourceIndex, top->key));
+	      ((HashTable *)database->sourceIndex, top->key));
   if (! record)
     record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)theDatabase->eventIndex, top->key));
+	      ((HashTable *)database->eventIndex, top->key));
   if (! record)
     record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)theDatabase->otherIndex, top->key));
+	      ((HashTable *)database->otherIndex, top->key));
   return (record);
 #endif  
 }

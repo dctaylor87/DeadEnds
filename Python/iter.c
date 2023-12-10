@@ -30,11 +30,11 @@
 /* these functions return iterators for all individuals, families, and
    sources, respectively, in the database.  */
 
-static PyObject *llpy_events (PyObject *self, PyObject *args);
-static PyObject *llpy_individuals (PyObject *self, PyObject *args);
-static PyObject *llpy_families (PyObject *self, PyObject *args);
-static PyObject *llpy_sources (PyObject *self, PyObject *args);
-static PyObject *llpy_others (PyObject *self, PyObject *args);
+static PyObject *llpy_events (PyObject *self, PyObject *args, PyObject *kw);
+static PyObject *llpy_individuals (PyObject *self, PyObject *args, PyObject *kw);
+static PyObject *llpy_families (PyObject *self, PyObject *args, PyObject *kw);
+static PyObject *llpy_sources (PyObject *self, PyObject *args, PyObject *kw);
+static PyObject *llpy_others (PyObject *self, PyObject *args, PyObject *kw);
 
 static int nodeiter_next_child (LLINES_PY_NODEITER *iter);
 static int nodeiter_next_traverse (LLINES_PY_NODEITER *iter);
@@ -53,10 +53,15 @@ static void llpy_debug_print_node_iter_cur (const char *prefix,
    events in the database.  */
 
 static PyObject *llpy_events (PyObject *self,
-			      PyObject *args ATTRIBUTE_UNUSED)
+			      PyObject *args, PyObject *kw)
 {
-  LLINES_PY_RECORD_ITER *iter = PyObject_New (LLINES_PY_RECORD_ITER,
-					      &llines_record_iter_type);
+  /* ALL non-db specific database iterators take an optional keyword
+     argument: database.  If not None, then type needs to be
+     llines_database_type, aka llines.Database. */
+
+  static char *keywords[] = { "database", NULL };
+  LLINES_PY_DATABASE *py_db = NULL;
+  Database *database;
 
   if (llpy_debug)
     {
@@ -64,27 +69,32 @@ static PyObject *llpy_events (PyObject *self,
 	       (void *)self, (void *)args);
     }
 
-  if (! iter)
-    return NULL;		/* PyObject_New failed and set exception */
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|O!", keywords,
+				     &llines_database_type, &py_db))
+    return NULL;
 
-  iter->li_type = LLINES_TYPE_EVEN;
-#if defined(DEADENDS)
-  iter->li_bucket_ndx = -1;
-  iter->li_element_ndx = -1;
-#else
-  iter->li_current = 0;
-#endif
-  return (PyObject *)iter;
+  /* database is either omitted, None, or valid */
+  if (! py_db)
+    database = theDatabase;	/* need a better name for the default database */
+  else
+    database = py_db->lld_database;
+
+  return _llpy_create_record_iterator (database, LLINES_TYPE_EVEN);
 }
 
 /* llpy_individuals (void) --> Returns an iterator for the set of
    individuals in the database.  */
 
 static PyObject *llpy_individuals (PyObject *self,
-				   PyObject *args ATTRIBUTE_UNUSED)
+				   PyObject *args, PyObject *kw)
 {
-  LLINES_PY_RECORD_ITER *iter = PyObject_New (LLINES_PY_RECORD_ITER,
-					      &llines_record_iter_type);
+  /* ALL non-db specific database iterators take an optional keyword
+     argument: database.  If not None, then type needs to be
+     llines_database_type, aka llines.Database. */
+
+  static char *keywords[] = { "database", NULL };
+  LLINES_PY_DATABASE *py_db = NULL;
+  Database *database;
 
   if (llpy_debug)
     {
@@ -92,27 +102,32 @@ static PyObject *llpy_individuals (PyObject *self,
 	       (void *)self, (void *)args);
     }
 
-  if (! iter)
-    return NULL;		/* PyObject_New failed and set exception */
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|O!", keywords,
+				     &llines_database_type, &py_db))
+    return NULL;
 
-  iter->li_type = LLINES_TYPE_INDI;
-#if defined(DEADENDS)
-  iter->li_bucket_ndx = -1;
-  iter->li_element_ndx = -1;
-#else
-  iter->li_current = 0;
-#endif
-  return (PyObject *)iter;
+  /* database is either omitted, None, or valid */
+  if (! py_db)
+    database = theDatabase;	/* need a better name for the default database */
+  else
+    database = py_db->lld_database;
+
+  return _llpy_create_record_iterator (database, LLINES_TYPE_INDI);
 }
 
 /* llpy_families (void) --> Returns an iterator for the set of
    families in the database.  */
 
 static PyObject *llpy_families (PyObject *self,
-				PyObject *args ATTRIBUTE_UNUSED)
+				PyObject *args, PyObject *kw)
 {
-  LLINES_PY_RECORD_ITER *iter = PyObject_New (LLINES_PY_RECORD_ITER,
-					      &llines_record_iter_type);
+  /* ALL non-db specific database iterators take an optional keyword
+     argument: database.  If not None, then type needs to be
+     llines_database_type, aka llines.Database. */
+
+  static char *keywords[] = { "database", NULL };
+  LLINES_PY_DATABASE *py_db = NULL;
+  Database *database;
 
   if (llpy_debug)
     {
@@ -120,27 +135,32 @@ static PyObject *llpy_families (PyObject *self,
 	       (void *)self, (void *)args);
     }
 
-  if (! iter)
-    return NULL;		/* PyObject_New failed and set exception */
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|O!", keywords,
+				     &llines_database_type, &py_db))
+    return NULL;
 
-  iter->li_type = LLINES_TYPE_FAM;
-#if defined(DEADENDS)
-  iter->li_bucket_ndx = -1;
-  iter->li_element_ndx = -1;
-#else
-  iter->li_current = 0;
-#endif
-  return (PyObject *)iter;
+  /* database is either omitted, None, or valid */
+  if (! py_db)
+    database = theDatabase;	/* need a better name for the default database */
+  else
+    database = py_db->lld_database;
+
+  return _llpy_create_record_iterator (database, LLINES_TYPE_FAM);
 }
 
 /* llpy_sources (void) --> Returns an iterator for the set of sources
    in the database.  */
 
 static PyObject *llpy_sources (PyObject *self,
-			       PyObject *args ATTRIBUTE_UNUSED)
+			       PyObject *args, PyObject *kw)
 {
-  LLINES_PY_RECORD_ITER *iter = PyObject_New (LLINES_PY_RECORD_ITER,
-					      &llines_record_iter_type);
+  /* ALL non-db specific database iterators take an optional keyword
+     argument: database.  If not None, then type needs to be
+     llines_database_type, aka llines.Database. */
+
+  static char *keywords[] = { "database", NULL };
+  LLINES_PY_DATABASE *py_db = NULL;
+  Database *database;
 
   if (llpy_debug)
     {
@@ -148,27 +168,32 @@ static PyObject *llpy_sources (PyObject *self,
 	       (void *)self, (void *)args);
     }
 
-  if (! iter)
-    return NULL;		/* PyObject_New failed and set exception */
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|O!", keywords,
+				     &llines_database_type, &py_db))
+    return NULL;
 
-  iter->li_type = LLINES_TYPE_SOUR;
-#if defined(DEADENDS)
-  iter->li_bucket_ndx = -1;
-  iter->li_element_ndx = -1;
-#else
-  iter->li_current = 0;
-#endif
-  return (PyObject *)iter;
+  /* database is either omitted, None, or valid */
+  if (! py_db)
+    database = theDatabase;	/* need a better name for the default database */
+  else
+    database = py_db->lld_database;
+
+  return _llpy_create_record_iterator (database, LLINES_TYPE_SOUR);
 }
 
 /* llpy_others (void) --> Returns an iterator for the set of other records
    in the database.  */
 
 static PyObject *llpy_others (PyObject *self,
-			       PyObject *args ATTRIBUTE_UNUSED)
+			       PyObject *args, PyObject *kw)
 {
-  LLINES_PY_RECORD_ITER *iter = PyObject_New (LLINES_PY_RECORD_ITER,
-					      &llines_record_iter_type);
+  /* ALL non-db specific database iterators take an optional keyword
+     argument: database.  If not None, then type needs to be
+     llines_database_type, aka llines.Database. */
+
+  static char *keywords[] = { "database", NULL };
+  LLINES_PY_DATABASE *py_db = NULL;
+  Database *database;
 
   if (llpy_debug)
     {
@@ -176,17 +201,17 @@ static PyObject *llpy_others (PyObject *self,
 	       (void *)self, (void *)args);
     }
 
-  if (! iter)
-    return NULL;		/* PyObject_New failed and set exception */
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|O!", keywords,
+				     &llines_database_type, &py_db))
+    return NULL;
 
-  iter->li_type = LLINES_TYPE_OTHR;
-#if defined(DEADENDS)
-  iter->li_bucket_ndx = -1;
-  iter->li_element_ndx = -1;
-#else
-  iter->li_current = 0;
-#endif
-  return (PyObject *)iter;
+  /* database is either omitted, None, or valid */
+  if (! py_db)
+    database = theDatabase;	/* need a better name for the default database */
+  else
+    database = py_db->lld_database;
+
+  return _llpy_create_record_iterator (database, LLINES_TYPE_OTHR);
 }
 
 static void llpy_record_iter_dealloc (PyObject *self)
@@ -214,6 +239,7 @@ static PyObject *llpy_record_iter (PyObject *self)
 static PyObject *llpy_record_iternext (PyObject *self)
 {
   LLINES_PY_RECORD_ITER *iter = (LLINES_PY_RECORD_ITER *)self;
+  Database *database = iter->li_database;
   RecordIndexEl *record;
   RecordIndex *index;
 
@@ -237,19 +263,19 @@ static PyObject *llpy_record_iternext (PyObject *self)
   switch (iter->li_type)
     {
     case LLINES_TYPE_INDI:
-      index = theDatabase->personIndex;
+      index = database->personIndex;
       break;
     case LLINES_TYPE_FAM:
-      index = theDatabase->familyIndex;
+      index = database->familyIndex;
       break;
     case LLINES_TYPE_SOUR:
-      index = theDatabase->sourceIndex;
+      index = database->sourceIndex;
       break;
     case LLINES_TYPE_OTHR:
-      index = theDatabase->otherIndex;
+      index = database->otherIndex;
       break;
     case LLINES_TYPE_EVEN:
-      index = theDatabase->eventIndex;
+      index = database->eventIndex;
       break;
     default:      
       Py_UNREACHABLE ();	/* internal error */
@@ -285,6 +311,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_EVEN;
+	obj->llr_database = database;
 	obj->llr_record = record;
 
 	return (PyObject *)obj;
@@ -298,6 +325,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_INDI;
+	obj->llr_database = database;
 	obj->llr_record = record;
 
 	return (PyObject *)obj;
@@ -311,6 +339,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_FAM;
+	obj->llr_database = database;
 	obj->llr_record = record;
 
 	return (PyObject *)obj;
@@ -324,6 +353,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_SOUR;
+	obj->llr_database = database;
 	obj->llr_record = record;
 
 	return (PyObject *)obj;
@@ -337,6 +367,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_OTHR;
+	obj->llr_database = database;
 	obj->llr_record = record;
 
 	return (PyObject *)obj;
@@ -597,6 +628,7 @@ static PyObject *llpy_node_iternext (PyObject *self)
 		return NULL;
 	      py_node->lnn_type = 0;
 	      py_node->lnn_node = iter->ni_cur_node;
+	      py_node->lnn_database = iter->ni_database;
 
 	      nrefcnt_inc(py_node->lnn_node);
 	      TRACK_NODE_REFCNT_INC(py_node->lnn_node);
@@ -863,16 +895,16 @@ static struct PyMethodDef Lifelines_Iter_Functions[] =
   {
    /* RECORD functions */
 
-   { "individuals",	llpy_individuals, METH_NOARGS,
-     "individuals(void) -> iterator for the set of all INDI in the database" },
-   { "families",	llpy_families, METH_NOARGS,
-     "families(void) -> iterator for the set of all FAM in the database" },
-   { "sources",		llpy_sources, METH_NOARGS,
-     "sources(void) -> iterator for the set of all SOUR in the database" },
-   { "events",		llpy_events, METH_NOARGS,
-     "events(void) --> iterator for the set of all EVEN in the database" },
-   { "others",		llpy_others, METH_NOARGS,
-     "others(void) --> iterator for the set of all OTHR records in the database" },
+   { "individuals",	(PyCFunction)llpy_individuals, METH_VARARGS | METH_KEYWORDS,
+     "individuals([database]) -> iterator for the set of all INDI in the database" },
+   { "families",	(PyCFunction)llpy_families, METH_VARARGS | METH_KEYWORDS,
+     "families([database]) -> iterator for the set of all FAM in the database" },
+   { "sources",		(PyCFunction)llpy_sources, METH_VARARGS | METH_KEYWORDS,
+     "sources([database]) -> iterator for the set of all SOUR in the database" },
+   { "events",		(PyCFunction)llpy_events, METH_VARARGS | METH_KEYWORDS,
+     "events([database]) --> iterator for the set of all EVEN in the database" },
+   { "others",		(PyCFunction)llpy_others, METH_VARARGS | METH_KEYWORDS,
+     "others([database]) --> iterator for the set of all OTHR records in the database" },
 
    /* NODE functions */
 

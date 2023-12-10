@@ -99,8 +99,10 @@ llines_node_richcompare (PyObject *self, PyObject *other, int op)
       (other->ob_type == &llines_other_type))
     {
 
-      obj1 = node_to_record (((LLINES_PY_NODE *) self)->lnn_node);
-      obj2 = node_to_record (((LLINES_PY_NODE *) other)->lnn_node);
+      obj1 = _llpy_node_to_record (((LLINES_PY_NODE *)self)->lnn_node,
+				   ((LLINES_PY_NODE *)self)->lnn_database);
+      obj2 = _llpy_node_to_record (((LLINES_PY_NODE *)other)->lnn_node,
+				   ((LLINES_PY_NODE *)other)->lnn_database);
 
       if (nztype (obj1) == nztype (obj2))
 #if defined(DEADENDS)

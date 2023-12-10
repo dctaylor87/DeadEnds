@@ -22,6 +22,7 @@
 #include "gnode.h"
 
 #include "python-to-c.h"
+#include "types.h"
 
 /* forward references */
 
@@ -44,15 +45,36 @@ static bool valid_gedcom_version (CString gedcom_version);
 static PyObject *
 llpy_export (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
-  static char *keywords[] = { "file", "version", "submitter", NULL };
+  static char *keywords[] = { "file", "version", "submitter", "database", NULL };
   char *filename = 0;
   char *gedcom_version = 0;
   char *submitter = 0;
-  FILE *file;
+  LLINES_PY_DATABASE *py_db = 0;
+  Database *database = 0;
 
-  if (! PyArg_ParseTupleAndKeywords (args, kw, "s|zz", keywords,
-				     &filename, &gedcom_version, &submitter))
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "s|zzO!", keywords,
+				     &filename, &gedcom_version, &submitter,
+				     &llines_database_type, &py_db))
     return NULL;
+
+  /* if database specified use it, otherwise use the current default database */
+  if (! py_db)
+    database = theDatabase;
+  else
+    database = py_db->lld_database;
+
+  return _llpy_export (database, filename, gedcom_version, submitter);
+}
+
+/* this is the implementation of the commonality of llpy_export /
+   llpy_export_db -- basically everything aftger the argument
+   parsing. */
+
+PyObject *
+_llpy_export (Database *database, CString filename,
+	       CString gedcom_version, CString submitter)
+{
+  FILE *file;
 
   file = fopen (filename, "w");
   if (! file)
@@ -87,6 +109,7 @@ llpy_export (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 	copy[ndx++ + added_at] = '@';
       copy[ndx + added_at] = 0;
       submitter = copy;
+      /* XXX insert code to verify existence of submitter in database XXX */
     }
   else
     submitter = 0;
@@ -101,7 +124,7 @@ llpy_export (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
     }
 
   if ((write_header (file, gedcom_version, submitter) < 0) ||
-      (write_body (file, theDatabase) < 0) ||
+      (write_body (file, database) < 0) ||
       (write_trailer(file) < 0) ||
       (fflush (file) < 0))
     {
@@ -112,7 +135,6 @@ llpy_export (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 
   Py_RETURN_NONE;
 }
-
 /* write_header -- write a simple, basic header
    This might get enhanced in the future.  */
 

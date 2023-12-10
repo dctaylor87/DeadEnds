@@ -665,6 +665,7 @@ dnl **************************************************************
 
 AC_CONFIG_FILES([Makefile \
         Database/Makefile \
+	Docs/Manual/Makefile \
         Gedcom/Makefile \
         Interp/Makefile \
         Lifelines/Makefile \

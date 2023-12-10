@@ -48,7 +48,7 @@ static void llpy_source_dealloc (PyObject *self)
 static struct PyMethodDef Lifelines_Source_Methods[] =
   {
    { "key", (PyCFunction)_llpy_key, METH_VARARGS | METH_KEYWORDS,
-     "(SOUR).key([strip_prefix]) --> STRING.  Returns the database key of the record.\n\
+     "(SOUR).key([strip_prefix]) --> STRING.  Returns the database key of the record.\n\n\
 If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." },
    { "top_node", (PyCFunction)_llpy_top_node, METH_NOARGS,
      "top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },

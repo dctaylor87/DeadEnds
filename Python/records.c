@@ -592,12 +592,12 @@ static PyObject *llpy_keynum_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObjec
 static struct PyMethodDef Lifelines_Records_Functions[] =
   {
    { "key_to_record",	(PyCFunction)llpy_key_to_record, METH_VARARGS | METH_KEYWORDS,
-     "key_to_record(key,[type]) --> RECORD.  Returns the RECORD having that KEY.\n\
+     "key_to_record(key,[type]) --> RECORD.  Returns the RECORD having that KEY.\n\n\
 If KEY contains the record type, then TYPE is optional, otherwise required.\n\
 TYPE when supplied must be the level zero RECORD tag -- INDI, FAM, SOUR, EVEN,\n\
 REPO, SUBM, SNOTE, or OBJE.  If the record is not found, None is returned." },
    { "keynum_to_record",	(PyCFunction)llpy_keynum_to_record, METH_VARARGS | METH_KEYWORDS,
-     "keynum_to_record(key,type) --> RECORD or None.\n\
+     "keynum_to_record(key,type) --> RECORD or None.\n\n\
 Returns the RECORD having the specified KEYNUM and TYPE.\n\
 TYPE must be the level zero RECORD tag -- INDI, FAM, SOUR, EVEN,\n\
 REPO, SUBM, SNOTE, or OBJE.  If the record is not found, None is returned." },

@@ -5,6 +5,7 @@ typedef struct {
   PyObject_HEAD
   int lnn_type;
   NODE lnn_node;		/* Lifelines GEDCOM generic NODE */
+  Database *lnn_database;
 } LLINES_PY_NODE;
 
 /* type values for records and nodes -- will likely be augmented in
@@ -22,11 +23,15 @@ typedef struct {
   PyObject_HEAD
   int llr_type;
   RECORD llr_record;		/* Lifelines GEDCOM generic RECORD */
+  Database *llr_database;	/* which database does this record belong to? */
 } LLINES_PY_RECORD;
 
 typedef struct {
   PyObject_HEAD
   /* XXX insert fields here that are useful for database 'types' XXX */
+#if defined(DEADENDS)
+  Database *lld_database;
+#endif
 } LLINES_PY_DATABASE;
 
 /* the 'iter' functions for each RECORD type (INDI, FAM...) provide an
@@ -41,6 +46,7 @@ typedef struct {
 
 typedef struct {
   PyObject_HEAD
+  Database *li_database;	/* which database are we iterating over */
   int li_type;			/* the type being iterated over, NOT *our* type */
 #if defined(DEADENDS)
   int li_bucket_ndx;	/* arguments to supply to {first|next}InHashTable */
@@ -56,6 +62,7 @@ typedef struct {
   PyObject_HEAD
   NODE ni_top_node; /* top of the node tree that we are iterating over */
   NODE ni_cur_node; /* most recently visited node in the node tree */
+  Database *ni_database;
   char *ni_tag;	    /* tag to search for if we are tag specific */
   int ni_type;	    /* type of iteration -- whole tree or just children */
   int ni_level;	    /* how far are we from the top of the tree */

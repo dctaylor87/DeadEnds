@@ -23,7 +23,7 @@
    been addref'd.  If you are not saving a reference to child, you
    need to do a release_record on it */
 
-#define FORCHILDREN_RECORD(fam,child) \
+#define FORCHILDREN_RECORD(fam,child,database)	\
 	{\
         NODE __node = find_tag(nchild(nztop(fam)), "CHIL");	\
 	RECORD child=0;\
@@ -32,7 +32,7 @@
 		if (!eqstr(ntag(__node), "CHIL")) break;\
 		__key = rmvat(nval(__node));\
 		__node = nsibling(__node);\
-		if (!__key || !(child = key_to_irecord(__key))) {\
+		if (!__key || !(child = keyToPersonRecord(__key, database))) {	\
 			continue;\
 		}\
 		{
@@ -72,7 +72,7 @@
    NOTE: spouse record has been addref'd.  If you don't store it, you
    need to call release_record on it.*/
 
-#define FORFAMSPOUSES_RECORD(fam,spouse) \
+#define FORFAMSPOUSES_RECORD(fam,spouse, database)	\
 	{\
 	NODE __node = nchild(nztop(fam));	\
 	RECORD spouse=0;\
@@ -83,7 +83,7 @@
 			continue;\
 		}\
 		__key = rmvat(nval(__node));\
-		if (!__key || !(spouse = qkey_to_irecord(__key))) {\
+		if (!__key || !(spouse = keyToPersonRecord(__key, database))) {	\
 			__node = nsibling(__node);\
 			continue;\
 		}\

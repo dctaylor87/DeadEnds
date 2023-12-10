@@ -409,14 +409,14 @@ static PyObject *llpy_dateformat (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 static struct PyMethodDef Lifelines_Date_Functions[] =
   {
    { "dayformat",	(PyCFunction)llpy_dayformat, METH_VARARGS,
-     "dayformat(INT) --> INT: set day format for stddate calls\n\
-\t\t-1 (do not change format, just return existing format)\n\
+     "dayformat([format]) --> INT: set day format for stddate calls\n\n\
+\t\t-1 ([default] do not change format, just return existing format)\n\
 \t\t0 (leave space before single digit days)\n\
 \t\t1 (use leading 0 before single digit days)\n\
 \t\t2 (no space or leading 0 before single digit days)." },
    { "monthformat",	(PyCFunction)llpy_monthformat, METH_VARARGS,
-     "monthformat(INT) --> INT: set month format for stddate calls.\n\
-\t\t-1 (do not change format, just return existing format)\n\
+     "monthformat([format]) --> INT: set month format for stddate calls.\n\n\
+\t\t-1 ([default] do not change format, just return existing format)\n\
 \t\t0\tnumber with space before single digit months\n\
 \t\t1\tnumber with leading zero before single digit months\n\
 \t\t2\tnumber with no space for zero before single digit months\n\
@@ -430,14 +430,14 @@ static struct PyMethodDef Lifelines_Date_Functions[] =
 \t\t10\tlower case roman letter (e.g., i, ii)\n\
 \t\t11\tupper case roman letter (e.g., I, II)\n" },
    { "yearformat",	(PyCFunction)llpy_yearformat, METH_VARARGS,
-     "yearformat(INT) --> INT: set year format for stddate calls\n\
-\t\t-1 (do not change format, just return existing format)\n\
+     "yearformat(format) --> INT: set year format for stddate calls\n\n\
+\t\t-1 ([default] do not change format, just return existing format)\n\
 \t\t0 (use leading spaces before years with less than four digits)\n\
 \t\t1 (use leading 0 before years with less than four digits\n\
 \t\t2 (no space or leading 0 before years)." },
    { "eraformat",	(PyCFunction)llpy_eraformat, METH_VARARGS,
-     "eraformat(INT) --> INT: set era format for stddate calls\n\
-\t\t-1 (do not change format, just return existing format)\n\
+     "eraformat(format) --> INT: set era format for stddate calls\n\n\
+\t\t-1 ([default] do not change format, just return existing format)\n\
 \t\t0 (no AD/BC markers)\n\
 \t\t1 (trailing B.C. if appropriate)\n\
 \t\t2 (trailing A.D. or B.C.)\n\
@@ -448,8 +448,8 @@ static struct PyMethodDef Lifelines_Date_Functions[] =
 \t\t31 (trailing BC if appropriate)\n\
 \t\t32 (trailing CE or BCE)." },
    { "dateformat",	(PyCFunction)llpy_dateformat, METH_VARARGS,
-     "dateformat(INT) --> INT: set date format for stddate calls.\n\
-\t\t-1 (do not change format, just return existing format\n\
+     "dateformat(format) --> INT: set date format for stddate calls.\n\n\
+\t\t-1 ([default] do not change format, just return existing format\n\
 \t\t0  (da mo yr)\n\
 \t\t1  (mo da, yr)\n\
 \t\t2  (mo/da/yr)\n\
@@ -467,11 +467,11 @@ static struct PyMethodDef Lifelines_Date_Functions[] =
 \t\t14 (As in GEDCOM" },
    { "stddate",		(PyCFunction)llpy_stddate_str,
      METH_VARARGS | METH_KEYWORDS,
-     "stddate(NODE) --> STRING: formatted date string." },
+     "stddate(date) --> STRING: formatted date string." },
 
    { "complexformat",	(PyCFunction)llpy_complexformat,
      METH_VARARGS | METH_KEYWORDS,
-     "complexformat([INT format]) --> INT:\n\
+     "complexformat([INT format]) --> INT:\n\n\
 Format must be either -1 or be in the range [3,8].\n\
 The value -1 just returns the current value without changing it.  Values in\n\
 the range [3,8] get set and return the previous value.  The value says what\n\
@@ -485,13 +485,13 @@ accompany the date.  Format values:\n\
 \t8 full words,  lower case" },
    { "complexdate",	(PyCFunction)llpy_complexdate_str,
      METH_VARARGS | METH_KEYWORDS,
-     "complexdate(date) --> STRING: formats and returns date\n\
+     "complexdate(date) --> STRING: formats and returns date\n\n\
 using complex date formats previously specified." },
 
 #if !defined(DEADENDS)
    { "complexpic",	(PyCFunction)llpy_complexpic,
      METH_VARARGS | METH_KEYWORDS,
-     "complexpic(which,[format] --> BOOLEAN\n\
+     "complexpic(which,[format] --> BOOLEAN\n\n\
 'which' is one of the constants: DATE_COMPLEX_ABT, DATE_COMPLEX_EST,\n\
 DATE_COMPLEX_CAL, DATE_COMPLEX_BEF, DATE_COMPLEX_AFT, DATE_COMPLEX_BET_AND,\n\
 DATE_COMPLEX_FROM, DATE_COMPLEX_TO, and DATE_COMPLEX_FROM_TO.\n\

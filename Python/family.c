@@ -78,6 +78,7 @@ static PyObject *llpy_marriage (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   nrefcnt_inc(event);
   TRACK_NODE_REFCNT_INC(event);
   marr->lnn_node = event;
+  marr->lnn_database = fam->llr_database;
   marr->lnn_type = LLINES_TYPE_FAM;
 
   return ((PyObject *)marr);
@@ -90,6 +91,7 @@ static PyObject *llpy_marriage (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_husband (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
+  Database *database = fam->llr_database;
   NODE fam_node;
   NODE husb_node;
   LLINES_PY_RECORD *husb;
@@ -109,7 +111,8 @@ static PyObject *llpy_husband (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (! husb)
     return NULL;		/* PyObject_New failed -- out of memory? */
 
-  husb->llr_record = key_to_irecord (key);
+  husb->llr_record = keyToPersonRecord (key, database);
+  husb->llr_database = database;
   husb->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)husb;
@@ -122,6 +125,7 @@ static PyObject *llpy_husband (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
+  Database *database = fam->llr_database;
   NODE fam_node;
   NODE wife_node;
   LLINES_PY_RECORD *wife;
@@ -141,7 +145,8 @@ static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (! wife)
     return NULL;		/* PyObject_New failed -- out of memory? */
 
-  wife->llr_record = key_to_irecord (key);
+  wife->llr_record = keyToPersonRecord (key, database);
+  wife->llr_database = database;
   wife->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)wife;
@@ -170,6 +175,7 @@ static PyObject *llpy_nchildren (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 static PyObject *llpy_firstchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
+  Database *database = fam->llr_database;
   NODE indi_node;
   LLINES_PY_RECORD *indi;
   CNSTRING key;
@@ -190,7 +196,8 @@ static PyObject *llpy_firstchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 	 detected.  It should have signalled an exception... */
       return NULL;
     }
-  indi->llr_record = key_to_irecord (key);
+  indi->llr_record = keyToPersonRecord (key, database);
+  indi->llr_database = database;
   indi->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)indi;
@@ -203,6 +210,7 @@ static PyObject *llpy_firstchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
+  Database *database = fam->llr_database;
   NODE indi_node;
   NODE prev_node;
   LLINES_PY_RECORD *indi;
@@ -232,7 +240,8 @@ static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 	 detected.  It should have signalled an exception... */
       return NULL;
     }
-  indi->llr_record = key_to_irecord (key);
+  indi->llr_record = keyToPersonRecord (key, database);
+  indi->llr_database = database;
   indi->llr_type = LLINES_TYPE_INDI;
 
   return (PyObject *)indi;
@@ -302,12 +311,13 @@ static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   RECORD fam = ((LLINES_PY_RECORD *)self)->llr_record;
+  Database *database = ((LLINES_PY_RECORD *)self)->llr_database;
   PyObject *output_set = PySet_New (NULL);
 
   if (! output_set)
     return NULL;
 
-  FORCHILDREN_RECORD (fam, child)
+  FORCHILDREN_RECORD (fam, child, database)
     LLINES_PY_RECORD *py_record = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
     if (! py_record)
       {
@@ -317,6 +327,7 @@ static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 	return NULL;
       }
     py_record->llr_record = child;
+    py_record->llr_database = database;
     py_record->llr_type = LLINES_TYPE_FAM;
     if (PySet_Add (output_set, (PyObject *)py_record) < 0)
       {
@@ -336,12 +347,13 @@ static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   RECORD fam = ((LLINES_PY_RECORD *)self)->llr_record;
+  Database *database = ((LLINES_PY_RECORD *)self)->llr_database;
   PyObject *output_set = PySet_New (NULL);
 
   if (! output_set)
     return NULL;
 
-  FORFAMSPOUSES_RECORD (fam, spouse)
+  FORFAMSPOUSES_RECORD (fam, spouse, database)
     LLINES_PY_RECORD *py_record = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
     if (! py_record)
       {
@@ -351,6 +363,7 @@ static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 	return NULL;
       }
     py_record->llr_record = spouse;
+    py_record->llr_database = database;
     py_record->llr_type = LLINES_TYPE_FAM;
     if (PySet_Add (output_set, (PyObject *)py_record) < 0)
       {
@@ -512,6 +525,7 @@ static void llpy_family_dealloc (PyObject *self)
     }
   release_record (fam->llr_record);
   fam->llr_record = 0;
+  fam->llr_database = 0;
   fam->llr_type = 0;
   Py_TYPE(self)->tp_free (self);
 }
@@ -519,34 +533,34 @@ static void llpy_family_dealloc (PyObject *self)
 static struct PyMethodDef Lifelines_Family_Methods[] =
   {
    { "marriage",	llpy_marriage, METH_NOARGS,
-     "(FAM).marriage --> NODE: First marriage event of FAM; None if no event is found." },
+     "(FAM).marriage(void) --> NODE: First marriage event of FAM; None if no event is found." },
    { "husband",		llpy_husband, METH_NOARGS,
-     "(FAM).husband --> INDI: First husband of FAM; None if no person in the role." },
+     "(FAM).husband(void) --> INDI: First husband of FAM; None if no person in the role." },
    { "wife",		llpy_wife, METH_NOARGS,
-     "(FAM).wife --> INDI: FIrst wife of FAM; None if no person in the role." },
+     "(FAM).wife(void) --> INDI: FIrst wife of FAM; None if no person in the role." },
    { "nchildren",	llpy_nchildren, METH_NOARGS,
-     "(FAM).nchildren -> INTEGER: number of children in FAM." },
+     "(FAM).nchildren(void) -> INTEGER: number of children in FAM." },
    { "firstchild",	llpy_firstchild, METH_NOARGS,
-     "(FAM).firstchild -> INDI: first child of FAM; None if no children." },
+     "(FAM).firstchild(void) -> INDI: first child of FAM; None if no children." },
    { "lastchild",	llpy_lastchild, METH_NOARGS,
-     "(FAM).lastchild -> INDI: last child of FAM; None if no children." },
+     "(FAM).lastchild(void) -> INDI: last child of FAM; None if no children." },
    { "key", (PyCFunction)_llpy_key, METH_VARARGS | METH_KEYWORDS,
-     "(FAM).key([strip_prefix]) --> STRING.  Returns the database key of the record.\n\
+     "(FAM).key([strip_prefix]) --> STRING.  Returns the database key of the record.\n\n\
 If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." },
 #if !defined(DEADENDS)
    { "nextfam",		llpy_nextfam, METH_NOARGS,
-     "(FAM).nextfam -> FAM: next family in database after FAM (in key order)" },
+     "(FAM).nextfam(void) -> FAM: next family in database after FAM (in key order)" },
    { "prevfam",		llpy_prevfam, METH_NOARGS,
-     "(FAM).prevfam -> FAM: previous family in database before FAM (in key order)" },
+     "(FAM).prevfam(void) -> FAM: previous family in database before FAM (in key order)" },
 #endif
    { "children",	llpy_children_f, METH_NOARGS,
-     "(FAM).children -> set of children in the family" },
+     "(FAM).children(void) -> set of children in the family" },
    { "spouses",		llpy_spouses_f, METH_NOARGS,
-     "(FAM).spouses -> set of spouses in the family" },
+     "(FAM).spouses(void) -> set of spouses in the family" },
 
 #if !defined(DEADENDS)
    { "choosechild",	llpy_choosechild_f, METH_NOARGS,
-     "(FAM).choosechild --> INDI.  Select and return child of family\n\
+     "(FAM).choosechild(void) --> INDI.  Select and return child of family\n\
  through user interface. Returns None if family has no children." },
 
    { "choosespouse",	llpy_choosespouse_f, METH_NOARGS,

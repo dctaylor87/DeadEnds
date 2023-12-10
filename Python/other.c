@@ -42,6 +42,7 @@ static void llpy_other_dealloc (PyObject *self)
     }
   release_record (othr->llr_record);
   othr->llr_record = 0;
+  othr->llr_database = 0;
   othr->llr_type = 0;
   Py_TYPE(self)->tp_free (self);
 }
@@ -56,6 +57,7 @@ static void llpy_event_dealloc (PyObject *self)
     }
   release_record (even->llr_record);
   even->llr_record = 0;
+  even->llr_database = 0;
   even->llr_type = 0;
   Py_TYPE(self)->tp_free (self);
 }

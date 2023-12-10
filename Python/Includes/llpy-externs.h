@@ -9,5 +9,5 @@ extern int llpy_execute_scripts (int continue_on_failure);
 extern int llpy_python_interactive (void);
 
 #if defined(DEADENDS)
-extern RecordIndexEl *_llpy_node_to_record (GNode *node);
+extern RecordIndexEl *_llpy_node_to_record (GNode *node, Database *database);
 #endif

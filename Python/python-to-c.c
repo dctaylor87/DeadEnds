@@ -88,6 +88,7 @@ PyObject *_llpy_top_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   py_node->lnn_type = py_record->llr_type;
   nrefcnt_inc(top);
   TRACK_NODE_REFCNT_INC(top);
+  py_node->lnn_database = py_record->llr_database;
   py_node->lnn_node = top;
   return ((PyObject *) py_node);
 }
