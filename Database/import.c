@@ -4,13 +4,15 @@
 //  import.c -- Read Gedcom files and build a database from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 1 December 2023.
+//  Last changed on 6 December 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include <unistd.h> // access
 #include <errno.h> // ENOENT
+#include <sys/param.h> // PATH_MAX
+#include <stdlib.h> // realpath
 
 #include "standard.h"
 #include "import.h"
@@ -35,12 +37,14 @@ extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, db
 
 static bool debugging = true;
 
-//  importFromFiles -- Import Gedcom files into a list of Databases.
+//  importFromFiles -- Import Gedcom files into a List of Databases, one Database per file. The
+//    List is returned. If errors were found in any of the files, the List of Databases will not
+//    hold a Database for that file, and the ErrorLog will hold the List of Errors detected.
 //--------------------------------------------------------------------------------------------------
 List *importFromFiles(String filePaths[], int count, ErrorLog *errorLog)
-//  filesPaths -- Paths of the files to import.
+//  filePaths -- Paths of the files to import.
 //  count -- Number of files to import.
-//  errorLog -- Error log.
+//  errorLog -- ErrorLog hold all Errors found during import.
 {
 	List *listOfDatabases = createList(null, null, null);
 	Database *database = null;
@@ -52,7 +56,8 @@ List *importFromFiles(String filePaths[], int count, ErrorLog *errorLog)
 	return listOfDatabases;
 }
 
-//  importFromFile -- Import the records in a Gedcom file into a Database.
+//  importFromFile -- Import the records in a Gedcom file into a new Database. If erros were
+//    found the function returns null, and the Errors found will be appended to the ErrorLog.
 //--------------------------------------------------------------------------------------------------
 Database *importFromFile(CString filePath, ErrorLog *errorLog)
 {
@@ -64,12 +69,16 @@ Database *importFromFile(CString filePath, ErrorLog *errorLog)
 			return null;
 		}
 	}
-	String fileName = lastPathSegment(filePath); // MNOTE: strsave not needed.
+	char pathBuffer[PATH_MAX];
+	String realPath = realpath(filePath, pathBuffer);
+	if (realPath) filePath = strsave(pathBuffer);
+
+	String lastSegment = lastPathSegment(filePath); // MNOTE: strsave not needed.
 
 	//  Make sure the file can be opened.
 	FILE *file = fopen(filePath, "r");
 	if (!file) {
-		addErrorToLog(errorLog, createError(systemError, fileName, 0, "Could not open file."));
+		addErrorToLog(errorLog, createError(systemError, lastSegment, 0, "Could not open file."));
 		return null;
 	}
 
@@ -78,13 +87,13 @@ Database *importFromFile(CString filePath, ErrorLog *errorLog)
 
 Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 {
-	String fileName = lastPathSegment(filePath); // MNOTE: strsave not needed.
-	Database *database = createDatabase(fileName);
+	String lastSegment = lastPathSegment(filePath); // MNOTE: strsave not needed.
+	Database *database = createDatabase(filePath);
 	int recordCount = 0;
 	int lineNo; // Line number kept up to date by the nodeTreeFromFile functions.
 
 	//  Read the records and add them to the database.
-	GNode *root = firstNodeTreeFromFile(file, fileName, &lineNo, errorLog);
+	GNode *root = firstNodeTreeFromFile(file, lastSegment, &lineNo, errorLog);
 	while (root) {
 		storeRecord(database, normalizeNodeTree(root), lineNo, errorLog);
 		recordCount += 1;
@@ -92,7 +101,7 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 	}
 	if (debugging) {
 		printf("Read %d records.\n", recordCount);
-		printf("There were %d errors importing file %s.\n", lengthList(errorLog), fileName);
+		printf("There were %d errors importing file %s.\n", lengthList(errorLog), lastSegment);
 		showErrorLog(errorLog);
 	}
 	if (lengthList(errorLog) > 0) {
