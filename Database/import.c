@@ -42,7 +42,7 @@ static bool debugging = true;
 //    hold a Database for that file, and the ErrorLog will hold the List of Errors detected.
 //--------------------------------------------------------------------------------------------------
 List *importFromFiles(String filePaths[], int count, ErrorLog *errorLog)
-//  filePaths -- Paths of the files to import.
+//  filePaths -- Paths to the files to import.
 //  count -- Number of files to import.
 //  errorLog -- ErrorLog hold all Errors found during import.
 {

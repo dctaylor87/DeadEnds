@@ -115,7 +115,7 @@ GNode* keyToPerson(CString key, Database *database)
 //--------------------------------------------------------------------------------------------------
 GNode* keyToFamily(CString key, Database *database)
 //  key -- Key of family record.
-//  index -- Record index to search for the family.
+//  database -- Database to find family in.
 {
 	//if (debugging) printf("keyToFamily called with key: %s\n", key);
 	RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->familyIndex, key);

@@ -110,7 +110,7 @@ static ReadReturn extractFields (String p, Error **error)
 	while (*p != '@' && *p != 0) p++;  // Read until the second @-sign.
 	//  If at the end of the string it is an error.
 	if (*p == 0) {
-		*error = createError(syntaxError, fileName, fileLine, "Line is incomplete");
+		*error = createError(syntaxError, fileName, fileLine, "Gedcom line is incomplete");
 		return ReadError;
 	}
 	//  p points to the second @-sign. Put a space into the next character (which will be
@@ -303,7 +303,7 @@ GNode* nextNodeTreeFromFile(FILE *fp, int *lineNo, ErrorLog *errorLog)
 
 		//  Anything else is an error.
 		} else {
-			if (debugging) printf("      NNTFF: adding and moving to sibling: %s\n", gnodeToString(node, 0));
+			if (debugging) printf("      NNTFF: illegal line level\n");
 			Error *error = createError(syntaxError, fileName, fileLine, "Illegal level number");
 			if (debugging) showError(error);
 			addErrorToLog(errorLog, error);
@@ -318,8 +318,6 @@ GNode* nextNodeTreeFromFile(FILE *fp, int *lineNo, ErrorLog *errorLog)
 	//  If successful return the tree root.
 	if (bcode == ReadOkay) return root;
 	if (bcode == ReadError || rc == ReadError) {
-		addErrorToLog(errorLog, error);
-		// If there were errors free all nodes rooted at root and return null.
 		freeGNodes(root);
 		return null;
 	}

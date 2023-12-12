@@ -40,6 +40,8 @@ int numNodeFrees(void)
 	return nodeFrees;
 }
 
+//  getFromTagTable -- Return the persistent copy of a tag from the tag table.
+//--------------------------------------------------------------------------------------------------
 static String getFromTagTable(String tag)
 //  tag -- Return the copy of this tag from the tag table.
 {
