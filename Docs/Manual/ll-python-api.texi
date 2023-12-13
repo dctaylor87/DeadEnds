@@ -1,0 +1,2072 @@
+\input texinfo
+@setfilename python-api
+@titlepage
+@titlefont{DeadEnds Python Extension Reference}
+@settitle DeadEnds Python Extension Reference Manual
+@author David Cole Taylor
+@today{}
+@end titlepage
+@contents
+
+NOTE: This manual started life as the LifeLines Python Extension
+Reference Manual.  If you are familiar with it, most of this will be a
+repeat of what you already know.
+
+Some of the functions and methods mentioned herein are not available
+in DeadEnds.  This will eventually be fixed.  If you notice such a
+function or method and bring it to my attention, that will speed the
+process or getting it fixed.
+
+Additionally, there will eventually be functions available only in
+DeadEnds and not in LifeLines.
+
+@chapter Overview
+There are, at least, two potential audiences for information about the
+DeadEnds Python extension --
+
+@itemize
+@item
+Those that want to modify the C code, whether to extend the module
+or to fix a bug.
+
+@item
+Those that want to use the module to write a report or to extend
+DeadEnds in some fashion.
+@end itemize
+
+Those two audiences have vastly different needs and interests.
+
+This document concerns itself with the @b{use} of the Python DeadEnds
+module, called llines.  If you wish to @b{modify} the C code that
+implements it, please consult the document ``DeadEnds Python Internals''.
+
+If you are already familiar with the DeadEnds Report Writing
+language, you will have an easier time learning the Python Extension
+Language as there is a fair bit of similarity in the function names
+and their behavior.
+
+Many of the function names are the same and take the same arguments in
+the same order as those in the DeadEnds Report Writing language.
+
+Three immediate differences --
+
+@itemize
+@item
+If the function operates on an instance of a particular DeadEnds
+  specific type, then instead of taking it as its first argument, it
+  is an instance function of the type.
+
+@item
+The variables, if any, to be set are not passed to the function.
+
+@item
+All arguments have keyword names and as a result they can be given by
+name or by position.  And -- where reasonable -- they are optional.
+@end itemize
+
+Example: if '@code{fam}' is a variable whose value is a family in the
+database, and you want the husband of the family, you might write:
+@findex husband
+
+    @code{husb = fam.husband()}
+
+If '@code{fam}' has no husband recorded, then @code{husband()} will return @code{None}.
+
+After executing the above, @code{husb} is either '@code{None}' or an INDI record.
+
+If @code{husb} is an individual (i.e., not @code{None}), then you could get @code{husb}'s
+name by typing:
+@findex name
+
+    @code{husb.name()}
+
+or
+
+    @code{husb.name(caps=False)}
+
+or
+
+    @code{husb.name(True)}
+
+The first returns @code{husb}'s name as a string using the default
+capitalization for the last name.  The second, returns it using the
+capitalization as found in the database, and the third puts it in all
+capital letters.
+
+This is because '@code{name}' is a instance method for Individual
+Records.  It takes one argument -- @code{caps} -- which is optional.
+You can let its value default (first example), give it explicitly by
+name (second example), or give it explicitly by position (third
+example).
+
+In the function write ups that follow, the arguments are shown in
+positional order.  The names shown are the keyword names.  And if an
+argument is shown in []'s, then it is optional.
+
+If the function is an instance method, the instance ``type'' is shown
+before the function name.
+
+Also, some functions are documented in more than one place -- for
+example, choosespouse is an instance method for individual records, so
+it is listed in the ``Individual Records'' section of the ``RECORDS''
+chapter.  But, it asks the user to choose the spouse, so it is in the
+``User Interaction Functions'' chapter as well.
+
+@chapter RECORDS
+@section Individual Records
+@subsection Name related
+The following functions are instance methods.
+
+@deftypefun INDI name ([caps]) @arrow{} STRING or @code{None}
+@findex name
+
+Returns the name found on the first '1 NAME' line of the record.
+Slashes are removed.  If @code{caps} (optional) is @code{True}
+(default), the surname is made all capitals.
+
+@end deftypefun
+@deftypefun INDI fullname ([upcase],[keep_order],[max_length]) @arrow{} STRING or @code{None}
+@findex fullname
+
+Returns the name of a person in a variety of formats.
+
+If @code{upcase} is @code{True} (default: @code{False}), the
+surname is shown in upper case, otherwise it is shown as in the
+record.
+
+If @code{keep_order} is @code{True} (default: @code{True}), the
+parts are shown in the order as found in the record, otherwise the
+surname is given first, followed by a comma, followed by the other
+name parts.
+
+Argument @code{max_length} (default: no maximum) specifies the
+maximum length that can be used to show the name.  Zero means no
+maximum.
+
+@end deftypefun
+@deftypefun INDI surname (void) @arrow{} STRING or @code{None}
+@findex surname
+
+Returns the surname as found in the first '1 NAME' line.  Slashes
+are removed.  If no NAME is found, @code{None} is returned.
+
+@end deftypefun
+@deftypefun INDI givens (void) @arrow{} STRING or @code{None}
+@findex givens
+
+Returns the given names of the person in the same order and format
+as found in the first '1 NAME' line of the record.  If no NAME is
+found, @code{None} is returned.
+
+@end deftypefun
+@deftypefun INDI trimname (max_length) @arrow{} STRING or @code{None}
+@findex trimname
+
+XXX should this be optional?  If yes, what should be the default
+max_length?
+
+@end deftypefun
+@deftypefun INDI title (void) @arrow{} STRING or @code{None}
+@findex title
+
+Returns the first '1 TITL' line in the record or @code{None}.
+
+@end deftypefun
+
+@deftypefun INDI soundex (void) @arrow{} STRING
+@findex soundex
+
+Returns the SOUNDEX code of INDI.
+
+@end deftypefun
+
+@deftypefun INDI pronoun (which)
+@findex pronoun
+
+@multitable {which} {himself, herself, itself} {Possessive Adjective}
+@headitem which @tab Pronouns @tab Case
+@item 0
+@tab
+He, She, It
+@tab
+Subjective
+@item 1
+@tab
+he, she, it
+@tab
+Subjective
+
+@item 2
+@tab
+His, Her, Its
+@tab
+Possessive Adjective
+@item 3
+@tab
+his, her, its
+@tab
+Possessive Adjective
+
+@item 4
+@tab
+him, her, it
+@tab
+Objective
+
+@item 5
+@tab
+his, hers, its
+@tab
+Possessive Pronoun
+
+@item 6
+@tab
+himself, herself, itself
+@tab
+Reflective
+@end multitable
+
+QUESTION: Should we allow / implement the it/its/itself column as a
+possible return value?  If yes, when should we return one of those
+pronouns?  My inclination is to go with tradition and return the
+masculine if the gender is unknown.  Neuter / None / error all feel
+wrong...
+
+Currently, if the SEX is neither 'M' nor 'F', the masculine choices
+are used.
+@end deftypefun
+
+@subsection Event NODE related
+The following functions are instance methods.
+@deftypefun INDI birth (void) @arrow{} NODE or @code{None}
+@findex birth
+
+Returns the first @code{BIRT} event of INDI; @code{None} if no birth
+event is found.
+
+@end deftypefun
+@deftypefun INDI death (void) @arrow{} NODE or @code{None}
+@findex death
+
+Returns the first @code{DEAT} event of INDI; @code{None} if no death
+event is found.
+
+@end deftypefun
+@deftypefun INDI burial (void) @arrow{} NODE or @code{None}
+@findex burial
+
+Returns the first burial event of INDI; @code{None} if no burial event is found.
+
+@end deftypefun
+@subsection Family related
+The following functions are instance methods.
+@deftypefun INDI father (void) @arrow{} INDI or @code{None}
+@findex father
+
+Returns the first father of INDI; @code{None} if no person in the role.
+
+@end deftypefun
+@deftypefun INDI mother (void) @arrow{} INDI or @code{None}
+@findex mother
+
+Returns the first mother of INDI; @code{None} if no person in the role.
+
+@end deftypefun
+@deftypefun INDI nextsib (void) @arrow{} INDI or @code{None}
+@findex nextsib
+
+Returns the next (younger) sibling of INDI; @code{None} if no person in
+the role.
+
+@end deftypefun
+@deftypefun INDI prevsib (void) @arrow{} INDI or @code{None}
+@findex prevsib
+
+Returns the previous (older) sibling of INDI; @code{None} if no person in
+the role.
+
+@end deftypefun
+@deftypefun INDI nspouses (void) @arrow{} INTEGER
+@findex nspouses
+
+Returns the number of spouses of INDI.
+
+@end deftypefun
+@deftypefun INDI nfamilies (void) @arrow{} INTEGER
+@findex nfamilies
+
+Returns the number of families of INDI.
+
+@end deftypefun
+@deftypefun INDI parents (void) @arrow{} FAM or @code{None}
+@findex parents
+
+Returns the first FAM in which INDI is a child.
+
+@end deftypefun
+@deftypefun INDI spouses (void) @arrow{} SET
+@findex spouses
+
+Returns the set of spouses of INDI.
+
+@end deftypefun
+@deftypefun INDI children (void) @arrow{} SET
+@findex children
+
+Returns the set of children of INDI.
+
+@end deftypefun
+@deftypefun INDI choosechild (void) @arrow{} INDI or @code{None}
+@findex choosechild
+
+Selects and returns child of person through user interface.
+Returns @code{None} if INDI has no children or if the user cancels.
+
+@end deftypefun
+@deftypefun INDI choosespouse (void) @arrow{} INDI or @code{None}
+@findex choosespouse
+
+Selects and returns spouse of person through user interface.
+Returns @code{None} if INDI has no spouses or if the user cancels.
+
+@end deftypefun
+@deftypefun INDI choosefam (void)
+@findex choosefam
+
+Selects and returns a family that INDI is in.  Returns @code{None} if
+INDI is not in any families or if the user cancels.
+
+@end deftypefun
+The following function is part of the module but is not an instance
+method:
+@defun spouseset (SET) @arrow{} SET
+@findex spouseset
+
+Returns the set of INDIs that are spouses of the input INDIs.
+
+@end defun
+@subsection Individual related
+The following functions are instance methods.
+@deftypefun INDI sex (void) @arrow{} "M", "F", "U"
+@findex sex
+
+Returns the sex of INDI ("M", "F", or "U")
+
+XXX Currently does not distinguish between a value of "U"
+(unknown) and no sex specified -- perhaps it should? XXX
+
+@end deftypefun
+@deftypefun INDI male (void) @arrow{} BOOLEAN
+@findex male
+
+Returns @code{True} if male, @code{False} otherwise.
+
+@end deftypefun
+@deftypefun INDI female (void) @arrow{} BOOLEAN
+@findex female
+
+Returns @code{True} if female, @code{False} otherwise.
+@end deftypefun
+
+@subsection Database related
+The following functions are instance methods.
+@deftypefun INDI key ([strip_prefix]) @arrow{} STRING.
+@findex key
+
+Returns the database key of the record.  If @code{strip_prefix} is
+@code{True} (default: @code{False}), the non-numeric prefix is
+stripped.
+
+@end deftypefun
+@deftypefun INDI nextindi (void) @arrow{} INDI or @code{None}
+@findex nextindi
+
+Returns the next INDI in the database (in key order).  Returns
+@code{None} when the end is reached.
+
+@end deftypefun
+@deftypefun INDI previndi (void) @arrow{} INDI or @code{None}
+@findex previndi
+
+Returns the previous INDI in the database (in key order).  Returns
+@code{None} when the beginning is reached.
+
+@end deftypefun
+
+The following functions are part of the module but are not instance
+methods:
+
+@defun firstindi (void) @arrow{} INDI or @code{None}
+@findex firstindi
+
+Returns the first individual in the database (in key order).
+Returns @code{None} if there are no INDIs in the database.
+
+In the future this MIGHT become a database instance function.
+@end defun
+@defun lastindi (void) @arrow{} INDI or @code{None}
+@findex lastindi
+
+Returns the last individual in the database (in key order).
+Returns @code{None} if there are no INDIs in the database.
+
+In the future this MIGHT become a database instance function.
+@end defun
+@defun individuals (void) @arrow{} Iterator
+@findex individuals
+
+Returns an iterator that when called produces all the INDI records in
+the database in database order.
+@end defun
+
+@section Family Records
+
+@subsection Event related
+The following functions are instance methods.
+
+@deftypefun FAM marriage (void) @arrow{} NODE or @code{None}
+@findex marriage
+
+Returns first marriage event of FAM.  @code{None} if no marriage event
+is found.
+@end deftypefun
+
+@subsection Person related
+The following functions are instance methods.
+
+@deftypefun FAM husband (void) @arrow{} INDI or @code{None}
+@findex husband
+
+Returns the first HUSB of the family.  @code{None} if there are none.
+
+@end deftypefun
+@deftypefun FAM wife (void) @arrow{} INDI or @code{None}
+@findex wife
+
+Returns the first WIFE of the family.  @code{None} if there are none.
+
+@end deftypefun
+@deftypefun FAM nchildren (void) @arrow{} INTEGER
+@findex nchildren
+
+Returns the number of children in the family.
+
+@end deftypefun
+@deftypefun FAM firstchild (void) @arrow{} INDI or @code{None}
+@findex firstchild
+
+Returns the first child of FAM; @code{None} if there are no children.
+
+@end deftypefun
+@deftypefun FAM lastchild (void) @arrow{} INDI or @code{None}
+@findex lastchild
+
+Returns the last child of FAM; @code{None} if there are no children.
+
+@end deftypefun
+
+@deftypefun FAM children (void) @arrow{} SET of INDIs
+@findex children
+
+Returns the set of children in the family.
+
+@end deftypefun
+@deftypefun FAM spouses (void) @arrow{} SET of INDIs
+@findex spouses
+
+Returns the set of spouses in the family.
+
+@end deftypefun
+@deftypefun FAM choosechild (void) @arrow{} INDI or @code{None}
+@findex choosechild
+
+Figures out FAM's collection of children and asks the user to
+choose one.  Returns @code{None} if FAM has no children or if the user
+cancelled the operation.
+
+@end deftypefun
+@deftypefun FAM choosespouse (void) @arrow{} INDI or @code{None}
+@findex choosespouse
+
+Selects and returns spouse of family through user interface.
+Returns @code{None} if FAM has no spouses or if the user cancels.
+
+@end deftypefun
+
+@subsection Database related
+The following functions are instance methods.
+
+@deftypefun FAM key ([strip_prefix]) @arrow{} STRING
+@findex key
+
+Returns the database key of the record.  If @code{strip_prefix} is
+@code{True} (default: @code{False}), then the non-numeric prefix is
+stripped.
+
+@end deftypefun
+@deftypefun FAM nextfam (void) @arrow{} FAM or @code{None}
+@findex nextfam
+
+Returns the next family (in key order) in the database.  Returns
+@code{None} if the end has been reached.
+
+@end deftypefun
+@deftypefun FAM prevfam (void) @arrow{} FAM or @code{None}
+@findex prevfam
+
+Returns the previous family (in key order) in the database.
+Returns @code{None} if the beginning has been reached.
+
+@end deftypefun
+The following functions are part of the module but are not instance
+methods:
+
+@defun firstfam (void) @arrow{} FAM or @code{None}
+@findex firstfam
+
+Returns the first family in the database (in key order).
+Returns @code{None} if there are no FAMs in the database.
+
+In the future this MIGHT become a database instance function.
+@end defun
+@defun lastfam (void) @arrow{} FAM or @code{None}
+@findex lastfam
+
+Returns the last family in the database (in key order).
+Returns @code{None} if there are no FAMs in the database.
+
+In the future this MIGHT become a database instance function.
+@end defun
+
+@defun families (void) @arrow{} Iterator
+@findex families
+
+Returns an iterator that when called produces all the FAM records in the
+database in key order.
+@end defun
+
+@section Event Records
+
+When exchanging @acronym{GEDCOM} files with other researchers, please
+be aware that event records are a DeadEnds extension.  They are not
+part of standard @acronym{GEDCOM}.
+
+The following function is an instance method.
+
+@deftypefun EVEN key ([strip_prefix]) @arrow{} STRING
+@findex key
+
+Returns the database key of the record.  If @code{strip_prefix} is
+@code{True} (default: @code{False}), then the non-numeric prefix is
+stripped.
+
+@end deftypefun
+
+The following function is part of the module but is not an instance
+method:
+
+@defun events (void) @arrow{} Iterator
+@findex events
+
+Returns an iterator that when called produces all EVEN records in the
+database in key order.
+@end defun
+
+@section Source Records
+
+The following function is an instance method.
+
+@deftypefun SOUR key ([strip_prefix]) @arrow{} STRING
+@findex key
+
+Returns the database key of the record.  If @code{strip_prefix} is
+@code{True} (default: @code{False}), the non-numeric prefix is
+stripped.
+@end deftypefun
+
+The following function is part of the module but is not an instance
+method:
+
+@defun sources (void) @arrow{} Iterator
+@findex sources
+
+Returns an iterator that when called produces all the SOUR records in the
+database in key order.
+@end defun
+
+@section Other Records
+
+The following function is an instance method.
+
+@deftypefun OTHR key ([strip_prefix]) @arrow{} STRING
+@findex key
+Returns the database key of the record.  If @code{strip_prefix} is
+@code{True} (default: @code{False}), then the non-numeric prefix is
+stripped.
+@end deftypefun
+
+The following function is part of the module but is not an instance
+method:
+
+@defun others (void) @arrow{} Iterator
+@findex others
+
+Returns an iterator that when called produces all OTHR records in the
+database in key order.
+@end defun
+
+@section Person Set Functions
+
+The functions in this section operate on sets of INDI Records.  They
+are not instance methods.
+
+Note further, that while they are documented as taking a SET as input,
+the input need only be an iterable Python collection of INDIs -- for
+example, it could be a list or a tuple.  The output is a SET,
+
+@defun parentset (SET) @arrow{} SET
+@findex parentset
+
+Returns the set of parents of the input INDIs.
+@end defun
+
+@defun spouseset (SET) @arrow{} SET
+@findex spouseset
+
+Returns the set of all spouses of the INDIs in the input set.
+@end defun
+
+@defun siblingset (SET) @arrow{} SET
+@findex siblingset
+
+Returns a set consisting of all the siblings of every INDI in the
+input set.
+@end defun
+
+@defun ancestorset (SET) @arrow{} SET
+@findex ancestorset
+
+Returns the set of INDI ancestors of every INDI in the input set.
+@end defun
+
+@defun descendantset (SET) @arrow{} SET
+@findex descendantset
+
+Returns the set of descendants of the input set.
+@end defun
+
+@defun childset (SET) @arrow{} SET
+@findex childset
+
+Returns the set of INDIs that are children of the input INDIs.
+@end defun
+
+@section Record Agnostic
+The following functions are instance functions that apply to all types of RECORDs.
+@deftypefun INDI top_node (void) @arrow{} NODE
+@deftypefunx FAM top_node (void) @arrow{} NODE
+@deftypefunx EVEN top_node (void) @arrow{} NODE
+@deftypefunx SOUR top_node (void) @arrow{} NODE
+@deftypefunx OTHR top_node (void) @arrow{} NODE
+Returns the NODE that is the top of the NODE tree associated with the RECORD.
+Works for each kind of RECORD.
+@end deftypefun
+
+The following functions are not instance methods:
+
+@defun key_to_record (key, [type]) @arrow{} RECORD or None
+@findex key_to_record
+
+Looks up and returns the database entry having the specified key.
+
+NOTE: As a convenience to the user, the key supplied to
+@code{key_to_record} may omit or include the surrounding @@'s.
+Additionally, since lower case letters are not permitted in keys, all
+letters will be converted to uppercase.
+
+Since DeadEnds, preserves the input @acronym{GEDCOM}'s RECORD keys, it
+cannot assume that the key is a letter followed by numbers, with the
+letter chosen according to LifeLines conventions.  Therefore the
+supplied key @emph{MUST} be complete.  Since keys are unique across
+all RECORDs, specifying the @code{type} is always optional.  If
+specified, only that record table is searched.
+
+Argument @code{type}, if supplied, must be the @acronym{GEDCOM} tag
+that is part of the RECORD's top node.  That is, when supplied, the
+type must be one of the strings ``FAM'', ``INDI'', ``SOUR'', ``EVEN'',
+``REPO'', ``SUBM'', ``SNOTE'', or ``OBJE''.
+@end defun
+
+@defun keynum_to_record (keynum, type) @arrow{} RECORD or None
+@findex keynum_to_record
+@strong{NOTE:} This function is @emph{NOT} available in DeadEnds.
+If DeadEnds someday adopts a convention for key names, it might
+return.
+
+Looks up and returns the database entry having the specified key.
+Since the key is incomplete (it is just the numeric portion), the type
+is required.  For the list of permitted values for @code{type}, see
+the function @code{key_to_record}, above.
+@end defun
+
+@chapter NODES
+@section @acronym{GEDCOM} Node Functions
+
+The following functions are instance methods.
+
+@deftypefun NODE xref (void) @arrow{} STRING or @code{None}
+@findex xref
+
+Returns cross references index of NODE.
+
+XXX Currently returns a string.  Should it return the record pointed
+to, instead? XXX
+@end deftypefun
+@deftypefun NODE tag (void) @arrow{} STRING
+@findex tag
+
+Returns NODE's tag.
+
+@end deftypefun
+@deftypefun NODE value (void) @arrow{} STRING or @code{None}
+@findex value
+
+Returns NODE's value.
+XXX check: does it return @code{None} if no value? or empty string? XXX
+
+@end deftypefun
+@deftypefun NODE parent_node (void) @arrow{} NODE or None
+@findex parent_node
+
+Returns NODE's parent node.  Returns None if already at the top of the
+tree.
+
+@end deftypefun
+@deftypefun NODE child_node (void) @arrow{} NODE or None
+@findex child_node
+
+Returns NODE's first child node.  Returns None if NODE has no
+children.
+
+@end deftypefun
+@deftypefun NODE sibling_node (void) @arrow{} NODE
+@findex sibling_node
+
+Returns NODE's next sibling.  Returns None if there are no more
+siblings.
+
+@end deftypefun
+@deftypefun NODE copy_node_tree (void) @arrow{} NODE
+@findex copy_node_tree
+
+Returns a copy of the node structure.
+
+@end deftypefun
+@deftypefun NODE level (void) @arrow{} INTEGER
+@findex level
+
+Returns NODE's level.
+
+NOTE: If NODE is not part of a RECORD (e.g., part of a disconnected
+NODE tree), then level is just the distance from the top of the NODE
+tree.
+
+@end deftypefun
+@deftypefun NODE add_node ([parent],[prev]) @arrow{} SELF
+@findex add_node
+
+Adds NODE into the @acronym{GEDCOM} tree with specified parent and
+specified previous sibling.  Returns the modified NODE.  Node
+@code{prev} MUST be a child of @code{parent}.  IF @code{prev} is None,
+then NODE becomes the first child of parent.
+
+@end deftypefun
+
+@deftypefun NODE detach_node (void) @arrow{} SELF
+@findex detach_node
+
+Detaches NODE from its node tree.  Returns the detached node.
+It is (currently) an error for it to be the top-node of the tree.
+@end deftypefun
+
+@deftypefun NODE copy_node_tree (void) @arrow{} NODE
+Returns a copy of the tree from the current node on down.
+@end deftypefun
+
+@deftypefun NODE nodeiter (type, [tag]) @arrow{} Iterator
+@anchor{nodeiter} Returns an iterator that performs the specified
+iteration upon the @code{NODE} tree.
+
+Argument @code{type} is either @code{ITER_CHILDREN} or
+@code{ITER_TRAVERSE}.  If @code{type} is @code{ITER_CHILDREN}, then we
+iterate through the immediate children of the node.  If @code{type} is
+@code{ITER_TRAVERSE}, then we iterate through all the nodes of the
+tree, depth first, parent before child.
+
+Optional argument @code{tag} is a tag to search for.  Only nodes with
+a matching tag will be returned.  If @code{tag} is omitted, is
+@code{None}, or is the empty string, then all nodes will be returned.
+@end deftypefun
+
+@sp 1
+The following functions are not instance methods.
+
+@defun create_node (tag, [value]) @arrow{} NODE
+Creates a node having the specified tag @code{tag} and value
+@code{value}.  Both @code{tag} and (if specified) @code{value} are
+strings.  The created node is returned.  NOTE: This CANNOT be used to
+create a reference, use @code{create_reference} for that.
+@end defun
+
+@section Event Nodes and Date Nodes
+
+The following functions are instance methods.
+
+@deftypefun NODE date (void) @arrow{} STRING or @code{None}
+@findex date
+
+Returns a string containing the value of the first DATE line of
+the event.  If there is no DATE line, returns @code{None}.
+
+@end deftypefun
+@deftypefun NODE place (void) @arrow{} STRING or @code{None}
+@findex place
+
+Returns a string containing the value of the first PLAC line of
+the event.  If there is no PLAC line, returns @code{None}.
+
+@end deftypefun
+@deftypefun NODE year (void) @arrow{} STRING or @code{None}
+@findex year
+
+Returns a string containing the first three or four digit number
+in the value of the first DATE line.  This number is assumed to be
+the year.
+
+@end deftypefun
+@deftypefun NODE long (void) @arrow{} STRING or @code{None}
+@findex long
+
+Returns the verbatim values of the DATE and PLAC lines in an
+event, concatenated together and separated by a comma.
+
+@end deftypefun
+@deftypefun NODE short (void) @arrow{} STRING or @code{None}
+@findex short
+
+Abbreviates information from the first DATE and PLAC lines,
+concatenates the shortened information together with a comma
+separator, and returns it.  The abbreviated date is its year.  The
+abbreviated pace is the last component in the value, further
+abbreviated if the component has an entry in the place
+abbreviation table.
+@end deftypefun
+
+@deftypefun NODE stddate (void) @arrow{} STRING
+Takes the given NODE @code{event}, finds the date, breaks it apart,
+formats it according to the previously specified formats, and returns
+the resulting string.
+
+NOTE: There is a non-instance version that takes a string.
+@end deftypefun
+
+The following functions affect how dates are presented.  They are not
+instance methods.
+
+@defun dayformat ([format]) @arrow{} INT.
+Sets the day format for stddate calls.  Returns the previous format.
+
+@table @asis
+@item -1
+Do not change format, just return existing format.
+@item 0
+leave space before single digit days.
+@item 1
+Use leading 0 before single digit days.
+@item 2
+No space or leading 0 before single digit days.
+@end table
+@end defun
+
+@defun monthformat ([format]) @arrow{} INT.
+Sets the month format for stddate calls.  Returns the previous format.
+
+@table @asis
+@item -1
+Do not change format, just return existing format.
+@item 0
+Number with space before single digit months.
+@item 1
+Number with leading zero before single digit months.
+@item 2
+Number with no space for zero before single digit months.
+@item 3
+Upper case abbreviation (eg.g. JAN, FEB) (localized).
+@item 4
+Capitalized abbreviation (e.g., Jan, Feb) (localized).
+@item 5
+Upper case full word (e.g., JANUARY, FEBRUARY) (localized).
+@item 6
+Capitalized full word (e.g., January, February) (localized).
+@item 7
+Lower case abbreviations (e.g., jan, feb) (localized).
+@item 8
+Lower case full word (e.g., january, february) (localized).
+@item 9
+Upper case abbreviation in English per @acronym{GEDCOM} (e.g., JAN, FEB).
+@item 10
+Lower case roman letter (e.g., i, ii).
+@item 11
+Upper case roman letter (e.g., I, II).
+@end table
+@end defun
+
+@defun yearformat ([format]) @arrow{} INT.
+Sets the year format for stddate calls.  Returns the previous format.
+
+@table @asis
+@item -1
+Do not change format, just return existing format.
+@item 0
+Use leading spaces before years with less than four digits.
+@item 1
+Use leading 0 before years with less than four digits.
+@item 2
+No space or leading 0 before years.
+@end table
+@end defun
+
+@defun eraformat ([format]) @arrow{} INT.
+Sets the era format for stddate calls.  Returns the previous format.
+
+@table @asis
+@item -1
+Do not change format, just return existing format.
+@item 0
+No AD/BC markers.
+@item 1
+Trailing B.C. if appropriate.
+@item 2
+Trailing A.D. or B.C..
+@item 11
+Trailing BC if appropriate.
+@item 12
+Trailing AD or BC.
+@item 21
+Trailing B.C.E. if appropriate.
+@item 22
+Trailing C.E. or B.C.E..
+@item 31
+Trailing BC if appropriate.
+@item 32
+Trailing CE or BCE.
+@end table
+@end defun
+
+@defun dateformat ([format]) @arrow{} INT.
+Sets the date format for stddate calls.  Returns the previous format.
+
+@table @asis
+@item -1
+Do not change format, just return existing format.
+@item 0 
+d0 mo yr
+@item 1
+mo da, yr
+@item 2
+mo/da/yr
+@item 3
+da/mo/yr
+@item 4
+mo-da-yr
+@item 5
+da-mo-yr
+@item 6
+modayr
+@item 7
+damoyr
+@item 8
+yr mo da
+@item 9
+yr/mo/da
+@item 10
+yr-mo-da
+@item 11
+yrmoda
+@item 12
+yr (Year only omitting all else.)
+@item 13
+da/mo yr
+@item 14
+As in @acronym{GEDCOM}.
+@end table
+@end defun
+
+@defun complexformat (INT format) @arrow{} INT
+The value @code{format} must be either @code{-1} or in the range
+@code{[3,8]}.  The value @code{-1} just returns the current value
+without changing it.  Values in the range @code{[3,8]} get set and
+return the previous value.  The value of @code{format} says what to do
+with words such as ``about'', ``between'', and ``estimated'' that
+accompany the date.  Format values:
+
+@multitable {abbreviation} {Upper Case} {Title Case} {Lower Case}
+@headitem Word Length @tab Upper Case @tab Title Case @tab Lower Case
+@item abbreviation
+@tab
+3
+@tab
+4
+@tab
+7
+@item full words
+@tab
+5
+@tab
+6
+@tab
+8
+@end multitable
+@end defun
+@defun stddate (STRING date) @arrow{} STRING
+Takes the given date, breaks it apart, formats it according to the
+previously specified formats, and returns the resulting string.
+
+NOTE: There is an instance version that takes a NODE.
+@end defun
+
+@defun complexpic (int which, [STRING format]) @arrow{} BOOLEAN
+Parameter @code{which} must be one of the constants listed in the
+@code{which} column of table below which shows the default lower case
+strings for both abbreviation and full word formats.  The upper case
+and title case versions are the same except for the capitalization.
+
+If a format string is specified and is to be used due to the text
+present in the date, then it is used as specified -- it is not
+abbreviated, nor is its capitalization altered.
+
+To return to the use of the default behavior, either omit
+@code{format} or supply either a value of @code{None} or an empty
+string.
+@multitable {@code{DATE_COMPLEX_FROM_TO}} {bet %1 and %2} {between %1 and %2}
+@headitem which @tab Abbreviated @tab Full words
+@item @code{DATE_COMPLEX_ABT}
+@tab
+@code{abt %1}
+@tab
+@code{about %1}
+
+@item @code{DATE_COMPLEX_EST}
+@tab
+@code{est %1}
+@tab
+@code{estimated %1}
+
+@item @code{DATE_COMPLEX_CAL}
+@tab
+@code{cal %1}
+@tab
+@code{calculted %1}
+
+@item @code{DATE_COMPLEX_BEF}
+@tab
+@code{bef %1}
+@tab
+@code{before %1}
+
+@item @code{DATE_COMPLEX_AFT}
+@tab
+@code{aft %1}
+@tab
+@code{after %1}
+
+@item @code{DATE_COMPLEX_BET_AND}
+@tab
+@code{bet %1 and %2}
+@tab
+@code{between %1 and %2}
+
+@item @code{DATE_COMPLEX_FROM}
+@tab
+@code{fr %1}
+@tab
+@code{from %1}
+
+@item @code{DATE_COMPLEX_TO}
+@tab
+@code{to %1}
+@tab
+@code{to %1}
+
+@item @code{DATE_COMPLEX_FROM_TO}
+@tab
+@code{fr %1 to %2}
+@tab
+@code{from %1 to %2}
+@end multitable
+
+For now it returns True on success.  This might change in the future
+to return the previous custom complex pic.
+@end defun
+
+@section Value Extraction Functions
+The following function is an instance function:
+
+@deftypefun NODE extractdate
+@findex extractdate
+
+XXX not yet implemented XXX
+@end deftypefun
+
+The following function is NOT an instance function:
+
+@defun extractdatestr
+@findex extractdatestr
+
+XXX not yet implemented XXX
+@end defun
+
+@chapter User Interaction Functions
+
+The following functions are instance methods.
+
+@deftypefun INDI choosechild (void) @arrow{} INDI
+@deftypefunx FAM choosechild (void) @arrow{} INDI
+@findex choosechild
+
+Select child of individual or family through user interface.
+
+@end deftypefun
+@deftypefun INDI choosefam (void) @arrow{} FAM
+@findex choosefam
+
+Select, through user interface, one of the families individual is
+in as a spouse.
+
+@end deftypefun
+@deftypefun INDI choosespouse (void) @arrow{} INDI
+@findex choosespouse
+
+Select spouse of Individual.
+
+@end deftypefun
+
+The following functions are not instance methods.
+
+@defun getindi ([prompt]) @arrow{} INDI
+@findex getindi
+
+Identify individual through user interface.
+Returns INDI (or @code{None} if user cancels).
+
+@end defun
+@defun getindiset ([prompt]) @arrow{} SET
+@findex getindiset
+
+Identify set of persons through user interface.
+Returns SET (or @code{None} if user cancels).
+
+XXX not yet implemented XXX
+
+@end defun
+@defun getfam (void) @arrow{} FAM
+@findex getfam
+
+Identify family through user interface.
+Returns family (or @code{None} if user cancels).
+
+@end defun
+@defun getint ([prompt]) @arrow{} INTEGER
+@findex getint
+
+Get integer through user interface.
+
+@end defun
+@defun getstr ([prompt]) @arrow{} STRING
+@findex getstr
+
+Get a string through the user interface.
+
+@end defun
+@defun chooseindi (SET) @arrow{} INDI
+@findex chooseindi
+
+Select individual from a set of persons.
+
+XXX not yet implemented XXX
+
+@end defun
+@defun choosesubset (SET) @arrow{} SET
+@findex choosesubset
+
+Select a subset of persons from a set of persons.
+
+XXX not yet implemented XXX
+
+@end defun
+@defun menuchoose (LIST,[prompt]) @arrow{} INT
+@findex menuchoose
+
+Select from a list of options.
+
+XXX not yet implemented XXX
+@end defun
+@chapter Iterators
+@section RECORD Iterators
+Each RECORD type -- Individuals, Families, Sources, Events, Others --
+has a function that returns an iterator for that type.
+
+N.B.: There are two types of events --
+@itemize
+@item
+RECORD EVENTs -- which are a DeadEnds extension.
+@item
+NODE events -- such as births and marriages.
+@end itemize
+We are concerned here with RECORDs.
+
+NOTE: The use of an iterator for XXXX (XXXX = even, fam, indi, othr,
+or sour), is conceptually equivalent to first calling firstXXXX and
+then calling nextXXXX repeatedly until exhaustion.
+
+For example,
+@example
+for person in llines.individuals():
+  do_something_with(person)
+@end example
+would assign the variable @code{person} each individual in the
+database, in turn, and then call @code{do_something_with} with
+@code{person} as its argument.
+
+There are two sets of RECORD iterators.  Method iterators and Function
+iterators.
+
+The RECORD instance iterator methods are:
+@deftypefun Database individuals (void) @arrow{} Iterator
+Returns an iterator for individuals in Database.
+@end deftypefun
+@deftypefun Database families (void) @arrow{} Iterator
+Returns an iterator for families in Database.
+@end deftypefun
+@deftypefun Database sources (void) @arrow{} Iterator
+Returns an iterator for sources in Database.
+@end deftypefun
+@deftypefun Database events (void) @arrow{} Iterator
+Returns an iterator for events in Database.
+@end deftypefun
+@deftypefun Database others (void) @arrow{} Iterator
+Returns an iterator for Others in Database.
+@end deftypefun
+
+The RECORD function iterators are:
+@defun individuals ([database]) @arrow{} Iterator
+@defunx families ([database]) @arrow{} Iterator
+@defunx sources ([database]) @arrow{} Iterator
+@defunx events ([database]) @arrow{} Iterator
+@defunx others ([database]) @arrow{} Iterator
+@end defun
+
+Returns an iterator of the given type for the specified database.  If
+@code{database} is omitted or is @code{None}, then returns an iterator
+for the current default database.
+
+ QUESTIONS:
+
+Should we support ``small'' iterators?  Iterators for things like:
+@itemize
+@item all spouses of an individual
+@item all families of an individual
+@item all children of an individual
+@item all children of a family
+@item all parents of a family
+@end itemize
+
+Does Python support mapping functions?  And if yes, how does that
+interact with iterators?
+
+@section NODE Iterators
+
+It is also possible to iterate over some NODEs.  There is nothing to
+distinguish a ``family'' NODE from an ``individual'' NODE, other than
+which tree it is in.  Additionally, there are ``temp'' NODEs which are
+NODEs that are not associated with any RECORD.
+
+To get an iterator for a NODE, call the instance function @code{nodeiter}.
+Its signature is:
+
+@deftypefun NODE noteiter (type, [tag]) @arrow{} Iterator
+Here @code{type} is one of @code{ITER_CHILDREN} or
+@code{ITER_TRAVERSE} and @code{tag} is a tag to search for.
+@xref{nodeiter} for details.
+@end deftypefun
+@chapter Miscellaneous Functions
+
+The following functions are not instance methods.
+
+@defun version (void) @arrow{} STRING
+Returns the version of DeadEnds
+@end defun
+
+@chapter What is not here
+@section Functions definitely NOT being implemented
+
+@itemize
+@item Arithmetic and Logic Functions
+
+The functions
+ @code{add},
+@findex add
+ @code{sub},
+@findex sub
+ @code{mul},
+@findex mul
+ @code{div},
+@findex div
+ @code{mod},
+@findex mod
+ @code{exp},
+@findex exp
+ @code{neg},
+@findex neg
+ @code{float},
+@findex float
+ @code{int},
+@findex int
+ @code{incr},
+@findex incr
+ @code{decr},
+@findex decr
+ @code{and},
+@findex and
+ @code{or},
+@findex or
+ @code{not},
+@findex not
+ @code{eq},
+@findex eq
+will not be implemented.
+
+@item List Functions
+
+The functions
+@code{list},
+@findex list
+@code{clear},
+@findex clear
+@code{empty},
+@findex empty
+@code{length},
+@findex length
+@code{enqueue},
+@findex enqueue
+@code{dequeue},
+@findex dequeue
+@code{requeue},
+@findex requeue
+@code{push},
+@findex push
+@code{pop},
+@findex pop
+@code{setel},
+@findex setel
+@code{getel},
+@findex getel
+@code{inlist},
+@findex inlist
+@code{sort},
+@findex sort
+@code{rsort},
+@findex rsort
+@code{dup},
+@findex dup
+@code{forlist},
+@findex forlist
+will not be implemented.
+
+@item Table Functions
+
+The functions
+@code{table},
+@findex table
+@code{insert},
+@findex insert
+@code{lookup},
+@findex lookup
+@code{length},
+@findex length
+@code{empty},
+@findex empty
+will not be implemented.
+
+@item String Functions
+
+The functions
+@code{lower},
+@findex lower
+@code{upper},
+@findex upper
+@code{capitalize},
+@findex capitalize
+@code{titlecase},
+@findex titlecase
+@code{trim},
+@findex trim
+@code{rjustify},
+@findex rjustify
+@code{concat},
+@findex concat
+@code{strconcat},
+@findex strconcat
+@code{strlen},
+@findex strlen
+@code{substring},
+@findex substring
+@code{index},
+@findex index
+@code{d},
+@findex d
+@code{f},
+@findex f
+@code{strtoint},
+@findex strtoint
+@code{atoi},
+@findex atoi
+@code{strcmp},
+@findex strcmp
+@code{eqstr},
+@findex eqstr
+@code{nestr},
+@findex nestr
+will not be implemented.
+
+@item Trigonometric and Spherical Calculations
+
+The functions @code{sin}, @code{cos}, @code{tan}, @code{arcsin},
+@code{arccos}, and @code{arctan} will not be implemented.
+@findex sin
+@findex cos
+@findex tan
+@findex arcsin
+@findex arccos
+@findex arctan
+
+The functions mentioned in the aforementioned sections will not be
+implemented as Python provides equivalent functionality natively.
+
+@item Deprecated Functions
+
+The functions
+@code{baptism}
+@findex baptism
+@code{getindimsg}
+@findex getindimsg
+@code{getintmsg}
+@findex getintmsg
+@code{getstrmsg}
+@findex getstrmsg
+@code{save}
+@findex save
+@code{strsave}
+@findex strsave
+@code{deletenode}
+@findex deletenode
+@code{lengthset}
+@findex lengthset
+will not be implemented.
+
+@item Output Mode Functions
+
+The functions @code{test}, @code{nl}, @code{sp}, @code{qt}, and
+@code{print} will not be implemented.  The others are yet to be
+decided.
+@findex test
+@findex nl
+@findex sp
+@findex qt
+@findex print
+
+@item Person Set Functions and @acronym{GEDCOM} Extraction
+
+The functions @code{indiset}, @code{addtoset}, @code{deletefromset},
+@code{length}, @code{union}, @code{intersect}, @code{difference},
+@code{uniqueset}, and @code{inset} will not be implemented.  Python
+provides all of their functionality and more, natively.
+@findex indiset
+@findex addtoset
+@findex deletefromset
+@findex length
+@findex union
+@findex intersect
+@findex difference
+@findex uniqueset
+@findex inset
+
+The function @code{valuesort} will not be implemented as we do not
+collect the information it needs.
+@findex valuesort
+
+The functions @code{namesort} and @code{keysort} will not be
+implemented as their functionality -- and more -- can be done with a
+Python one-liner.
+@findex namesort
+@findex keysort
+
+For example, to sort by names, you could do:
+
+@example
+sorted_indis =
+  sorted(unsorted_indis,
+         key=lambda indi: indi.fullname(keep_order=False))
+@end example
+
+And to sort by keys you could do:
+@example
+sorted_indis = sorted(unsorted_indis, key=lambda indi: indi.key())
+@end example
+@item Miscellaneous Functions
+
+The functions @code{system} and @code{heapused} will not be
+implemented.
+@findex system
+@findex heapused
+
+The function @code{program} will not be implemented as the
+functionality is available from Python via the variable
+@code{__file__}.  If you wish to omit the directory part, you can use
+@code{os.path.basename(__file__)}.
+@findex program
+
+@item Value Extraction Functions
+@findex extractnames
+@findex extractplaces
+
+The functions @code{extractplaces} and @code{extractnames} will not be
+implemented.
+
+The output of the function @code{extractplaces} can be obtained by
+simply calling @code{re.split} with a pattern of @code{'\s*,\s*'}.
+
+The function @code{extractnames} is slightly more involved, but still
+quite simple.  Call @code{partition} twice with a separator of @code{'/'}.
+The first time to separate the names before the surname from the rest.
+The second time to separate the surname from the parts after the
+surname.  If you then wish the individual pieces separated, call
+@code{split} with the default separator.
+
+@end itemize
+
+@section Functions that MIGHT be implemented
+
+@itemize
+@item Trigonometric and Spherical Calculations
+
+The functions @code{dms2deg}, @code{deg2dms}, and @code{spdist} might be implemented.
+@findex dms2deg
+@findex deg2dms
+@findex spdist
+
+@item Output Mode Functions
+
+Some of these functions might be implemented.  Uncertain.
+@end itemize
+@section Functions that WILL eventually be implemented
+
+Some variant of all the currently unimplemented functions in the
+section ``Event and Data Functions'' of the DeadEnds Report Writing
+manual'' will eventually be implemented.  I have held off on
+implementing them as I do not like the interface.  However, I have
+been unable to come up with a better interface and the functionality
+is needed.
+
+@chapter Debug Functions
+
+NOTHING IN THIS CHAPTER HAS BEEN IMPLEMENTED
+
+I am still trying to figure out the right interface and the right
+options.  Input is both welcome and encouraged.
+
+@defun getdebug (void) @arrow{} Returns a collection of keyword value pairs.  Data type not yet decided.
+@findex getdebug
+@end defun
+
+@defun setdebug (keyword=value[,keyword=value]*)
+@findex setdebug
+@end defun
+
+To assist in debugging, various options can be turned on or off.  For
+each keyword, there are two permitted values -- @code{True} and
+@code{False}.  @code{True} turns the option on.  @code{False} turns it
+off.  Not specifying it leaves it alone.
+
+@table @asis
+@item Keyword
+Description
+@item @code{entry_exit}
+Report function entry, exit, information about arguments, and return
+values.
+@item @code{arguments}
+Display information on function arguments.
+@item @code{exceptions}
+Display information on exceptions generated within the DeadEnds
+module.
+@item @code{reference_counts}
+Report reference count activity.
+@end table
+@chapter Building DeadEnds with an embedded Python interpreter
+
+@section MacOS and Windows
+
+While DeadEnds runs on GNU/Linux, MacOS, and Windows, and Python also
+runs on all three, I have only built and tested DeadEnds with Python
+on GNU/Linux.
+
+It should (famous last words), build and work on both Windows and
+MacOS.  But, neither has been tested.  Feedback would be appreciated.
+
+There is a lot of truth in the software adage ``If it has not been
+tested, then it does not work''.  So, while I am not aware of any
+problems with building and using it on Windows or MacOS, neither would
+surprise me.
+
+Feedback on success and/or failure building on MacOS and/or Windows
+would be appreciated.  Feedback on success and/or failure with using
+it on Windows or MacOS would also be appreciated.
+
+@section Configuring
+
+I added the option @option{--with-python} to the top-level
+@code{configure.ac}.  As with most @code{--with} options, there are
+four possible values for the option.
+
+@itemize
+@item @code{auto}
+
+The default.  If it finds the necessary headers and libraries, it
+enables Python, otherwise it disables Python.
+
+@item @code{no}
+
+Does not search for the Python headers and libraries.  Python is disabled.
+
+@item @code{yes}
+
+Searches for the Python headers and libraries.  If it finds what it
+needs, Python is enabled.  Otherwise, @code{configure} fails with a
+fatal error.
+
+@item @code{/path/to/a/specific/python}
+
+Is like @option{enable-python=yes}, but uses the specified Python.
+
+@end itemize
+
+Development used the Python 3.9.6 documentation.  Initial builds were
+against Python 3.8.4 (it is what was installed on my system).  Later
+builds were done against Python 3.9.7.  Python 3.10 has been released.
+
+I do not know what is the minimum required Python version.  Certainly
+Python 3 is required.  And Python 3.8.4 is sufficient.  Beyond that, I
+do not know.
+
+Success and failure stories with older versions would be useful to
+further refine what is the minimum required version.
+
+If you wish to build DeadEnds with Python, you will need to have the
+@code{libpython3-dev} or equivalent package installed.  If you
+encounter other dependencies beyond those required to build DeadEnds
+without Python, I would appreciate hearing about them.
+
+Three packages that I know that you need, whether with or without Python, are
+@code{autoconf}, @code{automake}, and @code{autoheader}.
+@chapter Invoking The Python Extension
+
+QUESTIONS: Should the Python interpreter be shutdown and restarted between scripts?
+What portions of Lifeline's initialization should be run before each script?
+
+@section llines
+There are two ways to invoke a Python Report, one is via the command
+line.  But, instead of saying @code{-x reportname.ll}, you should
+instead say @code{-p reportname.py}.  The other way is via the
+@code{p} option on the main menu.
+
+Note: As of yet the program @command{llines} has not been modified.
+If the @option{p} option is unavailable in the main menu, some other
+letter will be chosen.
+
+@section llexec
+Like @command{llines}, there are two ways to invoke the Python
+extension from @command{llexec}.  One is the same as for
+@command{llines} -- namely, @option{-p reportname.py}.  However, the
+other also involves the comand line, specify @option{-P} with no
+arguments.  The program @command{llexec} will process the other
+command line options and then invoke the interactive Python interpreter
+with the DeadEnds extensions linked in.  Like the DeadEnds report
+language, the Python interpreter has access to the full database.
+
+This is especially useful for speeding up the test-edit cycle.  It is
+also useful for small tests, for resolving documentation ambiguities
+and errors, and for getting your feet wet.  It also allows you to run
+your script -- as that functionality is part of the core Python
+interpreter!  At the interactive interpreter prompt, just type:
+@example
+exec(open("/path/to/script.py").read())
+@end example
+and it will open the script, read it, and execute the contents.
+
+To play with it, you might try something like:
+@example
+import llines
+fam1=llines.getfam()
+print(fam1)
+husb1=fam1.husband()
+print(husb1)
+name1=husb1.name()
+print(name1)
+@end example
+
+@appendix Functions Being Considered
+
+There is a good chance that NONE of these will be in the first
+release.  Some of these might @b{never} be part of a release.  Others
+might be part of a release but with a different interface than that
+described here.
+
+These are, at some level, thoughts about possible future enhancements.
+They are not in any sense a commitment.
+
+@section RECORD or NODE Related
+
+The following functions are instance methods.
+
+@deftypefun INDI add_family (family, role, [position]) @arrow{} INDI
+@deftypefunx FAM add_individual (individual, role, [position]) @arrow{} FAM
+
+Adds the indicated family to the individual (for @code{add_family}) or
+the indicated family to the individual (for @code{add_individual}).
+
+Role must be one of ``CHIL'', ``HUSB'', or ``WIFE''.  Creates the back
+link (between ``FAMC'' and ``CHIL'', ``FAMS'' and ``HUSB'' or
+``WIFE'') as well.  For ``CHIL'', @code{position} says where in the
+family's children to put the child.  If omitted, the new child is
+added to the end.  For ``HUSB'' and ``WIFE'', @code{position} says
+where in the individual to place the new family link.  If omitted, the
+new family is added to the end.
+
+QUESTION: What should be done about individuals with two or more
+``FAMC'' links (e.g., someone who was adopted and both families are
+known)?  Should there be two @code{position} arguments -- one each for
+the family and the individual?
+@end deftypefun
+
+@deftypefun NODE create_record (type) @arrow{} RECORD
+Takes the current node and makes a record of the specified type with
+the current node as the top node.  The created record is returned.
+
+NOTE: The current node must be a temp node and have no parent (i.e.,
+it must be the top of its node tree) and have no siblings.  There
+would probably be other restrictions, yet to be determined, as well.
+@end deftypefun
+
+@deftypefun RECORD sync (void) @arrow{} BOOLEAN
+Takes the current record and, if it has changed since it was last
+written, writes it out to the database.  On success, it returns True.
+
+NOTE: Other RECORDS that are have been modified since they were last
+written out might or might not be written out as well.
+@end deftypefun
+
+The following functions are not instance methods.
+
+@defun create_reference (tag, RECORD) @arrow{} NODE
+Creates and returns a NODE having the specified @code{tag} that
+references @code{RECORD}.
+
+NOTE: To protect database integrity, tags ``CHIL'', ``HUSB'',
+``WIFE'', ``FAMS'', and ``FAMC'' cannot have references created by
+this function.  Instead, see the functions @code{add_family} and
+@code{add_individual}.
+@findex add_family
+@findex add_individual
+@end defun
+
+@defun find_record (search, type) @arrow{} Collection of some flavor
+
+Searches records of type @code{type} for @code{search}.  For ``INDI''
+records, would search the @code{NAME}.  For ``FAM'' records, would
+probably search the @code{NAME} fields of the spouses or potentially
+the children.  For other record types, would need to figure out what
+it would search.
+
+Need to have a way to search by @code{REFN}.  And possibly other
+values such as keynums or keys or dates or locations.
+
+Might be nice to have a way to search for all records and/or nodes
+that reference a particular record.
+
+Definitely needs more thought as to what it should look like -- if it
+is to ever get implemented.
+
+Probably the best answer is to not implement it in C and instead let
+people implement whatever they want in Python.
+@end defun
+
+@defun find_references (record, options) @arrow{} Collection of some flavor
+Given a @code{record}, return the collection of @{ NODEs | RECORDs @}
+that reference that record.  Whether it is @code{NODEs} or
+@code{RECORDs} might be determined by @code{options}.  What sort of
+``collection'' also needs to be decided.
+@end defun
+
+@section Other @acronym{GEDCOM} Records
+
+There are a bunch of @acronym{GEDCOM} records that DeadEnds either
+does not support or does not support that well.  Some of these are
+because they were added long after Lifelines was written.  Others
+because the program's author changed jobs.
+
+QUESTIONS:
+
+What support should there be for records of types
+
+@itemize
+@item REPO
+@item SOUR
+@item SUBM
+@item OBJE
+@item SNOTE
+@end itemize
+
+Iterators?  Anything else?
+
+@section Database Related
+
+Unless explicitly stated otherwise, none of the following change which
+database is the @b{current} database.  Unless stated otherwise,
+functions described that do not take a database argument act upon data
+within the current database.
+
+One of the nebulous future goals is to allow multiple concurrent
+databases to be in memory at once.  What that should look like is
+unknown.  How to resolve issues such as how to @{ close | drop |
+unmount | whatever @} a database is unknown.
+
+@defun database_open (pathname, [access], [cache_sizes], [locking]) @arrow{} DataBase
+
+Attempts to open @code{pathname} as a LifeLines database.  If
+successful, the database object is returned.
+
+Does not change current database.
+
+QUESTIONS: Do we want to support closing a database?  If yes, how do
+we invalidate any existing Python objects that represent records or
+nodes within the database?  Or do we adopt the attitude that they are
+still valid but the database is now read-only?  Something else?
+Similar questions for PVALUEs and the existing report writing
+language.
+
+Opening and closing a database feels like the wrong paradigm.
+But, what is the right paradigm?
+@end defun
+
+@defun create_database (pathname) @arrow{} DataBase
+
+Creates a new empty database at the specified path.  Returns the newly
+created empty database.
+
+Does not change current database.
+@end defun
+
+@deftypefun DataBase import (gedcom_file, [keys = {keys_keep|keys_new|keys_auto}]) @arrow{} Something
+
+Imports the specified @acronym{GEDCOM} file.  The integer argument
+@code{keys}, if specified, must have one of three values.
+
+If @code{keys} is @code{keys_new}, then existing keys are ignored and
+records have new keys.
+
+If @code{keys} is @code{keys_keep}, then if existing keys are
+compatible and there are no conflicts, existing keys are kept.
+Otherwise an error occurs
+
+If @code{keys} is @code{keys_auto} (default), then if existing keys
+are compabible and there are no conflicts, existing keys are kept.
+Otherwise, new keys are used.
+
+Does not change the current database.
+
+QUESTIONS:
+
+Should we support doing this on a non-empty database -- possibly as a
+first step of ``merging'' two @acronym{GEDCOM} files.
+
+Other possibilities include merging databases... instead of merging
+@acronym{GEDCOM} files.  Something to think about.
+
+What should it return?  Possibilities include the current database,
+some statistics on the import, some statistics on the new database,
+success or failure indication, something else?  Needs thought.
+@end deftypefun
+
+@deftypefun DataBase export (pathname) @arrow{} Something
+
+QUESTIONS:
+
+What should this return?  Success / failure?  Statistics?  Something else?
+
+Should we take a file descriptor instead of a pathname?  That would be
+more Pythonic, but how to go between a Python file object and a stdio
+FILE object?
+
+Should there be an argument saying what to export?  Or should that be
+a different function?
+
+If there is an argument for what to export -- whether this or a
+separate function -- what to do about references to records outside
+the set?  VOID pointers?  Closure?
+@end deftypefun
+
+@deftypefun DataBase merge (database) @arrow{} DataBase
+Merge the specified database into our database.  The records and nodes
+of the database merged in become part of this database.
+
+QUESTION: Is old database closed?  Discarded?  Something else?
+
+Probably cannot support his until whole database layer is reworked and
+btree layer is eliminated.
+@end deftypefun
+
+@deftypefun DataBase statistics (void) @arrow{} tuple
+
+Tentative interface: Returns a tuple of tuples of two elements.  Each
+two element tuple is of the form
+
+@code{(string integer)}
+
+where the @code{string} is one of the known record types and the
+integer is how many records of that type are present in the database.
+
+Another possibility is to return a dictionary, the strings, as
+described above, are the keys, the integers are the values.
+
+XXX Think more about what this interface should be. XXX
+
+@end deftypefun
+
+@deftypefun DataBase sync (void) @arrow{} BOOLEAN
+Writes out any DataBase records that were modified since they were
+last written out.  On success, returns True.
+@end deftypefun
+
+@defun current_database (void) @arrow{} DataBase
+
+Returns an object that represents the current database.
+
+Long term goal: allow multiple concurrent databases in use.
+@end defun
+
+@deftypefun DataBase set_current (void) @arrow{} DataBase
+Makes this database the current database.  Returns the previous
+database.  Returns None if there is no previous database.
+@end deftypefun
+
+@deftypefun DataBase pathname (void) @arrow{} STRING
+
+Returns the pathname of the database.
+@end deftypefun
+
+@deftypefun DataBase cache_sizes (void) @arrow{} tuple
+
+Returns a tuple of tuples of two elements.  For each two element
+tuple, the first element is a string representing the cache's name,
+and the second element is an integer representing its size.
+
+QUESTION: Should cache sizes be database specific?  Or at they shared?
+Should the caches even exist?  Long term, I'm leaning towards
+eliminating them altogether.
+@end deftypefun
+
+@appendix Possible Future Directions
+@section User Interface
+
+I would like for there to be a better separation between functionality
+and user interface.  Functions which interact with the user, whether
+by asking a question, printing a message, or drawing something on the
+screen being totally separated from those that provide the underlying
+functionality.  Different files in different directories.
+
+I would like for there to be a variant of @command{llines} -- possibly
+@command{llexec} or possibly a new program that has a fully functional
+non-curses command line interface.
+
+I would also like there to be a GUI variant.
+
+One possible approach to the above include a library that provides the
+core functionality and then the interface (curses, command line, GUI)
+queries the library and displays the results.
+
+Another is to have the engine and user interface be separate processes
+with a stream interface between them which is designed NOT for humans
+but rather to be easily parsed by a computer.  The user interface sends
+a request, gets a response, and decides how best to display it.
+@section Disk Storage
+
+I would like the disk storage to be a @acronym{GEDCOM} file.  Or, if
+not strictly @acronym{GEDCOM}, then -- at least -- textual and
+hierarchical like @acronym{GEDCOM}.  That is, it might -- like the
+current Lifelines -- allow extensions (e.g., event records) that make
+it not necessarily strictly @acronym{GEDCOM} conforming.  But,
+structured like @acronym{GEDCOM} and if you didn't use the extensions,
+then it would be @acronym{GEDCOM}.
+
+Other options include formats such as XML and JSON.  If such a format
+was chosen as the native format, then @acronym{GEDCOM} would certainly
+remain an import and export option.
+@section Memory Usage
+
+Computer memory has in the past two decades become significantly
+cheapter.  And significantly larger.  Many machines ship with more
+memory than the maximum supported decades ago.  So...
+
+Keep the whole database in memory all the time.
+
+If the entire database is in memory, some of the fields within the
+NODE and RECORD structures (e.g., for starters, the cache pointers)
+can be eliminated making the structures smaller, reducing the memory
+cost of keeping the whole database in memory.
+
+@section Multiple Databases
+
+Allow multiple databases to be present in memory simultaneously -- for
+example, a research database and a confirmed (need a better word)
+database.  Or my database and a sister-in-laws database.  Or a
+complete database and a shareable (i.e., private information removed)
+database.  Or...
+
+@section Additional Record Types
+
+Better -- not sure what that really means here -- support for additional
+record types -- e.g., Sources, Repositories, Shared Notes, Multimedia,
+and Submitters.
+
+Possibly allowing the user to define their own record types.  Not sure
+what this would look like...
+
+@section Support for Non-@acronym{GEDCOM} Formats
+
+Possibly support some non @acronym{GEDCOM} format(s) such as XML or
+JSON in addition to @acronym{GEDCOM}.  Especially if there are any
+``popular'' (whatever that means here) programs with a non-proprietary
+non-GEDCOM textual format.
+
+@section Support for Export Restrictions
+
+Not sure if the @acronym{GEDCOM} @code{RESN} tag is adequate here.
+
+Some way to select when exporting data whether to export everything,
+all the @acronym{GEDCOM} conforming (i.e., no extensions) data, or a
+subset based on RECORD, EVENT, and/or NODE markers such as the
+@code{RESN} tag.
+
+This idea needs more thought.
+@printindex fn
+@bye
