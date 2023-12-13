@@ -15,8 +15,7 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	main.c menuset.c merge.c miscutls.c \
 	newrecs.c pedigree.c \
 	scan.c screen.c searchui.c selectdb.c show.c swap.c \
-	tandem.c \
-	codesets.c equaliso.c translat.c valid.c xlat.c
+	tandem.c
 
 PYTHON_LIBS = @PYTHON_LIBS@
 
@@ -39,6 +38,7 @@ PYTHON_CFLAGS = @PYTHON_CFLAGS@
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
 	-I$(top_srcdir)/Lifelines/Includes \
+	-I$(top_srcdir)/LLSupport/Includes \
 	-I$(top_srcdir)/Python/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \

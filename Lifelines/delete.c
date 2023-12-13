@@ -58,6 +58,7 @@
 #include "gedcom.h"
 #include "messages.h"
 #include "codesets.h"
+#include "remove.h"
 #else
 
 #include "sys_inc.h"

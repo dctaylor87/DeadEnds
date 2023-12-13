@@ -669,6 +669,7 @@ AC_CONFIG_FILES([Makefile \
         Gedcom/Makefile \
         Interp/Makefile \
         Lifelines/Makefile \
+        LLSupport/Makefile \
         Parser/Makefile \
         Programs/Makefile \
         Python/Makefile \

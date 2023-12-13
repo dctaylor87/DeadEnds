@@ -52,6 +52,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"
+#include "remove.h"
 #else
 
 #include "llstdlib.h"

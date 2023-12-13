@@ -73,6 +73,9 @@ typedef void *		VPTR;
 #define ISize(seq)	((seq)->size)
 #define length_indiseq(seq)	ISize(seq)
 
+/* XXX not sure if second argument should be 'false' or 'true' XXX */
+#define remove_indiseq(seq)	deleteSequence(seq, false)
+
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)
 
