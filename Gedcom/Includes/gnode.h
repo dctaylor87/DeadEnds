@@ -81,6 +81,7 @@ GNode* children_nodes(Database*, GNode*);
 GNode* parents_nodes(Database*, GNode*);
 
 int countNodes(GNode* node); // Count GNodes in a tree.
+int countNodesBefore(GNode*);  // Count the GNodes before a node in a tree.
 
 //String addat(String); //  Deprecated.
 //String rmvat(String); //  Deprecated.

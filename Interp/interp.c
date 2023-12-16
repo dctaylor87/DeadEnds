@@ -431,7 +431,7 @@ InterpType interpFamilies(PNode *node, Context *context, PValue *pval)
 	GNode *spouse = null;
 	int count = 0;
 	Database *database = context->database;
-	FORFAMSS(indi, fam, database) {
+	FORFAMSS(indi, fam, key, database) {
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		SexType sex = SEXV(indi);
 		if (sex == sexMale) spouse = familyToWife(fam, database);
@@ -465,7 +465,7 @@ InterpType interpFathers(PNode *node, Context *context, PValue *pval)
 		return InterpError;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam, context->database)
+	FORFAMCS(indi, fam, key, context->database)
 		GNode *husb = familyToHusband(fam, context->database);
 		if (husb == null) goto d;
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
@@ -494,7 +494,7 @@ InterpType interpMothers (PNode *node, Context *context, PValue *pval)
 		return InterpError;;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam, context->database) {
+	FORFAMCS(indi, fam, key, context->database) {
 		GNode *wife = familyToWife(fam, context->database);
 		if (wife == null) goto d;
 		//  Assign the current loop identifier valujes to the symbol table.
@@ -528,7 +528,7 @@ InterpType interpParents(PNode *node, Context *context, PValue *pval)
 		return InterpError;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam, context->database) {
+	FORFAMCS(indi, fam, key, context->database) {
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(context->symbolTable, node->countIden,  PVALUE(PVInt, uInt, ++nfams));
 		irc = interpret(node->loopState, context, pval);
