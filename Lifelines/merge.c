@@ -322,9 +322,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 			that = nsibling(that);
 		}
 		join_fam(fam, fref, husb, wife, chil, rest);
-#if !defined(DEADENDS)
 		fam_to_dbase(fam);
-#endif
 		this = nsibling(this);
 	}
 
@@ -346,9 +344,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 			that = nsibling(that);
 		}
 		join_fam(fam, fref, husb, wife, chil, rest);
-#if !defined(DEADENDS)
 		fam_to_dbase(fam);
-#endif
 		this = nsibling(this);
 	}
 	free_nodes(fam12);
@@ -408,9 +404,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 			wife = head;
 #endif
 		join_fam(fam, fref, husb, wife, chil, rest);
-#if !defined(DEADENDS)
 		fam_to_dbase(fam);
-#endif
 		this = nsibling(this);
 	}
 
@@ -436,9 +430,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 			that = nsibling(that);
 		}
 		join_fam(fam, fref, husb, wife, chil, rest);
-#if !defined(DEADENDS)
 		fam_to_dbase(fam);
-#endif
 		this = nsibling(this);
 	}
 	free_nodes(fam12);
@@ -480,9 +472,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 /* done with changes, save new record to db */
 
 	resolve_refn_links(indi4);
-#if !defined(DEADENDS)
 	indi_to_dbase(indi4);
-#endif
 
 /* finally we're done with indi1 & indi2 */
 
@@ -648,9 +638,7 @@ merge_two_fams (NODE fam1, NODE fam2)
 	free_nodes(rest1);
 	join_fam(fam2, fref4, husb4, wife4, chil4, rest4);
 	resolve_refn_links(fam2);
-#if !defined(DEADENDS)
 	fam_to_dbase(fam2);
-#endif
 
 /* sanity check lineage links */
 	check_fam_lineage_links(fam2);
@@ -738,9 +726,7 @@ merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 		else
 			famc = first;
 		join_indi(indi, name, refn, sex, body, famc, fams);
-#if !defined(DEADENDS)
 		indi_to_dbase(indi);
-#endif
 		curs1 = nsibling(curs1);
 	}
 }

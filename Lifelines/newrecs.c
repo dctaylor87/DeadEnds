@@ -54,6 +54,9 @@
 #include "messages.h"
 #include "editing.h"
 #include "nodeutils.h"
+#include "readindex.h"
+#include "database.h"
+#include "llpy-externs.h"
 #else
 
 #include "llstdlib.h"
@@ -158,21 +161,29 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	STRING (*getreffnc)(void) = NULL; /* get next internal key */
 	void (*todbasefnc)(NODE) = NULL;  /* write record to dbase */
+#if !defined(DEADENDS)
 	void (*tocachefnc)(NODE) = NULL;  /* write record to cache */
+#endif
 	
 	/* set up functions according to type */
 	if (ntype == 'S') {
 		getreffnc = getsxref;
 		todbasefnc = sour_to_dbase;
+#if !defined(DEADENDS)
 		tocachefnc = sour_to_cache;
+#endif
 	} else if (ntype == 'E') {
 		getreffnc = getexref;
 		todbasefnc = even_to_dbase;
+#if !defined(DEADENDS)
 		tocachefnc = even_to_cache;
+#endif
 	} else { /* X */
 		getreffnc = getxxref;
 		todbasefnc = othr_to_dbase;
+#if !defined(DEADENDS)
 		tocachefnc = othr_to_cache;
+#endif
 	}
 
 /* Create template for user to edit */
@@ -233,7 +244,9 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 			add_refn(nval(refn), key);
 	}
 	(*todbasefnc)(node);
+#if !defined(DEADENDS)
 	(*tocachefnc)(node);
+#endif
 	return key_to_record(key);
 }
 /*=======================================

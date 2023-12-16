@@ -22,6 +22,7 @@
 #include "gnode.h"
 
 #include "python-to-c.h"
+#include "llpy-externs.h"
 #include "types.h"
 
 /* forward references */

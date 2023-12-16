@@ -13,3 +13,6 @@ extern STRING rpt_setlocale (STRING str);
 
 extern void locales_notify_uicodeset_changes (void);
 extern void locales_notify_language_change (void);
+
+extern void save_original_locales (void);
+extern char *llsetlocale (int category, char * locale);

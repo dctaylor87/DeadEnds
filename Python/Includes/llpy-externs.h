@@ -10,4 +10,6 @@ extern int llpy_python_interactive (void);
 
 #if defined(DEADENDS)
 extern RecordIndexEl *_llpy_node_to_record (GNode *node, Database *database);
+extern RecordIndexEl *__llpy_key_to_record (CString key, int *int_type);
+
 #endif

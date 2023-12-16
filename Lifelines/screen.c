@@ -35,6 +35,10 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
+
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -60,6 +64,10 @@
 #include "codesets.h"
 #include "listui.h"
 #include "list.h"
+#include "locales.h"
+#include "database.h"
+#include "readindex.h"
+#include "llpy-externs.h"
 
 #else
 

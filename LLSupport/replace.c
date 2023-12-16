@@ -42,6 +42,7 @@
 
 #include "gnode.h"
 #include "translat.h"
+#include "splitjoin.h"
 
 #else
 

@@ -39,8 +39,6 @@ extern PyObject *_llpy_create_record_iterator (Database *database, int record_ty
 extern PyObject *_llpy_export (Database *database, CString filename,
 			       CString gedcom_version, CString submitter);
 
-extern RECORD __llpy_key_to_record (CString key, int *int_type);
-
 extern int _py_traverse_nodes (GNode *node, int level,
 			       int (*func)(GNode *, int, void *),
 			       void *extra);

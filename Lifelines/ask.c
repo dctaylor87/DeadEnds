@@ -57,6 +57,10 @@
 #include "liflines.h"
 #include "messages.h"
 #include "codesets.h"
+#include "gnode.h"
+#include "database.h"
+#include "recordindex.h"
+#include "llpy-externs.h"
 #else
 
 #include "llstdlib.h"

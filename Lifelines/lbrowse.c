@@ -51,6 +51,12 @@
 #include "liflines.h"
 #include "menuitem.h"
 #include "messages.h"
+#include "sequence.h"
+#include "gnode.h"
+#include "database.h"
+#include "recordindex.h"
+#include "llpy-externs.h"
+
 #else
 
 #include "llstdlib.h"

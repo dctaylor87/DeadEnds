@@ -335,7 +335,9 @@ remove_any_record (RECORD record)
 	split_othr(root, &refn, &rest);
 
 /* Remove record from cache */
+#if !defined(DEADENDS)
 	remove_from_cache_by_key(key);
+#endif
 	record=NULL; /* record no longer valid */
 
 /* Remove any refn entries */

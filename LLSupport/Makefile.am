@@ -9,6 +9,7 @@ libllsupport_a_SOURCES = \
 	codesets.c \
 	equaliso.c \
 	locales.c \
+	messages.c \
 	remove.c \
 	replace.c \
 	translat.c \

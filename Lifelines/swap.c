@@ -193,9 +193,7 @@ swap_children_impl (NODE fam, NODE one, NODE two)
 	tmp = nchild(one);
 	nchild(one) = nchild(two);
 	nchild(two) = tmp;
-#if !defined(DEADENDS)
 	fam_to_dbase(fam);
-#endif
 }
 /*=============================================
  * reorder_child -- Reorder one child in family
@@ -274,9 +272,7 @@ gotfam:
 
 	add_child_to_fam(child, fam, i);
 
-#if !defined(DEADENDS)
 	fam_to_dbase(fam);
-#endif
 	return TRUE;
 }
 /*=============================================
@@ -387,9 +383,7 @@ swap_families (RECORD irec)
 	tmp = nchild(one);
 	nchild(one) = nchild(two);
 	nchild(two) = tmp;
-#if !defined(DEADENDS)
 	indi_to_dbase(indi);
-#endif
 	msg_info("%s", _(qSokfswp));
 	return TRUE;
 }

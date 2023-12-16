@@ -27,8 +27,6 @@ typedef void *		VPTR;
 //#define store_record(key, rec, len)			storeRecord(
 //#define choose_from_indiseq(seq, ask1, titl1, titln)	chooseFromSequence(seq, ask1, titl1, titln)
 
-#define create_indiseq_null()			createSequence(theDatabase)
-
 //#define edit_add_event()
 //#define edit_add_source
 //#define edit_add_other
@@ -75,6 +73,9 @@ typedef void *		VPTR;
 
 /* XXX not sure if second argument should be 'false' or 'true' XXX */
 #define remove_indiseq(seq)	deleteSequence(seq, false)
+
+#define copy_indiseq(seq)	copySequence(seq)
+#define create_indiseq_null()	createSequence(theDatabase) /* XXX theDatabase XXX */
 
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)
@@ -127,9 +128,14 @@ typedef void *		VPTR;
 #define INT32		int32_t
 
 #define TABLE		HashTable *
-#define LIST		List *
+#define create_table_obj			createHashTable(NULL, NULL, NULL)
+#define destroy_table(table)			deleteHashTable(table)
+#define insert_table_obj(table, element)	insertInHashTable(table, element)
+#define valueof_obj(table, key)			searchHashTable(table, key)
 
+#define LIST		List *
 #define create_list()			createList(NULL, NULL, NULL)
+#define enqueue_list			enqueueList
 
 #define event_to_date(node,shorten)	eventToDate(node,shorten)
 #define givens(name)			getGivenNames(name)
@@ -163,3 +169,9 @@ typedef void *		VPTR;
 
 #define FORINDISEQ(seq,elt,ndx)		FORSEQUENCE(seq,elt,ndx)
 #define ENDINDISEQ			ENDSEQUENCE
+
+#ifdef WIN32
+#define path_match(path1, path2)	(!stricmp(path1, path2))
+#else
+#define path_match(path1, path2)	(!strcmp(path1, path2))
+#endif

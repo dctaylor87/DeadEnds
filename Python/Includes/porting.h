@@ -87,6 +87,7 @@ typedef const char *	CNSTRING;
 
 /* we drop efmt -- era format */
 #define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) format_date(str,dfmt,mfmt,yfmt,sfmt,cmplx)
+
 #endif
 
 #if !defined(DEADENDS)

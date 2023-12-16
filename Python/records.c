@@ -26,6 +26,7 @@
 #endif
 
 #include "python-to-c.h"
+#include "llpy-externs.h"
 #include "types.h"
 
 /* forware references */

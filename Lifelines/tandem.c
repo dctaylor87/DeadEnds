@@ -55,6 +55,10 @@
 #include "messages.h"
 #include "screen.h"
 #include "lineage.h"
+#include "gnode.h"
+#include "readindex.h"
+#include "database.h"
+#include "llpy-externs.h"
 #else
 
 #include "llstdlib.h"

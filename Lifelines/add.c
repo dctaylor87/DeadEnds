@@ -68,7 +68,9 @@
 #include "codesets.h"
 #include "readwrite.h"
 #include "lineage.h"
+
 #else
+
 #include "llstdlib.h"
 #include "table.h"
 #include "translat.h"
@@ -220,8 +222,8 @@ add_new_indi_to_db (RECORD indi0)
 	}
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_refn_links(indi);
-#if !defined(DEADENDS)
 	indi_to_dbase(indi);
+#if !defined(DEADENDS)
 	add_new_indi_to_cache(indi0);
 #endif
 }
@@ -399,10 +401,8 @@ add_child_to_fam (NODE child, NODE fam, INT i)
 
 	resolve_refn_links(child);
 	resolve_refn_links(fam);
-#if !defined(DEADENDS)
 	fam_to_dbase(fam);
 	indi_to_dbase(child);
-#endif
 }
 /*===================================
  * prompt_add_spouse -- Add spouse to family
@@ -554,10 +554,8 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
 
 	resolve_refn_links(spouse);
 	resolve_refn_links(fam);
-#if !defined(DEADENDS)
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
-#endif
 }
 /*=========================================
  * add_members_to_family -- Add members to new family
@@ -839,13 +837,13 @@ add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
 	resolve_refn_links(spouse1);
 	resolve_refn_links(spouse2);
 	resolve_refn_links(child);
-#if !defined(DEADENDS)
 	fam_to_dbase(fam2);
+#if !defined(DEADENDS)
 	fam_to_cache(fam2);
+#endif
 	if (spouse1) indi_to_dbase(spouse1);
 	if (spouse2) indi_to_dbase(spouse2);
 	if (child) indi_to_dbase(child);
-#endif
 }
 #ifdef ETHEL
 /*=========================================
