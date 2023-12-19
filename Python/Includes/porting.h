@@ -48,9 +48,9 @@ typedef const char *	CNSTRING;
 
 #define indi_to_fath(node)		personToFather(node, theDatabase)
 #define indi_to_moth(node)		personToMother(node, theDatabase)
-#define indi_to_next_sib_old(node)	personToNextSibling(node, theDatabase)
-#define indi_to_prev_sib_old(node)	personToPreviousSibling(node, theDatabase)
-#define indi_to_famc(node)		personToFamilyAsChild(node, theDatabase)
+#define indi_to_next_sib_old(node)	personToNextSibling(node, database)
+#define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
+#define indi_to_famc(node)		personToFamilyAsChild(node, database)
 
 #define create_temp_node(xref, tag, value, parent)	createGNode (xref, tag, value, parent) /* XXX */
 #define set_temp_node(node, temp) /* XXX currently no nodes are marked temporary XXX */

@@ -104,7 +104,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	      if (nestr (child_key, nzkey (indi)))
 		{
 		  /* child in same family, different key, must be sibling */
-		  RECORD sibling = key_to_irecord (child_key);
+		  RECORD sibling = keyToPersonRecord (child_key, database);
 		  LLINES_PY_RECORD *new_indi;
 
 		  new_indi = PyObject_New (LLINES_PY_RECORD,
@@ -315,6 +315,7 @@ static PyObject *llpy_parentset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args
 static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_set)
 {
   RECORD indi = ((LLINES_PY_RECORD *)obj)->llr_record;
+  Database *database = ((LLINES_PY_RECORD *)obj)->llr_database;
   NODE indi_node = nztop (indi);
   NODE famc = FAMC (indi_node);
   RECORD fam;
@@ -359,11 +360,11 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
       return 0;			/* no parents, nothing to do, success */
     }
 
-  fam = qkey_to_frecord (rmvat (nval (famc)));
+  fam = keyToFamilyRecord (rmvat (nval (famc)), database);
   fam_node = nztop (fam);
   if ((parent = HUSB (fam_node)))
     {
-      RECORD record = qkey_to_irecord (rmvat (nval (parent)));
+      RECORD record = keyToPersonRecord (rmvat (nval (parent)), database);
       LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
       if (! new_indi)
@@ -388,7 +389,7 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
     }
   if ((parent = WIFE (fam_node)))
     {
-      RECORD record = key_to_irecord (rmvat (nval (parent)));
+      RECORD record = keyToPersonRecord (rmvat (nval (parent)), database);
       LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
       if (! new_indi)

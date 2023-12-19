@@ -417,7 +417,7 @@ static PyObject *llpy_nextsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
-  NODE indi_node = indi_to_next_sib_old (nztop (indi->llr_record));
+  NODE indi_node = personToNextSibling(nztop (indi->llr_record), database);
   LLINES_PY_RECORD *sibling;
 
   if (! indi_node)
@@ -440,7 +440,7 @@ static PyObject *llpy_prevsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
-  NODE indi_node = indi_to_prev_sib_old (nztop (indi->llr_record));
+  NODE indi_node = personToPreviousSibling(nztop (indi->llr_record), database);
   LLINES_PY_RECORD *sibling;
 
   if (! indi_node)
@@ -588,7 +588,7 @@ static PyObject *llpy_parents (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
   NODE indi_node = nztop (indi->llr_record);
-  NODE fam_node = indi_to_famc (indi_node);
+  NODE fam_node = personToFamilyAsChild(indi_node, database);
   LLINES_PY_RECORD *fam;
 
   if (! fam_node)

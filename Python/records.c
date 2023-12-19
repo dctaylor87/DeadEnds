@@ -32,21 +32,26 @@
 /* forware references */
 
 static PyObject *llpy_key_to_record (PyObject *self, PyObject *args, PyObject *kw);
+#if !defined(DEADENDS)
 static PyObject *llpy_keynum_to_record (PyObject *self, PyObject *args, PyObject *kw);
+#endif
 
 /* start of code */
 
 #if defined(DEADENDS)
 static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
-  static char *keywords[] = { "key", "type", NULL };
+  static char *keywords[] = { "key", "type", "database", NULL };
   const char *key = 0;
   const char *type = 0;
   int int_type = 0;
   RECORD record;
   LLINES_PY_RECORD *py_record = 0;
+  LLINES_PY_DATABASE *py_db = 0;
+  Database *database = 0;
 
-  if (! PyArg_ParseTupleAndKeywords (args, kw, "s|z", keywords, &key, &type))
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "s|zO!", keywords, &key, &type,
+				     &llines_database_type, &py_db))
     return NULL;
 
   if (type && (type[0] != 0))
@@ -127,7 +132,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 	  return NULL;
 	}
     }
-  record = __llpy_key_to_record (key, &int_type);
+  record = __llpy_key_to_record (key, &int_type, database);
 
   if (! record)
     Py_RETURN_NONE;		/* that keynum has no record */
@@ -181,7 +186,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
    broken out of llpy_key_to_record so that it could also be used by
    the DE port of the LL curses UI.  XXX */
 
-RECORD __llpy_key_to_record (CString key, int *int_type)
+RECORD __llpy_key_to_record (CString key, int *int_type, Database *database)
 {
   RECORD record;
   int added_at = 0;
@@ -212,24 +217,24 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
   switch (type)
     {
     case 'I':
-      record = qkey_to_irecord (key_buffer);
+      record = keyToPersonRecord (key_buffer, database);
       break;
     case 'F':
-      record = qkey_to_frecord (key_buffer);
+      record = keyToFamilyRecord (key_buffer, database);
       break;
     case 'S':
-      record = qkey_to_srecord (key_buffer);
+      record = keyToSourceRecord (key_buffer, database);
       break;
     case 'E':
-      record = qkey_to_erecord (key_buffer);
+      record = keyToEventRecord (key_buffer, database);
       break;
     case 'X':
-      record = qkey_to_orecord (key_buffer);
+      record = keyToOtherRecord (key_buffer, database);
       break;
     default:
       /* caller did not specify a type, try them all until we find it.
 	 If all fail, we will return None */
-      record = qkey_to_irecord (key_buffer);
+      record = keyToPersonRecord (key_buffer, database);
       if (record)
 	{
 	  if (int_type)
@@ -237,8 +242,7 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
 	  break;
 	}
 
-      record = qkey_to_frecord (key_buffer);
-
+      record = keyToFamilyRecord (key_buffer, database);
       if (record)
 	{
 	  if (int_type)
@@ -246,8 +250,7 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
 	  break;
 	}
 
-      record = qkey_to_srecord (key_buffer);
-
+      record = keyToSourceRecord (key_buffer, database);
       if (record)
 	{
 	  if (int_type)
@@ -255,8 +258,7 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
 	  break;
 	}
 
-      record = qkey_to_erecord (key_buffer);
-
+      record = keyToEventRecord (key_buffer, database);
       if (record)
 	{
 	  if (int_type)
@@ -264,8 +266,7 @@ RECORD __llpy_key_to_record (CString key, int *int_type)
 	  break;
 	}
 
-      record = qkey_to_orecord (key_buffer);
-
+      record = keyToOtherRecord (key_buffer, database);
       if (record)
 	{
 	  if (int_type)
@@ -458,6 +459,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 }
 #endif
 
+#if !defined(DEADENDS)
 static PyObject *llpy_keynum_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
   static char *keywords[] = { "keynum", "type", NULL };
@@ -588,20 +590,24 @@ static PyObject *llpy_keynum_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObjec
   py_record->llr_type = int_type;
   return ((PyObject *) py_record);
 }
+#endif
 
 
 static struct PyMethodDef Lifelines_Records_Functions[] =
   {
    { "key_to_record",	(PyCFunction)llpy_key_to_record, METH_VARARGS | METH_KEYWORDS,
-     "key_to_record(key,[type]) --> RECORD.  Returns the RECORD having that KEY.\n\n\
-If KEY contains the record type, then TYPE is optional, otherwise required.\n\
-TYPE when supplied must be the level zero RECORD tag -- INDI, FAM, SOUR, EVEN,\n\
-REPO, SUBM, SNOTE, or OBJE.  If the record is not found, None is returned." },
+     "key_to_record(key,[type], [database]) --> RECORD.  Returns the RECORD having that KEY.\n\n\
+If TYPE is supplied, only that record type is searched.  Otherwise all types are searched.\n\
+TYPE, if supplied, must be the level zero RECORD tag -- INDI, FAM, SOUR, EVEN,\n\
+REPO, SUBM, SNOTE, or OBJE.  If the record is not found, None is returned.\n\
+If DATABASE is omitted, the current database is used." },
+#if !defined(DEADENDS)
    { "keynum_to_record",	(PyCFunction)llpy_keynum_to_record, METH_VARARGS | METH_KEYWORDS,
      "keynum_to_record(key,type) --> RECORD or None.\n\n\
 Returns the RECORD having the specified KEYNUM and TYPE.\n\
 TYPE must be the level zero RECORD tag -- INDI, FAM, SOUR, EVEN,\n\
 REPO, SUBM, SNOTE, or OBJE.  If the record is not found, None is returned." },
+#endif
 
    { NULL, 0, 0, NULL }		/* sentinel */
   };

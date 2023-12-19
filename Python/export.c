@@ -38,7 +38,7 @@ static int write_node_tree (FILE *file, GNode *root);
 static int write_out_node (GNode *node, int level, void *extra);
 static int write_trailer (FILE *file);
 
-static bool valid_submitter (CString submitter);
+static bool valid_submitter (CString submitter, Database *database);
 static bool valid_gedcom_version (CString gedcom_version);
 
 /* start of code */
@@ -87,7 +87,7 @@ _llpy_export (Database *database, CString filename,
   /* treat an empty submitter string the same as not supplied at all */
   if (submitter && (submitter[0] != '\0'))
     {
-      if (! valid_submitter (submitter))
+      if (! valid_submitter (submitter, database))
 	{
 	  PyErr_SetString (PyExc_ValueError, "export: invalid submitter value");
 	  return NULL;
@@ -310,12 +310,12 @@ write_trailer (FILE *file)
 /* valid_submitter -- for a submitter to be valid, it must be a key
    and it must point to a SUBM record */
 static bool
-valid_submitter (CString submitter)
+valid_submitter (CString submitter, Database *database)
 {
   RECORD record;
   int type = 'X';
 
-  record = __llpy_key_to_record (submitter, &type);
+  record = __llpy_key_to_record (submitter, &type, database);
   if (! record)
     return false;
 
