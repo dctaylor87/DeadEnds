@@ -144,6 +144,7 @@ void parseAndRunProgramTest(Database *database, int testNumber)
 //  database -- The database the script runs on.
 {
 	printf("\n%d: START OF PARSE AND RUN PROGRAM TEST\n", testNumber);
+	parseProgram("llprogram", "/Users/ttw4/Desktop/DeadEnds/Reports/");
 
 //  Create a PNProcCall node to call the main procedure.
 	currentProgramFileName = "internal";
