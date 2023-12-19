@@ -28,6 +28,7 @@ testset_SOURCES = testset.c
 LDADD = ../Python/libpyllines.a \
 	../Parser/libparser.a ../Interp/libinterp.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Validate/libvalidate.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 LIBS =  $(PYTHON_LIBS)
@@ -51,6 +52,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Interp/Includes \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/Database/Includes \
+	-I$(top_srcdir)/Validate/Includes \
 	$(PYTHON_CPPFLAGS)
 
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@

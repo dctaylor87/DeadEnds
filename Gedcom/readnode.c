@@ -5,7 +5,7 @@
 //    and strings.
 //
 //  Created by Thomas Wetmore on 17 December 2022.
-//  Last changed on 12 December 2023.
+//  Last changed on 16 December 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -90,7 +90,7 @@ static ReadReturn extractFields (String p, Error **error)
 	while (*p != '@' && *p != 0) p++;  // Read until the second @-sign.
 	//  If at the end of the string it is an error.
 	if (*p == 0) {
-		*error = createError(syntaxError, fileName, fileLine, "Gedcom line is incomplete");
+		*error = createError(syntaxError, fileName, fileLine, "Gedcom line is incomplete.");
 		return ReadError;
 	}
 	//  p points to the second @-sign. Put a space into the next character (which will be
@@ -268,7 +268,7 @@ NodeList *getNodeListFromFile(FILE *fp)
 		}
 		rc = fileToLine(fp, &error);
 	}
-	if (debugging) printf("Length of the root nodes and errors list is %d\n", lengthList(nodeList));
+	if (debugging) printf("Length of the node and error list is %d\n", lengthList(nodeList));
 
 	if (lengthList(nodeList) > 0) return nodeList;
 	deleteList(nodeList);

@@ -100,7 +100,7 @@ void addErrorToLog (ErrorLog *errorLog, Error *error)
 	appendListElement(errorLog, error);
 }
 
-//  addErrorToLog -- Add an error to an error log.
+//  addErrorToLog -- Add an Error to an ErrorLog.
 //--------------------------------------------------------------------------------------------------
 void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType, CString fileName, int lineNumber,
 	String message)

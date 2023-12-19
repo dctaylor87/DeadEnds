@@ -12,13 +12,13 @@ libdatabase_a_SOURCES = \
 	database.c \
 	nameindex.c \
 	recordindex.c \
-	import.c \
-	validate.c
+	import.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Gedcom/Includes \
+	-I$(top_srcdir)/Validate/Includes \
 	-I$(top_srcdir)/Utils/Includes
 
 #AM_CFLAGS = -Wno-unused-function -Wno-unused-but-set-variable

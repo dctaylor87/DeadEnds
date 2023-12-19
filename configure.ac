@@ -675,5 +675,6 @@ AC_CONFIG_FILES([Makefile \
         Python/Makefile \
         DataTypes/Makefile \
         Utils/Makefile \
+	Validate/Makefile \
         Tests/Makefile])
 AC_OUTPUT

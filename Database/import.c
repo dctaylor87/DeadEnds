@@ -90,6 +90,7 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 	String lastSegment = lastPathSegment(filePath); // MNOTE: strsave not needed.
 	// Get the lines of the Gedcom file as a node list of nodes and errors.
 	NodeList *listOfNodes = getNodeListFromFile(file);
+	if (!listOfNodes) return null;
 
 	// Convert the list of nodes and errors into a node list of node trees.
 	NodeList *listOfTrees = getNodeTreesFromNodeList(listOfNodes, errorLog);
@@ -117,7 +118,6 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 		deleteDatabase(database);
 		return null;
 	}
-
 	return database;
 }
 
@@ -127,7 +127,7 @@ String noiref = (String) "FAM record has no INDI references; record ignored.\n";
 // normalizeNodeTree -- Normalize node tree records to standard format.
 //--------------------------------------------------------------------------------------------------
 GNode *normalizeNodeTree (GNode *root)
-//  root -- Root of a Gedcom node tree record.
+//  root -- Root of a Gedcom tree record.
 {
 	switch (recordType(root)) {
 		case GRHeader: return root;
