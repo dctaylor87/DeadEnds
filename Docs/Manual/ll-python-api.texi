@@ -3,12 +3,16 @@
 @titlepage
 @titlefont{DeadEnds Python Extension Reference}
 @settitle DeadEnds Python Extension Reference Manual
+@setchapternewpage odd
 @author David Cole Taylor
 @today{}
+@page
 @end titlepage
+@page
 @contents
 
-NOTE: This manual started life as the LifeLines Python Extension
+@chapter Overview
+This manual started life as the LifeLines Python Extension
 Reference Manual.  If you are familiar with it, most of this will be a
 repeat of what you already know.
 
@@ -20,7 +24,6 @@ process or getting it fixed.
 Additionally, there will eventually be functions available only in
 DeadEnds and not in LifeLines.
 
-@chapter Overview
 There are, at least, two potential audiences for information about the
 DeadEnds Python extension --
 
@@ -289,7 +292,9 @@ the role.
 @deftypefun INDI nspouses (void) @arrow{} INTEGER
 @findex nspouses
 
-Returns the number of spouses of INDI.
+Returns the number of spouses of INDI.  If INDI is in a family where
+the spouse is unknown, then number of spouses and number families will
+be different.
 
 @end deftypefun
 @deftypefun INDI nfamilies (void) @arrow{} INTEGER
@@ -322,6 +327,7 @@ Returns the set of children of INDI.
 Selects and returns child of person through user interface.
 Returns @code{None} if INDI has no children or if the user cancels.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosespouse (void) @arrow{} INDI or @code{None}
 @findex choosespouse
@@ -329,6 +335,7 @@ Returns @code{None} if INDI has no children or if the user cancels.
 Selects and returns spouse of person through user interface.
 Returns @code{None} if INDI has no spouses or if the user cancels.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosefam (void)
 @findex choosefam
@@ -336,6 +343,7 @@ Returns @code{None} if INDI has no spouses or if the user cancels.
 Selects and returns a family that INDI is in.  Returns @code{None} if
 INDI is not in any families or if the user cancels.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 The following function is part of the module but is not an instance
 method:
@@ -384,6 +392,7 @@ stripped.
 Returns the next INDI in the database (in key order).  Returns
 @code{None} when the end is reached.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI previndi (void) @arrow{} INDI or @code{None}
 @findex previndi
@@ -391,6 +400,7 @@ Returns the next INDI in the database (in key order).  Returns
 Returns the previous INDI in the database (in key order).  Returns
 @code{None} when the beginning is reached.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 
 The following functions are part of the module but are not instance
@@ -403,6 +413,7 @@ Returns the first individual in the database (in key order).
 Returns @code{None} if there are no INDIs in the database.
 
 In the future this MIGHT become a database instance function.
+@b{Not currently available in DeadEnds.}
 @end defun
 @defun lastindi (void) @arrow{} INDI or @code{None}
 @findex lastindi
@@ -411,6 +422,7 @@ Returns the last individual in the database (in key order).
 Returns @code{None} if there are no INDIs in the database.
 
 In the future this MIGHT become a database instance function.
+@b{Not currently available in DeadEnds.}
 @end defun
 @defun individuals (void) @arrow{} Iterator
 @findex individuals
@@ -484,6 +496,7 @@ Figures out FAM's collection of children and asks the user to
 choose one.  Returns @code{None} if FAM has no children or if the user
 cancelled the operation.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun FAM choosespouse (void) @arrow{} INDI or @code{None}
 @findex choosespouse
@@ -491,6 +504,7 @@ cancelled the operation.
 Selects and returns spouse of family through user interface.
 Returns @code{None} if FAM has no spouses or if the user cancels.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 
 @subsection Database related
@@ -510,6 +524,7 @@ stripped.
 Returns the next family (in key order) in the database.  Returns
 @code{None} if the end has been reached.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun FAM prevfam (void) @arrow{} FAM or @code{None}
 @findex prevfam
@@ -517,6 +532,7 @@ Returns the next family (in key order) in the database.  Returns
 Returns the previous family (in key order) in the database.
 Returns @code{None} if the beginning has been reached.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 The following functions are part of the module but are not instance
 methods:
@@ -528,6 +544,7 @@ Returns the first family in the database (in key order).
 Returns @code{None} if there are no FAMs in the database.
 
 In the future this MIGHT become a database instance function.
+@b{Not currently available in DeadEnds.}
 @end defun
 @defun lastfam (void) @arrow{} FAM or @code{None}
 @findex lastfam
@@ -536,6 +553,7 @@ Returns the last family in the database (in key order).
 Returns @code{None} if there are no FAMs in the database.
 
 In the future this MIGHT become a database instance function.
+@b{Not currently available in DeadEnds.}
 @end defun
 
 @defun families (void) @arrow{} Iterator
@@ -1136,6 +1154,7 @@ The following functions are instance methods.
 
 Select child of individual or family through user interface.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosefam (void) @arrow{} FAM
 @findex choosefam
@@ -1143,6 +1162,7 @@ Select child of individual or family through user interface.
 Select, through user interface, one of the families individual is
 in as a spouse.
 
+@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosespouse (void) @arrow{} INDI
 @findex choosespouse
@@ -1159,6 +1179,7 @@ The following functions are not instance methods.
 Identify individual through user interface.
 Returns INDI (or @code{None} if user cancels).
 
+@b{Not currently available in DeadEnds.}
 @end defun
 @defun getindiset ([prompt]) @arrow{} SET
 @findex getindiset
@@ -1175,12 +1196,14 @@ XXX not yet implemented XXX
 Identify family through user interface.
 Returns family (or @code{None} if user cancels).
 
+@b{Not currently available in DeadEnds.}
 @end defun
 @defun getint ([prompt]) @arrow{} INTEGER
 @findex getint
 
 Get integer through user interface.
 
+@b{Not currently available in DeadEnds.}
 @end defun
 @defun getstr ([prompt]) @arrow{} STRING
 @findex getstr
@@ -1270,19 +1293,8 @@ Returns an iterator of the given type for the specified database.  If
 @code{database} is omitted or is @code{None}, then returns an iterator
 for the current default database.
 
- QUESTIONS:
-
-Should we support ``small'' iterators?  Iterators for things like:
-@itemize
-@item all spouses of an individual
-@item all families of an individual
-@item all children of an individual
-@item all children of a family
-@item all parents of a family
-@end itemize
-
-Does Python support mapping functions?  And if yes, how does that
-interact with iterators?
+@strong{NOTE:} The RECORDs are returned in database order.  You should
+not expect them to be returned in numerical nor in alphabetical order.
 
 @section NODE Iterators
 
@@ -1511,7 +1523,7 @@ Python one-liner.
 @findex namesort
 @findex keysort
 
-For example, to sort by names, you could do:
+For example, to sort by names, last name, first, you could do:
 
 @example
 sorted_indis =
@@ -1565,6 +1577,8 @@ The functions @code{dms2deg}, @code{deg2dms}, and @code{spdist} might be impleme
 @findex deg2dms
 @findex spdist
 
+However, as there are no reports in the distribution that use them,
+their priority is very very low and they might never be implemented.
 @item Output Mode Functions
 
 Some of these functions might be implemented.  Uncertain.
@@ -1634,8 +1648,8 @@ it on Windows or MacOS would also be appreciated.
 
 @section Configuring
 
-I added the option @option{--with-python} to the top-level
-@code{configure.ac}.  As with most @code{--with} options, there are
+The top-level @code{configure.ac} has the option
+@option{--with-python} As with most @code{--with} options, there are
 four possible values for the option.
 
 @itemize
@@ -1660,16 +1674,19 @@ Is like @option{enable-python=yes}, but uses the specified Python.
 
 @end itemize
 
-Development used the Python 3.9.6 documentation.  Initial builds were
-against Python 3.8.4 (it is what was installed on my system).  Later
-builds were done against Python 3.9.7.  Python 3.10 has been released.
+Initial development was in @code{LifeLines} using the Python 3.9.6
+documentation.  And Initial builds were against Python 3.8.4 (it is
+what was installed on my system).  Later builds were done against
+Python 3.9.7.  The @code{Python} embeddding into @code{DeadEnds} was
+done using @code{Python} 3.11.2.
 
 I do not know what is the minimum required Python version.  Certainly
-Python 3 is required.  And Python 3.8.4 is sufficient.  Beyond that, I
-do not know.
+Python 3 is required.  And Python 3.8.4 is sufficient.  It has been
+successfully built and used with 3.8, 3.9, 3.10, and 3.11.
 
 Success and failure stories with older versions would be useful to
-further refine what is the minimum required version.
+further refine what is the minimum required version.  I do not expect
+any problems with newer versions as the embedding uses the stable API.
 
 If you wish to build DeadEnds with Python, you will need to have the
 @code{libpython3-dev} or equivalent package installed.  If you
@@ -1678,36 +1695,64 @@ without Python, I would appreciate hearing about them.
 
 Three packages that I know that you need, whether with or without Python, are
 @code{autoconf}, @code{automake}, and @code{autoheader}.
+
+@section Building from a @code{Git} repository
+
+Before your first build, you will need to run, from the top of the
+tree, the following three commands (each with no arguments):
+
+@code{autoheader}
+
+This will generate the file @code{config.h.in} in the top-level
+directory.
+
+@code{automake}
+
+This will generate the @code{Makefile.in}'s in the various
+directories.
+
+@code{autoconf}
+
+This will generate the file @code{configure} in the top-level directory.
+
+After running the aforementioned three commands, you are now ready to
+run the @code{configure} command.  The @code{configure} command
+accepts a lot of options.  If you are unfamiliar with
+@code{configure}, then I recommend giving it the @option{--help}
+option.
+
+While @code{configure} supports building in the source tree, I
+recommend building in a separate tree as it helps keep the source tree
+clean.  I also recommend the option @option{--with-docs} to enable the
+building of the documentation. 
+
 @chapter Invoking The Python Extension
 
-QUESTIONS: Should the Python interpreter be shutdown and restarted between scripts?
-What portions of Lifeline's initialization should be run before each script?
+QUESTIONS: Should the Python interpreter be shutdown and restarted
+between scripts?  What portions of DeadEnd's initialization should be
+run before each script?
 
-@section llines
-There are two ways to invoke a Python Report, one is via the command
-line.  But, instead of saying @code{-x reportname.ll}, you should
-instead say @code{-p reportname.py}.  The other way is via the
-@code{p} option on the main menu.
+@section deadends, The Program
 
-Note: As of yet the program @command{llines} has not been modified.
-If the @option{p} option is unavailable in the main menu, some other
-letter will be chosen.
+There are two ways to invoke the Python embedding.
 
-@section llexec
-Like @command{llines}, there are two ways to invoke the Python
-extension from @command{llexec}.  One is the same as for
-@command{llines} -- namely, @option{-p reportname.py}.  However, the
-other also involves the comand line, specify @option{-P} with no
-arguments.  The program @command{llexec} will process the other
-command line options and then invoke the interactive Python interpreter
-with the DeadEnds extensions linked in.  Like the DeadEnds report
-language, the Python interpreter has access to the full database.
+One is to specify on the command line that you want to run a Python
+report.  To do this, instead of saying @code{-x reportname.ll} as you
+would to run a DE script, instead say @code{-p reportname.py}.
 
-This is especially useful for speeding up the test-edit cycle.  It is
-also useful for small tests, for resolving documentation ambiguities
-and errors, and for getting your feet wet.  It also allows you to run
-your script -- as that functionality is part of the core Python
-interpreter!  At the interactive interpreter prompt, just type:
+The other way is to specify @code{-P} on the command line.  This will
+invoke the interactive Python interpreter with the DeadEnds extensions
+linked in.
+
+Like the DeadEnds report language, the DeadEnds Python interpreter has
+access to the full database.
+
+Use of the interactive interpreter is especially useful for speeding
+up the test-edit cycle.  It is also useful for small tests, for
+resolving documentation ambiguities and errors, and for getting your
+feet wet.  It also allows you to run your script -- as that
+functionality is part of the core Python interpreter!  At the
+interactive interpreter prompt, just type:
 @example
 exec(open("/path/to/script.py").read())
 @end example
@@ -1715,6 +1760,7 @@ and it will open the script, read it, and execute the contents.
 
 To play with it, you might try something like:
 @example
+import readline
 import llines
 fam1=llines.getfam()
 print(fam1)
@@ -1723,6 +1769,10 @@ print(husb1)
 name1=husb1.name()
 print(name1)
 @end example
+
+The @code{import readline} line is optional, but enables the use of
+readline editing (both vi and emacs modes) on the interactive command
+line.
 
 @appendix Functions Being Considered
 
@@ -1767,21 +1817,13 @@ it must be the top of its node tree) and have no siblings.  There
 would probably be other restrictions, yet to be determined, as well.
 @end deftypefun
 
-@deftypefun RECORD sync (void) @arrow{} BOOLEAN
-Takes the current record and, if it has changed since it was last
-written, writes it out to the database.  On success, it returns True.
-
-NOTE: Other RECORDS that are have been modified since they were last
-written out might or might not be written out as well.
-@end deftypefun
-
 The following functions are not instance methods.
 
 @defun create_reference (tag, RECORD) @arrow{} NODE
 Creates and returns a NODE having the specified @code{tag} that
 references @code{RECORD}.
 
-NOTE: To protect database integrity, tags ``CHIL'', ``HUSB'',
+NOTE: To protect database integrity, the tags ``CHIL'', ``HUSB'',
 ``WIFE'', ``FAMS'', and ``FAMC'' cannot have references created by
 this function.  Instead, see the functions @code{add_family} and
 @code{add_individual}.
@@ -1953,8 +1995,8 @@ XXX Think more about what this interface should be. XXX
 @end deftypefun
 
 @deftypefun DataBase sync (void) @arrow{} BOOLEAN
-Writes out any DataBase records that were modified since they were
-last written out.  On success, returns True.
+Writes out (backs up) the Database if it is dirty and the backup path
+has been set.  On success, returns True.
 @end deftypefun
 
 @defun current_database (void) @arrow{} DataBase
@@ -1974,19 +2016,11 @@ database.  Returns None if there is no previous database.
 Returns the pathname of the database.
 @end deftypefun
 
-@deftypefun DataBase cache_sizes (void) @arrow{} tuple
-
-Returns a tuple of tuples of two elements.  For each two element
-tuple, the first element is a string representing the cache's name,
-and the second element is an integer representing its size.
-
-QUESTION: Should cache sizes be database specific?  Or at they shared?
-Should the caches even exist?  Long term, I'm leaning towards
-eliminating them altogether.
-@end deftypefun
-
 @appendix Possible Future Directions
+@b{Much of this chapter is about LifeLines, not DeadEnds.}
 @section User Interface
+
+@b{DeadEnds currently has no user interface.}
 
 I would like for there to be a better separation between functionality
 and user interface.  Functions which interact with the user, whether
@@ -2008,6 +2042,7 @@ Another is to have the engine and user interface be separate processes
 with a stream interface between them which is designed NOT for humans
 but rather to be easily parsed by a computer.  The user interface sends
 a request, gets a response, and decides how best to display it.
+
 @section Disk Storage
 
 I would like the disk storage to be a @acronym{GEDCOM} file.  Or, if
@@ -2036,11 +2071,8 @@ cost of keeping the whole database in memory.
 
 @section Multiple Databases
 
-Allow multiple databases to be present in memory simultaneously -- for
-example, a research database and a confirmed (need a better word)
-database.  Or my database and a sister-in-laws database.  Or a
-complete database and a shareable (i.e., private information removed)
-database.  Or...
+Allowing multiple databases to be present in memory simultaneously is
+currently a work in progress for DeadEnds.
 
 @section Additional Record Types
 
@@ -2051,6 +2083,9 @@ and Submitters.
 Possibly allowing the user to define their own record types.  Not sure
 what this would look like...
 
+Possibly moving some of the currently supported ``lesser'' record
+types into their own record indexes and adding commands specifically
+for them.
 @section Support for Non-@acronym{GEDCOM} Formats
 
 Possibly support some non @acronym{GEDCOM} format(s) such as XML or
@@ -2068,5 +2103,7 @@ subset based on RECORD, EVENT, and/or NODE markers such as the
 @code{RESN} tag.
 
 This idea needs more thought.
+
+@unnumbered Function Index
 @printindex fn
 @bye

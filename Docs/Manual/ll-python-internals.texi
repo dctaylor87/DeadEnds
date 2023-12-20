@@ -1,11 +1,14 @@
 \input texinfo
 @setfilename python-internals
+@settitle DeadEnds Python Extension Internals Manual
+@setchapternewpage odd
 @titlepage
 @titlefont{DeadEnds Python Extension Internals}
-@settitle DeadEnds Python Extension Internals Manual
 @author David Cole Taylor
 @today{}
+@page
 @end titlepage
+@page
 @syncodeindex vr fn
 @syncodeindex tp fn
 @contents
