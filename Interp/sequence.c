@@ -6,7 +6,7 @@
 //    indiseq data type of DeadEndsScript.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 22 November 2023.
+//  Last changed on 19 December 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -511,7 +511,7 @@ Sequence *childSequence(Sequence *sequence)
 		//  For each family the person is a spouse in.
 		FORFAMSS(person, fam, key, database)
 			//  For the children in that family.
-			FORCHILDREN(fam, chil, num2, database)
+			FORCHILDREN(fam, chil, childKey, num2, database)
 				//  Add child to sequence if not there.
 				String key = personToKey(chil);
 				if (!isInHashTable(table, key)) {
@@ -534,7 +534,7 @@ Sequence *personToChildren(GNode* person, Database *database)
 	Sequence *children = createSequence(database);
 
 	FORFAMSS(person, family, key, database)
-		FORCHILDREN(family, child, count, database)
+		FORCHILDREN(family, child, childKey, count, database)
 			appendToSequence(children, personToKey(child), null, null);
 		ENDCHILDREN
 	ENDFAMSS
@@ -572,7 +572,7 @@ Sequence *personToFathers(GNode *person, Database *database)
 	Sequence *fathers = createSequence(database);
 
 	FORFAMCS(person, family, key, database)  // For each family the person is a child in...
-		FORHUSBS(family, husb, database)  // For each husband in that family...
+		FORHUSBS(family, husb, husbKey, database)  // For each husband in that family...
 			appendToSequence(fathers, personToKey(husb), null, null);  // Add him to the sequence.
 		ENDHUSBS
 	ENDFAMCS
@@ -590,7 +590,7 @@ Sequence *personToMothers (GNode* indi, Database *database)
 	if (!indi) return null;
 	Sequence *mothers = createSequence(database);
 	FORFAMCS(indi, fam, key, database)  // For each family the person is a child in...
-		FORWIFES(fam, wife, database)  // For each wife in that family...
+		FORWIFES(fam, wife, wifeKey, database)  // For each wife in that family...
 			appendToSequence(mothers, personToKey(wife), null, null);  // Add her to the sequence.
 		ENDWIFES
 	ENDFAMCS
@@ -633,7 +633,7 @@ Sequence *familyToChildren(GNode* family, Database *database)
 {
 	if (!family) return null;
 	Sequence *children = createSequence(database);
-	FORCHILDREN(family, chil, num, database) {
+	FORCHILDREN(family, chil, key, num, database) {
 		appendToSequence(children, personToKey(chil), null, null);
 	} ENDCHILDREN
 	if (lengthSequence(children) > 0) return children;
@@ -648,7 +648,7 @@ Sequence *familyToFathers(GNode* fam, Database *database)
 {
 	if (!fam) return null;
 	Sequence *seq = createSequence(database);
-	FORHUSBS(fam, husb, database)
+	FORHUSBS(fam, husb, key, database)
 		appendToSequence(seq, personToKey(husb), null, null);
 	ENDHUSBS
 	if (lengthSequence(seq)) return seq;
@@ -663,9 +663,9 @@ Sequence *familyToMothers(GNode *fam, Database *database)
 {
 	if (!fam) return null;
 	Sequence *seq = createSequence(database);
-	FORWIFES(fam, husb, database) {
-		//key = personToKey(husb);
-		appendToSequence(seq, personToKey(husb), null, null);
+	FORWIFES(fam, wife, key, database) {
+		//key = personToKey(wife);
+		appendToSequence(seq, personToKey(wife), null, null);
 	}
 	ENDWIFES
 	if (lengthSequence(seq)) return seq;
@@ -698,7 +698,7 @@ Sequence *siblingSequence(Sequence *sequence, bool close)
 	ENDSEQUENCE
 	FORSEQUENCE(familySequence, el, num)
 		fam = keyToFamily(el->key, database);
-		FORCHILDREN(fam, chil, num2, database)
+		FORCHILDREN(fam, chil, chilKey, num2, database)
 			key = personToKey(chil);
 			if (!isInHashTable(tab, key)) {
 				appendToSequence(siblingSequence, key, null, null);
@@ -768,7 +768,7 @@ Sequence *descendentSequence(Sequence *startSequence)
 {
 	if (!startSequence) return null;
 	Database *database = startSequence->database;
-	String key, descendentKey, familyKey;
+	String key, descendentKey;
 	StringTable *descendentKeys = createStringTable();  //  Keys of all descendents processed.
 	StringTable *familyKeys = createStringTable();  //  Keys of all families processed.
 	List *descendentQueue = createList(null, baseFree, null);  //  Queue of descendent keys.
@@ -788,7 +788,7 @@ Sequence *descendentSequence(Sequence *startSequence)
 		FORFAMSS(person, family, key, database) {
 			if (isInHashTable(familyKeys, key)) goto a;
 			insertInStringTable(familyKeys, strsave(key), null);
-			FORCHILDREN(family, child, num, database)
+			FORCHILDREN(family, child, chilKey, num, database)
 				if (!isInHashTable(descendentKeys, descendentKey = personToKey(child))) {
 					appendToSequence(descendentSequence, descendentKey, null, null);
 					//  MNOTE: strsave required -- lists don't save their elements.
@@ -876,7 +876,7 @@ void sequenceToGedcom(Sequence *sequence, FILE *fp)
 				goto a;
 			}
 			//  Check whether any of the children in this family are in the sequence.
-			FORCHILDREN(family, child, count, database)
+			FORCHILDREN(family, child, chilKey, count, database)
 				String childKey = personToKey(child);
 				if (isInHashTable(personTable, childKey)) {
 					appendToSequence(familySequence, familyToKey(family), null, null);
