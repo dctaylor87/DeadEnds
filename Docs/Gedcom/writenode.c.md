@@ -9,4 +9,4 @@
 |static String swriteGNode(int level, GNode* node, String p)|Write a GNode to a string. Return the  position in the string for the next node.|
 |static String swriteGNodes (int level, GNode* gnode, String p)|Write a GNode tree to a string. Recurses to children and siblings.|
 |int treeStringLength(int level, GNode* gnode)|Recursively compute the string length of a Gedcom tree. This is used to preallocate the memory needed to hold the full string.|
-|static int nodeStringLength(int level, GNode* gnode)|Compute a GNode's string length; counts the \n but not the final 0. *Unicode impact*.|
+|static int nodeStringLength(int level, GNode* gnode)|Compute a GNode's string length; counts the newline but not the final 0. *Unicode impact*.|
