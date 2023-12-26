@@ -1758,7 +1758,8 @@ exec(open("/path/to/script.py").read())
 @end example
 and it will open the script, read it, and execute the contents.
 
-To play with it, you might try something like:
+The module is @code{llines}.  To play with it, you might try something
+like:
 @example
 import readline
 import llines
@@ -1770,9 +1771,11 @@ name1=husb1.name()
 print(name1)
 @end example
 
-The @code{import readline} line is optional, but enables the use of
-readline editing (both vi and emacs modes) on the interactive command
-line.
+The @code{import readline} line is completely optional, but enables
+the use of readline editing (both vi and emacs modes) and history on
+the interactive command line.  The @code{import llines} line is
+required.  The other lines are simply illustrating the use of the
+module.
 
 @appendix Functions Being Considered
 
@@ -1894,10 +1897,10 @@ unmount | whatever @} a database is unknown.
 
 @defun database_open (pathname, [access], [cache_sizes], [locking]) @arrow{} DataBase
 
-Attempts to open @code{pathname} as a LifeLines database.  If
+Attempts to open @code{pathname} as a DeadEnds database.  If
 successful, the database object is returned.
 
-Does not change current database.
+Does not change which database is the current database.
 
 QUESTIONS: Do we want to support closing a database?  If yes, how do
 we invalidate any existing Python objects that represent records or
@@ -1905,6 +1908,14 @@ nodes within the database?  Or do we adopt the attitude that they are
 still valid but the database is now read-only?  Something else?
 Similar questions for PVALUEs and the existing report writing
 language.
+
+Two possible answers, neither completely satisfactory, are to either
+not support closing / deleteing / removing a database OR placing the
+burden upon the script writer -- if such such a PValue / PyObject is
+referenced it might cause the program to crash and burn.
+
+To support removing a database from memory I believe that we would
+need reference counts, but I'm not sure if they would be sufficient.
 
 Opening and closing a database feels like the wrong paradigm.
 But, what is the right paradigm?
@@ -1915,7 +1926,7 @@ But, what is the right paradigm?
 Creates a new empty database at the specified path.  Returns the newly
 created empty database.
 
-Does not change current database.
+Does not change which database is the current database.
 @end defun
 
 @deftypefun DataBase import (gedcom_file, [keys = {keys_keep|keys_new|keys_auto}]) @arrow{} Something
@@ -1934,7 +1945,7 @@ If @code{keys} is @code{keys_auto} (default), then if existing keys
 are compabible and there are no conflicts, existing keys are kept.
 Otherwise, new keys are used.
 
-Does not change the current database.
+Does not change which database is the current database.
 
 QUESTIONS:
 
@@ -1964,7 +1975,8 @@ a different function?
 
 If there is an argument for what to export -- whether this or a
 separate function -- what to do about references to records outside
-the set?  VOID pointers?  Closure?
+the set?  VOID pointers?  Closure?  Need to ensure that what is
+exported is a valid database -- no broken pointers.
 @end deftypefun
 
 @deftypefun DataBase merge (database) @arrow{} DataBase
@@ -1973,8 +1985,6 @@ of the database merged in become part of this database.
 
 QUESTION: Is old database closed?  Discarded?  Something else?
 
-Probably cannot support his until whole database layer is reworked and
-btree layer is eliminated.
 @end deftypefun
 
 @deftypefun DataBase statistics (void) @arrow{} tuple
@@ -1990,13 +2000,21 @@ integer is how many records of that type are present in the database.
 Another possibility is to return a dictionary, the strings, as
 described above, are the keys, the integers are the values.
 
-XXX Think more about what this interface should be. XXX
+My current thought is to rename this from @code{statistics} to
+something more general like @code{info} or @code{information}.  But,
+then the question arises as to how to know the type of the value
+returned.  For some (e.g, number of persons), it is numeric, for
+others (e.g. dirty), it is a boolean, and yet others (e.g., name), it
+is a string.  And one of the goals of a name change is to allow future
+extension -- more keys.
+
+XXX Need to think more about what this interface should be. XXX
 
 @end deftypefun
 
 @deftypefun DataBase sync (void) @arrow{} BOOLEAN
 Writes out (backs up) the Database if it is dirty and the backup path
-has been set.  On success, returns True.
+has been set.  On success, it returns True.
 @end deftypefun
 
 @defun current_database (void) @arrow{} DataBase
@@ -2017,62 +2035,28 @@ Returns the pathname of the database.
 @end deftypefun
 
 @appendix Possible Future Directions
-@b{Much of this chapter is about LifeLines, not DeadEnds.}
+
 @section User Interface
 
 @b{DeadEnds currently has no user interface.}
 
-I would like for there to be a better separation between functionality
-and user interface.  Functions which interact with the user, whether
-by asking a question, printing a message, or drawing something on the
-screen being totally separated from those that provide the underlying
-functionality.  Different files in different directories.
+I would like there to be at least four user interfaces:
 
-I would like for there to be a variant of @command{llines} -- possibly
-@command{llexec} or possibly a new program that has a fully functional
-non-curses command line interface.
-
-I would also like there to be a GUI variant.
-
-One possible approach to the above include a library that provides the
-core functionality and then the interface (curses, command line, GUI)
-queries the library and displays the results.
-
-Another is to have the engine and user interface be separate processes
-with a stream interface between them which is designed NOT for humans
-but rather to be easily parsed by a computer.  The user interface sends
-a request, gets a response, and decides how best to display it.
-
-@section Disk Storage
-
-I would like the disk storage to be a @acronym{GEDCOM} file.  Or, if
-not strictly @acronym{GEDCOM}, then -- at least -- textual and
-hierarchical like @acronym{GEDCOM}.  That is, it might -- like the
-current Lifelines -- allow extensions (e.g., event records) that make
-it not necessarily strictly @acronym{GEDCOM} conforming.  But,
-structured like @acronym{GEDCOM} and if you didn't use the extensions,
-then it would be @acronym{GEDCOM}.
-
-Other options include formats such as XML and JSON.  If such a format
-was chosen as the native format, then @acronym{GEDCOM} would certainly
-remain an import and export option.
-@section Memory Usage
-
-Computer memory has in the past two decades become significantly
-cheapter.  And significantly larger.  Many machines ship with more
-memory than the maximum supported decades ago.  So...
-
-Keep the whole database in memory all the time.
-
-If the entire database is in memory, some of the fields within the
-NODE and RECORD structures (e.g., for starters, the cache pointers)
-can be eliminated making the structures smaller, reducing the memory
-cost of keeping the whole database in memory.
+@itemize
+@item a GUI interface
+@item a curses interface similar to the existing LifeLines interface
+@item a fully functional non-curses interactive command line interface
+@item a streaming interface
+@end itemize
 
 @section Multiple Databases
 
 Allowing multiple databases to be present in memory simultaneously is
 currently a work in progress for DeadEnds.
+
+While supporting all library functionality in the script languages is
+an explicit goal, it is unclear if there is anyway for a script to
+safely delete a database.
 
 @section Additional Record Types
 
@@ -2093,6 +2077,8 @@ JSON in addition to @acronym{GEDCOM}.  Especially if there are any
 ``popular'' (whatever that means here) programs with a non-proprietary
 non-GEDCOM textual format.
 
+Both import and export support.
+
 @section Support for Export Restrictions
 
 Not sure if the @acronym{GEDCOM} @code{RESN} tag is adequate here.
@@ -2102,7 +2088,14 @@ all the @acronym{GEDCOM} conforming (i.e., no extensions) data, or a
 subset based on RECORD, EVENT, and/or NODE markers such as the
 @code{RESN} tag.
 
-This idea needs more thought.
+Possibly excluding living individuals.  Or excluding selected
+information on living individuals -- such as birth information and
+SSNs.
+
+When exporting a subset need to ensure that the resulting database is
+valid.
+
+This whole idea needs more thought.
 
 @unnumbered Function Index
 @printindex fn
