@@ -30,9 +30,12 @@ typedef struct Database {
     RecordIndex *eventIndex;  // Index of events in this database.
     RecordIndex *otherIndex;  // Indes of other records in this database.
     NameIndex *nameIndex;  // Index of the names of the persons in this database.
+#if 0
+    CString backupPath;	// path of the most recent backup, if any
+#endif
 } Database;
 
-extern Database *theDatabase;
+extern Database *currentDatabase;
 
 Database *createDatabase(CString fileName); // Create an empty database.
 void deleteDatabase(Database*); // Delete a database.

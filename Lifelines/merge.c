@@ -37,6 +37,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -48,6 +49,7 @@
 #include "readwrite.h"
 #include "recordindex.h"
 #include "rfmt.h"
+#include "editing.h"
 #include "sequence.h"
 #include "hashtable.h"
 #include "xlat.h"
@@ -58,6 +60,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"
+#include "remove.h"
 
 #include "llpy-externs.h"
 #else

@@ -6,8 +6,11 @@
 noinst_LIBRARIES = libllsupport.a
 
 libllsupport_a_SOURCES = \
+	charmaps.c \
+	charprops.c \
 	codesets.c \
 	equaliso.c \
+	llgettext.c \
 	locales.c \
 	messages.c \
 	remove.c \

@@ -43,7 +43,7 @@ const char *DEADENDS_search_path = ".:/usr/share/deadends:/usr/share/lifelines";
 const char *GEDCOM_search_path = ".";
 const char *PYTHON_search_path = "."; /* XXX not currently used XXX */
 
-Database *theDatabase;
+Database *currentDatabase;
 
 /* forward references */
 static void print_usage (int status);
@@ -170,8 +170,8 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  theDatabase = importFromFileFP (db_file, cmd_line_db, &error_log);
-  if (! theDatabase)
+  currentDatabase = importFromFileFP (db_file, cmd_line_db, &error_log);
+  if (! currentDatabase)
     {
       fprintf (stderr, "%s: import failed\n", ProgName);
       /* XXX figure out how to print 'error_log' XXX */
@@ -180,7 +180,7 @@ main (int argc, char *argv[])
 
   if (have_deadend_scripts)
     {
-      int status = deadend_execute_scripts (0, theDatabase);
+      int status = deadend_execute_scripts (0, currentDatabase);
       if (status < 0)
 	fprintf (stderr, "%s: DeadEnds script failed, status = %d\n",
 		 ProgName, status);

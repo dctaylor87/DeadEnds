@@ -20,6 +20,7 @@
 #endif
 
 #if defined(DEADENDS)
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -29,6 +30,7 @@
 #include "rfmt.h"
 #include "sequence.h"
 #include "hashtable.h"
+#include "stringtable.h"
 #include "uiprompts.h"
 #include "errors.h"
 #include "liflines.h"

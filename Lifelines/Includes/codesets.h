@@ -13,6 +13,7 @@
 extern STRING int_codeset;     /* internal codeset */
 #if defined(DEADENDS)
 extern BOOLEAN uu8;	       /* is int_codeset utf-8? */
+extern BOOLEAN gui8;	       /* flag if display output encoding is UTF-8 */
 #endif
 
 extern STRING editor_codeset_out; /* output to editor */

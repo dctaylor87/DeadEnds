@@ -60,7 +60,7 @@ llpy_export (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 
   /* if database specified use it, otherwise use the current default database */
   if (! py_db)
-    database = theDatabase;
+    database = currentDatabase;
   else
     database = py_db->lld_database;
 

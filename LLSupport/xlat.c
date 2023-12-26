@@ -21,6 +21,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -703,6 +704,63 @@ xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
  *  eg, "3 steps with iconv(UTF-8, CP1252)"
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
+#if defined(DEADENDS)
+String
+xlat_get_description (XLAT xlat)
+{
+  int count=0;
+  String rtn = 0;		/* final string to return */
+  String str = 0;		/* string with details for iconv conversions */
+  char stepcount[32];
+  XLSTEP xstep=0;
+  int len;
+  String part;
+  String next;
+  if (!xlat || !xlat->steps) {
+    rtn = _("(no conversion))");
+    goto end_get_desc;
+  }
+  /* simply cycle through & perform each step */
+  FORLIST(xlat->steps, el)
+    xstep = (XLSTEP)el;
+    ++count;
+    if (xstep->iconv_src) {
+      /* an iconv step */
+      len = 2 + 6 + strlen (xstep->iconv_src) + 1 + strlen (xstep->iconv_dest) + 1 + 1;
+      part = (char *)malloc (len);
+      next = part;
+      if (str)
+	next = stpcpy (part, ", ");
+      next = stpcpy (next, "iconv(");
+      next = stpcpy (next, xstep->iconv_src);
+      next = stpcpy (next, ",");
+      next = stpcpy (next, xstep->iconv_dest);
+      next = stpcpy (next, ")");
+    } else if (xstep->dyntt) {
+      String dyn = tt_get_name (xstep->dyntt->tt);
+      len = 2 + 3 + strlen(dyn) + 1 + 1;
+      part = (char *)malloc (len);
+      next = part;
+      if (str)
+	next = stpcpy (part, ", ");
+      next = stpcpy (next, "tt(");
+      next = stpcpy (next, dyn);
+      next = stpcpy (next, ")");
+    }
+  ENDLIST
+  /* TRANSLATORS: steps in a chain of codeset conversions, eg, Editor-to-Internal */
+  snprintf(stepcount, sizeof(stepcount), _pl("%d step", "%d steps", count), count);
+  len = strlen (stepcount) + 2 + (next - part) + 1;
+  rtn = (char *) malloc (len);
+  next = stpcpy (rtn, stepcount);
+  next = stpcpy (next, ": ");
+  next = stpcpy (next, str);
+
+end_get_desc:
+	free(str);
+	return rtn;
+}
+#else
 ZSTR
 xlat_get_description (XLAT xlat)
 {
@@ -744,6 +802,7 @@ end_get_desc:
 	zs_free(&zstr);
 	return zrtn;
 }
+#endif
 /*==========================================================
  * xl_is_xlat_valid -- Does it do the job ?
  * Created: 2002/12/15 (Perry Rapp)

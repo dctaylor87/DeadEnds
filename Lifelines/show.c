@@ -38,6 +38,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -345,7 +346,7 @@ init_display_indi (RECORD irec, INT width)
 	        if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
 #if defined(DEADENDS)
-			FORCHILDREN(fam, chld, nm, theDatabase)
+			FORCHILDREN(fam, chld, nm, currentDatabase)
 #else
 			FORCHILDREN(fam, chld, nm)
 #endif
@@ -571,7 +572,7 @@ init_display_fam (RECORD frec, INT width)
 	Solen = 0;
 	nch = 0;
 #if defined(DEADENDS)
-	FORCHILDREN(fam, chld, nm, theDatabase)
+	FORCHILDREN(fam, chld, nm, currentDatabase)
 #else
 	FORCHILDREN(fam, chld, nm)
 #endif

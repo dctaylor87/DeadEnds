@@ -36,11 +36,15 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
 #include "gnode.h"
+#include "rfmt.h"
+#include "xlat.h"
+#include "editing.h"
 #include "translat.h"
 #include "splitjoin.h"
 

@@ -34,6 +34,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -47,6 +48,9 @@
 #include "errors.h"
 #include "liflines.h"
 #include "choose.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"

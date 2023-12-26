@@ -39,10 +39,12 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
+#include "locales.h"
 #include "translat.h"
 #include "gnode.h"
 #include "rfmt.h"
@@ -57,6 +59,8 @@
 #include "screen.h"
 #include "readwrite.h"
 #include "options.h"
+#include "stringtable.h"
+#include "codesets.h"
 #else
 
 #include "llstdlib.h"

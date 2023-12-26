@@ -54,6 +54,11 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 				     &llines_database_type, &py_db))
     return NULL;
 
+  if (py_db)
+    database = py_db->lld_database;
+  else
+    database = currentDatabase;
+
   if (type && (type[0] != 0))
     {
       /* if type was specified and is not the empty string, we search
@@ -166,6 +171,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
 
   py_record->llr_record = record;
   py_record->llr_type = int_type;
+  py_record->llr_database = database;
   return ((PyObject *) py_record);
 }
 

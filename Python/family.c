@@ -387,6 +387,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   NODE node = nztop (fam->llr_record);
+  Database *database = fam->llr_database;
   INDISEQ seq=0;
   RECORD record;
   LLINES_PY_RECORD *indi;

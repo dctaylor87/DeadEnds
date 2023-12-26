@@ -43,6 +43,7 @@
 #include <inttypes.h>
 #endif
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -53,9 +54,9 @@
 #include "llpy-externs.h"
 
 #include "translat.h"
-#include "gnode.h"
 #include "recordindex.h"
 #include "rfmt.h"
+#include "editing.h"
 #include "sequence.h"
 #include "xlat.h"
 #include "uiprompts.h"

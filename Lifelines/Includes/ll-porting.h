@@ -1,28 +1,11 @@
 /* ll-porting.h -- the purpose of this file is to ease porting between
    LifeLines and DeadEnds */
 
-typedef const char *	CNSTRING;
 typedef void *		VPTR;
 
 #define STRING		String
 
-#define BOOLEAN		_Bool
-#define NODE		GNode *
-
-#define nchild(node)	((node)->child)
-#define nsibling(node)	((node)->sibling)
-#define nparent(node)	((node)->parent)
-#define nval(node)	((node)->value)
-#define ntag(node)	((node)->tag)
-#define nxref(node)	((node)->key)
-
-#define RECORD		RecordIndexEl *
-
-#define nztop(record)	((record)->root)
-#define nzkey(record)	((record)->root->key)
-#define nztype(record)	((record)->root->key[0])
-
-#define key_of_record(record)	nzkey(record) /* XXX revisit when REFNs are supported XXX */
+#define key_of_record(node)	nxref(node) /* XXX revisit when REFNs are supported XXX */
 
 //#define store_record(key, rec, len)			storeRecord(
 //#define choose_from_indiseq(seq, ask1, titl1, titln)	chooseFromSequence(seq, ask1, titl1, titln)
@@ -34,38 +17,16 @@ typedef void *		VPTR;
 #define create_node(xref, tag, val, prnt)	createGNode(xref, tag, val, prnt)
 #define string_to_node(str)			stringToNodeTree(str)
 #define node_to_string(node)			gnodesToString(node)
+#define free_node(node,msg)			freeGNode(node)
 #define free_nodes(node)			freeGNodes(node)
 
-#define DOSURCAP	true
-#define NOSURCAP	false
-#define REGORDER	true
-#define SURFIRST	false
-
-#define DOASK1		1
-#define NOASK1		0
-
 #define ARRSIZE(array)		ARRAYSIZE(array)
-
-#define release_record(record)		/* empty --= no current ref counts */
-
-#define key_to_irecord(key)	keyToPersonRecord(key, theDatabase)
-#define key_to_frecord(key)	keyToFamilyRecord(key, theDatabase)
-#define key_to_srecord(key)	keyToSourceRecord(key, theDatabase)
-#define key_to_erecord(key)	keyToEventRecord(key, theDatabase)
-#define key_to_orecord(key)	keyToOtherRecord(key, theDatabase)
-#define qkey_to_irecord(key)	keyToPersonRecord(key, theDatabase)
-#define qkey_to_frecord(key)	keyToFamilyRecord(key, theDatabase)
-#define qkey_to_srecord(key)	keyToSourceRecord(key, theDatabase)
-#define qkey_to_erecord(key)	keyToEventRecord(key, theDatabase)
-#define qkey_to_orecord(key)	keyToOtherRecord(key, theDatabase)
 
 #define key_to_record(key)	__llpy_key_to_record(key, NULL)
 #define qkey_to_record(key)	__llpy_key_to_record(key, NULL)
 
-#define key_to_fam(key)		keyToFamily(key, theDatabase)
-#define key_to_indi(key)	keyToPerson(key, theDatabase)
-
-#define getlloptstr(property, default)	(getenv(property) ? getenv(property) : default) /* XXX */
+#define key_to_fam(key)		keyToFamily(key, currentDatabase)
+#define key_to_indi(key)	keyToPerson(key, currentDatabase)
 
 #define INDISEQ		Sequence *
 #define ISize(seq)	((seq)->size)
@@ -75,28 +36,23 @@ typedef void *		VPTR;
 #define remove_indiseq(seq)	deleteSequence(seq, false)
 
 #define copy_indiseq(seq)	copySequence(seq)
-#define create_indiseq_null()	createSequence(theDatabase) /* XXX theDatabase XXX */
+#define create_indiseq_null()	createSequence(currentDatabase) /* XXX currentDatabase XXX */
 
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)
 
-#define fam_to_children(node)		familyToChildren(node, theDatabase)
-#define fam_to_fathers(node)		familyToFathers(node, theDatabase)
-#define fam_to_mothers(node)		familyToMothers(node, theDatabase)
-#define fam_to_husb(node)		familyToHusband(node, theDatabase)
-#define fam_to_first_chil(node)		familyToFirstChild(node, theDatabase)
+#define fam_to_children(node)		familyToChildren(node, database)
+#define fam_to_fathers(node)		familyToFathers(node, database)
+#define fam_to_mothers(node)		familyToMothers(node, database)
+#define fam_to_husb(node)		familyToHusband(node, currentDatabase)
+#define fam_to_first_chil(node)		familyToFirstChild(node, currentDatabase)
 #define fam_to_key(fam)			familyToKey(fam)
 
-#define indi_to_children(node)		personToChildren(node, theDatabase)
-#define indi_to_families(person, fams)	personToFamilies(person, fams, theDatabase)
-#define indi_to_fathers(node)		personToFathers(node, theDatabase)
-#define indi_to_mothers(node)		personToMothers(node, theDatabase)
-#define indi_to_spouses(node)		personToSpouses(node, theDatabase)
-
-#define indi_to_fath(node)		personToFather(node, theDatabase)
-#define indi_to_moth(node)		personToMother(node, theDatabase)
-#define indi_to_prev_sib(record)	personToPreviousSibling((record->root), theDatabase)
-#define indi_to_next_sib(record)	personToNextSibling((record->root), theDatabase)
+#define indi_to_children(node)		personToChildren(node, database)
+#define indi_to_families(person, fams)	personToFamilies(person, fams, database)
+#define indi_to_fathers(node)		personToFathers(node, database)
+#define indi_to_mothers(node)		personToMothers(node, database)
+#define indi_to_spouses(node)		personToSpouses(node, database)
 
 #define indi_to_name(node, len)		personToName(node,len)
 
@@ -120,49 +76,35 @@ typedef void *		VPTR;
 #define lock_cache(cel)		/* empty */
 #define unlock_cache(cel)	/* empty */
 
-#define FALSE		false	/* <stdbool.h> */
-#define TRUE		true	/* <stdbool.h> */
-
-#define INT		int	/* XXX */
 #define uchar		u_char
 #define INT32		int32_t
+#define INT16		int16_t
 
 #define TABLE		HashTable *
 #define create_table_obj			createHashTable(NULL, NULL, NULL)
 #define destroy_table(table)			deleteHashTable(table)
-#define insert_table_obj(table, element)	insertInHashTable(table, element)
+//#define insert_table_obj(table, element)	insertInHashTable(table, element)
+
+#define create_table_str()			createStringTable()
+#define insert_table_str(table, key, value)	insertInStringTable(table,key,value)
+#define valueof_str(table, key)			searchStringTable(table,key)
+
+#define insert_table_int(table, key, value)	insertInIntegerTable(table,key,value)
+#define valueof_int(table, key)			searchIntegerTable(table,key)
 #define valueof_obj(table, key)			searchHashTable(table, key)
 
 #define LIST		List *
 #define create_list()			createList(NULL, NULL, NULL)
 #define enqueue_list			enqueueList
 
-#define event_to_date(node,shorten)	eventToDate(node,shorten)
-#define givens(name)			getGivenNames(name)
-#define getasurname(name)		getSurname(name)
-#define getsxsurname(name)		getSurname(name)
-#define find_tag(node, tag)		findTag(node, tag)
-#define trad_soundex(name)		soundex(name)
+#define num_indis()			numberPersons(currentDatabase)
+#define num_fams()			numberFamilies(currentDatabase)
+#define num_sours()			numberSources(currentDatabase)
+#define num_evens()			numberEvents(currentDatabase)
+#define num_othrs()			numberOthers(currentDatabase)
 
-#define manip_name(name,caps,reg,len)	manipulateName(name,caps,reg,len)
-
-#define name_string(str)		nameString(str)
-#define trim_name(name,len)		trimName(name,len)
-
-#define num_indis()			numberPersons(theDatabase)
-#define num_fams()			numberFamilies(theDatabase)
-#define num_sours()			numberSources(theDatabase)
-#define num_evens()			numberEvents(theDatabase)
-#define num_othrs()			numberOthers(theDatabase)
-
-#define rmvat(key)		(key)
-
-#define node_to_record(node)	_llpy_node_to_record(node)
 #define node_to_key(node)	(rmvat(nxref(node)))
 #define normalize_rec(rec)	normalizeNodeTree(rec->root)
-
-/* we drop efmt -- era format */
-#define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) format_date(str,dfmt,mfmt,yfmt,sfmt,cmplx)
 
 #define HINT_PARAM_UNUSED		ATTRIBUTE_UNUSED
 #define HINT_PRINTF(fmt, args)		ATTRIBUTE_PRINTF(fmt, args)
@@ -175,3 +117,5 @@ typedef void *		VPTR;
 #else
 #define path_match(path1, path2)	(!strcmp(path1, path2))
 #endif
+
+#define strfree(ptr_to_str)	{ stdfree (*ptr_to_str); *ptr_to_str = 0; }

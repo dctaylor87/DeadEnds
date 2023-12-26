@@ -37,6 +37,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -55,6 +56,7 @@
 #include "messages.h"
 #include "choose.h"
 #include "readwrite.h"
+#include "equaliso.h"
 #else
 
 #include "llstdlib.h"

@@ -725,6 +725,7 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE node = nztop (indi->llr_record);
+  Database *database = indi->llr_database;
   INDISEQ seq=0;
   RECORD record;
 
@@ -762,6 +763,7 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE node = nztop (indi->llr_record);
+  Database *database = indi->llr_database;
   RECORD record;
   INDISEQ seq;
   LLINES_PY_RECORD *py_indi;
@@ -791,6 +793,7 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
 static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
+  Database *database = indi->llr_database;
   LLINES_PY_RECORD *fam;
   INDISEQ seq;
   RECORD record;

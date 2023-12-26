@@ -75,7 +75,7 @@ static PyObject *llpy_events (PyObject *self,
 
   /* database is either omitted, None, or valid */
   if (! py_db)
-    database = theDatabase;	/* need a better name for the default database */
+    database = currentDatabase;	/* need a better name for the default database */
   else
     database = py_db->lld_database;
 
@@ -108,7 +108,7 @@ static PyObject *llpy_individuals (PyObject *self,
 
   /* database is either omitted, None, or valid */
   if (! py_db)
-    database = theDatabase;	/* need a better name for the default database */
+    database = currentDatabase;	/* need a better name for the default database */
   else
     database = py_db->lld_database;
 
@@ -141,7 +141,7 @@ static PyObject *llpy_families (PyObject *self,
 
   /* database is either omitted, None, or valid */
   if (! py_db)
-    database = theDatabase;	/* need a better name for the default database */
+    database = currentDatabase;	/* need a better name for the default database */
   else
     database = py_db->lld_database;
 
@@ -174,7 +174,7 @@ static PyObject *llpy_sources (PyObject *self,
 
   /* database is either omitted, None, or valid */
   if (! py_db)
-    database = theDatabase;	/* need a better name for the default database */
+    database = currentDatabase;	/* need a better name for the default database */
   else
     database = py_db->lld_database;
 
@@ -207,7 +207,7 @@ static PyObject *llpy_others (PyObject *self,
 
   /* database is either omitted, None, or valid */
   if (! py_db)
-    database = theDatabase;	/* need a better name for the default database */
+    database = currentDatabase;	/* need a better name for the default database */
   else
     database = py_db->lld_database;
 

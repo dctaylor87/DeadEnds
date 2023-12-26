@@ -46,8 +46,8 @@ typedef const char *	CNSTRING;
 
 #define INT		int	/* XXX */
 
-#define indi_to_fath(node)		personToFather(node, theDatabase)
-#define indi_to_moth(node)		personToMother(node, theDatabase)
+#define indi_to_fath(node)		personToFather(node, currentDatabase)
+#define indi_to_moth(node)		personToMother(node, currentDatabase)
 #define indi_to_next_sib_old(node)	personToNextSibling(node, database)
 #define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
 #define indi_to_famc(node)		personToFamilyAsChild(node, database)
@@ -70,16 +70,16 @@ typedef const char *	CNSTRING;
 #define name_string(str)		nameString(str)
 #define trim_name(name,len)		trimName(name,len)
 
-#define key_to_irecord(key)	keyToPersonRecord(key, theDatabase)
-#define key_to_frecord(key)	keyToFamilyRecord(key, theDatabase)
-#define key_to_srecord(key)	keyToSourceRecord(key, theDatabase)
-#define key_to_erecord(key)	keyToEventRecord(key, theDatabase)
-#define key_to_orecord(key)	keyToOtherRecord(key, theDatabase)
-#define qkey_to_irecord(key)	keyToPersonRecord(key, theDatabase)
-#define qkey_to_frecord(key)	keyToFamilyRecord(key, theDatabase)
-#define qkey_to_srecord(key)	keyToSourceRecord(key, theDatabase)
-#define qkey_to_erecord(key)	keyToEventRecord(key, theDatabase)
-#define qkey_to_orecord(key)	keyToOtherRecord(key, theDatabase)
+#define key_to_irecord(key)	keyToPersonRecord(key, database)
+#define key_to_frecord(key)	keyToFamilyRecord(key, database)
+#define key_to_srecord(key)	keyToSourceRecord(key, database)
+#define key_to_erecord(key)	keyToEventRecord(key, database)
+#define key_to_orecord(key)	keyToOtherRecord(key, database)
+#define qkey_to_irecord(key)	keyToPersonRecord(key, database)
+#define qkey_to_frecord(key)	keyToFamilyRecord(key, database)
+#define qkey_to_srecord(key)	keyToSourceRecord(key, database)
+#define qkey_to_erecord(key)	keyToEventRecord(key, database)
+#define qkey_to_orecord(key)	keyToOtherRecord(key, database)
 
 #define rmvat(key)		(key)
 

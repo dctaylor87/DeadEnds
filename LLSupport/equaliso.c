@@ -34,6 +34,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -43,6 +44,7 @@
 #include "rfmt.h"
 #include "xlat.h"
 #include "editing.h"
+#include "equaliso.h"
 #else
 #include "llstdlib.h"
 #include "table.h"

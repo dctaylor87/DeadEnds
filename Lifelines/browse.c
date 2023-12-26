@@ -39,6 +39,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -297,7 +298,7 @@ goto_indi_child (RECORD irec, int childno)
 	if (!irec) return NULL;
 	FORFAMS(indi, fam, num1)
 #if defined(DEADENDS)
-		FORCHILDREN(fam, chil, num2, theDatabase)
+		FORCHILDREN(fam, chil, num2, currentDatabase)
 #else
 		FORCHILDREN(fam, chil, num2)
 #endif
@@ -325,7 +326,7 @@ goto_fam_child (RECORD frec, int childno)
 	NODE fam = nztop(frec);
 	if (!frec) return NULL;
 #if defined(DEADENDS)
-	FORCHILDREN(fam, chil, num, theDatabase)
+	FORCHILDREN(fam, chil, num, currentDatabase)
 #else
 	FORCHILDREN(fam, chil, num)
 #endif

@@ -16,7 +16,9 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <errno.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -483,10 +485,10 @@ transl_get_predefined_menukey (INT trnum)
 ZSTR
 transl_get_description (XLAT xlat)
 {
-	ZSTR zstr = xlat_get_description(xlat);
-	INT index = xl_get_uparam(xlat)-1;
-	struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
-	if (legtt && legtt->tt) {
+  String str = xlat_get_description(xlat);
+  INT index = xl_get_uparam(xlat)-1;
+  struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
+  if (legtt && legtt->tt) {
 		ZSTR zdesc = get_trantable_desc(legtt->tt);
 		/* TRANSLATORS: db internal translation table note for tt menu */
 		zs_appf(zstr, _(" (dbint tt: %s)"), zs_str(zdesc));

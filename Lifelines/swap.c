@@ -37,13 +37,16 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "options.h"
 
 #include "translat.h"
+#include "gnode.h"
 #include "rfmt.h"
+#include "editing.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "choose.h"
@@ -53,6 +56,9 @@
 #include "messages.h"
 #include "splitjoin.h"
 #include "remove.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"

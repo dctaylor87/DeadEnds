@@ -32,6 +32,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -76,9 +77,11 @@
  * local function prototypes
  *********************************************/
 
+#if !defined(DEADENDS)
 /* alphabetical */
 static BOOLEAN is_unadorned_directory(STRING path);
 static void show_open_error(INT dberr);
+#endif
 
 /*********************************************
  * local & exported function definitions
@@ -151,6 +154,8 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 	stdfree(dbused);
 	return TRUE;
 }
+
+#if !defined(DEADENDS)
 /*==================================================
  * open_or_create_database -- open database, prompt for
  *  creating new one if it doesn't exist
@@ -245,3 +250,4 @@ is_unadorned_directory (STRING path)
 	}
 	return TRUE;
 }
+#endif	/* !DEADENDS */

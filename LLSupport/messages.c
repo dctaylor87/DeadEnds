@@ -31,8 +31,26 @@
  *   3.0.2 - 06 Dec 94
  *===========================================================*/
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
+#if defined(DEADENDS)
+#include <ansidecl.h>
+
+#include "porting.h"
+#include "ll-porting.h"
+#include "standard.h"
+#include "llnls.h"
+
+#include "messages.h"
+
+#else
+
 #include "llstdlib.h"
 #include "messages.h"
+
+#endif
 
 /* strings used to clear the screen */
 STRING empstr = SS "                                                ";

@@ -39,6 +39,7 @@
 #include <locale.h>
 #endif
 
+#include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
@@ -49,6 +50,7 @@
 #include "rfmt.h"
 #include "sequence.h"
 #include "hashtable.h"
+#include "stringtable.h"
 #include "xlat.h"
 #include "uiprompts.h"
 #include "choose.h"
@@ -69,6 +71,8 @@
 #include "readindex.h"
 #include "llpy-externs.h"
 
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
