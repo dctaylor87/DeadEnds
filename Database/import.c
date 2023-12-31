@@ -1,17 +1,18 @@
 //
 //  DeadEnds
 //
-//  import.c -- Read Gedcom files and build a database from them.
+//  import.c -- Read Gedcom files and build Databases from them.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 12 December 2023.
+//  Last changed on 27 December 2023.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include <unistd.h> // access
-#include <errno.h> // ENOENT
+//#include <errno.h> // ENOENT
 #include <sys/param.h> // PATH_MAX
+#include <sys/errno.h> // errno
 #include <stdlib.h> // realpath
 
 #include "standard.h"
@@ -27,10 +28,11 @@
 #include "readnode.h"
 #include "path.h"
 
-static String updateKeyMap(GNode *root, StringTable* keyMap);
-static void rekeyIndex(RecordIndex*, StringTable *keyMap);
-static void setupDatabase(List *recordIndexes);
-static void addIndexToDatabase(RecordIndex *index, Database *database);
+// REMOVED
+//static String updateKeyMap(GNode *root, StringTable* keyMap);
+//static void rekeyIndex(RecordIndex*, StringTable *keyMap);
+//static void setupDatabase(List *recordIndexes);
+//static void addIndexToDatabase(RecordIndex *index, Database *database);
 
 // Error messages defined elsewhere.
 extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, dbrdon;
@@ -88,21 +90,21 @@ Database *importFromFile(CString filePath, ErrorLog *errorLog)
 Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 {
 	String lastSegment = lastPathSegment(filePath); // MNOTE: strsave not needed.
-	// Get the lines of the Gedcom file as a node list of nodes and errors.
-	NodeList *listOfNodes = getNodeListFromFile(file);
+	// Get the lines of the Gedcom file as a NodeList of GNodes and Errors.
+	int numErrors = 0;
+	NodeList *listOfNodes = getNodeListFromFile(file, &numErrors);
 	if (!listOfNodes) return null;
 
-	// Convert the list of nodes and errors into a node list of node trees.
+	// Convert the NodeList of GNodes and Errors into a NodeList of GNode trees.
 	NodeList *listOfTrees = getNodeTreesFromNodeList(listOfNodes, errorLog);
 
-	// During the testing phase, bail out if there are any errors.
-	int numErrors = numberErrorsInNodeList(listOfTrees);
-	if (numErrors > 0) {
+	// During the testing phase, bail out if there are Errors.
+	if (numErrors) {
 		printf("There are %d errors in the listOfTrees. Bailing out for the time being.\n", numErrors);
-		exit(1);  // Bail at this point in the testing.
+		exit(1);
 	}
 
-	// Create the database and add the node trees to the database.
+	// If we get to here create the Database and add the GNode trees to it.
 	Database *database = createDatabase(filePath);
 	FORLIST(listOfTrees, element)
 		NodeListElement *e = (NodeListElement*) element;
