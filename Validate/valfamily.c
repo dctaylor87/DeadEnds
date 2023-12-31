@@ -4,7 +4,7 @@
 //  valfamily.c -- Functions that validate family records.
 //
 //  Created by Thomas Wetmore on 18 December 2023.
-//  Last changed on 19 December 2023.
+//  Last changed on 29 December 2023.
 //
 
 #include "validate.h"
@@ -15,10 +15,8 @@
 #include "errors.h"
 
 static bool validateFamily(GNode *family, Database*, ErrorLog*);
-static int familyLineNumber (GNode *family, Database*);
 
-
-static bool debugging = true;
+static bool debugging = false;
 
 //  validateFamilyIndex -- Validate all family records in a database.
 //-------------------------------------------------------------------------------------------------
@@ -27,18 +25,20 @@ bool validateFamilyIndex(Database *database, ErrorLog *errorLog)
 	bool valid = true;
 	FORHASHTABLE(database->familyIndex, element)
 		GNode* family = ((RecordIndexEl*) element)->root;
-			int errors = lengthList(errorLog);
+		int numErrors = lengthList(errorLog);  // Debugging.
 		if (debugging) printf("Start validating %s\n", family->key);
 		if (!validateFamily(family, database, errorLog)) valid = false;
-		if (debugging && lengthList(errorLog) > errors)
-			printf("There were %d errors validating %s\n", lengthList(errorLog) - errors, family->key);
+		if (debugging && lengthList(errorLog) > numErrors) {
+			printf("There were %d errors validating %s\n", lengthList(errorLog) - numErrors, family->key);
+			numErrors = lengthList(errorLog);
+		}
 		if (debugging) printf("Done validating %s\n", family->key);
 	ENDHASHTABLE
 	return valid;
 }
 
-//  validateFamily -- Validate a family node tree record. Check all HUSB, WIFE and CHIL links
-//    to persons.
+//  validateFamily -- Validate a family node tree record. Check that all HUSB, WIFE and CHIL
+//    links refer to existing persons. If so, check that all return links also exist.
 //--------------------------------------------------------------------------------------------------
 static bool validateFamily(GNode *family, Database *database, ErrorLog* errorLog)
 {
@@ -51,8 +51,11 @@ static bool validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 		if (!husband) {
 			int lineNumber = familyLineNumber(family, database);
 			sprintf(s, "FAM %s (line %d): HUSB %s (line %d) does not exist.",
-				family->key, lineNumber, key, lineNumber + countNodesBefore(__node));
-			addErrorToLog(errorLog, createError(linkageError, segment, lineNumber, s));
+					family->key,
+					lineNumber,
+					key,
+					lineNumber + countNodesBefore(__node));
+			addErrorToLog(errorLog, createError(linkageError, segment, 0, s));
 			errorCount++;
 		}
 	ENDHUSBS
@@ -61,8 +64,11 @@ static bool validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 		if (!wife) {
 			int lineNumber = familyLineNumber(family, database);
 			sprintf(s, "FAM %s (line %d): WIFE %s (line %d) does not exist.",
-				family->key, lineNumber, key, lineNumber + countNodesBefore(__node));
-			addErrorToLog(errorLog, createError(linkageError, segment, lineNumber, s));
+					family->key,
+					lineNumber,
+					key,
+					lineNumber + countNodesBefore(__node));
+			addErrorToLog(errorLog, createError(linkageError, segment, 0, s));
 			errorCount++;
 		}
 	ENDWIFES
@@ -71,25 +77,34 @@ static bool validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 	if (!child) {
 			int lineNumber = familyLineNumber(family, database);
 			sprintf(s, "FAM %s (line %d): CHIL %s (line %d) does not exist.",
-				family->key, lineNumber, key, lineNumber + countNodesBefore(__node));
+					family->key,
+					lineNumber,
+					key,
+					lineNumber + countNodesBefore(__node));
 			addErrorToLog(errorLog, createError(linkageError, segment, lineNumber, s));
 			errorCount++;
 		}
 	ENDCHILDREN
 
-	FORHUSBS(family, husband, key, database)
+	// If there were errors above then the following code should not run.
+	if (errorCount) return false;
+
+	FORHUSBS(family, husband, hkey, database)
 		// The husband must have one FAMS link back to this family.
 		int numOccurences = 0;
-		FORFAMSS(husband, fam, key, database)
+		FORFAMSS(husband, fam, fkey, database)
 			if (family == fam) numOccurences++;
 		ENDFAMSS
-		ASSERT(numOccurences == 1);
+		if (numOccurences != 1) {
+			addErrorToLog(errorLog, createError(linkageError, segment, 111, "GET ERROR MESSAGE"));
+			errorCount++;
+		}
 	ENDHUSBS
 
 	//  For each WIFE line in the family (multiples in non-traditional cases)...
-	FORWIFES(family, wife, wifeKey, database) {
+	FORWIFES(family, wife, wkey, database) {
 		int numOccurences = 0;
-		FORFAMSS(wife, fam, famKey, database)
+		FORFAMSS(wife, fam, fkey, database)
 			if (family == fam) numOccurences++;
 		ENDFAMSS
 		ASSERT(numOccurences == 1);
@@ -123,7 +138,7 @@ static bool validateFamily(GNode *family, Database *database, ErrorLog* errorLog
 //    takes the line number from there. Obviously won't work correctly for records that
 //    arrived from another source.
 //--------------------------------------------------------------------------------------------------
-static int familyLineNumber (GNode *family, Database* database)
+int familyLineNumber (GNode *family, Database* database)
 {
 	RecordIndexEl *element = searchHashTable(database->familyIndex, family->key);
 	if (!element) return 0;  // Should not happen.
