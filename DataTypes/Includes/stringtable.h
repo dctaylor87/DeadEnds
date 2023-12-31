@@ -25,9 +25,9 @@ typedef struct StringElement {
 //  User interface to string tables.
 //--------------------------------------------------------------------------------------------------
 HashTable *createStringTable(void);
-String searchStringTable(StringTable*, String key);
-extern bool isInStringTable(StringTable *table, String key);
-void insertInStringTable(StringTable*, String key, String value);
+String searchStringTable(StringTable*, CString key);
+extern bool isInStringTable(StringTable *table, CString key);
+void insertInStringTable(StringTable*, CString key, String value);
 String fixString(StringTable *table, String string);
 void showStringTable(StringTable*);  //  For debugging.
 

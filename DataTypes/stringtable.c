@@ -48,7 +48,7 @@ HashTable *createStringTable(void)
 //  searchStringTable -- Search a string table for the element with the given key. If found return
 //    the element's value; otherwise return null.
 //--------------------------------------------------------------------------------------------------
-String searchStringTable(StringTable *table, String key)
+String searchStringTable(StringTable *table, CString key)
 {
     StringElement *element = (StringElement*) searchHashTable(table, key);
     return element ? element->value : null;
@@ -56,7 +56,7 @@ String searchStringTable(StringTable *table, String key)
 
 //  isInStringTable -- See if a string is in a string table.
 //--------------------------------------------------------------------------------------------------
-bool isInStringTable(StringTable *table, String key)
+bool isInStringTable(StringTable *table, CString key)
 {
     return searchHashTable(table, key) != null;
 }
@@ -64,7 +64,7 @@ bool isInStringTable(StringTable *table, String key)
 //  insertInStringTable -- Insert a (key, value) pair into a hash table. If the values are null,
 //    the string table behaves like a set of strings.
 //--------------------------------------------------------------------------------------------------
-void insertInStringTable(HashTable *table, String key, String value)
+void insertInStringTable(HashTable *table, CString key, String value)
 {
     //  See if the key is in the table; remove the old element if it is.
     StringElement *element = (StringElement*) searchHashTable(table, key);

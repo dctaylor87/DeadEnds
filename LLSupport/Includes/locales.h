@@ -1,3 +1,5 @@
+typedef void (*CALLBACK_FNC)(VPTR);
+
 extern STRING get_original_locale_collate (void);
 extern STRING get_current_locale_collate (void);
 extern STRING get_original_locale_msgs (void);
@@ -16,3 +18,8 @@ extern void locales_notify_language_change (void);
 
 extern void save_original_locales (void);
 extern char *llsetlocale (int category, char * locale);
+
+extern void register_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm);
+extern void unregister_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm);
+extern void register_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm);
+extern void unregister_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm);

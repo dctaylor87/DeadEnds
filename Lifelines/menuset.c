@@ -31,6 +31,7 @@
 #include "menuitem.h"
 #include "messages.h"
 #include "codesets.h"
+#include "pvalue.h"
 #else
 
 #include "llstdlib.h"
@@ -47,7 +48,11 @@
 struct tag_cmditem {
 	uchar c;
 	BOOLEAN direct; /* (T: command value, F: pointer) */
+#if defined(DEADENDS)
+	VUnion value; /* command value, or pointer to CommandArray */
+#else
 	UNION value; /* command value, or pointer to CommandArray */
+#endif
 };
 typedef struct tag_cmditem * CMDITEM;
 
@@ -279,7 +284,11 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 				crashlog(_("Clash with shorter hotkey in item: %s")
 					, display);
 			} else {
+#if defined(DEADENDS)
+				CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.uWord;
+#else
 				CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.w;
+#endif
 				insert_cmd(subarr, &str[1], cmdnum, display);
 			}
 		}
@@ -293,12 +302,20 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 		cmds->array[pos].c = c;
 		if (len==1) {
 			cmds->array[pos].direct = TRUE;
+#if defined(DEADENDS)
+			cmds->array[pos].value.uInt = cmdnum;
+#else
 			cmds->array[pos].value.i = cmdnum;
+#endif
 		} else {
 			/* multicharacter new cmd */
 			CMDARRAY newcmds = create_cmd_array(8);
 			cmds->array[pos].direct = FALSE;
+#if defined(DEADENDS)
+			cmds->array[pos].value.uWord = newcmds;
+#else
 			cmds->array[pos].value.w = newcmds;
+#endif
 			insert_cmd(newcmds, &str[1], cmdnum, display);
 		}
 		cmds->used++;
@@ -314,7 +331,11 @@ free_cmds (CMDARRAY cmds)
 	INT i;
 	for (i=0; i<cmds->used; i++) {
 		if (!cmds->array[i].direct) {
+#if defined(DEADENDS)
+			CMDARRAY subarr = (CMDARRAY)cmds->array[i].value.uWord;
+#else
 			CMDARRAY subarr = (CMDARRAY)cmds->array[i].value.w;
+#endif
 			free_cmds(subarr);
 		}
 	}
@@ -344,10 +365,18 @@ menuitem_find_cmd (CMDARRAY cmds, STRING str)
 	if (!find_cmd(cmds, *str, &pos))
 		return CMD_NONE;
 	if (cmds->array[pos].direct) {
+#if defined(DEADENDS)
+		INT cmd = cmds->array[pos].value.uInt;
+#else
 		INT cmd = cmds->array[pos].value.i;
+#endif
 		return cmd;
 	} else {
+#if defined(DEADENDS)
+		CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.uWord;
+#else
 		CMDARRAY subarr = (CMDARRAY)cmds->array[pos].value.w;
+#endif
 		if (!str[1])
 			return CMD_PARTIAL;
 		return menuitem_find_cmd(subarr, &str[1]);

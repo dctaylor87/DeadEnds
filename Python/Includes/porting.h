@@ -6,6 +6,7 @@
 typedef const char *	CNSTRING;
 
 #define BOOLEAN		_Bool
+#define SURCAPTYPE	_Bool
 #define NODE		GNode *
 
 /* nxref, nflag, ncel are not used by Python code.  The fate of
@@ -46,8 +47,8 @@ typedef const char *	CNSTRING;
 
 #define INT		int	/* XXX */
 
-#define indi_to_fath(node)		personToFather(node, currentDatabase)
-#define indi_to_moth(node)		personToMother(node, currentDatabase)
+#define indi_to_fath(node)		personToFather(node, database)
+#define indi_to_moth(node)		personToMother(node, database)
 #define indi_to_next_sib_old(node)	personToNextSibling(node, database)
 #define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
 #define indi_to_famc(node)		personToFamilyAsChild(node, database)

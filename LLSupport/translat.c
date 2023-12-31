@@ -27,6 +27,7 @@
 #include "translat.h"
 #include "xlat.h"
 #include "codesets.h"
+#include "list.h"
 #else
 
 #include <errno.h>
@@ -489,9 +490,9 @@ transl_get_description (XLAT xlat)
   INT index = xl_get_uparam(xlat)-1;
   struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
   if (legtt && legtt->tt) {
-		ZSTR zdesc = get_trantable_desc(legtt->tt);
+		String desc = get_trantable_desc(legtt->tt);
 		/* TRANSLATORS: db internal translation table note for tt menu */
-		zs_appf(zstr, _(" (dbint tt: %s)"), zs_str(zdesc));
+		zs_appf(zstr, _(" (dbint tt: %s)"), desc);
 		zs_free(&zdesc);
 	}
 

@@ -66,6 +66,9 @@
 #include "options.h"
 
 #include "llpy-externs.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
@@ -288,6 +291,29 @@ main_browse (RECORD rec1, INT code)
  * goto_indi_child - jump to child by number
  * returns addref'd record
  *==============================================*/
+#if defined(DEADENDS)
+static RECORD
+goto_indi_child (RECORD irec, int childno)
+{
+  INT num1, num2, i = 0;
+  RECORD answer = 0;
+  CString akey=0; /* answer key */
+  NODE indi = nztop(irec);
+  if (!irec)
+    return NULL;
+  FORFAMS(indi, fam, num1)
+    FORCHILDREN(fam, chil, key, num2, database)
+      if (num2 == childno) 
+        akey = key;
+    ENDCHILDREN
+  ENDFAMS
+  if (akey) {
+    answer = key_to_irecord(akey);
+    addref_record(answer);
+  }
+  return answer;
+}
+#else
 static RECORD
 goto_indi_child (RECORD irec, int childno)
 {
@@ -297,11 +323,7 @@ goto_indi_child (RECORD irec, int childno)
 	NODE indi = nztop(irec);
 	if (!irec) return NULL;
 	FORFAMS(indi, fam, num1)
-#if defined(DEADENDS)
-		FORCHILDREN(fam, chil, num2, currentDatabase)
-#else
 		FORCHILDREN(fam, chil, num2)
-#endif
 			i++;
 			if (i == childno) 
 				akeynum = nzkeynum(chil);
@@ -313,6 +335,7 @@ goto_indi_child (RECORD irec, int childno)
 	}
 	return answer;
 }
+#endif
 /*================================================
  * goto_fam_child - jump to child by number
  * returns addref'd record
@@ -320,25 +343,37 @@ goto_indi_child (RECORD irec, int childno)
 static RECORD
 goto_fam_child (RECORD frec, int childno)
 {
-	INT num, i = 0;
-	RECORD answer = 0;
-	INT akeynum=0;
-	NODE fam = nztop(frec);
-	if (!frec) return NULL;
+  INT num, i = 0;
+  RECORD answer = 0;
 #if defined(DEADENDS)
-	FORCHILDREN(fam, chil, num, currentDatabase)
+  CString akey=0;
 #else
-	FORCHILDREN(fam, chil, num)
+  INT akeynum=0;
 #endif
-		i++;
-		if (i == childno) 
-			akeynum = nzkeynum(chil);
-	ENDCHILDREN
-	if (akeynum) {
-		answer = keynum_to_irecord(akeynum);
-		addref_record(answer);
-	}
-	return answer;
+  NODE fam = nztop(frec);
+  if (!frec)
+    return NULL;
+#if defined(DEADENDS)
+  FORCHILDREN(fam, chil, key, num, database)
+    if (num == childno) 
+      akey = key;
+  ENDCHILDREN
+  if (akey) {
+    answer = key_to_irecord(akey);
+    addref_record(answer);
+  }
+#else
+  FORCHILDREN(fam, chil, num)
+    i++;
+  if (i == childno) 
+    akeynum = nzkeynum(chil);
+  ENDCHILDREN
+  if (akeynum) {
+    answer = keynum_to_irecord(akeynum);
+    addref_record(answer);
+  }
+#endif
+  return answer;
 }
 /*===============================================
  * pick_create_new_family -- 

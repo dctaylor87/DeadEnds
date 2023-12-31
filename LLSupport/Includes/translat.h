@@ -60,7 +60,9 @@ CNSTRING transl_get_map_name(INT trnum);
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN init_map_from_rec(CNSTRING key, INT trnum, TRANTABLE*);
 BOOLEAN custom_sort(const char *str1, const char *str2, INT * rtn);
-#if !defined(DEADENDS)
+#if defined(DEADENDS)
+String get_trantable_desc(TRANTABLE tt);
+#else
 ZSTR get_trantable_desc(TRANTABLE tt);
 #endif
 void remove_trantable(TRANTABLE);

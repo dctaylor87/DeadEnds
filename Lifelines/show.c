@@ -58,6 +58,9 @@
 #include "lineage.h"
 #include "codesets.h"
 #include "options.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
@@ -346,7 +349,7 @@ init_display_indi (RECORD irec, INT width)
 	        if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
 #if defined(DEADENDS)
-			FORCHILDREN(fam, chld, nm, currentDatabase)
+			FORCHILDREN(fam, chld, key, nm, database)
 #else
 			FORCHILDREN(fam, chld, nm)
 #endif
@@ -466,7 +469,11 @@ static void
 init_display_fam (RECORD frec, INT width)
 {
 	NODE fam=nztop(frec);
+#if defined(DEADENDS)
+	GNode *husb=0, *wife=0;
+#else
 	NODE husb=0, wife=0;
+#endif
 	STRING s=0;
 	ZSTR famkey = zs_news(key_of_record(fam));
 	INT nch, nm, wtemp;
@@ -572,12 +579,14 @@ init_display_fam (RECORD frec, INT width)
 	Solen = 0;
 	nch = 0;
 #if defined(DEADENDS)
-	FORCHILDREN(fam, chld, nm, currentDatabase)
+	FORCHILDREN(fam, chld, key, nm, database)
+	  add_child_line(++nch, chld, width);
+	ENDCHILDREN
 #else
 	FORCHILDREN(fam, chld, nm)
-#endif
 		add_child_line(++nch, chld, width);
 	ENDCHILDREN
+#endif
 	release_record(ihusb);
 	release_record(iwife);
 }

@@ -179,7 +179,9 @@ advedit_expand_traverse (NODE node, VPTR param)
 	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));
 #endif /* DEBUG */
 		if (eqstr(key, rmvat(nval((NODE) el)))) {
+#if !defined(DEADENDS)
 			STOPLIST
+#endif
 			stdfree(key);
 			return TRUE;
 		}

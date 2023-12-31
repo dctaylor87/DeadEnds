@@ -43,9 +43,9 @@
 
 #include "gnode.h"
 #include "rfmt.h"
+#include "translat.h"
 #include "xlat.h"
 #include "editing.h"
-#include "translat.h"
 #include "splitjoin.h"
 
 #else

@@ -70,6 +70,9 @@
 #include "readwrite.h"
 #include "lineage.h"
 
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
+
 #else
 
 #include "llstdlib.h"

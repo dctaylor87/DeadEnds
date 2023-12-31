@@ -47,6 +47,9 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "sys_inc.h"
@@ -374,7 +377,9 @@ ns_callback (CNSTRING key, CNSTRING name, HINT_PARAM_UNUSED BOOLEAN newset, void
 			piece = (STRING)el;
 			if (scanner_does_pattern_match(scanner, piece)) {
 				scanner_add_result(scanner, key);
+#if !defined(DEADENDS)
 				STOPLIST
+#endif
 				break;
 			}
 		ENDLIST

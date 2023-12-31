@@ -42,6 +42,8 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "gnode.h"
+#include "readwrite.h"
 
 #include "messages.h"
 

@@ -31,6 +31,8 @@
 #include "translat.h"
 #include "xlat.h" 
 #include "list.h"
+#include "gnode.h"
+#include "readwrite.h"
 
 #else
 
@@ -261,7 +263,9 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 				&& eqstr_ex(xlattemp->dest, zs_str(zdest_u))
 				) {
 				xlat = xlattemp;
+#if !defined(DEADENDS)
 				STOPLIST
+#endif
 				goto end_get_xlat;
 			}
 		ENDLIST

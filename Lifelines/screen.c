@@ -51,6 +51,7 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "stringtable.h"
+#include "translat.h"
 #include "xlat.h"
 #include "uiprompts.h"
 #include "choose.h"
@@ -68,7 +69,9 @@
 #include "list.h"
 #include "locales.h"
 #include "database.h"
-#include "readindex.h"
+//#include "readindex.h"
+#include "charprops.h"
+#include "llgettext.h"
 #include "llpy-externs.h"
 
 /* everything in this file assumes we are dealing with the current database */

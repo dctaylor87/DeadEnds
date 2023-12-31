@@ -770,6 +770,32 @@ custom_sort (const char *str1, const char *str2, INT * rtn)
  * get_trantable_desc -- Get description of trantable
  * Created: 2002/11/26 (Perry Rapp)
  *=================================================*/
+#if defined(DEADENDS)
+String
+get_trantable_desc (TRANTABLE tt)
+{
+  int len = strlen (tt->name);
+
+  if (len < 15)			/* "(Unnamed table)" */
+    len = 15;
+  len += 2 + 20 + 1 + 1;	/* " ] + %d + "]" + \0 */
+
+  char buffer[len];
+  char *end;
+
+  if (tt->name[0])
+    end = stpcpy (buffer, tt->name);
+  else
+    end = stpcpy (buffer, "(Unnamed table)");
+  snprintf (end, " [" FMT_INT "]", tt->total);
+  
+  char *retbuf = (char *)malloc (strlen(buffer) + 1);
+  if (! retbuf)
+    return NULL;
+
+  return strcpy (retbuf, buffer);
+}
+#else
 ZSTR
 get_trantable_desc (TRANTABLE tt)
 {
@@ -784,6 +810,8 @@ get_trantable_desc (TRANTABLE tt)
 	zs_apps(zstr, buffer);
 	return zstr;
 }
+#endif
+
 /*===================================================
  * tt_get_name -- Return name of translation table
  *  or "unnamed"

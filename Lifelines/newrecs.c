@@ -55,9 +55,12 @@
 #include "messages.h"
 #include "editing.h"
 #include "nodeutils.h"
-#include "readindex.h"
+//#include "readindex.h"
 #include "database.h"
 #include "llpy-externs.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"

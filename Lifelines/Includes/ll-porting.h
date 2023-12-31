@@ -22,11 +22,11 @@ typedef void *		VPTR;
 
 #define ARRSIZE(array)		ARRAYSIZE(array)
 
-#define key_to_record(key)	__llpy_key_to_record(key, NULL)
-#define qkey_to_record(key)	__llpy_key_to_record(key, NULL)
+#define key_to_record(key)	__llpy_key_to_record(key, NULL, database)
+#define qkey_to_record(key)	__llpy_key_to_record(key, NULL, database)
 
-#define key_to_fam(key)		keyToFamily(key, currentDatabase)
-#define key_to_indi(key)	keyToPerson(key, currentDatabase)
+#define key_to_fam(key)		keyToFamily(key, database)
+#define key_to_indi(key)	keyToPerson(key, database)
 
 #define INDISEQ		Sequence *
 #define ISize(seq)	((seq)->size)
@@ -36,7 +36,7 @@ typedef void *		VPTR;
 #define remove_indiseq(seq)	deleteSequence(seq, false)
 
 #define copy_indiseq(seq)	copySequence(seq)
-#define create_indiseq_null()	createSequence(currentDatabase) /* XXX currentDatabase XXX */
+#define create_indiseq_null()	createSequence(database)
 
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)
@@ -44,8 +44,8 @@ typedef void *		VPTR;
 #define fam_to_children(node)		familyToChildren(node, database)
 #define fam_to_fathers(node)		familyToFathers(node, database)
 #define fam_to_mothers(node)		familyToMothers(node, database)
-#define fam_to_husb(node)		familyToHusband(node, currentDatabase)
-#define fam_to_first_chil(node)		familyToFirstChild(node, currentDatabase)
+#define fam_to_husb(node)		familyToHusband(node, database)
+#define fam_to_first_chil(node)		familyToFirstChild(node, database)
 #define fam_to_key(fam)			familyToKey(fam)
 
 #define indi_to_children(node)		personToChildren(node, database)
@@ -97,11 +97,11 @@ typedef void *		VPTR;
 #define create_list()			createList(NULL, NULL, NULL)
 #define enqueue_list			enqueueList
 
-#define num_indis()			numberPersons(currentDatabase)
-#define num_fams()			numberFamilies(currentDatabase)
-#define num_sours()			numberSources(currentDatabase)
-#define num_evens()			numberEvents(currentDatabase)
-#define num_othrs()			numberOthers(currentDatabase)
+#define num_indis()			numberPersons(database)
+#define num_fams()			numberFamilies(database)
+#define num_sours()			numberSources(database)
+#define num_evens()			numberEvents(database)
+#define num_othrs()			numberOthers(database)
 
 #define node_to_key(node)	(rmvat(nxref(node)))
 #define normalize_rec(rec)	normalizeNodeTree(rec->root)

@@ -53,6 +53,9 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
