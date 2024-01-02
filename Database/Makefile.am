@@ -12,7 +12,9 @@ libdatabase_a_SOURCES = \
 	database.c \
 	nameindex.c \
 	recordindex.c \
-	import.c
+	import.c \
+	addoperations.c \
+	refnindex.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
