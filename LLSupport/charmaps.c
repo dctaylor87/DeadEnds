@@ -787,7 +787,8 @@ get_trantable_desc (TRANTABLE tt)
     end = stpcpy (buffer, tt->name);
   else
     end = stpcpy (buffer, "(Unnamed table)");
-  snprintf (end, " [" FMT_INT "]", tt->total);
+
+  snprintf (end, len - (end - buffer), " [" FMT_INT "]", tt->total);
   
   char *retbuf = (char *)malloc (strlen(buffer) + 1);
   if (! retbuf)

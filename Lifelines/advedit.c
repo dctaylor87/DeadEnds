@@ -52,6 +52,9 @@
 #include "feedback.h"
 #include "liflines.h"
 #include "pvalue.h"
+
+/* everything in this file assumes we are dealing with the current database */
+#define database	currentDatabase
 #else
 
 #include "llstdlib.h"

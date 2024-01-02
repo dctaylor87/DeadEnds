@@ -25,6 +25,8 @@ typedef void *		VPTR;
 #define key_to_record(key)	__llpy_key_to_record(key, NULL, database)
 #define qkey_to_record(key)	__llpy_key_to_record(key, NULL, database)
 
+#define key_to_possible_record(key, letter)	__llpy_key_to_record(key, NULL, database)
+
 #define key_to_fam(key)		keyToFamily(key, database)
 #define key_to_indi(key)	keyToPerson(key, database)
 
