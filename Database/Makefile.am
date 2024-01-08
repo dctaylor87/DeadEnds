@@ -14,6 +14,7 @@ libdatabase_a_SOURCES = \
 	recordindex.c \
 	import.c \
 	addoperations.c \
+	removeoperations.c \
 	refnindex.c
 
 AM_CPPFLAGS = \
