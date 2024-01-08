@@ -73,6 +73,7 @@
 #include "charprops.h"
 #include "llgettext.h"
 #include "llpy-externs.h"
+#include "ll-list.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -449,7 +450,11 @@ repaint_main_menu (UIWINDOW uiwin)
 	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
 	mvccwaddstr(win, 1, 2, title);
 	mvccwaddstr(win, 2, 4, _(qScright));
+#if defined(DEADENDS)
+	str = getlloptint("FullDbPath", 1) ? database->filePath : database->lastSegment;
+#else
 	str = getlloptint("FullDbPath", 1) ? readpath : readpath_file;
+#endif
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	if (immutable)
 		wprintw(win, "%s", _(qSdbimmut));

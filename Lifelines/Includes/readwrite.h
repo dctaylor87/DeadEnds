@@ -56,6 +56,7 @@
 #define SCN_INT		"%d"
 
 extern String editfile;
+extern String editstr;
 
 /* valid.c */
 extern BOOLEAN pointer_value(String);

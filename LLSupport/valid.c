@@ -125,14 +125,15 @@ valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 		*pmsg = _(qSbadfms); 
 		goto bad1;
 	}
-	isex = val_to_sex(sex0);
 #if defined(DEADENDS)
+	isex = valueToSex(sex0);
 	if (!fams0) isex = sexUnknown;
-	if (isex != sexUnknown && isex != val_to_sex(sex1)) {
+	if (isex != sexUnknown && isex != valueToSex(sex1)) {
 		*pmsg = _(qSbadparsex);
 		goto bad1;
 	}
 #else
+	isex = val_to_sex(sex0);
 	if (!fams0) isex = SEX_UNKNOWN;
 	if (isex != SEX_UNKNOWN && isex != val_to_sex(sex1)) {
 		*pmsg = _(qSbadparsex);

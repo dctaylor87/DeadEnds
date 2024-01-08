@@ -61,6 +61,7 @@
 #include "options.h"
 #include "stringtable.h"
 #include "codesets.h"
+#include "ll-list.h"
 #else
 
 #include "llstdlib.h"
@@ -269,7 +270,11 @@ main (int argc, char **argv)
 # endif
 #endif
 		case 'a':	/* debug allocation */
+#if defined(DEADENDS)
+		  logAllocations(true);
+#else
 			alloclog = TRUE;
+#endif
 			break;
 		case 'd':	/* debug = no signal catchers */
 			debugmode = TRUE;
@@ -506,7 +511,9 @@ finish:
 	/* strfree frees memory & nulls pointer */
 	strfree(&dbrequested);
 	strfree(&dbused);
+#if !defined(DEADENDS)
 	strfree(&readpath_file);
+#endif
 	shutdown_interpreter();
 #if HAVE_PYTHON
 	llpy_python_terminate ();

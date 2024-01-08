@@ -47,6 +47,7 @@
 #include "xlat.h"
 #include "editing.h"
 #include "splitjoin.h"
+#include "nodeutils.h"
 
 #else
 

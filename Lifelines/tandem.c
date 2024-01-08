@@ -252,7 +252,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 
 	show_reset_scroll();
 	nkey1p = 0; /* force redraw */
-    nkey2p = 0;
+	nkey2p = 0;
 	modep = mode;
 
 	while (TRUE) {
@@ -288,15 +288,30 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			{
 #if defined(DEADENDS)
 				RecordIndexEl *fam1=0, *fam2=0;
+				GNode *node1;
+				GNode *node2;
+
+				node1 = familyToHusband (current1->root, database);
+				node2 = familyToHusband (current2->root, database);
+
+				fam1 = _llpy_node_to_record (node1, database);
+				fam2 = _llpy_node_to_record (node2, database);
+
+				if (fam1 && fam2) {
+				  *prec1 = fam1;
+				  *prec2 = fam2;
+				  return BROWSE_TAND;
+				}
 #else
 				RECORD fam1=0, fam2=0;
-#endif
+
 				if (fam_to_husb(current1, &fam1) == 1
 					&& fam_to_husb(current2, &fam2) == 1) {
 					*prec1 = fam1;
 					*prec2 = fam2;
 					return BROWSE_TAND;
 				}
+#endif
 			}
 			msg_error("%s", _(qStwohsb));
 			break;

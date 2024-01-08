@@ -25,7 +25,7 @@ typedef void *		VPTR;
 #define key_to_record(key)	__llpy_key_to_record(key, NULL, database)
 #define qkey_to_record(key)	__llpy_key_to_record(key, NULL, database)
 
-#define key_to_possible_record(key, letter)	__llpy_key_to_record(key, NULL, database)
+#define key_possible_to_record(key, letter)	__llpy_key_to_record(key, NULL, database)
 
 #define key_to_fam(key)		keyToFamily(key, database)
 #define key_to_indi(key)	keyToPerson(key, database)
@@ -46,7 +46,7 @@ typedef void *		VPTR;
 #define fam_to_children(node)		familyToChildren(node, database)
 #define fam_to_fathers(node)		familyToFathers(node, database)
 #define fam_to_mothers(node)		familyToMothers(node, database)
-#define fam_to_husb(node)		familyToHusband(node, database)
+//#define fam_to_husb(node)		familyToHusband(node, database)
 #define fam_to_first_chil(node)		familyToFirstChild(node, database)
 #define fam_to_key(fam)			familyToKey(fam)
 
@@ -91,6 +91,7 @@ typedef void *		VPTR;
 #define insert_table_str(table, key, value)	insertInStringTable(table,key,value)
 #define valueof_str(table, key)			searchStringTable(table,key)
 
+#define create_table_int()			createIntegerTable()
 #define insert_table_int(table, key, value)	insertInIntegerTable(table,key,value)
 #define valueof_int(table, key)			searchIntegerTable(table,key)
 #define valueof_obj(table, key)			searchHashTable(table, key)

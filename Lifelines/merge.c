@@ -52,6 +52,7 @@
 #include "editing.h"
 #include "sequence.h"
 #include "hashtable.h"
+#include "integertable.h"
 #include "xlat.h"
 #include "uiprompts.h"
 #include "llinesi.h"
@@ -61,6 +62,7 @@
 #include "messages.h"
 #include "splitjoin.h"
 #include "remove.h"
+#include "nodeutils.h"
 
 #include "llpy-externs.h"
 
@@ -217,8 +219,8 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	indi2 = copy_nodes(indi2, TRUE, TRUE);
 #if defined(DEADENDS)
 	sx2 = sexUnknown;
-	if (fams1) sx2 = val_to_sex(sex1);
-	if (fams2) sx2 = val_to_sex(sex2);
+	if (fams1) sx2 = valueToSex(sex1);
+	if (fams2) sx2 = valueToSex(sex2);
 #else
 	sx2 = SEX_UNKNOWN;
 	if (fams1) sx2 = val_to_sex(sex1);
@@ -853,12 +855,15 @@ check_indi_lineage_links (NODE indi)
 #if defined(DEADENDS)
 	GNode *name=0, *refn=0, *sex=0, *body=0, *famc=0, *fams=0;
 	GNode *curs=0; /* for travesing node lists */
+	int bucket_index = 0;
+	int element_index = 0;
+	IntegerElement *element;
 #else
 	NODE name=0, refn=0, sex=0, body=0, famc=0, fams=0;
 	NODE curs=0; /* for travesing node lists */
-#endif
-	TABLE memtab = memtab = create_table_int();
 	TABLE_ITER tabit=0;
+#endif
+	TABLE memtab = create_table_int();
 	CNSTRING famkey=0; /* used inside traversal loops */
 	INT count=0;
 	CNSTRING ikey = nxref(indi);
@@ -887,8 +892,16 @@ check_indi_lineage_links (NODE indi)
 	Check that all listed families contain person as spouse as many times
 	as expected
 	*/
+#if defined(DEADENDS)
+	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
+	     element;
+	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
+	        famkey = element->key;
+	        count = element->value;
+#else
 	tabit = begin_table_iter(memtab);
 	while (next_table_int(tabit, &famkey, &count)) {
+#endif
 		NODE fam = key_to_fam(famkey);
 		/*
 		count how many times our main person (ikey)
@@ -931,8 +944,16 @@ check_indi_lineage_links (NODE indi)
 	Check that all listed families contain person as child (CHIL) as many times
 	as expected
 	*/
+#if defined(DEADENDS)
+	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
+	     element;
+	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
+	        famkey = element->key;
+	        count = element->value;
+#else
 	tabit = begin_table_iter(memtab);
 	while (next_table_int(tabit, &famkey, &count)) {
+#endif
 		NODE fam = key_to_fam(famkey);
 		/*
 		count how many times our main person (ikey)
@@ -968,12 +989,15 @@ check_fam_lineage_links (NODE fam)
 #if defined(DEADENDS)
 	GNode *fref=0, *husb=0, *wife=0, *chil=0, *rest=0;
 	GNode *curs=0; /* for travesing node lists */
+	int bucket_index = 0;
+	int element_index = 0;
+	IntegerElement *element;
 #else
 	NODE fref=0, husb=0, wife=0, chil=0, rest=0;
 	NODE curs=0; /* for travesing node lists */
+	TABLE_ITER tabit=0;
 #endif
 	TABLE memtab = memtab = create_table_int();
-	TABLE_ITER tabit=0;
 	CNSTRING indikey=0; /* used inside traversal loops */
 	INT count=0;
 	CNSTRING fkey = nxref(fam);
@@ -1011,8 +1035,16 @@ check_fam_lineage_links (NODE fam)
 	Check that all listed persons contain family as FAMS as many times
 	as expected
 	*/
+#if defined(DEADENDS)
+	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
+	     element;
+	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
+	        indikey = element->key;
+	        count = element->value;
+#else
 	tabit = begin_table_iter(memtab);
 	while (next_table_int(tabit, &indikey, &count)) {
+#endif
 		NODE indi = key_to_indi(indikey);
 		/*
 		count how many times our main family (fkey)
@@ -1055,8 +1087,16 @@ check_fam_lineage_links (NODE fam)
 	Check that all listed families contain person as FAMC as many times
 	as expected
 	*/
+#if defined(DEADENDS)
+	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
+	     element;
+	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
+	        indikey = element->key;
+	        count = element->value;
+#else
 	tabit = begin_table_iter(memtab);
 	while (next_table_int(tabit, &indikey, &count)) {
+#endif
 		NODE indi = key_to_indi(indikey);
 		/*
 		count how many times our main family (fkey)
