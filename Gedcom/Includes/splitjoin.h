@@ -19,6 +19,13 @@ void joinPerson(GNode*, GNode*, GNode*, GNode*, GNode*, GNode*, GNode*);
 void splitFamily(GNode*, GNode**, GNode**, GNode**, GNode**, GNode**);
 void joinFamily(GNode*, GNode*, GNode*, GNode*, GNode*, GNode*);
 
+void splitSource(GNode *root, GNode **prefn, GNode **pbody);
+void joinSource (GNode *root, GNode *refn, GNode *body);
+void splitEvent(GNode *root, GNode **prefn, GNode **pbody);
+void joinEvent (GNode *root, GNode *refn, GNode *body);
+void splitOther(GNode *root, GNode **prefn, GNode **pbody);
+void joinOther (GNode *root, GNode *refn, GNode *body);
+
 GNode *normalizePerson(GNode*);
 GNode *normalizeFamily(GNode*);
 GNode *normalizeEvent(GNode*);

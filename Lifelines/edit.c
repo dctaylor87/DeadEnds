@@ -57,6 +57,7 @@
 #include "choose.h"
 #include "readwrite.h"
 #include "equaliso.h"
+#include "lineage.h"
 #else
 
 #include "llstdlib.h"

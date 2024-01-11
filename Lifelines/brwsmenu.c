@@ -27,6 +27,7 @@
 #include "menuitem.h"
 #include "messages.h"
 #include "codesets.h"
+#include "locales.h"
 #else
 
 #include "llstdlib.h"

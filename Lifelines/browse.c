@@ -64,6 +64,7 @@
 #include "splitjoin.h"
 #include "codesets.h"
 #include "options.h"
+#include "xreffile.h"
 
 #include "llpy-externs.h"
 

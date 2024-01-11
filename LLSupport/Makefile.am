@@ -17,7 +17,8 @@ libllsupport_a_SOURCES = \
 	replace.c \
 	translat.c \
 	valid.c \
-	xlat.c
+	xlat.c \
+	xreffile.c
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \

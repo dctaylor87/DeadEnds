@@ -69,6 +69,7 @@
 #include "codesets.h"
 #include "readwrite.h"
 #include "lineage.h"
+#include "xreffile.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

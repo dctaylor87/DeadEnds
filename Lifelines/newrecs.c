@@ -57,6 +57,8 @@
 #include "nodeutils.h"
 //#include "readindex.h"
 #include "database.h"
+#include "xreffile.h"
+
 #include "llpy-externs.h"
 
 /* everything in this file assumes we are dealing with the current database */

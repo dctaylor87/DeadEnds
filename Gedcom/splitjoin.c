@@ -193,6 +193,204 @@ void joinFamily (GNode *fam, GNode *refn, GNode *husb, GNode *wife, GNode *chil,
 	}
 }
 
+//  splitSource -- Split a Source Node tree into parts. The Nodes are not copied; they are
+//    separated into different lists.
+//--------------------------------------------------------------------------------------------------
+void splitSource(GNode *root, GNode **prefn, GNode **pbody)
+// root  -- (in) Root of Source node tree to split.
+// prefn -- (out) Pointer to list of 1 REFN Nodes.
+// pbody -- (out) Pointer to other level 1 Nodes.
+{
+  GNode *refn = null;
+  GNode *body = null;
+  GNode *last = null;
+  GNode *lref = null;
+  GNode *prev = null;
+  GNode *node = null;
+
+  ASSERT(eqstr("SOUR", root->tag));
+  ASSERT(! (root->sibling));	// root nodes should *NEVER* have siblings!
+
+  node = indi->child;  // Prepare to iterate through the children of the INDI Node.
+  root->child = null;  // Disconnect the root from its child
+
+  while (node) {  // Iterate through the children of the SOUR Node.
+    String tag = node->tag;
+
+    if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
+      if (!refn)
+	refn = lref = node;
+      else
+	lref = lref->sibling = node;
+    } else {  // Handle all other level 1 Nodes.
+      if (!body)
+	body = last = node;
+      else
+	last = last->sibling = node;
+    }
+    prev = node;
+    node = node->sibling;
+    prev->sibling = null;
+  }
+  *prefn = refn;
+  *pbody = body;
+}
+
+//  joinSource -- Join a Source node tree from parts. This neither allocates nor frees any nodes.
+//--------------------------------------------------------------------------------------------------
+void joinSource (GNode *root, GNode *refn, GNode *body)
+//  source, refn;
+{
+  GNode *node = null;
+  ASSERT(root && eqstr("SOUR", root->tag));
+
+  root->child = null;
+  if (refn) {
+    root->child = node = refn;
+
+    while (node->sibling)
+      node = node->sibling;
+  }
+  if (body) {
+    if (node)
+      node = node->sibling = body;
+    else
+      root->child = node = body;
+  }
+}
+
+//  splitEvent -- Split a Event Node tree into parts. The Nodes are not copied; they are
+//    separated into different lists.
+//--------------------------------------------------------------------------------------------------
+void splitEvent(GNode *root, GNode **prefn, GNode **pbody)
+// root  -- (in) Root of Event node tree to split.
+// prefn -- (out) Pointer to list of 1 REFN Nodes.
+// pbody -- (out) Pointer to other level 1 Nodes.
+{
+  GNode *refn = null;
+  GNode *body = null;
+  GNode *last = null;
+  GNode *lref = null;
+  GNode *prev = null;
+  GNode *node = null;
+
+  ASSERT(eqstr("EVEN", root->tag));
+  ASSERT(! (root->sibling));	// root nodes should *NEVER* have siblings!
+
+  node = indi->child;  // Prepare to iterate through the children of the INDI Node.
+  root->child = null;  // Disconnect the root from its child
+
+  while (node) {  // Iterate through the children of the SOUR Node.
+    String tag = node->tag;
+
+    if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
+      if (!refn)
+	refn = lref = node;
+      else
+	lref = lref->sibling = node;
+    } else {  // Handle all other level 1 Nodes.
+      if (!body)
+	body = last = node;
+      else
+	last = last->sibling = node;
+    }
+    prev = node;
+    node = node->sibling;
+    prev->sibling = null;
+  }
+  *prefn = refn;
+  *pbody = body;
+}
+
+//  joinEvent -- Join an Event node tree from parts. This neither allocates nor frees any nodes.
+//--------------------------------------------------------------------------------------------------
+void joinEvent (GNode *root, GNode *refn, GNode *body)
+//  event, refn;
+{
+  GNode *node = null;
+  ASSERT(root && eqstr("EVEN", root->tag));
+
+  root->child = null;
+  if (refn) {
+    root->child = node = refn;
+
+    while (node->sibling)
+      node = node->sibling;
+  }
+  if (body) {
+    if (node)
+      node = node->sibling = body;
+    else
+      root->child = node = body;
+  }
+}
+
+//  splitOther -- Split an Other Node tree into parts. The Nodes are not copied; they are
+//    separated into different lists.
+//--------------------------------------------------------------------------------------------------
+void splitOther(GNode *root, GNode **prefn, GNode **pbody)
+// root  -- (in) Root of Other node tree to split.
+// prefn -- (out) Pointer to list of 1 REFN Nodes.
+// pbody -- (out) Pointer to other level 1 Nodes.
+{
+  GNode *refn = null;
+  GNode *body = null;
+  GNode *last = null;
+  GNode *lref = null;
+  GNode *prev = null;
+  GNode *node = null;
+
+  ASSERT(root);
+  ASSERT(! (root->sibling));	// root nodes should *NEVER* have siblings!
+
+  node = indi->child;  // Prepare to iterate through the children of the INDI Node.
+  root->child = null;  // Disconnect the root from its child
+
+  while (node) {  // Iterate through the children of the SOUR Node.
+    String tag = node->tag;
+
+    if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
+      if (!refn)
+	refn = lref = node;
+      else
+	lref = lref->sibling = node;
+    } else {  // Handle all other level 1 Nodes.
+      if (!body)
+	body = last = node;
+      else
+	last = last->sibling = node;
+    }
+    prev = node;
+    node = node->sibling;
+    prev->sibling = null;
+  }
+  *prefn = refn;
+  *pbody = body;
+}
+
+//  joinOther -- Join an Other node tree from parts. This neither allocates nor frees any nodes.
+//--------------------------------------------------------------------------------------------------
+void joinOther (GNode *root, GNode *refn, GNode *body)
+//  other, refn;
+{
+  GNode *node = null;
+  ASSERT(root);
+
+  root->child = null;
+  if (refn) {
+    root->child = node = refn;
+
+    while (node->sibling)
+      node = node->sibling;
+  }
+  if (body) {
+    if (node)
+      node = node->sibling = body;
+    else
+      root->child = node = body;
+  }
+}
+
 //  normalizePerson - Get a person gedcom tree into standard format.
 //--------------------------------------------------------------------------------------------------
 GNode *normalizePerson(GNode *indi)
@@ -213,14 +411,35 @@ GNode *normalizeFamily(GNode *fam)
     return fam;
 }
 
-// normalizeEvent -- Convert an event record to standard format; currently a no-op.
+// normalizeEvent -- Convert an event record into standard format.
 //--------------------------------------------------------------------------------------------------
-GNode *normalizeEvent(GNode *event) { return event; }
+GNode *normalizeEvent(GNode *event)
+{
+  GNode *refns, *body;
+  splitEvent (event, &refns, &body);
+  joinEvent (event, refns, body);
 
-// normalizeSource -- Convert a source record to standard format; currently a no-op.
-//--------------------------------------------------------------------------------------------------
-GNode *normalizeSource(GNode *source) { return source; }
+  return event;
+}
 
-// normalizeOther -- Convert an other record to standard format; currently a no-op.
+// normalizeSource -- Convert a source record into standard format.
 //--------------------------------------------------------------------------------------------------
-GNode *normalizeOther(GNode *other) { return other; }
+GNode *normalizeSource(GNode *source)
+{
+  GNode *refns, *body;
+  splitSource (source, &refns, &body);
+  joinSource (source, refns, body);
+
+  return source;
+}
+
+// normalizeOther -- Convert an other record into standard format.
+//--------------------------------------------------------------------------------------------------
+GNode *normalizeOther(GNode *other)
+{
+  GNode *refns, *body;
+  splitOther (other, &refns, &body);
+  joinOther (other, refns, body);
+
+  return other;
+}

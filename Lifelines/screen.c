@@ -74,6 +74,7 @@
 #include "llgettext.h"
 #include "llpy-externs.h"
 #include "ll-list.h"
+#include "locales.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

@@ -58,6 +58,7 @@
 #include "lineage.h"
 #include "codesets.h"
 #include "options.h"
+#include "xreffile.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

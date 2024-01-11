@@ -62,6 +62,8 @@ typedef void *		VPTR;
 #define split_fam(fam,refn,husb,wife,chil,rest) splitFamily(fam,refn,husb,wife,chil,rest)
 #define join_indi(indi,name,refn,sex,body,famc,fams) joinPerson(indi,name,refn,sex,body,famc,fams)
 #define join_fam(fam,refn,husb,wife,chil,rest) joinFamily(fam,refn,husb,wife,chil,rest)
+#define split_othr(othr,refn,body)	splitOther(othr,refn,body)
+#define join_othr(othr,refn,body)	joinOther(othr,refn,body)
 
 #define fam_to_cache(node)	/* empty */
 #define even_to_cache(node)	/* empty */

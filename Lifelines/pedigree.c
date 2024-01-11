@@ -35,6 +35,7 @@
 #include "errors.h"
 #include "liflines.h"
 #include "ll-list.h"
+#include "lineage.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -67,7 +68,11 @@ struct displaynode_s
 {
 	struct displaynode_s * firstchild;
 	struct displaynode_s * nextsib;
+#if defined(DEADENDS)
+	CString key;	/* used by anc/desc trees */
+#else
 	int keynum; /* used by anc/desc trees */
+#endif
 	STRING str; /* used by extended gedcom node trees */
 };
 typedef struct displaynode_s *DISPNODE;
@@ -75,7 +80,11 @@ typedef STRING (*LINEPRINT_FNC)(INT width, void * param);
 /* parameters for anc/desc trees */
 typedef struct indi_print_param_s
 {
+#if defined(DEADENDS)
+	CString key;
+#else
 	INT keynum;
+#endif
 } *INDI_PRINT_PARAM;
 /* parameters for gedcom node traversal */
 typedef struct node_print_param_s
@@ -147,7 +156,11 @@ alloc_displaynode (void)
 	DISPNODE tn = (DISPNODE)stdalloc(sizeof(*tn));
 	tn->firstchild = NULL;
 	tn->nextsib = NULL;
+#if defined(DEADENDS)
+	tn->key = 0;
+#else
 	tn->keynum = 0;
+#endif
 	tn->str = NULL;
 	return tn;
 }
@@ -160,7 +173,11 @@ free_displaynode (DISPNODE tn)
 {
 	tn->firstchild = NULL;
 	tn->nextsib = NULL;
+#if defined(DEADENDS)
+	tn->key = 0;
+#else
 	tn->keynum = -1;
+#endif
 	if (tn->str) {
 		stdfree(tn->str);
 		tn->str = NULL;
@@ -177,7 +194,11 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
 	DISPNODE tn0, tn1;
 	int i;
 
+#if defined(DEADENDS)
+	tn->key = personToKey(indi);
+#else
 	tn->keynum = indi_to_keynum(indi);
+#endif
 	tn->firstchild = 0;
 	tn->nextsib = 0;
 	(*count)++;
@@ -439,16 +460,25 @@ static DISPNODE
 add_parents (NODE indi, INT gen, INT maxgen, INT * count)
 {
 	DISPNODE tn = alloc_displaynode();
+#if defined(DEADENDS)
+	tn->key = personToKey(indi);
+#else
 	tn->keynum = indi_to_keynum(indi);
+#endif
 	tn->firstchild = 0;
 	tn->nextsib = 0;
 	(*count)++;
 	if (gen<maxgen) {
 		tn->firstchild = 
 			add_parents(indi_to_fath(indi), gen+1, maxgen, count);
+#if defined(DEADENDS)
+		if (tn->key)
+			indi=keyToPerson(tn->key, currentDatabase);
+#else
 		/* reload indi in case lost from cache */
 		if (tn->keynum)
 			indi=keynum_to_indi(tn->keynum);
+#endif
 		tn->firstchild->nextsib = 
 			add_parents(indi_to_moth(indi), gen+1, maxgen, count);
 	}
@@ -508,8 +538,13 @@ indi_lineprint (INT width, void * param)
 {
 	INDI_PRINT_PARAM ipp = (INDI_PRINT_PARAM)param;
 	NODE indi=0;
+#if defined(DEADENDS)
+	if (ipp->key)
+		indi = keyToPerson(ipp->key, currentDatabase);
+#else
 	if (ipp->keynum)
 		indi = keynum_to_indi(ipp->keynum);
+#endif
 	return indi_to_ped_fix(indi, width);
 }
 /*=================================
@@ -575,7 +610,11 @@ trav_pre_print_tn (DISPNODE tn, INT * row, INT gen, INT indent, CANVASDATA canva
 {
 	DISPNODE n0;
 	struct indi_print_param_s ipp;
+#if defined(DEADENDS)
+	ipp.key = tn->key;
+#else
 	ipp.keynum = tn->keynum;
+#endif
 	/* all display printing passes thru generic print_to_screen,
 	which handles scrolling */
 	print_to_screen(gen, indent, row, &indi_lineprint, &ipp, canvas);
@@ -627,7 +666,11 @@ static void
 trav_bin_in_print_tn (DISPNODE tn, INT * row, INT gen, INT indent, CANVASDATA canvas)
 {
 	struct indi_print_param_s ipp;
+#if defined(DEADENDS)
+	ipp.key = tn->key;
+#else
 	ipp.keynum = tn->keynum;
+#endif
 	if (tn->firstchild)
 		trav_bin_in_print_tn(tn->firstchild, row, gen+1, indent, canvas);
 	/* all display printing passes thru generic print_to_screen,
