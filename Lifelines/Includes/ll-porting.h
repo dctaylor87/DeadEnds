@@ -37,6 +37,9 @@ typedef void *		VPTR;
 /* XXX not sure if second argument should be 'false' or 'true' XXX */
 #define remove_indiseq(seq)	deleteSequence(seq, false)
 
+/* remove an element from a sequence */
+#define delete_indiseq(seq,key,name,index) removeFromSequence(seq,key,name,index)
+
 #define copy_indiseq(seq)	copySequence(seq)
 #define create_indiseq_null()	createSequence(database)
 
