@@ -211,7 +211,7 @@ void splitSource(GNode *root, GNode **prefn, GNode **pbody)
   ASSERT(eqstr("SOUR", root->tag));
   ASSERT(! (root->sibling));	// root nodes should *NEVER* have siblings!
 
-  node = indi->child;  // Prepare to iterate through the children of the INDI Node.
+  node = root->child;  // Prepare to iterate through the children of the INDI Node.
   root->child = null;  // Disconnect the root from its child
 
   while (node) {  // Iterate through the children of the SOUR Node.
@@ -277,7 +277,7 @@ void splitEvent(GNode *root, GNode **prefn, GNode **pbody)
   ASSERT(eqstr("EVEN", root->tag));
   ASSERT(! (root->sibling));	// root nodes should *NEVER* have siblings!
 
-  node = indi->child;  // Prepare to iterate through the children of the INDI Node.
+  node = root->child;  // Prepare to iterate through the children of the EVEN Node.
   root->child = null;  // Disconnect the root from its child
 
   while (node) {  // Iterate through the children of the SOUR Node.
@@ -343,7 +343,7 @@ void splitOther(GNode *root, GNode **prefn, GNode **pbody)
   ASSERT(root);
   ASSERT(! (root->sibling));	// root nodes should *NEVER* have siblings!
 
-  node = indi->child;  // Prepare to iterate through the children of the INDI Node.
+  node = root->child;  // Prepare to iterate through the children of the other Node.
   root->child = null;  // Disconnect the root from its child
 
   while (node) {  // Iterate through the children of the SOUR Node.
