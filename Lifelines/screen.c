@@ -34,6 +34,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
@@ -75,6 +76,7 @@
 #include "llpy-externs.h"
 #include "ll-list.h"
 #include "locales.h"
+#include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

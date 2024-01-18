@@ -34,6 +34,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -55,6 +56,7 @@
 #include "screen.h"
 #include "cscurses.h"
 #include "codesets.h"
+#include "de-strings.h"
 #else
 
 #include "llstdlib.h"

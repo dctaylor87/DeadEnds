@@ -38,6 +38,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -65,6 +66,7 @@
 #include "codesets.h"
 #include "options.h"
 #include "xreffile.h"
+#include "de-strings.h"
 
 #include "llpy-externs.h"
 

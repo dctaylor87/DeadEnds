@@ -16,6 +16,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -29,6 +30,7 @@
 #include "gnode.h"
 #include "readwrite.h"
 #include "xlat.h"
+#include "de-strings.h"
 #else
 #include "sys_inc.h"
 #include "llstdlib.h"

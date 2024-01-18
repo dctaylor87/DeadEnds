@@ -37,6 +37,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -59,6 +60,7 @@
 #include "codesets.h"
 #include "options.h"
 #include "xreffile.h"
+#include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

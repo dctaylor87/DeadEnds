@@ -15,6 +15,11 @@ libllsupport_a_SOURCES = \
 	messages.c \
 	remove.c \
 	replace.c \
+	stdstrng.c \
+	strapp.c \
+	strset.c \
+	strutf8.c \
+	strwhite.c \
 	translat.c \
 	valid.c \
 	xlat.c \

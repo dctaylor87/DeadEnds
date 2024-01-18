@@ -15,6 +15,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -28,6 +29,7 @@
 
 #include "hashtable.h"
 #include "stringtable.h"
+#include "de-strings.h"
 #else
 
 #include "llstdlib.h"

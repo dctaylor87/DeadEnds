@@ -17,6 +17,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 #include <errno.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -28,6 +29,7 @@
 #include "xlat.h"
 #include "codesets.h"
 #include "list.h"
+#include "de-strings.h"
 #else
 
 #include <errno.h>

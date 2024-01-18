@@ -88,7 +88,7 @@ typedef void *		VPTR;
 #define INT16		int16_t
 
 #define TABLE		HashTable *
-#define create_table_obj			createHashTable(NULL, NULL, NULL)
+#define create_table_obj()			createHashTable(NULL, NULL, NULL)
 #define destroy_table(table)			deleteHashTable(table)
 //#define insert_table_obj(table, element)	insertInHashTable(table, element)
 
@@ -104,6 +104,13 @@ typedef void *		VPTR;
 #define LIST		List *
 #define create_list()			createList(NULL, NULL, NULL)
 #define enqueue_list			enqueueList
+
+#define back_list(list, elt)		appendListElement(list, elt)
+#define destroy_list(list)		deleteList(list)
+#define is_empty_list(list)		isEmptyList(list)
+#define length_list(list)		lengthList(list)
+#define pop_list(list)			removeFirstListElement(list)
+#define push_list(list, vptr)		prependListElement(list, vptr)
 
 #define num_indis()			numberPersons(database)
 #define num_fams()			numberFamilies(database)

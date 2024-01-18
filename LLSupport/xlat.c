@@ -20,6 +20,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -34,6 +35,7 @@
 #include "gnode.h"
 #include "readwrite.h"
 #include "ll-list.h"
+#include "de-strings.h"
 
 #else
 
@@ -245,7 +247,12 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	XLAT xlat=0;
 	ZSTR zsrc=zs_new(), zdest=zs_new();
 	ZSTR zsrc_u=ll_toupperz(src,0),zdest_u=ll_toupperz(dest,0);
+#if defined(DEADENDS)
+	List *srcsubs=0;
+	List *destsubs=0;
+#else
 	LIST srcsubs=0, destsubs=0;
+#endif
 	STRING subcoding=0;
 	
 	if (!src || !src[0] || !dest || !dest[0]) {

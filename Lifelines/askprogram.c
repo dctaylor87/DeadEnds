@@ -20,6 +20,8 @@
 #endif
 
 #if defined(DEADENDS)
+#include <stdarg.h>
+
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
@@ -36,6 +38,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "codesets.h"
+#include "de-strings.h"
 #else
 
 #include "standard.h"

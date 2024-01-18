@@ -15,6 +15,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -27,6 +28,7 @@
 #include "codesets.h"
 #include "gnode.h"
 #include "readwrite.h"
+#include "de-strings.h"
 #else
 
 #include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */

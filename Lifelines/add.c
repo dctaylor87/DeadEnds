@@ -38,6 +38,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdarg.h>
 
 #if defined(HAVE_INTTYPES_H)
 #include <inttypes.h>
@@ -70,6 +71,7 @@
 #include "readwrite.h"
 #include "lineage.h"
 #include "xreffile.h"
+#include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
