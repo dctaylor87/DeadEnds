@@ -58,6 +58,8 @@
 #include "readwrite.h"
 #include "equaliso.h"
 #include "lineage.h"
+#include "gnode.h"
+#include "replace.h"
 #else
 
 #include "llstdlib.h"

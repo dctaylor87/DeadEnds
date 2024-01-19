@@ -50,6 +50,7 @@
 #include "menuitem.h"
 #include "messages.h"
 #include "screen.h"
+#include "screeni.h"
 #else
 
 #include "llstdlib.h"

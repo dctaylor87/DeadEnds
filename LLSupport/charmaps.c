@@ -30,6 +30,7 @@
 #include "gnode.h"
 #include "readwrite.h"
 #include "xlat.h"
+#include "charmaps.h"
 #include "de-strings.h"
 #else
 #include "sys_inc.h"

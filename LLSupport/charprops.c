@@ -28,6 +28,7 @@
 #include "codesets.h"
 #include "gnode.h"
 #include "readwrite.h"
+#include "charmaps.h"
 #include "de-strings.h"
 #else
 

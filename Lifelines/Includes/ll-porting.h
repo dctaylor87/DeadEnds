@@ -134,3 +134,4 @@ typedef void *		VPTR;
 #endif
 
 #define strfree(ptr_to_str)	{ stdfree (*ptr_to_str); *ptr_to_str = 0; }
+#define ISNULL(k)		(!k || *k == 0)

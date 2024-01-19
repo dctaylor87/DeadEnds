@@ -48,6 +48,7 @@
 #include "editing.h"
 #include "splitjoin.h"
 #include "nodeutils.h"
+#include "replace.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
