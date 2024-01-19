@@ -28,14 +28,16 @@
 #include "llnls.h"
 #include "sys_inc.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "hashtable.h"
 #include "translat.h"
 #include "xlat.h" 
-#include "list.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "ll-list.h"
 #include "de-strings.h"
+#include "zstr.h"
 
 #else
 
@@ -716,7 +718,7 @@ xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
  *  eg, "3 steps with iconv(UTF-8, CP1252)"
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
-#if defined(DEADENDS)
+#if 0
 String
 xlat_get_description (XLAT xlat)
 {

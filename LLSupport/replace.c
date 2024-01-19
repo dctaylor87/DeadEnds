@@ -41,6 +41,8 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "gnode.h"
 #include "rfmt.h"
 #include "translat.h"

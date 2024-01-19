@@ -33,6 +33,9 @@
 #include "cscurses.h"
 #include "codesets.h"
 #include "de-strings.h"
+#include "zstr.h"
+#include "translat.h"
+#include "xlat.h"
 #else
 
 #include "llstdlib.h"

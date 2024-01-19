@@ -25,11 +25,14 @@
 #include "llnls.h"
 #include "sys_inc.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
 #include "codesets.h"
 #include "list.h"
 #include "de-strings.h"
+#include "zstr.h"
 #else
 
 #include <errno.h>
@@ -488,13 +491,13 @@ transl_get_predefined_menukey (INT trnum)
 ZSTR
 transl_get_description (XLAT xlat)
 {
-  String str = xlat_get_description(xlat);
+  ZSTR zstr = xlat_get_description(xlat);
   INT index = xl_get_uparam(xlat)-1;
   struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
   if (legtt && legtt->tt) {
-		String desc = get_trantable_desc(legtt->tt);
+		ZSTR zdesc = get_trantable_desc(legtt->tt);
 		/* TRANSLATORS: db internal translation table note for tt menu */
-		zs_appf(zstr, _(" (dbint tt: %s)"), desc);
+		zs_appf(zstr, _(" (dbint tt: %s)"), zs_str(zdesc));
 		zs_free(&zdesc);
 	}
 

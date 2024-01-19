@@ -23,7 +23,9 @@
 #include "llnls.h"
 #include "sys_inc.h"
 
+#include "list.h"
 #include "charprops.h"
+#include "zstr.h"
 #include "translat.h"
 #include "codesets.h"
 #include "gnode.h"

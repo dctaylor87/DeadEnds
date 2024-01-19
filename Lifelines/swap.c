@@ -43,6 +43,8 @@
 #include "llnls.h"
 #include "options.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "gnode.h"
 #include "rfmt.h"

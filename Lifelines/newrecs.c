@@ -44,6 +44,7 @@
 #include "readwrite.h"
 #include "options.h"
 
+#include "zstr.h"
 #include "translat.h"
 #include "rfmt.h"
 #include "sequence.h"

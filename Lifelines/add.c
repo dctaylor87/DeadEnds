@@ -54,6 +54,7 @@
 #include "options.h"
 #include "llpy-externs.h"
 
+#include "zstr.h"
 #include "translat.h"
 #include "recordindex.h"
 #include "rfmt.h"

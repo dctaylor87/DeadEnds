@@ -39,6 +39,8 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "recordindex.h"
 #include "rfmt.h"

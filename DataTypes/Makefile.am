@@ -11,7 +11,8 @@ libdatatypes_a_SOURCES = \
 	sort.c \
 	set.c \
 	stringtable.c \
-	integertable.c
+	integertable.c \
+	zstr.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/DataTypes/Includes \

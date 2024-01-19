@@ -46,6 +46,8 @@
 #include "llnls.h"
 #include "sys_inc.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "recordindex.h"
 #include "sequence.h"

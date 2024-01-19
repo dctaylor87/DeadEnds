@@ -46,6 +46,8 @@
 #include "llnls.h"
 
 #include "locales.h"
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "gnode.h"
 #include "rfmt.h"

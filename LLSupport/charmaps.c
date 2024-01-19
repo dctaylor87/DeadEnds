@@ -21,8 +21,11 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
+#include "sys_inc.h"
 #include "llnls.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
 #include "messages.h"
@@ -32,7 +35,9 @@
 #include "xlat.h"
 #include "charmaps.h"
 #include "de-strings.h"
+
 #else
+
 #include "sys_inc.h"
 #include "llstdlib.h"
 #include "table.h"
@@ -773,7 +778,7 @@ custom_sort (const char *str1, const char *str2, INT * rtn)
  * get_trantable_desc -- Get description of trantable
  * Created: 2002/11/26 (Perry Rapp)
  *=================================================*/
-#if defined(DEADENDS)
+#if 0
 String
 get_trantable_desc (TRANTABLE tt)
 {

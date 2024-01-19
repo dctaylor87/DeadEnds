@@ -41,6 +41,8 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
 #include "gnode.h"

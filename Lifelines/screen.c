@@ -52,6 +52,7 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "stringtable.h"
+#include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
 #include "uiprompts.h"

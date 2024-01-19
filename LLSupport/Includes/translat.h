@@ -60,7 +60,7 @@ CNSTRING transl_get_map_name(INT trnum);
 TRANTABLE create_trantable(STRING *lefts, STRING *rights, INT n, STRING name);
 BOOLEAN init_map_from_rec(CNSTRING key, INT trnum, TRANTABLE*);
 BOOLEAN custom_sort(const char *str1, const char *str2, INT * rtn);
-#if defined(DEADENDS)
+#if 0
 String get_trantable_desc(TRANTABLE tt);
 #else
 ZSTR get_trantable_desc(TRANTABLE tt);
@@ -68,9 +68,7 @@ ZSTR get_trantable_desc(TRANTABLE tt);
 void remove_trantable(TRANTABLE);
 void translate_catn(XLAT ttm, STRING * pdest, CNSTRING src, INT * len);
 void translate_string(XLAT, CNSTRING in, STRING out, INT max);
-#if !defined(DEADENDS)
 ZSTR translate_string_to_zstring(XLAT ttm, CNSTRING in);
-#endif
 BOOLEAN translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last);
 CNSTRING tt_get_name(TRANTABLE tt);
 
@@ -85,24 +83,18 @@ translat is the frontend, which knows about the various codesets (internal, GUI,
 BOOLEAN transl_are_all_conversions_ok(void);
 void transl_free_predefined_xlats(void);
 XLAT transl_get_predefined_xlat(INT trnum);
-#if !defined(DEADENDS)
 ZSTR transl_get_predefined_menukey(INT trnum);
 ZSTR transl_get_predefined_name(INT trnum);
 ZSTR transl_get_description(XLAT xlat);
-#endif
 XLAT transl_get_xlat(CNSTRING src, CNSTRING dest);
 XLAT transl_get_xlat_to_int(CNSTRING codeset);
 BOOLEAN transl_is_xlat_valid(XLAT xlat);
 TRANTABLE transl_get_legacy_tt(INT trnum);
 void transl_load_all_tts(void);
 void transl_load_xlats(void);
-#if !defined(DEADENDS)
 void transl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
-#endif
 void transl_release_xlat(XLAT xlat);
 void transl_set_legacy_tt(INT trnum, TRANTABLE tt);
-#if !defined(DEADENDS)
 void transl_xlat(XLAT xlat, ZSTR zstr);
-#endif
 
 #endif /* _TRANSLAT_H */

@@ -45,6 +45,8 @@
 #include "llnls.h"
 #include "sys_inc.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "xreffile.h"
 #include "gnode.h"
 #include "readwrite.h"

@@ -22,6 +22,8 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "list.h"
+#include "zstr.h"
 #include "codesets.h"
 #include "translat.h"
 #include "llgettext.h"

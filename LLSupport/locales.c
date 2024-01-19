@@ -39,6 +39,7 @@
 #include "locales.h"
 #include "codesets.h"
 #include "list.h"
+#include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
 #include "de-strings.h"
