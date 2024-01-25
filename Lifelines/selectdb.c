@@ -44,6 +44,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "rfmt.h"
+#include "refnindex.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "feedback.h"

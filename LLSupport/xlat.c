@@ -33,6 +33,7 @@
 #include "hashtable.h"
 #include "translat.h"
 #include "xlat.h" 
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "ll-list.h"

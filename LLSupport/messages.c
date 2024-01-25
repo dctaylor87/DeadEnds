@@ -42,6 +42,7 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 

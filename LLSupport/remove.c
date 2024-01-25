@@ -42,6 +42,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "refnindex.h"
 #include "gnode.h"
 #include "sequence.h"
 #include "feedback.h"

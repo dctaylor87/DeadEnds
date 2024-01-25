@@ -48,6 +48,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "rfmt.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "sequence.h"

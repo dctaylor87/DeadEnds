@@ -18,6 +18,7 @@
 
 #include "rfmt.h"
 #include "uiprompts.h"
+#include "refnindex.h"
 #include "sequence.h"
 #else
 

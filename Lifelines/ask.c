@@ -49,6 +49,7 @@
 #include "list.h"
 #include "zstr.h"
 #include "translat.h"
+#include "refnindex.h"
 #include "recordindex.h"
 #include "sequence.h"
 #include "uiprompts.h"

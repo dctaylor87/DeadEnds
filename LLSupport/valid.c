@@ -46,6 +46,7 @@
 #include "list.h"
 #include "zstr.h"
 #include "translat.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "splitjoin.h"

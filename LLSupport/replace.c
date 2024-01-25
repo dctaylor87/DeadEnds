@@ -43,6 +43,7 @@
 
 #include "list.h"
 #include "zstr.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "rfmt.h"
 #include "translat.h"

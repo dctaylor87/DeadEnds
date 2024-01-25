@@ -49,6 +49,7 @@
 #include "standard.h"
 #include "llnls.h"
 #include "sys_inc.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "options.h"

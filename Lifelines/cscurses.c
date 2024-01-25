@@ -24,6 +24,7 @@
 #include "llnls.h"
 
 #include "rfmt.h"
+#include "refnindex.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "llinesi.h"

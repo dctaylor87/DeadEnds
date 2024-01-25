@@ -27,6 +27,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "rfmt.h"

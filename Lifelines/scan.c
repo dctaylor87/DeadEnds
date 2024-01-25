@@ -41,6 +41,7 @@
 #include "sys_inc.h"
 
 #include "rfmt.h"
+#include "refnindex.h"
 #include "sequence.h"
 #include "uiprompts.h"
 #include "feedback.h"

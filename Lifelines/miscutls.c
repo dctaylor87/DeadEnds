@@ -45,6 +45,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
 #include "rfmt.h"

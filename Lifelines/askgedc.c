@@ -28,6 +28,7 @@
 #include "sys_inc.h"
 
 #include "rfmt.h"
+#include "refnindex.h"
 #include "sequence.h"
 #include "hashtable.h"
 #include "stringtable.h"
