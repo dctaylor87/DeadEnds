@@ -17,6 +17,7 @@
 //
 #include <ansidecl.h>
 
+#include "refnindex.h"
 #include "evaluate.h"
 #include "standard.h"
 #include "symboltable.h"

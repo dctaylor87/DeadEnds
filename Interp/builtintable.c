@@ -11,6 +11,7 @@
 
 #include <ansidecl.h>
 
+#include "refnindex.h"
 #include "pvaluetable.h"
 #include "builtintable.h"
 #include "pnode.h"

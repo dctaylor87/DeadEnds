@@ -12,6 +12,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
+#include "refnindex.h"
 #include "database.h"
 #include "gnode.h"
 #include "name.h"

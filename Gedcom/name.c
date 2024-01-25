@@ -12,6 +12,7 @@
 
 #include "standard.h"
 #include "name.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "nameindex.h"
 #include "database.h"

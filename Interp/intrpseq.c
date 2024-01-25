@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include "standard.h"
+#include "refnindex.h"
 #include "symboltable.h"
 #include "gedcom.h"
 #include "pnode.h"

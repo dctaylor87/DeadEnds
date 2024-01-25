@@ -10,6 +10,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include "standard.h"
+#include "refnindex.h"
 #include "pnode.h"
 #include "pvalue.h"
 #include "evaluate.h"

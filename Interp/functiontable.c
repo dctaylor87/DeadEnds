@@ -7,6 +7,7 @@
 //  Last changed on 3 June 2023.
 //
 
+#include "refnindex.h"
 #include "functiontable.h"
 
 static bool debugging = false;

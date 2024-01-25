@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "standard.h"
 #include "parse.h"
+#include "refnindex.h"
 #include "pnode.h"
 #include "interp.h"
 #include "functiontable.h"

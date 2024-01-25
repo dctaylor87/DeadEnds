@@ -27,6 +27,7 @@
 #include "standard.h"
 #include "llnls.h"
 #include "path.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "database.h"
 #include "import.h"

@@ -16,6 +16,7 @@
 #include "standard.h"		/* String */
 #include "llnls.h"
 #include "path.h"		/* fopenPath */
+#include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
 #else

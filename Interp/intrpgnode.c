@@ -11,6 +11,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include "standard.h"
+#include "refnindex.h"
 #include "pnode.h"
 #include "interp.h"
 #include "pvalue.h"

@@ -10,6 +10,7 @@
 #include <ansidecl.h>
 
 #include "standard.h"
+#include "refnindex.h"
 #include "gnode.h"    // GNode.
 #include "lineage.h"
 #include "pvalue.h"   // PValue.

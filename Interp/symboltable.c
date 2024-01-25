@@ -8,6 +8,7 @@
 //
 
 #include "standard.h"
+#include "refnindex.h"
 #include "symboltable.h"
 
 static bool debugging = false;

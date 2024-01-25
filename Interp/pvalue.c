@@ -10,6 +10,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
+#include "refnindex.h"
 #include "pvalue.h"
 #include "standard.h"
 #include "gedcom.h"

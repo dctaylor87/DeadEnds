@@ -11,6 +11,7 @@
 #include <ansidecl.h>
 
 #include "standard.h"
+#include "refnindex.h"
 #include "pvaluetable.h"
 
 //  getPValueTableKey -- Get the key from a program value element.

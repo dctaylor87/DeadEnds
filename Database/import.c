@@ -16,6 +16,7 @@
 #include <stdlib.h> // realpath
 
 #include "standard.h"
+#include "refnindex.h"
 #include "import.h"
 #include "gnode.h"
 #include "stringtable.h"

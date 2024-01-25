@@ -10,6 +10,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
+#include "refnindex.h"
 #include "readnode.h"
 #include "stringtable.h"
 #include "list.h"

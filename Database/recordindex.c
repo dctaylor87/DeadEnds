@@ -11,6 +11,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
+#include "refnindex.h"
 #include "recordindex.h"
 #include "list.h"
 #include "sort.h"

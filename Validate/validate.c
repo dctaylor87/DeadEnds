@@ -7,6 +7,7 @@
 //  Last changed on 19 December 2023.
 //
 
+#include "refnindex.h"
 #include "validate.h"
 #include "gnode.h"
 #include "gedcom.h"

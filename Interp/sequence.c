@@ -12,6 +12,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include "standard.h"
+#include "refnindex.h"
 #include "sequence.h"
 #include "gnode.h"
 #include "lineage.h"

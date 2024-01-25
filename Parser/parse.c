@@ -11,6 +11,7 @@
 
 #include "parse.h"
 #include <stdarg.h>
+#include "refnindex.h"
 #include "functiontable.h"
 #include "integertable.h"
 #include "gedcom.h"

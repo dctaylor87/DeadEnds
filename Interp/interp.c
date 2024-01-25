@@ -12,6 +12,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include <stdarg.h>
+#include "refnindex.h"
 #include "symboltable.h"
 #include "functiontable.h"
 #include "pnode.h"

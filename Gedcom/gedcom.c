@@ -9,6 +9,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
+#include "refnindex.h"
 #include "gedcom.h"
 
 RecordType recordType(GNode *root)

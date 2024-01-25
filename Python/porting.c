@@ -18,6 +18,7 @@
 #include "porting.h"
 
 #include "hashtable.h"
+#include "refnindex.h"
 #include "database.h"
 #include "recordindex.h"
 

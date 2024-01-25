@@ -8,6 +8,7 @@
 //
 
 #include "stdlib.h"
+#include "refnindex.h"
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"

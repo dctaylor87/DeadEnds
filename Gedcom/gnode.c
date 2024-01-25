@@ -9,6 +9,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
 #include "standard.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "nodeutils.h"
 #include "lineage.h"

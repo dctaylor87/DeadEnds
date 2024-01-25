@@ -12,6 +12,7 @@
 
 #include <ansidecl.h>
 
+#include "refnindex.h"
 #include "pnode.h"
 #include "interp.h"
 #include "list.h"

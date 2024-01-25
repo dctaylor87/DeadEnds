@@ -10,6 +10,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 
+#include "refnindex.h"
 #include "pnode.h"
 #include "standard.h"
 #include "hashtable.h"
