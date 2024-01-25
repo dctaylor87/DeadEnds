@@ -8,6 +8,7 @@
 //
 %{
 //#include "llstdlib.h"
+#include "refnindex.h"
 #include "lexer.h"
 #include "symboltable.h"
 #include "functiontable.h"
