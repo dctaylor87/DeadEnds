@@ -73,10 +73,11 @@ typedef void *		VPTR;
 #define othr_to_cache(node)	/* empty */
 #define sour_to_cache(node)	/* empty */
 
-#define fam_to_dbase(node)	/* empty */
-#define even_to_dbase(node)	/* empty */
-#define othr_to_dbase(node)	/* empty */
-#define sour_to_dbase(node)	/* empty */
+#define indi_to_dbase(node)	AddOrUpdatePersonInDatabase(database, node)
+#define fam_to_dbase(node)	AddOrUpdateFamilyInDatabase(database, node)
+#define even_to_dbase(node)	AddOrUpdateEventInDatabase(database, node)
+#define othr_to_dbase(node)	AddOrUpdateOtherInDatabase(database, node)
+#define sour_to_dbase(node)	AddOrUpdateSourceInDatabase(database, node)
 
 #define fam_to_cacheel(record)	0
 #define indi_to_cacheel(record)	0

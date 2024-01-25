@@ -13,6 +13,7 @@ libllsupport_a_SOURCES = \
 	llgettext.c \
 	locales.c \
 	messages.c \
+	refns.c \
 	remove.c \
 	replace.c \
 	stdstrng.c \
