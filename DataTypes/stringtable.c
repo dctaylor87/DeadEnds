@@ -64,7 +64,7 @@ bool isInStringTable(StringTable *table, CString key)
 //  insertInStringTable -- Insert a (key, value) pair into a hash table. If the values are null,
 //    the string table behaves like a set of strings.
 //--------------------------------------------------------------------------------------------------
-void insertInStringTable(HashTable *table, CString key, String value)
+void insertInStringTable(HashTable *table, CString key, CString value)
 {
     //  See if the key is in the table; remove the old element if it is.
     StringElement *element = (StringElement*) searchHashTable(table, key);

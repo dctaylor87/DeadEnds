@@ -27,7 +27,7 @@ typedef struct StringElement {
 HashTable *createStringTable(void);
 String searchStringTable(StringTable*, CString key);
 extern bool isInStringTable(StringTable *table, CString key);
-void insertInStringTable(StringTable*, CString key, String value);
+void insertInStringTable(StringTable*, CString key, CString value);
 String fixString(StringTable *table, String string);
 void showStringTable(StringTable*);  //  For debugging.
 

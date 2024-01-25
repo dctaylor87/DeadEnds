@@ -211,7 +211,7 @@ void sortBucket(Bucket *bucket, int(*compare)(Word, Word), String(*getKey)(Word)
 //  isInHashTable -- Check whether an element with a given key is in the hash table.
 //    The key is extracted from the element argument.
 //--------------------------------------------------------------------------------------------------
-bool isInHashTable(HashTable *table, String key)
+bool isInHashTable(HashTable *table, CString key)
 {
 	ASSERT(table && key);
 	return searchHashTable(table, key) != null;
@@ -247,7 +247,7 @@ void insertInHashTable(HashTable *table, Word element)
 
 //  removeFromHashTable -- Remove an element with a specific key from a hash table.
 //--------------------------------------------------------------------------------------------------
-void removeFromHashTable(HashTable *table, String key)
+void removeFromHashTable(HashTable *table, CString key)
 {
 	// Hash the key to find the bucket with the element.
 	int hash = getHash(key);

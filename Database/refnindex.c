@@ -18,7 +18,7 @@
 //  searchRefnIndex -- Search a RefnIndex for a reference (REFN) value.
 //--------------------------------------------------------------------------------------------------
 
-String searchRefnIndex(RefnIndex *index, String refn)
+String searchRefnIndex(RefnIndex *index, CString refn)
 {
 	RefnIndexEl *el = (RefnIndexEl*) searchHashTable(index, refn);
 	return el ? el->key : null;
@@ -73,7 +73,7 @@ void deleteRefnIndex (RefnIndex *index)
 //    reference value was not already in the index. Returns false of the reference value is
 //    already in the index.
 //-------------------------------------------------------------------------------------------------
-bool insertInRefnIndex (RefnIndex *index, String refn, String key)
+bool insertInRefnIndex (RefnIndex *index, CString refn, CString key)
 {
 	//  Get the bucket index and create a bucket if it does not exist.
 	int hash = getHash(refn);

@@ -47,7 +47,7 @@ typedef struct HashTable {
 HashTable *createHashTable(int (*compare)(Word, Word), void(*delete)(Word), String(*getKey)(Word));
 extern int compareElements(Word a, Word b, String(*getKey)(Word));
 void deleteHashTable(HashTable*);  // Delete a HashTable; use the element delete function if exists.
-bool isInHashTable(HashTable*, String key);  //  Return whether an element with key is in.
+bool isInHashTable(HashTable*, CString key);  //  Return whether an element with key is in.
 Word searchHashTable(HashTable*, CString key);  // Return the element that matches the key.
 
 void insertInHashTable(HashTable*, Word element);  // Add a new element to the table.
@@ -56,7 +56,7 @@ Word nextInHashTable(HashTable*, int*, int*);  // Return next table element in i
 int sizeHashTable(HashTable*);  // Return the number of elements in a table.
 void showHashTable(HashTable*, void (*show)(Word));  // Show the contents of a table; for debugging.
 /*static*/ int getHash(CString);  // Return the hashed value of a String.
-void removeFromHashTable(HashTable*, String key);
+void removeFromHashTable(HashTable*, CString key);
 int iterateHashTableWithPredicate(HashTable*, bool (*function)(Word element));
 
 //  SHOULDN'T THE BUCKET FUNCTIONS BE STATIC, SO NOT DECLARED IN HERE AT ALL??
