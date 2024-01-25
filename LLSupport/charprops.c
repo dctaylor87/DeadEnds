@@ -28,6 +28,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "codesets.h"
+#include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
 #include "charmaps.h"
@@ -65,13 +66,16 @@ static int loaded_codepage = 0;
 static TRANTABLE uppers = 0;
 static TRANTABLE lowers = 0;
 static STRING charset_name = 0; /* what charset is currently in charset_info */
+#if !defined(DEADENDS)
 static struct my_charset_info_tag charset_info[256];
+#endif
 
 /*********************************************
  * local & exported function definitions
  * body of module
  *********************************************/
 
+#if !defined(DEADENDS)
 /*==========================================
  * charprops_load_utf8 -- Load case tables for full UTF-8
  *========================================*/
@@ -153,6 +157,7 @@ charprops_load_utf8 (void)
 	set_utf8_casing(charprops_toupperz, charprops_tolowerz);
 	return TRUE;
 }
+#endif
 /*==========================================
  * charprops_is_loaded -- Return 1 if UnicodeData.txt file was loaded
  *  (meaning we have our own uppercasing translation tables)
@@ -180,6 +185,8 @@ charprops_free_all (void)
 	strfree(&charset_name);
 	loaded_codepage = 0;
 }
+
+#if !defined(DEADENDS)
 /*==========================================
  * charprops_load -- Load case tables for a single codepage
  *========================================*/
@@ -263,6 +270,8 @@ charprops_load (const char * codepage)
 	strupdate(&charset_name, codepage);
 	return TRUE;
 }
+#endif
+
 /*==========================================
  * charprops_toupperz -- Return uppercase version of string
  * Only used when internal codeset is UTF-8
