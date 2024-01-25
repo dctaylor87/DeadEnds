@@ -30,6 +30,8 @@ typedef struct Database {
     RecordIndex *eventIndex;  // Index of events in this database.
     RecordIndex *otherIndex;  // Indes of other records in this database.
     NameIndex *nameIndex;  // Index of the names of the persons in this database.
+
+    RefnIndex *refnIndex; // Index of REFNs in this database
 #if 0
     CString backupPath;	// path of the most recent backup, if any
 #endif
