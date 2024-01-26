@@ -45,6 +45,7 @@
 #include "standard.h"
 #include "llnls.h"
 
+#include "llgettext.h"
 #include "locales.h"
 #include "list.h"
 #include "zstr.h"

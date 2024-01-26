@@ -36,6 +36,7 @@
 # include "langinfz.h"
 #endif
 
+#include "llgettext.h"
 #include "locales.h"
 #include "codesets.h"
 #include "list.h"
