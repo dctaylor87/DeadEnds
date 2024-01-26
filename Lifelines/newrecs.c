@@ -60,6 +60,9 @@
 //#include "readindex.h"
 #include "database.h"
 #include "xreffile.h"
+#include "ll-addoperations.h"
+#include "splitjoin.h"
+#include "refns.h"
 
 #include "llpy-externs.h"
 
@@ -95,10 +98,17 @@
 /* alphabetical */
 static RECORD edit_add_record(STRING recstr, STRING redt, STRING redtopt
 	, char ntype, STRING cfrm);
+#if defined(DEADENDS)
+static BOOLEAN edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
+			   String redtopt,
+			   bool (*val)(GNode *, String *, GNode *), String cfrm,
+			   bool (*todbase)(GNode *, Database *),
+			   String gdmsg, RFMT rfmt);
+#else
 static BOOLEAN edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	, STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
 	, void (*todbase)(NODE), STRING gdmsg, RFMT rfmt);
-
+#endif
 
 /*********************************************
  * local function definitions
@@ -168,28 +178,36 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	BOOLEAN emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	STRING (*getreffnc)(void) = NULL; /* get next internal key */
+#if defined(DEADENDS)
+	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
+#else
 	void (*todbasefnc)(NODE) = NULL;  /* write record to dbase */
-#if !defined(DEADENDS)
 	void (*tocachefnc)(NODE) = NULL;  /* write record to cache */
 #endif
 	
 	/* set up functions according to type */
 	if (ntype == 'S') {
 		getreffnc = getsxref;
+#if defined(DEADENDS)
+		todbasefnc = AddOrUpdateSourceInDatabase;
+#else
 		todbasefnc = sour_to_dbase;
-#if !defined(DEADENDS)
 		tocachefnc = sour_to_cache;
 #endif
 	} else if (ntype == 'E') {
 		getreffnc = getexref;
+#if defined(DEADENDS)
+		todbasefnc = AddOrUpdateEventInDatabase;
+#else
 		todbasefnc = even_to_dbase;
-#if !defined(DEADENDS)
 		tocachefnc = even_to_cache;
 #endif
 	} else { /* X */
 		getreffnc = getxxref;
+#if defined(DEADENDS)
+		todbasefnc = AddOrUpdateOtherInDatabase;
+#else
 		todbasefnc = othr_to_dbase;
-#if !defined(DEADENDS)
 		tocachefnc = othr_to_cache;
 #endif
 	}
@@ -251,8 +269,10 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
 			add_refn(nval(refn), key);
 	}
+#if defined(DEADENDS)
+	(*todbasefnc)(node, database);
+#else
 	(*todbasefnc)(node);
-#if !defined(DEADENDS)
 	(*tocachefnc)(node);
 #endif
 	return key_to_record(key);
@@ -263,8 +283,14 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 BOOLEAN
 edit_source (RECORD rec, RFMT rfmt)
 {
+#if defined(DEADENDS)
+	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt),
+			   valid_sour_tree, _(qScfrupt),
+			   AddOrUpdateSourceInDatabase, _(qSgdrmod), rfmt);
+#else
 	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt)
 		, valid_sour_tree, _(qScfrupt), sour_to_dbase, _(qSgdrmod), rfmt);
+#endif
 }
 /*=====================================
  * edit_event -- Edit event in database
@@ -272,8 +298,14 @@ edit_source (RECORD rec, RFMT rfmt)
 BOOLEAN
 edit_event (RECORD rec, RFMT rfmt)
 {
+#if defined(DEADENDS)
+	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt),
+			   valid_even_tree, _(qScfeupt),
+			   AddOrUpdateEventInDatabase, _(qSgdemod), rfmt);
+#else
 	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt)
 		, valid_even_tree, _(qScfeupt), even_to_dbase, _(qSgdemod), rfmt);
+#endif
 }
 /*===========================================
  * edit_other -- Edit other record in database (eg, NOTE)
@@ -281,8 +313,14 @@ edit_event (RECORD rec, RFMT rfmt)
 BOOLEAN
 edit_other (RECORD rec, RFMT rfmt)
 {
+#if defined(DEADENDS)
+	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt),
+			   valid_othr_tree, _(qScfxupt),
+			   AddOrUpdateOtherInDatabase, _(qSgdxmod), rfmt);
+#else
 	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt)
 		, valid_othr_tree, _(qScfxupt), othr_to_dbase, _(qSgdxmod), rfmt);
+#endif
 }
 /*=======================================
  * edit_any_record -- Edit record of any type
@@ -330,11 +368,19 @@ write_node_to_editfile (NODE node)
  *  gdmsg:   [IN]  success message
  *  rfmt:    [IN]  display reformatter
  *=====================================*/
+#if defined(DEADENDS)
+static bool
+edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
+	    String redtopt,
+	    bool (*val)(GNode *, String *, GNode *), String cfrm,
+	    bool (*todbase)(GNode *, Database *),
+	    String gdmsg, RFMT rfmt)
+#else
 static BOOLEAN
-edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
-	, BOOLEAN (*val)(NODE, STRING *, NODE)
-	, STRING cfrm, void (*todbase)(NODE), STRING gdmsg
-	, RFMT rfmt)
+edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
+	    , STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
+	    , void (*todbase)(NODE), STRING gdmsg, RFMT rfmt)
+#endif
 {
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	STRING msg, key;
@@ -436,7 +482,11 @@ edit_record (RECORD rec1, STRING idedt, INT letr, STRING redt, STRING redtopt
 
 /* Change the database */
 
+#if defined(DEADENDS)
+	(*todbase)(root1, database);
+#else
 	(*todbase)(root1);
+#endif
 	key = rmvat(nxref(root1));
 	/* remove deleted refns & add new ones */
 	classify_nodes(&refn1, &refnn, &refn1n);
