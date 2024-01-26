@@ -73,11 +73,11 @@ typedef void *		VPTR;
 #define othr_to_cache(node)	/* empty */
 #define sour_to_cache(node)	/* empty */
 
-#define indi_to_dbase(node)	AddOrUpdatePersonInDatabase(database, node)
-#define fam_to_dbase(node)	AddOrUpdateFamilyInDatabase(database, node)
-#define even_to_dbase(node)	AddOrUpdateEventInDatabase(database, node)
-#define othr_to_dbase(node)	AddOrUpdateOtherInDatabase(database, node)
-#define sour_to_dbase(node)	AddOrUpdateSourceInDatabase(database, node)
+#define indi_to_dbase(node)	AddOrUpdatePersonInDatabase(node, database)
+#define fam_to_dbase(node)	AddOrUpdateFamilyInDatabase(node, database)
+#define even_to_dbase(node)	AddOrUpdateEventInDatabase(node, database)
+#define othr_to_dbase(node)	AddOrUpdateOtherInDatabase(node, database)
+#define sour_to_dbase(node)	AddOrUpdateSourceInDatabase(node, database)
 
 #define fam_to_cacheel(record)	0
 #define indi_to_cacheel(record)	0
@@ -136,3 +136,11 @@ typedef void *		VPTR;
 
 #define strfree(ptr_to_str)	{ stdfree (*ptr_to_str); *ptr_to_str = 0; }
 #define ISNULL(k)		(!k || *k == 0)
+
+#define resolve_refn_links(node)	resolveRefnLinks(node, database)
+#define add_refn(refn, key)		addRefn(refn, key, database)
+#define remove_refn(refn, key)		removeRefn(refn, key, database)
+#define get_refn(refn)			getRefn(refn, database)
+#define index_by_refn(node)		indexByRefn(node, database)
+#define annotate_with_supplemental(node, rfmt)	annotateWithSupplemental(node, rfmt, database)
+#define traverse_refns(func, param)	traverseRefns(func, param, database)
