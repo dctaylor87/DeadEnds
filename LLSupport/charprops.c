@@ -75,7 +75,6 @@ static struct my_charset_info_tag charset_info[256];
  * body of module
  *********************************************/
 
-#if !defined(DEADENDS)
 /*==========================================
  * charprops_load_utf8 -- Load case tables for full UTF-8
  *========================================*/
@@ -157,7 +156,7 @@ charprops_load_utf8 (void)
 	set_utf8_casing(charprops_toupperz, charprops_tolowerz);
 	return TRUE;
 }
-#endif
+
 /*==========================================
  * charprops_is_loaded -- Return 1 if UnicodeData.txt file was loaded
  *  (meaning we have our own uppercasing translation tables)
