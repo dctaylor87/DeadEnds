@@ -10,6 +10,7 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	codesets.c \
 	equaliso.c \
+	ll-addoperations.c \
 	llgettext.c \
 	locales.c \
 	messages.c \
