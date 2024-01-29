@@ -190,7 +190,9 @@ static void display_status(STRING text);
 static BOOLEAN does_match(VPTR param, VPTR el);
 static void edit_tt_menu(void);
 static void edit_user_options(void);
+#if !defined(DEADENDS)
 static void edit_place_table(void);
+#endif
 static void end_action(void);
 BOOLEAN get_answer(UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen);
 static INT get_brwsmenu_size(INT screen);
@@ -1937,8 +1939,8 @@ invoke_utils_menu (void)
 	case 'd': show_database_stats(); break;
 #if !defined(DEADENDS)		/* DeadEnds has no cache */
 	case 'm': display_cache_stats(); break;
-#endif
 	case 'e': edit_place_table(); break;
+#endif
 	case 'o': edit_user_options(); break;
 	case 'c': invoke_cset_display(); break;
 		/*
@@ -2010,6 +2012,8 @@ uopt_validate (TABLE tab, void * param)
 	}
 	return 0;
 }
+
+#if !defined(DEADENDS)
 /*===============================
  * edit_place_table -- Allow user to edit the table of place abbreviations
  *=============================*/
@@ -2018,6 +2022,8 @@ edit_place_table (void)
 {
 	edit_valtab_from_db("VPLAC", &placabbvs, ':', _(qSabverr), 0, 0);
 }
+#endif
+
 /*===============================
  * edit_user_options -- Allow user to edit options embedded in current db
  *=============================*/
@@ -2753,7 +2759,9 @@ repaint_utils_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_utkpers));
 	mvccwaddstr(win, row++, 4, _(qSmn_utdbstat));
 	mvccwaddstr(win, row++, 4, _(qSmn_utmemsta));
+#if !defined(DEADENDS)
 	mvccwaddstr(win, row++, 4, _(qSmn_utplaces));
+#endif
 	mvccwaddstr(win, row++, 4, _(qSmn_utusropt));
 	mvccwaddstr(win, row++, 4, _(qSmn_mmcset));
 	mvccwaddstr(win, row++, 4, _(qSmn_quit));
