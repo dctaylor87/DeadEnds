@@ -70,6 +70,7 @@
 #include "options.h"
 #include "xreffile.h"
 #include "de-strings.h"
+#include "ll-gedcom.h"
 
 #include "llpy-externs.h"
 
@@ -141,8 +142,10 @@ static void history_record(RECORD rec, struct hist * histp);
 static RECORD history_fwd(struct hist * histp);
 static void init_hist_lists(void);
 static void init_hist(struct hist * histp, INT count);
+#if !defined(DEADENDS)
 static void load_hist_lists(void);
 static void load_nkey_list(STRING key, struct hist * histp);
+#endif
 static void prompt_add_spouse_with_candidate(RECORD fam, RECORD save);
 static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
 static void pick_remove_spouse_from_family(RECORD frec);
@@ -307,7 +310,7 @@ goto_indi_child (RECORD irec, int childno)
   NODE indi = nztop(irec);
   if (!irec)
     return NULL;
-  FORFAMS(indi, fam, num1)
+  FORFAMS(indi, fam, num1, database)
     FORCHILDREN(fam, chil, key, num2, database)
       if (num2 == childno) 
         akey = key;
@@ -1620,6 +1623,8 @@ init_hist_lists (void)
 	init_hist(&vhist, count);
 	init_hist(&chist, count);
 }
+
+#if !defined(DEADENDS)
 /*==================================================
  * load_hist_lists -- Load previous history from database
  * Created: 2001/12/23, Perry Rapp
@@ -1632,6 +1637,8 @@ load_hist_lists (void)
 		load_nkey_list("HISTC", &chist);
 	}
 }
+#endif
+
 /*==================================================
  * save_hist_lists -- Save history into database
  * Created: 2001/12/23, Perry Rapp
@@ -1679,6 +1686,8 @@ term_hist (struct hist * histp)
 	stdfree(histp->list);
 	histp->size = 0;
 }
+
+#if !defined(DEADENDS)
 /*==================================================
  * load_nkey_list -- Load node list from record into NKEY array
  *  key:   [IN]  key used to store list in database
@@ -1742,6 +1751,8 @@ load_nkey_list (STRING key, struct hist * histp)
 end:
 	stdfree(rawrec);
 }
+#endif
+
 /*==================================================
  * get_hist_count -- Calculate current size of history
  * Created: 2001/12/23, Perry Rapp
@@ -2171,6 +2182,8 @@ autoadd_xref (RECORD rec, NODE newnode)
 	
 	unknown_node_to_dbase(node);
 }
+
+#if !defined(DEADENDS)
 /*==================================================
  * get_vhist_len -- how many records currently in visit history list ?
  * Created: 2002/06/23, Perry Rapp
@@ -2180,6 +2193,7 @@ get_vhist_len (void)
 {
 	return get_hist_count(&vhist);
 }
+
 /*==================================================
  * get_chist_len -- how many records currently in change history list ?
  * Created: 2002/06/23, Perry Rapp
@@ -2189,6 +2203,8 @@ get_chist_len (void)
 {
 	return get_hist_count(&chist);
 }
+#endif
+
 /*==================================================
  * init_browse_module -- Do any initialization
  *  This is after database is determined, and before
@@ -2199,7 +2215,9 @@ void
 init_browse_module (void)
 {
 	init_hist_lists();
+#if !defined(DEADENDS)
 	load_hist_lists();
+#endif
 }
 /*==================================================
  * term_browse_module -- Cleanup for browse module
@@ -2209,6 +2227,8 @@ init_browse_module (void)
 void
 term_browse_module (void)
 {
+#if !defined(DEADENDS)
 	save_hist_lists();
+#endif
 	term_hist_lists();
 }
