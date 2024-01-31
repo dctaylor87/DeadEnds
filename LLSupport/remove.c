@@ -49,6 +49,9 @@
 #include "remove.h"
 #include "splitjoin.h"
 #include "messages.h"
+#include "ll-addoperations.h"
+#include "rfmt.h"
+#include "refns.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

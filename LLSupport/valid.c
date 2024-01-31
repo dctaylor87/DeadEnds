@@ -54,6 +54,7 @@
 #include "xlat.h"
 #include "editing.h"
 #include "messages.h"
+#include "refns.h"
 #else
 #include "llstdlib.h"
 #include "table.h"

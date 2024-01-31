@@ -33,6 +33,7 @@
 #include "readwrite.h"
 #include "charmaps.h"
 #include "de-strings.h"
+#include "strcvt.h"
 #else
 
 #include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */

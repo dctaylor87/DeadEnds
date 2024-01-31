@@ -39,6 +39,8 @@
 #include "ll-list.h"
 #include "de-strings.h"
 #include "zstr.h"
+#include "strcvt.h"
+#include "icvt.h"
 
 #else
 
@@ -102,8 +104,8 @@ static XLSTEP create_dyntt_step(DYNTT dyntt);
 static XLAT create_null_xlat(BOOLEAN adhoc);
 static XLAT create_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
 static DYNTT create_dyntt(TRANTABLE tt, CNSTRING name, CNSTRING path);
-static void destroy_dyntt(DYNTT dyntt);
 #if !defined(DEADENDS)
+static void destroy_dyntt(DYNTT dyntt);
 static void dyntt_destructor(VTABLE *obj);
 #endif
 static void free_dyntts(void);
@@ -662,6 +664,8 @@ xlat_shutdown (void)
 	xl_free_xlats();
 	free_dyntts();
 }
+
+#if !defined(DEADENDS)
 /*=================================================
  * destroy_table -- destroy all element & memory for table
  *===============================================*/
@@ -678,6 +682,8 @@ destroy_dyntt (DYNTT dyntt)
 	dyntt->tt = 0;
 	stdfree(dyntt);
 }
+#endif
+
 /*==========================================================
  * xl_parse_codeset -- Parse out subcode suffixes of a codeset
  *  eg, "CP437//TrGreekAscii//TrCyrillicAscii"

@@ -37,6 +37,7 @@
 #include "liflines.h"
 #include "ll-list.h"
 #include "lineage.h"
+#include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

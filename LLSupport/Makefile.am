@@ -10,6 +10,7 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	codesets.c \
 	equaliso.c \
+	icvt.c \
 	ll-addoperations.c \
 	llgettext.c \
 	locales.c \
@@ -19,6 +20,7 @@ libllsupport_a_SOURCES = \
 	replace.c \
 	stdstrng.c \
 	strapp.c \
+	strcvt.c \
 	strset.c \
 	strutf8.c \
 	strwhite.c \

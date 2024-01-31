@@ -66,6 +66,8 @@
 #include "splitjoin.h"
 #include "remove.h"
 #include "nodeutils.h"
+#include "ll-addoperations.h"
+#include "refns.h"
 
 #include "llpy-externs.h"
 

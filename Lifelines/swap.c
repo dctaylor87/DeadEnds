@@ -59,6 +59,7 @@
 #include "messages.h"
 #include "splitjoin.h"
 #include "remove.h"
+#include "ll-addoperations.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

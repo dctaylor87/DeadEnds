@@ -42,6 +42,8 @@
 
 #include "codesets.h"
 #include "de-strings.h"
+#include "zstr.h"
+#include "strcvt.h"
 
 #else
 
