@@ -63,6 +63,8 @@
 #include "lineage.h"
 #include "gnode.h"
 #include "replace.h"
+#include "editing.h"
+#include "refns.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

@@ -350,7 +350,11 @@ init_display_indi (RECORD irec, INT width)
 	icel = indi_to_cacheel_old(pers);
 	lock_cache(icel);
 #endif
+#if defined(DEADENDS)
+	FORSPOUSES(pers, sp, fam, num, database)
+#else
 	FORFAMSS(pers, fam, sp, num)
+#endif
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
 	        if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
@@ -362,8 +366,10 @@ init_display_indi (RECORD irec, INT width)
 				if(chld) add_child_line(++nch, chld, width);
 			ENDCHILDREN
 		}
+#if defined(DEADENDS)
+	ENDSPOUSES
+#else
 	ENDFAMSS
-#if !defined(DEADENDS)
 	unlock_cache(icel);
 #endif
 }
@@ -1105,7 +1111,11 @@ display_cache_stats (void)
 static STRING
 sh_indi_to_event_long (NODE node, STRING tag, STRING head, INT len)
 {
+#if defined(DEADENDS)
+	return personToEvent(node, tag, head, len, false);
+#else
 	return indi_to_event(node, tag, head, len, &disp_long_rfmt);
+#endif
 }
 /*================================================
  * sh_indi_to_event_shrt -- Pass-thru to indi_to_event, short display
@@ -1114,7 +1124,11 @@ sh_indi_to_event_long (NODE node, STRING tag, STRING head, INT len)
 static STRING
 sh_indi_to_event_shrt (NODE node, STRING tag, STRING head, INT len)
 {
+#if defined(DEADENDS)
+	return personToEvent(node, tag, head, len, true);
+#else
 	return indi_to_event(node, tag, head, len, &disp_shrt_rfmt);
+#endif
 }
 /*==================================================
  * sh_fam_to_event_shrt -- Pass-thru to fam_to_event

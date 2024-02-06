@@ -285,6 +285,8 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 	}
 	return 0;
 }
+
+#if !defined(DEADENDS)
 /*===================================================
  * init_map_from_rec -- Init single translation table
  *  indx:  [IN]  which translation table (see defn of map_keys)
@@ -312,6 +314,8 @@ init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
 	zs_free(&zerr);
 	return ok;
 }
+#endif
+
 /*====================================================
  * init_map_from_file -- Init single translation table
  *  file: [IN]  file from which to read translation table
@@ -607,6 +611,8 @@ hexvalue (INT c)
 	if (c >= 'A' && c <= 'F') return 10 + c - 'A';
 	return -1;
 }
+
+#if !defined(DEADENDS)
 /*====================================================
  * maperror -- Print error message from reading map
  *==================================================*/
@@ -615,6 +621,8 @@ maperror (CNSTRING errmsg)
 {
 	llwprintf("%s", (STRING)errmsg);
 }
+#endif
+
 #ifdef DEBUG
 /*=======================================================
  * show_trantable -- DEBUG routine that shows a TRANTABLE

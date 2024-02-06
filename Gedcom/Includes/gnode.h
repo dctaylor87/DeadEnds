@@ -56,6 +56,7 @@ int treeStringLength(int, GNode*);
 GNode* personToFamilyAsChild(GNode *person, Database*);
 
 String personToEvent(GNode*, String, String, int, bool);
+String familyToEvent(GNode*, String, String, int, bool);
 String eventToString(GNode*, bool);
 String eventToDate(GNode*, bool);
 String event_to_plac(GNode*, bool);

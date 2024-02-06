@@ -149,8 +149,10 @@ static void load_nkey_list(STRING key, struct hist * histp);
 static void prompt_add_spouse_with_candidate(RECORD fam, RECORD save);
 static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
 static void pick_remove_spouse_from_family(RECORD frec);
+#if !defined(DEADENDS)
 static void save_hist_lists(void);
 static void save_nkey_list(STRING key, struct hist * histp);
+#endif
 static void setrecord(RECORD * dest, RECORD * src);
 static void term_hist_lists(void);
 static void term_hist(struct hist * histp);
@@ -1637,7 +1639,6 @@ load_hist_lists (void)
 		load_nkey_list("HISTC", &chist);
 	}
 }
-#endif
 
 /*==================================================
  * save_hist_lists -- Save history into database
@@ -1651,6 +1652,8 @@ save_hist_lists (void)
 	save_nkey_list("HISTV", &vhist);
 	save_nkey_list("HISTC", &chist);
 }
+#endif
+
 /*==================================================
  * term_hist_lists -- destroy history lists
  * Created: 2021/04/18, Matt Emmerton
@@ -1688,6 +1691,9 @@ term_hist (struct hist * histp)
 }
 
 #if !defined(DEADENDS)
+/* currently we have no way to save the history, so loading saving
+   history is not an option...  maybe some day we'll figure out a
+   location to save it...  */
 /*==================================================
  * load_nkey_list -- Load node list from record into NKEY array
  *  key:   [IN]  key used to store list in database
@@ -1767,6 +1773,10 @@ get_hist_count (struct hist * histp)
 	else
 		return histp->size - histp->start + histp->past_end;
 }
+
+#if !defined(DEADENDS)
+/* currently we do not have a location to save history... */
+
 /*==================================================
  * save_nkey_list -- Save nkey list from circular array
  *  key:     [IN]  key used to store list in database
@@ -1819,6 +1829,8 @@ save_nkey_list (STRING key, struct hist * histp)
 
 	store_text_file_to_db(key, editfile, 0);
 }
+#endif
+
 /*==================================================
  * history_record_change -- add node to change history
  *  (if different from top of history)

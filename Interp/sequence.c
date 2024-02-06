@@ -127,9 +127,9 @@ void appendToSequence(Sequence *sequence, String key, String name, PValue *val)
 	sequence->max = 0;
 }
 
-//  rename_indiseq -- Update element name with standard name
+//  renameSequence -- Update element name with standard name
 //--------------------------------------------------------------------------------------------------
-void rename_indiseq(Sequence *seq, String key)
+void renameSequence(Sequence *seq, String key)
 //  seq -- Sequence with the element to change.
 //  key -- Key of the element to change.
 {
@@ -197,9 +197,9 @@ bool removeFromSequence(Sequence *sequence, String key, String name, int index)
 	return true;
 }
 
-//  element_indiseq -- Return an element from a sequence
+//  elementSequence -- Return an element from a sequence
 //--------------------------------------------------------------------------------------------------
-bool element_indiseq (Sequence *seq, int index, String* pkey, String* pname)
+bool elementSequence (Sequence *seq, int index, String* pkey, String* pname)
 //  seq -- Sequence.
 //  index -- Element index in sequence.
 //  pkey -- (out) Key of the element.
@@ -210,6 +210,19 @@ bool element_indiseq (Sequence *seq, int index, String* pkey, String* pname)
 	*pkey =  (IData(seq)[index])->key;
 	*pname = (IData(seq)[index])->name;
 	return true;
+}
+
+// elementKeySequence -- Return element key from sequence.
+//  or NULL on error (sequence NULL, index out of range).
+
+CString elementKeySequence (Sequence *seq, int index)
+{
+  if (! seq)
+    return NULL;
+  if ((index < 0) || (index >= seq->size))
+    return NULL;
+
+  return (IData(seq)[index])->key;
 }
 
 //  nameCompare -- Compare two sequence elements by their name fields. The elements must hold

@@ -6,15 +6,19 @@
 noinst_LIBRARIES = libllsupport.a
 
 libllsupport_a_SOURCES = \
+	appendstr.c \
+	brwslist.c \
 	charmaps.c \
 	charprops.c \
 	codesets.c \
 	equaliso.c \
 	icvt.c \
+	listener.c \
 	ll-addoperations.c \
 	llgettext.c \
 	locales.c \
 	messages.c \
+	proptbls.c \
 	refns.c \
 	remove.c \
 	replace.c \

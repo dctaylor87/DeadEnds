@@ -134,6 +134,11 @@ String personToEvent(GNode* node, String tag, String head, int len, bool shorten
 	return scratch;
 }
 
+String familyToEvent(GNode* node, String tag, String head, int len, bool shorten)
+{
+  return personToEvent(node, tag, head, len, shorten);
+}
+
 //  eventToString -- Convert an event to a string.
 //  MNOTE: The string returned is in static memory. Callers must retain a copy if necessary.
 //--------------------------------------------------------------------------------------------------

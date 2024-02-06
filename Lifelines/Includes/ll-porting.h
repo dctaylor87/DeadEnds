@@ -43,6 +43,9 @@ typedef void *		VPTR;
 #define copy_indiseq(seq)	copySequence(seq)
 #define create_indiseq_null()	createSequence(database)
 
+#define rename_indiseq(seq, key)			renameSequence(seq, key)
+#define element_indiseq(seq, index, pkey, pname)	elementSequence(seq, index, pkey, pname)
+
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)
 
@@ -60,6 +63,7 @@ typedef void *		VPTR;
 #define indi_to_spouses(node)		personToSpouses(node, database)
 
 #define indi_to_name(node, len)		personToName(node,len)
+#define indi_to_title(node, len)	personToTitle(node,len)
 
 #define split_indi_old(indi,name,refn,sex,body,famc,fams) splitPerson(indi,name,refn,sex,body,famc,fams)
 #define split_fam(fam,refn,husb,wife,chil,rest) splitFamily(fam,refn,husb,wife,chil,rest)
@@ -95,6 +99,7 @@ typedef void *		VPTR;
 
 #define create_table_str()			createStringTable()
 #define insert_table_str(table, key, value)	insertInStringTable(table,key,value)
+#define replace_table_str(table, key, value)	insertInStringTable(table,key,value)
 #define valueof_str(table, key)			searchStringTable(table,key)
 
 #define create_table_int()			createIntegerTable()
@@ -144,3 +149,12 @@ typedef void *		VPTR;
 #define index_by_refn(node)		indexByRefn(node, database)
 #define annotate_with_supplemental(node, rfmt)	annotateWithSupplemental(node, rfmt, database)
 #define traverse_refns(func, param)	traverseRefns(func, param, database)
+
+/* experimental NKEY stuff */
+
+#define NKEY	String
+
+#define nkey_copy(src, dest)	*dest = strdup(*src)
+#define nkey_eq(nkey1, nkey2)	strcmp (*nkey1, *nkey2)
+#define nkey_clear(nkey)	*nkey = 0
+#define nkey_zero()		0

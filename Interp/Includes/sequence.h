@@ -81,6 +81,10 @@ Sequence *ancestorSequence(Sequence*);
 Sequence *descendentSequence(Sequence*); 
 Sequence *siblingSequence(Sequence*, bool);
 
+void renameSequence(Sequence *seq, String key);
+bool elementSequence(Sequence *seq, int index, String* pkey, String* pname);
+CString elementKeySequence (Sequence *seq, int index);
+
 void sequenceToGedcom(Sequence*, FILE*);
 
 // Kind of for debugging.

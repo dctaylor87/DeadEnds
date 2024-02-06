@@ -67,7 +67,9 @@
 #include "remove.h"
 #include "nodeutils.h"
 #include "ll-addoperations.h"
+#include "browse.h"
 #include "refns.h"
+#include "xreffile.h"
 
 #include "llpy-externs.h"
 

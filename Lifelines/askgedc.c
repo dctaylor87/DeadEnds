@@ -37,6 +37,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "readwrite.h"
+#include "proptbls.h"
 #include "de-strings.h"
 #else
 

@@ -44,3 +44,10 @@ extern void striptrail (STRING p);
 extern void skipws (STRING * ptr);
 extern BOOLEAN allwhite (STRING p);
 extern void chomp (STRING str);
+
+/* appendstr.c */
+
+extern void appendstr(STRING * pdest, INT * len, int utf8, CNSTRING src);
+/* The author of appendstr, writes: llstrcatn is a bad name, because
+   its prototype is different from strcatn! */
+#define llstrcatn(dest, src, len) appendstr(dest, len, uu8, src)

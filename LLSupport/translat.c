@@ -33,6 +33,7 @@
 #include "list.h"
 #include "de-strings.h"
 #include "zstr.h"
+#include "charmaps.h"
 #else
 
 #include <errno.h>

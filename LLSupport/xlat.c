@@ -41,6 +41,7 @@
 #include "zstr.h"
 #include "strcvt.h"
 #include "icvt.h"
+#include "charmaps.h"
 
 #else
 

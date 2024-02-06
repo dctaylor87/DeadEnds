@@ -3078,6 +3078,16 @@ register_screen_lang_callbacks (BOOLEAN registering)
 static void
 screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 {
+#if defined(DEADENDS)
+  int max = lengthList (list_uiwin);
+  int ndx;
+
+  for (ndx = 0; ndx < max; ndx++)
+    {
+      UIWINDOW uiwin = (UIWINDOW) getListElement (list_uiwin, ndx);
+      uiwin->outdated = TRUE;
+    }
+#else
 	LIST_ITER listit=0;
 	VPTR ptr=0;
 	listit = begin_list(list_uiwin);
@@ -3086,5 +3096,5 @@ screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 		uiwin->outdated = TRUE;
 	}
 	end_list_iter(&listit);
-
+#endif
 }
