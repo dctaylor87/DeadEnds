@@ -526,28 +526,7 @@ show_node_rec (INT levl,
 	show_node_rec(levl + 1, nchild(node));
 	show_node_rec(levl    , nsibling(node));
 }
-/*===========================================
- * length_nodes -- Return length of NODE list
- *=========================================*/
-INT
-length_nodes (NODE node)
-{
-	INT len = 0;
-	while (node) {
-		len++;
-		node = nsibling(node);
-	}
-	return len;
-}
 
-/*=======================
- * copy_node -- Copy node
- *=====================*/
-NODE
-copy_node (NODE node)
-{
-	return create_node(nxref(node), ntag(node), nval(node), NULL);
-}
 /*========================
  * copy_node_subtree -- Copy tree
  *======================*/
@@ -556,35 +535,7 @@ copy_node_subtree (NODE node)
 {
 	return copy_nodes(node, TRUE, FALSE);
 }
-/*========================
- * copy_nodes -- Copy tree
- *======================*/
-NODE
-copy_nodes (NODE node, BOOLEAN kids, BOOLEAN sibs)
-{
-#if defined(DEADENDS)
-	GNode *newn, *kin;
-#else
-	NODE newn, kin;
-#endif
-	if (!node) return NULL;
-	newn = copy_node(node);
-	if (kids && nchild(node)) {
-		kin = copy_nodes(nchild(node), TRUE, TRUE);
-		ASSERT(kin);
-		nchild(newn) = kin;
-		while (kin) {
-			nparent(kin) = newn;
-			kin = nsibling(kin);
-		}
-	}
-	if (sibs && nsibling(node)) {
-		kin = copy_nodes(nsibling(node), kids, TRUE);
-		ASSERT(kin);
-		nsibling(newn) = kin;
-	}
-	return newn;
-}
+
 /*===============================================================
  * traverse_nodes -- Traverse nodes in tree while doing something
  * NODE node:    root of tree to traverse

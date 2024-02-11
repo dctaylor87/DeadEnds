@@ -47,6 +47,7 @@ AM_CPPFLAGS=-I$(top_builddir) \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/Python/Includes \
 	-I$(top_srcdir)/Lifelines/Includes \
+	-I$(top_srcdir)/LLSupport/Includes \
 	-I$(top_srcdir)/Database/Includes \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \

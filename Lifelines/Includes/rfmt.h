@@ -3,9 +3,9 @@
    null, meaning use date or place exactly as occurs in data */
 
 struct tag_rfmt {
-  STRING (*rfmt_date)(STRING); /* returns static buffer */
-  STRING (*rfmt_plac)(STRING); /* returns static buffer */
-  STRING combopic; /* stdalloc'd buffer, eg, "%1, %2" */
+  String (*rfmt_date)(String); /* returns static buffer */
+  String (*rfmt_plac)(String); /* returns static buffer */
+  String combopic; /* stdalloc'd buffer, eg, "%1, %2" */
 };
 
 typedef struct tag_rfmt *RFMT;

@@ -15,6 +15,7 @@
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
+#include "rfmt.h"
 #include "ll-node.h"
 #else
 #include "standard.h"		/* STRING */
