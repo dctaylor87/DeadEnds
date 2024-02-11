@@ -39,6 +39,7 @@ Database *createDatabase(CString filePath)
 	database->eventIndex = createRecordIndex();
 	database->otherIndex = createRecordIndex();
 	database->nameIndex = createNameIndex();
+	database->refnIndex = createRefnIndex();
 	return database;
 }
 

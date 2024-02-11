@@ -3,7 +3,7 @@
 //  JustParsing
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 16 November 2023.
+//  Last changed on 9 February 2024.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -21,27 +21,26 @@ static int daycode = 0;
 static int monthcode = 3;
 static int datecode = 0;
 
-///*===============================
-// * __date -- Return date of event
-// *   usage: date(EVENT) -> STRING
-// *=============================*/
-//WORD __date (node, stab, eflg)
-//INTERP node; TABLE stab; bool *eflg;
-//{
-//    NODE evnt = (NODE) evaluate(ielist(node), stab, eflg);
-//    TRANTABLE ttr = tran_tables[MINRP];
-//    if (*eflg || !evnt) return NULL;
-//    return (WORD) eventToDate(evnt, ttr, FALSE);
-//}
+//  __date -- Return date of event
+//    usage: date(EVENT) -> STRING
+//--------------------------------------------------------------------------------------------------
+PValue __date (PNode *pnode, Context *context, bool *errflg)
+{
+	PValue pvalue = evaluate(pnode->arguments, context, errflg);
+	if (*errflg || !isGNodeType(pvalue.type)) return nullPValue;
+	String date = eventToDate(pvalue.value.uGNode, false);
+	if (date) return PVALUE(PVString, uString, strsave(date));
+	return nullPValue;
+}
 
 //  __place -- Return the place of event, the value of the first PLAC GNode in an event.
 //    usage: place(EVENT) -> STRING
 //--------------------------------------------------------------------------------------------------
-PValue __place(PNode *pnode, Context *context, bool* errflg)
+PValue __place(PNode *pnode, Context *context, bool *errflg)
 {
     PValue pvalue = evaluate(pnode->arguments, context, errflg);
     if (*errflg || !isGNodeType(pvalue.type)) return nullPValue;
-    String place = event_to_plac(pvalue.value.uGNode, false);
+    String place = eventToPlace(pvalue.value.uGNode, false);
     if (place) return PVALUE(PVString, uString, strsave(place));
     return nullPValue;
 }
@@ -115,8 +114,6 @@ PValue __dateformat(PNode *node, Context *context, bool* eflg)
 //  __stddate -- Return standard date format of event
 //    usage: stddate(EVENT) -> STRING
 //--------------------------------------------------------------------------------------------------
-
-
 PValue __stddate(PNode *node, Context *context, bool* eflg)
 {
     PValue pvalue = evaluate(node->arguments, context, eflg);
@@ -129,11 +126,11 @@ PValue __stddate(PNode *node, Context *context, bool* eflg)
 //  __gettoday -- Create today's event
 //    usage: gettoday() --> EVENT
 //--------------------------------------------------------------------------------------------------
-//PValue __gettoday(PNode expr, Context *context, bool* eflg)
-//{
-//    GNode prnt = createGNode(null, "EVEN", null, null);
-//    GNode chil = createGNode(null, "DATE", get_date(), prnt);
-//    prnt->gChild = chil;
-//    *eflg = false;
-//    return (PValue) {.pvType = PVGNode, .pvValue = pv(.uGNode = prnt)};
-//}
+PValue __gettoday(PNode *expr, Context *context, bool* eflg)
+{
+	GNode *prnt = createGNode(null, "EVEN", null, null);
+	GNode *chil = createGNode(null, "DATE", get_date(), prnt);
+	prnt->child = chil;
+	*eflg = false;
+	return PVALUE(PVGNode, uGNode, prnt);
+}

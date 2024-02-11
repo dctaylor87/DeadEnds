@@ -361,24 +361,25 @@ PValue __strtoint (PNode *node, Context *context, bool *eflg)
 //  __not -- Not operation
 //    usage: not(INT) -> INT
 //--------------------------------------------------------------------------------------------------
-PValue __not (PNode *node, Context *context, bool *eflg)
+PValue __not (PNode *node, Context *context, bool *errflg)
 {
-	PValue value = evaluateBoolean(node->arguments, context, eflg);
-	if (*eflg || value.type != PVBool) return nullPValue;
+	PValue value = evaluateBoolean(node->arguments, context, errflg);
+	if (*errflg || value.type != PVBool) return nullPValue;
 	return value.value.uBool ? falsePValue : truePValue;
 }
 
-///*================================
-// * __save -- Copy string
-// *   usage: save(STRING) -> STRING
-// *==============================*/
-//WORD __save (node, stab, eflg)
-//INTERP node; TABLE stab; bool *eflg;
-//{
-//    WORD value = evaluate(ielist(node), stab, eflg);
-//    if (*eflg) return NULL;
-//    return value? (WORD) strsave(value) : NULL;
-//}
+//  __save -- Copy string
+//--------------------------------------------------------------------------------------------------
+PValue __save (PNode *pnode, Context *context, bool *errflg)
+{
+    String value = evaluateString(pnode->arguments, context, errflg);
+	if (*errflg || !value || *value == 0) {
+		prog_error(pnode, "The argument to save must be a string.");
+		*errflg = true;
+		return nullPValue;
+	}
+	return PVALUE(PVString, uString, strsave(value));
+}
 
 //  __strlen -- Find length of string
 //    usage: strlen(STRING) -> INT
@@ -389,39 +390,34 @@ PValue __strlen (PNode *node, Context *context, bool* eflg)
 	if (*eflg || value.type != PVString) return nullPValue;
 	return PVALUE(PVInt, uInt, (long) strlen(value.value.uString));
 }
-///*==============================================
-// * __concat -- Catenate strings
-// *   usage: concat(STRING [, STRING]+) -> STRING
-// *============================================*/
-//WORD __concat (node, stab, eflg)
-//INTERP node; TABLE stab; bool *eflg;
-//{
-//        INTERP arg = (INTERP) ielist(node);
-//        INT len = 0, i, nstrs = 0;
-//        STRING hold[32];
-//        STRING p, new, str;
-//
-//        while (arg) {
-//                str = (STRING) evaluate(arg, stab, eflg);
-//                if (*eflg) return NULL;
-//                if (str) {
-//                        len += strlen(str);
-//                        hold[nstrs++] = strsave(str);
-//                } else
-//                        hold[nstrs++] = NULL;
-//                arg = inext(arg);
-//        }
-//        p = new = (STRING) stdalloc(len + 1);
-//        for (i = 0; i < nstrs; i++) {
-//                str = hold[i];
-//                if (str) {
-//                        strcpy(p, str);
-//                        p += strlen(p);
-//                        stdfree(str);
-//                }
-//        }
-//        return (WORD) new;
-//}
+
+//  __concat -- Catenate potentially many strings.
+//    usage: concat(STRING [, STRING]+) -> STRING
+//--------------------------------------------------------------------------------------------------
+PValue __concat (PNode *pnode, Context *context, bool *errflg)
+{
+	PNode *arg = pnode->arguments;
+	if (arg == null) return nullPValue;
+	int len = 0, nstrs = 0;
+	String hold[100];
+	PValue svalue = evaluate(arg, context, errflg);
+	while (arg != null) {
+		PValue svalue = evaluate(arg, context, errflg);
+		if (*errflg || svalue.type != PVString) return nullPValue;
+		len += strlen(svalue.value.uString);
+		hold[nstrs++] = svalue.value.uString;
+		arg = arg->next;
+	}
+	String nstring = stdalloc(len + 1);
+	String p = nstring;
+	for (int i = 0; i < nstrs; i++) {
+		strcpy(p, hold[i]);
+		p += strlen(p);
+		stdfree(hold[i]);
+	}
+	*p = 0;
+	return PVALUE(PVString, uString, nstring);
+}
 
 //  __lower -- Convert string to lower case.
 //    usage: lower(STRING) -> STRING
@@ -471,13 +467,12 @@ PValue __capitalize(PNode *node, Context *context, bool* eflg)
 //    return NULL;
 //}
 
-// * __root -- Return root of cached record
-// *   usage: root(INDI|FAM|EVEN|SOUR|OTHR) -> NODE
-// *=============================================*/
-//WORD __rot (node, stab, eflg)
-//INTERP node; TABLE stab; bool *eflg;
+//  __root -- Return root of cached record
+//    usage: root(INDI|FAM|EVEN|SOUR|OTHR) -> NODE
+//--------------------------------------------------------------------------------------------------
+//PValue __rot (PNode *pnode, Context *context, bool *errflg)
 //{
-//    STRING key;
+//    String key;
 //     CACHEEL cel = (CACHEEL) evaluate(ielist(node), stab, eflg);
 //        if (*eflg || !cel) return NULL;
 //        if (cnode(cel))
@@ -492,9 +487,6 @@ PValue __capitalize(PNode *node, Context *context, bool* eflg)
 //    default:  FATAL();
 //    }
 //}
-
-
-
 
 ///*=====================================
 // * __trim -- Trim string if too long
@@ -548,16 +540,10 @@ PValue __capitalize(PNode *node, Context *context, bool* eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __copyfile (PNode *node, Context *context, bool *eflg)
 {
-	PValue pvalue = evaluate(node->arguments, context, eflg);
-	if (pvalue.type != PVString) {
-		prog_error(node, "the argument to copyfile must be a string");
+	String fileName = evaluateString(node->arguments, context, eflg);
+	if (*eflg || fileName == null || strlen(fileName) == 0) {
 		*eflg = true;
-		return nullPValue;
-	}
-	String fileName = pvalue.value.uString;
-	if (!fileName || *fileName == 0) {
-		prog_error(node, "the argument to copyfile must be a string");
-		*eflg = true;
+		prog_error(node, "The argument to copyfile must be a string.");
 		return nullPValue;
 	}
 	FILE *cfp = fopenPath(fileName, "r", ".:$HOME");
@@ -566,12 +552,10 @@ PValue __copyfile (PNode *node, Context *context, bool *eflg)
 		*eflg = true;
 		return nullPValue;
 	}
-	//int c;
 	char buffer[1024];
 	while (fgets(buffer, 1024, cfp)) {
 		printf("%s", buffer);  // TODO: GOT TO CHANGE TO A MORE POUTPUT APPROACH.
 	}
-		//poutput(buffer);
 	fclose(cfp);
 	return nullPValue;
 }
@@ -734,4 +718,3 @@ PValue __deletenode (PNode *node, Context *context, bool *eflg)
 		prev->sibling = next;
 	return nullPValue;
 }
-

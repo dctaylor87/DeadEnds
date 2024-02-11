@@ -13,8 +13,8 @@ libdatabase_a_SOURCES = \
 	nameindex.c \
 	recordindex.c \
 	import.c \
-	addoperations.c \
-	removeoperations.c \
+	addops.c \
+	removeops.c \
 	refnindex.c
 
 AM_CPPFLAGS = \

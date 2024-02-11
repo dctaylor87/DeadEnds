@@ -140,7 +140,7 @@ extern PValue __reference(PNode*, Context*, bool*);
 extern PValue __requeue(PNode*, Context*, bool*);
 extern PValue __rjustify(PNode*, Context*, bool*);
 extern PValue __roman(PNode*, Context*, bool*);
-extern PValue __rot(PNode*, Context*, bool*);
+//extern PValue __rot(PNode*, Context*, bool*); // No cache-els any more.
 extern PValue __row(PNode*, Context*, bool*);
 extern PValue __save(PNode*, Context*, bool*);
 extern PValue __savenode(PNode*, Context*, bool*);

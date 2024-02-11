@@ -25,7 +25,8 @@ libinterp_a_SOURCES = \
 	pvaluetable.c \
 	sequence.c \
 	symboltable.c \
-	builtinlist.c
+	builtinlist.c \
+	rassa.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Parser/Includes \
