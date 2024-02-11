@@ -17,6 +17,7 @@ libllsupport_a_SOURCES = \
 	listener.c \
 	ll-addoperations.c \
 	ll-database.c \
+	ll-node.c \
 	ll-str.c \
 	llgettext.c \
 	locales.c \

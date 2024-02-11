@@ -4,6 +4,7 @@ extern void free_temp_node_tree (NODE node);
 extern BOOLEAN is_temp_node (NODE node);
 extern void set_temp_node (NODE node, BOOLEAN temp);
 extern INT tree_strlen (INT levl, NODE node);
+extern void unknown_node_to_dbase (NODE node); /* XXX */
 extern int next_spouse (NODE *node, RECORD *spouse);
 extern RECORD indi_to_prev_sib (RECORD irec);
 extern RECORD indi_to_next_sib (RECORD irec);
@@ -14,7 +15,6 @@ extern NODE record_to_first_event (RECORD record, CNSTRING tag);
 extern NODE node_to_next_event (NODE node, CNSTRING tag);
 extern void event_to_date_place (NODE node, STRING * date, STRING * plac);
 extern STRING event_to_string (NODE node, RFMT rfmt);
-extern STRING event_to_plac (NODE node, BOOLEAN shrt); /* gnode.c */
 extern void show_node (NODE node);
 extern void show_node_rec (INT levl, NODE node);
 extern INT length_nodes (NODE node);

@@ -369,7 +369,12 @@ indi_to_next_sib (RECORD irec)
  *====================================*/
 STRING node_to_tag (NODE node, STRING tag, INT len)
 {
+#if defined(DEADENDS)
+	/* GEDCOM has no max, but MAXLINELEN is the longest line we support. */
+	static char scratch[MAXLINELEN+1];
+#else
 	static char scratch[MAXGEDNAMELEN+1];
+#endif
 	STRING refn;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag)))

@@ -53,13 +53,10 @@ typedef const char *	CNSTRING;
 #define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
 #define indi_to_famc(node)		personToFamilyAsChild(node, database)
 
-#define create_temp_node(xref, tag, value, parent)	createGNode (xref, tag, value, parent) /* XXX */
-#define set_temp_node(node, temp) /* XXX currently no nodes are marked temporary XXX */
-#define is_temp_node(node)	0 /* XXX currently no nodes are marked temporary XXX */
-
 #define getlloptstr(property, default)	(getenv(property) ? getenv(property) : default) /* XXX */
 
 #define event_to_date(node,shorten)	eventToDate(node,shorten)
+#define event_to_plac(node,shorten)	eventToPlace(node,shorten)
 #define givens(name)			getGivenNames(name)
 #define getasurname(name)		getSurname(name)
 #define getsxsurname(name)		getSurname(name)
