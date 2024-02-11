@@ -51,3 +51,8 @@ extern void appendstr(STRING * pdest, INT * len, int utf8, CNSTRING src);
 /* The author of appendstr, writes: llstrcatn is a bad name, because
    its prototype is different from strcatn! */
 #define llstrcatn(dest, src, len) appendstr(dest, len, uu8, src)
+
+/* ll-str.c */
+
+extern void strfree (String *str);
+extern void strupdate (String *str, CString value);

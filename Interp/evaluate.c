@@ -16,6 +16,7 @@
 //  Last changed on 31 May 2023.
 //
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "refnindex.h"
 #include "evaluate.h"

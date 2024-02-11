@@ -39,6 +39,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -69,6 +70,7 @@
 #include "codesets.h"
 #include "options.h"
 #include "xreffile.h"
+#include "gstrings.h"
 #include "de-strings.h"
 #include "ll-gedcom.h"
 

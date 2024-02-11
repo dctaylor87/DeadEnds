@@ -6,6 +6,7 @@
 //  Created by Thomas Wetmore on 2 January 2024.
 //  Last changed on 3 January 2024
 //
+#include <stdint.h>
 
 #include "stdlib.h"
 #include "refnindex.h"

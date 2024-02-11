@@ -39,6 +39,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #if defined(HAVE_INTTYPES_H)
 #include <inttypes.h>
@@ -58,6 +59,7 @@
 #include "refns.h"
 #include "readwrite.h"
 #include "options.h"
+#include "gstrings.h"
 #include "llpy-externs.h"
 
 #include "zstr.h"

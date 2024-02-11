@@ -10,6 +10,7 @@
 //
 
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "refnindex.h"
 #include "pvaluetable.h"

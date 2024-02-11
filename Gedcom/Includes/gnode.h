@@ -31,6 +31,9 @@ struct GNode {
 	GNode *parent;  // Parent node; all nodes except roots use this field.
 	GNode *child;   // First child none of this node, if any.
 	GNode *sibling; // Next sibling node of this node, if any.
+	uint32_t refcount; // Reference count
+	uint8_t flags;  // flags, such as ND_TEMP
+	uint8_t spare[3]; // reserved for future expansion
 };
 
 //String fileof = (String) "The file is as positioned at EOF.";
@@ -81,7 +84,7 @@ int countNodes(GNode* node); // Count GNodes in a tree.
 int countNodesBefore(GNode*);  // Count the GNodes before a node in a tree.
 
 bool isKey(String);
-GNode* findTag(GNode*, String);
+GNode* findTag(GNode*, CString);
 SexType valueToSex(GNode*);
 String full_value(GNode*);
 String recordKey(GNode* node);  // Return the key of the record that contains the node.

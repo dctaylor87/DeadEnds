@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <stdint.h>
 
 #if defined(HAVE_GETOPT)
 #if defined(HAVE_GETOPT_H)

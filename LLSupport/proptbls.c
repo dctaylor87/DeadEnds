@@ -18,6 +18,7 @@
 #include <ansidecl.h>
 #include <inttypes.h>
 #include <dirent.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"

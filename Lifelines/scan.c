@@ -33,6 +33,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -47,9 +48,11 @@
 #include "feedback.h"
 #include "errors.h"
 #include "liflines.h"
+#include "fpattern.h"
 #include "messages.h"
 #include "xreffile.h"
 #include "refns.h"
+#include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

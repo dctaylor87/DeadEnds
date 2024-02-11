@@ -12,9 +12,12 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	codesets.c \
 	equaliso.c \
+	fpattern.c \
 	icvt.c \
 	listener.c \
 	ll-addoperations.c \
+	ll-database.c \
+	ll-str.c \
 	llgettext.c \
 	locales.c \
 	messages.c \

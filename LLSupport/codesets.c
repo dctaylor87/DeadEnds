@@ -121,12 +121,7 @@ init_codesets (void)
 	char wincs[32];
 	int n = w_get_codepage();
 	snprintf(wincs, sizeof(wincs), "CP%d", n);
-#if defined(DEADENDS)
-	stdfree (defcodeset);
-	defcodeset = wincs;
-#else
 	strupdate(&defcodeset, wincs);
-#endif
 #else
 	STRING defval = nl_langinfo (CODESET);
 	/* nl_langinfo giving 0 on linux glibc-2.2.4-19.3 (Perry, 2002-12-01) */

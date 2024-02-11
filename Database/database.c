@@ -11,6 +11,7 @@
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+#include <stdint.h>
 
 #include "refnindex.h"
 #include "database.h"

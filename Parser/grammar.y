@@ -7,6 +7,7 @@
 //  Last changed 28 September 2023.
 //
 %{
+#include <stdint.h>
 //#include "llstdlib.h"
 #include "refnindex.h"
 #include "lexer.h"

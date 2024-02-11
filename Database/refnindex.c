@@ -12,6 +12,8 @@
 //  Last changed on 1 January 2024.
 //
 
+#include <stdint.h>
+
 #include "refnindex.h"
 #include "gedcom.h"
 

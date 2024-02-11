@@ -6,6 +6,7 @@
 //  Created by Thomas Wetmore on 27 December 2022.
 //  Last changed on 3 June 2023.
 //
+#include <stdint.h>
 
 #include "refnindex.h"
 #include "lexer.h"

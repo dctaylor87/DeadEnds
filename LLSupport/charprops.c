@@ -16,6 +16,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"

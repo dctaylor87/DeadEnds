@@ -4,6 +4,7 @@
 
 #include <ansidecl.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "standard.h"
 #include "parse.h"

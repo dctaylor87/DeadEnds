@@ -11,6 +11,7 @@
 //
 
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "refnindex.h"
 #include "pnode.h"

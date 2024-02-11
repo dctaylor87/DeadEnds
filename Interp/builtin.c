@@ -8,6 +8,7 @@
 //  Last changed on 22 November 2023.
 //
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "standard.h"
 #include "refnindex.h"

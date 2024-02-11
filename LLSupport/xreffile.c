@@ -38,6 +38,7 @@
 
 #if defined(DEADENDS)
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -52,6 +53,7 @@
 #include "gnode.h"
 #include "readwrite.h"
 #include "translat.h"
+#include "de-strings.h"
 #else
 
 #include "sys_inc.h"

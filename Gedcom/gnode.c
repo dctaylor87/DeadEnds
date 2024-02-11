@@ -7,6 +7,7 @@
 //  Last changed on 2 January 2024..
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+#include <stdint.h>
 
 #include "standard.h"
 #include "refnindex.h"
@@ -542,7 +543,7 @@ bool isKey(String str)
 //  findTag -- Search a list of nodes for the first node with a specific tag. Return that node.
 //    If a node with the tag is not found, return null.
 //--------------------------------------------------------------------------------------------------
-GNode* findTag(GNode* node, String tag)
+GNode* findTag(GNode* node, CString tag)
 //  node -- First node in the list of nodes to search.
 //  tag -- Tag being searched for.
 {

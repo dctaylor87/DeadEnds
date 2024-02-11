@@ -4,6 +4,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <inttypes.h>		/* needed by PRIdKEYNUM */
+#include <stdint.h>
 
 #include "ll-standard.h"
 

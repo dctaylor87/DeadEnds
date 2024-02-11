@@ -19,6 +19,7 @@ typedef void *		VPTR;
 #define node_to_string(node)			gnodesToString(node)
 #define free_node(node,msg)			freeGNode(node)
 #define free_nodes(node)			freeGNodes(node)
+#define find_tag(node, tag)			findTag(node, tag)
 
 #define ARRSIZE(array)		ARRAYSIZE(array)
 
@@ -29,6 +30,7 @@ typedef void *		VPTR;
 
 #define key_to_fam(key)		keyToFamily(key, database)
 #define key_to_indi(key)	keyToPerson(key, database)
+#define qkey_to_indi(key)	keyToPerson(key, database)
 
 #define INDISEQ		Sequence *
 #define ISize(seq)	((seq)->size)
@@ -139,7 +141,7 @@ typedef void *		VPTR;
 #define path_match(path1, path2)	(!strcmp(path1, path2))
 #endif
 
-#define strfree(ptr_to_str)	{ stdfree (*ptr_to_str); *ptr_to_str = 0; }
+//#define strfree(ptr_to_str)	{ stdfree (*ptr_to_str); *ptr_to_str = 0; }
 #define ISNULL(k)		(!k || *k == 0)
 
 #define resolve_refn_links(node)	resolveRefnLinks(node, database)

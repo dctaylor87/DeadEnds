@@ -9,6 +9,7 @@
 //
 
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "standard.h"
 #include "refnindex.h"

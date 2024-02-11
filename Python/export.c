@@ -13,6 +13,7 @@
 #include <ansidecl.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdint.h>
 
 #include "porting.h"
 

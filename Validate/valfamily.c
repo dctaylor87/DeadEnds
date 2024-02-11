@@ -6,6 +6,7 @@
 //  Created by Thomas Wetmore on 18 December 2023.
 //  Last changed on 29 December 2023.
 //
+#include <stdint.h>
 
 #include "refnindex.h"
 #include "validate.h"

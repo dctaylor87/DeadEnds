@@ -20,6 +20,7 @@
 
 #if defined(DEADENDS)
 #include <stdarg.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"

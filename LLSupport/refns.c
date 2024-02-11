@@ -4,6 +4,8 @@
 #include "config.h"
 #endif
 
+#include <stdint.h>
+
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
@@ -46,7 +48,7 @@ resolveRefnLinks (GNode *node, Database *database)
   /* resolve all descendant nodes */
   begin_node_it(node, &nodeit);
   while ((child = next_node_it_ptr(&nodeit)) != NULL) {
-    if (!resolve_node(child, annotate_pointers))
+    if (!resolve_node(child, annotate_pointers, database))
       ++unresolved;
   }
   return unresolved;
@@ -150,7 +152,7 @@ annotateWithSupplemental (GNode *node, RFMT rfmt, Database *database)
   /* annotate all descendant nodes */
   begin_node_it(node, &nodeit);
   while ((child = next_node_it_ptr(&nodeit)) != NULL) {
-    annotate_node(child, expand_refns, annotate_pointers, rfmt);
+    annotate_node(child, expand_refns, annotate_pointers, rfmt, database);
   }
 }
 
@@ -160,6 +162,24 @@ annotateWithSupplemental (GNode *node, RFMT rfmt, Database *database)
 void
 traverseRefns (TRAV_REFNS_FUNC func, Word param, Database *database)
 {
+  int bucket = 0;
+  int element = 0;
+  String refn;
+  String key;
+  RefnIndexEl *refn_elt;
+
+  for (refn_elt = (RefnIndexEl *)firstInHashTable (database->refnIndex, &bucket, &element);
+       refn_elt;
+       refn_elt = nextInHashTable (database->refnIndex, &bucket, &element))
+    {
+      refn = refn_elt->refn;
+      key = refn_elt->key;
+      /* NOTE: all current callers always return true; but, the spec
+	 says that they can return false to stop the iteration --
+	 presumably if they 'found' what they were 'looking for'.  */
+      if (! (*func)(key, refn, param, database))
+	return;
+    }
 }
 
 /* begin_node_it -- Being a node iteration.  */

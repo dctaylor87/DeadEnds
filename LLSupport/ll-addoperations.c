@@ -4,6 +4,8 @@
 
 #include <ansidecl.h>
 #include <stdarg.h>
+#include <stdint.h>
+
 #include "standard.h"
 #include "llnls.h"
 #include "sys_inc.h"

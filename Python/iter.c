@@ -8,6 +8,7 @@
 #endif
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
+#include <stdint.h>
 
 #if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */

@@ -17,6 +17,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"
@@ -110,7 +111,9 @@ struct tag_trantable {
 /* alphabetical */
 static XNODE create_xnode(XNODE, INT, STRING);
 static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr);
+#if !defined(DEADENDS)
 static void maperror(CNSTRING errmsg);
+#endif
 static void remove_xnodes(XNODE);
 #ifdef DEBUG
 void show_trantable (TRANTABLE tt);

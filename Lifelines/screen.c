@@ -35,6 +35,7 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #ifdef HAVE_LOCALE_H
 #include <locale.h>

@@ -4,6 +4,8 @@
 //  Last changed on 17 December 2023.
 
 #include <stdio.h>
+#include <stdint.h>
+
 #include "standard.h"
 #include "parse.h"
 #include "refnindex.h"

@@ -10,6 +10,7 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdio.h>
+#include <stdint.h>
 
 #if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */

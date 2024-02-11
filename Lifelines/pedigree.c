@@ -21,6 +21,8 @@
 #endif
 
 #if defined(DEADENDS)
+#include <stdint.h>
+
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
@@ -38,6 +40,7 @@
 #include "ll-list.h"
 #include "lineage.h"
 #include "codesets.h"
+#include "gstrings.h"
 #include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
