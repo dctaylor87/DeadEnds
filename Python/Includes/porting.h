@@ -20,8 +20,15 @@ typedef const char *	CNSTRING;
 #define ntag(node)	((node)->tag)
 #define nxref(node)	((node)->key)
 
+#if 0
 #define nrefcnt_inc(node)	/* XXX currently no field, but we need this XXX*/
 #define nrefcnt_dec(node)	/* XXX currently no field, but we need this XXX*/
+#define get_nrefcnt(node)	/* XXX currently no field, but we need this XXX*/
+#else
+#define nrefcnt_inc(node)	((node)->refcount++)
+#define nrefcnt_dec(node)	((node)->refcount--)
+#define get_nrefcnt(node)	((node)->refcount)
+#endif
 
 #define TRACK_NODE_REFCNT_INC(node) /* empty -- no current ref counts */
 #define TRACK_NODE_REFCNT_DEC(node) /* empty -- no current ref counts */

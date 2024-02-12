@@ -66,6 +66,7 @@ static int hardfail = 0; /* developer mode to help find bad sign-extensions */
  * body of module
  *********************************************/
 
+#if 0
 /*==================================
  * chartype -- Return character type
  *================================*/
@@ -95,6 +96,7 @@ chartype (INT c)
 		return DIGIT;
 	return c;
 }
+#endif
 /*=================================
  * isnumch -- Check if character is a digit
  * Note: input character is passed to isdigit, so it
@@ -112,6 +114,8 @@ isnumch (INT c)
 	return (c >= '0' && c <= '9');
 #endif
 }
+
+#if 0
 /*=================================
  * iswhite -- Check for white space
  * Note: input character is passed to isspace, so it
@@ -129,6 +133,8 @@ iswhite (INT c)
 	return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 #endif
 }
+#endif
+
 /*=================================
  * islinebreak -- Check for linebreak
  * TODO: Fix for Unicode

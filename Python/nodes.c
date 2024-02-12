@@ -437,13 +437,8 @@ static void llpy_debug_print_node (const char *prefix, PyObject *self)
   if (! node)
     fprintf (stderr, "%s: lnn_node: node NULL\n", prefix);
   else
-#if defined(DEADENDS)
-    fprintf (stderr, "%s: lnn node: node %p tag %s\n",
-	     prefix, (void *)node, ntag(node));
-#else
     fprintf (stderr, "%s: lnn node: node %p tag %s refcnt %d\n",
-	     prefix, (void *)node, ntag(node), nrefcnt(node));
-#endif
+	     prefix, (void *)node, ntag(node), get_nrefcnt(node));
 }
 
 static struct PyMethodDef Lifelines_Node_Methods[] =

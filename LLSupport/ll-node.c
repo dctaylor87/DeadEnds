@@ -173,7 +173,7 @@ void
 free_temp_node_tree (NODE node)
 {
 	NODE n2;
-	if (nrefcnt (node) == 0) {
+	if (get_nrefcnt (node) == 0) {
 		if ((n2 = nchild(node))) {
 			free_temp_node_tree(n2);
 			nchild(node) = 0;
@@ -183,7 +183,7 @@ free_temp_node_tree (NODE node)
 		free_temp_node_tree(n2);
 		nsibling(node) = 0;
 	}
-	if (nrefcnt (node) == 0) {
+	if (get_nrefcnt (node) == 0) {
 		free_node(node,"free_temp_node_tree");
 	}
 }

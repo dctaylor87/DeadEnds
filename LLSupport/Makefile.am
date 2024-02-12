@@ -22,10 +22,12 @@ libllsupport_a_SOURCES = \
 	llgettext.c \
 	locales.c \
 	messages.c \
+	norm_charmap.c \
 	proptbls.c \
 	refns.c \
 	remove.c \
 	replace.c \
+	sprintpic.c \
 	stdstrng.c \
 	strapp.c \
 	strcvt.c \

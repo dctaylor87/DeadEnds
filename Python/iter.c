@@ -547,11 +547,10 @@ static PyObject *llpy_node_iternext (PyObject *self)
   int retval;
 
   /* these are only used if llpy_debug is true */
-#if !defined(DEADENDS)
+
   /* these are for debugging ref counts which DeadEnds currently lacks */
   NODE old_cur_node = iter->ni_cur_node;
   NODE old_top_node = iter->ni_top_node;
-#endif
 
 #if 0
   /* if this is ever stored or returned, something is screwed up */
@@ -564,32 +563,16 @@ static PyObject *llpy_node_iternext (PyObject *self)
 	       "llpy_node_iternext entry: type %d current %p refcnt %ld, type %s\n",
 	       iter->ni_type, (void *)iter->ni_cur_node, Py_REFCNT (self),
 	       Py_TYPE(self)->tp_name);
-#if defined(DEADENDS)
-      if (iter->ni_top_node)
-	fprintf (stderr, "llpy_node_iternext: top %p\n",
-		 (void *)(iter->ni_top_node));
-      else
-	fprintf (stderr, "llpy_node_iternext: top NULL\n");
-#else
       if (iter->ni_top_node)
 	fprintf (stderr, "llpy_node_iternext: top %p, refcnt %d\n",
-		 (void *)(iter->ni_top_node), nrefcnt(iter->ni_top_node));
+		 (void *)(iter->ni_top_node), get_nrefcnt(iter->ni_top_node));
       else
 	fprintf (stderr, "llpy_node_iternext: top NULL\n");
-#endif
-#if defined(DEADENDS)
-      if (iter->ni_cur_node)
-	fprintf (stderr, "llpy_node_iternext: cur %p\n",
-		 (void *)(iter->ni_cur_node));
-      else
-	fprintf (stderr, "llpy_node_iternext: cur NULL\n");
-#else
       if (iter->ni_cur_node)
 	fprintf (stderr, "llpy_node_iternext: cur %p, refcnt %d\n",
-		 (void *)(iter->ni_cur_node), nrefcnt(iter->ni_cur_node));
+		 (void *)(iter->ni_cur_node), get_nrefcnt(iter->ni_cur_node));
       else
 	fprintf (stderr, "llpy_node_iternext: cur NULL\n");
-#endif
     }
 
   while (1)
@@ -637,15 +620,12 @@ static PyObject *llpy_node_iternext (PyObject *self)
 
 	      if (llpy_debug)
 		{
-#if defined(DEADENDS)
-#else
 		  if (old_top_node)
 		    fprintf (stderr, "llpy_node_iternext exit: old top refcnt %d\n",
-			     nrefcnt(iter->ni_top_node));
+			     get_nrefcnt(iter->ni_top_node));
 		  if (old_cur_node)
 		    fprintf (stderr, "llpy_node_iternext exit: old cur refcnt %d\n",
-			     nrefcnt(iter->ni_cur_node));
-#endif
+			     get_nrefcnt(iter->ni_cur_node));
 		  llpy_debug_print_node_iter ("llpy_node_iternext exit", iter);
 		}
 	      return (PyObject *) py_node;
@@ -839,33 +819,17 @@ static void llpy_debug_print_node_iter (const char *prefix,
 	   Py_TYPE(iter)->tp_name);
 
   if (iter->ni_top_node)
-#if defined(DEADENDS)
-    fprintf (stderr, "%s: top key %s tag %s val %s\n",
-	     prefix,
-	     iter->ni_top_node->key ? iter->ni_top_node->key : "NULL",
-	     ntag(iter->ni_top_node),
-	     nval(iter->ni_top_node) ? nval(iter->ni_top_node) : "NULL");
-#else
     fprintf (stderr, "%s: top refcnt %d xref %s tag %s val %s\n",
-	     prefix, nrefcnt(iter->ni_top_node),
+	     prefix, get_nrefcnt(iter->ni_top_node),
 	     nxref(iter->ni_top_node) ? nxref(iter->ni_top_node) : "NULL",
 	     ntag(iter->ni_top_node),
 	     nval(iter->ni_top_node) ? nval(iter->ni_top_node) : "NULL");
-#endif
   if (iter->ni_cur_node)
-#if defined(DEADENDS)
-    fprintf (stderr, "%s: cur key %s tag %s val %s\n",
-	     prefix,
-	     iter->ni_cur_node->key ? iter->ni_cur_node->key : "NULL",
-	     ntag(iter->ni_cur_node),
-	     nval(iter->ni_cur_node) ? nval(iter->ni_cur_node) : "NULL");
-#else
     fprintf (stderr, "%s: cur refcnt %d xref %s tag %s val %s\n",
-	     prefix, nrefcnt(iter->ni_cur_node),
+	     prefix, get_nrefcnt(iter->ni_cur_node),
 	     nxref(iter->ni_cur_node) ? nxref(iter->ni_cur_node) : "NULL",
 	     ntag(iter->ni_cur_node),
 	     nval(iter->ni_cur_node) ? nval(iter->ni_cur_node) : "NULL");
-#endif
   else
     fprintf (stderr, "%s: cur NULL\n", prefix);
 }
@@ -876,19 +840,11 @@ static void llpy_debug_print_node_iter_cur (const char *prefix,
 					    LLINES_PY_NODEITER *iter)
 {
   if (iter->ni_cur_node)
-#if defined(DEADENDS)
-    fprintf (stderr, "%s: cur key %s tag %s val %s\n",
-	     prefix,
-	     iter->ni_cur_node->key ? iter->ni_cur_node->key : "NULL",
-	     ntag(iter->ni_cur_node),
-	     nval(iter->ni_cur_node) ? nval(iter->ni_cur_node) : "NULL");
-#else
     fprintf (stderr, "%s: cur refcnt %d xref %s tag %s val %s\n",
-	     prefix, nrefcnt(iter->ni_cur_node),
+	     prefix, get_nrefcnt(iter->ni_cur_node),
 	     nxref(iter->ni_cur_node) ? nxref(iter->ni_cur_node) : "NULL",
 	     ntag(iter->ni_cur_node),
 	     nval(iter->ni_cur_node) ? nval(iter->ni_cur_node) : "NULL");
-#endif
   else
     fprintf (stderr, "%s: cur NULL\n", prefix);
 }
