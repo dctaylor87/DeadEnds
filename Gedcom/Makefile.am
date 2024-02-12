@@ -11,6 +11,7 @@ libgedcom_a_SOURCES = \
 	lineage.c \
 	name.c \
 	nodeutls.c \
+	place.c \
 	readnode.c \
 	splitjoin.c \
 	writenode.c
