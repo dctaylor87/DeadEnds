@@ -7,7 +7,7 @@
 //    records is also done.
 //
 //  Created by Thomas Wetmore on 10 November 2022.
-//  Last changed 6 December 2023.
+//  Last changed 13 February 2024.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -145,8 +145,8 @@ GNode *keyToEvent(CString key, Database *database)
 //--------------------------------------------------------------------------------------------------
 GNode *keyToOther(CString key, Database *database)
 {
-    RecordIndexEl *element = searchHashTable(database->otherIndex, key);
-    return element ? element->root : null;
+	RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->otherIndex, key);
+	return element ? element->root : null;
 }
 
 //  keyToPersonRecord -- Get a person record from a database.
@@ -306,6 +306,17 @@ static int keyLineNumber (Database *database, String key)
 	if (!element) element = searchHashTable(database->otherIndex, key);
 	if (!element) return 0; // Hasn't been seen before.
 	return element->lineNumber;
+}
+
+GNode *getRecord(Database *database, String key)
+{
+	GNode *root;
+	if ((root = keyToPerson(key, database))) return root;
+	if ((root = keyToFamily(key, database))) return root;
+	if ((root = keyToSource(key, database))) return root;
+	if ((root = keyToEvent(key, database))) return root;
+	if ((root = keyToOther(key, database))) return root;
+	return null;
 }
 
 //  Some debugging functions.

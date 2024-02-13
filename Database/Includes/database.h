@@ -54,6 +54,7 @@ GNode *keyToFamily(CString key, Database*); // Get a family record from the data
 GNode *keyToSource(CString key, Database*); // Get a source record from the database.
 GNode *keyToEvent(CString key, Database*); // Get an event record from the database.
 GNode *keyToOther(CString Key, Database*); // Get an other record from the database.
+GNode *getRecord(Database*, String key);  // Get an arbitraray record from the database.
 
 //  Get a person record from the database.
 extern RecordIndexEl *keyToPersonRecord(CString key, Database*);
