@@ -44,6 +44,8 @@
 #include "llstdlib.h"
 
 #endif
+
+#if !defined(DEADENDS)		/* now part of Utils/standard.c */
 /*================================
  * trim -- Trim string if too long
  *  returns static buffer (or NULL)
@@ -70,6 +72,8 @@ striptrail (STRING p)
 	while (q >= p && iswhite((uchar)*q))
 		*q-- = '\0';
 }
+#endif
+
 #ifdef UNUSED_CODE
 /*=======================================
  * striplead -- Strip leading white space
@@ -105,6 +109,8 @@ skipws (STRING * ptr)
 	while (iswhite(*(uchar *)(*ptr)))
 		++(*ptr);
 }
+
+#if !defined(DEADENDS)		/* now part of Utils/standard.c */
 /*=========================================
  * allwhite -- Check if string is all white
  *=======================================*/
@@ -115,6 +121,8 @@ allwhite (STRING p)
 		if (!iswhite((uchar)*p++)) return FALSE;
 	return TRUE;
 }
+#endif
+
 /*============================================
  * chomp -- remove any trailing carriage return/linefeed
  * Created: 2002/01/03 (Perry Rapp)
