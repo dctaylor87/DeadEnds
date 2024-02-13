@@ -11,7 +11,6 @@ libllsupport_a_SOURCES = \
 	charmaps.c \
 	charprops.c \
 	codesets.c \
-	equaliso.c \
 	fpattern.c \
 	icvt.c \
 	listener.c \
