@@ -104,7 +104,7 @@ static BOOLEAN edit_record(RecordIndexEl *rec1, String idedt, INT letr, String r
 			   String redtopt,
 			   bool (*val)(GNode *, String *, GNode *), String cfrm,
 			   bool (*todbase)(GNode *, Database *),
-			   String gdmsg, RFMT rfmt);
+			   String gdmsg, bool rfmt);
 #else
 static BOOLEAN edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	, STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
@@ -339,7 +339,11 @@ edit_other (RECORD rec, RFMT rfmt)
  * edit_any_record -- Edit record of any type
  *=====================================*/
 BOOLEAN
+#if defined(DEADENDS)
+edit_any_record (RECORD rec, bool rfmt)
+#else
 edit_any_record (RECORD rec, RFMT rfmt)
+#endif
 {
 	ASSERT(rec);
 	switch (nztype(rec)) {
@@ -420,7 +424,7 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 
 /* Have user edit record */
 #if defined(DEADENDS)
-	annotateWithSupplemental(root1, rfmt);
+	annotateWithSupplemental(root1, rfmt, database);
 #else
 	annotate_with_supplemental(root1, rfmt);
 #endif

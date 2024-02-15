@@ -34,8 +34,13 @@ typedef struct tag_import_feedback *IMPORT_FEEDBACK;
 struct tag_export_feedback;
 
 /* add.c */
+#if defined(DEADENDS)
+RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, bool rfmt);
+RECORD add_indi_by_edit(bool rfmt);
+#else
 RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt);
 RECORD add_indi_by_edit(RFMT rfmt);
+#endif
 BOOLEAN add_indi_no_cache(NODE);
 STRING get_unresolved_ref_error_string(INT count);
 #if defined(DEADENDS)
@@ -79,8 +84,13 @@ BOOLEAN choose_and_remove_spouse(RECORD irec, RECORD frec, BOOLEAN nolast);
 BOOLEAN choose_and_remove_any_record(RECORD rec, CONFIRMQ confirmq);
 
 /* edit.c */
+#if defined(DEADENDS)
+BOOLEAN edit_family(RECORD frec1, bool rfmt);
+BOOLEAN edit_indi(RECORD irec1, bool rfmt);
+#else
 BOOLEAN edit_family(RECORD frec1, RFMT rfmt);
 BOOLEAN edit_indi(RECORD irec1, RFMT rfmt);
+#endif
 
 /* lbrowse.c */
 INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
@@ -104,10 +114,17 @@ void sighand_cmdline(int sig);
 RECORD edit_add_event(void);
 RECORD edit_add_other(void);
 RECORD edit_add_source(void);
+#if defined(DEADENDS)
+BOOLEAN edit_any_record(RECORD rec, bool rfmt);
+BOOLEAN edit_event(RECORD rec, bool rfmt);
+BOOLEAN edit_other(RECORD rec, bool rfmt);
+BOOLEAN edit_source(RECORD rec, bool rfmt);
+#else
 BOOLEAN edit_any_record(RECORD rec, RFMT rfmt);
 BOOLEAN edit_event(RECORD rec, RFMT rfmt);
 BOOLEAN edit_other(RECORD rec, RFMT rfmt);
 BOOLEAN edit_source(RECORD rec, RFMT rfmt);
+#endif
 
 /* pedigree.c */
 	/* gedcom view mode */
