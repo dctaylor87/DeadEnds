@@ -25,6 +25,8 @@
 
 static bool debugging = false;
 static int keyLineNumber(Database*, String key);
+static int keycmp(Word a, Word b) { return strcmp((String) a, (String) b); }
+static String keyget(Word a) { return (String) a; }
 
 //  createDatabase -- Create a database.
 //--------------------------------------------------------------------------------------------------
@@ -40,6 +42,8 @@ Database *createDatabase(CString filePath)
 	database->otherIndex = createRecordIndex();
 	database->nameIndex = createNameIndex();
 	database->refnIndex = createRefnIndex();
+	database->personKeys = createList(keycmp, null, keyget);
+	database->familyKeys = createList(keycmp, null, keyget);
 	return database;
 }
 
@@ -228,9 +232,11 @@ bool storeRecord(Database *database, GNode* root, int lineNumber, ErrorLog *erro
 	switch (type) {
 		case GRPerson:
 			insertInRecordIndex(database->personIndex, key, root, lineNumber);
+			insertInKeyList(database->personKeys, key);
 			return true;
 		case GRFamily:
 			insertInRecordIndex(database->familyIndex, key, root, lineNumber);
+			insertInKeyList(database->familyKeys, key);
 			return true;
 		case GRSource:
 			insertInRecordIndex(database->sourceIndex, key, root, lineNumber);

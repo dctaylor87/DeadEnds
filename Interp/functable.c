@@ -4,7 +4,7 @@
 //  functable.c -- Table of the built-in functions in the DeadEnds programming language.
 //
 //  Created by Thomas Wetmore on 10 January 2023.
-//  Last changed on 9 February 2024.
+//  Last changed on 14 February 2024.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -104,6 +104,7 @@ BuiltIn builtIns[] = {
   { "key",          1,    2,    __key },
   { "keysort",      1,    1,    __keysort },
   { "lastchild",    1,    1,    __lastchild },
+  { "lastindi",     1,    1,    __lastindi },
   { "le",           2,    2,    __le },
   { "length",       1,    1,    __length },
   { "lengthset",    1,    1,    __lengthset },
@@ -148,16 +149,16 @@ BuiltIn builtIns[] = {
   { "pop",          1,    1,    __pop },
   { "pos",          2,    2,    __pos },
 //{ "prevfam",      1,    1,    __prevfam },
-//{ "previndi",     1,    1,    __previndi },
+  { "previndi",     1,    1,    __previndi },
   { "prevsib",      1,    1,    __prevsib },
 //{ "print",        1,    32,    __print },
   { "push",         2,    2,    __push },
   { "qt",           0,    0,    __qt },
   { "reference",    1,    1,    __reference },
-//{ "requeue",      2,    2,    __requeue },
-//{ "rjustify",     2,    2,    __rjustify },
+  { "requeue",      2,    2,    __requeue },
+  { "rjustify",     2,    2,    __rjustify },
   { "roman",        1,    1,    __roman },
-//{ "root",         1,    1,    __rot },
+  { "root",         1,    1,    __root },  // Not needed as in LL; now walks up the Gedcom tree.
   { "row",          1,    1,    __row },
   { "save",         1,    1,    __save },
 //{ "savenode",     1,    1,    __savenode },
@@ -178,13 +179,13 @@ BuiltIn builtIns[] = {
   { "strsoundex",   1,    1,    __strsoundex },
   { "strtoint",     1,    1,    __strtoint },
   { "sub",          2,    2,    __sub },
-//{ "substring",    3,    3,    __substring },
+  { "substring",    3,    3,    __substring },
   { "surname",      1,    1,    __surname },
 //{ "system",       1,    1,    __system },
   { "table",        1,    1,    __table },
   { "tag",          1,    1,    __tag },
   { "title",        1,    1,    __title },
-//{ "trim",         2,    2,    __trim },
+  { "trim",         2,    2,    __trim },
   { "trimname",     2,    2,    __trimname },
   { "union",        2,    2,    __union },
   { "uniqueset",    1,    1,    __uniqueset },

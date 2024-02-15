@@ -32,6 +32,8 @@ typedef struct Database {
     RecordIndex *otherIndex;  // Indes of other records in this database.
     NameIndex *nameIndex;  // Index of the names of the persons in this database.
     RefnIndex *refnIndex; // Index of REFN values in this database.
+    List *personKeys;  // List of all person keys in the database.
+    List *familyKeys;  // List of all family keys in the database.
 #if 0
     CString backupPath;	// path of the most recent backup, if any
 #endif
@@ -71,6 +73,7 @@ bool storeRecord(Database*, GNode*, int lineno, ErrorLog*); // Add a record to t
 void showTableSizes(Database*);  // Show the sizes of the database tables. Debugging.
 void showPersonIndex(Database*); // Show the person index. Debugging.
 void showFamilyIndex(Database*); // Show the family index. Debugging.
+void insertInKeyList(List*, String);
 
 extern int getCount(void);
 

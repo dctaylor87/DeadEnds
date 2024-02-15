@@ -20,6 +20,7 @@ libinterp_a_SOURCES = \
         intrpmath.c \
 	intrpperson.c \
 	intrpseq.c \
+	intrpstring.c \
 	pnode.c \
 	pvalue.c \
 	pvaluetable.c \
