@@ -213,7 +213,11 @@ swap_children_impl (NODE fam, NODE one, NODE two)
  *  rftm: [IN]  person formatting for prompts
  *===========================================*/
 BOOLEAN
+#if defined(DEADENDS)
+reorder_child (RECORD prnt, RECORD frec, bool rfmt)
+#else
 reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
+#endif
 {
 	INT nfam, nchil;
 	INT prevorder, i;

@@ -291,7 +291,11 @@ resize_win: /* we come back here if we resize the window */
 	if (first) {
 		elemwidth = ld.rectDetails.right - ld.rectDetails.left + 1;
 		if (length_indiseq(seq)<50)
+#if defined(DEADENDS)
+			preprint_indiseq(seq, elemwidth, true);
+#else
 			preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
+#endif
 		first=FALSE;
 	}
 	uierase(ld.uiwin);
@@ -560,7 +564,11 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 				snprintf(numstr, sizeof(numstr), FMT_INT ":", i+1);
 				mvccwaddstr(win, row, ld->rectList.left+4, numstr);
 			}
+#if defined(DEADENDS)
+			print_indiseq_element(seq, i, buffer, width, true);
+#else
 			print_indiseq_element(seq, i, buffer, width, &disp_shrt_rfmt);
+#endif
 			mvccwaddstr(win, row, ld->rectList.left+offset, buffer);
 		}
 	}

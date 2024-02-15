@@ -466,6 +466,8 @@ event_to_date_place (NODE node, STRING * date, STRING * plac)
 		node = nsibling(node);
 	}
 }
+
+#if 0			 /* DeadEnds now has eventToString */
 /*===========================================
  * event_to_string -- Convert event to string
  * Finds DATE & PLACE nodes, and prints a string
@@ -497,6 +499,7 @@ event_to_string (NODE node, RFMT rfmt)
 	}
 	return scratch1;
 }
+#endif
 
 /*================================
  * show_node -- Show tree -- DEBUG

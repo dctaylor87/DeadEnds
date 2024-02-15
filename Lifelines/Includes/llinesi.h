@@ -38,7 +38,11 @@ RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 RECORD add_indi_by_edit(RFMT rfmt);
 BOOLEAN add_indi_no_cache(NODE);
 STRING get_unresolved_ref_error_string(INT count);
+#if defined(DEADENDS)
+NODE prompt_add_child(NODE child, NODE fam, bool rfmt);
+#else
 NODE prompt_add_child(NODE child, NODE fam, RFMT rfmt);
+#endif
 BOOLEAN prompt_add_spouse(RECORD spouse, RECORD fam, BOOLEAN conf);
 
 /* advedit.c */
@@ -144,7 +148,11 @@ STRING indi_to_ped_fix(NODE indi, INT len);
 
 /* swap.c */
 BOOLEAN swap_children(RECORD prnt, RECORD frec);
+#if defined(DEADENDS)
+BOOLEAN reorder_child(RECORD prnt, RECORD frec, bool rfmt);
+#else
 BOOLEAN reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
+#endif
 BOOLEAN swap_families(RECORD);
 
 /* tandem.c */

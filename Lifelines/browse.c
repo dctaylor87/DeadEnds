@@ -1026,14 +1026,24 @@ pick_remove_spouse_from_family (RECORD frec)
 	i = 0;
 	for (node = husb; node; node = nsibling(node)) {
 		root = key_to_indi(rmvat(nval(node)));
+#if defined(DEADENDS)
+		spstrings[i] = indi_to_list_string(root,
+			 NULL, 66, true, TRUE);
+#else
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, &disp_shrt_rfmt, TRUE);
+#endif
 		spnodes[i++] = root;
 	}
 	for (node = wife; node; node = nsibling(node)) {
 		root = key_to_indi(rmvat(nval(node)));
+#if defined(DEADENDS)
+		spstrings[i] = indi_to_list_string(root,
+			 NULL, 66, true, TRUE);
+#else
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, &disp_shrt_rfmt, TRUE);
+#endif
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
 			message("%s", _(qSspover));
@@ -1131,7 +1141,11 @@ prompt_add_child_check_save (NODE fam, NODE save)
 NODE
 my_prompt_add_child (NODE child, NODE fam)
 {
+#if defined(DEADENDS)
+	return prompt_add_child(child, fam, true);
+#else
 	return prompt_add_child(child, fam, &disp_shrt_rfmt);
+#endif
 }
 /*===============================================
  * browse_fam -- Handle family browse selections.
@@ -1365,7 +1379,11 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			swap_children(NULL, current);
 			break;
 		case CMD_REORDERCHILD: /* Move a child in order */
+#if defined(DEADENDS)
+			reorder_child(NULL, current, true);
+#else
 			reorder_child(NULL, current, &disp_shrt_rfmt);
+#endif
 			break;
 		case CMD_TOGGLE_CHILDNUMS:       /* toggle children numbers */
 			show_childnumbers();

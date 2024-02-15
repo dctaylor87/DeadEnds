@@ -12,6 +12,7 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	codesets.c \
 	fpattern.c \
+	gstrings.c \
 	icvt.c \
 	listener.c \
 	ll-addoperations.c \

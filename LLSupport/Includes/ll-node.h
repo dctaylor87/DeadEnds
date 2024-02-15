@@ -14,7 +14,7 @@ extern void record_to_date_place (RECORD record, String tag,
 extern GNode *record_to_first_event (RECORD record, CString tag);
 extern GNode *node_to_next_event (GNode *node, CString tag);
 extern void event_to_date_place (GNode *node, String * date, String * plac);
-extern String event_to_string (GNode *node, RFMT rfmt);
+//extern String event_to_string (GNode *node, RFMT rfmt);
 extern void show_node (GNode *node);
 extern void show_node_rec (INT levl, GNode *node);
 extern GNode *copy_node_subtree (GNode *node);

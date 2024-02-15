@@ -1136,8 +1136,11 @@ sh_indi_to_event_shrt (NODE node, STRING tag, STRING head, INT len)
  *  using display reformatting
  *================================================*/
 static STRING
-sh_fam_to_event_shrt (NODE node, STRING tag, STRING head
-	, INT len)
+sh_fam_to_event_shrt (NODE node, STRING tag, STRING head, INT len)
 {
+#if defined(DEADENDS)
+	return fam_to_event(node, tag, head, len, true);
+#else
 	return fam_to_event(node, tag, head, len, &disp_shrt_rfmt);
+#endif
 }

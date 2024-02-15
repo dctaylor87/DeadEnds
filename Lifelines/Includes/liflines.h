@@ -46,10 +46,11 @@ void add_child_to_fam(NODE child, NODE fam, INT i);
 NODE add_family_to_db(NODE spouse1, NODE spouse2, NODE child);
 #if defined(DEADENDS)
 void add_spouse_to_fam(NODE spouse, NODE fam, SexType sex);
+INT ask_child_order(NODE fam, PROMPTQ promptq, bool rfmt);
 #else
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
-#endif
 INT ask_child_order(NODE fam, PROMPTQ promptq, RFMT rfmt);
+#endif
 STRING ask_for_indi_key(STRING, ASK1Q ask1);
 RECORD ask_for_indi(STRING ttl, ASK1Q ask1);
 

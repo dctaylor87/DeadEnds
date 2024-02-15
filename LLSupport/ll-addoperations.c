@@ -15,52 +15,53 @@
 #include "database.h"
 #include "ll-addoperations.h"
 
+/* forward reference */
 static bool
-AddOrUpdateRecordInDatabase (RecordType type, GNode *node, Database *database);
+addOrUpdateRecordInDatabase (RecordType type, GNode *node, Database *database);
 
 /* If a person is not in the database, add them; if they are, then
    update them */
 bool
-AddOrUpdatePersonInDatabase (GNode *person, Database *database)
+addOrUpdatePersonInDatabase (GNode *person, Database *database)
 {
-  return AddOrUpdateRecordInDatabase (GRPerson, person, database);
+  return addOrUpdateRecordInDatabase (GRPerson, person, database);
 }
 
 /* If a family is not in the database, add them; if they are, then
    update them */
 bool
-AddOrUpdateFamilyInDatabase (GNode *family, Database *database)
+addOrUpdateFamilyInDatabase (GNode *family, Database *database)
 {
-  return AddOrUpdateRecordInDatabase (GRFamily, family, database);
+  return addOrUpdateRecordInDatabase (GRFamily, family, database);
 }
 
 /* If a source is not in the database, add it; if it is, then
    update it */
 bool
-AddOrUpdateSourceInDatabase (GNode *source, Database *database)
+addOrUpdateSourceInDatabase (GNode *source, Database *database)
 {
-  return AddOrUpdateRecordInDatabase (GRSource, source, database);
+  return addOrUpdateRecordInDatabase (GRSource, source, database);
 }
 
 /* If an event is not in the database, add it; if it is, then
    update it */
 
 bool
-AddOrUpdateEventInDatabase (GNode *event, Database *database)
+addOrUpdateEventInDatabase (GNode *event, Database *database)
 {
-  return AddOrUpdateRecordInDatabase (GREvent, event, database);
+  return addOrUpdateRecordInDatabase (GREvent, event, database);
 }
 
 /* If an Other record is not in the database, add it; if it it, then
    update it */
 bool
-AddOrUpdateOtherInDatabase (GNode *other, Database *database)
+addOrUpdateOtherInDatabase (GNode *other, Database *database)
 {
-  return AddOrUpdateRecordInDatabase (GROther, other, database);
+  return addOrUpdateRecordInDatabase (GROther, other, database);
 }
 
 static bool
-AddOrUpdateRecordInDatabase (RecordType type,
+addOrUpdateRecordInDatabase (RecordType type,
 			     GNode *node,
 			     Database *database)
 {

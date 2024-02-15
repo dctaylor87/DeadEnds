@@ -27,7 +27,6 @@ typedef void *		VPTR;
 #define qkey_to_record(key)	__llpy_key_to_record(key, NULL, database)
 
 #define key_possible_to_record(key, letter)	__llpy_key_to_record(key, NULL, database)
-
 #define key_to_fam(key)		keyToFamily(key, database)
 #define key_to_indi(key)	keyToPerson(key, database)
 #define qkey_to_indi(key)	keyToPerson(key, database)
@@ -79,11 +78,11 @@ typedef void *		VPTR;
 #define othr_to_cache(node)	/* empty */
 #define sour_to_cache(node)	/* empty */
 
-#define indi_to_dbase(node)	AddOrUpdatePersonInDatabase(node, database)
-#define fam_to_dbase(node)	AddOrUpdateFamilyInDatabase(node, database)
-#define even_to_dbase(node)	AddOrUpdateEventInDatabase(node, database)
-#define othr_to_dbase(node)	AddOrUpdateOtherInDatabase(node, database)
-#define sour_to_dbase(node)	AddOrUpdateSourceInDatabase(node, database)
+#define indi_to_dbase(node)	addOrUpdatePersonInDatabase(node, database)
+#define fam_to_dbase(node)	addOrUpdateFamilyInDatabase(node, database)
+#define even_to_dbase(node)	addOrUpdateEventInDatabase(node, database)
+#define othr_to_dbase(node)	addOrUpdateOtherInDatabase(node, database)
+#define sour_to_dbase(node)	addOrUpdateSourceInDatabase(node, database)
 
 #define fam_to_cacheel(record)	0
 #define indi_to_cacheel(record)	0
@@ -149,7 +148,7 @@ typedef void *		VPTR;
 #define remove_refn(refn, key)		removeRefn(refn, key, database)
 #define get_refn(refn)			getRefn(refn, database)
 #define index_by_refn(node)		indexByRefn(node, database)
-#define annotate_with_supplemental(node, rfmt)	annotateWithSupplemental(node, rfmt, database)
+//#define annotate_with_supplemental(node, rfmt)	annotateWithSupplemental(node, rfmt, database)
 #define traverse_refns(func, param)	traverseRefns(func, param, database)
 
 /* experimental NKEY stuff */

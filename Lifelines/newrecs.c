@@ -190,7 +190,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	if (ntype == 'S') {
 		getreffnc = getsxref;
 #if defined(DEADENDS)
-		todbasefnc = AddOrUpdateSourceInDatabase;
+		todbasefnc = addOrUpdateSourceInDatabase;
 #else
 		todbasefnc = sour_to_dbase;
 		tocachefnc = sour_to_cache;
@@ -198,7 +198,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	} else if (ntype == 'E') {
 		getreffnc = getexref;
 #if defined(DEADENDS)
-		todbasefnc = AddOrUpdateEventInDatabase;
+		todbasefnc = addOrUpdateEventInDatabase;
 #else
 		todbasefnc = even_to_dbase;
 		tocachefnc = even_to_cache;
@@ -206,7 +206,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 	} else { /* X */
 		getreffnc = getxxref;
 #if defined(DEADENDS)
-		todbasefnc = AddOrUpdateOtherInDatabase;
+		todbasefnc = addOrUpdateOtherInDatabase;
 #else
 		todbasefnc = othr_to_dbase;
 		tocachefnc = othr_to_cache;
@@ -282,12 +282,16 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
  * edit_source -- Edit source in database
  *=====================================*/
 BOOLEAN
+#if defined(DEADENDS)
+edit_source (RECORD rec, bool rfmt)
+#else
 edit_source (RECORD rec, RFMT rfmt)
+#endif
 {
 #if defined(DEADENDS)
 	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt),
 			   valid_sour_tree, _(qScfrupt),
-			   AddOrUpdateSourceInDatabase, _(qSgdrmod), rfmt);
+			   addOrUpdateSourceInDatabase, _(qSgdrmod), rfmt);
 #else
 	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt)
 		, valid_sour_tree, _(qScfrupt), sour_to_dbase, _(qSgdrmod), rfmt);
@@ -297,12 +301,16 @@ edit_source (RECORD rec, RFMT rfmt)
  * edit_event -- Edit event in database
  *===================================*/
 BOOLEAN
+#if defined(DEADENDS)
+edit_event (RECORD rec, bool rfmt)
+#else
 edit_event (RECORD rec, RFMT rfmt)
+#endif
 {
 #if defined(DEADENDS)
 	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt),
 			   valid_even_tree, _(qScfeupt),
-			   AddOrUpdateEventInDatabase, _(qSgdemod), rfmt);
+			   addOrUpdateEventInDatabase, _(qSgdemod), rfmt);
 #else
 	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt)
 		, valid_even_tree, _(qScfeupt), even_to_dbase, _(qSgdemod), rfmt);
@@ -312,12 +320,16 @@ edit_event (RECORD rec, RFMT rfmt)
  * edit_other -- Edit other record in database (eg, NOTE)
  *=========================================*/
 BOOLEAN
+#if defined(DEADENDS)
+edit_other (RECORD rec, bool rfmt)
+#else
 edit_other (RECORD rec, RFMT rfmt)
+#endif
 {
 #if defined(DEADENDS)
 	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt),
 			   valid_othr_tree, _(qScfxupt),
-			   AddOrUpdateOtherInDatabase, _(qSgdxmod), rfmt);
+			   addOrUpdateOtherInDatabase, _(qSgdxmod), rfmt);
 #else
 	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt)
 		, valid_othr_tree, _(qScfxupt), othr_to_dbase, _(qSgdxmod), rfmt);
@@ -375,7 +387,7 @@ edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
 	    String redtopt,
 	    bool (*val)(GNode *, String *, GNode *), String cfrm,
 	    bool (*todbase)(GNode *, Database *),
-	    String gdmsg, RFMT rfmt)
+	    String gdmsg, bool rfmt)
 #else
 static BOOLEAN
 edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
@@ -407,7 +419,11 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	}
 
 /* Have user edit record */
+#if defined(DEADENDS)
+	annotateWithSupplemental(root1, rfmt);
+#else
 	annotate_with_supplemental(root1, rfmt);
+#endif
 	write_node_to_editfile(root1);
 	resolve_refn_links(root1);
 

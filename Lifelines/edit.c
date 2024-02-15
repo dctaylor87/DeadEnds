@@ -94,7 +94,11 @@
  * returns TRUE if user makes changes (& saves them)
  *===================================*/
 BOOLEAN
+#if defined(DEADENDS)
+edit_indi (RECORD irec1, bool rfmt)
+#else
 edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
+#endif
 {
 #if defined(DEADENDS)
 	GNode *indi1, *indi2=0;
@@ -184,7 +188,11 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
  * (with user interaction)
  *==================================*/
 BOOLEAN
+#if defined(DEADENDS)
+edit_family (RECORD frec1, bool rfmt)
+#else
 edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
+#endif
 {
 #if defined(DEADENDS)
 	GNode *fam1=0, *fam2=0;

@@ -122,7 +122,11 @@ get_unresolved_ref_error_string (INT count)
  * returns addref'd record
  *========================================================*/
 RECORD
+#if defined(DEADENDS)
+add_indi_by_edit (bool rfmt)
+#else
 add_indi_by_edit (RFMT rfmt)
+#endif
 {
 	FILE *fp;
 	RECORD indi0=0;
@@ -284,7 +288,11 @@ add_indi_no_cache (NODE indi)
  *  rfmt:    [in] reformatting info
  *======================================================*/
 INT
+#if defined(DEADENDS)
+ask_child_order (NODE fam, PROMPTQ promptq, bool rfmt)
+#else
 ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
+#endif
 {
 	INT i, nchildren;
 	STRING *childstrings, *childkeys;
@@ -309,7 +317,11 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
  *  fam:   [in] family to which to add
  *================================*/
 NODE
+#if defined(DEADENDS)
+prompt_add_child (NODE child, NODE fam, bool rfmt)
+#else
 prompt_add_child (NODE child, NODE fam, RFMT rfmt)
+#endif
 {
 	INT i;
 
@@ -633,7 +645,11 @@ add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
  * (with user interaction)
  *=======================================*/
 RECORD
+#if defined(DEADENDS)
+add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, bool rfmt)
+#else
 add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
+#endif
 {
 #if defined(DEADENDS)
 	SexType sex1 = sexUnknown;

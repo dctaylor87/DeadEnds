@@ -212,5 +212,6 @@ int compareRecordKeys(String, String);  // gedcom.c
 #define CHIL(fam)   findTag(fam->child,"CHIL")
 #define DATE(evnt)  findTag(evnt->child,"DATE")
 #define PLAC(evnt)  findTag(evnt->child,"PLAC")
+#define REFN(node)  findTag(node->child,"REFN")
 
 #endif // gedcom_h

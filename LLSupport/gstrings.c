@@ -93,7 +93,11 @@ static BOOLEAN displaykeys=TRUE;
  *  pkeys: [out] array of output strings (children descriptions)
  *=================================================================*/
 STRING *
+#if defined(DEADENDS)
+get_child_strings (GNode *fam, bool rfmt, INT *pnum, String **pkeys)
+#else
 get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
+#endif
 {
 	NODE chil;
 	INT i;
@@ -140,7 +144,11 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
  *  appkey: [IN]  allow appending key ?
  *==============================================*/
 STRING
+#if defined(DEADENDS)
+indi_to_list_string (NODE indi, NODE fam, INT len, bool rfmt, BOOLEAN appkey)
+#else
 indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
+#endif
 {
 	char scratch[MAXLINELEN];
 	INT linelen = MAXLINELEN;
@@ -413,7 +421,11 @@ other_to_list_string(NODE node, INT len, HINT_PARAM_UNUSED STRING delim)
  *  appkey: [IN]  allow appending key ?
  *=========================================*/
 STRING
+#if defined(DEADENDS)
+generic_to_list_string (NODE node, STRING key, INT len, STRING delim, bool rfmt, BOOLEAN appkey)
+#else
 generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey)
+#endif
 {
 	STRING str;
 	str=NULL; /* set to appropriate format */
