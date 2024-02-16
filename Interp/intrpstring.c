@@ -7,10 +7,13 @@
 //
 
 #include <stdio.h>
+#include <stdint.h>
+
 #include "standard.h"
 #include "interp.h"
 #include "evaluate.h"
 #include "utils.h"
+#include "builtintable.h"
 
 //  __substring -- Find substring of string.
 //    usage: substring(STRING, INT, INT) -> STRING

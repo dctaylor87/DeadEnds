@@ -223,6 +223,23 @@ set_temp_node (NODE node, BOOLEAN temp)
 	if (nchild (node))
 	  set_temp_node_helper (nchild (node), temp);
 }
+/* free_nodes -- Free all NODEs in tree.  */
+
+void
+free_nodes (NODE node)
+{
+	GNode *sib;
+	while (node) {
+		if (nchild(node)) {
+			free_nodes(nchild(node));
+			nchild (node) = 0;
+		}
+		sib = nsibling(node);
+		free_node(node,"free_nodes");
+		node = sib;
+	}
+}
+
 /*==============================================================
  * tree_strlen -- Compute string length of tree -- don't count 0
  *============================================================*/

@@ -69,18 +69,18 @@
  *********************************************/
 
 /* internal codeset of current database */
-BOOLEAN uu8=0;            /* flag if internal codeset is UTF-8 */
-BOOLEAN gui8=0;            /* flag if display output encoding is UTF-8 */
-STRING int_codeset=0;     /* internal codeset */
+bool uu8=0;            /* flag if internal codeset is UTF-8 */
+bool gui8=0;            /* flag if display output encoding is UTF-8 */
+String int_codeset=0;     /* internal codeset */
 
-STRING editor_codeset_out=0; /* output to editor */
-STRING editor_codeset_in=0;  /* input from editor */
-STRING gedcom_codeset_out=0; /* output GEDCOM files */
-STRING gedcom_codeset_in=0;  /* default for reading GEDCOM files */
-STRING gui_codeset_in=0;     /* reading characters from GUI */
-STRING gui_codeset_out=0;    /* writing characters to GUI */
-STRING report_codeset_out=0; /* default for report output */
-STRING report_codeset_in=0;  /* default for input from reports */
+String editor_codeset_out=0; /* output to editor */
+String editor_codeset_in=0;  /* input from editor */
+String gedcom_codeset_out=0; /* output GEDCOM files */
+String gedcom_codeset_in=0;  /* default for reading GEDCOM files */
+String gui_codeset_in=0;     /* reading characters from GUI */
+String gui_codeset_out=0;    /* writing characters to GUI */
+String report_codeset_out=0; /* default for report output */
+String report_codeset_in=0;  /* default for input from reports */
 
 
 /*********************************************
@@ -92,12 +92,12 @@ STRING report_codeset_in=0;  /* default for input from reports */
  *********************************************/
 
 /* alphabetical */
-static void set_codeset_pair(CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin);
+static void set_codeset_pair(CString base, CString defval, String *pcsout, String *pcsin);
 
 /*********************************************
  * local variables
  *********************************************/
-static STRING defcodeset=0;
+static String defcodeset=0;
 
 /*********************************************
  * local & exported function definitions
@@ -112,7 +112,7 @@ static STRING defcodeset=0;
 void
 init_codesets (void)
 {
-	STRING e=0;
+	String e=0;
 #if defined(WIN32) && !defined(__CYGWIN__)
 	/*
 	The Win32 case is special because we care about both Windows & Console
@@ -123,7 +123,7 @@ init_codesets (void)
 	snprintf(wincs, sizeof(wincs), "CP%d", n);
 	strupdate(&defcodeset, wincs);
 #else
-	STRING defval = nl_langinfo (CODESET);
+	String defval = nl_langinfo (CODESET);
 	/* nl_langinfo giving 0 on linux glibc-2.2.4-19.3 (Perry, 2002-12-01) */
 	if (!defval)
 		defval="";
@@ -201,7 +201,7 @@ init_codesets (void)
  *===============================================*/
 #if defined(DEADENDS)
 static void
-set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
+set_codeset_pair (CString base, CString defval, String *pcsout, String *pcsin)
 {
   CString e;
   int len = strlen(base);
@@ -231,10 +231,10 @@ set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
 #else
 
 static void
-set_codeset_pair (CNSTRING base, CNSTRING defval, STRING *pcsout, STRING *pcsin)
+set_codeset_pair (CString base, CString defval, String *pcsout, String *pcsin)
 {
 	ZSTR zstr = zs_news(base);
-	CNSTRING e;
+	CString e;
 	zs_apps(zstr, "Out");
 	e = getlloptstr(zs_str(zstr), "");
 	if (!e[0])
@@ -275,8 +275,23 @@ term_codesets (void)
 /*=================================================
  * get_defcodeset -- Return user's default codeset
  *===============================================*/
-CNSTRING
+CString
 get_defcodeset (void)
 {
 	return defcodeset;
+}
+
+/* is_codeset_utf8 -- is this the name of utf-8? */
+
+bool
+is_codeset_utf8 (CString codename)
+{
+  if (! codename || ! codename[0])
+    return false;
+
+  if (eqstr("UTF-8", codename) ||
+      eqstr("utf-8", codename) || eqstr("65001", codename))
+    return true;
+
+  return false;
 }

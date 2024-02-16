@@ -10,24 +10,25 @@
 #define codesets_h_included
 
 
-extern STRING int_codeset;     /* internal codeset */
+extern String int_codeset;     /* internal codeset */
 #if defined(DEADENDS)
-extern BOOLEAN uu8;	       /* is int_codeset utf-8? */
-extern BOOLEAN gui8;	       /* flag if display output encoding is UTF-8 */
+extern bool uu8;	       /* is int_codeset utf-8? */
+extern bool gui8;	       /* flag if display output encoding is UTF-8 */
 #endif
 
-extern STRING editor_codeset_out; /* output to editor */
-extern STRING editor_codeset_in;  /* input from editor */
-extern STRING gedcom_codeset_out; /* output GEDCOM files */
-extern STRING gedcom_codeset_in;  /* default for reading GEDCOM files */
-extern STRING gui_codeset_in;     /* reading characters from GUI */
-extern STRING gui_codeset_out;    /* writing characters to GUI */
-extern STRING report_codeset_out; /* default for report output */
-extern STRING report_codeset_in;  /* default for input from reports */
+extern String editor_codeset_out; /* output to editor */
+extern String editor_codeset_in;  /* input from editor */
+extern String gedcom_codeset_out; /* output GEDCOM files */
+extern String gedcom_codeset_in;  /* default for reading GEDCOM files */
+extern String gui_codeset_in;     /* reading characters from GUI */
+extern String gui_codeset_out;    /* writing characters to GUI */
+extern String report_codeset_out; /* default for report output */
+extern String report_codeset_in;  /* default for input from reports */
 
-CNSTRING get_defcodeset(void);
+CString get_defcodeset(void);
 void init_codesets(void);
 void term_codesets(void);
+bool is_codeset_utf8(CString codename);
 
 #endif /* codesets_h_included */
 
