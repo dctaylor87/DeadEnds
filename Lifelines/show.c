@@ -510,11 +510,11 @@ init_display_fam (RECORD frec, INT width)
 	 */
 	if (fam) {
 		fnode = nchild(fam);
-		husbstatus = next_spouse(&fnode,&ihusb);
+		husbstatus = next_spouse(&fnode,&ihusb, currentDatabase);
 		husb = nztop(ihusb);
 		if (fnode) {
 			fnode = nsibling(fnode);
-			wifestatus = next_spouse(&fnode,&iwife);
+			wifestatus = next_spouse(&fnode,&iwife, currentDatabase);
 			wife = nztop(iwife);
 		}
 	}

@@ -58,8 +58,6 @@
 #include "splitjoin.h"
 #include "gstrings.h"
 
-/* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
@@ -94,7 +92,7 @@ static BOOLEAN displaykeys=TRUE;
  *=================================================================*/
 STRING *
 #if defined(DEADENDS)
-get_child_strings (GNode *fam, bool rfmt, INT *pnum, String **pkeys)
+get_child_strings (GNode *fam, bool rfmt, INT *pnum, String **pkeys, Database *database)
 #else
 get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 #endif
@@ -293,7 +291,7 @@ even_to_list_string (NODE even, INT len, HINT_PARAM_UNUSED STRING delim)
  * Created: 2001/02/17, Perry Rapp
  *==============================================*/
 STRING
-fam_to_list_string (NODE fam, INT len, STRING delim)
+fam_to_list_string (NODE fam, INT len, STRING delim, Database *database)
 {
 	char scratch[1024];
 	STRING name, p=scratch;
@@ -422,7 +420,8 @@ other_to_list_string(NODE node, INT len, HINT_PARAM_UNUSED STRING delim)
  *=========================================*/
 STRING
 #if defined(DEADENDS)
-generic_to_list_string (NODE node, STRING key, INT len, STRING delim, bool rfmt, BOOLEAN appkey)
+generic_to_list_string (NODE node, STRING key, INT len, STRING delim,
+			bool rfmt, BOOLEAN appkey, Database *database)
 #else
 generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey)
 #endif
@@ -443,7 +442,11 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt,
 			str = sour_to_list_string(node, len, delim);
 			break;
 		case 'F':
+#if defined(DEADENDS)
+			str = fam_to_list_string(node, len, delim, database);
+#else
 			str = fam_to_list_string(node, len, delim);
+#endif
 			break;
 		case 'E':
 			str = even_to_list_string(node, len, delim);

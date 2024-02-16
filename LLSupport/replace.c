@@ -58,8 +58,6 @@
 #include "sequence.h"
 #include "browse.h"
 
-/* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
@@ -77,7 +75,7 @@
  *  consumes indi2 (calls free_node on it)
  *=================================================================*/
 void
-replace_indi (NODE indi1, NODE indi2)
+replace_indi (NODE indi1, NODE indi2, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *name1, *name2, *refn1, *refn2, *sex, *body, *famc, *fams;
@@ -138,7 +136,7 @@ replace_indi (NODE indi1, NODE indi2)
  *  consumes fam2 (calls free_node on it)
  *================================================================*/
 void
-replace_fam (NODE fam1, NODE fam2)
+replace_fam (NODE fam1, NODE fam2, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *refn1, *refn2, *husb, *wife, *chil, *body;

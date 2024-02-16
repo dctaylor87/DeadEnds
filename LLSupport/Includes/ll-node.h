@@ -5,9 +5,9 @@ extern bool is_temp_node (GNode *node);
 extern void set_temp_node (GNode *node, bool temp);
 extern INT tree_strlen (INT levl, GNode *node);
 extern void unknown_node_to_dbase (GNode *node); /* XXX */
-extern int next_spouse (GNode **node, RECORD *spouse);
-extern RECORD indi_to_prev_sib (RECORD irec);
-extern RECORD indi_to_next_sib (RECORD irec);
+extern int next_spouse (GNode **node, RECORD *spouse, Database *database);
+extern RECORD indi_to_prev_sib (RECORD irec, Database *database);
+extern RECORD indi_to_next_sib (RECORD irec, Database *database);
 extern String node_to_tag (GNode *node, String tag, INT len);
 extern void record_to_date_place (RECORD record, String tag,
 				  String * date, String * plac, INT * count);
@@ -19,7 +19,7 @@ extern void show_node (GNode *node);
 extern void show_node_rec (INT levl, GNode *node);
 extern GNode *copy_node_subtree (GNode *node);
 extern bool traverse_nodes (GNode *node, bool (*func)(GNode *, Word), Word param);
-extern INT num_spouses_of_indi (GNode *indi);
+//extern INT num_spouses_of_indi (GNode *indi); /* gnode.h */
 extern GNode *find_node (GNode *prnt, String tag, String val, GNode **plast); /* gnode.c */
 //extern void check_node_leaks (void);
 extern void term_node_allocator (void);

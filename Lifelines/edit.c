@@ -175,7 +175,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 	}
 
 /* Move new data (in indi2 children) into existing indi1 tree */
-	replace_indi(indi1, indi2);
+	replace_indi(indi1, indi2, currentDatabase);
 
 /* Note in change history */
 	history_record_change(irec1);
@@ -274,7 +274,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 		goto end_edit_fam;
 
 /* Move new data (in fam2 children) into existing fam1 tree */
-	replace_fam(fam1, fam2);
+	replace_fam(fam1, fam2, currentDatabase);
 	fam2 = NULL;
 
 	msg_status("%s", _(qSgdfmod));

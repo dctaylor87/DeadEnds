@@ -55,9 +55,6 @@
 #include "refns.h"
 #include "browse.h"
 
-/* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
-
 #else
 
 #include "llstdlib.h"
@@ -77,7 +74,7 @@
 
 static NODE remove_any_xrefs_node_list(STRING xref, NODE list);
 static void remove_name_list(NODE name, CNSTRING key);
-static void remove_refn_list(NODE refn, CNSTRING key);
+static void remove_refn_list(NODE refn, CNSTRING key, Database *database);
 
 /*================================================================
  * remove_indi_by_root -- Delete person and links; if this leaves families
@@ -87,7 +84,7 @@ static void remove_refn_list(NODE refn, CNSTRING key);
  * Created: 2001/11/08, Perry Rapp
  *==============================================================*/
 void
-remove_indi_by_root (NODE indi)
+remove_indi_by_root (NODE indi, Database *database)
 {
 	STRING key = rmvat(nxref(indi));
 #if defined(DEADENDS)
@@ -113,7 +110,7 @@ remove_indi_by_root (NODE indi)
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
 		else
-			remove_empty_fam(fam);
+		  remove_empty_fam(fam, database);
 	}
 
 /* Remove person from families he/she is in as a child */
@@ -127,13 +124,13 @@ remove_indi_by_root (NODE indi)
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
 		else
-			remove_empty_fam(fam);
+			remove_empty_fam(fam, database);
 	}
 
 
 /* Remove any name and refn entries */
 	remove_name_list(name, key);
-	remove_refn_list(refn, key);
+	remove_refn_list(refn, key, database);
 
 /* Reassemble & delete the in-memory record we're holding (indi) */
 	join_indi(indi, name, refn, sex, body, famc, fams);
@@ -157,7 +154,7 @@ remove_indi_by_root (NODE indi)
  *  people in the family.
  *========================================*/
 BOOLEAN
-remove_empty_fam (NODE fam)
+remove_empty_fam (NODE fam, Database *database)
 {
 	STRING key;
 #if defined(DEADENDS)
@@ -192,7 +189,7 @@ remove_empty_fam (NODE fam)
 #endif
 
 /* Remove any refn entries */
-	remove_refn_list(refn, key);
+	remove_refn_list(refn, key, database);
 
 #if !defined(DEADENDS)
 	/* Remove from on-disk database */
@@ -206,7 +203,7 @@ remove_empty_fam (NODE fam)
  *  silent function
  *=======================================*/
 BOOLEAN
-remove_child (NODE indi, NODE fam)
+remove_child (NODE indi, NODE fam, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *node, *last;
@@ -235,7 +232,7 @@ remove_child (NODE indi, NODE fam)
 	/* Update database with changed records */
 #if defined(DEADENDS)
 	if (num_fam_xrefs(fam) == 0)
-		remove_empty_fam(fam);
+		remove_empty_fam(fam, database);
 #else
 	indi_to_dbase(indi);
 	if (num_fam_xrefs(fam) == 0)
@@ -251,7 +248,7 @@ remove_child (NODE indi, NODE fam)
  *  silent function
  *=========================================*/
 BOOLEAN
-remove_spouse (NODE indi, NODE fam)
+remove_spouse (NODE indi, NODE fam, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *node=0, *last=0;
@@ -284,7 +281,7 @@ remove_spouse (NODE indi, NODE fam)
 
 #if defined(DEADENDS)
 	if (num_fam_xrefs(fam) == 0)
-		remove_empty_fam(fam);
+		remove_empty_fam(fam, database);
 #else
 	/* Update database with change records */
 	indi_to_dbase(indi);
@@ -317,7 +314,7 @@ remove_fam_record (HINT_PARAM_UNUSED RECORD frec)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 BOOLEAN
-remove_any_record (RECORD record)
+remove_any_record (RECORD record, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *root=0;
@@ -332,7 +329,7 @@ remove_any_record (RECORD record)
 
 	/* indi & family records take special handling, for lineage-linking */
 	if (nztype(record) == 'I') {
-		remove_indi_by_root(nztop(record));
+		remove_indi_by_root(nztop(record), database);
 		return TRUE;
 	}
 	if (nztype(record) == 'F') {
@@ -351,7 +348,7 @@ remove_any_record (RECORD record)
 	record=NULL; /* record no longer valid */
 
 /* Remove any refn entries */
-	remove_refn_list(refn, key);
+	remove_refn_list(refn, key, database);
 
 /* Remove from on-disk database */
 	del_in_dbase(key);
@@ -430,7 +427,7 @@ remove_name_list (NODE name, CNSTRING key)
  *  silent function, does not fail
  *=======================================*/
 static void
-remove_refn_list (NODE refn, CNSTRING key)
+remove_refn_list (NODE refn, CNSTRING key, Database *database)
 {
 	NODE node;
 	for (node = refn; node; node = nsibling(node)) {

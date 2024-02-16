@@ -298,7 +298,8 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 	STRING *childstrings, *childkeys;
 /* If first child in family, confirm and add */
 
-	childstrings = get_child_strings(fam, rfmt, &nchildren, &childkeys);
+	childstrings = get_child_strings(fam, rfmt, &nchildren, &childkeys,
+					 currentDatabase);
 	if (nchildren == 0) {
 		if (promptq == ALWAYS_PROMPT && !ask_yes_or_no(_(qScfcadd)))
 				return -1;

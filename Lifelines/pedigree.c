@@ -588,7 +588,7 @@ node_lineprint (INT width, void * param)
 		STRING key = rmvat(nval(node)), str;
 		if (key) {
 #if defined(DEADENDS)
-			str = generic_to_list_string(NULL, key, mylen, ",", false, TRUE);
+			str = generic_to_list_string(NULL, key, mylen, ",", false, TRUE, currentDatabase);
 #else
 			str = generic_to_list_string(NULL, key, mylen, ",", &disp_long_rfmt, TRUE);
 #endif

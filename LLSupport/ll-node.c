@@ -56,8 +56,6 @@
 #include "ll-node.h"
 #include "de-strings.h"
 
-/* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
 #else
 
 #include "llstdlib.h"
@@ -100,7 +98,7 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
 //#define alloc_node(msg) alloc_node_int(msg,__FILE__,__LINE__)
 //static NODE alloc_node_int(char* msg, char *file, int line);
 //static STRING fixtag (STRING tag);
-static RECORD indi_to_prev_sib_impl(NODE indi);
+static RECORD indi_to_prev_sib_impl(NODE indi, Database *database);
 static INT node_strlen(INT levl, NODE node);
 
 /*********************************************
@@ -294,7 +292,7 @@ unknown_node_to_dbase (NODE node)
  * returns addref'd record in *spouse
  *=============================================*/
 int
-next_spouse (NODE *node, RECORD *spouse)
+next_spouse (NODE *node, RECORD *spouse, Database *database)
 {
 	CNSTRING key=0;
 	if (!node || !spouse) return 0;
@@ -316,7 +314,7 @@ next_spouse (NODE *node, RECORD *spouse)
  *  returns addref'd record
  *================================================*/
 static RECORD
-indi_to_prev_sib_impl (NODE indi)
+indi_to_prev_sib_impl (NODE indi, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *fam, *prev, *node;
@@ -340,16 +338,16 @@ indi_to_prev_sib_impl (NODE indi)
 	return NULL;
 }
 RECORD
-indi_to_prev_sib (RECORD irec)
+indi_to_prev_sib (RECORD irec, Database *database)
 {
-	return indi_to_prev_sib_impl(nztop(irec));
+	return indi_to_prev_sib_impl(nztop(irec), database);
 }
 /*==============================================
  * indi_to_next_sib -- Return next sib of person
  *  returns addref'd record
  *============================================*/
 static RECORD
-indi_to_next_sib_impl (NODE indi)
+indi_to_next_sib_impl (NODE indi, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *fam, *node;
@@ -375,9 +373,9 @@ indi_to_next_sib_impl (NODE indi)
 }
 
 RECORD
-indi_to_next_sib (RECORD irec)
+indi_to_next_sib (RECORD irec, Database *database)
 {
-	return indi_to_next_sib_impl(nztop(irec));
+	return indi_to_next_sib_impl(nztop(irec), database);
 }
 
 /*======================================
@@ -576,6 +574,7 @@ traverse_nodes (NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param)
 	return TRUE;
 }
 
+#if 0		  /* no callers */
 /*==================================================
  * num_spouses_of_indi -- Returns number of spouses of person
  *================================================*/
@@ -591,6 +590,7 @@ num_spouses_of_indi (NODE indi)
 #endif
 	return nsp;  /* don't include self*/
 }
+#endif
 
 #if !defined(DEADENDS)
 /*=================================================

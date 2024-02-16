@@ -24,9 +24,6 @@
 #include "refns.h"
 #include "llpy-externs.h"	/* XXX */
 
-/* everything in this file assumes we are dealing with the current database */
-//#define database	currentDatabase
-
 struct tag_node_iter {
   GNode *start;
   GNode *next;
@@ -273,7 +270,7 @@ annotate_node (NODE node, BOOLEAN expand_refns,
 	}
 
 	if (annotate_pointers) {
-		STRING str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, FALSE);
+		STRING str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, FALSE, database);
 		ZSTR zstr = zs_news(nval(node));
 		zs_apps(zstr, " {{");
 		zs_apps(zstr, str);

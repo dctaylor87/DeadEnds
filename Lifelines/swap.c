@@ -274,7 +274,7 @@ gotfam:
 	prevorder = child_index(child, fam);
 
 	/* first remove child, so can list others & add back */
-	remove_child(child, fam);
+	remove_child(child, fam, currentDatabase);
 
 	i = ask_child_order(fam, ALWAYS_PROMPT, rfmt);
 	if (i == -1 || !ask_yes_or_no(_(qScfchswp))) {

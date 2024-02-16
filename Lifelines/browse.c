@@ -653,13 +653,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				indimode = 'i';
 			break;
 		case CMD_UPSIB:	/* Browse to older sib */
-			if ((tmp = indi_to_prev_sib(current)) != 0)
+			if ((tmp = indi_to_prev_sib(current), database) != 0)
 				setrecord(&current, &tmp);
 			else
 				msg_error("%s", _(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
-			if ((tmp = indi_to_next_sib(current)) != 0)
+			if ((tmp = indi_to_next_sib(current), database) != 0)
 				setrecord(&current, &tmp);
 			else
 				msg_error("%s", _(qSnoysib));

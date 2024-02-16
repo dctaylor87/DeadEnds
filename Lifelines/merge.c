@@ -507,7 +507,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
 
-	remove_indi_by_root(indi01);	/* this is the original indi1 */
+	remove_indi_by_root(indi01, currentDatabase);	/* this is the original indi1 */
 
 /* sanity check lineage links */
 	check_indi_lineage_links(indi02);
@@ -647,7 +647,7 @@ merge_two_fams (NODE fam1, NODE fam2)
 	join_fam(fam4, fref2, husb2, wife2, chil2, rest2);
 	free_nodes(fam4);
 	nchild(fam1) = NULL;
-	remove_empty_fam(fam1); /* TO DO - can this fail ? 2001/11/08, Perry */
+	remove_empty_fam(fam1, currentDatabase); /* TO DO - can this fail ? 2001/11/08, Perry */
 	free_nodes(husb1);
 	free_nodes(wife1);
 	free_nodes(chil1);

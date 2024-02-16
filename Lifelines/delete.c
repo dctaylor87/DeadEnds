@@ -136,18 +136,18 @@ choose_and_remove_family (void)
 
 		if (ISize(spseq)+ISize(chseq) == 0) {
 			/* handle empty family */
-			remove_empty_fam(fam);
+			remove_empty_fam(fam, currentDatabase);
 		}
 		else {
 			/* the last remove command will delete the family */
 			FORINDISEQ(spseq, el, num)
 				indi = key_to_indi(element_skey(el));
-				remove_spouse(indi, fam);
+				remove_spouse(indi, fam, currentDatabase);
 			ENDINDISEQ
 
 			FORINDISEQ(chseq, el, num)
 				indi = key_to_indi(element_skey(el));
-				remove_child(indi, fam);
+				remove_child(indi, fam, currentDatabase);
 			ENDINDISEQ
 		}
 	}
@@ -171,7 +171,7 @@ choose_and_remove_indi (NODE indi, CONFIRMQ confirmq)
 	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfpdel))) return;
 
 	/* alright, we finished the UI, so delegate to the internal workhorse */
-	remove_indi_by_root(indi);
+	remove_indi_by_root(indi, currentDatabase);
 }
 /*================================================================
  * choose_and_remove_any_record -- Prompt & delete any record
@@ -190,7 +190,7 @@ choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
 		return FALSE;
 
 	/* alright, we finished the UI, so delegate to the internal workhorse */
-	return remove_any_record(record);
+	return remove_any_record(record, currentDatabase);
 }
 /*===========================================
  * choose_and_remove_spouse -- Remove spouse 
@@ -227,7 +227,7 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 	if (!ask_yes_or_no(_(qScfsrmv))) return FALSE;
 
 	/* call internal workhorse remove_spouse() to do the actual removal */
-	if (!remove_spouse(nztop(irec), fam)) {
+	if (!remove_spouse(nztop(irec), fam, currentDatabase)) {
 		msg_error("%s", _(qSntsinf));
 		return FALSE;
 	}
@@ -268,7 +268,7 @@ choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 	}
 	if (!ask_yes_or_no(_(qScfcrmv))) return TRUE;
 
-	if (!remove_child(nztop(irec), fam)) {
+	if (!remove_child(nztop(irec), fam, currentDatabase)) {
 		msg_error("%s", _(qSntcinf));
 		return FALSE;
 	}
