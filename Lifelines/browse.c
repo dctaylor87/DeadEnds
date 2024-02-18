@@ -405,7 +405,7 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	i = choose_from_array(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
 	if (i == 0) {
-		rec = add_family_by_edit(NULL, NULL, current, &disp_long_rfmt);
+		rec = add_family_by_edit(NULL, NULL, current, false);
 	} else if (save) {
 		char scratch[100];
 		STRING name = indi_to_name(nztop(save), 55);
@@ -415,11 +415,11 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 			llstrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
 		}
 		if (ask_yes_or_no(scratch))
-			rec = add_family_by_edit(current, save, NULL, &disp_long_rfmt);
+			rec = add_family_by_edit(current, save, NULL, false);
 		else
-			rec = add_family_by_edit(current, NULL, NULL, &disp_long_rfmt);
+			rec = add_family_by_edit(current, NULL, NULL, false);
 	} else
-		rec = add_family_by_edit(current, NULL, NULL, &disp_long_rfmt);
+		rec = add_family_by_edit(current, NULL, NULL, false);
 	return rec;
 }
 /*====================================================
@@ -510,7 +510,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		switch (c)
 		{
 		case CMD_EDIT:	/* Edit this person */
-			edit_indi(current, &disp_long_rfmt);
+			edit_indi(current, false);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
 			if ((tmp = choose_family(current, _(qSntprnt)
@@ -653,13 +653,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				indimode = 'i';
 			break;
 		case CMD_UPSIB:	/* Browse to older sib */
-			if ((tmp = indi_to_prev_sib(current), database) != 0)
+			if ((tmp = indi_to_prev_sib(current, database)) != 0)
 				setrecord(&current, &tmp);
 			else
 				msg_error("%s", _(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
-			if ((tmp = indi_to_next_sib(current), database) != 0)
+			if ((tmp = indi_to_next_sib(current, database)) != 0)
 				setrecord(&current, &tmp);
 			else
 				msg_error("%s", _(qSnoysib));
@@ -706,7 +706,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_NEWPERSON:	/* Add new person */
-			if (!(tmp = add_indi_by_edit(&disp_long_rfmt))) 
+			if (!(tmp = add_indi_by_edit(false)))
 				break;
 			setrecord(&save, &current);
 			setrecord(&current, &tmp);
@@ -910,9 +910,9 @@ reprocess_aux_cmd:
 		{
 		case CMD_EDIT:
 			switch(ntype) {
-			case 'S': edit_source(current, &disp_long_rfmt); break;
-			case 'E': edit_event(current, &disp_long_rfmt); break;
-			case 'X': edit_other(current, &disp_long_rfmt); break;
+			case 'S': edit_source(current, false); break;
+			case 'E': edit_event(current, false); break;
+			case 'X': edit_other(current, false); break;
 			}
 			break;
 		case CMD_ADD_SOUR: /* add source */
@@ -1227,7 +1227,11 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_EDIT:	/* Edit family's record */
+#if defined(DEADENDS)
+			edit_family(current, false);
+#else
 			edit_family(current, &disp_long_rfmt);
+#endif
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
 			if ((tmp = choose_father(NULL, current, _(qSnohusb),
@@ -1311,7 +1315,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			pick_remove_spouse_from_family(current);
 			break;
 		case CMD_NEWPERSON:	/* Add person to database */
-			tmp = add_indi_by_edit(&disp_long_rfmt);
+			tmp = add_indi_by_edit(false);
 			setrecord(&save, &tmp);
 			break;
 		case CMD_ADD_SOUR: /* add source */

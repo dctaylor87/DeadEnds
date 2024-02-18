@@ -154,7 +154,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		switch (c)
 		{
 		case CMD_EDIT: 	/* edit top person */
-			edit_indi(current1, &disp_long_rfmt);
+			edit_indi(current1, false);
 			break;
 		case CMD_TOP: 	/* browse top person */
 			*prec1 = current1;
@@ -195,7 +195,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			current2 = tmp;
 			break;
 		case CMD_ADDFAMILY: 	/* make two persons parents in family */
-			tmp = add_family_by_edit(current1, current2, NULL, &disp_long_rfmt);
+			tmp = add_family_by_edit(current1, current2, NULL, false);
 			if (tmp) {
 				*prec1 = tmp;
 				return BROWSE_FAM;
@@ -281,7 +281,11 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		switch (c)
 		{
 		case CMD_EDIT:	/* edit top fam */
-			edit_family(current1, &disp_long_rfmt);
+#if defined(DEADENDS)
+			edit_family(current1, false);
+#else
+			edit_family(current1, false);
+#endif
 			break;
 		case CMD_TOP:	/* browse top fam */
 			*prec1 = current1;

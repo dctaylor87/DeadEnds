@@ -331,9 +331,9 @@ init_display_indi (RECORD irec, INT width)
 
 	disp_person_name(Spers, _(qSdspl_indi), irec, width);
 
-	disp_person_birthdeath(Sbirt, irec, f_birth_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Sbirt, irec, f_birth_tags, false);
 
-	disp_person_birthdeath(Sdeat, irec, f_death_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Sdeat, irec, f_death_tags, false);
 
 	fth = indi_to_fath(pers);
 	s = person_display(fth, NULL, width-13);
@@ -554,8 +554,8 @@ init_display_fam (RECORD frec, INT width)
 	}
 	zs_free(&famkey);
 
-	disp_person_birthdeath(Shbirt, ihusb, f_birth_tags, &disp_long_rfmt);
-	disp_person_birthdeath(Shdeat, ihusb, f_death_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Shbirt, ihusb, f_birth_tags, false);
+	disp_person_birthdeath(Shdeat, ihusb, f_death_tags, false);
 
 	if (wifestatus == 1) {
 		INT avail = width;
@@ -570,8 +570,8 @@ init_display_fam (RECORD frec, INT width)
 			zs_apps(Swife, "??");
 	}
 
-	disp_person_birthdeath(Swbirt, iwife, f_birth_tags, &disp_long_rfmt);
-	disp_person_birthdeath(Swdeat, iwife, f_death_tags, &disp_long_rfmt);
+	disp_person_birthdeath(Swbirt, iwife, f_birth_tags, false);
+	disp_person_birthdeath(Swdeat, iwife, f_death_tags, false);
 
 	/* Find marriage (or marital contract, or engagement) */
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
@@ -1115,7 +1115,7 @@ sh_indi_to_event_long (NODE node, STRING tag, STRING head, INT len)
 #if defined(DEADENDS)
 	return personToEvent(node, tag, head, len, false);
 #else
-	return indi_to_event(node, tag, head, len, &disp_long_rfmt);
+	return indi_to_event(node, tag, head, len, false);
 #endif
 }
 /*================================================

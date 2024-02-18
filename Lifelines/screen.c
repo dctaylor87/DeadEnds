@@ -1537,9 +1537,9 @@ invoke_add_menu (void)
 
 	switch (code) {
 	case 'p':
-		rec = add_indi_by_edit(&disp_long_rfmt);
+		rec = add_indi_by_edit(false);
 		break;
-	case 'f': add_family_by_edit(NULL, NULL, NULL, &disp_long_rfmt); break;
+	case 'f': add_family_by_edit(NULL, NULL, NULL, false); break;
 	case 'c': my_prompt_add_child(NULL, NULL); break;
 	case 's': prompt_add_spouse(NULL, NULL, TRUE); break;
 	case 'q': break;
@@ -1936,7 +1936,9 @@ invoke_utils_menu (void)
 	case 'r': load_gedcom(FALSE); break;
 	case 'R': load_gedcom(TRUE); break;
 	case 'k': key_util(); break;
+#if !defined(DEADENDS)
 	case 'i': who_is_he_she(); break;
+#endif
 	case 'd': show_database_stats(); break;
 #if !defined(DEADENDS)		/* DeadEnds has no cache */
 	case 'm': display_cache_stats(); break;
@@ -1984,11 +1986,11 @@ invoke_extra_menu (RECORD *prec)
 		case 'e': return BROWSE_EVEN;
 		case 'x': return BROWSE_AUX;
 		case '1': *prec = edit_add_source(); return BROWSE_SOUR;
-		case '2': edit_source(NULL, &disp_long_rfmt); return BROWSE_QUIT;
+		case '2': edit_source(NULL, false); return BROWSE_QUIT;
 		case '3': *prec = edit_add_event(); return BROWSE_EVEN;
-		case '4': edit_event(NULL, &disp_long_rfmt); return BROWSE_QUIT;
+		case '4': edit_event(NULL, false); return BROWSE_QUIT;
 		case '5': *prec = edit_add_other(); return BROWSE_AUX;
-		case '6': edit_other(NULL, &disp_long_rfmt); return BROWSE_QUIT;
+		case '6': edit_other(NULL, false); return BROWSE_QUIT;
 		case 'q': return BROWSE_QUIT;
 		}
 	}
@@ -2757,7 +2759,9 @@ repaint_utils_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_utread));
 	mvccwaddstr(win, row++, 4, _(qSmn_utgdchoo));
 	mvccwaddstr(win, row++, 4, _(qSmn_utkey));
+#if !defined(DEADENDS)
 	mvccwaddstr(win, row++, 4, _(qSmn_utkpers));
+#endif
 	mvccwaddstr(win, row++, 4, _(qSmn_utdbstat));
 	mvccwaddstr(win, row++, 4, _(qSmn_utmemsta));
 #if !defined(DEADENDS)
