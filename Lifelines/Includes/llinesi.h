@@ -106,7 +106,9 @@ RECORD merge_two_fams(NODE, NODE);
 /* miscutls.c */
 void key_util(void);
 void show_database_stats(void);
+#if !defined(DEADENDS)
 void who_is_he_she(void);
+#endif
 void sighand_cursesui(int sig);
 void sighand_cmdline(int sig);
 

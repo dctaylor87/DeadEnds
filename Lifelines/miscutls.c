@@ -90,6 +90,8 @@ key_util (void)
 	if (!indi) return;
 	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), 70));
 }
+
+#if !defined(DEADENDS)
 /*===================================================
  * who_is_he_she -- Find who person is from key value
  *=================================================*/
@@ -129,6 +131,8 @@ who_is_he_she (void)
 	msg_info("%s - %s", key, str);
 	/* LEAK -- where is stdfree(rawrec) -- Perry 2001/11/18 */
 }
+#endif
+
 /*===========================================
  * show_database_stats -- Show database stats
  *=========================================*/
