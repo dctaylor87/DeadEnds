@@ -197,6 +197,27 @@ remove_browse_list (STRING name,
 		}
 	ENDLIST
 }
+
+#if defined(DEADENDS)
+/* stringToSequence -- return sequence of records matching a string.
+   The search order is: named sequence, key, REFN, name */
+
+Sequence stringToSequence (String name)
+{
+  Sequence seq;
+
+  seq = find_named_seq (name);
+  if (! seq)
+    seq = key_to_indiseq (name);
+  if (! seq)
+    seq = refnToSequence (name);
+  if (! seq)
+    seq = nameToSequence (name);
+
+  return seq;
+}
+#endif
+
 /*===========================================
  * find_named_seq -- Find named browse list.
  *=========================================*/

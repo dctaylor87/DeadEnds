@@ -1034,6 +1034,46 @@ Sequence *nameToSequence(String name, Database *database)
 //        } ENDSEQUENCE
 //    }
 //}
+
+#if defined(DEADENDS)
+/* refnToSequence -- givena a REFN, return a sequence of containing
+   the key of the referenced record.
+
+   Much of the LL version of this function confuses me.
+
+   First, a REFN must be unique.  A record can have as many REFNs as
+   the creator the databaset wants, but a given REFN can only be on a
+   single record.  So, the sequence is either empty (and we return
+   NULL) or has a single element.
+
+   Second, why the 'letr' argument?  We don't use it during the search.
+
+   Third, the sort argument in the LL version -- sorting a sequence of
+   0 or 1 elsements?
+
+   We return a sequence because that is what the caller expects.  */
+
+Sequence *
+refnToSequence (CString ukey, Database *database)
+{
+  String key;
+  Sequence *seq;
+
+  if ((! ukey) || (*ukey == 0))
+    return NULL;
+
+  key = getRefn (ukey);
+  if (! key)
+    return NULL;
+
+  seq = createSequence(database);
+
+  /* XXX not sure what the last three arguments do here...  XXX */
+  appendToSequence (seq, key, null, null, false);
+
+  return seq;
+}
+#else
 /*==============================================================
  * refn_to_indiseq -- Return indiseq whose user references match
  *============================================================*/
@@ -1058,6 +1098,7 @@ Sequence *nameToSequence(String name, Database *database)
 //    namesort_indiseq(seq);
 //    return seq;
 //}
+#endif
 
 //  key_to_indiseq -- Return person sequence of the matching key
 //--------------------------------------------------------------------------------------------------
