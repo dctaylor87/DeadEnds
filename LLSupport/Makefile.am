@@ -19,6 +19,7 @@ libllsupport_a_SOURCES = \
 	ll-database.c \
 	ll-node.c \
 	ll-str.c \
+	ll-temp-nodes.c \
 	llgettext.c \
 	locales.c \
 	messages.c \

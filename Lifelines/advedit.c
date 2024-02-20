@@ -127,7 +127,11 @@ expand_tree (NODE root0)
 	ENDLIST
 	/* Shouldn't we free subs now ? Perry 2001/06/22 */
 #ifdef DEBUG
+#if defined(DEADENDS)
+	showGNode (expd);
+#else
 	show_node(expd);
+#endif
 #endif
 	return expd;
 }

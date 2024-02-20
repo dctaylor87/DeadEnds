@@ -530,7 +530,11 @@ ask_for_record (STRING idstr, INT letr)
 	rec = key_possible_to_record(answer, letr);
 	if (!rec) {
 		INDISEQ seq;
+#if defined(DEADENDS)
+		seq = refnToSequence(answer, currentDatabase);
+#else
 		seq = refn_to_indiseq(answer, letr, KEYSORT);
+#endif
 		if (!seq) return NULL;
 		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
 		remove_indiseq(seq);

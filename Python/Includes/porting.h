@@ -89,6 +89,7 @@ typedef const char *	CNSTRING;
 #define rmvat(key)		(key)
 
 #define node_to_record(node)	_llpy_node_to_record(node, database)
+#define copy_nodes(node, children, siblings)	copyNodes(node, children, siblings)
 
 /* we drop efmt -- era format */
 #define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) format_date(str,dfmt,mfmt,yfmt,sfmt,cmplx)

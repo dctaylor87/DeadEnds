@@ -202,17 +202,17 @@ remove_browse_list (STRING name,
 /* stringToSequence -- return sequence of records matching a string.
    The search order is: named sequence, key, REFN, name */
 
-Sequence stringToSequence (String name)
+Sequence *stringToSequence (String name, Database *database)
 {
-  Sequence seq;
+  Sequence *seq;
 
   seq = find_named_seq (name);
   if (! seq)
-    seq = key_to_indiseq (name);
+    seq = key_to_indiseq (name, database);
   if (! seq)
-    seq = refnToSequence (name);
+    seq = refnToSequence (name, database);
   if (! seq)
-    seq = nameToSequence (name);
+    seq = nameToSequence (name, database);
 
   return seq;
 }

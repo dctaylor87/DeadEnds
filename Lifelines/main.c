@@ -310,9 +310,11 @@ main (int argc, char **argv)
 		case 'n':	/* use non-traditional family rules */
 			traditional = FALSE;
 			break;
+#if !defined(DEADENDS)		/* XXX not currently supported by DeadEnds XXX */
 		case 't': /* show lots of trace statements for debugging */
 			prog_trace = TRUE;
 			break;
+#endif
 		case 'u': /* specify screen dimensions */
 			sscanf(optarg, SCN_INT "," SCN_INT, &winx, &winy);
 			break;
