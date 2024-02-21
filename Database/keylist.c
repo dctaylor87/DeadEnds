@@ -7,6 +7,7 @@
 //
 
 #include <stdio.h>
+#include <stdint.h>
 #include "keylist.h"
 #include "database.h"
 #include "name.h"
