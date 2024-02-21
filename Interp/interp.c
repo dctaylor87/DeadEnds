@@ -120,7 +120,7 @@ InterpType interpret(PNode *programNode, Context *context, PValue *returnValue)
 			case PNIdent:
 				pvalue = evaluateIdent(programNode, context, &errorFlag);
 				if (errorFlag) {
-					prog_error(programNode, "error evaluating an identifier");
+					scriptError(programNode, "error evaluating an identifier");
 					return InterpError;
 				}
 				if (pvalue.type == PVString && pvalue.value.uString)
@@ -132,7 +132,7 @@ InterpType interpret(PNode *programNode, Context *context, PValue *returnValue)
 			case PNBltinCall:
 				pvalue = evaluateBuiltin(programNode, context, &errorFlag);
 				if (errorFlag) {
-					prog_error(programNode, "error calling built-in function: %s", programNode->funcName);
+					scriptError(programNode, "error calling built-in function: %s", programNode->funcName);
 					return InterpError;
 				}
 				if (pvalue.type == PVString && pvalue.value.uString)
@@ -368,7 +368,7 @@ InterpType interpChildren (PNode *pnode, Context *context, PValue* pval)
 	bool eflg = false;
 	GNode *fam =  evaluateFamily(pnode->familyExpr, context, &eflg);
 	if (eflg || !fam || nestr(fam->tag, "FAM")) {
-		prog_error(pnode, "the first argument to children must be a family");
+		scriptError(pnode, "the first argument to children must be a family");
 		return InterpError;
 	}
 	FORCHILDREN(fam, chil, key, nchil, context->database) {
@@ -398,7 +398,7 @@ InterpType interpSpouses(PNode *pnode, Context *context, PValue *pval)
 	bool eflg = false;
 	GNode *indi = evaluatePerson(pnode->personExpr, context, &eflg);
 	if (eflg || !indi || nestr(indi->tag, "INDI")) {
-		prog_error(pnode, "the first argument to spouses must be a person");
+		scriptError(pnode, "the first argument to spouses must be a person");
 		return InterpError;
 	}
 	FORSPOUSES(indi, spouse, fam, nspouses, context->database) {
@@ -427,7 +427,7 @@ InterpType interpFamilies(PNode *node, Context *context, PValue *pval)
 	bool eflg = false;
 	GNode *indi = evaluatePerson(node->personExpr, context, &eflg);
 	if (eflg || !indi || nestr(indi->tag, "INDI")) {
-		prog_error(node, "the first argument to families must be a person");
+		scriptError(node, "the first argument to families must be a person");
 		return InterpError;
 	}
 	GNode *spouse = null;
@@ -463,7 +463,7 @@ InterpType interpFathers(PNode *node, Context *context, PValue *pval)
 	bool eflg = false;
 	GNode *indi = evaluatePerson(node->personExpr, context, &eflg);
 	if (eflg || !indi || nestr(indi->tag, "INDI")) {
-		prog_error(node, "the first argument to fathers must be a person");
+		scriptError(node, "the first argument to fathers must be a person");
 		return InterpError;
 	}
 	int nfams = 0;
@@ -492,7 +492,7 @@ InterpType interpMothers (PNode *node, Context *context, PValue *pval)
 	bool eflg = false;
 	GNode *indi = evaluatePerson(node->personExpr, context, &eflg);
 	if (eflg || !indi || nestr(indi->tag, "INDI")) {
-		prog_error(node, "the first argument to mothers must be a person");
+		scriptError(node, "the first argument to mothers must be a person");
 		return InterpError;;
 	}
 	int nfams = 0;
@@ -526,7 +526,7 @@ InterpType interpParents(PNode *node, Context *context, PValue *pval)
 	InterpType irc;
 	GNode *indi = evaluatePerson(node->personExpr, context, &eflg);
 	if (eflg || !indi || nestr(indi->tag, "INDI")) {
-		prog_error(node, "the first argument to parents must be a person");
+		scriptError(node, "the first argument to parents must be a person");
 		return InterpError;
 	}
 	int nfams = 0;
@@ -555,7 +555,7 @@ InterpType interp_fornotes(PNode *node, Context *context, PValue *pval)
 	InterpType irc;
 	GNode *root = evaluateGNode(node, context, &eflg);
 	if (eflg) {
-		prog_error(node, "1st arg to fornotes must be a record line");
+		scriptError(node, "1st arg to fornotes must be a record line");
 		return InterpError;
 	}
 	if (!root) return InterpOkay;
@@ -585,7 +585,7 @@ InterpType interp_fornodes(PNode *node, Context *context, PValue *pval)
 	bool eflg = false;
 	GNode *root = evaluateGNode(node->gnodeExpr, context, &eflg);
 	if (eflg || !root) {
-		prog_error(node, "the first argument to fornodes must be a Gedcom node/line");
+		scriptError(node, "the first argument to fornodes must be a Gedcom node/line");
 		return InterpError;
 	}
 	GNode *sub = root->child;
@@ -807,7 +807,7 @@ InterpType interp_indisetloop(PNode *pnode, Context *context, PValue *pval)
 	// The sequence expression field must be a sequence.
 	PValue val = evaluate(pnode->sequenceExpr, context, &eflg);
 	if (eflg || val.type != PVSequence) {
-		prog_error(pnode, "the first argument to forindiset must be a set");
+		scriptError(pnode, "the first argument to forindiset must be a set");
 		return InterpError;
 	}
 	Sequence *seq = val.value.uSequence;
@@ -1001,7 +1001,7 @@ InterpType interpTraverse(PNode *traverseNode, Context *context, PValue *returnV
 	bool errorFlag = false;
 	GNode *root = evaluateGNode(traverseNode->gnodeExpr, context, &errorFlag);
 	if (errorFlag || !root) {
-		prog_error(traverseNode, "the first argument to traverse must be a Gedcom line");
+		scriptError(traverseNode, "the first argument to traverse must be a Gedcom line");
 		return InterpError;
 	}
 
@@ -1070,7 +1070,7 @@ a:  removeFromHashTable(context->symbolTable, traverseNode->levelIden);
 
 //  prog_error -- Report a run time program error.
 //--------------------------------------------------------------------------------------------------
-void prog_error(PNode *gnode, String fmt, ...)
+void scriptError(PNode *gnode, String fmt, ...)
 {
 	va_list args;
 	printf("\nError in \"%s\" at line %d: ", gnode->fileName, gnode->lineNumber);

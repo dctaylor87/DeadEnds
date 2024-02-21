@@ -85,7 +85,7 @@ void free_pnode_tree(PNode*);
 PNode *iden_node(String);
 bool iistype(PNode*, PNType);
 int num_params(PNode*);
-void prog_error(PNode*, String, ...);
+void scriptError(PNode*, String, ...);
 //void show_one_pnode(PNode*);
 void show_pnode(PNode*);
 void show_pnodes(PNode*);

@@ -15,7 +15,8 @@ libdatabase_a_SOURCES = \
 	import.c \
 	addops.c \
 	removeops.c \
-	refnindex.c
+	refnindex.c \
+	keylist.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
