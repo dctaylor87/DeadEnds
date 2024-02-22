@@ -227,10 +227,4 @@ void term_show_module(void);
 #include "feedback.h"
 #endif /* _FEEDBACK_H */
 
-/* temporarily -- currently too many dependencies to move this from
-   screen.c to curses-wrappers.c (where it really belongs as a static
-   function) */
-extern void
-curses_outputv (void *data, MSG_LEVEL level, STRING fmt, va_list args);
-
 #endif /* _SCREEN_H */

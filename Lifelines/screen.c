@@ -66,6 +66,7 @@
 #include "messages.h"
 #include "screen.h"
 #include "screeni.h"
+#include "curses-ui.h"
 #include "cscurses.h"
 #include "messages.h"
 #include "codesets.h"

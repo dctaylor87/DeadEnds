@@ -20,11 +20,14 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 PYTHON_LIBS = @PYTHON_LIBS@
 
 LDADD = ../Python/libpyllines.a \
+	../LLSupport/libllsupport.a \
 	../Parser/libparser.a ../Interp/libinterp.a \
+	../UI/libui.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Validate/libvalidate.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
-LIBS =	$(PYTHON_LIBS) @LIBINTL@ @LIBICONV@
+LIBS =	$(PYTHON_LIBS) @LIBINTL@ @LIBICONV@ @LIBS@
 
 EXTRA_llines_DEPENDENCIES = $(LIBPYLLINES)
 
@@ -40,6 +43,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Lifelines/Includes \
 	-I$(top_srcdir)/LLSupport/Includes \
 	-I$(top_srcdir)/Python/Includes \
+	-I$(top_srcdir)/UI/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Parser/Includes \

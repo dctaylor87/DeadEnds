@@ -70,6 +70,7 @@
 #include "ll-list.h"
 #include "gstrings.h"
 #include "de-strings.h"
+#include "uiio.h"
 #else
 
 #include "llstdlib.h"

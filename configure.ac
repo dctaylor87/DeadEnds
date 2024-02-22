@@ -665,7 +665,7 @@ dnl **************************************************************
 
 AC_CONFIG_FILES([Makefile \
         Database/Makefile \
-	Docs/Manual/Makefile \
+        Docs/Manual/Makefile \
         Gedcom/Makefile \
         Interp/Makefile \
         Lifelines/Makefile \
@@ -674,7 +674,8 @@ AC_CONFIG_FILES([Makefile \
         Programs/Makefile \
         Python/Makefile \
         DataTypes/Makefile \
+        UI/Makefile \
         Utils/Makefile \
-	Validate/Makefile \
+        Validate/Makefile \
         Tests/Makefile])
 AC_OUTPUT
