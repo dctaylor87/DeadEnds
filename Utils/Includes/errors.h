@@ -33,7 +33,7 @@ typedef enum ErrorSeverity {
 typedef struct Error {
 	ErrorType type;         //  Type of this error.
 	ErrorSeverity severity; //  Severity of this error.
-	String fileName;        //  Name of file, if any, containing the error.
+	CString fileName;        //  Name of file, if any, containing the error.
 	int lineNumber;         //  Line number in file, if any, where the error occurs.
 	String message;         //  Message that describes the error.
 } Error;
@@ -45,6 +45,7 @@ typedef struct Error {
 extern ErrorLog *createErrorLog(void);
 extern void deleteErrorLog(ErrorLog*);
 extern Error *createError(ErrorType type, CString fileName, int lineNumber, String message);
+extern void setSeverityError(Error *error, ErrorSeverity severity);
 extern void deleteError(Error*);
 extern void addErrorToLog(ErrorLog*, Error*);
 extern void showErrorLog(ErrorLog*);

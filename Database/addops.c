@@ -13,6 +13,7 @@
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"
+#include "addrmvops.h"
 
 //  addChildToFamily -- Add an existing child to an existing family in a Database.
 //-------------------------------------------------------------------------------------------------

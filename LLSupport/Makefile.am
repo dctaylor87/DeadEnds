@@ -37,6 +37,7 @@ libllsupport_a_SOURCES = \
 	strwhite.c \
 	translat.c \
 	valid.c \
+	write.c \
 	xlat.c \
 	xreffile.c
 

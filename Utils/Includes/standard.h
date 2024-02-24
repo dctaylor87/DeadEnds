@@ -106,7 +106,7 @@ extern CString version;		// standard.c
 #define null ((void*) 0)
 
 // Debugging aids.
-extern String lastPathSegment(String);
+//extern String lastPathSegment(String);
 #define PH if(debugging) printf("%s %s %d\n", __FUNCTION__, lastPathSegment(__FILE__), __LINE__);
 
 #endif

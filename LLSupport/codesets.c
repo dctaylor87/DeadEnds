@@ -44,6 +44,7 @@
 #include "de-strings.h"
 #include "zstr.h"
 #include "strcvt.h"
+#include "norm_charmap.h"
 
 #else
 

@@ -114,7 +114,11 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 
 /* Prepare file for user to edit */
 	nodechk(indi1, "edit_indi");
+#if defined(DEADENDS)
+	write_indi_to_file_for_edit(indi1, editfile, rfmt, currentDatabase);
+#else
 	write_indi_to_file_for_edit(indi1, editfile, rfmt);
+#endif
 
 /* Have user edit file */
 	do_edit();
@@ -158,7 +162,11 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
+#if defined(DEADENDS)
+				write_indi_to_file_for_edit(indi2, editfile, rfmt, currentDatabase);
+#else
 				write_indi_to_file_for_edit(indi2, editfile, rfmt);
+#endif
 				do_edit();
 				continue;
 			}
@@ -218,7 +226,11 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 	fam1 = nztop(frec1);
 
 /* Prepare file for user to edit */
+#if defined(DEADENDS)
+	write_fam_to_file_for_edit(fam1, editfile, rfmt, currentDatabase);
+#else
 	write_fam_to_file_for_edit(fam1, editfile, rfmt);
+#endif
 
 /* Have user edit record */
 	do_edit();
@@ -259,7 +271,11 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
+#if defined(DEADENDS)
+				write_fam_to_file_for_edit(fam2, editfile, rfmt, currentDatabase);
+#else
 				write_fam_to_file_for_edit(fam2, editfile, rfmt);
+#endif
 				do_edit();
 				continue;
 			}

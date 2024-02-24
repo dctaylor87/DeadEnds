@@ -59,6 +59,7 @@ void nameSortSequence(Sequence*);  //  Sort a sequence by name.
 void keySortSequence(Sequence*);  //  Sort a sequence by key.
 void valueSortSequence(Sequence*); //  Sort a sequence by value (not properly implemented).
 Sequence *uniqueSequence(Sequence*);  //  Return sequence uniqueued from another.
+void uniqueSequenceInPlace(Sequence *sequence);  // Remove duplicate elements from a sequence.
 
 Sequence *personToChildren(GNode *person, Database*);  //  Return sequence of a person's children.
 Sequence *personToFathers(GNode *person, Database*);   //  Return sequence of a person's fathers.
@@ -69,7 +70,11 @@ Sequence *familyToMothers(GNode *family, Database*);  //  Return sequence of a f
 Sequence *personToSpouses(GNode *person, Database*);  //  Return sequence of a person's spouses.
 Sequence *personToFamilies(GNode *person, bool, Database*);  //  Return sequence of a person's families.
 Sequence *nameToSequence(String, Database*);  //  Return sequence of persons who match a name.
+#if defined(DEADENDS)
+Sequence *refnToSequence (CString ukey, Database *database);
+#else
 Sequence *refn_to_indiseq(String refn);
+#endif
 
 Sequence *unionSequence(Sequence*, Sequence*);
 Sequence *intersectSequence(Sequence*, Sequence*); 
@@ -86,6 +91,7 @@ bool elementSequence(Sequence *seq, int index, String* pkey, String* pname);
 CString elementKeySequence (Sequence *seq, int index);
 
 void sequenceToGedcom(Sequence*, FILE*);
+bool limitPersonNode(GNode *node, int level);
 
 // Kind of for debugging.
 void showSequence(Sequence*); // Show the contents of a sequence by pringing keys and names.for

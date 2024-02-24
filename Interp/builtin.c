@@ -517,8 +517,8 @@ PValue __extractdate (PNode *pnode, Context *context, bool* errflg)
         str = eventToDate(gnode, false);
     else
         str = gnode->value;
-	if (!str || *str == 0) return nullPValue;  // Not considered an error.
-	String stryear;
+    if (!str || *str == 0) return nullPValue;  // Not considered an error.
+    String stryear;
     extractDate(str, &daormo, &da, &mo, &yr, &stryear);
     assignValueToSymbol(context->symbolTable, dvar->identifier, PVALUE(PVInt, uInt, da));
 	assignValueToSymbol(context->symbolTable, mvar->identifier, PVALUE(PVInt, uInt, mo));

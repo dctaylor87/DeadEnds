@@ -94,7 +94,7 @@ static int getTokenLow(void)
     // Got by any white space and/or comments. Now at the first character of a token.
     if (t == Letter) {
         p = (String) tokbuf;
-        while (t == Letter | t == Digit || c == '_') {
+        while (t == Letter || t == Digit || c == '_') {
             *p++ = c;
             t = characterType(c = inchar());
         }

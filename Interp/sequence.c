@@ -38,7 +38,7 @@ static int valueCompare(SequenceEl, SequenceEl);  // Compare by value values.
 
 static void sequenceSort(Word*, int, int(*compare)(Word, Word));
 
-void baseFree(Word word) { stdfree(word); }
+static void baseFree(Word word) { stdfree(word); }
 
 #define key_to_name(key, database)  (NAME(keyToPerson(key, database))->value)
 

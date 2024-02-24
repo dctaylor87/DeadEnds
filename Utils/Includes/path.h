@@ -13,6 +13,6 @@
 #include "standard.h"
 
 FILE *fopenPath(CString fileName, CString mode, CString searchPath);
-String lastPathSegment(String fileName);
+String lastPathSegment(CString fileName);
 
 #endif /* path_h */

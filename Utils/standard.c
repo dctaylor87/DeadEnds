@@ -183,6 +183,7 @@ void __fatal (String file, int line)
 	abort();
 }
 
+#if 0	/* this has a different signature than what the standard specifies */
 // __assert -- Make an assertion.
 //--------------------------------------------------------------------------------------------------
 void __assert (bool exp, String file, int line)
@@ -193,6 +194,7 @@ void __assert (bool exp, String file, int line)
 	if (exp) return;
 	__fatal(file, line);
 }
+#endif
 
 // iswhite -- Check whether a character is white space. Probably doesn't change with Unicode.
 //--------------------------------------------------------------------------------------------------

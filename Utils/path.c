@@ -15,7 +15,7 @@
 
 // filePath -- Find a file in a sequence of paths.
 //--------------------------------------------------------------------------------------------------
-static String filePath (CString fileName, CString searchPath)
+static CString filePath (CString fileName, CString searchPath)
 // fileName -- Name of a file to search for and open.
 //  searchPath -- Search path to use in finding the file.
 {
@@ -86,7 +86,7 @@ FILE *fopenPath (CString name, CString mode, CString path)
 //  lastPathSegment -- Return the last component of a path.
 //    MNOTE: Returns pointer to an internal static buffer. Caller must deal with this.
 //--------------------------------------------------------------------------------------------------
-String lastPathSegment (String path)
+String lastPathSegment (CString path)
 //  path -- Path to find the last component of.
 {
 	static unsigned char scratch[MAXPATHBUFFER];

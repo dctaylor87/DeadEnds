@@ -1,4 +1,4 @@
 ## Process this file with automake to produce Makefile.in
 ## (configure will process the resulting Makefile.in to produce Makefile)
 
-SUBDIRS = Database Gedcom Validate Interp Parser Python DataTypes Utils Tests Programs #LLSupport Lifelines
+SUBDIRS = Database Gedcom Validate Interp Parser Python DataTypes Utils Tests UI LLSupport Programs Lifelines

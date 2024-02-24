@@ -13,6 +13,7 @@
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"
+#include "addrmvops.h"
 
 
 //  removeChildFromFamily -- Remove an existing child from an existing family in a Database.

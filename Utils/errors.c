@@ -25,7 +25,7 @@ static String getErrKey(Word error)
 	static int dex = 0;
 	if (++dex > NUMKEYS - 1) dex = 0;
 	String scratch = buffer[dex];
-	String fileName = ((Error*) error)->fileName;
+	CString fileName = ((Error*) error)->fileName;
 	if (!fileName) fileName = "";
 	int lineNumber = ((Error*) error)->lineNumber;
 	//  MNOTE: The key is returned out of static memory. The caller must make a copy if it needs

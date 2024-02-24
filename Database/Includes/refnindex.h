@@ -18,7 +18,7 @@ typedef struct RefnIndexEl {
 
 typedef HashTable RefnIndex;
 
-RefnIndexEl *createRefnIndexEl(String refn, String key);
+RefnIndexEl *createRefnIndexEl(CString refn, String key);
 RefnIndex *createRefnIndex(void);
 void deleteRefnIndex(RefnIndex*);
 bool insertInRefnIndex(RefnIndex*, CString refn, CString key);

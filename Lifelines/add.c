@@ -193,7 +193,11 @@ add_indi_by_edit (RFMT rfmt)
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
+#if defined(DEADENDS)
+				write_indi_to_file_for_edit(indi, editfile, rfmt, currentDatabase);
+#else
 				write_indi_to_file_for_edit(indi, editfile, rfmt);
+#endif
 				do_edit();
 				continue;
 			}
@@ -810,7 +814,11 @@ editfam:
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
+#if defined(DEADENDS)
+				write_fam_to_file_for_edit(fam2, editfile, rfmt, currentDatabase);
+#else
 				write_fam_to_file_for_edit(fam2, editfile, rfmt);
+#endif
 				do_edit();
 				continue;
 			}

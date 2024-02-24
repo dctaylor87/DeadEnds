@@ -56,6 +56,7 @@
 #include "codesets.h"
 #include "readwrite.h"
 #include "splitjoin.h"
+#include "ll-node.h"
 #include "gstrings.h"
 
 #else

@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "standard.h"
 #include "list.h"
+#include "place.h"
 
 static bool inString (int chr, String str);
 bool valueToList (String str, List *list, int *plen, String dlm);

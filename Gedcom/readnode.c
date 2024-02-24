@@ -232,7 +232,7 @@ static ReadReturn fileToLine(FILE *file, Error **error)
 //--------------------------------------------------------------------------------------------------
 NodeListElement *createNodeListElement(GNode *node, int level, int lineNo, Error *error)
 {
-	ASSERT(node || error && (!node || !error));  // Ugly exclusive or.
+	ASSERT((node || error) && (!node || !error));  // Ugly exclusive or.
 	NodeListElement *element = (NodeListElement*) malloc(sizeof(NodeListElement));
 	element->node = node;
 	element->level = level;
