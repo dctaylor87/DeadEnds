@@ -73,6 +73,7 @@
 #include "gstrings.h"
 #include "de-strings.h"
 #include "ll-gedcom.h"
+#include "ll-sequence.h"
 
 #include "llpy-externs.h"
 
@@ -1589,7 +1590,11 @@ choose_any_source (void)
 {
 	INDISEQ seq;
 	RECORD rec;
+#if defined(DEADENDS)
+	seq = getAllSources(currentDatabase);
+#else
 	seq = get_all_sour();
+#endif
 	if (!seq)
 	{
 		msg_error("%s", _(qSnosour));
@@ -1607,7 +1612,11 @@ choose_any_event (void)
 {
 	INDISEQ seq;
 	RECORD rec;
+#if defined(DEADENDS)
+	seq = getAllEvents(currentDatabase);
+#else
 	seq = get_all_even();
+#endif
 	if (!seq)
 	{
 		msg_error("%s", _(qSnoeven));
@@ -1625,7 +1634,11 @@ choose_any_other (void)
 {
 	INDISEQ seq;
 	RECORD rec;
+#if defined(DEADENDS)
+	seq = getAllOthers(currentDatabase);
+#else
 	seq = get_all_othe();
+#endif
 	if (!seq)
 	{
 		msg_error("%s", _(qSnoothe));

@@ -18,9 +18,11 @@ libllsupport_a_SOURCES = \
 	ll-addoperations.c \
 	ll-database.c \
 	ll-node.c \
+	ll-sequence.c \
 	ll-str.c \
 	ll-temp-nodes.c \
 	llgettext.c \
+	lloptions.c \
 	locales.c \
 	messages.c \
 	norm_charmap.c \

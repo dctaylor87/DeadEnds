@@ -95,7 +95,7 @@ Sequence *copySequence(Sequence *seq)
 
 //  appendToSequence -- Create and append a new element to a sequence.
 //--------------------------------------------------------------------------------------------------
-void appendToSequence(Sequence *sequence, String key, String name, PValue *val)
+void appendToSequence(Sequence *sequence, CString key, CString name, PValue *val)
 //  sequence -- Sequence to add an element to.
 //  key -- Key of the element; it cannot be null.
 //  name -- Name of the element (if a person); it may be null.
@@ -1068,8 +1068,7 @@ refnToSequence (CString ukey, Database *database)
 
   seq = createSequence(database);
 
-  /* XXX not sure what the last three arguments do here...  XXX */
-  appendToSequence (seq, key, null, null, false);
+  appendToSequence (seq, key, null, null);
 
   return seq;
 }

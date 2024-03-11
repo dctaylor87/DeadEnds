@@ -191,8 +191,8 @@ static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, INT indx);
 static void display_status(STRING text);
 static BOOLEAN does_match(VPTR param, VPTR el);
 static void edit_tt_menu(void);
-static void edit_user_options(void);
 #if !defined(DEADENDS)
+static void edit_user_options(void);
 static void edit_place_table(void);
 #endif
 static void end_action(void);
@@ -456,7 +456,11 @@ repaint_main_menu (UIWINDOW uiwin)
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	if (width > ll_cols-4)
 		width = ll_cols-4;
+#if defined(DEADENDS)
+	llstrncpyf(title, width, uu8, _(qSmtitle), get_deadends_version(ll_cols-4));
+#else
 	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
+#endif
 	mvccwaddstr(win, 1, 2, title);
 	mvccwaddstr(win, 2, 4, _(qScright));
 #if defined(DEADENDS)
@@ -1944,8 +1948,8 @@ invoke_utils_menu (void)
 #if !defined(DEADENDS)		/* DeadEnds has no cache */
 	case 'm': display_cache_stats(); break;
 	case 'e': edit_place_table(); break;
-#endif
 	case 'o': edit_user_options(); break;
+#endif
 	case 'c': invoke_cset_display(); break;
 		/*
 		we could add edit_global_config pretty easily, but the difficulty is
@@ -2026,7 +2030,6 @@ edit_place_table (void)
 {
 	edit_valtab_from_db("VPLAC", &placabbvs, ':', _(qSabverr), 0, 0);
 }
-#endif
 
 /*===============================
  * edit_user_options -- Allow user to edit options embedded in current db
@@ -2045,6 +2048,8 @@ edit_user_options (void)
 	strfree(&param);
 	release_table(uopts);
 }
+#endif
+
 /*============================================
  * get_answer -- Have user respond with string
  *  uiwin:   [IN] which window to use
@@ -3029,7 +3034,11 @@ platform_postcurses_init (void)
 #ifdef WIN32
 	char buffer[80];
 	STRING title = _(qSmtitle);
+#if defined(DEADENDS)
+	snprintf(buffer, sizeof(buffer), title, get_deadends_version(sizeof(buffer)-1-strlen(title)));
+#else
 	snprintf(buffer, sizeof(buffer), title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
+#endif
 	wtitle(buffer);
 #endif
 }

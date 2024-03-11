@@ -28,7 +28,7 @@ double getmilliseconds(void) {
 String substring (String s, int i, int j)
 {
 	static char scratch[MAXLINELEN+1];
-	if (!s || *s == 0 || i <= 0 || i > j || j > strlen(s)) return "";
+	if (!s || *s == 0 || i <= 0 || i > j || j > (int)strlen(s)) return "";
 	strncpy(scratch, &s[i-1], j-i+1);
 	scratch[j-i+1] = 0;
 	return strsave(scratch);

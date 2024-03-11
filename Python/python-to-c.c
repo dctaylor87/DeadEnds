@@ -22,7 +22,7 @@
 #include "llstdlib.h"
 #include "gedcom.h"
 #include "../gedlib/leaksi.h"
-#include "version.h"		/* get_lifelines_version */
+#include "version.h"		/* get_deadends_version */
 #endif
 
 #include "python-to-c.h"

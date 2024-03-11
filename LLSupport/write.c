@@ -58,8 +58,10 @@
 
 /* alphabetical */
 static void prefix_file(FILE *fp, XLAT tt);
+#if !defined(DEADENDS)
 static STRING swrite_node(INT levl, NODE node, STRING p);
 static STRING swrite_nodes(INT levl, NODE node, STRING p);
+#endif
 static BOOLEAN should_write_bom(void);
 static void write_fam_to_file(NODE fam, CNSTRING file);
 static void write_indi_to_file(NODE indi, CNSTRING file);
@@ -171,6 +173,8 @@ write_nodes (INT levl,       /* level */
 	if (sibs)
 		write_nodes(levl, fp, ttm, nsibling(node), indent, kids, TRUE);
 }
+
+#if 0			   /* DeadEnds now defines gnodesToString */
 /*====================================
  * swrite_node -- Write NODE to string
  *==================================*/
@@ -200,6 +204,7 @@ swrite_node (INT levl,       /* level */
 	strcpy(p, scratch);
 	return p + strlen(p);
 }
+
 /*=====================================
  * swrite_nodes -- Write tree to string
  *===================================*/
@@ -216,6 +221,7 @@ swrite_nodes (INT levl,       /* level */
 	}
 	return p;
 }
+
 /*=========================================
  * node_to_string -- Convert tree to string
  *=======================================*/
@@ -229,6 +235,8 @@ node_to_string (NODE node)      /* root */
 	(void) swrite_nodes(0, node, str);
 	return str;
 }
+#endif
+
 /*=====================================
  * prefix_file_for_edit - write BOM prefix to file if appropriate
  *  This handles prepending BOM (byte order mark) to UTF-8 files

@@ -21,7 +21,7 @@ static int keyCompare(Word a, Word b)
 	// (This duplicates code from sequence.c. Should be cleaned up.)
 	ASSERT(strlen(keya) > 2 && strlen(keyb) > 2);
 	if (strlen(keya) != strlen(keyb)) return (int) (strlen(a) - strlen(b));
-	for (int i = 0; i < strlen(keya); i++) {
+	for (int i = 0; i < (int)strlen(keya); i++) {
 		if (keya[i] != keyb[i]) return keya[i] - keyb[i];
 	}
 	return 0;
@@ -42,7 +42,7 @@ static int rootKeyCompare(Word a, Word b) {
 	// (This duplicates code from sequence.c. Should be cleaned up.)
 	ASSERT(strlen(keya) > 1 && strlen(keyb) > 1);
 	if (strlen(keya) != strlen(keyb)) return (int) (strlen(a) - strlen(b));
-	for (int i = 0; i < strlen(keya); i++) {
+	for (int i = 0; i < (int)strlen(keya); i++) {
 		if (keya[i] != keyb[i]) return keya[i] - keyb[i];
 	}
 	return 0;

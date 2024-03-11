@@ -40,6 +40,7 @@ typedef struct HashTable {
 	String(*getKey)(Word);       //  Function to get the key from an element.
 	Bucket *buckets[MAX_HASH];   //  Buckets of the hash table.
 	int count;                   //  The number of elements in the table.
+	int refcount;		     //  Number of references to the table.
 } HashTable;
 
 // User interface to hash table.
@@ -58,6 +59,9 @@ void showHashTable(HashTable*, void (*show)(Word));  // Show the contents of a t
 /*static*/ int getHash(CString);  // Return the hashed value of a String.
 void removeFromHashTable(HashTable*, CString key);
 int iterateHashTableWithPredicate(HashTable*, bool (*function)(Word element));
+
+extern void addrefHashTable (HashTable *table); // increment ref. count of table
+extern void releaseHashTable (HashTable *table); // decrement ref. count of table, free if zero
 
 //  SHOULDN'T THE BUCKET FUNCTIONS BE STATIC, SO NOT DECLARED IN HERE AT ALL??
 Bucket *createBucket(void);  // Create a bucket.

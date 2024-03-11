@@ -60,7 +60,7 @@ typedef const char *	CNSTRING;
 #define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
 #define indi_to_famc(node)		personToFamilyAsChild(node, database)
 
-#define getlloptstr(property, default)	(getenv(property) ? getenv(property) : default) /* XXX */
+//#define getlloptstr(property, default)	(getenv(property) ? getenv(property) : default) /* XXX */
 
 #define event_to_date(node,shorten)	eventToDate(node,shorten)
 #define event_to_plac(node,shorten)	eventToPlace(node,shorten)

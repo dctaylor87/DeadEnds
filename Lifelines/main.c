@@ -187,11 +187,16 @@ main (int argc, char **argv)
 
 	current_uiio = uiio_curses;
 
+	/* DEADENDS: init_arch is just 'return 0', init_stdlib is
+	   misnamed -- it initializes some btree stuff used by the LL
+	   on disk database. */
+#if !defined(DEADENDS)
 	/* initialize all the low-level platform code */
 	init_arch();
 
 	/* initialize all the low-level library code */
 	init_stdlib();
+#endif
 
 #if HAVE_SETLOCALE
 	/* initialize locales */
@@ -410,7 +415,9 @@ prompt_for_db:
 		}
 		set_screen_graphical(graphical);
 	}
+#if !defined(DEADENDS)
 	init_interpreter(); /* give interpreter its turn at initialization */
+#endif
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
@@ -524,8 +531,8 @@ finish:
 	strfree(&dbused);
 #if !defined(DEADENDS)
 	strfree(&readpath_file);
-#endif
 	shutdown_interpreter();
+#endif
 #if HAVE_PYTHON
 	llpy_python_terminate ();
 #endif

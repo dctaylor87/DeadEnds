@@ -650,14 +650,14 @@ dnl **************************************************************
 dnl Platform-Specific Configuration
 dnl **************************************************************
 
-#case $host_os in
-#  *windows*)
-#    AC_DEFINE(LINES_CONFIG_FILE,"lines.cfg",[lifelines configuration file])
-#    ;;
-#  *)
-#    AC_DEFINE(LINES_CONFIG_FILE,".linesrc",[lifelines configuration file])
-#    ;;
-#esac
+case $host_os in
+  *windows*)
+    AC_DEFINE(DEADENDS_CONFIG_FILE,"deadends.cfg",[lifelines configuration file])
+    ;;
+  *)
+    AC_DEFINE(DEADENDS_CONFIG_FILE,".deadendsrc",[lifelines configuration file])
+    ;;
+esac
 
 dnl **************************************************************
 dnl Generate Makefiles

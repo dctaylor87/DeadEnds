@@ -20,6 +20,8 @@
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
+#include "locales.h"
+#include "lloptions.h"
 #else
 #include "standard.h"		/* STRING */
 #include "llstdlib.h"		/* CALLBACK_FNC (needed by gedcom.h) */

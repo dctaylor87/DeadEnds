@@ -28,7 +28,7 @@ String searchRefnIndex(RefnIndex *index, CString refn)
 
 //  createRefnIndexEl -- Create a new reference index entry.
 //-------------------------------------------------------------------------------------------------
-RefnIndexEl *createRefnIndexEl(CString refn, String key)
+RefnIndexEl *createRefnIndexEl(CString refn, CString key)
 {
 	RefnIndexEl *el = (RefnIndexEl*) stdalloc(sizeof(RefnIndexEl));
 	el->refn = refn;

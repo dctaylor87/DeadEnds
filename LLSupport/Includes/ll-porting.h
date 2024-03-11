@@ -108,6 +108,9 @@ typedef void *		VPTR;
 #define valueof_int(table, key)			searchIntegerTable(table,key)
 #define valueof_obj(table, key)			searchHashTable(table, key)
 
+#define release_table(table)			releaseHashTable(table)
+#define addref_table(table)			addrefHashTable(table)
+
 #define LIST		List *
 #define create_list()			createList(NULL, NULL, NULL)
 #define enqueue_list			enqueueList

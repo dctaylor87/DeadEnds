@@ -124,7 +124,11 @@ variable, and checked & resized at init_display_indi time */
  *********************************************/
 
 /* alphabetical */
+#if defined(DEADENDS)
+static void add_child_line(INT, GNode *node, INT width);
+#else
 static void add_child_line(INT, RECORD, INT width);
+#endif
 static void add_spouse_line(INT, NODE, NODE, INT width);
 static BOOLEAN append_event(STRING * pstr, STRING evt, INT * plen, INT minlen);
 static void disp_person_birthdeath(ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt);
@@ -463,12 +467,20 @@ add_spouse_line (HINT_PARAM_UNUSED INT num, NODE indi, NODE fam, INT width)
  * add_child_line -- Add child line to others
  *=========================================*/
 static void
+#if defined(DEADENDS)
+add_child_line (INT num, GNode *node, INT width)
+#else
 add_child_line (INT num, RECORD irec, INT width)
+#endif
 {
 	STRING line;
 	STRING child = _(qSdspl_child);
 	if (Solen >= MAXOTHERS) return;
+#if defined(DEADENDS)
+	line = person_display(node, NULL, width-15);
+#else
 	line = person_display(nztop(irec), NULL, width-15);
+#endif
 	if (number_child_enable)
 		llstrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
 	else

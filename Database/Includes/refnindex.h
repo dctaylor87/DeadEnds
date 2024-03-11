@@ -12,13 +12,13 @@
 #include "hashtable.h"
 
 typedef struct RefnIndexEl {
-	String refn;  // Value of the REFN node.
-	String key;  // Key of the record with the REFN node.
+	CString refn;  // Value of the REFN node.
+	CString key;  // Key of the record with the REFN node.
 } RefnIndexEl;
 
 typedef HashTable RefnIndex;
 
-RefnIndexEl *createRefnIndexEl(CString refn, String key);
+RefnIndexEl *createRefnIndexEl(CString refn, CString key);
 RefnIndex *createRefnIndex(void);
 void deleteRefnIndex(RefnIndex*);
 bool insertInRefnIndex(RefnIndex*, CString refn, CString key);

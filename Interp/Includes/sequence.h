@@ -52,7 +52,7 @@ Sequence *createSequence(Database*);  // Create a sequence.
 void deleteSequence(Sequence*, bool fval);  //  Delete a sequence.
 Sequence *copySequence(Sequence*);  //  Copy a sequence.
 int lengthSequence(Sequence*);  //  Return the length of a sequence.
-void appendToSequence(Sequence*, String key, String name, PValue *val);
+void appendToSequence(Sequence*, CString key, CString name, PValue *val);
 bool isInSequence(Sequence*, String key);
 bool removeFromSequence(Sequence*, String key, String name, int index);
 void nameSortSequence(Sequence*);  //  Sort a sequence by name.

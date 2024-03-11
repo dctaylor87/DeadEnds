@@ -56,3 +56,4 @@ extern void appendstr(STRING * pdest, INT * len, int utf8, CNSTRING src);
 
 extern void strfree (String *str);
 extern void strupdate (String *str, CString value);
+extern String allocsubbytes (String s, INT start, INT num);

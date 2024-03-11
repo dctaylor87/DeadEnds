@@ -41,6 +41,8 @@ HashTable *createHashTable(int(*compare)(Word, Word), void(*delete)(Word), Strin
 	table->delete = delete;
 	table->getKey = getKey;
 	for (int i = 0; i < MAX_HASH; i++) table->buckets[i] = null;
+	table->count = 0;
+	table->refcount = 1;
 	return table;
 }
 
@@ -408,3 +410,27 @@ void showHashTable (HashTable *table, void (*show)(Word))
 //  This file also implements some more specific hash tables;
 
 String wordGetKey(Word element) { return ((WordElement*) element)->key; }
+
+// addrefHashTable -- increment reference count of a HashTable
+
+void
+addrefHashTable (HashTable *table)
+{
+  if (! table)
+    return;
+
+  table->refcount++;
+}
+
+// releaseHashTable -- decrement reference count of table, free if count is zero
+
+void
+releaseHashTable (HashTable *table)
+{
+  if (! table)
+    return;
+
+  table->refcount--;
+  if (! table->refcount)
+    deleteHashTable (table);
+}
