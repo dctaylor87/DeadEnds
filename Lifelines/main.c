@@ -36,7 +36,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -71,32 +70,7 @@
 #include "gstrings.h"
 #include "de-strings.h"
 #include "uiio.h"
-#else
 
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include "btree.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "liflines.h"
-#include "arch.h"
-#include "lloptions.h"
-#include "interp.h"
-#include "version.h"
-#include "messages.h"
-
-#include "llinesi.h"
-#include "indiseq.h"
-#include "feedback.h"
-#include "screen.h"
-
-#include "uiio.h"
-
-#endif
 /* for parser debugging */
 extern int yydebug;
 
@@ -114,11 +88,6 @@ extern int yydebug;
  * external variables (no header)
  *********************************************/
 
-extern INT csz_indi;
-extern INT csz_fam;
-extern INT csz_sour;
-extern INT csz_even;
-extern INT csz_othr;
 extern INT winx, winy;
 
 extern int opterr;
@@ -129,7 +98,6 @@ extern int opterr;
 
 
 static STRING usage_summary = "";      /* usage string */
-int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
 BOOLEAN keyflag   = TRUE;      /* show key values */
@@ -232,57 +200,8 @@ main (int argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fntc:Fu:x:o:zC:I:p:Pvh?")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
-#if !defined(DEADENDS)
-		case 'c':	/* adjust cache sizes */
-			while(optarg && *optarg) {
-				if(isasciiletter((uchar)*optarg) && isupper((uchar)*optarg))
-					*optarg = tolower((uchar)*optarg);
-				if(*optarg == 'i') {
-					INT icsz_indi=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_indi, &icsz_indi);
-				}
-				else if(*optarg == 'f') {
-					INT icsz_fam=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_fam, &icsz_fam);
-				}
-				else if(*optarg == 's') {
-					INT icsz_sour=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_sour, &icsz_sour);
-				}
-				else if(*optarg == 'e') {
-					INT icsz_even=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_even, &icsz_even);
-				}
-				else if((*optarg == 'o') || (*optarg == 'x')) {
-					INT icsz_othr=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_othr, &icsz_othr);
-				}
-				optarg++;
-				while(*optarg && isdigit((uchar)*optarg)) optarg++;
-				if(*optarg == ',') optarg++;
-				while(*optarg && isdigit((uchar)*optarg)) optarg++;
-			}
-			break;
-#endif
-#ifdef FINNISH
-# ifdef FINNISHOPTION
-		case 'F':	/* Finnish sorting order [toggle] */
-			opt_finnish = !opt_finnish;
-			/*
-			TODO - need to mark Finnish databases, as 
-			name records are not interoperable, because of
-			different soundex encoding
-			2001-02-17, Perry Rapp
-			TODO, 2002-11-07, Perry Rapp:
-			Need to see if we can fix database so locale sort doesn't affect btree
-			because it would be nicer if changing locale didn't hurt the btree !
-			Perhaps locale collates can only be used inside name records ? needs research
-			*/
-			break;
-# endif
-#endif
 		case 'a':	/* debug allocation */
 #if defined(DEADENDS)
 		  logAllocations(true);
@@ -415,9 +334,7 @@ prompt_for_db:
 		}
 		set_screen_graphical(graphical);
 	}
-#if !defined(DEADENDS)
-	init_interpreter(); /* give interpreter its turn at initialization */
-#endif
+	initializeInterpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
@@ -606,18 +523,7 @@ shutdown_ui (BOOLEAN pause)
 static void
 load_usage (void)
 {
-#ifdef FINNISH
-# ifdef FINNISHOPTION
-	opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-	usage_summary = _(qSusgFinnOpt);
-# else
-	opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-	usage_summary = _(qSusgFinnAlw);
-# endif
-#else
-	opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
 	usage_summary = _(qSusgNorm);
-#endif
 }
 /*===============================================
  * print_usage -- display program help/usage

@@ -56,7 +56,6 @@ extern int yydebug;
  *********************************************/
 
 static STRING usage_summary = "";      /* usage string */
-int opt_finnish  = FALSE;      /* Finnish Language sorting order if TRUE */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
 BOOLEAN keyflag   = TRUE;      /* show key values */
@@ -154,53 +153,8 @@ main (int argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fntc:Fu:x:o:zC:I:p:Pvh?")) != -1) {
+	while ((c = getopt(argc, argv, "adkrwil:fntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
-#if !defined(DEADENDS)
-		case 'c':	/* adjust cache sizes */
-			while(optarg && *optarg) {
-				if(isasciiletter((uchar)*optarg) && isupper((uchar)*optarg))
-					*optarg = tolower((uchar)*optarg);
-				if(*optarg == 'i') {
-					INT icsz_indi=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_indi, &icsz_indi);
-				}
-				else if(*optarg == 'f') {
-					INT icsz_fam=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_fam, &icsz_fam);
-				}
-				else if(*optarg == 's') {
-					INT icsz_sour=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_sour, &icsz_sour);
-				}
-				else if(*optarg == 'e') {
-					INT icsz_even=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_even, &icsz_even);
-				}
-				else if((*optarg == 'o') || (*optarg == 'x')) {
-					INT icsz_othr=0;
-					sscanf(optarg+1, SCN_INT "," SCN_INT, &csz_othr, &icsz_othr);
-				}
-				optarg++;
-				while(*optarg && isdigit((uchar)*optarg)) optarg++;
-				if(*optarg == ',') optarg++;
-				while(*optarg && isdigit((uchar)*optarg)) optarg++;
-			}
-			break;
-#endif
-#ifdef FINNISH
-# ifdef FINNISHOPTION
-		case 'F':	/* Finnish sorting order [toggle] */
-			opt_finnish = !opt_finnish;
-			/*
-			TO DO - need to mark Finnish databases, as 
-			name records are not interoperable, because of
-			different soundex encoding
-			2001/02/17, Perry Rapp
-			*/
-			break;
-# endif
-#endif
 		case 'a':	/* debug allocation */
 			alloclog = TRUE;
 			break;
@@ -307,7 +261,7 @@ prompt_for_db:
 	crashlog = getlloptstr("CrashLog_llexec", NULL);
 	if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
 	crash_setcrashlog(crashlog);
-	init_interpreter(); /* give interpreter its turn at initialization */
+	initializeInterpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
 	if ((readonly || immutable) && writeable) {
@@ -481,18 +435,7 @@ platform_init (void)
 static void
 load_usage (void)
 {
-#ifdef FINNISH
-# ifdef FINNISHOPTION
-	opt_finnish  = FALSE;/* Finnish Language sorting order if TRUE */
-	usage_summary = _(qSusgFinnOpt);
-# else
-	opt_finnish  = TRUE;/* Finnish Language sorting order if TRUE */
-	usage_summary = _(qSusgFinnAlw);
-# endif
-#else
-	opt_finnish  = FALSE;/* Finnish Language sorting order id disabled*/
 	usage_summary = _(qSusgNorm);
-#endif
 }
 /*===============================================
  * print_usage -- display program help/usage
