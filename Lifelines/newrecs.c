@@ -123,10 +123,7 @@ RECORD
 edit_add_source (void)
 {
 	STRING str;
-	if (readonly) {
-		msg_error("%s", _(qSronlya));
-		return NULL;
-	}
+
 	str = getlloptstr("SOURREC", _(qSdefsour));
 	return edit_add_record(str, _(qSrredit), _(qSrreditopt), 'S', _(qScfradd));
 }
@@ -137,10 +134,7 @@ RECORD
 edit_add_event (void)
 {
 	STRING str;
-	if (readonly) {
-		msg_error("%s", _(qSronlya));
-		return NULL;
-	}
+
 	str = getlloptstr("EVENREC", _(qSdefeven));
 	return edit_add_record(str, _(qSeredit), _(qSereditopt), 'E', _(qScfeadd));
 }
@@ -151,10 +145,7 @@ RECORD
 edit_add_other (void)
 {
 	STRING str;
-	if (readonly) {
-		msg_error("%s", _(qSronlya));
-		return NULL;
-	}
+
 	str = getlloptstr("OTHR", _(qSdefothr));
 	return edit_add_record(str, _(qSxredit), _(qSxreditopt), 'X', _(qScfxadd));
 }
@@ -432,13 +423,6 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	resolve_refn_links(root1);
 
 	do_edit();
-	if (readonly) {
-		root2 = file_to_node(editfile, ttmi, &msg, &emp);
-		if (!equal_tree(root1, root2))
-			msg_error("%s", _(qSronlye));
-		free_nodes(root2);
-		return FALSE;
-	}
 
 	while (TRUE) {
 		INT cnt;

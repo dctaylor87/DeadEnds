@@ -1181,12 +1181,6 @@ static PyObject *llpy_sync_indi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   NODE old_tree = 0;
   NODE new_tree = 0;
 
-  if (readonly)
-    {
-      PyErr_SetString (PyExc_PermissionError, "sync: database was opened read-only");
-      return NULL;
-    }
-
   if (! key)
     {
       PyErr_SetString (PyExc_SystemError, "sync: unable to determine record's key");

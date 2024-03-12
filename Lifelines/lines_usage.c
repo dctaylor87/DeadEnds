@@ -81,8 +81,6 @@ print_lines_usage (CNSTRING exename)
 	printf(_("debug mode (disable signal trapping)"));
 	printf("\n\t-f\n\t\t");
 	printf(_("force open (for recovery from errors or power failure)"));
-	printf("\n\t-i\n\t\t");
-	printf(_("open database with immutable access (for use on read-only media)"));
 	printf("\n\t-k\n\t\t");
 	printf(_("always show keys (even if REFN available)"));
 	printf("\n\t-ln\n\t\t");
@@ -93,9 +91,6 @@ print_lines_usage (CNSTRING exename)
 	printf(_("do not use traditional family rules"));
 	printf("\n\t-o[FILE]\n\t\t");
 	printf(_("Specify program output filename (eg, -o/tmp/mytests)"));
-	printf("\n\t-r\n\t\t");
-	printf(_("open database with read-only access (prohibiting other\n"
-		"\t\twrite access)"));
 	printf("\n\t-t\n\t\t");
 	printf(_("trace function calls in report programs (for debugging)"));
 	printf("\n\t");

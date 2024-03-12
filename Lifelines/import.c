@@ -276,12 +276,6 @@ TODO: why were these here ?
 
 	/* test for read-only database here */
 
-	if(readonly) {
-		if (ifeed && ifeed->error_readonly_fnc)
-			(*ifeed->error_readonly_fnc)();
-		goto end_import;
-	}
-
 	/* tell user we are beginning real part of import */
 	if (ifeed && ifeed->beginning_import_fnc) {
 		if(gd_reuse)

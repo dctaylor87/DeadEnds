@@ -440,10 +440,6 @@ ZST qSdbrecstats  = N_(FMT_INT "I, " FMT_INT "F, " FMT_INT "S," FMT_INT "E, " FM
 ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");
 ZST qScright      = N_("Copyright(c) 1991 to 1996, by T. T. Wetmore IV");
 ZST qSdbname      = N_("Current Database - %s");
-	/* immutable is read-only with no reader/writer conflict protection */
-ZST qSdbimmut     = N_(" (immutable)");
-	/* read-only has protection against reader/writer conflict */
-ZST qSdbrdonly    = N_(" (read only)");
 ZST qSplschs      = N_("Please choose an operation:");
 ZST qSmn_unkcmd   = N_("Not valid command");
 
@@ -483,7 +479,6 @@ ZST qSbadhistlen  = N_("Bad history length");
 ZST qShistclr     = N_("Delete history (%d entries)?");
 ZST qSdataerr     = N_("Error accessing data");
 ZST qSidhist      = N_("Choose from history");
-ZST qSnorwandro   = N_("Cannot combine immutable (-i) or read-only (-r) with read-write (-w) access.");
 ZST qSnofandl     = N_("Cannot combine forceopen (-f) and lock (-l) flags.");
 ZST qSiddefpath   = N_("Default path: ");
 ZST qSmisskeys    = N_("WARNING: missing keys");

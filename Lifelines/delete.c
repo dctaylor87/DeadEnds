@@ -203,11 +203,6 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
 {
 	NODE fam;
 
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return FALSE;
-	}
-
 /* Identify spouse to remove */
 	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1);
 	if (!irec) return FALSE;
@@ -245,11 +240,6 @@ choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
 {
 	NODE fam;
 
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return FALSE;
-	}
-		
 /* Identify child and check for FAMC nodes */
 	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1);
 	if (!irec) return FALSE;

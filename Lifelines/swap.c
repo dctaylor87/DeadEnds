@@ -102,11 +102,6 @@ swap_children (RECORD prnt, RECORD frec)
 #endif
 	INT nfam, nchil;
 
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return FALSE;
-	}
-
 /* Identify parent if need be */
 	if (frec) goto gotfam;
 	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
@@ -227,11 +222,6 @@ reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 	NODE fam, child;
 #endif
 
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return FALSE;
-	}
-
 /* Identify parent if need be */
 	if (frec) goto gotfam;
 	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
@@ -333,11 +323,6 @@ swap_families (RECORD irec)
 #endif
 	INT nfam;
 	STRING str;
-
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return FALSE;
-	}
 
 /* Find person and assure has >= 2 families */
 	if (!irec) irec = ask_for_indi(_(qSidfswp), NOASK1);

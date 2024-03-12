@@ -190,11 +190,6 @@ open_or_create_database (INT alteration, STRING *dbused)
 		return FALSE;
 	}
 
-	if (readonly || immutable || alteration)
-	{
-		llwprintf("%s", _("Cannot create new database with -r, -i, -l, or -f flags."));
-		return FALSE;
-	}
 	/*
 	error was only that db doesn't exist, so lets try
 	making a new one 

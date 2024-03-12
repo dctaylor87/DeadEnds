@@ -135,11 +135,6 @@ add_indi_by_edit (RFMT rfmt)
 	BOOLEAN emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
-	if (readonly) {
-		msg_error("%s", _(qSronlya));
-		return NULL;
-	}
-
 /* Create person template for user to edit */
 
 	if (!(fp = fopen(editfile, LLWRITETEXT)))
@@ -330,11 +325,6 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 {
 	INT i;
 
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return NULL;
-	}
-
 /* Identify child if caller did not */
 
 	if (!child) {
@@ -454,11 +444,6 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 	INT sex;
 	NODE spouse, fam = nztop(frec);
 #endif
-
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return FALSE;
-	}
 
 	/* Identify spouse to add to family */
 
@@ -672,11 +657,6 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 	STRING msg=0, key=0, str=0;
 	BOOLEAN emp;
 	FILE *fp=NULL;
-
-	if (readonly) {
-		msg_error("%s", _(qSronlya));
-		return NULL;
-	}
 
 /* Handle case where child is known */
 

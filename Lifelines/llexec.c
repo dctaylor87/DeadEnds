@@ -59,9 +59,7 @@ static STRING usage_summary = "";      /* usage string */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
 BOOLEAN keyflag   = TRUE;      /* show key values */
-BOOLEAN readonly  = FALSE;     /* database is read only */
 BOOLEAN writeable = FALSE;     /* database must be writeable */
-BOOLEAN immutable = FALSE;     /* make no changes at all to database, for access to truly read-only medium */
 INT alldone       = 0;         /* completion flag */
 extern BOOLEAN progrunning;
 extern BOOLEAN progparsing;
@@ -153,7 +151,7 @@ main (int argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkrwil:fntu:x:o:zC:I:p:Pvh?")) != -1) {
+	while ((c = getopt(argc, argv, "adkwl:fntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
 			alloclog = TRUE;
@@ -164,15 +162,8 @@ main (int argc, char **argv)
 		case 'k':	/* don't show key values */
 			keyflag = FALSE;
 			break;
-		case 'r':	/* request for read only access */
-			readonly = TRUE;
-			break;
 		case 'w':	/* request for write access */
 			writeable = TRUE;
-			break;
-		case 'i': /* immutable access */
-			immutable = TRUE;
-			readonly = TRUE;
 			break;
 		case 'l': /* locking switch */
 			lockchange = TRUE;
@@ -264,10 +255,6 @@ prompt_for_db:
 	initializeInterpreter(); /* give interpreter its turn at initialization */
 
 	/* Validate Command-Line Arguments */
-	if ((readonly || immutable) && writeable) {
-		llwprintf("%s", _(qSnorwandro));
-		goto finish;
-	}
 	if (forceopen && lockchange) {
 		llwprintf("%s", _(qSnofandl));
 		goto finish;

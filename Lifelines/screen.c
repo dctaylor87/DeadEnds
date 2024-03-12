@@ -469,10 +469,6 @@ repaint_main_menu (UIWINDOW uiwin)
 	str = getlloptint("FullDbPath", 1) ? readpath : readpath_file;
 #endif
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
-	if (immutable)
-		wprintw(win, "%s", _(qSdbimmut));
-	else if (readonly)
-		wprintw(win, "%s", _(qSdbrdonly));
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
 	mvccwaddstr(win, row++, 2, _(qSplschs));
@@ -801,10 +797,7 @@ main_menu (void)
 	case 'a':
 		{
 			RECORD rec = 0;
-			if (readonly) {
-				msg_error("%s", _(qSronlya));
-				break;
-			}
+
 			rec = invoke_add_menu();
 			if (rec)
 				main_browse(rec, BROWSE_UNK);
@@ -812,10 +805,6 @@ main_menu (void)
 		break;
 	case 'd':
 		{
-			if (readonly) {
-				msg_error("%s", _(qSronlyr));
-				break;
-			}
 			invoke_del_menu();
 		}
 		break;
@@ -1821,11 +1810,6 @@ load_tt_action (void)
 	STRING fname=0;
 	INT ttnum;
 	STRING ttimportdir;
-
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return;
-	}
 
 	/* Ask which table */
 	ttnum = choose_tt(_(qSmn_svttttl));

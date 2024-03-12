@@ -165,10 +165,6 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 	ASSERT(indi2);
 	ASSERT(eqstr("INDI", ntag(indi1)));
 	ASSERT(eqstr("INDI", ntag(indi2)));
-	if (readonly) {
-		msg_error("%s", _(qSronlym));
-		return NULL;
-	}
 	if (indi1 == indi2) {
 		msg_error("%s", _(qSnopmrg));
 		return NULL;
@@ -545,10 +541,6 @@ merge_two_fams (NODE fam1, NODE fam2)
 	STRING msg;
 	BOOLEAN emp;
 
-	if (readonly) {
-		msg_error("%s", _(qSronlym));
-		return NULL;
-	}
 	ASSERT(fam1);
 	ASSERT(fam2);
 	ASSERT(eqstr("FAM", ntag(fam1)));

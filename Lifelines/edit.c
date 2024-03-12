@@ -122,15 +122,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 
 /* Have user edit file */
 	do_edit();
-	if (readonly) {
-		STRING msg;
-		BOOLEAN emp;
-		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
-		if (!equal_tree(indi1, indi2))
-			msg_error("%s", _(qSronlye));
-		free_nodes(indi2);
-		return FALSE;
-	}
+
 	while (TRUE) {
 		INT cnt;
 		STRING msg;
@@ -234,13 +226,6 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 
 /* Have user edit record */
 	do_edit();
-	if (readonly) {
-		BOOLEAN emp;
-		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
-		if (!equal_tree(fam1, fam2))
-			msg_error("%s", _(qSronlye));
-		goto end_edit_fam;
-	}
 	while (TRUE) {
 		INT cnt;
 		BOOLEAN emp;

@@ -399,10 +399,6 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 	INT i;
 	RECORD rec=0;
 
-	if (readonly) {
-		msg_error("%s", _(qSronlya));
-		return NULL;
-	}
 	i = choose_from_array(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
 	if (i == 0) {
@@ -1015,10 +1011,7 @@ pick_remove_spouse_from_family (RECORD frec)
 #endif
 	STRING spstrings[MAX_SPOUSES];
 	INT i;
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return;
-	}
+
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	if (!husb && !wife) {
 		msg_error("%s", _(qShasnei));
@@ -1073,10 +1066,7 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 #endif
 	BOOLEAN confirm;
 	char scratch[100];
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return;
-	}
+
 	split_fam(nztop(fam), &fref, &husb, &wife, &chil, &rest);
 	join_fam(nztop(fam), fref, husb, wife, chil, rest);
 	if (traditional) {
@@ -1113,10 +1103,7 @@ static void
 prompt_add_child_check_save (NODE fam, NODE save)
 {
 	char scratch[100];
-	if (readonly) {
-		msg_error("%s", _(qSronlye));
-		return;
-	}
+
 	if (save) {
 		if (keyflag)
 			if(getlloptint("DisplayKeyTags", 0) > 0) {
@@ -1298,10 +1285,6 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
-			if (readonly) {
-				msg_error("%s", _(qSronlye));
-				break;
-			}
 			if ((tmp = choose_child(NULL, current, _(qSnocinf),
 				_(qSidcrmv), DOASK1)) != 0) {
 				choose_and_remove_child(tmp, current, TRUE);
@@ -1685,7 +1668,6 @@ static void
 save_hist_lists (void)
 {
 	if (!getlloptint("SaveHistory", 0)) return;
-	if (readonly || immutable) return;
 	save_nkey_list("HISTV", &vhist);
 	save_nkey_list("HISTC", &chist);
 }
