@@ -98,8 +98,6 @@ main (int argc, char **argv)
 	BOOLEAN ok=FALSE;
 	BOOLEAN python_interactive = FALSE;
 	STRING dbrequested=NULL; /* database (path) requested */
-	BOOLEAN forceopen=FALSE, lockchange=FALSE;
-	char lockarg = 0; /* option passed for database lock */
 	INT alteration=0;
 	LIST exprogs=NULL;
 	TABLE exargs=NULL;
@@ -150,7 +148,7 @@ main (int argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkl:fntu:x:o:zC:I:p:Pvh?")) != -1) {
+	while ((c = getopt(argc, argv, "adkntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
 			alloclog = TRUE;
@@ -160,13 +158,6 @@ main (int argc, char **argv)
 			break;
 		case 'k':	/* don't show key values */
 			keyflag = FALSE;
-			break;
-		case 'l': /* locking switch */
-			lockchange = TRUE;
-			lockarg = *optarg;
-			break;
-		case 'f':	/* force database open in all cases */
-			forceopen = TRUE;
 			break;
 		case 'n':	/* use non-traditional family rules */
 			traditional = FALSE;
@@ -250,23 +241,6 @@ prompt_for_db:
 	crash_setcrashlog(crashlog);
 	initializeInterpreter(); /* give interpreter its turn at initialization */
 
-	/* Validate Command-Line Arguments */
-	if (forceopen && lockchange) {
-		llwprintf("%s", _(qSnofandl));
-		goto finish;
-	}
-	if (lockchange && lockarg != 'y' && lockarg != 'n') {
-		llwprintf("%s", _(qSbdlkar));
-		goto finish;
-	}
-	if (forceopen)
-		alteration = 3;
-	else if (lockchange) {
-		if (lockarg == 'y')
-			alteration = 2;
-		else
-			alteration = 1;
-	}
 	c = argc - optind;
 	if (c > 1) {
 		showusage = TRUE;
