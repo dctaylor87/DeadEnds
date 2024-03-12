@@ -101,7 +101,6 @@ static STRING usage_summary = "";      /* usage string */
 BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
 BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
 BOOLEAN keyflag   = TRUE;      /* show key values */
-BOOLEAN writeable = FALSE;     /* database must be writeable */
 INT alldone       = 0;         /* completion flag */
 extern BOOLEAN progrunning;
 extern BOOLEAN progparsing;
@@ -198,7 +197,7 @@ main (int argc, char **argv)
 
 	/* Parse Command-Line Arguments */
 	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkwl:fntu:x:o:zC:I:p:Pvh?")) != -1) {
+	while ((c = getopt(argc, argv, "adkl:fntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
 #if defined(DEADENDS)
@@ -212,9 +211,6 @@ main (int argc, char **argv)
 			break;
 		case 'k':	/* don't show key values */
 			keyflag = FALSE;
-			break;
-		case 'w':	/* request for write access */
-			writeable = TRUE;
 			break;
 		case 'l': /* locking switch */
 			lockchange = TRUE;

@@ -100,8 +100,6 @@ print_lines_usage (CNSTRING exename)
 		"\t\tby 34 rows)"));
 	printf("\n\t--help\n\t\t");
 	printf(_("display this help and exit"));
-	printf("\n\t-w\n\t\t");
-	printf(_("open database with writeable access (this is the default)"));
 	printf("\n\t");
 	printf(_("-x[REPORT]"));
 	printf("\n\t\t");
