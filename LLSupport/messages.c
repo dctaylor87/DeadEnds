@@ -62,24 +62,24 @@ STRING empstr71 = SS "                                                          
 
 
 ZST qSiddbse      = N_("You must identify a database.");
-ZST qSidldir      = N_("What directory holds (or will hold) the LifeLines database? (? to list)");
+ZST qSidldir      = N_("Which file holds (or will hold) the DeadEnds database? (? to list, <return> to cancel.)");
 ZST qSidldrp      = N_("enter path: ");
-ZST qSnodbse      = N_("No LifeLines database found.");
+ZST qSnodbse      = N_("No DeadEnds database found.");
 ZST qScrdbse      = N_("Do you want to create a database at '%s'?");
-ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
+//ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */
-ZST qSusgFinnOpt  = N_("lines [-adkrwiflntcuFxoCzI] [database]   # Use -F for Finnish database");
+//ZST qSusgFinnOpt  = N_("lines [-adklntcuFxoCzI] [database]   # Use -F for Finnish database");
 	/* summary of options (compiled with Finnish as mandatory) */
-ZST qSusgFinnAlw  = N_("lines [-adkrwiflntcuxoCzI] [database]   # Finnish database");
+//ZST qSusgFinnAlw  = N_("lines [-adklntcuxoCzI] [database]   # Finnish database");
 	/* summary of options (normal compile -- no Finnish support) */
-ZST qSusgNorm     = N_("lines [-adkrwiflntcuxoCzI] [database]");
+ZST qSusgNorm     = N_("lines [-adklntcuxoCzI] [database]");
 
-ZST qSronlya      = N_("The database is read only; you may not add records.");
-ZST qSronlye      = N_("The database is read only; you may not change records.");
-ZST qSronlym      = N_("The database is read only; you may not merge records.");
-ZST qSronlyr      = N_("The database is read only; you may not remove records.");
-ZST qSronly       = N_("The database is read only.");
+//ZST qSronlya      = N_("The database is read only; you may not add records.");
+//ZST qSronlye      = N_("The database is read only; you may not change records.");
+//ZST qSronlym      = N_("The database is read only; you may not merge records.");
+//ZST qSronlyr      = N_("The database is read only; you may not remove records.");
+//ZST qSronly       = N_("The database is read only.");
 
 ZST qSidbrws      = N_("Name, key, refn, list, or @:");
 ZST qSidkyrfn     = N_("enter key or refn: ");
@@ -437,7 +437,7 @@ ZST qSdbrecords   = N_("Database records");
 ZST qSdbrecstats  = N_(FMT_INT "I, " FMT_INT "F, " FMT_INT "S," FMT_INT "E, " FMT_INT "X");
 
 /* menus */
-ZST qSmtitle      = N_("LifeLines %s - Genealogical DB and Programming System");
+ZST qSmtitle      = N_("DeadEnds %s - Genealogical DB and Programming System");
 ZST qScright      = N_("Copyright(c) 1991 to 1996, by T. T. Wetmore IV");
 ZST qSdbname      = N_("Current Database - %s");
 ZST qSplschs      = N_("Please choose an operation:");
@@ -449,12 +449,12 @@ ZST qSaskynyn     = N_("yYnN"); /* valid chars for yes/no answer */
 ZST qSaskyY       = N_("yY"); /* chars meaning yes answer */
 
 /* browse menu titles */
-ZST qSttlindibrw  = N_("LifeLines -- Person Browse Screen (* toggles menu)");
-ZST qSttlfambrw   = N_("LifeLines -- Family Browse Screen (* toggles menu)");
-ZST qSttl2perbrw  = N_("LifeLines -- Two Person Browse Screen (* toggles menu)");
-ZST qSttl2fambrw  = N_("LifeLines -- Two Family Browse Screen (* toggles menu)");
-ZST qSttlauxbrw   = N_("LifeLines -- Auxiliary Browse Screen (* toggles menu)");
-ZST qSttllstbrw   = N_("LifeLines -- List Browse Screen (* toggles menu)");
+ZST qSttlindibrw  = N_("DeadEnds -- Person Browse Screen (* toggles menu)");
+ZST qSttlfambrw   = N_("DeadEnds -- Family Browse Screen (* toggles menu)");
+ZST qSttl2perbrw  = N_("DeadEnds -- Two Person Browse Screen (* toggles menu)");
+ZST qSttl2fambrw  = N_("DeadEnds -- Two Family Browse Screen (* toggles menu)");
+ZST qSttlauxbrw   = N_("DeadEnds -- Auxiliary Browse Screen (* toggles menu)");
+ZST qSttllstbrw   = N_("DeadEnds -- List Browse Screen (* toggles menu)");
 
 /* list menu */
 
@@ -706,10 +706,10 @@ ZST qSmon_fr13A   = N_("comp");
 ZST qSmon_fr13B   = N_("jour_complementairs");
 
 /* Copyright, warranty, contact information, etc. */
-ZST qSgen_copyright = N_("Copyright (C) 1991-2019 Thomas T. Wetmore IV and contributors.");
+ZST qSgen_copyright = N_("Copyright (C) 1991-2024 Thomas T. Wetmore IV and contributors.");
 ZST qSgen_warranty  = N_("This is free software; see the source for copying conditions.  There is NO\n"
                          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
-ZST qSgen_license   = N_("Lifelines is distributed under an X/MIT Open Source license.\n"
+ZST qSgen_license   = N_("DeadEnds is distributed under an X/MIT Open Source license.\n"
                          "\tSee file LICENSE in the program directory.");
 ZST qSgen_website   = N_("For more information, visit our web site at https://lifelines.github.io/lifelines/");
 ZST qSgen_bugreport = N_("Please report bugs to https://github.com/lifelines/lifelines/issues");
