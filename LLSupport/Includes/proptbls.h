@@ -15,12 +15,12 @@
 
 /* proptbls.c */
 typedef int (*SELECT_FNC)(const struct dirent *);
-INT add_dir_files_to_proplist(CNSTRING dir, SELECT_FNC selectfnc, LIST list);
-INT add_path_files_to_proplist(CNSTRING path, SELECT_FNC selectfnc, LIST list);
-void add_prop_dnum(TABLE props, CNSTRING name, CNSTRING value);
+int add_dir_files_to_proplist(CString dir, SELECT_FNC selectfnc, LIST list);
+int add_path_files_to_proplist(CString path, SELECT_FNC selectfnc, LIST list);
+void add_prop_dnum(TABLE props, CString name, CString value);
 TABLE * convert_proplist_to_proparray(LIST list);
 void free_proparray(TABLE ** props);
-TABLE * get_proparray_of_files_in_path(CNSTRING path, SELECT_FNC selectfnc, INT * nfiles);
-void set_prop_dnum(TABLE props, INT n, CNSTRING name, CNSTRING value);
+TABLE * get_proparray_of_files_in_path(CString path, SELECT_FNC selectfnc, int * nfiles);
+void set_prop_dnum(TABLE props, int n, CString name, CString value);
 
 #endif /* proptbls_h_included */

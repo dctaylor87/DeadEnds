@@ -1,1 +1,1 @@
-extern BOOLEAN equal_tree (NODE root1, NODE root2);
+extern bool equal_tree (GNode *root1, GNode *root2);

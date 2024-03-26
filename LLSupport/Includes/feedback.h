@@ -22,48 +22,48 @@
 
 /* Ways for engine & code to report to ui */
 	/* report an error */
-void msg_error(STRING fmt, ...) HINT_PRINTF(1,2);
+void msg_error(String fmt, ...) HINT_PRINTF(1,2);
 	/* report a message */
-void msg_info(STRING fmt, ...) HINT_PRINTF(1,2);
+void msg_info(String fmt, ...) HINT_PRINTF(1,2);
 	/* report transitory state that should not be preserved */
-void msg_status(STRING fmt, ...) HINT_PRINTF(1,2);
+void msg_status(String fmt, ...) HINT_PRINTF(1,2);
 	/* more longwinded ways */
 typedef enum { MSG_ERROR=-1, MSG_INFO, MSG_STATUS } MSG_LEVEL;
-void msg_output(MSG_LEVEL, STRING fmt, ...) HINT_PRINTF(2,3);
-void msg_outputv(MSG_LEVEL, STRING fmt, va_list args);
+void msg_output(MSG_LEVEL, String fmt, ...) HINT_PRINTF(2,3);
+void msg_outputv(MSG_LEVEL, String fmt, va_list args);
 	/* legacy */
 	/* message () is a macro -- does not localize */
-void message(STRING fmt, ...) HINT_PRINTF(1,2);
+void message(String fmt, ...) HINT_PRINTF(1,2);
 	/* report to stdout style output (uses embedded carriage returns */
-void llwprintf(STRING fmt, ...) HINT_PRINTF(1,2);
-void llvwprintf(STRING fmt, va_list args);
+void llwprintf(String fmt, ...) HINT_PRINTF(1,2);
+void llvwprintf(String fmt, va_list args);
 	/* how many characters available for msg_xxx strings (-1 if unlimited) */
-INT msg_width(void);
+int msg_width(void);
 	/* report language print function */
-void rpt_print(STRING str);
+void rpt_print(String str);
 
 /* called by ask.c */
-BOOLEAN ask_for_input_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
-BOOLEAN ask_for_output_filename(STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen);
+bool ask_for_input_filename(String ttl, String path, String prmpt, String buffer, int buflen);
+bool ask_for_output_filename(String ttl, String path, String prmpt, String buffer, int buflen);
 
 /* called by signal handler before invoking exit() */
-void shutdown_ui(BOOLEAN pause);
+void shutdown_ui(bool pause);
 
 /* called by edit routines for translation maps &
  edit routines for tables for user options & abbreviations */
 void do_edit(void);
 
 /* msg boxes */
-BOOLEAN ask_yes_or_no(STRING ttl);
-BOOLEAN ask_yes_or_no_msg(STRING msg, STRING ttl);
-BOOLEAN ask_for_string(CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen);
-BOOLEAN ask_for_string2(CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen);
+bool ask_yes_or_no(String ttl);
+bool ask_yes_or_no_msg(String msg, String ttl);
+bool ask_for_string(CString ttl, CString prmpt, String buffer, int buflen);
+bool ask_for_string2(CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen);
 
 /* called by interp when finished */
 void refresh_stdout(void);
 
 /* for report interpreter engine */
-void call_system_cmd(STRING cmd);
+void call_system_cmd(String cmd);
 
 #endif /* _FEEDBACK_H */
 

@@ -29,8 +29,8 @@
    When in doubt, check gedlib/messages.c
  */
 
-#define SS (STRING)
-#define ZST STRING
+#define SS (String)
+#define ZST String
 
 extern ZST qSiddbse;      /* "You must identify a database." */
 extern ZST qSidldir;      /* "What directory holds (or will hold) the LifeLines database? (? to list)" */
@@ -277,7 +277,7 @@ extern ZST qSundevn;      /* "Event %s is referred to but not defined." */
 extern ZST qSbadlev;      /* "Line %d: This line has a level number that is too large." */
 extern ZST qSnoname;      /* "Line %d: Person defined here has no name." */
 #if 0
-STRING noxref = SS "Line %d: This record has no cross reference value.";
+String noxref = SS "Line %d: This record has no cross reference value.";
 #endif
 
 	/* Option at bottom of list, if none in list are desired */

@@ -4,6 +4,6 @@
 #if !defined(_OPTIONS_H_)
 #define _OPTIONS_H_
 
-extern BOOLEAN keyflag;		/* whether to display key values */
+extern bool keyflag;		/* whether to display key values */
 
 #endif

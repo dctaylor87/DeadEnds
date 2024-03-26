@@ -26,7 +26,7 @@
 /* initialization & termination */
 void free_optable(HashTable **ptab);
 //void get_db_options(HashTable *opts); /* free with FREEBOTH */
-INT load_global_options(String configfile, String * pmsg);
+int load_global_options(String configfile, String * pmsg);
 void register_notify(CALLBACK_FNC fncptr);
 void set_cmd_options(HashTable *opts);
 //void set_db_options(HashTable *opts);
@@ -38,7 +38,7 @@ void unregister_notify(CALLBACK_FNC fncptr);
 /* routine use */
 /* TODO: fix const-correctness */
 String getlloptstr(CString optname, String defval);
-INT getlloptint(CString optname, INT defval);
+int getlloptint(CString optname, int defval);
 String getlloptstr_dbonly(CString optname, String defval);
 String getlloptstr_rpt(CString optname, String defval);
 

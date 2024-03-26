@@ -1,18 +1,18 @@
 
 /* stdstrng.c */
-extern INT chartype (INT c);
-extern BOOLEAN isnumch (INT c);
-extern BOOLEAN iswhite (INT c);
-extern BOOLEAN islinebreak (INT c);
-extern BOOLEAN isletter (INT c);
-extern BOOLEAN isasciiletter (INT c);
-extern INT ll_toupper (INT c);
-extern INT ll_tolower (INT c);
-extern BOOLEAN eqstr_ex (CNSTRING s1, CNSTRING s2);
+extern int chartype (int c);
+extern bool isnumch (int c);
+extern bool iswhite (int c);
+extern bool islinebreak (int c);
+extern bool isletter (int c);
+extern bool isasciiletter (int c);
+extern int ll_toupper (int c);
+extern int ll_tolower (int c);
+extern bool eqstr_ex (CString s1, CString s2);
 extern char *llstrncpy (char *dest, const char *src, size_t n, int utf8);
 extern char *llstrncpyf (char *dest, size_t n, int utf8, const char * fmt, ...);
 extern char *llstrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args);
-extern INT ll_atoi (CNSTRING str, INT defval);
+extern int ll_atoi (CString str, int defval);
 extern void stdstring_hardfail (void);
 extern int make8char (int c);
 
@@ -29,25 +29,25 @@ extern char *llstrsetf (char * dest, int limit, int utf8, const char * fmt, ...)
 extern char *llstrsetvf (char * dest, int limit, int utf8, const char * fmt, va_list args);
 
 /* strutf8.c */
-extern INT utf8len (char ch);
-extern size_t str8chlen (CNSTRING str);
-extern STRING find_prev_char (STRING ptr, INT * width, STRING limit, int utf8);
-extern INT next_char32 (STRING * ptr, int utf8);
-extern void skip_BOM (STRING * pstr);
-extern void unicode_to_utf8 (INT wch, char * utf8);
-extern void chopstr_utf8 (STRING str, size_t index, BOOLEAN utf8);
-extern void limit_width (STRING str, size_t width, BOOLEAN utf8);
+extern int utf8len (char ch);
+extern size_t str8chlen (CString str);
+extern String find_prev_char (String ptr, int * width, String limit, int utf8);
+extern int next_char32 (String * ptr, int utf8);
+extern void skip_BOM (String * pstr);
+extern void unicode_to_utf8 (int wch, char * utf8);
+extern void chopstr_utf8 (String str, size_t index, bool utf8);
+extern void limit_width (String str, size_t width, bool utf8);
 
 /* strwhite.c */
-extern STRING trim (STRING str, INT len);
-extern void striptrail (STRING p);
-extern void skipws (STRING * ptr);
-extern BOOLEAN allwhite (STRING p);
-extern void chomp (STRING str);
+extern String trim (String str, int len);
+extern void striptrail (String p);
+extern void skipws (String * ptr);
+extern bool allwhite (String p);
+extern void chomp (String str);
 
 /* appendstr.c */
 
-extern void appendstr(STRING * pdest, INT * len, int utf8, CNSTRING src);
+extern void appendstr(String * pdest, int * len, int utf8, CString src);
 /* The author of appendstr, writes: llstrcatn is a bad name, because
    its prototype is different from strcatn! */
 #define llstrcatn(dest, src, len) appendstr(dest, len, uu8, src)
@@ -56,4 +56,4 @@ extern void appendstr(STRING * pdest, INT * len, int utf8, CNSTRING src);
 
 extern void strfree (String *str);
 extern void strupdate (String *str, CString value);
-extern String allocsubbytes (String s, INT start, INT num);
+extern String allocsubbytes (String s, int start, int num);

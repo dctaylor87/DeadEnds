@@ -19,10 +19,10 @@ struct tag_xlat;
 
 typedef struct tag_xlat *XLAT;
 
-extern XLAT transl_get_predefined_xlat(INT trnum);
+extern XLAT transl_get_predefined_xlat(int trnum);
 
 /* xlat.c */
-extern BOOLEAN xl_do_xlat(XLAT xlat, ZSTR zstr);
+extern bool xl_do_xlat(XLAT xlat, ZSTR zstr);
 extern void xl_free_adhoc_xlats(void);
 extern void xl_free_xlats(void);
 #if 0
@@ -30,14 +30,14 @@ extern String xlat_get_description(XLAT xlat);
 #else
 extern ZSTR xlat_get_description(XLAT xlat);
 #endif
-extern CNSTRING xl_get_dest_codeset(XLAT xlat);
+extern CString xl_get_dest_codeset(XLAT xlat);
 extern TRANTABLE xl_get_legacy_tt(XLAT xlat);
 extern XLAT xl_get_null_xlat(void);
-extern INT xl_get_uparam(XLAT);
-extern XLAT xl_get_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
-extern BOOLEAN xl_is_xlat_valid(XLAT xlat);
-extern void xl_load_all_dyntts(CNSTRING ttpath);
-extern void xl_parse_codeset(CNSTRING codeset, ZSTR zcsname, LIST * subcodes);
+extern int xl_get_uparam(XLAT);
+extern XLAT xl_get_xlat(CString src, CString dest, bool adhoc);
+extern bool xl_is_xlat_valid(XLAT xlat);
+extern void xl_load_all_dyntts(CString ttpath);
+extern void xl_parse_codeset(CString codeset, ZSTR zcsname, LIST * subcodes);
 extern void xl_release_xlat(XLAT xlat);
-extern void xl_set_uparam(XLAT, INT uparam);
+extern void xl_set_uparam(XLAT, int uparam);
 extern void xlat_shutdown(void);

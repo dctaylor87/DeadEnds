@@ -60,11 +60,11 @@ extern String editfile;
 extern String editstr;
 
 /* valid.c */
-extern BOOLEAN pointer_value(String);
-extern BOOLEAN valid_indi_tree(GNode *, String*, GNode *);
-extern BOOLEAN valid_fam_tree(GNode *, String*, GNode *);
-extern BOOLEAN valid_name(String);
-extern BOOLEAN valid_node_type(GNode *node, char ntype, String *pmsg, GNode *node0);
-extern BOOLEAN valid_sour_tree(GNode *, String*, GNode *);
-extern BOOLEAN valid_even_tree(GNode *, String*, GNode *);
-extern BOOLEAN valid_othr_tree(GNode *, String*, GNode *);
+extern bool pointer_value(String);
+extern bool valid_indi_tree(GNode *, String*, GNode *);
+extern bool valid_fam_tree(GNode *, String*, GNode *);
+extern bool valid_name(String);
+extern bool valid_node_type(GNode *node, char ntype, String *pmsg, GNode *node0);
+extern bool valid_sour_tree(GNode *, String*, GNode *);
+extern bool valid_even_tree(GNode *, String*, GNode *);
+extern bool valid_othr_tree(GNode *, String*, GNode *);
