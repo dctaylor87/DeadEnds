@@ -57,8 +57,8 @@
 #endif
 
 /* strings used to clear the screen */
-STRING empstr = SS "                                                ";
-STRING empstr71 = SS "                                                                       ";
+String empstr = SS "                                                ";
+String empstr71 = SS "                                                                       ";
 
 
 ZST qSiddbse      = N_("You must identify a database.");
@@ -306,7 +306,7 @@ ZST qSundevn      = N_("Event %s is referred to but not defined.");
 ZST qSbadlev      = N_("Line %d: This line has a level number that is too large.");
 ZST qSnoname      = N_("Line %d: Person defined here has no name.");
 #if 0
-STRING noxref = SS "Line %d: This record has no cross reference value.";
+String noxref = SS "Line %d: This record has no cross reference value.";
 #endif
 
 	/* Option at bottom of list, if none in list are desired */

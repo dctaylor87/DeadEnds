@@ -37,7 +37,7 @@
  * local types
  *********************************************/
 
-struct callback_info { CALLBACK_FNC fnc; VPTR uparm; };
+struct callback_info { CALLBACK_FNC fnc; Word uparm; };
 
 /*********************************************
  * local function prototypes
@@ -52,7 +52,7 @@ struct callback_info { CALLBACK_FNC fnc; VPTR uparm; };
  * add_listener -- add new listener to collection (no dup check)
  *=============================================*/
 void
-add_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
+add_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 {
 	struct callback_info * info = 
 		(struct callback_info *)stdalloc(sizeof(*info));
@@ -61,13 +61,13 @@ add_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 	info->uparm = uparm;
 	if (!*notifiees)
 		*notifiees = create_list2(LISTDOFREE);
-	enqueue_list(*notifiees, (VPTR)info);
+	enqueue_list(*notifiees, (Word)info);
 }
 /*===============================================
  * remove_listeners -- Empty & remove list
  *=============================================*/
 void
-remove_listeners (LIST * notifiees)
+remove_listeners (List **notifiees)
 {
 	if (*notifiees) {
 		destroy_list(*notifiees);
@@ -79,11 +79,11 @@ remove_listeners (LIST * notifiees)
  *  (removes first instance)
  *=============================================*/
 void
-delete_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
+delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 {
 	/* Our lists don't have remove from middle, so we just make a new copy */
-	LIST lold = 0;
-	BOOLEAN found = FALSE;
+	List *lold = 0;
+	bool found = false;
 	if (!*notifiees || is_empty_list(*notifiees))
 		return;
 	lold = *notifiees;
@@ -91,11 +91,11 @@ delete_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
 	while (!is_empty_list(lold)) {
 		struct callback_info * info = (struct callback_info *)pop_list(lold);
 		if (!found && info->fnc == fncptr && info->uparm == uparm) {
-			found = TRUE;
+			found = true;
 			info->fnc = NULL;
 			stdfree(info);
 		} else {
-			enqueue_list(*notifiees, (VPTR)info);
+			enqueue_list(*notifiees, (Word)info);
 		}
 	}
 	destroy_empty_list(lold);
@@ -107,10 +107,10 @@ delete_listener (LIST * notifiees, CALLBACK_FNC fncptr, VPTR uparm)
  * notify_listeners -- Send notifications to any registered listeners
  *=============================================*/
 void
-notify_listeners (LIST * notifiees)
+notify_listeners (List **notifiees)
 {
 	struct callback_info * info;
-	LIST list;
+	List  *list;
 	if (!notifiees || is_empty_list(*notifiees))
 		return;
 	list = *notifiees;

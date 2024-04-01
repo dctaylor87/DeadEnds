@@ -104,9 +104,9 @@ typedef enum { DUPSOK, NODUPS } DUPS;
  *==================================*/
 struct deleteset_s
 {
-	INT32 n; /* num keys + 1, ie, starts at 1 */
-	INT32 * recs;
-	INT32 max;
+	int32_t n; /* num keys + 1, ie, starts at 1 */
+	int32_t * recs;
+	int32_t max;
 	char ctype;
 };
 typedef struct deleteset_s *DELETESET;
@@ -116,31 +116,31 @@ typedef struct deleteset_s *DELETESET;
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN addixref_impl(INT32 key, DUPS dups);
-static BOOLEAN addfxref_impl(INT32 key, DUPS dups);
-static BOOLEAN addsxref_impl(INT32 key, DUPS dups);
-static BOOLEAN addexref_impl(INT32 key, DUPS dups);
-static BOOLEAN addxref_impl(CNSTRING key, DUPS dups);
-static BOOLEAN addxxref_impl(INT32 key, DUPS dups);
-static void dumpxrecs (STRING type, DELETESET set, INT32 *offset);
-static INT32 find_slot(INT32 keynum, DELETESET set);
+static bool addixref_impl(int32_t key, DUPS dups);
+static bool addfxref_impl(int32_t key, DUPS dups);
+static bool addsxref_impl(int32_t key, DUPS dups);
+static bool addexref_impl(int32_t key, DUPS dups);
+static bool addxref_impl(CString key, DUPS dups);
+static bool addxxref_impl(int32_t key, DUPS dups);
+static void dumpxrecs (String type, DELETESET set, int32_t *offset);
+static int32_t find_slot(int32_t keynum, DELETESET set);
 #if !defined(DEADENDS)
 static void freexref(DELETESET set);
 #endif
 static DELETESET get_deleteset_from_type(char ctype);
-static STRING getxref(DELETESET set);
+static String getxref(DELETESET set);
 static void growxrefs(DELETESET set);
-static STRING newxref(STRING xrefp, BOOLEAN flag, DELETESET set);
+static String newxref(String xrefp, bool flag, DELETESET set);
 #if !defined(DEADENDS)
-static INT num_set(DELETESET set);
+static int num_set(DELETESET set);
 #endif
-static BOOLEAN parse_key(CNSTRING key, char * ktype, INT32 * kval);
+static bool parse_key(CString key, char * ktype, int32_t * kval);
 #if !defined(DEADENDS)
 static void readrecs(DELETESET set);
-static BOOLEAN readxrefs(void);
+static bool readxrefs(void);
 #endif
-static BOOLEAN xref_isvalid_impl(DELETESET set, INT32 keynum);
-static INT xref_last(DELETESET set);
+static bool xref_isvalid_impl(DELETESET set, int32_t keynum);
+static int xref_last(DELETESET set);
 
 /*********************************************
  * local variables
@@ -151,11 +151,11 @@ static struct deleteset_s irecs, frecs, srecs, erecs, xrecs;
 
 #if !defined(DEADENDS)
 static FILE *xreffp=0;	/* open xref file pointer */
-static BOOLEAN xrefReadonly = FALSE;
+static bool xrefReadonly = false;
 #endif
-static INT xrefsize=0; /* xref file size */
+static int xrefsize=0; /* xref file size */
 
-static INT32 maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
+static int32_t maxkeynum=-1; /* cache value of largest key extant (-1 means not sure) */
 
 /*********************************************
  * local & exported function definitions
@@ -194,15 +194,15 @@ void
 initxref (void)
 {
 	char scratch[MAXPATHLEN];
-	INT32 i = 1;
-	INT j;
+	int32_t i = 1;
+	int j;
 	ASSERT(!xrefReadonly);
 	initdsets();
 	ASSERT(!xreffp);
 	snprintf(scratch, sizeof(scratch), "%s/xrefs", BTR->b_basedir);
 	ASSERT(xreffp = fopen(scratch, LLWRITEBINARY));
 	for (j = 0; j < 10; j++) {
-		ASSERT(fwrite(&i, sizeof(INT32), 1, xreffp) == 1);
+		ASSERT(fwrite(&i, sizeof(int32_t), 1, xreffp) == 1);
 	}
 	fclose(xreffp); xreffp=0;
 }
@@ -210,12 +210,12 @@ initxref (void)
 /*============================
  * openxref -- Open xrefs file
  *==========================*/
-BOOLEAN
-openxref (BOOLEAN readonly)
+bool
+openxref (bool readonly)
 {
 	char scratch[MAXPATHLEN];
-	STRING fmode;
-	BOOLEAN success;
+	String fmode;
+	bool success;
 
 	initdsets();
 	ASSERT(!xreffp);
@@ -223,7 +223,7 @@ openxref (BOOLEAN readonly)
 	xrefReadonly = readonly;
 	fmode = xrefReadonly ? LLREADBINARY : LLREADBINARYUPDATE;
 	if (!(xreffp = fopen(scratch, fmode))) {
-		return FALSE;
+		return false;
 	}
 
 	success = readxrefs();
@@ -257,10 +257,10 @@ closexref (void)
  *  generic for all 5 types
  * Created: 2001/02/04, Perry Rapp
  *=======================================*/
-static INT32
+static int32_t
 getxrefnum (DELETESET set)
 {
-	INT32 keynum;
+	int32_t keynum;
 #if !defined(DEADENDS)
 	ASSERT(xreffp);
 #endif
@@ -289,10 +289,10 @@ getxrefnum (DELETESET set)
  *  a new highnumber
  *  generic for all 5 types
  *=======================================*/
-static STRING
+static String
 getxref (DELETESET set)
 {
-	INT32 keynum = getxrefnum(set);
+	int32_t keynum = getxrefnum(set);
 	static char scratch[12];
 	snprintf(scratch, sizeof(scratch), "@%c" FMT_INT32 "@", set->ctype, keynum);
 	return scratch;
@@ -301,10 +301,10 @@ getxref (DELETESET set)
  * get?xref -- Wrappers for each type to getxref (qv)
  *  symmetric versions
  *=================================================*/
-STRING getfxref (void) { return getxref(&frecs); }
-STRING getsxref (void) { return getxref(&srecs); }
-STRING getexref (void) { return getxref(&erecs); }
-STRING getxxref (void) { return getxref(&xrecs); }
+String getfxref (void) { return getxref(&frecs); }
+String getsxref (void) { return getxref(&srecs); }
+String getexref (void) { return getxref(&erecs); }
+String getxxref (void) { return getxref(&xrecs); }
 /*===================================================
  * get?xrefnum -- Wrappers for each type to getxrefnum (qv)
  * Created: 2001/02/04, Perry Rapp
@@ -312,7 +312,7 @@ STRING getxxref (void) { return getxref(&xrecs); }
  * interface that exposes the internal xref type?
  * Should try to revert back to getixref as above.
  *=================================================*/
-INT32 getixrefnum (void) { return getxrefnum(&irecs); }
+int32_t getixrefnum (void) { return getxrefnum(&irecs); }
 
 #if !defined(DEADENDS)
 /*======================================
@@ -332,13 +332,13 @@ sortxref (DELETESET set)
 	they should normally already be sorted, 
 	so use watchful bubble-sort for O(n)
 	*/
-	INT32 i, j, temp;
-	BOOLEAN sorted;
+	int32_t i, j, temp;
+	bool sorted;
 	for (i=1; i<set->n; i++) {
-		sorted = TRUE;
+		sorted = true;
 		for (j=i+1; j<set->n; j++) {
 			if (set->recs[i] < set->recs[j]) {
-				sorted = FALSE;
+				sorted = false;
 				temp = set->recs[j];
 				set->recs[j] = set->recs[i];
 				set->recs[i] = temp;
@@ -364,15 +364,15 @@ sortxrefs (void)
  * readxrefs -- Read xrefs file
  *  storage order: IFESX
  *===========================*/
-static BOOLEAN
+static bool
 readxrefs (void)
 {
 	ASSERT(xreffp);
-	ASSERT(fread(&irecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fread(&frecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fread(&erecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fread(&srecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fread(&xrecs.n, sizeof(INT32), 1, xreffp) == 1);
+	ASSERT(fread(&irecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fread(&frecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fread(&erecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fread(&srecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fread(&xrecs.n, sizeof(int32_t), 1, xreffp) == 1);
 	ASSERT(irecs.n > 0);
 	ASSERT(frecs.n > 0);
 	ASSERT(erecs.n > 0);
@@ -389,7 +389,7 @@ readxrefs (void)
 	readrecs(&srecs);
 	readrecs(&xrecs);
 	sortxrefs();
-	return TRUE;
+	return true;
 }
 /*=========================================
  * readrecs -- Read in one array of records
@@ -397,31 +397,31 @@ readxrefs (void)
 static void
 readrecs (DELETESET set)
 {
-	ASSERT((INT32)fread(set->recs, sizeof(INT32), set->n, xreffp) == set->n);
+	ASSERT((int32_t)fread(set->recs, sizeof(int32_t), set->n, xreffp) == set->n);
 }
 
 /*================================
  * writexrefs -- Write xrefs file.
  *  storage order: IFESX
  *==============================*/
-BOOLEAN
+bool
 writexrefs (void)
 {
 	ASSERT(!xrefReadonly);
 	ASSERT(xreffp);
 	rewind(xreffp);
-	ASSERT(fwrite(&irecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fwrite(&frecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fwrite(&erecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fwrite(&srecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT(fwrite(&xrecs.n, sizeof(INT32), 1, xreffp) == 1);
-	ASSERT((INT32)fwrite(irecs.recs, sizeof(INT32), irecs.n, xreffp) == irecs.n);
-	ASSERT((INT32)fwrite(frecs.recs, sizeof(INT32), frecs.n, xreffp) == frecs.n);
-	ASSERT((INT32)fwrite(erecs.recs, sizeof(INT32), erecs.n, xreffp) == erecs.n);
-	ASSERT((INT32)fwrite(srecs.recs, sizeof(INT32), srecs.n, xreffp) == srecs.n);
-	ASSERT((INT32)fwrite(xrecs.recs, sizeof(INT32), xrecs.n, xreffp) == xrecs.n);
+	ASSERT(fwrite(&irecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fwrite(&frecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fwrite(&erecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fwrite(&srecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT(fwrite(&xrecs.n, sizeof(int32_t), 1, xreffp) == 1);
+	ASSERT((int32_t)fwrite(irecs.recs, sizeof(int32_t), irecs.n, xreffp) == irecs.n);
+	ASSERT((int32_t)fwrite(frecs.recs, sizeof(int32_t), frecs.n, xreffp) == frecs.n);
+	ASSERT((int32_t)fwrite(erecs.recs, sizeof(int32_t), erecs.n, xreffp) == erecs.n);
+	ASSERT((int32_t)fwrite(srecs.recs, sizeof(int32_t), srecs.n, xreffp) == srecs.n);
+	ASSERT((int32_t)fwrite(xrecs.recs, sizeof(int32_t), xrecs.n, xreffp) == xrecs.n);
 	fflush(xreffp);
-	return TRUE;
+	return true;
 }
 #endif
 
@@ -432,7 +432,7 @@ writexrefs (void)
 void
 dumpxrefs (void)
 {
-	INT32 offset = 0;
+	int32_t offset = 0;
 
         printf("NOTE: n is always the number of deleted keys PLUS ONE.\n");
         printf("NOTE: Each entry indicates the next available key value.\n\n");
@@ -457,33 +457,33 @@ dumpxrefs (void)
 	dumpxrecs("X", &xrecs, &offset);
 
 	/* Dump size */
-	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ") %s\n", offset, (INT32)xrefsize, (offset == (INT32)xrefsize) ? "GOOD" : "BAD");
+	printf(FMT_INT32_HEX ": EOF (" FMT_INT32_HEX ") %s\n", offset, (int32_t)xrefsize, (offset == (int32_t)xrefsize) ? "GOOD" : "BAD");
 }
 /*================================
  * dumpxrecs -- Print DELETESET to stdout
  *==============================*/
 static void
-dumpxrecs (STRING type, DELETESET set, INT32 *offset)
+dumpxrecs (String type, DELETESET set, int32_t *offset)
 {
-	INT i;
+	int i;
 
 	for (i=0; i<set->n; i++)
 	{
 		printf(FMT_INT32_HEX ": %s[" FMT_INT_04 "]: " FMT_INT32_HEX " (" FMT_INT32 ")\n", *offset, type, i, (set->recs)[i], (set->recs)[i]);
-		*offset += (INT32)sizeof((set->recs)[i]);
+		*offset += (int32_t)sizeof((set->recs)[i]);
 	}
 }
 /*=====================================
  * find_slot -- Find slot at which to add key
  *===================================*/
-static INT32
-find_slot (INT32 keynum, DELETESET set)
+static int32_t
+find_slot (int32_t keynum, DELETESET set)
 {
-	INT32 lo=1;
-	INT32 hi=(set->n)-1;
+	int32_t lo=1;
+	int32_t hi=(set->n)-1;
 	/* binary search to find where to insert key */
 	while (lo<=hi) {
-		INT32 md = (lo + hi)/2;
+		int32_t md = (lo + hi)/2;
 		if (keynum > (set->recs)[md])
 			hi=--md;
 		else if (keynum < (set->recs)[md])
@@ -499,10 +499,10 @@ find_slot (INT32 keynum, DELETESET set)
  * add_xref_to_set_impl -- Add deleted key to xrefs.
  *  generic for all types
  *===================================*/
-static BOOLEAN
-add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
+static bool
+add_xref_to_set_impl (int32_t keynum, DELETESET set, DUPS dups)
 {
-	INT32 lo, i;
+	int32_t lo, i;
 #if defined(DEADENDS)
 	if (keynum <= 0 || (set->n) < 1) {
 		char msg[128];
@@ -529,7 +529,7 @@ add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
 #if !defined(DEADENDS)
 		ASSERT(writexrefs());
 #endif
-		return TRUE;
+		return true;
 	}
 	if (set->n >= set->max)
 		growxrefs(set);
@@ -540,7 +540,7 @@ add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
 		/* key is already free */
 		char msg[96];
 		if (dups==DUPSOK) 
-			return FALSE;
+			return false;
 		snprintf(msg, sizeof(msg)
 			, _("Tried to add already-deleted record (" FMT_INT32 ") to xref (%c)!")
 			, keynum, set->ctype);
@@ -555,37 +555,37 @@ add_xref_to_set_impl (INT32 keynum, DELETESET set, DUPS dups)
 	ASSERT(writexrefs());
 #endif
 	maxkeynum=-1;
-	return TRUE;
+	return true;
 }
 
 /*===================================================
  * add?xref_impl -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-static BOOLEAN addixref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
-static BOOLEAN addfxref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
-static BOOLEAN addsxref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
-static BOOLEAN addexref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
-static BOOLEAN addxxref_impl (INT32 key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
+static bool addixref_impl (int32_t key, DUPS dups) { return add_xref_to_set_impl(key, &irecs, dups); }
+static bool addfxref_impl (int32_t key, DUPS dups) { return add_xref_to_set_impl(key, &frecs, dups); }
+static bool addsxref_impl (int32_t key, DUPS dups) { return add_xref_to_set_impl(key, &srecs, dups); }
+static bool addexref_impl (int32_t key, DUPS dups) { return add_xref_to_set_impl(key, &erecs, dups); }
+static bool addxxref_impl (int32_t key, DUPS dups) { return add_xref_to_set_impl(key, &xrecs, dups); }
 /*===================================================
  * add?xref -- Wrappers for each type to add_xref_to_set (qv)
  *  5 symmetric versions
  *=================================================*/
-void addixref (INT key) { addixref_impl((INT32)key, NODUPS); }
-void addfxref (INT key) { addfxref_impl((INT32)key, NODUPS); }
-void addsxref (INT key) { addsxref_impl((INT32)key, NODUPS); }
-void addexref (INT key) { addexref_impl((INT32)key, NODUPS); }
-void addxxref (INT key) { addxxref_impl((INT32)key, NODUPS); }
+void addixref (int key) { addixref_impl((int32_t)key, NODUPS); }
+void addfxref (int key) { addfxref_impl((int32_t)key, NODUPS); }
+void addsxref (int key) { addsxref_impl((int32_t)key, NODUPS); }
+void addexref (int key) { addexref_impl((int32_t)key, NODUPS); }
+void addxxref (int key) { addxxref_impl((int32_t)key, NODUPS); }
 /*===================================================
  * addxref_impl -- Mark key free (accepts string key, any type)
  *  key:    [IN]  key to delete (add to free set)
- *  silent: [IN]  if FALSE, ASSERT if record is already free
+ *  silent: [IN]  if false, ASSERT if record is already free
  *=================================================*/
-static BOOLEAN
-addxref_impl (CNSTRING key, DUPS dups)
+static bool
+addxref_impl (CString key, DUPS dups)
 {
 	char ktype=0;
-	INT32 keynum=0;
+	int32_t keynum=0;
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
 		snprintf(msg, sizeof(msg), "Bad key passed to addxref_impl: %s", key);
@@ -597,14 +597,14 @@ addxref_impl (CNSTRING key, DUPS dups)
 	case 'S': return addsxref_impl(keynum, dups);
 	case 'E': return addexref_impl(keynum, dups);
 	case 'X': return addxxref_impl(keynum, dups);
-	default: ASSERT(0); return FALSE;
+	default: ASSERT(0); return false;
 	}
 }
 /*===================================================
  * addxref -- Mark key free (accepts string key, any type)
  * ASSERT if key is already free
  *=================================================*/
-void addxref (CNSTRING key)
+void addxref (CString key)
 {
 	addxref_impl(key, NODUPS);
 }
@@ -612,7 +612,7 @@ void addxref (CNSTRING key)
  * addxref_if_missing -- Mark key free (accepts string key, any type)
  * Does nothing if key already free
  *=================================================*/
-BOOLEAN addxref_if_missing (CNSTRING key)
+bool addxref_if_missing (CString key)
 {
 	return addxref_impl(key, DUPSOK);
 }
@@ -624,12 +624,12 @@ BOOLEAN addxref_if_missing (CNSTRING key)
 static void
 growxrefs (DELETESET set)
 {
-	INT32 i, m = set->max, *newp;
+	int32_t i, m = set->max, *newp;
 	if (set->max == 0)
 		set->max = 64;
 	while (set->max <= set->n)
 		set->max = set->max << 1;
-	newp = (INT32 *) stdalloc((set->max)*sizeof(INT32));
+	newp = (int32_t *) stdalloc((set->max)*sizeof(int32_t));
 	if (m) {
 		for (i = 0; i < set->n; i++)
 			newp[i] = set->recs[i];
@@ -658,13 +658,13 @@ get_deleteset_from_type (char ctype)
  * delete_xref_if_present -- If record is listed
  *  as free, remove it from the free list
  *========================================*/
-BOOLEAN
-delete_xref_if_present (CNSTRING key)
+bool
+delete_xref_if_present (CString key)
 {
 	DELETESET set=0;
-	INT32 keynum=0;
-	INT32 lo=0;
-	INT32 i=0;
+	int32_t keynum=0;
+	int32_t lo=0;
+	int32_t i=0;
 
 	ASSERT(key);
 	ASSERT(key[0]);
@@ -674,7 +674,7 @@ delete_xref_if_present (CNSTRING key)
 	ASSERT(keynum>0);
 	lo = find_slot(keynum, set);
 	if (!(lo < set->n && (set->recs)[lo] == keynum))
-		return FALSE;
+		return false;
 	/* removing xrefs[lo] -- move lo+ down */
 	for (i=lo; i+1<set->n-1; ++i)
 		(set->recs)[i] = (set->recs)[i+1];
@@ -686,36 +686,36 @@ delete_xref_if_present (CNSTRING key)
 	ASSERT(writexrefs());
 #endif
 	maxkeynum=-1;
-	return TRUE;
+	return true;
 
 }
 /*==========================================
  * parse_key -- Get key type (first char) and numeric value
  * parse_key("I44") => 'I', 44
  *========================================*/
-static BOOLEAN
-parse_key (CNSTRING key, char * ktype, INT32 * kval)
+static bool
+parse_key (CString key, char * ktype, int32_t * kval)
 {
 	if (!key || !key[0] || !key[1])
-		return FALSE;
+		return false;
 	/* convert "@I44@" to "I44" */
 	if (key[0] == '@' && key[strlen(key)-1] == '@')
 		key = rmvat(key);
 	*ktype = key[0];
 	*kval = atoi(key+1);
-	return TRUE;
+	return true;
 }
 /*==========================================
- * is_key_in_use -- Return TRUE if a live record
+ * is_key_in_use -- Return true if a live record
  *========================================*/
-BOOLEAN
-is_key_in_use (CNSTRING key)
+bool
+is_key_in_use (CString key)
 {
 	DELETESET set=0;
-	INT32 keynum=0;
+	int32_t keynum=0;
 	char ktype=0;
-	CNSTRING barekey=0;
-	BOOLEAN result=FALSE;
+	CString barekey=0;
+	bool result=false;
 
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
@@ -729,7 +729,7 @@ is_key_in_use (CNSTRING key)
 	
 	result = xref_isvalid_impl(set, keynum);
 
-	strfree((STRING *)&barekey);
+	strfree((String *)&barekey);
 	
 	return result;
 }
@@ -759,34 +759,34 @@ freexref (DELETESET set)
  * xref_num_????s -- Return number of type of things in database.
  *  5 symmetric versions
  *========================================================*/
-static INT xref_num_set (DELETESET set)
+static int xref_num_set (DELETESET set)
 {
 	ASSERT(set);
 	/* next key value less number of deleted keys */
-	return (INT)(set->recs[0] - set->n);
+	return (int)(set->recs[0] - set->n);
 }
-INT xref_num_indis (void) { return xref_num_set(&irecs); }
-INT xref_num_fams (void)  { return xref_num_set(&frecs); }
-INT xref_num_sours (void) { return xref_num_set(&srecs); }
-INT xref_num_evens (void) { return xref_num_set(&erecs); }
-INT xref_num_othrs (void) { return xref_num_set(&xrecs); }
+int xref_num_indis (void) { return xref_num_set(&irecs); }
+int xref_num_fams (void)  { return xref_num_set(&frecs); }
+int xref_num_sours (void) { return xref_num_set(&srecs); }
+int xref_num_evens (void) { return xref_num_set(&erecs); }
+int xref_num_othrs (void) { return xref_num_set(&xrecs); }
 /*========================================================
  * max_????s -- Return max key number of object type in db
  * 5 symmetric versions
  *======================================================*/
-static INT32 max_set (DELETESET set)
+static int32_t max_set (DELETESET set)
 {
 	return set->recs[0];
 }
-INT32 xref_max_indis (void) { return max_set(&irecs); }
-INT32 xref_max_fams (void)  { return max_set(&frecs); }
-INT32 xref_max_sours (void) { return max_set(&srecs); }
-INT32 xref_max_evens (void) { return max_set(&erecs); }
-INT32 xref_max_othrs (void) { return max_set(&xrecs); }
+int32_t xref_max_indis (void) { return max_set(&irecs); }
+int32_t xref_max_fams (void)  { return max_set(&frecs); }
+int32_t xref_max_sours (void) { return max_set(&srecs); }
+int32_t xref_max_evens (void) { return max_set(&erecs); }
+int32_t xref_max_othrs (void) { return max_set(&xrecs); }
 /*======================================================
  * xref_max_any -- Return largest key number of any type
  *====================================================*/
-INT32
+int32_t
 xref_max_any (void)
 {
 	if (maxkeynum>=0)
@@ -809,12 +809,12 @@ xref_max_any (void)
  * flag = use the current key
  *  returns static buffer
  *==============================================*/
-static STRING
-newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
+static String
+newxref (String xrefp, bool flag, DELETESET set)
 {
-	INT32 keynum;
+	int32_t keynum;
 #if !defined(DEADENDS)
-	BOOLEAN changed;
+	bool changed;
 #endif
 	static char scratch[12];
 	if(flag) {
@@ -840,28 +840,28 @@ newxref (STRING xrefp, BOOLEAN flag, DELETESET set)
  * xrefp = key of the record
  * flag = use the current key
  *==============================================*/
-STRING
-newixref (STRING xrefp, BOOLEAN flag)
+String
+newixref (String xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &irecs);
 }
-STRING
-newfxref (STRING xrefp, BOOLEAN flag)
+String
+newfxref (String xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &frecs);
 }
-STRING
-newsxref (STRING xrefp, BOOLEAN flag)
+String
+newsxref (String xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &srecs);
 }
-STRING
-newexref (STRING xrefp, BOOLEAN flag)
+String
+newexref (String xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &erecs);
 }
-STRING
-newxxref (STRING xrefp, BOOLEAN flag)
+String
+newxxref (String xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &xrecs);
 }
@@ -870,12 +870,12 @@ newxxref (STRING xrefp, BOOLEAN flag)
  *  generic for all 5 types
  * (internal use)
  *==============================================*/
-static BOOLEAN
-xref_isvalid_impl (DELETESET set, INT32 keynum)
+static bool
+xref_isvalid_impl (DELETESET set, int32_t keynum)
 {
-	INT32 lo,hi,md;
-	if (set->n == set->recs[0]) return FALSE; /* no valids */
-	if (set->n == 1) return TRUE; /* all valid */
+	int32_t lo,hi,md;
+	if (set->n == set->recs[0]) return false; /* no valids */
+	if (set->n == 1) return true; /* all valid */
 	/* binary search deleteds */
 	lo=1;
 	hi=(set->n)-1;
@@ -886,9 +886,9 @@ xref_isvalid_impl (DELETESET set, INT32 keynum)
 		else if (keynum<(set->recs)[md])
 			lo=++md;
 		else
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 /*=========================================================
  * xref_next_impl -- Return next valid of some type after i
@@ -897,13 +897,13 @@ xref_isvalid_impl (DELETESET set, INT32 keynum)
  *  this could be more efficient (after first one work
  *  thru tree)
  *=======================================================*/
-static INT32
-xref_next_impl (DELETESET set, INT32 i)
+static int32_t
+xref_next_impl (DELETESET set, int32_t i)
 {
 	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (++i < set->recs[0])
 	{
-		if (xref_isvalid_impl(set, i)) return (INT)i;
+		if (xref_isvalid_impl(set, i)) return (int)i;
 	}
 	return 0;
 }
@@ -912,8 +912,8 @@ xref_next_impl (DELETESET set, INT32 i)
  *  returns 0 if none found
  *  generic for all 5 types
  *========================================================*/
-static INT32
-xref_prev_impl (DELETESET set, INT32 i)
+static int32_t
+xref_prev_impl (DELETESET set, int32_t i)
 {
 	if (set->n == set->recs[0]) return 0; /* no valids */
 	while (--i)
@@ -927,12 +927,12 @@ xref_prev_impl (DELETESET set, INT32 i)
  *  returns 0 if none found
  *  5 symmetric versions
  *=============================================*/
-INT xref_nexti (INT i) { return (INT)xref_next_impl(&irecs, (INT32)i); }
-INT xref_nextf (INT i) { return (INT)xref_next_impl(&frecs, (INT32)i); }
-INT xref_nexts (INT i) { return (INT)xref_next_impl(&srecs, (INT32)i); }
-INT xref_nexte (INT i) { return (INT)xref_next_impl(&erecs, (INT32)i); }
-INT xref_nextx (INT i) { return (INT)xref_next_impl(&xrecs, (INT32)i); }
-INT xref_next (char ntype, INT i)
+int xref_nexti (int i) { return (int)xref_next_impl(&irecs, (int32_t)i); }
+int xref_nextf (int i) { return (int)xref_next_impl(&frecs, (int32_t)i); }
+int xref_nexts (int i) { return (int)xref_next_impl(&srecs, (int32_t)i); }
+int xref_nexte (int i) { return (int)xref_next_impl(&erecs, (int32_t)i); }
+int xref_nextx (int i) { return (int)xref_next_impl(&xrecs, (int32_t)i); }
+int xref_next (char ntype, int i)
 {
 	switch(ntype) {
 	case 'I': return xref_nexti(i);
@@ -948,12 +948,12 @@ INT xref_next (char ntype, INT i)
  *  returns 0 if none found
  *  5 symmetric versions
  *==============================================*/
-INT xref_previ (INT i) { return (INT)xref_prev_impl(&irecs, (INT32)i); }
-INT xref_prevf (INT i) { return (INT)xref_prev_impl(&frecs, (INT32)i); }
-INT xref_prevs (INT i) { return (INT)xref_prev_impl(&srecs, (INT32)i); }
-INT xref_preve (INT i) { return (INT)xref_prev_impl(&erecs, (INT32)i); }
-INT xref_prevx (INT i) { return (INT)xref_prev_impl(&xrecs, (INT32)i); }
-INT xref_prev (char ntype, INT i)
+int xref_previ (int i) { return (int)xref_prev_impl(&irecs, (int32_t)i); }
+int xref_prevf (int i) { return (int)xref_prev_impl(&frecs, (int32_t)i); }
+int xref_prevs (int i) { return (int)xref_prev_impl(&srecs, (int32_t)i); }
+int xref_preve (int i) { return (int)xref_prev_impl(&erecs, (int32_t)i); }
+int xref_prevx (int i) { return (int)xref_prev_impl(&xrecs, (int32_t)i); }
+int xref_prev (char ntype, int i)
 {
 	switch(ntype) {
 	case 'I': return xref_previ(i);
@@ -969,79 +969,79 @@ INT xref_prev (char ntype, INT i)
  *  returns 0 if none found
  *  5 symmetric versions
  *=======================================*/
-INT xref_firsti (void) { return xref_nexti(0); }
-INT xref_firstf (void) { return xref_nextf(0); }
-INT xref_firsts (void) { return xref_nexts(0); }
-INT xref_firste (void) { return xref_nexte(0); }
-INT xref_firstx (void) { return xref_nextx(0); }
+int xref_firsti (void) { return xref_nexti(0); }
+int xref_firstf (void) { return xref_nextf(0); }
+int xref_firsts (void) { return xref_nexts(0); }
+int xref_firste (void) { return xref_nexte(0); }
+int xref_firstx (void) { return xref_nextx(0); }
 /*=======================================
  * xref_last? -- Return last valid indi/?
  *  returns 0 if none found
  *  5 symmetric versions
  *=====================================*/
-static INT xref_last (DELETESET set)
+static int xref_last (DELETESET set)
 {
-	return (INT)xref_prev_impl(set, set->recs[0]);
+	return (int)xref_prev_impl(set, set->recs[0]);
 }
-INT xref_lasti (void) { return xref_last(&irecs); }
-INT xref_lastf (void) { return xref_last(&frecs); }
-INT xref_lasts (void) { return xref_last(&srecs); }
-INT xref_laste (void) { return xref_last(&erecs); }
-INT xref_lastx (void) { return xref_last(&xrecs); }
+int xref_lasti (void) { return xref_last(&irecs); }
+int xref_lastf (void) { return xref_last(&frecs); }
+int xref_lasts (void) { return xref_last(&srecs); }
+int xref_laste (void) { return xref_last(&erecs); }
+int xref_lastx (void) { return xref_last(&xrecs); }
 
 #if !defined(DEADENDS)
 /*=======================================
  * xrefs_get_counts_from_unopened_db --
  *  read record counts out of file on disk
- * returns FALSE if specified path is not the root of a traditional lifelines database
+ * returns false if specified path is not the root of a traditional lifelines database
  * If db structure error, errptr points to description of error (in static buffer)
  *=====================================*/
-BOOLEAN
-xrefs_get_counts_from_unopened_db (CNSTRING path, INT *nindis, INT *nfams
-	, INT *nsours, INT *nevens, INT *nothrs, char ** errptr)
+bool
+xrefs_get_counts_from_unopened_db (CString path, int *nindis, int *nfams
+	, int *nsours, int *nevens, int *nothrs, char ** errptr)
 {
 	char scratch[MAXPATHLEN];
 	static char errstr[256];
 	FILE * fp = 0;
-	INT i;
-	INT32 ndels[5], nmax[5];
+	int i;
+	int32_t ndels[5], nmax[5];
 
 	*errptr = 0;
 
 	ASSERT(!xreffp);
 	snprintf(scratch, sizeof(scratch), "%s/xrefs", path);
 	if (!(fp = fopen(scratch, LLREADBINARY))) {
-		return FALSE;
+		return false;
 	}
 	for (i=0; i<5; ++i) {
-		if (fread(&ndels[i], sizeof(INT32), 1, fp) != 1) {
+		if (fread(&ndels[i], sizeof(int32_t), 1, fp) != 1) {
 			snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "] bad", i);
 			*errptr = errstr;
 			fclose(fp);
-			return FALSE;
+			return false;
 		}
 	}
 	for (i=0; i<5; ++i) {
-		INT32 j;
+		int32_t j;
 		for (j=0; j<ndels[i]; ++j) {
-			INT32 k;
-			if (fread(&k, sizeof(INT32), 1, fp) != 1) {
+			int32_t k;
+			if (fread(&k, sizeof(int32_t), 1, fp) != 1) {
 				snprintf(errstr, sizeof(errstr), "ndels[" FMT_INT "]#" FMT_INT32 " bad", i, j);
 				*errptr = errstr;
 				fclose(fp);
-				return FALSE;
+				return false;
 			}
 			if (!j)
 				nmax[i] = k;
 		}
 	}
 	/* This logic is similar to what is in xref_num_set() */
-	*nindis = (INT)(nmax[0] - ndels[0]);
-	*nfams  = (INT)(nmax[1] - ndels[1]);
-	*nevens = (INT)(nmax[2] - ndels[2]);
-	*nsours = (INT)(nmax[3] - ndels[3]);
-	*nothrs = (INT)(nmax[4] - ndels[4]);
+	*nindis = (int)(nmax[0] - ndels[0]);
+	*nfams  = (int)(nmax[1] - ndels[1]);
+	*nevens = (int)(nmax[2] - ndels[2]);
+	*nsours = (int)(nmax[3] - ndels[3]);
+	*nothrs = (int)(nmax[4] - ndels[4]);
 	fclose(fp);
-	return TRUE;
+	return true;
 }
 #endif

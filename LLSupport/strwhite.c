@@ -50,8 +50,8 @@
  * trim -- Trim string if too long
  *  returns static buffer (or NULL)
  *==============================*/
-STRING
-trim (STRING str, INT len)
+String
+trim (String str, int len)
 {
 	static char scratch[MAXLINELEN+1];
 	if (!str || strlen(str) > MAXLINELEN) return NULL;
@@ -66,10 +66,10 @@ trim (STRING str, INT len)
  *  modifies argument (zeros out trailing whitespace)
  *=======================================*/
 void
-striptrail (STRING p)
+striptrail (String p)
 {
-	STRING q = p + strlen(p) - 1;
-	while (q >= p && iswhite((uchar)*q))
+	String q = p + strlen(p) - 1;
+	while (q >= p && iswhite((u_char)*q))
 		*q-- = '\0';
 }
 #endif
@@ -82,14 +82,14 @@ striptrail (STRING p)
  * UNUSED CODE
  *=====================================*/
 void
-striplead (STRING p)
+striplead (String p)
 {
-	INT i = strlen(p);
-	STRING  e = p + i - 1;
-	STRING b = p;
-	STRING q = p;
+	int i = strlen(p);
+	String  e = p + i - 1;
+	String b = p;
+	String q = p;
 
-	while (iswhite((uchar)*q) && q <= e) {
+	while (iswhite((u_char)*q) && q <= e) {
 		++q;
 		--i; /* keep from copying past end of p */
 	}
@@ -104,9 +104,9 @@ striplead (STRING p)
  * skipws -- Advance pointer over whitespace
  *=======================================*/
 void
-skipws (STRING * ptr)
+skipws (String * ptr)
 {
-	while (iswhite(*(uchar *)(*ptr)))
+	while (iswhite(*(u_char *)(*ptr)))
 		++(*ptr);
 }
 
@@ -114,12 +114,12 @@ skipws (STRING * ptr)
 /*=========================================
  * allwhite -- Check if string is all white
  *=======================================*/
-BOOLEAN
-allwhite (STRING p)
+bool
+allwhite (String p)
 {
 	while (*p)
-		if (!iswhite((uchar)*p++)) return FALSE;
-	return TRUE;
+		if (!iswhite((u_char)*p++)) return false;
+	return true;
 }
 #endif
 
@@ -128,9 +128,9 @@ allwhite (STRING p)
  * Created: 2002/01/03 (Perry Rapp)
  *==========================================*/
 void
-chomp (STRING str)
+chomp (String str)
 {
-	STRING p = str + strlen(str) - 1;
+	String p = str + strlen(str) - 1;
 	while (p>=str && (*p=='\r' || *p=='\n')) {
 		*p=0;
 		--p;

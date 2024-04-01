@@ -59,14 +59,14 @@
 /* alphabetical */
 static void prefix_file(FILE *fp, XLAT tt);
 #if !defined(DEADENDS)
-static STRING swrite_node(INT levl, NODE node, STRING p);
-static STRING swrite_nodes(INT levl, NODE node, STRING p);
+static String swrite_node(int levl, GNode *node, String p);
+static String swrite_nodes(int levl, GNode *node, String p);
 #endif
-static BOOLEAN should_write_bom(void);
-static void write_fam_to_file(NODE fam, CNSTRING file);
-static void write_indi_to_file(NODE indi, CNSTRING file);
-static void write_node(INT levl, FILE *fp, XLAT ttm,
-	NODE node, BOOLEAN indent);
+static bool should_write_bom(void);
+static void write_fam_to_file(GNode *fam, CString file);
+static void write_indi_to_file(GNode *indi, CString file);
+static void write_node(int levl, FILE *fp, XLAT ttm,
+	GNode *node, bool indent);
 
 /*********************************************
  * local function definitions
@@ -84,9 +84,9 @@ static void write_node(INT levl, FILE *fp, XLAT ttm,
  * returns addref'd record
  *===============================================*/
 RECORD
-file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
+file_to_record (String fname, XLAT ttm, String *pmsg, bool *pemp)
 {
-	NODE node = file_to_node(fname, ttm, pmsg, pemp);
+	GNode *node = file_to_node(fname, ttm, pmsg, pemp);
 	if (!node)
 		return 0;
 	if (nxref(node)) {
@@ -104,41 +104,41 @@ file_to_record (STRING fname, XLAT ttm, STRING *pmsg, BOOLEAN *pemp)
 /*============================================
  * node_to_file -- Convert tree to GEDCOM file
  *==========================================*/
-BOOLEAN
-node_to_file (INT levl,       /* top level */
-              NODE node,      /* root node */
-              STRING fname,   /* file */
-              BOOLEAN indent, /* indent? */
+bool
+node_to_file (int levl,       /* top level */
+              GNode *node,      /* root node */
+              String fname,   /* file */
+              bool indent, /* indent? */
               TRANTABLE tt)   /* char map */
 {
 	FILE *fp;
 	if (!(fp = fopen(fname, LLWRITETEXT))) {
 		llwprintf("Could not open file: `%s'\n", fname);
-		return FALSE;
+		return false;
 	}
-	write_nodes(levl, fp, tt, node, indent, TRUE, TRUE);
+	write_nodes(levl, fp, tt, node, indent, true, true);
 	fclose(fp);
-	return TRUE;
+	return true;
 }
 #endif
 
 /*========================================
  * write_node -- Write NODE to GEDCOM file
  *
- * INT levl:       [in] level
+ * int levl:       [in] level
  * FILE *fp:       [in] file
  * TRANTABLE tt    [in] char map
- * NODE node:      [in] node
- * BOOLEAN indent: [in]indent?
+ * GNode *node:      [in] node
+ * bool indent: [in]indent?
  *======================================*/
 static void
-write_node (INT levl, FILE *fp, XLAT ttm, NODE node,
-	BOOLEAN indent)
+write_node (int levl, FILE *fp, XLAT ttm, GNode *node,
+	bool indent)
 {
 	char out[MAXLINELEN+1];
-	STRING p;
+	String p;
 	if (indent) {
-		INT i;
+		int i;
 		for (i = 1;  i < levl;  i++)
 			fprintf(fp, "  ");
 	}
@@ -158,33 +158,33 @@ write_node (INT levl, FILE *fp, XLAT ttm, NODE node,
  * write_nodes -- Write NODEs to GEDCOM file
  *========================================*/
 void
-write_nodes (INT levl,       /* level */
+write_nodes (int levl,       /* level */
              FILE *fp,       /* file */
              XLAT ttm,   /* char map */
-             NODE node,      /* root */
-             BOOLEAN indent, /* indent? */
-             BOOLEAN kids,   /* output kids? */
-             BOOLEAN sibs)   /* output sibs? */
+             GNode *node,      /* root */
+             bool indent, /* indent? */
+             bool kids,   /* output kids? */
+             bool sibs)   /* output sibs? */
 {
 	if (!node) return;
 	write_node(levl, fp, ttm, node, indent);
 	if (kids)
-		write_nodes(levl+1, fp, ttm, nchild(node), indent, TRUE, TRUE);
+		write_nodes(levl+1, fp, ttm, nchild(node), indent, true, true);
 	if (sibs)
-		write_nodes(levl, fp, ttm, nsibling(node), indent, kids, TRUE);
+		write_nodes(levl, fp, ttm, nsibling(node), indent, kids, true);
 }
 
 #if 0			   /* DeadEnds now defines gnodesToString */
 /*====================================
  * swrite_node -- Write NODE to string
  *==================================*/
-static STRING
-swrite_node (INT levl,       /* level */
-             NODE node,      /* node */
-             STRING p)       /* write string */
+static String
+swrite_node (int levl,       /* level */
+             GNode *node,      /* node */
+             String p)       /* write string */
 {
 	char scratch[600];
-	STRING q = scratch;
+	String q = scratch;
 	snprintf(q, sizeof(scratch), FMT_INT " ", levl);
 	q += strlen(q);
 	if (nxref(node)) {
@@ -208,10 +208,10 @@ swrite_node (INT levl,       /* level */
 /*=====================================
  * swrite_nodes -- Write tree to string
  *===================================*/
-static STRING
-swrite_nodes (INT levl,       /* level */
-              NODE node,      /* root */
-              STRING p)       /* write string */
+static String
+swrite_nodes (int levl,       /* level */
+              GNode *node,      /* root */
+              String p)       /* write string */
 {
 	while (node) {
 		p = swrite_node(levl, node, p);
@@ -225,13 +225,13 @@ swrite_nodes (INT levl,       /* level */
 /*=========================================
  * node_to_string -- Convert tree to string
  *=======================================*/
-STRING
-node_to_string (NODE node)      /* root */
+String
+node_to_string (GNode *node)      /* root */
 {
-	INT len = tree_strlen(0, node) + 1;
-	STRING str;
+	int len = tree_strlen(0, node) + 1;
+	String str;
 	if (len <= 0) return NULL;
-	str = (STRING) stdalloc(len);
+	str = (String) stdalloc(len);
 	(void) swrite_nodes(0, node, str);
 	return str;
 }
@@ -292,27 +292,23 @@ prefix_file (FILE *fp, XLAT tt)
  * (no user interaction)
  *===================================*/
 void
-write_indi_to_file (NODE indi, CNSTRING file)
+write_indi_to_file (GNode *indi, CString file)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
-#if defined(DEADENDS)
 	GNode *name, *refn, *sex, *body, *famc, *fams;
-#else
-	NODE name, refn, sex, body, famc, fams;
-#endif
 
 	ASSERT(fp = fopen(file, LLWRITETEXT));
 	prefix_file(fp, ttmo);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
-	write_nodes(0, fp, ttmo, indi, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, name, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, sex,   TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, body , TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, famc,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, fams,  TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, indi, true, true, true);
+	write_nodes(1, fp, ttmo, name, true, true, true);
+	write_nodes(1, fp, ttmo, refn, true, true, true);
+	write_nodes(1, fp, ttmo, sex,   true, true, true);
+	write_nodes(1, fp, ttmo, body , true, true, true);
+	write_nodes(1, fp, ttmo, famc,  true, true, true);
+	write_nodes(1, fp, ttmo, fams,  true, true, true);
 	fclose(fp);
 	join_indi(indi, name, refn, sex, body, famc, fams);
 }
@@ -320,13 +316,13 @@ write_indi_to_file (NODE indi, CNSTRING file)
  * write_bom - whether to write Unicode BOM
  * (byte order marker)
  *===================================*/
-static BOOLEAN
+static bool
 should_write_bom (void)
 {
 #ifdef WIN32
-	return TRUE;
+	return true;
 #else
-	return FALSE;
+	return false;
 #endif
 }
 /*=====================================
@@ -335,17 +331,9 @@ should_write_bom (void)
  * (no user interaction)
  *===================================*/
 void
-#if defined(DEADENDS)
-write_indi_to_file_for_edit (NODE indi, CNSTRING file, bool rfmt, Database *database)
-#else
-write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
-#endif
+write_indi_to_file_for_edit (GNode *indi, CString file, bool rfmt, Database *database)
 {
-#if defined(DEADENDS)
 	annotateWithSupplemental(indi, rfmt, database);
-#else
-	annotate_with_supplemental(indi, rfmt);
-#endif
 	write_indi_to_file(indi, file);
 	resolve_refn_links(indi);
 }
@@ -355,13 +343,9 @@ write_indi_to_file_for_edit (NODE indi, CNSTRING file, RFMT rfmt)
  * (no user interaction)
  *===================================*/
 void
-#if defined(DEADENDS)
-write_fam_to_file_for_edit (NODE fam, CNSTRING file, bool rfmt, Database *database)
-#else
-write_fam_to_file_for_edit (NODE fam, CNSTRING file, RFMT rfmt)
-#endif
+write_fam_to_file_for_edit (GNode *fam, CString file, bool rfmt, Database *database)
 {
-	annotate_with_supplemental(fam, rfmt);
+	annotateWithSupplemental(fam, rfmt, database);
 	write_fam_to_file(fam, file);
 	resolve_refn_links(fam);
 }
@@ -370,26 +354,22 @@ write_fam_to_file_for_edit (NODE fam, CNSTRING file, RFMT rfmt)
  * (no user interaction)
  *===================================*/
 static void
-write_fam_to_file (NODE fam, CNSTRING file)
+write_fam_to_file (GNode *fam, CString file)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
-#if defined(DEADENDS)
 	GNode *refn, *husb, *wife, *chil, *body;
-#else
-	NODE refn, husb, wife, chil, body;
-#endif
 
 	ASSERT(fp = fopen(file, LLWRITETEXT));
 	prefix_file(fp, ttmo);
 
 	split_fam(fam, &refn, &husb, &wife, &chil, &body);
-	write_nodes(0, fp, ttmo, fam,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, refn, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, husb,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, wife,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, body,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, chil,  TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, fam,  true, true, true);
+	write_nodes(1, fp, ttmo, refn, true, true, true);
+	write_nodes(1, fp, ttmo, husb,  true, true, true);
+	write_nodes(1, fp, ttmo, wife,  true, true, true);
+	write_nodes(1, fp, ttmo, body,  true, true, true);
+	write_nodes(1, fp, ttmo, chil,  true, true, true);
 	join_fam(fam, refn, husb, wife, chil, body);
 	fclose(fp);
 }

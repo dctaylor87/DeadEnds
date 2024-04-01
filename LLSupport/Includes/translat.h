@@ -31,10 +31,6 @@
 #ifndef _TRANSLAT_H
 #define _TRANSLAT_H
 
-#if !defined(DEADENDS)
-#include "standard.h"
-#endif
-
 /* Types */
 
 /*
@@ -92,7 +88,7 @@ bool transl_is_xlat_valid(XLAT xlat);
 TRANTABLE transl_get_legacy_tt(int trnum);
 void transl_load_all_tts(void);
 void transl_load_xlats(void);
-void transl_parse_codeset(CString codeset, ZSTR zcsname, LIST * subcodes);
+void transl_parse_codeset(CString codeset, ZSTR zcsname, List **subcodes);
 void transl_release_xlat(XLAT xlat);
 void transl_set_legacy_tt(int trnum, TRANTABLE tt);
 void transl_xlat(XLAT xlat, ZSTR zstr);

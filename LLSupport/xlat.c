@@ -66,30 +66,27 @@
 /* This will go into translat.c when new system is working */
 struct tag_xlat {
 	/* All members either NULL or heap-alloc'd */
-	STRING src;
-	STRING dest;
-	LIST steps;
-	BOOLEAN adhoc;
-	BOOLEAN valid;
-	INT uparam; /* opaque number used by client */
+	String src;
+	String dest;
+	List *steps;
+	bool adhoc;
+	bool valid;
+	int uparam; /* opaque number used by client */
 };
 /* dynamically loadable translation table, entry in dyntt list */
 struct tag_dyntt {
-#if !defined(DEADENDS)
-	struct tag_vtable *vtable; /* generic object */
-#endif
-	INT refcnt; /* ref-countable object */
-	STRING name;
-	STRING path;
+	int refcnt; /* ref-countable object */
+	String name;
+	String path;
 	TRANTABLE tt; /* when loaded */
-	BOOLEAN loadfailure;
+	bool loadfailure;
 };
 typedef struct tag_dyntt *DYNTT;
 
 /* step of a translation, either iconv_src or trantble is NULL */
 typedef struct xlat_step_s {
-	STRING iconv_src;
-	STRING iconv_dest;
+	String iconv_src;
+	String iconv_dest;
 	DYNTT dyntt;
 } *XLSTEP;
 
@@ -100,44 +97,31 @@ typedef struct xlat_step_s {
 
 /* alphabetical */
 static void add_dyntt_step(XLAT xlat, DYNTT dyntt);
-static INT check_tt_name(CNSTRING filename);
-static XLSTEP create_iconv_step(CNSTRING src, CNSTRING dest);
+static int check_tt_name(CString filename);
+static XLSTEP create_iconv_step(CString src, CString dest);
 static XLSTEP create_dyntt_step(DYNTT dyntt);
-static XLAT create_null_xlat(BOOLEAN adhoc);
-static XLAT create_xlat(CNSTRING src, CNSTRING dest, BOOLEAN adhoc);
-static DYNTT create_dyntt(TRANTABLE tt, CNSTRING name, CNSTRING path);
+static XLAT create_null_xlat(bool adhoc);
+static XLAT create_xlat(CString src, CString dest, bool adhoc);
+static DYNTT create_dyntt(TRANTABLE tt, CString name, CString path);
 #if !defined(DEADENDS)
 static void destroy_dyntt(DYNTT dyntt);
 static void dyntt_destructor(VTABLE *obj);
 #endif
 static void free_dyntts(void);
 static void free_xlat(XLAT xlat);
-static DYNTT get_conversion_dyntt(CNSTRING src, CNSTRING dest);
-static DYNTT get_subcoding_dyntt(CNSTRING codeset, CNSTRING subcoding);
+static DYNTT get_conversion_dyntt(CString src, CString dest);
+static DYNTT get_subcoding_dyntt(CString codeset, CString subcoding);
 static void load_dyntt_if_needed(DYNTT dyntt);
-static void load_dynttlist_from_dir(STRING dir);
+static void load_dynttlist_from_dir(String dir);
 static int select_tts(const struct dirent *entry);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static LIST f_xlats=0; /* cache of conversions */
+static List *f_xlats=0; /* cache of conversions */
 static TABLE f_dyntts=0; /* cache of dynamic translation tables */
 static char f_ttext[] = ".tt";
-
-#if !defined(DEADENDS)
-static struct tag_vtable vtable_for_dyntt = {
-	VTABLE_MAGIC
-	, "dyntt"
-	, &dyntt_destructor
-	, &refcountable_isref
-	, &refcountable_addref
-	, &refcountable_release
-	, 0 /* copy_fnc */
-	, &generic_get_type_name
-};
-#endif
 
 /*********************************************
  * local & exported function definitions
@@ -150,13 +134,13 @@ static struct tag_vtable vtable_for_dyntt = {
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
 static XLAT
-create_null_xlat (BOOLEAN adhoc)
+create_null_xlat (bool adhoc)
 {
 	/* create & initialize new xlat */
 	XLAT xlat = (XLAT)stdalloc(sizeof(*xlat));
 	memset(xlat, 0, sizeof(*xlat));
 	xlat->steps = create_list2(LISTDOFREE);
-	xlat->valid = TRUE;
+	xlat->valid = true;
 	if (!f_xlats) {
 		f_xlats = create_list();
 	}
@@ -170,7 +154,7 @@ create_null_xlat (BOOLEAN adhoc)
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
 static XLAT
-create_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
+create_xlat (CString src, CString dest, bool adhoc)
 {
 	/* create & initialize new xlat */
 	XLAT xlat = create_null_xlat(adhoc);
@@ -203,7 +187,7 @@ free_xlat (XLAT xlat)
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 static XLSTEP
-create_iconv_step (CNSTRING src, CNSTRING dest)
+create_iconv_step (CString src, CString dest)
 {
 	XLSTEP xstep;
 	xstep = (XLSTEP) stdalloc(sizeof(*xstep));
@@ -230,13 +214,10 @@ create_dyntt_step (DYNTT dyntt)
  * Created: 2002/12/10 (Perry Rapp)
  *========================================================*/
 static DYNTT
-create_dyntt (TRANTABLE tt, CNSTRING name, CNSTRING path)
+create_dyntt (TRANTABLE tt, CString name, CString path)
 {
 	DYNTT dyntt = (DYNTT)stdalloc(sizeof(*dyntt));
 	memset(dyntt, 0, sizeof(*dyntt));
-#if !defined(DEADENDS)
-	dyntt->vtable = &vtable_for_dyntt;
-#endif
 	dyntt->refcnt = 1;
 	dyntt->tt = tt;
 	dyntt->name = strsave(name);
@@ -249,18 +230,14 @@ create_dyntt (TRANTABLE tt, CNSTRING name, CNSTRING path)
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
 XLAT
-xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
+xl_get_xlat (CString src, CString dest, bool adhoc)
 {
 	XLAT xlat=0;
 	ZSTR zsrc=zs_new(), zdest=zs_new();
 	ZSTR zsrc_u=ll_toupperz(src,0),zdest_u=ll_toupperz(dest,0);
-#if defined(DEADENDS)
 	List *srcsubs=0;
 	List *destsubs=0;
-#else
-	LIST srcsubs=0, destsubs=0;
-#endif
-	STRING subcoding=0;
+	String subcoding=0;
 	
 	if (!src || !src[0] || !dest || !dest[0]) {
 		xlat = create_null_xlat(adhoc);
@@ -278,9 +255,6 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 				&& eqstr_ex(xlattemp->dest, zs_str(zdest_u))
 				) {
 				xlat = xlattemp;
-#if !defined(DEADENDS)
-				STOPLIST
-#endif
 				goto end_get_xlat;
 			}
 		ENDLIST
@@ -302,7 +276,7 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 	/* eg, if going from UTF-8 to GUI, transliterations done in UTF-8 first */
 	if (destsubs) {
 		FORLIST(destsubs, el)
-			subcoding = (STRING)el;
+			subcoding = (String)el;
 			add_dyntt_step(xlat
 				, get_subcoding_dyntt(zs_str(zsrc), subcoding));
 		ENDLIST
@@ -315,12 +289,12 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 		XLSTEP xstep = create_iconv_step(zs_str(zsrc), zs_str(zdest));
 		enqueue_list(xlat->steps, xstep);
 	} else {
-		STRING src = zs_str(zsrc), dest = zs_str(zdest);
-		BOOLEAN foundit = FALSE;
+		String src = zs_str(zsrc), dest = zs_str(zdest);
+		bool foundit = false;
 		DYNTT dyntt = get_conversion_dyntt(src, dest);
 		if (dyntt) {
 			add_dyntt_step(xlat, dyntt);
-			foundit = TRUE;
+			foundit = true;
 		}
 		else if (!eqstr(src, "UTF-8") && !eqstr(dest, "UTF-8")) {
 			/* try going through UTF-8 as intermediate step */
@@ -329,18 +303,18 @@ xl_get_xlat (CNSTRING src, CNSTRING dest, BOOLEAN adhoc)
 			if (dyntt1 && dyntt2) {
 				add_dyntt_step(xlat, dyntt1);
 				add_dyntt_step(xlat, dyntt2);
-				foundit = TRUE;
+				foundit = true;
 			}
 		}
 		if (!foundit)
-			xlat->valid = FALSE; /* missing main conversion */
+			xlat->valid = false; /* missing main conversion */
 	}
 
 	/* in destination codeset, do subcodings requested by source */
 	/* eg, if going from GUI into UTF-8, transliterations undone in UTF-8 last */
 	if (srcsubs) {
 		FORLIST(srcsubs, el)
-			subcoding = (STRING)el;
+			subcoding = (String)el;
 			add_dyntt_step(xlat
 				, get_subcoding_dyntt(zs_str(zdest), subcoding));
 		ENDLIST
@@ -363,7 +337,7 @@ end_get_xlat:
 XLAT
 xl_get_null_xlat (void)
 {
-	return create_null_xlat(FALSE);
+	return create_null_xlat(false);
 }
 /*==========================================================
  * add_dyntt_step -- Add dynamic translation table step
@@ -385,7 +359,7 @@ add_dyntt_step (XLAT xlat, DYNTT dyntt)
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
 static DYNTT
-get_conversion_dyntt (CNSTRING src, CNSTRING dest)
+get_conversion_dyntt (CString src, CString dest)
 {
 	DYNTT dyntt;
 	ZSTR zttname = zs_news(src);
@@ -407,7 +381,7 @@ get_conversion_dyntt (CNSTRING src, CNSTRING dest)
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
 static DYNTT
-get_subcoding_dyntt (CNSTRING codeset, CNSTRING subcoding)
+get_subcoding_dyntt (CString codeset, CString subcoding)
 {
 	DYNTT dyntt;
 	ZSTR zttname = zs_news(codeset);
@@ -435,7 +409,7 @@ load_dyntt_if_needed (DYNTT dyntt)
 	if (dyntt->tt || dyntt->loadfailure)
 		return;
 	if (!init_map_from_file(dyntt->path, dyntt->name, &dyntt->tt, zerr)) {
-		dyntt->loadfailure = TRUE;
+		dyntt->loadfailure = true;
 	}
 	zs_free(&zerr);
 }
@@ -443,10 +417,10 @@ load_dyntt_if_needed (DYNTT dyntt)
  * xl_do_xlat -- Perform a translation on a string
  * Created: 2002/11/25 (Perry Rapp)
  *========================================================*/
-BOOLEAN
+bool
 xl_do_xlat (XLAT xlat, ZSTR zstr)
 {
-	BOOLEAN cvtd=FALSE;
+	bool cvtd=false;
 	XLSTEP xstep=0;
 	if (!xlat || !xlat->valid) return cvtd;
 	/* simply cycle through & perform each step */
@@ -456,7 +430,7 @@ xl_do_xlat (XLAT xlat, ZSTR zstr)
 			/* an iconv step */
 			ZSTR ztemp=zs_new();
 			if (iconv_trans(xstep->iconv_src, xstep->iconv_dest, zs_str(zstr), ztemp, '?')) {
-				cvtd=TRUE;
+				cvtd=true;
 				zs_move(zstr, &ztemp);
 			} else {
 				zs_free(&ztemp);
@@ -476,9 +450,9 @@ xl_do_xlat (XLAT xlat, ZSTR zstr)
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 void
-xl_load_all_dyntts (CNSTRING ttpath)
+xl_load_all_dyntts (CString ttpath)
 {
-	STRING dirs,p;
+	String dirs,p;
 	free_dyntts();
 	if (getlloptint("TTPATH.debug", 0)) {
 		if (!ttpath ||  !ttpath[0])
@@ -489,7 +463,7 @@ xl_load_all_dyntts (CNSTRING ttpath)
 	if (!ttpath ||  !ttpath[0])
 		return;
 	f_dyntts = create_table_obj();
-	dirs = (STRING)stdalloc(strlen(ttpath)+2);
+	dirs = (String)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);
 	/* now process each directory */
@@ -505,19 +479,19 @@ xl_load_all_dyntts (CNSTRING ttpath)
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 static void
-load_dynttlist_from_dir (STRING dir)
+load_dynttlist_from_dir (String dir)
 {
 	struct dirent **programs;
-	INT n = scandir(dir, &programs, select_tts, alphasort);
-	INT i;
+	int n = scandir(dir, &programs, select_tts, alphasort);
+	int i;
 	if (getlloptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg", _("ttpath checking dir <%s>"), dir);
 	}
 	for (i=0; i<n; ++i) {
-		CNSTRING ttfile = programs[i]->d_name;
+		CString ttfile = programs[i]->d_name;
 		/* filename without extension */
 		ZSTR zfile = zs_newsubs(ttfile, strlen(ttfile)-(sizeof(f_ttext)-1));
-		INT ntype = check_tt_name(zs_str(zfile));
+		int ntype = check_tt_name(zs_str(zfile));
 		/*
 		Valid names are like so:
 			UTF-8_ISO-8859-1 (type 1; code conversion)
@@ -530,7 +504,7 @@ load_dynttlist_from_dir (STRING dir)
 			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);
 			if (!valueof_obj(f_dyntts, zs_str(zfile_u))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
-				STRING path = concat_path_alloc(dir, ttfile);
+				String path = concat_path_alloc(dir, ttfile);
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
 				insert_table_obj(f_dyntts, zs_str(zfile_u), dyntt);
@@ -553,11 +527,11 @@ load_dynttlist_from_dir (STRING dir)
  *  returns 2 if codeset subcoding conversion
  *  returns 0 if not valid name for tt
  *==========================================================*/
-static INT
-check_tt_name (CNSTRING filename)
+static int
+check_tt_name (CString filename)
 {
-	CNSTRING ptr;
-	CNSTRING underbar=0;
+	CString ptr;
+	CString underbar=0;
 	ZSTR ztemp;
 	for (ptr=filename; *ptr; ++ptr) {
 		if (*ptr=='_') {
@@ -589,9 +563,9 @@ check_tt_name (CNSTRING filename)
 static int
 select_tts (const struct dirent *entry)
 {
-	INT tlen = strlen(entry->d_name);
-	CNSTRING entext;
-	if (tlen < (INT)sizeof(f_ttext)) return 0;
+	int tlen = strlen(entry->d_name);
+	CString entext;
+	if (tlen < (int)sizeof(f_ttext)) return 0;
 
 	/* examine end of entry->d_name */
 	entext = entry->d_name + tlen - (sizeof(f_ttext)-1);
@@ -611,7 +585,7 @@ void
 xl_free_adhoc_xlats (void)
 {
     XLAT xlattemp=0;
-	LIST newlist=0;
+	List *newlist=0;
 	if (!f_xlats)
 		return;
 	/* we don't have a way to delete items from a list,
@@ -675,9 +649,6 @@ static void
 destroy_dyntt (DYNTT dyntt)
 {
 	if (!dyntt) return;
-#if !defined(DEADENDS)
-	ASSERT(dyntt->vtable == &vtable_for_dyntt);
-#endif
 	strfree(&dyntt->name);
 	strfree(&dyntt->path);
 	remove_trantable(dyntt->tt);
@@ -694,16 +665,16 @@ destroy_dyntt (DYNTT dyntt)
  * Created: 2002/12/01 (Perry Rapp)
  *========================================================*/
 void
-xl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
+xl_parse_codeset (CString codeset, ZSTR zcsname, List **subcodes)
 {
-	CNSTRING p=codeset, prev=codeset;
-	BOOLEAN base=FALSE;
+	CString p=codeset, prev=codeset;
+	bool base=false;
 	for ( ; ; ++p) {
 		if ( !p[0] || (p[0]=='/' && p[1]=='/')) {
 			if (!base) {
 				ZSTR ztemp = zs_newsubs(codeset, p-prev);
 				zs_move(zcsname, &ztemp);
-				base=TRUE;
+				base=true;
 			} else {
 				if (subcodes) {
 					ZSTR ztemp=0;
@@ -830,7 +801,7 @@ end_get_desc:
  * xl_is_xlat_valid -- Does it do the job ?
  * Created: 2002/12/15 (Perry Rapp)
  *========================================================*/
-BOOLEAN
+bool
 xl_is_xlat_valid (XLAT xlat)
 {
 	return xlat->valid;
@@ -850,11 +821,11 @@ xl_release_xlat (HINT_PARAM_UNUSED XLAT xlat)
 	*/
 }
 void
-xl_set_uparam (XLAT xlat, INT uparam)
+xl_set_uparam (XLAT xlat, int uparam)
 {
 	xlat->uparam = uparam;
 }
-INT
+int
 xl_get_uparam (XLAT xlat)
 {
 	return xlat->uparam;
@@ -862,22 +833,8 @@ xl_get_uparam (XLAT xlat)
 /*==========================================================
  * xl_get_dest_codeset -- return name of codeset of destination
  *========================================================*/
-CNSTRING
+CString
 xl_get_dest_codeset (XLAT xlat)
 {
 	return xlat->dest;
 }
-
-#if !defined(DEADENDS)
-/*=================================================
- * dyntt_destructor -- destructor for dyntt
- *  (destructor entry in vtable)
- *===============================================*/
-static void
-dyntt_destructor (VTABLE *obj)
-{
-	DYNTT tab = (DYNTT)obj;
-	ASSERT(tab->vtable == &vtable_for_dyntt);
-	destroy_dyntt(tab);
-}
-#endif

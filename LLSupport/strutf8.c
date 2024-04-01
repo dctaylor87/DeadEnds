@@ -34,7 +34,7 @@
  * Created: 2001/08/02 (Perry Rapp)
  *============================*/
 #if 0
-INT
+int
 utf8len (char ch)
 {
 	/* test short cases first, as probably much more common */
@@ -52,7 +52,7 @@ utf8len (char ch)
 }
 #endif
 
-INT
+int
 utf8len (char ch)
 {
   /* verify byte is first byte of a character */
@@ -98,9 +98,9 @@ utf8len (char ch)
  * Created: 2001/08/02 (Perry Rapp)
  *============================*/
 size_t
-str8chlen (CNSTRING str)
+str8chlen (CString str)
 {
-	CNSTRING ptr = str;
+	CString ptr = str;
 	size_t len = 0;
 	size_t chwidth = 0;
 	size_t i=0;
@@ -130,14 +130,14 @@ str8chlen (CNSTRING str)
  *  if input was pointing at partial multibyte at end (broken string)
  * Created: 2002/06/12, Perry Rapp
  *=======================================*/
-STRING
-find_prev_char (STRING ptr, INT * width, STRING limit, int utf8)
+String
+find_prev_char (String ptr, int * width, String limit, int utf8)
 {
-	STRING init = ptr;
-	INT len=0;
+	String init = ptr;
+	int len=0;
 	if (utf8) {
 		while (1) {
-			INT tmp;
+			int tmp;
 			if (ptr == limit)
 				break;
 			--ptr;
@@ -166,37 +166,37 @@ find_prev_char (STRING ptr, INT * width, STRING limit, int utf8)
  * character returned is in UCS-4, native alignment
  * Assumes valid UTF-8 input
  *=======================================*/
-INT
-next_char32 (STRING * ptr, int utf8)
+int
+next_char32 (String * ptr, int utf8)
 {
-	STRING str = *ptr; /* simplifies notation below */
+	String str = *ptr; /* simplifies notation below */
 	if (!utf8) {
-		INT ch = (unsigned char)*str;
+		int ch = (unsigned char)*str;
 		++(*ptr);
 		return ch;
 	}
 	/* test short cases first, as probably much more common */
 	if (!(*str & 0x80 && *str & 0x40)) {
 		/* if a trail byte, comes thru here & need cast */
-		INT ch = (unsigned char)str[0];
+		int ch = (unsigned char)str[0];
 		++(*ptr);
 		return ch;
 	}
 	if (!(*str & 0x20)) {
-		INT ch = ((str[0] & 0x1F) << 6)
+		int ch = ((str[0] & 0x1F) << 6)
 			+ (str[1] & 0x3F);
 		(*ptr) += 2;
 		return ch;
 	}
 	if (!(*str & 0x10)) {
-		INT ch = ((str[0] & 0x0f) << 12)
+		int ch = ((str[0] & 0x0f) << 12)
 			+ ((str[1] & 0x3F) << 6)
 			+ (str[2] & 0x3F);
 		(*ptr) += 3;
 		return ch;
 	}
 	if (!(*str & 0x08)) {
-		INT ch = ((str[0] & 0x0F) << 18)
+		int ch = ((str[0] & 0x0F) << 18)
 			+ ((str[1] & 0x3F) << 12)
 			+ ((str[2] & 0x3F) << 6)
 			+ (str[3] & 0x3F);
@@ -204,7 +204,7 @@ next_char32 (STRING * ptr, int utf8)
 		return ch;
 	}
 	if (!(*str & 0x04)) {
-		INT ch = ((str[0] & 0x0F) << 24)
+		int ch = ((str[0] & 0x0F) << 24)
 			+ ((str[1] & 0x3F) << 18)
 			+ ((str[2] & 0x3F) << 12)
 			+ ((str[3] & 0x3F) << 6)
@@ -212,7 +212,7 @@ next_char32 (STRING * ptr, int utf8)
 		(*ptr) += 5;
 		return ch;
 	} else {
-		INT ch = ((str[0] & 0x0F) << 30)
+		int ch = ((str[0] & 0x0F) << 30)
 			+ ((str[1] & 0x3F) << 24)
 			+ ((str[2] & 0x3F) << 18)
 			+ ((str[3] & 0x3F) << 12)
@@ -227,18 +227,18 @@ next_char32 (STRING * ptr, int utf8)
  *  BOM is a byte order mark that Microsoft likes to use
  *=======================================*/
 void
-skip_BOM (STRING * pstr)
+skip_BOM (String * pstr)
 {
-	STRING str = *pstr;
+	String str = *pstr;
 	/* UTF-8 is the only BOM we handle */
-	if ((uchar)str[0] == 0xEF && (uchar)str[1] == 0xBB && (uchar)str[2] == 0xBF)
+	if ((u_char)str[0] == 0xEF && (u_char)str[1] == 0xBB && (u_char)str[2] == 0xBF)
 		*pstr += 3;
 }
 /*=========================================
  * unicode_to_utf8 -- convert UCS-4 (native alignment) to UTF-8
  *=======================================*/
 void
-unicode_to_utf8 (INT wch, char * utf8)
+unicode_to_utf8 (int wch, char * utf8)
 {
 	unsigned char *lpd = (unsigned char *)utf8;
 	unsigned int uch = (unsigned int)wch;
@@ -294,10 +294,10 @@ unicode_to_utf8 (INT wch, char * utf8)
  * broken multibyte at end
  *=======================================*/
 void
-chopstr_utf8 (STRING str, size_t index, BOOLEAN utf8)
+chopstr_utf8 (String str, size_t index, bool utf8)
 {
-	INT width=0;
-	STRING prev = find_prev_char(&str[index+1], &width, str, utf8);
+	int width=0;
+	String prev = find_prev_char(&str[index+1], &width, str, utf8);
 	prev[0] = 0;
 	/* We don't zero out entire width in case it is outside of
 	string range, in case caller passed us a broken string */
@@ -307,7 +307,7 @@ chopstr_utf8 (STRING str, size_t index, BOOLEAN utf8)
  *  handles UTF-8
  *=======================================*/
 void
-limit_width (STRING str, size_t width, BOOLEAN utf8)
+limit_width (String str, size_t width, bool utf8)
 {
 	if (strlen(str) <= width) return;
 	chopstr_utf8(str, width-1, utf8);

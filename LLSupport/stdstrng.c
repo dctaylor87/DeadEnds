@@ -37,8 +37,6 @@
 #include <ansidecl.h>
 #include <stdarg.h>
 
-#include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -52,7 +50,7 @@
 #include "mychar.h"
 
 /* global variables defined here */
-BOOLEAN opt_mychar = FALSE; /* Custom character set handling (bypass libc) */
+bool opt_mychar = false; /* Custom character set handling (bypass libc) */
 #endif
 
 /*********************************************
@@ -70,14 +68,14 @@ static int hardfail = 0; /* developer mode to help find bad sign-extensions */
 /*==================================
  * chartype -- Return character type
  *================================*/
-INT
-chartype (INT c)
+int
+chartype (int c)
 {
 	if (c<0) {
-	/* This most likely means someone assigned a char to an INT
+	/* This most likely means someone assigned a char to an int
 	which is very bad -- it gets sign extended! -- it must always
-	be first cast to a uchar (unsigned char), eg
-	INT a = (uchar)*p;
+	be first cast to a u_char (unsigned char), eg
+	int a = (u_char)*p;
 	We can't pass this to O/S isx functions, because some of them
 	are table driven, and we certainly don't want to give them an
 	offset of several billion negative.
@@ -103,10 +101,10 @@ chartype (INT c)
  *  should be in unsigned char range.
  * TODO: Fix for Unicode
  *===============================*/
-BOOLEAN
-isnumch (INT c)
+bool
+isnumch (int c)
 {
-	if (c<0 || c>0x7F) return FALSE;
+	if (c<0 || c>0x7F) return false;
 	/* Now we know it is ASCII range */
 #ifndef OS_NOCTYPE
 	return (isdigit(c));
@@ -122,10 +120,10 @@ isnumch (INT c)
  *  should be in unsigned char range.
  * TODO: Fix for Unicode
  *===============================*/
-BOOLEAN
-iswhite (INT c)
+bool
+iswhite (int c)
 {
-	if (c<0 || c>0x7F) return FALSE;
+	if (c<0 || c>0x7F) return false;
 	/* Now we know it is ASCII range */
 #ifndef OS_NOCTYPE
 	return (isspace(c));
@@ -139,8 +137,8 @@ iswhite (INT c)
  * islinebreak -- Check for linebreak
  * TODO: Fix for Unicode
  *===============================*/
-BOOLEAN
-islinebreak (INT c)
+bool
+islinebreak (int c)
 {
 	return c == '\n' || c == '\r';
 }
@@ -148,8 +146,8 @@ islinebreak (INT c)
  * isletter -- Check for letter
  * TODO: Fix for Unicode
  *===========================*/
-BOOLEAN
-isletter (INT c)
+bool
+isletter (int c)
 {
 #if !defined(DEADENDS)
 	if (opt_mychar) return mych_isalpha(c);
@@ -163,16 +161,16 @@ isletter (INT c)
 /*=============================
  * isasciiletter -- Check for English letter
  *===========================*/
-BOOLEAN
-isasciiletter (INT c)
+bool
+isasciiletter (int c)
 {
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 /*==========================================
  * ll_toupper -- Convert letter to uppercase
  *========================================*/
-INT
-ll_toupper (INT c)
+int
+ll_toupper (int c)
 {
 #if !defined(DEADENDS)
 	if (opt_mychar) return mych_toupper(c);
@@ -189,8 +187,8 @@ ll_toupper (INT c)
 /*==========================================
  * ll_tolower -- Convert letter to lowercase
  *========================================*/
-INT
-ll_tolower (INT c)
+int
+ll_tolower (int c)
 {
 #if !defined(DEADENDS)
 	if (opt_mychar) return mych_tolower(c);
@@ -209,17 +207,17 @@ ll_tolower (INT c)
  *  This is just eqstr extended to handle empty or null strings
  *  Like eqstr, this is byte-by-byte comparison, no locale, no UTF-8
  *=============================*/
-BOOLEAN
-eqstr_ex (CNSTRING s1, CNSTRING s2)
+bool
+eqstr_ex (CString s1, CString s2)
 {
 	if (!s1 || !s1[0]) {
 		if (!s2 || !s2[0])
-			return TRUE;
+			return true;
 		else
-			return FALSE;
+			return false;
 	} else {
 		if (!s2 || !s2[0])
-			return FALSE;
+			return false;
 		else
 			return eqstr(s1, s2);
 	}
@@ -247,15 +245,15 @@ llstrncpy (char *dest, const char *src, size_t n, int utf8)
  * llvsnprintf -- vsnprintf which backs up to last whole character
  * handles UTF-8
  *================================*/
-static INT
+static int
 llvsnprintf (char *dest, size_t len, int utf8, const char * fmt, va_list args)
 {
-	INT rtn;
+	int rtn;
 	rtn = vsnprintf(dest, len, fmt, args);
 	if (rtn >= (int)(len-1) || rtn == -1) {
 		/* overflowed -- back up to last character that fits */
-		INT width=0;
-		STRING prev;
+		int width=0;
+		String prev;
 		dest[len-1] = 0; /* ensure zero-termination */
 		prev = find_prev_char(&dest[len-1], &width, dest, utf8);
 		prev[width]=0;
@@ -294,8 +292,8 @@ llstrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args)
  * ll_atoi -- Wrapper for atoi which handles NULL input
  * Created: 2002/10/19, Perry Rapp
  *================================*/
-INT
-ll_atoi (CNSTRING str, INT defval)
+int
+ll_atoi (CString str, int defval)
 {
 	return str ? atoi(str) : defval;
 }

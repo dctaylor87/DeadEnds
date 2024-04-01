@@ -5,7 +5,7 @@ extern String getsxref (void);
 extern String getexref (void);
 extern String getxxref (void);
 
-extern INT32 getixrefnum (void);
+extern int32_t getixrefnum (void);
 extern void dumpxrefs (void);
 
 extern void addixref (int key);
@@ -26,13 +26,13 @@ extern int xref_num_sours (void);
 extern int xref_num_evens (void);
 extern int xref_num_othrs (void);
 
-extern INT32 xref_max_indis (void);
-extern INT32 xref_max_fams (void);
-extern INT32 xref_max_sours (void);
-extern INT32 xref_max_evens (void);
-extern INT32 xref_max_othrs (void);
+extern int32_t xref_max_indis (void);
+extern int32_t xref_max_fams (void);
+extern int32_t xref_max_sours (void);
+extern int32_t xref_max_evens (void);
+extern int32_t xref_max_othrs (void);
 
-extern INT32 xref_max_any (void);
+extern int32_t xref_max_any (void);
 
 extern String newixref (String xrefp, bool flag);
 extern String newfxref (String xrefp, bool flag);

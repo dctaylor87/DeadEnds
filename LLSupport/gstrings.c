@@ -73,10 +73,10 @@
  * local variables
  *********************************************/
 
-static INT nchil = 0, maxchil = 0;
-static STRING *chstrings = NULL, *chkeys = NULL;
+static int nchil = 0, maxchil = 0;
+static String *chstrings = NULL, *chkeys = NULL;
 
-static BOOLEAN displaykeys=TRUE;
+static bool displaykeys=true;
 
 /*********************************************
  * local function definitions
@@ -91,15 +91,11 @@ static BOOLEAN displaykeys=TRUE;
  *  pnum:  [out] number of output strings
  *  pkeys: [out] array of output strings (children descriptions)
  *=================================================================*/
-STRING *
-#if defined(DEADENDS)
-get_child_strings (GNode *fam, bool rfmt, INT *pnum, String **pkeys, Database *database)
-#else
-get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
-#endif
+String *
+get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *database)
 {
-	NODE chil;
-	INT i;
+	GNode *chil;
+	int i;
 
 	for (i = 0; i < nchil; i++) {
 		stdfree(chstrings[i]);
@@ -114,18 +110,18 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
 			stdfree(chstrings); 
 			stdfree(chkeys); 
 		}
-		chstrings = (STRING *) stdalloc((nchil+5)*sizeof(STRING));
-		chkeys = (STRING *) stdalloc((nchil+5)*sizeof(STRING));
+		chstrings = (String *) stdalloc((nchil+5)*sizeof(String));
+		chkeys = (String *) stdalloc((nchil+5)*sizeof(String));
 		maxchil = nchil + 5;
 	}
 #if defined(DEADENDS)
 	FORCHILDREN(fam,child,key, i, database)
-		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, TRUE);
+		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, true);
 		chkeys[i-1] = strsave(rmvat(nxref(child)));
 	ENDCHILDREN
 #else
 	FORCHILDRENx(fam,child,i)
-		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, TRUE);
+		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, true);
 		chkeys[i-1] = strsave(rmvat(nxref(child)));
 	ENDCHILDRENx
 #endif
@@ -142,16 +138,12 @@ get_child_strings (NODE fam, RFMT rfmt, INT *pnum, STRING **pkeys)
  *  rfmt:   [IN]  reformating functions (may be NULL)
  *  appkey: [IN]  allow appending key ?
  *==============================================*/
-STRING
-#if defined(DEADENDS)
-indi_to_list_string (NODE indi, NODE fam, INT len, bool rfmt, BOOLEAN appkey)
-#else
-indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
-#endif
+String
+indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 {
 	char scratch[MAXLINELEN];
-	INT linelen = MAXLINELEN;
-	STRING name, evt = NULL, p = scratch;
+	int linelen = MAXLINELEN;
+	String name, evt = NULL, p = scratch;
 	int hasparents;
 	int hasfamily;
 	if (len>linelen)
@@ -163,7 +155,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	snprintf(p, linelen, "%s", name);
 	linelen -= strlen(p);
 	p += strlen(p);
-#if defined(DEADENDS)
+
 	if (fam)
 	  evt = familyToEvent(fam, "MARR", _(qSdspa_mar), len, rfmt);
 	if (!evt)
@@ -174,13 +166,7 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
 	  evt = personToEvent(indi, "DEAT", _(qSdspa_dea), len, rfmt);
 	if (!evt)
 	  evt = personToEvent(indi, "BURI", _(qSdspa_bur), len, rfmt);
-#else
-	if (fam)  evt = fam_to_event(fam, "MARR", _(qSdspa_mar), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, "BIRT", _(qSdspa_bir), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, "CHR", _(qSdspa_chr), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, "DEAT", _(qSdspa_dea), len, rfmt);
-	if (!evt) evt = indi_to_event(indi, "BURI", _(qSdspa_bur), len, rfmt);
-#endif
+
 	if (evt) {
 		snprintf(p, linelen, ", %s", evt);
 		linelen -= strlen(p);
@@ -229,13 +215,13 @@ indi_to_list_string (NODE indi, NODE fam, INT len, RFMT rfmt, BOOLEAN appkey)
  * sour_to_list_string -- Return menu list string.
  * Created: 2000/11/29, Perry Rapp
  *==============================================*/
-STRING
-sour_to_list_string (NODE sour, INT len, STRING delim)
+String
+sour_to_list_string (GNode *sour, int len, String delim)
 {
 	char scratch[1024];
-	STRING name, p=scratch;
-	INT mylen=len;
-	if (mylen>(INT)sizeof(scratch))
+	String name, p=scratch;
+	int mylen=len;
+	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(S", &mylen);
@@ -263,13 +249,13 @@ sour_to_list_string (NODE sour, INT len, STRING delim)
  * even_to_list_string -- Return menu list string.
  * Created: 2001/12/16, Perry Rapp
  *==============================================*/
-STRING
-even_to_list_string (NODE even, INT len, HINT_PARAM_UNUSED STRING delim)
+String
+even_to_list_string (GNode *even, int len, HINT_PARAM_UNUSED String delim)
 {
 	char scratch[1024];
-	STRING name, p=scratch;
-	INT mylen=len;
-	if (mylen>(INT)sizeof(scratch))
+	String name, p=scratch;
+	int mylen=len;
+	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(E", &mylen);
@@ -291,22 +277,18 @@ even_to_list_string (NODE even, INT len, HINT_PARAM_UNUSED STRING delim)
  * fam_to_list_string -- Return menu list string.
  * Created: 2001/02/17, Perry Rapp
  *==============================================*/
-STRING
-fam_to_list_string (NODE fam, INT len, STRING delim, Database *database)
+String
+fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 {
 	char scratch[1024];
-	STRING name, p=scratch;
-	STRING tempname;
-	INT mylen=len;
+	String name, p=scratch;
+	String tempname;
+	int mylen=len;
 	char counts[FMT_INT_LEN+2+FMT_INT_LEN+2+FMT_INT_LEN+2+1];
-	INT husbands=0, wives=0, children=0;
-	INT templen=0;
-#if defined(DEADENDS)
+	int husbands=0, wives=0, children=0;
+	int templen=0;
 	GNode *refn, *husb, *wife, *chil, *rest, *node;
-#else
-	NODE refn, husb, wife, chil, rest, node;
-#endif
-	if (mylen>(INT)sizeof(scratch))
+	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(F", &mylen);
@@ -360,14 +342,14 @@ fam_to_list_string (NODE fam, INT len, STRING delim, Database *database)
  * other_to_list_string -- Return menu list string.
  * Created: 2000/11/29, Perry Rapp
  *==============================================*/
-STRING
-other_to_list_string(NODE node, INT len, HINT_PARAM_UNUSED STRING delim)
+String
+other_to_list_string(GNode *node, int len, HINT_PARAM_UNUSED String delim)
 {
 	char scratch[1024];
-	STRING name, p=scratch;
-	INT mylen=len;
-	NODE child;
-	if (mylen>(INT)sizeof(scratch))
+	String name, p=scratch;
+	int mylen=len;
+	GNode *child;
+	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
 	llstrcatn(&p, "(X", &mylen);
@@ -419,15 +401,11 @@ other_to_list_string(NODE node, INT len, HINT_PARAM_UNUSED STRING delim)
  *  rfmt:   [IN]  reformatting information
  *  appkey: [IN]  allow appending key ?
  *=========================================*/
-STRING
-#if defined(DEADENDS)
-generic_to_list_string (NODE node, STRING key, INT len, STRING delim,
-			bool rfmt, BOOLEAN appkey, Database *database)
-#else
-generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt, BOOLEAN appkey)
-#endif
+String
+generic_to_list_string (GNode *node, String key, int len, String delim,
+			bool rfmt, bool appkey, Database *database)
 {
-	STRING str;
+	String str;
 	str=NULL; /* set to appropriate format */
 	if (!node && key)
 		node = qkey_to_type(key);
@@ -443,11 +421,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt,
 			str = sour_to_list_string(node, len, delim);
 			break;
 		case 'F':
-#if defined(DEADENDS)
 			str = fam_to_list_string(node, len, delim, database);
-#else
-			str = fam_to_list_string(node, len, delim);
-#endif
 			break;
 		case 'E':
 			str = even_to_list_string(node, len, delim);
@@ -471,7 +445,7 @@ generic_to_list_string (NODE node, STRING key, INT len, STRING delim, RFMT rfmt,
  * Created: 2001/01/01, Perry Rapp
  *=====================================================*/
 void
-set_displaykeys (BOOLEAN keyflag)
+set_displaykeys (bool keyflag)
 {
 	displaykeys = keyflag;
 }

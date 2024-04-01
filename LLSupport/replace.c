@@ -75,16 +75,11 @@
  *  consumes indi2 (calls free_node on it)
  *=================================================================*/
 void
-replace_indi (NODE indi1, NODE indi2, Database *database)
+replace_indi (GNode *indi1, GNode *indi2, Database *database)
 {
-#if defined(DEADENDS)
 	GNode *name1, *name2, *refn1, *refn2, *sex, *body, *famc, *fams;
 	GNode *node, *namen, *refnn, *name1n, *refn1n, *indi0;
-#else
-	NODE name1, name2, refn1, refn2, sex, body, famc, fams;
-	NODE node, namen, refnn, name1n, refn1n, indi0;
-#endif
-	STRING key;
+	String key;
 
 
 	/* Move indi1 data into indi0 & delete it (saving names & refns */
@@ -94,8 +89,8 @@ replace_indi (NODE indi1, NODE indi2, Database *database)
 	free_nodes(indi0);
 	/* Move indi2 data into indi1, also copy out lists of names & refns */
 	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
-	namen = copy_nodes(name2, TRUE, TRUE);
-	refnn = copy_nodes(refn2, TRUE, TRUE);
+	namen = copy_nodes(name2, true, true);
+	refnn = copy_nodes(refn2, true, true);
 	join_indi(indi1, name2, refn2, sex, body, famc, fams);
 	free_node(indi2,"replace_indi");
 	nodechk(indi1, "replace_indi");
@@ -136,16 +131,11 @@ replace_indi (NODE indi1, NODE indi2, Database *database)
  *  consumes fam2 (calls free_node on it)
  *================================================================*/
 void
-replace_fam (NODE fam1, NODE fam2, Database *database)
+replace_fam (GNode *fam1, GNode *fam2, Database *database)
 {
-#if defined(DEADENDS)
 	GNode *refn1, *refn2, *husb, *wife, *chil, *body;
 	GNode *refnn, *refn1n, *node, *fam0;
-#else
-	NODE refn1, refn2, husb, wife, chil, body;
-	NODE refnn, refn1n, node, fam0;
-#endif
-	STRING key;
+	String key;
 
 
 	/* Move fam1 data into fam0 & delete it (saving refns) */
@@ -155,7 +145,7 @@ replace_fam (NODE fam1, NODE fam2, Database *database)
 	free_nodes(fam0);
 	/* Move fam2 data into fam1, also copy out list of refns */
 	split_fam(fam2, &refn2, &husb, &wife, &chil, &body);
-	refnn = copy_nodes(refn2, TRUE, TRUE);
+	refnn = copy_nodes(refn2, true, true);
 	join_fam(fam1, refn2, husb, wife, chil, body);
 	free_node(fam2,"replace_fam");
 

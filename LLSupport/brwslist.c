@@ -67,11 +67,8 @@ INDISEQ current_seq = NULL;
  *********************************************/
 
 struct tag_blel {
-#if !defined(DEADENDS)
-	struct tag_vtable *vtable; /* generic object */
-#endif
-	INT refcnt; /* ref-countable object */
-	STRING bl_name;
+	int refcnt; /* ref-countable object */
+	String bl_name;
 	INDISEQ bl_seq;
 };
 typedef struct tag_blel *BLEL;
@@ -80,9 +77,6 @@ typedef struct tag_blel *BLEL;
  * local function prototypes
  *********************************************/
 
-#if !defined(DEADENDS)
-static void blel_destructor(VTABLE *obj);
-#endif
 static BLEL create_new_blel(void);
 /* unused
 static void destroy_blel(BLEL blel);
@@ -92,19 +86,7 @@ static void destroy_blel(BLEL blel);
  * local variables
  *********************************************/
 
-#if !defined(DEADENDS)
-static struct tag_vtable vtable_for_blel = {
-	VTABLE_MAGIC
-	, "blel"
-	, &blel_destructor
-	, &refcountable_isref
-	, &refcountable_addref
-	, &refcountable_release
-	, 0 /* copy_fnc */
-	, &generic_get_type_name
-};
-#endif
-static LIST browse_lists=0;
+static List *browse_lists=0;
 
 /*********************************************
  * local & exported function definitions
@@ -135,9 +117,6 @@ create_new_blel (void)
 {
 	BLEL blel = (BLEL) stdalloc(sizeof(*blel));
 	memset(blel, 0, sizeof(*blel));
-#if !defined(DEADENDS)
-	blel->vtable = &vtable_for_blel;
-#endif
 	blel->refcnt = 1;
 	return blel;
 }
@@ -145,20 +124,17 @@ create_new_blel (void)
  *  add_browse_list -- Add named browse list.
  *=========================================*/
 void
-add_browse_list (STRING name, INDISEQ seq)
+add_browse_list (String name, INDISEQ seq)
 {
 	BLEL blel;
-	BOOLEAN done = FALSE;
+	bool done = false;
 	if (!name) return;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		if (blel->bl_name && eqstr(name, blel->bl_name)) {
 			remove_indiseq(blel->bl_seq);
 			blel->bl_seq = seq;
-			done = TRUE;
-#if !defined(DEADENDS)
-			STOPLIST
-#endif
+			done = true;
 			break;
 		}
 	ENDLIST
@@ -168,9 +144,6 @@ add_browse_list (STRING name, INDISEQ seq)
 		if (!blel->bl_name) {
 			blel->bl_name = name;
 			blel->bl_seq = seq;
-#if !defined(DEADENDS)
-			STOPLIST
-#endif
 			return;
 		}
 	ENDLIST
@@ -183,7 +156,7 @@ add_browse_list (STRING name, INDISEQ seq)
  *  remove_browse_list -- Remove named browse list.
  *===============================================*/
 void
-remove_browse_list (STRING name,
+remove_browse_list (String name,
                     INDISEQ seq)
 {
 	BLEL blel;
@@ -222,15 +195,12 @@ Sequence *stringToSequence (String name, Database *database)
  * find_named_seq -- Find named browse list.
  *=========================================*/
 INDISEQ
-find_named_seq (STRING name)
+find_named_seq (String name)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		if (eqstr(name, blel->bl_name)) {
-#if !defined(DEADENDS)
-			STOPLIST
-#endif
 			return copy_indiseq(blel->bl_seq);
 		}
 	ENDLIST
@@ -240,7 +210,7 @@ find_named_seq (STRING name)
  * new_name_browse_list -- Rename named browse list.
  *=================================================*/
 void
-new_name_browse_list (STRING oldstr, STRING newstr)
+new_name_browse_list (String oldstr, String newstr)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)
@@ -248,9 +218,6 @@ new_name_browse_list (STRING oldstr, STRING newstr)
 		if (eqstr(oldstr, blel->bl_name)) {
 			stdfree(blel->bl_name);
 			blel->bl_name = newstr;
-#if !defined(DEADENDS)
-			STOPLIST
-#endif
 			return;
 		}
 	ENDLIST
@@ -259,7 +226,7 @@ new_name_browse_list (STRING oldstr, STRING newstr)
  *  update_browse_list -- Assign name to browse list.
  *=================================================*/
 void
-update_browse_list (STRING name,
+update_browse_list (String name,
                     INDISEQ seq)
 {
 	BLEL blel;
@@ -277,7 +244,7 @@ update_browse_list (STRING name,
  * remove_from_browse_lists -- Remove stale elements from lists.
  *============================================================*/
 void
-remove_from_browse_lists (STRING key)
+remove_from_browse_lists (String key)
 {
 	BLEL blel;
 	INDISEQ seq;
@@ -298,7 +265,7 @@ remove_from_browse_lists (STRING key)
  *   in browse lists.
  *==============================================================*/
 void
-rename_from_browse_lists (STRING key)
+rename_from_browse_lists (String key)
 {
 	INDISEQ seq;
 	BLEL blel;
@@ -313,19 +280,6 @@ rename_from_browse_lists (STRING key)
 	ENDLIST
 }
 
-#if !defined(DEADENDS)
-/*=================================================
- * blel_destructor -- destructor for blel (browse list element)
- *  (destructor entry in vtable)
- *===============================================*/
-static void
-blel_destructor (VTABLE *obj)
-{
-	BLEL blel = (BLEL)obj;
-	ASSERT(blel->vtable == &vtable_for_blel);
-	stdfree(blel);
-}
-#endif
 /*=================================================
  * destroy_blel -- destroy and free blel (browse list element)
  * All blels are destroyed in this function

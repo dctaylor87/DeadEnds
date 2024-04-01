@@ -47,8 +47,8 @@
  *********************************************/
 
 static TABLE gt_localeDirs = NULL; /* most recent */ /* leaks */
-static STRING gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
-static STRING gt_defLocaleDir = 0; /* compiled default */ /* leak */
+static String gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
+static String gt_defLocaleDir = 0; /* compiled default */ /* leak */
 
 /*********************************************
  * local & exported function definitions
@@ -59,7 +59,7 @@ static STRING gt_defLocaleDir = 0; /* compiled default */ /* leak */
  * llgettext_set_default_localedir -- save LOCALEDIR
  *================================================*/
 void
-llgettext_set_default_localedir (CNSTRING localeDir)
+llgettext_set_default_localedir (CString localeDir)
 {
 	strupdate(&gt_defLocaleDir, localeDir);
 }
@@ -71,7 +71,7 @@ llgettext_set_default_localedir (CNSTRING localeDir)
  *  codeset: [IN]  codeset to use
  *================================================*/
 void
-llgettext_init (CNSTRING domain, CNSTRING codeset)
+llgettext_init (CString domain, CString codeset)
 {
 #if ENABLE_NLS
 	/* until we have an internal codeset (which is until we open a database)
@@ -109,9 +109,9 @@ llgettext_term (void)
  *  prefix:  [IN] "Ui" or "Rpt"
  *================================================*/
 void
-update_textdomain_localedir (CNSTRING domain, CNSTRING prefix)
+update_textdomain_localedir (CString domain, CString prefix)
 {
-	STRING newLocaleDir = 0;
+	String newLocaleDir = 0;
 	char keyname[30] = ""; /* eg, "UiLocaleDir" */
 	/* allow run-time specification of locale directory */
 
@@ -138,10 +138,10 @@ update_textdomain_localedir (CNSTRING domain, CNSTRING prefix)
  *  to send ui callbacks
  *===============================*/
 void
-ll_bindtextdomain (CNSTRING domain, CNSTRING localeDir)
+ll_bindtextdomain (CString domain, CString localeDir)
 {
 #if ENABLE_NLS
-	STRING oldLocaleDir = 0;
+	String oldLocaleDir = 0;
 
 	if (!gt_localeDirs) {
 		gt_localeDirs = create_table_str();
@@ -165,7 +165,7 @@ init_win32_gettext_shim (void)
 {
 #if ENABLE_NLS
 #ifdef WIN32_INTL_SHIM
-	STRING e;
+	String e;
 	/* (re)load gettext dll if specified */
 	e = getlloptstr("gettext.path", "");
 	if (e && *e)
@@ -200,9 +200,9 @@ init_win32_gettext_shim (void)
  *===============================*/
 void
 #if ENABLE_NLS
-set_gettext_codeset (CNSTRING domain, CNSTRING codeset)
+set_gettext_codeset (CString domain, CString codeset)
 #else
-set_gettext_codeset (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRING codeset)
+set_gettext_codeset (HINT_PARAM_UNUSED CString domain, HINT_PARAM_UNUSED CString codeset)
 #endif
 {
 #if ENABLE_NLS
@@ -237,7 +237,7 @@ set_gettext_codeset (HINT_PARAM_UNUSED CNSTRING domain, HINT_PARAM_UNUSED CNSTRI
  * get_gettext_codeset -- Return last codeset passed to bind_textdomain_codeset
  * (returns null if none, otherwise pointer to private string)
  *===============================*/
-CNSTRING
+CString
 get_gettext_codeset (void)
 {
 	return gt_codeset;

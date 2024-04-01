@@ -54,15 +54,11 @@
  * global/exported variables
  *********************************************/
 
-STRING illegal_char = 0;
+String illegal_char = 0;
 
 /*********************************************
  * external/imported variables
  *********************************************/
-
-#if !defined(DEADENDS)
-extern BTREE BTR;
-#endif
 
 /*********************************************
  * local types
@@ -71,23 +67,23 @@ extern BTREE BTR;
 /* legacy (embedded) translation table */
 struct legacytt_s {
 	TRANTABLE tt;
-	BOOLEAN first; /* comes at start of translation ? */
+	bool first; /* comes at start of translation ? */
 };
 /* a predefined conversion, such as editor-to-internal */
 struct conversion_s {
-	INT trnum;
-	CNSTRING key;
-	CNSTRING name;
-	INT zon_src;
-	INT zon_dest;
-	STRING * src_codeset;
-	STRING * dest_codeset;
+	int trnum;
+	CString key;
+	CString name;
+	int zon_src;
+	int zon_dest;
+	String * src_codeset;
+	String * dest_codeset;
 	XLAT xlat;
 };
 /* a predefined codeset, such as editor */
 struct zone_s {
-	INT znum;
-	CNSTRING name;
+	int znum;
+	CString name;
 };
 
 /*********************************************
@@ -101,10 +97,10 @@ enum { ZON_X, ZON_INT, ZON_GUI, ZON_EDI, ZON_RPT, ZON_GED, NUM_ZONES };
  *********************************************/
 
 /* alphabetical */
-static void clear_legacy_tt(INT trnum);
+static void clear_legacy_tt(int trnum);
 static void clear_predefined_list(void);
-static struct conversion_s * getconvert(INT trnum);
-static BOOLEAN is_legacy_first(INT trnum);
+static struct conversion_s * getconvert(int trnum);
+static bool is_legacy_first(int trnum);
 static void local_init(void);
 
 
@@ -140,7 +136,7 @@ static struct conversion_s conversions[] = {
 	, { MUCAS, "MUCAS", "Custom Uppercase", ZON_X, ZON_X, 0, 0, 0 }
 	, { MPREF, "MPREF", "Custom Prefix", ZON_X, ZON_X, 0, 0, 0 }
 };
-static CNSTRING conversions_keys[] = {
+static CString conversions_keys[] = {
 	/* TRANSLATORS: key for "Editor to Internal" on translation table menu 
 	Omit everything up to and including final | */
 	N_("menu|trantable|e")
@@ -168,7 +164,7 @@ static CNSTRING conversions_keys[] = {
 };
 /* currently loaded legacy (embedded) translation tables */
 static struct legacytt_s legacytts[NUM_TT_MAPS]; /* initialized once by transl_init() */
-static BOOLEAN inited=FALSE;
+static bool inited=false;
 
 
 /*********************************************
@@ -185,9 +181,9 @@ static BOOLEAN inited=FALSE;
  * len:   address of space left in destination (will be decremented)
  *=================================================*/
 void
-translate_catn (XLAT ttm, STRING * pdest, CNSTRING src, INT * len)
+translate_catn (XLAT ttm, String * pdest, CString src, int * len)
 {
-	INT added;
+	int added;
 	if (*len > 1)
 		translate_string(ttm, src, *pdest, *len);
 	else
@@ -205,7 +201,7 @@ translate_catn (XLAT ttm, STRING * pdest, CNSTRING src, INT * len)
  * uses dynamic buffer, so it can expand if necessary
  *=================================================*/
 ZSTR
-translate_string_to_zstring (XLAT xlat, CNSTRING in)
+translate_string_to_zstring (XLAT xlat, CString in)
 {
 	ZSTR zstr = zs_news(in);
 	transl_xlat(xlat, zstr);
@@ -221,7 +217,7 @@ translate_string_to_zstring (XLAT xlat, CNSTRING in)
  * add_char & add_string.
  *=================================================*/
 void
-translate_string (XLAT ttm, CNSTRING in, STRING out, INT maxlen)
+translate_string (XLAT ttm, CString in, String out, int maxlen)
 {
 	ZSTR zstr=0;
 	if (!in || !in[0]) {
@@ -245,19 +241,19 @@ translate_string (XLAT ttm, CNSTRING in, STRING out, INT maxlen)
  * not terminated by \n and caller didn't ask to write it anyway
  * NB: If no translation table, entire string is always written
  *========================================================*/
-BOOLEAN
-translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last)
+bool
+translate_write(XLAT ttm, String in, int *lenp, FILE *ofp, bool last)
 {
 	char intmp[MAXLINELEN+2]="";
 	char out[MAXLINELEN+2]="";
 	char *tp=0;
-	STRING bp = in;
+	String bp = in;
 	int i=0,j=0;
 
 	if(ttm == NULL) {
 	    ASSERT(fwrite(in, *lenp, 1, ofp) == 1);
 	    *lenp = 0;
-	    return TRUE;
+	    return true;
 	}
 
 	/* loop through lines one by one */
@@ -284,7 +280,7 @@ translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last)
 			/* the last line is not complete, return it in buffer  */
 			strcpy(in, intmp);
 			*lenp = strlen(in);
-			return(TRUE);
+			return(true);
 		}
 		/* translate & write out current line */
 		/* TODO (2002-11-28): modify to use dynamic string */
@@ -299,7 +295,7 @@ translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last)
 		}
 	}
 	*lenp = 0;
-	return(TRUE);
+	return(true);
 }
 /*==========================================================
  * get_xlat_to_int -- Get translation to internal codeset
@@ -307,9 +303,9 @@ translate_write(XLAT ttm, STRING in, INT *lenp, FILE *ofp, BOOLEAN last)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 XLAT
-transl_get_xlat_to_int (CNSTRING codeset)
+transl_get_xlat_to_int (CString codeset)
 {
-	BOOLEAN adhoc = TRUE;
+	bool adhoc = true;
 	return xl_get_xlat(codeset, int_codeset, adhoc);
 }
 /*==========================================================
@@ -318,9 +314,9 @@ transl_get_xlat_to_int (CNSTRING codeset)
  * Created: 2002/11/30 (Perry Rapp)
  *========================================================*/
 XLAT
-transl_get_xlat (CNSTRING src, CNSTRING dest)
+transl_get_xlat (CString src, CString dest)
 {
-	BOOLEAN adhoc = TRUE;
+	bool adhoc = true;
 	return xl_get_xlat(src, dest, adhoc);
 }
 /*==========================================================
@@ -331,7 +327,7 @@ transl_get_xlat (CNSTRING src, CNSTRING dest)
 void
 transl_load_all_tts (void)
 {
-	CNSTRING ttpath = getlloptstr("TTPATH", ".");
+	CString ttpath = getlloptstr("TTPATH", ".");
 	if (!inited) local_init();
 	xl_load_all_dyntts(ttpath);
 }
@@ -342,7 +338,7 @@ transl_load_all_tts (void)
 void
 transl_xlat (XLAT xlat, ZSTR zstr)
 {
-	INT index = xl_get_uparam(xlat)-1;
+	int index = xl_get_uparam(xlat)-1;
 	struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
 	if (legtt && legtt->tt && legtt->first) {
 		custom_translatez(zstr, legtt->tt);
@@ -361,27 +357,27 @@ transl_xlat (XLAT xlat, ZSTR zstr)
 static void
 local_init (void)
 {
-	INT i;
+	int i;
 
 	ASSERT(NUM_TT_MAPS == ARRSIZE(conversions));
 	ASSERT(NUM_ZONES == ARRSIZE(zones));
 
 	for (i=0; i<NUM_TT_MAPS; ++i)
 		legacytts[i].tt = 0;
-	inited=TRUE;
+	inited=true;
 }
 
 #if !defined(DEADENDS)
 /*==========================================================
  * transl_load_xlats -- Load translations for all regular codesets
  *  (internal, GUI, ...)
- * returns FALSE if needed conversions not available
+ * returns false if needed conversions not available
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 void
 transl_load_xlats (void)
 {
-	INT i;
+	int i;
 
 	if (!inited) local_init();
 
@@ -389,8 +385,8 @@ transl_load_xlats (void)
 
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		struct conversion_s * conv = getconvert(i);
-		STRING src, dest;
-		BOOLEAN adhoc = FALSE;
+		String src, dest;
+		bool adhoc = false;
 		ASSERT(conv->trnum == i);
 		if (conv->src_codeset && int_codeset) {
 			ASSERT(conv->dest_codeset);
@@ -423,8 +419,8 @@ transl_load_xlats (void)
  * This is to make legacy tts run in internal codeset
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
-static BOOLEAN
-is_legacy_first (INT trnum)
+static bool
+is_legacy_first (int trnum)
 {
 	return (getconvert(trnum)->src_codeset == &int_codeset);
 }
@@ -435,7 +431,7 @@ is_legacy_first (INT trnum)
 static void
 clear_predefined_list (void)
 {
-	INT i;
+	int i;
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		getconvert(i)->xlat = 0; /* pointer into xlat.c cache, so we don't free it */
 		clear_legacy_tt(i);
@@ -447,7 +443,7 @@ clear_predefined_list (void)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 XLAT
-transl_get_predefined_xlat (INT trnum)
+transl_get_predefined_xlat (int trnum)
 {
 	return getconvert(trnum)->xlat;
 }
@@ -457,7 +453,7 @@ transl_get_predefined_xlat (INT trnum)
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
 ZSTR
-transl_get_predefined_name (INT trnum)
+transl_get_predefined_name (int trnum)
 {
 	return zs_news(_(getconvert(trnum)->name));
 }
@@ -478,7 +474,7 @@ sgettext (const char *msgid)
  * (localized)
  *========================================================*/
 ZSTR
-transl_get_predefined_menukey (INT trnum)
+transl_get_predefined_menukey (int trnum)
 {
 	ASSERT(trnum>=0);
 	ASSERT(trnum<(int)ARRSIZE(conversions_keys));
@@ -493,7 +489,7 @@ ZSTR
 transl_get_description (XLAT xlat)
 {
   ZSTR zstr = xlat_get_description(xlat);
-  INT index = xl_get_uparam(xlat)-1;
+  int index = xl_get_uparam(xlat)-1;
   struct legacytt_s * legtt = (index>=0 ? &legacytts[index] : NULL);
   if (legtt && legtt->tt) {
 		ZSTR zdesc = get_trantable_desc(legtt->tt);
@@ -512,24 +508,24 @@ transl_get_description (XLAT xlat)
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
 void
-transl_parse_codeset (CNSTRING codeset, ZSTR zcsname, LIST * subcodes)
+transl_parse_codeset (CString codeset, ZSTR zcsname, List **subcodes)
 {
 	xl_parse_codeset(codeset, zcsname, subcodes);
 }
 /*==========================================================
  * transl_are_all_conversions_ok -- 
- *  return FALSE if there any conversions we couldn't figure out
+ *  return false if there any conversions we couldn't figure out
  * Created: 2002/11/28 (Perry Rapp)
  *========================================================*/
-BOOLEAN
+bool
 transl_are_all_conversions_ok (void)
 {
-	INT i;
+	int i;
 	for (i=0; i<NUM_TT_MAPS; ++i) {
 		if (conversions[i].src_codeset && !conversions[i].xlat)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 /*==========================================================
  * getconvert -- return conversion for trnum
@@ -537,7 +533,7 @@ transl_are_all_conversions_ok (void)
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
 static struct conversion_s *
-getconvert (INT trnum)
+getconvert (int trnum)
 {
 	ASSERT(trnum>=0);
 	ASSERT(trnum<NUM_TT_MAPS);
@@ -549,7 +545,7 @@ getconvert (INT trnum)
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
 TRANTABLE
-transl_get_legacy_tt (INT trnum)
+transl_get_legacy_tt (int trnum)
 {
 	getconvert(trnum); /* check validity of trnum */
 	return legacytts[trnum].tt;
@@ -560,7 +556,7 @@ transl_get_legacy_tt (INT trnum)
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
 void
-transl_set_legacy_tt (INT trnum, TRANTABLE tt)
+transl_set_legacy_tt (int trnum, TRANTABLE tt)
 {
 	struct legacytt_s * leg; 
 	clear_legacy_tt(trnum); /* ensures trnum validity */
@@ -574,7 +570,7 @@ transl_set_legacy_tt (INT trnum, TRANTABLE tt)
  * Created: 2002/12/13 (Perry Rapp)
  *========================================================*/
 static void
-clear_legacy_tt (INT trnum)
+clear_legacy_tt (int trnum)
 {
 	struct legacytt_s * leg; 
 	getconvert(trnum); /* check validity of trnum */
@@ -598,7 +594,7 @@ transl_free_predefined_xlats (void)
  * transl_is_xlat_valid -- Does it do the job ?
  * Created: 2002/12/15 (Perry Rapp)
  *========================================================*/
-BOOLEAN
+bool
 transl_is_xlat_valid (XLAT xlat)
 {
 	return xl_is_xlat_valid(xlat);
@@ -608,8 +604,8 @@ transl_is_xlat_valid (XLAT xlat)
  * eg, "Editor to Internal"
  * (localized)
  *========================================================*/
-CNSTRING
-transl_get_map_name (INT trnum)
+CString
+transl_get_map_name (int trnum)
 {
 	ASSERT(trnum>=0);
 	ASSERT(trnum<NUM_TT_MAPS);

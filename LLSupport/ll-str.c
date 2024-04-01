@@ -4,8 +4,6 @@
 
 #include <ansidecl.h>
 
-#include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "de-strings.h"
@@ -37,7 +35,7 @@ strupdate (String *str, CString value)
    Created: 2001/08/02 (Perry Rapp) */
 
 String
-allocsubbytes (String s, INT start, INT num)
+allocsubbytes (String s, int start, int num)
 {
 	String substr;
 	substr = stdalloc(num+1);

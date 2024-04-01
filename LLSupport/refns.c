@@ -32,13 +32,13 @@ struct tag_node_iter {
 typedef struct tag_node_iter *NODE_ITER;
 /* forward references */
 
-static void annotate_node (NODE node, BOOLEAN expand_refns,
-			   BOOLEAN annotate_pointers, bool rfmt,
+static void annotate_node (GNode *node, bool expand_refns,
+			   bool annotate_pointers, bool rfmt,
 			   Database *database);
-static BOOLEAN is_annotated_xref(CNSTRING val, INT * len);
-static BOOLEAN resolve_node (NODE node, BOOLEAN annotate_pointers,
+static bool is_annotated_xref(CString val, int * len);
+static bool resolve_node (GNode *node, bool annotate_pointers,
 			     Database *database);
-static STRING symbolic_link (CNSTRING val);
+static String symbolic_link (CString val);
 
 static void begin_node_it (GNode *node, NODE_ITER nodeit);
 static GNode *find_next (NODE_ITER nodeit);
@@ -69,31 +69,31 @@ resolveRefnLinks (GNode *node, Database *database)
 
 /* resolve_node -- Traverse routine for resolve_refn_links (q.v.)
    node:    Current node in traversal
-   returns FALSE if bad refn pointer.  */
+   returns false if bad refn pointer.  */
 
-static BOOLEAN
-resolve_node (NODE node, BOOLEAN annotate_pointers, Database *database)
+static bool
+resolve_node (GNode *node, bool annotate_pointers, Database *database)
 {
-	STRING val = nval(node);
-	STRING refn=0;
+	String val = nval(node);
+	String refn=0;
 
-	if (!val) return TRUE;
+	if (!val) return true;
 	refn = symbolic_link(val);
 	if (refn) {
-		INT letr = record_letter(ntag(node));
-		NODE refr = refn_to_record(refn, letr, database);
+		int letr = record_letter(ntag(node));
+		GNode *refr = refn_to_record(refn, letr, database);
 		if (refr) {
 			stdfree(nval(node));
 			nval(node) = strsave(nxref(refr));
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 	if (annotate_pointers) {
-		INT i=0,len=0;
+		int i=0,len=0;
 		if (is_annotated_xref(nval(node), &len)) {
 			char newval[20];
-			ASSERT(len < (INT)sizeof(newval));
+			ASSERT(len < (int)sizeof(newval));
 			for (i=0; i<len; ++i) {
 				newval[i] = nval(node)[i];
 			}
@@ -103,34 +103,34 @@ resolve_node (NODE node, BOOLEAN annotate_pointers, Database *database)
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 /* is_annotated_xref -- Return true if this is an annotated
    xref value (eg, "@I1@ {{ John/SMITH }}").  */
 
-static BOOLEAN
-is_annotated_xref (CNSTRING val, INT * len)
+static bool
+is_annotated_xref (CString val, int * len)
 {
-	CNSTRING ptr=val;
-	INT end=0;
-	if (!val) return FALSE;
-	if (val[0] != '@') return FALSE;
+	CString ptr=val;
+	int end=0;
+	if (!val) return false;
+	if (val[0] != '@') return false;
 	if (val[1] != 'I' && val[1] != 'F' && val[1] != 'S' 
-		&& val[1] != 'E' && val[1] != 'X') return FALSE;
-	if (!isdigit((uchar)val[2])) return FALSE;
-	for (ptr = val + 3; isdigit((uchar)*ptr); ++ptr) {
+		&& val[1] != 'E' && val[1] != 'X') return false;
+	if (!isdigit((u_char)val[2])) return false;
+	for (ptr = val + 3; isdigit((u_char)*ptr); ++ptr) {
 	}
-	if (ptr > val+9) return FALSE;
-	if (*ptr++ != '@') return FALSE;
-	if (ptr[0] != ' ') return FALSE;
-	if (ptr[1] != '{') return FALSE;
-	if (ptr[2] != '{') return FALSE;
+	if (ptr > val+9) return false;
+	if (*ptr++ != '@') return false;
+	if (ptr[0] != ' ') return false;
+	if (ptr[1] != '{') return false;
+	if (ptr[2] != '{') return false;
 	end = strlen(ptr);
-	if (end < 3) return FALSE;
-	if (ptr[end-1] != '}') return FALSE;
-	if (ptr[end-2] != '}') return FALSE;
+	if (end < 3) return false;
+	if (ptr[end-1] != '}') return false;
+	if (ptr[end-2] != '}') return false;
 	*len = ptr-val;
-	return TRUE;
+	return true;
 }
 
 /* addRefn -- if refn is already present in the refn index,
@@ -239,11 +239,11 @@ annotateWithSupplemental (GNode *node, bool rfmt, Database *database)
    annotating pointers (eg, "@I1@" to "@I1@ {{ John/SMITH }}")
    Used during editing.  */
 static void
-annotate_node (NODE node, BOOLEAN expand_refns,
-	       BOOLEAN annotate_pointers, bool rfmt,
+annotate_node (GNode *node, bool expand_refns,
+	       bool annotate_pointers, bool rfmt,
 	       Database *database)
 {
-	STRING key=0;
+	String key=0;
 	RECORD rec=0;
 
 	key = value_to_xref(nval(node));
@@ -253,7 +253,7 @@ annotate_node (NODE node, BOOLEAN expand_refns,
 	if (!rec) return;
 	
 	if (expand_refns) {
-		NODE refn = REFN(nztop(rec));
+		GNode *refn = REFN(nztop(rec));
 		char buffer[60];
 		/* if there is a REFN, and it fits in our buffer,
 		and it doesn't have any (confusing) > in it */
@@ -270,7 +270,7 @@ annotate_node (NODE node, BOOLEAN expand_refns,
 	}
 
 	if (annotate_pointers) {
-		STRING str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, FALSE, database);
+		String str = generic_to_list_string(nztop(rec), key, 60, ", ", rfmt, false, database);
 		ZSTR zstr = zs_news(nval(node));
 		zs_apps(zstr, " {{");
 		zs_apps(zstr, str);
@@ -287,15 +287,15 @@ annotate_node (NODE node, BOOLEAN expand_refns,
 /* symbolic_link -- See if value is symbolic link
    If so, returns heap-allocated copy of the reference
    (without surrounding angle brackets).  */
-static STRING
-symbolic_link (CNSTRING val)
+static String
+symbolic_link (CString val)
 {
-	CNSTRING ptr=val;
-	STRING link=0;
-	INT len=0;
+	CString ptr=val;
+	String link=0;
+	int len=0;
 	if (!val || *val != '<') return NULL;
 	len = strlen(val);
-	if (len < 3) return FALSE;
+	if (len < 3) return false;
 	if (val[len-1] == '>') {
 		/* entirely a symbolic link */
 		link = strsave(val+1);
@@ -309,8 +309,8 @@ symbolic_link (CNSTRING val)
 	}
 	if (ptr == val+1) return NULL; /* "<>" doesn't count */
 	/* found end of symbolic link, see if annotation follows */
-	if (ptr[1]!=' ' || ptr[2]!= '{' || ptr[3]!='{') return FALSE;
-	if (val[len-2]!='}' || val[len-1]!='}') return FALSE;
+	if (ptr[1]!=' ' || ptr[2]!= '{' || ptr[3]!='{') return false;
+	if (val[len-2]!='}' || val[len-1]!='}') return false;
 	len = ptr-val;
 	link = strsave(val+1);
 	link[len-1]=0;
@@ -318,8 +318,8 @@ symbolic_link (CNSTRING val)
 }
 /* record_letter -- Return letter for record type */
 
-INT
-record_letter (CNSTRING tag)
+int
+record_letter (CString tag)
 {
 	if (eqstr("FATH", tag)) return 'I';
 	if (eqstr("MOTH", tag)) return 'I';
@@ -342,12 +342,12 @@ record_letter (CNSTRING tag)
    let:  if string starts with a letter, it must be this (eg, 'I' for indi)
    This returns NULL upon failure.  */
 
-RECORD key_possible_to_record (STRING str, /* string that may be a key */
-                    INT let)    /* if string starts with letter it
+RECORD key_possible_to_record (String str, /* string that may be a key */
+                    int let)    /* if string starts with letter it
                                    must be this */
 {
 	char kbuf[MAXGEDNAMELEN];
-	INT i = 0, c;
+	int i = 0, c;
 
 	if (!str || *str == 0) return NULL;
 	c = *str++;
@@ -378,12 +378,12 @@ RECORD key_possible_to_record (STRING str, /* string that may be a key */
    eg, refn_to_record("1850.Census", "S").  */
 
 NODE
-refn_to_record (STRING ukey,    /* user refn key */
-                INT letr,       /* type of record */
+refn_to_record (String ukey,    /* user refn key */
+                int letr,       /* type of record */
 		Database *database)
 {
-	STRING *keys;
-	INT num;
+	String *keys;
+	int num;
 
 	if (!ukey || *ukey == 0) return NULL;
 	get_refns(ukey, &num, &keys, letr);

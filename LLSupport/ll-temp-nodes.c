@@ -27,16 +27,16 @@
 /* create_temp_node -- Create NODE for temporary use
    (not to be connected to a record)
    [All arguments are duplicated, so caller doesn't have to]
-   STRING xref  [in] xref
-   STRING tag   [in] tag
-   STRING val:  [in] value
-   NODE prnt:   [in] parent
+   String xref  [in] xref
+   String tag   [in] tag
+   String val:  [in] value
+   GNode *prnt: [in] parent
    Created: 2003-02-01 (Perry Rapp) */
 
-NODE
-create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
+GNode *
+create_temp_node (String xref, String tag, String val, GNode *prnt)
 {
-	NODE node = create_node(xref, tag, val, prnt);
+	GNode *node = create_node(xref, tag, val, prnt);
 	nflag(node) = ND_TEMP;
 	return node;
 }
@@ -46,9 +46,9 @@ create_temp_node (STRING xref, STRING tag, STRING val, NODE prnt)
    Created: 2003-02-01 (Perry Rapp).  Modified: David Taylor.  */
 
 void
-free_temp_node_tree (NODE node)
+free_temp_node_tree (GNode *node)
 {
-	NODE n2;
+	GNode *n2;
 	if (get_nrefcnt (node) == 0) {
 		if ((n2 = nchild(node))) {
 			free_temp_node_tree(n2);
@@ -66,8 +66,8 @@ free_temp_node_tree (NODE node)
 /* is_temp_node -- Return whether node is a temp
    Created: 2003-02-04 (Perry Rapp) */
 
-BOOLEAN
-is_temp_node (NODE node)
+bool
+is_temp_node (GNode *node)
 {
 	return !!(nflag(node) & ND_TEMP);
 }
@@ -76,7 +76,7 @@ is_temp_node (NODE node)
    and siblings */
 
 static void
-set_temp_node_helper (NODE node, BOOLEAN temp)
+set_temp_node_helper (GNode *node, bool temp)
 {
   if (is_temp_node (node) ^ temp)
     nflag (node) ^= ND_TEMP;
@@ -90,7 +90,7 @@ set_temp_node_helper (NODE node, BOOLEAN temp)
    Created: 2003-02-04 (Perry Rapp) */
 
 void
-set_temp_node (NODE node, BOOLEAN temp)
+set_temp_node (GNode *node, bool temp)
 {
 	if (is_temp_node(node) ^ temp)
 		nflag(node) ^= ND_TEMP;

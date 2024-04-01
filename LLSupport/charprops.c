@@ -55,9 +55,9 @@
  * local function prototypes
  *********************************************/
 
-static ZSTR convert_utf8(TRANTABLE tt, CNSTRING s);
-static ZSTR charprops_toupperz(CNSTRING s);
-static ZSTR charprops_tolowerz(CNSTRING s);
+static ZSTR convert_utf8(TRANTABLE tt, CString s);
+static ZSTR charprops_toupperz(CString s);
+static ZSTR charprops_tolowerz(CString s);
 
 /*********************************************
  * local variables
@@ -67,7 +67,7 @@ static int loaded_utf8 = 0; /* 1 if loaded, -1 if failed */
 static int loaded_codepage = 0;
 static TRANTABLE uppers = 0;
 static TRANTABLE lowers = 0;
-static STRING charset_name = 0; /* what charset is currently in charset_info */
+static String charset_name = 0; /* what charset is currently in charset_info */
 #if !defined(DEADENDS)
 static struct my_charset_info_tag charset_info[256];
 #endif
@@ -80,25 +80,25 @@ static struct my_charset_info_tag charset_info[256];
 /*==========================================
  * charprops_load_utf8 -- Load case tables for full UTF-8
  *========================================*/
-BOOLEAN
+bool
 charprops_load_utf8 (void)
 {
 	FILE * fp=0;
-	CNSTRING ttpath = getlloptstr("TTPATH", ".");
-	STRING upleft[MAXCASES], upright[MAXCASES], loleft[MAXCASES], loright[MAXCASES];
-	INT upcount=0, locount=0;
-	INT i;
+	CString ttpath = getlloptstr("TTPATH", ".");
+	String upleft[MAXCASES], upright[MAXCASES], loleft[MAXCASES], loright[MAXCASES];
+	int upcount=0, locount=0;
+	int i;
 	char filepath[MAXPATHLEN], line[MAXPATHLEN];
 
-	if (loaded_utf8) return TRUE;
+	if (loaded_utf8) return true;
 	
 	loaded_utf8 = -1;
 	concat_path(ttpath, "UnicodeDataExcerpt.txt", uu8, filepath, sizeof(filepath));
 	fp = fopen(filepath, LLREADTEXT);
 	if (!fp)
-		return FALSE;
+		return false;
 	while (fgets(line, sizeof(line), fp)) {
-		INT ch, chup, chlo;
+		int ch, chup, chlo;
 		unsigned int uich;
 		const char *ptr;
 		if (line[0] == '#')
@@ -156,14 +156,14 @@ charprops_load_utf8 (void)
 		stdfree(loleft[i]);
 	loaded_utf8 = 1;
 	set_utf8_casing(charprops_toupperz, charprops_tolowerz);
-	return TRUE;
+	return true;
 }
 
 /*==========================================
  * charprops_is_loaded -- Return 1 if UnicodeData.txt file was loaded
  *  (meaning we have our own uppercasing translation tables)
  *========================================*/
-BOOLEAN
+bool
 charprops_is_loaded (void)
 {
 	return (loaded_utf8 > 0);
@@ -191,35 +191,35 @@ charprops_free_all (void)
 /*==========================================
  * charprops_load -- Load case tables for a single codepage
  *========================================*/
-BOOLEAN
+bool
 charprops_load (const char * codepage)
 {
 	XLAT tt8=0, ttback = 0;
-	INT ch;
+	int ch;
 	char src[2];
 
 	/* check if already loaded */
 	if (eqstr_ex(charset_name, codepage)) 
-		return TRUE;
+		return true;
 
 	/* assume that we don't have a table, in case we bail */
 	loaded_codepage = -1;
-	opt_mychar = FALSE;
+	opt_mychar = false;
 
 	/* check that we have UTF-8 */
 	if (!loaded_utf8)
 		charprops_load_utf8();
 	if (loaded_utf8 != 1)
-		return FALSE;
+		return false;
 
 	/* can we get from desired codepage to UTF-8 ? */
 	tt8 = transl_get_xlat(codepage, "UTF-8");
 	if (!tt8)
-		return FALSE;
+		return false;
 	/* and back ? */
 	ttback = transl_get_xlat("UTF-8", codepage);
 	if (!ttback)
-		return FALSE;
+		return false;
 
 	src[1] = 0;
 	for (ch=0; ch<256; ++ch) {
@@ -266,10 +266,10 @@ charprops_load (const char * codepage)
 
 	/* activate new table of character properties */
 	mych_set_table(charset_info);
-	opt_mychar = TRUE;
+	opt_mychar = true;
 
 	strupdate(&charset_name, codepage);
-	return TRUE;
+	return true;
 }
 #endif
 
@@ -279,7 +279,7 @@ charprops_load (const char * codepage)
  * This is called as a plugin from ll_toupperz
  *========================================*/
 static ZSTR
-charprops_toupperz (CNSTRING s)
+charprops_toupperz (CString s)
 {
 	ASSERT(uu8);
 	ASSERT(loaded_utf8==1);
@@ -291,7 +291,7 @@ charprops_toupperz (CNSTRING s)
  * This is called as a plugin from ll_toupperz
  *========================================*/
 static ZSTR
-charprops_tolowerz (CNSTRING s)
+charprops_tolowerz (CString s)
 {
 	ASSERT(uu8);
 	ASSERT(loaded_utf8==1);
@@ -301,7 +301,7 @@ charprops_tolowerz (CNSTRING s)
  * convert_utf8 -- translate string using specified trantable
  *========================================*/
 static ZSTR
-convert_utf8 (TRANTABLE tt, CNSTRING s)
+convert_utf8 (TRANTABLE tt, CString s)
 {
 	ZSTR zstr = custom_translate(s, tt);
 	return zstr;

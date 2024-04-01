@@ -71,37 +71,30 @@
  *  indi1:  [IN]  person to validate
  *  pmsg:   [OUT] error message, if any
  *  orig:   [IN]  person to match - may be NULL
- * rtn: FALSE for bad
+ * rtn: false for bad
  * Should be replaced by valid_indi(RECORD,...) ?
  *=================================*/
-BOOLEAN
-valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
+bool
+valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 {
-#if defined(DEADENDS)
 	GNode *refn;
 	GNode *name1, *refn1, *sex1, *body1, *famc1, *fams1, *node;
 	GNode *name0, *refn0, *sex0, *body0, *famc0, *fams0;
 	SexType isex;
-	INT num;
-#else
-	NODE refn;
-	NODE name1, refn1, sex1, body1, famc1, fams1, node;
-	NODE name0, refn0, sex0, body0, famc0, fams0;
-	INT isex, num;
-#endif
-	STRING *keys, ukey;
+	int num;
+	String *keys, ukey;
 
 	if (!indi1) {
 		*pmsg = _(qSbademp);
-  		return FALSE;
+  		return false;
 	}
 	if (nestr("INDI", ntag(indi1))) {
 		*pmsg = _(qSbadin0);
-		return FALSE;
+		return false;
 	}
 	if (nsibling(indi1)) {
 		*pmsg = _(qSbadmul);
-		return FALSE;
+		return false;
 	}
 	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	if (getlloptint("RequireNames", 0) && !name1) {
@@ -118,33 +111,24 @@ valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 	if (orig)
 		split_indi_old(orig, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
-	if (orig && !iso_nodes(indi1, orig, FALSE, FALSE)) {
+	if (orig && !iso_nodes(indi1, orig, false, false)) {
 		*pmsg = _(qSbadind); 
 		goto bad1;
 	}
-	if (!iso_nodes(famc1, famc0, FALSE, TRUE)) {
+	if (!iso_nodes(famc1, famc0, false, true)) {
 		*pmsg = _(qSbadfmc);
 		goto bad1;
 	}
-	if (!iso_nodes(fams1, fams0, FALSE, TRUE)) {
+	if (!iso_nodes(fams1, fams0, false, true)) {
 		*pmsg = _(qSbadfms); 
 		goto bad1;
 	}
-#if defined(DEADENDS)
 	isex = valueToSex(sex0);
 	if (!fams0) isex = sexUnknown;
 	if (isex != sexUnknown && isex != valueToSex(sex1)) {
 		*pmsg = _(qSbadparsex);
 		goto bad1;
 	}
-#else
-	isex = val_to_sex(sex0);
-	if (!fams0) isex = SEX_UNKNOWN;
-	if (isex != SEX_UNKNOWN && isex != val_to_sex(sex1)) {
-		*pmsg = _(qSbadparsex);
-		goto bad1;
-	}
-#endif
 	/* if there are more than one refn should check each */
 	for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
 		ukey = nval(refn);
@@ -158,13 +142,13 @@ valid_indi_tree (NODE indi1, STRING *pmsg, NODE orig)
 	if (orig)
 		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
-	return TRUE;
+	return true;
 bad1:
 	if (orig)
 		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
 bad2:
 	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
-	return FALSE;
+	return false;
 }
 /*===============================
  * valid_fam_tree -- Validate FAM tree
@@ -173,28 +157,23 @@ bad2:
  *  fam0:  [IN]  family to match - may be NULL
  * Should be replaced by valid_fam(RECORD,...) ?
  *=============================*/
-BOOLEAN
-valid_fam_tree (NODE fam1, STRING *pmsg, NODE fam0)
+bool
+valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0)
 {
-#if defined(DEADENDS)
 	GNode *refn0, *husb0, *wife0, *chil0, *body0;
 	GNode *refn1, *husb1, *wife1, *chil1, *body1;
-#else
-	NODE refn0, husb0, wife0, chil0, body0;
-	NODE refn1, husb1, wife1, chil1, body1;
-#endif
 
 	if (!fam1) {
 		*pmsg = _(qSbademp);
-  		return FALSE;
+  		return false;
 	}
 	if (nestr("FAM", ntag(fam1))) {
 		*pmsg = _(qSbadfm0);
-		return FALSE;
+		return false;
 	}
 	if (nsibling(fam1)) {
 		*pmsg = _(qSbadmul);
-		return FALSE;
+		return false;
 	}
 
 	refn0 = husb0 = wife0 = chil0 = body0 = NULL;
@@ -202,41 +181,41 @@ valid_fam_tree (NODE fam1, STRING *pmsg, NODE fam0)
 		split_fam(fam0, &refn0, &husb0, &wife0, &chil0, &body0);
 	split_fam(fam1, &refn1, &husb1, &wife1, &chil1, &body1);
 	
-	if (fam0 && !iso_nodes(fam1, fam0, FALSE, TRUE)) {
+	if (fam0 && !iso_nodes(fam1, fam0, false, true)) {
 		*pmsg = _(qSbadfam); 
 		goto bad3;
 	}
-	if (!iso_nodes(husb1, husb0, FALSE, TRUE)) {
+	if (!iso_nodes(husb1, husb0, false, true)) {
 		*pmsg = _(qSbadhsb);
 		goto bad3;
 	}
-	if (!iso_nodes(wife1, wife0, FALSE, TRUE)) {
+	if (!iso_nodes(wife1, wife0, false, true)) {
 		*pmsg = _(qSbadwif);
 		goto bad3;
 	}
-	if (!iso_nodes(chil1, chil0, FALSE, TRUE)) {
+	if (!iso_nodes(chil1, chil0, false, true)) {
 		*pmsg = _(qSbadchl);
 		goto bad3;
 	}
 	if (fam0)
 		join_fam(fam0, refn0, husb0, wife0, chil0, body0);
 	join_fam(fam1, refn1, husb1, wife1, chil1, body1);
-	return TRUE;
+	return true;
 bad3:
 	if (fam0)
 		join_fam(fam0, refn0, husb0, wife0, chil0, body0);
 	join_fam(fam1, refn1, husb1, wife1, chil1, body1);
-	return FALSE;
+	return false;
 }
 /*============================
  * valid_name -- Validate name
  *==========================*/
-BOOLEAN
-valid_name (STRING name)
+bool
+valid_name (String name)
 {
-	INT c, n = 0;
-	if (!name) return FALSE;
-	if (pointer_value(name)) return FALSE;
+	int c, n = 0;
+	if (!name) return false;
+	if (pointer_value(name)) return false;
 	while ((c = *name++)) {
 		if (c == NAMESEP) n++;
 	}
@@ -249,8 +228,8 @@ valid_name (STRING name)
  *  pmsg,   [OUT] error message, if any
  *  orig:   [IN]  node to match (may be null)
  *====================================*/
-BOOLEAN
-valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
+bool
+valid_node_type (GNode *node, char ntype, String *pmsg, GNode *node0)
 {
 	switch(ntype) {
 	case 'I': return valid_indi_tree(node, pmsg, node0);
@@ -266,27 +245,27 @@ valid_node_type (NODE node, char ntype, STRING *pmsg, NODE node0)
  *  pmsg:  [OUT] error message, if any 
  *  orig:  [IN]  SOUR node to match 
  *====================================*/
-BOOLEAN
-valid_sour_tree (NODE node, STRING *pmsg, HINT_PARAM_UNUSED NODE orig)
+bool
+valid_sour_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
 {
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = _(qSbademp);
-  		return FALSE;
+  		return false;
 	}
 	if (nestr("SOUR", ntag(node))) {
 		*pmsg = _(qSbadsr0);
-		return FALSE;
+		return false;
 	}
 #if 0
 	/* validation unimplemented */
 	if (orig)
 	{
 		*pmsg = _(qSbadsr0);
-		return FALSE;
+		return false;
 	}
 #endif
-	return TRUE;
+	return true;
 }
 /*======================================
  * valid_even_tree -- Validate EVEN tree
@@ -294,27 +273,27 @@ valid_sour_tree (NODE node, STRING *pmsg, HINT_PARAM_UNUSED NODE orig)
  *  pmsg,  [OUT] error message, if any
  *  orig:  [IN]  EVEN node to match
  *====================================*/
-BOOLEAN
-valid_even_tree (NODE node, STRING *pmsg, HINT_PARAM_UNUSED NODE orig)
+bool
+valid_even_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
 {
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = _(qSbademp);
-  		return FALSE;
+  		return false;
 	}
 	if (nestr("EVEN", ntag(node))) {
 		*pmsg = _(qSbadev0);
-		return FALSE;
+		return false;
 	}
 #if 0
 	/* validation unimplemented */
 	if (orig)
 	{
 		*pmsg = _(qSbadev0);
-		return FALSE;
+		return false;
 	}
 #endif
-	return TRUE;
+	return true;
 }
 /*======================================
  * valid_othr_tree -- Validate OTHR tree
@@ -322,35 +301,35 @@ valid_even_tree (NODE node, STRING *pmsg, HINT_PARAM_UNUSED NODE orig)
  *  pmsg,  [OUT] error message, if any
  *  orig:  [IN]  OTHR node to match
  *====================================*/
-BOOLEAN
-valid_othr_tree (NODE node, STRING *pmsg, HINT_PARAM_UNUSED NODE orig)
+bool
+valid_othr_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
 {
 	*pmsg = NULL;
 	if (!node) {
 		*pmsg = _(qSbademp);
-  		return FALSE;
+  		return false;
 	}
 	if (eqstr("INDI", ntag(node)) || eqstr("FAM", ntag(node))
 		|| eqstr("SOUR", ntag(node)) || eqstr("EVEN", ntag(node))) {
 		*pmsg = _(qSbadothr0);
-		return FALSE;
+		return false;
 	}
 #if 0
 	/* validation unimplemented */
 	if (orig)
 	{
 		*pmsg = _(qSbadothr0);
-		return FALSE;
+		return false;
 	}
 #endif
-	return TRUE;
+	return true;
 }
 /*=========================================
  * pointer_value -- See if value is pointer
  *=======================================*/
-BOOLEAN
-pointer_value (STRING val)
+bool
+pointer_value (String val)
 {
-	if (!val || *val != '@' || strlen(val) < 3) return FALSE;
+	if (!val || *val != '@' || strlen(val) < 3) return false;
 	return val[strlen(val)-1] == '@';
 }

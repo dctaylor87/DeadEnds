@@ -18,8 +18,6 @@
 
 #include <ansidecl.h>
 
-#include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -39,7 +37,7 @@
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN printpic_arg(STRING *b, INT max, INT utf8, CNSTRING arg, INT arglen);
+static bool printpic_arg(String *b, int max, int utf8, CString arg, int arglen);
 
 /*********************************************
  * local & exported function definitions
@@ -54,22 +52,22 @@ static BOOLEAN printpic_arg(STRING *b, INT max, INT utf8, CNSTRING arg, INT argl
  *  max:    [IN]  space left in output buffer
  *  arg:    [IN]  arg to insert
  *  arglen: [IN]  (precomputed) length of arg
- * returns FALSE if can't fit entire arg.
+ * returns false if can't fit entire arg.
  *============================*/
-static BOOLEAN
-printpic_arg (STRING *b, INT max, INT utf8, CNSTRING arg, INT arglen)
+static bool
+printpic_arg (String *b, int max, int utf8, CString arg, int arglen)
 {
-	if (!arglen) return TRUE;
+	if (!arglen) return true;
 	if (arglen > max) {
 		/* can't fit it all */
 		llstrncpy(*b, arg, max+1, utf8); 
 		b[max] = 0;
-		return FALSE;
+		return false;
 	} else {
 		/* it fits */
 		strcpy(*b, arg);
 		*b += arglen;
-		return TRUE;
+		return true;
 	}
 }
 /*=========================================
@@ -79,12 +77,12 @@ printpic_arg (STRING *b, INT max, INT utf8, CNSTRING arg, INT arglen)
  * zero-terminate.
  *=======================================*/
 void
-sprintpic0 (STRING buffer, INT len, INT utf8, CNSTRING pic)
+sprintpic0 (String buffer, int len, int utf8, CString pic)
 {
 	if (len == snprintf(buffer, len, "%s", pic)) {
 		/* overflowed -- back up to last character that fits */
-		INT width=0;
-		STRING prev = find_prev_char(&buffer[len-1], &width, buffer, utf8);
+		int width=0;
+		String prev = find_prev_char(&buffer[len-1], &width, buffer, utf8);
 		prev[width]=0;
 	}
 
@@ -97,29 +95,29 @@ sprintpic0 (STRING buffer, INT len, INT utf8, CNSTRING pic)
  *  pic:     [IN]  picture string
  *  arg1:    [IN]  argument (for %1)
  * (Multiple occurrences of %1 are allowed.)
- * returns FALSE if it couldn't fit whole thing.
+ * returns false if it couldn't fit whole thing.
  *============================*/
-BOOLEAN
-sprintpic1 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1)
+bool
+sprintpic1 (String buffer, int len, int utf8, CString pic, CString arg1)
 {
-	STRING b = buffer, bmax = &buffer[len-1];
-	CNSTRING p=pic;
-	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
+	String b = buffer, bmax = &buffer[len-1];
+	CString p=pic;
+	int arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
 			if (!printpic_arg(&b, bmax-b, utf8, arg1, arg1len))
-				return FALSE;
+				return false;
 			p += 2;
 		} else {
 			*b++ = *p++;
 		}
 		if (!p[0]) { /* ran out of input */
 			*b=0;
-			return TRUE;
+			return true;
 		}
 		if (b == bmax) { /* ran out of output room */
 			*b=0;
-			return FALSE;
+			return false;
 		}
 	}
 }
@@ -132,10 +130,10 @@ sprintpic1 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1)
  * returns result as zstring
  *============================*/
 ZSTR
-zprintpic1 (CNSTRING pic, CNSTRING arg1)
+zprintpic1 (CString pic, CString arg1)
 {
 	ZSTR zstr = zs_newn(strlen(pic)+strlen(arg1));
-	CNSTRING p=pic;
+	CString p=pic;
 	while (*p) {
 		if (p[0]=='%' && p[1]=='1') {
 			zs_apps(zstr, arg1);
@@ -151,32 +149,32 @@ zprintpic1 (CNSTRING pic, CNSTRING arg1)
  *  with two arguments, eg "From %1 To %s"
  * See sprintpic1 for argument explanation.
  *============================*/
-BOOLEAN
-sprintpic2 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
+bool
+sprintpic2 (String buffer, int len, int utf8, CString pic, CString arg1, CString arg2)
 {
-	STRING b = buffer, bmax = &buffer[len-1];
-	CNSTRING p=pic;
-	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
-	INT arg2len = arg2 ? strlen(arg2) : 0;
+	String b = buffer, bmax = &buffer[len-1];
+	CString p=pic;
+	int arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
+	int arg2len = arg2 ? strlen(arg2) : 0;
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
 			if (!printpic_arg(&b, bmax-b, utf8, arg1, arg1len))
-				return FALSE;
+				return false;
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='2') {
 			if (!printpic_arg(&b, bmax-b, utf8, arg2, arg2len))
-				return FALSE;
+				return false;
 			p += 2;
 		} else {
 			*b++ = *p++;
 		}
 		if (!p[0]) { /* ran out of input */
 			*b=0;
-			return TRUE;
+			return true;
 		}
 		if (b == bmax) { /* ran out of output room */
 			*b=0;
-			return FALSE;
+			return false;
 		}
 	}
 }
@@ -186,10 +184,10 @@ sprintpic2 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTR
  * returning result as zstring
  *============================*/
 ZSTR
-zprintpic2 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
+zprintpic2 (CString pic, CString arg1, CString arg2)
 {
 	ZSTR zstr = zs_newn(strlen(pic)+strlen(arg1)+strlen(arg2));
-	CNSTRING p=pic;
+	CString p=pic;
 	while (*p) {
 		if (p[0]=='%' && p[1]=='1') {
 			zs_apps(zstr, arg1);
@@ -208,38 +206,38 @@ zprintpic2 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2)
  *  with three arguments, eg "%1/%2/%3"
  * See sprintpic1 for argument explanation.
  *============================*/
-BOOLEAN
-sprintpic3 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTRING arg2
-	, CNSTRING arg3)
+bool
+sprintpic3 (String buffer, int len, int utf8, CString pic, CString arg1, CString arg2
+	, CString arg3)
 {
-	STRING b = buffer, bmax = &buffer[len-1];
-	CNSTRING p=pic;
-	INT arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
-	INT arg2len = arg2 ? strlen(arg2) : 0;
-	INT arg3len = arg3 ? strlen(arg3) : 0;
+	String b = buffer, bmax = &buffer[len-1];
+	CString p=pic;
+	int arg1len = arg1 ? strlen(arg1) : 0; /* precompute */
+	int arg2len = arg2 ? strlen(arg2) : 0;
+	int arg3len = arg3 ? strlen(arg3) : 0;
 	while (1) {
 		if (p[0]=='%' && p[1]=='1') {
 			if (!printpic_arg(&b, bmax-b, utf8, arg1, arg1len))
-				return FALSE;
+				return false;
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='2') {
 			if (!printpic_arg(&b, bmax-b, utf8, arg2, arg2len))
-				return FALSE;
+				return false;
 			p += 2;
 		} else if (p[0]=='%' && p[1]=='3') {
 			if (!printpic_arg(&b, bmax-b, utf8, arg3, arg3len))
-				return FALSE;
+				return false;
 			p += 2;
 		} else {
 			*b++ = *p++;
 		}
 		if (!p[0]) { /* ran out of input */
 			*b=0;
-			return TRUE;
+			return true;
 		}
 		if (b == bmax) { /* ran out of output room */
 			*b=0;
-			return FALSE;
+			return false;
 		}
 	}
 }
@@ -249,10 +247,10 @@ sprintpic3 (STRING buffer, INT len, INT utf8, CNSTRING pic, CNSTRING arg1, CNSTR
  * returning result as zstring
  *============================*/
 ZSTR
-zprintpic3 (CNSTRING pic, CNSTRING arg1, CNSTRING arg2, CNSTRING arg3)
+zprintpic3 (CString pic, CString arg1, CString arg2, CString arg3)
 {
 	ZSTR zstr = zs_newn(strlen(pic)+strlen(arg1)+strlen(arg2)+strlen(arg3));
-	CNSTRING p=pic;
+	CString p=pic;
 	while (*p) {
 		if (p[0]=='%' && p[1]=='1') {
 			zs_apps(zstr, arg1);

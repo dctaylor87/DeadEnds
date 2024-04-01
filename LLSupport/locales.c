@@ -75,18 +75,18 @@
  *********************************************/
 
 /* alphabetical */
-static void customlocale(STRING prefix);
-static STRING get_current_locale(INT category);
+static void customlocale(String prefix);
+static String get_current_locale(int category);
 #ifdef ENABLE_NLS
-static BOOLEAN is_msgcategory(int category);
+static bool is_msgcategory(int category);
 #if ! ( defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES) )
-static STRING llsetenv(STRING name, STRING value);
+static String llsetenv(String name, String value);
 #endif /* ! (defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES) ) */
 #endif /* ENABLE_NLS */
 static void notify_gettext_language_changed(void);
 static void send_uilang_callbacks(void);
 #ifdef ENABLE_NLS
-static STRING setmsgs(STRING localename);
+static String setmsgs(String localename);
 #endif /* ENABLE_NLS */
 static char * win32_setlocale(int category, char * locale);
 
@@ -94,17 +94,17 @@ static char * win32_setlocale(int category, char * locale);
  * local variables
  *********************************************/
 
-static STRING  deflocale_coll = NULL;
-static STRING  deflocale_msgs = NULL;
-static BOOLEAN customized_loc = FALSE;
+static String  deflocale_coll = NULL;
+static String  deflocale_msgs = NULL;
+static bool customized_loc = false;
 #ifdef ENABLE_NLS
-static BOOLEAN customized_msgs = FALSE;
+static bool customized_msgs = false;
 #endif /* ENABLE_NLS */
-static STRING current_coll = NULL; /* most recent */
-static STRING current_msgs = NULL; /* most recent */
-static STRING rptlocalestr = NULL; /* if set by report program */
-static LIST f_uicodeset_callbacks = NULL; /* collection of callbacks for UI codeset changes */
-static LIST f_uilang_callbacks = NULL; /* collection of callbacks for UI language changes */
+static String current_coll = NULL; /* most recent */
+static String current_msgs = NULL; /* most recent */
+static String rptlocalestr = NULL; /* if set by report program */
+static List *f_uicodeset_callbacks = NULL; /* collection of callbacks for UI codeset changes */
+static List *f_uilang_callbacks = NULL; /* collection of callbacks for UI language changes */
 
 
 
@@ -119,10 +119,10 @@ static LIST f_uilang_callbacks = NULL; /* collection of callbacks for UI languag
  * Created: 2002/02/24 (Perry Rapp)
  *========================================*/
 #ifdef HAVE_SETLOCALE
-static STRING
-get_current_locale (INT category)
+static String
+get_current_locale (int category)
 {
-	STRING str = 0;
+	String str = 0;
 	str = setlocale(category, NULL);
 	return str ? str : "C";
 }
@@ -155,7 +155,7 @@ save_original_locales (void)
 #endif /* HAVE_SETLOCALE */
 	/* fallback to the environment (see setmsgs) */
 	if (!deflocale_msgs) {
-		STRING msgs = getenv("LC_MESSAGES");
+		String msgs = getenv("LC_MESSAGES");
 		deflocale_msgs = strsave(msgs ? msgs : "");
 		current_msgs = strsave(deflocale_msgs);
 	}
@@ -166,7 +166,7 @@ save_original_locales (void)
  * caller may not alter string
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-STRING
+String
 get_original_locale_collate (void)
 {
 #ifdef HAVE_SETLOCALE
@@ -179,7 +179,7 @@ get_original_locale_collate (void)
  * caller may not alter string
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-STRING
+String
 get_current_locale_collate (void)
 {
 	return current_coll;
@@ -189,7 +189,7 @@ get_current_locale_collate (void)
  * caller may not alter string
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-STRING
+String
 get_original_locale_msgs (void)
 {
 	return deflocale_msgs;
@@ -199,7 +199,7 @@ get_original_locale_msgs (void)
  * caller may not alter string
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-STRING
+String
 get_current_locale_msgs (void)
 {
 	return current_msgs;
@@ -208,46 +208,46 @@ get_current_locale_msgs (void)
  * are_locales_supported -- locale support compiled in ?
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-BOOLEAN
+bool
 are_locales_supported (void)
 {
 #ifdef HAVE_SETLOCALE
-	return TRUE;
+	return true;
 #endif /* HAVE_SETLOCALE */
-	return FALSE;
+	return false;
 }
 /*==========================================
  * is_nls_supported -- is NLS (National Language Support) compiled in ?
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-BOOLEAN
+bool
 is_nls_supported (void)
 {
 #ifdef ENABLE_NLS
-	return TRUE;
+	return true;
 #endif /* ENABLE_NLS */
-	return FALSE;
+	return false;
 }
 /*==========================================
  * is_iconv_supported -- is iconv (codeset conversion library) compiled in ?
  * Created: 2002/06/15 (Perry Rapp)
  *========================================*/
-BOOLEAN
+bool
 is_iconv_supported (void)
 {
 #ifdef HAVE_ICONV
-	return TRUE;
+	return true;
 #endif /* HAVE_ICONV */
-	return FALSE;
+	return false;
 }
 /*==========================================
  * ll_langinfo -- wrapper for nl_langinfo
  *  in case not provided (eg, MS-Windows)
  *========================================*/
-STRING
+String
 ll_langinfo (void)
 {
-	STRING str = nl_langinfo(CODESET);
+	String str = nl_langinfo(CODESET);
 	/* TODO: Should we apply norm_charmap.c ?
 	http://www.cl.cam.ac.uk/~mgk25/ucs/norm_charmap.c
 	*/
@@ -308,8 +308,8 @@ rptlocale (void)
  *  used by report language
  * Created: 2002/06/27 (Perry Rapp)
  *========================================*/
-STRING
-rpt_setlocale (STRING str)
+String
+rpt_setlocale (String str)
 {
 	strfree(&rptlocalestr);
 	rptlocalestr = llsetlocale(LC_ALL, str);
@@ -322,10 +322,10 @@ rpt_setlocale (STRING str)
  * Returns non-null string if succeeds
  *========================================*/
 #ifdef ENABLE_NLS
-static STRING
-setmsgs (STRING localename)
+static String
+setmsgs (String localename)
 {
-	STRING str;
+	String str;
 	if (eqstr_ex(current_msgs, localename))
 		return localename; /* skip it if already current */
 #if defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES)
@@ -356,11 +356,11 @@ setmsgs (STRING localename)
  * Workaround for systems without HAVE_SETLOCALE && HAVE_LC_MESSAGES
  * Returns value if it succeeded
  *========================================*/
-static STRING
-llsetenv (STRING name, STRING value)
+static String
+llsetenv (String name, String value)
 {
 	char buffer[128];
-	STRING str = 0;
+	String str = 0;
 
 	buffer[0] = 0;
 	llstrappf(buffer, sizeof(buffer), uu8, "%s=%s", name, value);
@@ -390,11 +390,11 @@ llsetenv (STRING name, STRING value)
  * Created: 2002/02/24 (Perry Rapp)
  *========================================*/
 static void
-customlocale (STRING prefix)
+customlocale (String prefix)
 {
 	char option[64];
-	STRING str;
-	INT prefixlen = strlen(prefix);
+	String str;
+	int prefixlen = strlen(prefix);
 	
 	if (prefixlen > 30) return;
 
@@ -405,7 +405,7 @@ customlocale (STRING prefix)
 	strcpy(option+prefixlen, "Collate");
 	str = getlloptstr(option, 0);
 	if (str) {
-		customized_loc = TRUE;
+		customized_loc = true;
 		str = llsetlocale(LC_COLLATE, str);
 	}
 	if (!str) {
@@ -413,7 +413,7 @@ customlocale (STRING prefix)
 		option[prefixlen] = 0;
 		str = getlloptstr(option, 0);
 		if (str) {
-			customized_loc = TRUE;
+			customized_loc = true;
 			str = llsetlocale(LC_COLLATE, str);
 		}
 		/* nothing set, so try to revert to startup value */
@@ -427,14 +427,14 @@ customlocale (STRING prefix)
 	strcpy(option+prefixlen, "Messages");
 	str = getlloptstr(option, 0);
 	if (str) {
-		customized_msgs = TRUE;
+		customized_msgs = true;
 		str = setmsgs(str);
 	} else {
 		/* did user set, eg, UiLocale option ? */
 		option[prefixlen] = 0;
 		str = getlloptstr(option, 0);
 		if (str) {
-			customized_msgs = TRUE;
+			customized_msgs = true;
 			str = setmsgs(str);
 		}
 		if (!str && customized_msgs)
@@ -484,7 +484,7 @@ llsetlocale (int category, char * locale)
  * is_msgcategory -- check for LC_ALL or LC_MESSAGES
  *========================================*/
 #ifdef ENABLE_NLS
-static BOOLEAN
+static bool
 is_msgcategory (int category)
 {
 #ifdef LC_MESSAGES
@@ -540,7 +540,7 @@ win32_setlocale (HINT_PARAM_UNUSED int category, HINT_PARAM_UNUSED char * locale
  * register_uilang_callback -- 
  *========================================*/
 void
-register_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm)
+register_uilang_callback (CALLBACK_FNC fncptr, Word uparm)
 {
 	add_listener(&f_uilang_callbacks, fncptr, uparm);
 }
@@ -548,7 +548,7 @@ register_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm)
  * unregister_uilang_callback -- 
  *========================================*/
 void
-unregister_uilang_callback (CALLBACK_FNC fncptr, VPTR uparm)
+unregister_uilang_callback (CALLBACK_FNC fncptr, Word uparm)
 {
 	delete_listener(&f_uilang_callbacks, fncptr, uparm);
 }
@@ -566,7 +566,7 @@ send_uilang_callbacks (void)
  * register_uicodeset_callback -- 
  *========================================*/
 void
-register_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm)
+register_uicodeset_callback (CALLBACK_FNC fncptr, Word uparm)
 {
 	add_listener(&f_uicodeset_callbacks, fncptr, uparm);
 }
@@ -574,7 +574,7 @@ register_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm)
  * unregister_uicodeset_callback -- 
  *========================================*/
 void
-unregister_uicodeset_callback (CALLBACK_FNC fncptr, VPTR uparm)
+unregister_uicodeset_callback (CALLBACK_FNC fncptr, Word uparm)
 {
 	delete_listener(&f_uicodeset_callbacks, fncptr, uparm);
 }

@@ -48,10 +48,10 @@
  * add_prop_dnum -- Add named property table as new last display order
  *========================================================*/
 void
-add_prop_dnum (TABLE props, CNSTRING name, CNSTRING value)
+add_prop_dnum (TABLE props, CString name, CString value)
 {
-	STRING str = valueof_str(props, "dn");
-	INT n = ll_atoi(str, 0)+1;
+	String str = valueof_str(props, "dn");
+	int n = ll_atoi(str, 0)+1;
 	char temp[FMT_INT_LEN+1];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
 	insert_table_str(props, temp, name);
@@ -63,10 +63,10 @@ add_prop_dnum (TABLE props, CNSTRING name, CNSTRING value)
  * set_prop_dnum -- Set named property in table, at specified display number
  *========================================================*/
 void
-set_prop_dnum (TABLE props, INT n, CNSTRING name, CNSTRING value)
+set_prop_dnum (TABLE props, int n, CString name, CString value)
 {
-	STRING str = valueof_str(props, "dn");
-	INT max = ll_atoi(str, 0);
+	String str = valueof_str(props, "dn");
+	int max = ll_atoi(str, 0);
 	char temp[24];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
 	replace_table_str(props, temp, name);
@@ -80,12 +80,12 @@ set_prop_dnum (TABLE props, INT n, CNSTRING name, CNSTRING value)
  * add_dir_files_to_proplist -- Add all files in dir to list of property tables
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
-INT
-add_dir_files_to_proplist (CNSTRING dir, SELECT_FNC selectfnc, LIST list)
+int
+add_dir_files_to_proplist (CString dir, SELECT_FNC selectfnc, List *list)
 {
 	struct dirent **programs;
-	INT n = scandir(dir, &programs, selectfnc, alphasort);
-	INT i;
+	int n = scandir(dir, &programs, selectfnc, alphasort);
+	int i;
 	for (i=0; i<n; ++i) {
 		TABLE table = create_table_str();
 		set_prop_dnum(table, 1, "filename", programs[i]->d_name);
@@ -102,13 +102,13 @@ add_dir_files_to_proplist (CNSTRING dir, SELECT_FNC selectfnc, LIST list)
  * add_path_files_to_proplist -- Add all files on path to list of property tables
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
-INT
-add_path_files_to_proplist (CNSTRING path, SELECT_FNC selectfnc, LIST list)
+int
+add_path_files_to_proplist (CString path, SELECT_FNC selectfnc, List *list)
 {
-	STRING dirs, p;
-	INT ct=0;
+	String dirs, p;
+	int ct=0;
 	if (!path || !path[0]) return 0;
-	dirs = (STRING)stdalloc(strlen(path)+2);
+	dirs = (String)stdalloc(strlen(path)+2);
 	chop_path(path, dirs);
 	for (p=dirs; *p; p+=strlen(p)+1) {
 		add_dir_files_to_proplist(p, selectfnc, list);
@@ -123,10 +123,10 @@ add_path_files_to_proplist (CNSTRING path, SELECT_FNC selectfnc, LIST list)
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 TABLE *
-convert_proplist_to_proparray (LIST list)
+convert_proplist_to_proparray (List *list)
 {
 	TABLE * props;
-	INT i;
+	int i;
 	props = (TABLE *)malloc((length_list(list)+1)*sizeof(props[0]));
 	i = 0;
 	FORLIST(list, el)
@@ -141,10 +141,10 @@ convert_proplist_to_proparray (LIST list)
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 TABLE *
-get_proparray_of_files_in_path (CNSTRING path, SELECT_FNC selectfnc, INT * nfiles)
+get_proparray_of_files_in_path (CString path, SELECT_FNC selectfnc, int * nfiles)
 {
 	/* get array of file property tables */
-	LIST list = create_list();
+	List *list = create_list();
 	add_path_files_to_proplist(path, selectfnc, list);
 	*nfiles = length_list(list);
 	return convert_proplist_to_proparray(list);
@@ -157,7 +157,7 @@ get_proparray_of_files_in_path (CNSTRING path, SELECT_FNC selectfnc, INT * nfile
 void
 free_proparray (TABLE ** props)
 {
-	INT i;
+	int i;
 	for (i=0; (*props)[i]; ++i) {
 		TABLE tab = (*props)[i];
 		destroy_table(tab);

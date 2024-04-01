@@ -19,8 +19,6 @@
 #if defined(DEADENDS)
 #include <ansidecl.h>
 
-#include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "sys_inc.h"
@@ -44,7 +42,7 @@
  * NB: Need one byte for terminating zero, so len==1 is same as len==0.
  *================================*/
 void
-appendstr (STRING * pdest, INT * len, int utf8, CNSTRING src)
+appendstr (String * pdest, int * len, int utf8, CString src)
 {
 	int amount;
 	*pdest[0]=0; /* so client doesn't have to initialize */

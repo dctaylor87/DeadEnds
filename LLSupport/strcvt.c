@@ -62,8 +62,8 @@
 
 #endif
 static const char * get_wchar_codeset_name(void);
-static ZSTR (*upperfunc)(CNSTRING) = 0;
-static ZSTR (*lowerfunc)(CNSTRING) = 0;
+static ZSTR (*upperfunc)(CString) = 0;
+static ZSTR (*lowerfunc)(CString) = 0;
 
 /*===================================================
  * get_wchar_codeset_name -- name of wchar_t codeset
@@ -92,7 +92,7 @@ makewide (const char *str)
 {
 	ZSTR zstr=0;
 	if (int_codeset && int_codeset[0]) {
-		CNSTRING dest = get_wchar_codeset_name();
+		CString dest = get_wchar_codeset_name();
 		zstr = zs_new();
 		/* dest = "wchar_t" doesn't work--Perry, 2002-11-20 */
 		if (!iconv_trans(int_codeset, dest, str, zstr, '?')) {
@@ -109,7 +109,7 @@ ZSTR
 makeznarrow (ZSTR zwstr)
 {
 	ZSTR zout=zs_new();
-	CNSTRING src = get_wchar_codeset_name();
+	CString src = get_wchar_codeset_name();
 	if (!iconv_trans(src, int_codeset, zs_str(zwstr), zout, '?'))
 		zs_free(&zout);
 	return zout;
@@ -120,23 +120,23 @@ makeznarrow (ZSTR zwstr)
  * so only needs to handle ASCII digits
  * Does not need to handle any other types of digits
  *=======================================*/
-BOOLEAN
-isnumeric (STRING str)
+bool
+isnumeric (String str)
 {
-	INT c;
-	if (!str) return FALSE;
+	int c;
+	if (!str) return false;
 	/* only needs to handle ASCII digits
 	so can use very simple ASCII comparison */
-	while ((c = (uchar)*str++)) {
+	while ((c = (u_char)*str++)) {
 		if (!(c >= '0' && c <= '9'))
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 /*======================================
  * iswletter -- is widechar a letter ?
  *====================================*/
-BOOLEAN
+bool
 iswletter (wchar_t wch)
 {
 #ifdef HAVE_ISWALPHA
@@ -197,7 +197,7 @@ wz_makenarrow(ZSTR zstr)
  * ll_tolowerz -- Return lowercase version of string
  *====================================*/
 ZSTR
-ll_tolowerz (CNSTRING s, INT utf8)
+ll_tolowerz (CString s, int utf8)
 {
 	ZSTR zstr=0;
 	if (utf8) {
@@ -217,7 +217,7 @@ ll_tolowerz (CNSTRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			uchar ch = (uchar)*s;
+			u_char ch = (u_char)*s;
 			/* uppercase unless UTF-8 multibyte code */
 			if (!utf8 || ch < 0x7f)
 				ch = ll_tolower(ch);
@@ -230,7 +230,7 @@ ll_tolowerz (CNSTRING s, INT utf8)
  * set_utf8_casing -- Set plugin functions for UTF-8 casing
  *========================================*/
 void
-set_utf8_casing (ZSTR (*ufnc)(CNSTRING), ZSTR (*lfnc)(CNSTRING))
+set_utf8_casing (ZSTR (*ufnc)(CString), ZSTR (*lfnc)(CString))
 {
 	upperfunc = ufnc;
 	lowerfunc = lfnc;
@@ -239,7 +239,7 @@ set_utf8_casing (ZSTR (*ufnc)(CNSTRING), ZSTR (*lfnc)(CNSTRING))
  * ll_toupperz -- Return uppercase version of string
  *========================================*/
 ZSTR
-ll_toupperz (CNSTRING s, INT utf8)
+ll_toupperz (CString s, int utf8)
 {
 	ZSTR zstr=0;
 	if (utf8) {
@@ -261,7 +261,7 @@ ll_toupperz (CNSTRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			uchar ch = (uchar)*s;
+			u_char ch = (u_char)*s;
 			/* uppercase unless UTF-8 multibyte code */
 			if (!utf8 || ch < 0x7f)
 				ch = ll_toupper(ch);
@@ -277,13 +277,13 @@ ll_toupperz (CNSTRING s, INT utf8)
  * (It is a fast, cheap solution appropriate
  *  for GEDCOM keyword parsing.)
  *====================================*/
-STRING
-upperascii_s (STRING str)
+String
+upperascii_s (String str)
 {
 	static char scratch[MAXLINELEN+1];
-	STRING p = scratch;
-	INT c, i=0;
-	while ((c = (uchar)*str++) && (++i < MAXLINELEN+1)) {
+	String p = scratch;
+	int c, i=0;
+	while ((c = (u_char)*str++) && (++i < MAXLINELEN+1)) {
 		if (c>='a' && c<='z')
 			c += 'A' - 'a';
 		*p++ = (unsigned int)c;
@@ -295,7 +295,7 @@ upperascii_s (STRING str)
  * ll_tocapitalizedz -- Returned capitalized version of string
  *==============================*/
 ZSTR
-ll_tocapitalizedz (STRING s, INT utf8)
+ll_tocapitalizedz (String s, int utf8)
 {
 	ZSTR zstr=0;
 #if defined(HAVE_TOWLOWER) && defined(HAVE_TOWUPPER)
@@ -316,7 +316,7 @@ ll_tocapitalizedz (STRING s, INT utf8)
 	if (!zstr) {
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			uchar ch = (uchar)*s;
+			u_char ch = (u_char)*s;
 			if (!zs_len(zstr)) {
 				/* uppercase unless UTF-8 multibyte code */
 				if (!utf8 || ch < 0x7f)
@@ -331,7 +331,7 @@ ll_tocapitalizedz (STRING s, INT utf8)
  * ll_totitlecasez -- Return titlecased version of string
  *==============================*/
 ZSTR
-ll_totitlecasez (STRING s, INT utf8)
+ll_totitlecasez (String s, int utf8)
 {
 	ZSTR zstr=0;
 #if defined(HAVE_TOWLOWER) && defined(HAVE_TOWUPPER) && defined(HAVE_ISWSPACE)
@@ -340,16 +340,16 @@ ll_totitlecasez (STRING s, INT utf8)
 		if (zstr) {
 			/* Now zstr holds a string of wchar_t characters */
 			/* NB: sizeof(wchar_t) varies with platform */
-			BOOLEAN inword = FALSE;
+			bool inword = false;
 			wchar_t * wp;
 			for (wp = (wchar_t *)zs_str(zstr); *wp; ++wp) {
 				if (iswspace(*wp)) {
-					inword = FALSE;
+					inword = false;
 				} else {
 					if (!inword) {
 						/* first letter of word */
 						*wp = towupper(*wp);
-						inword = TRUE;
+						inword = true;
 					}
 				}
 			}
@@ -359,15 +359,15 @@ ll_totitlecasez (STRING s, INT utf8)
 #endif
 
 	if (!zstr) {
-		BOOLEAN inword = FALSE;
+		bool inword = false;
 		zstr = zs_newn(strlen(s));
 		for ( ; *s; ++s) {
-			uchar ch = (uchar)*s;
-			if (iswhite((uchar)*s)) {
-				inword = FALSE;
+			u_char ch = (u_char)*s;
+			if (iswhite((u_char)*s)) {
+				inword = false;
 			} else if (!inword) {
 				/* first letter of word */
-				inword = TRUE;
+				inword = true;
 				/* uppercase unless UTF-8 multibyte code */
 				if (!utf8 || ch < 0x7f)
 					ch = ll_toupper(*s);

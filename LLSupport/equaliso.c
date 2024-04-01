@@ -59,64 +59,60 @@
 /*=========================================
  * equal_tree -- See if two trees are equal
  *=======================================*/
-BOOLEAN
-equal_tree (NODE root1,
-            NODE root2)
+bool
+equal_tree (GNode *root1,
+            GNode *root2)
 {
-	STRING str1, str2;
-	if (!root1 && !root2) return TRUE;
-	if (!root1 || !root2) return FALSE;
-	if (length_nodes(root1) != length_nodes(root2)) return FALSE;
+	String str1, str2;
+	if (!root1 && !root2) return true;
+	if (!root1 || !root2) return false;
+	if (length_nodes(root1) != length_nodes(root2)) return false;
 	while (root1) {
-		if (nestr(ntag(root1), ntag(root2))) return FALSE;
+		if (nestr(ntag(root1), ntag(root2))) return false;
 		str1 = nval(root1);
 		str2 = nval(root2);
-		if (str1 && !str2) return FALSE;
-		if (str2 && !str1) return FALSE;
-		if (str1 && str2 && nestr(str1, str2)) return FALSE;
-		if (!equal_tree(nchild(root1), nchild(root2))) return FALSE;
+		if (str1 && !str2) return false;
+		if (str2 && !str1) return false;
+		if (str1 && str2 && nestr(str1, str2)) return false;
+		if (!equal_tree(nchild(root1), nchild(root2))) return false;
 		root1 = nsibling(root1);
 		root2 = nsibling(root2);
 	}
-	return TRUE;
+	return true;
 }
 /*=========================================
  * equal_node -- See if two nodes are equal
  *=======================================*/
-BOOLEAN
-equal_node (NODE node1,
-            NODE node2)
+bool
+equal_node (GNode *node1,
+            GNode *node2)
 {
-	STRING str1, str2;
-	if (!node1 && !node2) return TRUE;
-	if (!node1 || !node2) return FALSE;
-	if (nestr(ntag(node1), ntag(node2))) return FALSE;
+	String str1, str2;
+	if (!node1 && !node2) return true;
+	if (!node1 || !node2) return false;
+	if (nestr(ntag(node1), ntag(node2))) return false;
 	str1 = nval(node1);
 	str2 = nval(node2);
-	if (str1 && !str2) return FALSE;
-	if (str2 && !str1) return FALSE;
-	if (str1 && str2 && nestr(str1, str2)) return FALSE;
-	return TRUE;
+	if (str1 && !str2) return false;
+	if (str2 && !str1) return false;
+	if (str1 && str2 && nestr(str1, str2)) return false;
+	return true;
 }
 /*=================================================
  * iso_list -- See if two node lists are isomorphic
  *===============================================*/
-BOOLEAN
-iso_list (NODE root1,
-          NODE root2)
+bool
+iso_list (GNode *root1,
+          GNode *root2)
 {
-	INT len1, len2;
-#if defined(DEADENDS)
+	int len1, len2;
 	GNode *node1, *node2;
-#else
-	NODE node1, node2;
-#endif
-	if (!root1 && !root2) return TRUE;
-	if (!root1 || !root2) return FALSE;
+	if (!root1 && !root2) return true;
+	if (!root1 || !root2) return false;
 	len1 = length_nodes(root1);
 	len2 = length_nodes(root2);
-	if (len1 != len2) return FALSE;
-	if (len1 == 0) return TRUE;
+	if (len1 != len2) return false;
+	if (len1 == 0) return true;
 	node1 = root1;
 	while (node1) {
 		node2 = root2;
@@ -125,27 +121,27 @@ iso_list (NODE root1,
 				break;
 			node2 = nsibling(node2);
 		}
-		if (!node2) return FALSE;
+		if (!node2) return false;
 		node1 = nsibling(node1);
 	}
-	return TRUE;
+	return true;
 }
 
 /*====================================================
  * equal_nodes -- See if two node structures are equal
  *==================================================*/
-BOOLEAN
-equal_nodes (NODE root1,
-             NODE root2,
-             BOOLEAN kids,
-             BOOLEAN sibs)
+bool
+equal_nodes (GNode *root1,
+             GNode *root2,
+             bool kids,
+             bool sibs)
 {
-	if (!root1 && !root2) return TRUE;
+	if (!root1 && !root2) return true;
 	while (root1) {
-		if (!equal_node(root1, root2)) return FALSE;
+		if (!equal_node(root1, root2)) return false;
 		if (kids && !equal_nodes(nchild(root1), nchild(root2), 1, 1))
-			return FALSE;
-		if (!sibs) return TRUE;
+			return false;
+		if (!sibs) return true;
 		root1 = nsibling(root1);
 		root2 = nsibling(root2);
 	}
@@ -154,21 +150,17 @@ equal_nodes (NODE root1,
 /*=======================================================
  * iso_nodes -- See if two node structures are isomorphic
  *=====================================================*/
-BOOLEAN
-iso_nodes (NODE root1,
-           NODE root2,
-           BOOLEAN kids,
-           BOOLEAN sibs)
+bool
+iso_nodes (GNode *root1,
+           GNode *root2,
+           bool kids,
+           bool sibs)
 {
-	INT len1, len2;
-#if defined(DEADENDS)
+	int len1, len2;
 	GNode *node1, *node2;
-#else
-	NODE node1, node2;
-#endif
 
-	if (!root1 && !root2) return TRUE;
-	if (!root1 || !root2) return FALSE;
+	if (!root1 && !root2) return true;
+	if (!root1 || !root2) return false;
 
 	if (!kids && !sibs) return equal_node(root1, root2);
 	if ( kids && !sibs)
@@ -177,8 +169,8 @@ iso_nodes (NODE root1,
 
 	len1 = length_nodes(root1);
 	len2 = length_nodes(root2);
-	if (len1 != len2) return FALSE;
-	if (len1 == 0) return TRUE;
+	if (len1 != len2) return false;
+	if (len1 == 0) return true;
 
 	node1 = root1;
 	while (node1) {
@@ -188,8 +180,8 @@ iso_nodes (NODE root1,
 				break;
 			node2 = nsibling(node2);
 		}
-		if (!node2) return FALSE;
+		if (!node2) return false;
 		node1 = nsibling(node1);
 	}
-	return TRUE;
+	return true;
 }

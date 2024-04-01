@@ -72,9 +72,9 @@
  * local function prototypes
  *********************************************/
 
-static NODE remove_any_xrefs_node_list(STRING xref, NODE list);
-static void remove_name_list(NODE name, CNSTRING key);
-static void remove_refn_list(NODE refn, CNSTRING key, Database *database);
+static GNode *remove_any_xrefs_node_list(String xref, GNode *list);
+static void remove_name_list(GNode *name, CString key);
+static void remove_refn_list(GNode *refn, CString key, Database *database);
 
 /*================================================================
  * remove_indi_by_root -- Delete person and links; if this leaves families
@@ -84,16 +84,11 @@ static void remove_refn_list(NODE refn, CNSTRING key, Database *database);
  * Created: 2001/11/08, Perry Rapp
  *==============================================================*/
 void
-remove_indi_by_root (NODE indi, Database *database)
+remove_indi_by_root (GNode *indi, Database *database)
 {
-	STRING key = rmvat(nxref(indi));
-#if defined(DEADENDS)
+	String key = rmvat(nxref(indi));
 	GNode *name, *refn, *sex, *body, *famc, *fams;
 	GNode *node, *husb, *wife, *chil, *rest, *fam, *fref;
-#else
-	NODE name, refn, sex, body, famc, fams;
-	NODE node, husb, wife, chil, rest, fam, fref;
-#endif
 
 /* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
 	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
@@ -135,35 +130,21 @@ remove_indi_by_root (NODE indi, Database *database)
 /* Reassemble & delete the in-memory record we're holding (indi) */
 	join_indi(indi, name, refn, sex, body, famc, fams);
 
-#if !defined(DEADENDS)
-	/* Remove indi from cache */
-	remove_indi_cache(key);
-#endif
-
 /* Remove any entries in existing browse lists */
 	remove_from_browse_lists(key);
-
-#if !defined(DEADENDS)
-	/* Remove from on-disk database */
-	del_in_dbase(key);
-#endif
 }
 /*==========================================
  * remove_empty_fam -- Delete family from database
  *  This will call message & fail if there are any
  *  people in the family.
  *========================================*/
-BOOLEAN
-remove_empty_fam (NODE fam, Database *database)
+bool
+remove_empty_fam (GNode *fam, Database *database)
 {
-	STRING key;
-#if defined(DEADENDS)
+	String key;
 	GNode *husb, *wife, *chil, *rest, *refn;
-#else
-	NODE husb, wife, chil, rest, refn;
-#endif
 
-	if (!fam) return TRUE;
+	if (!fam) return true;
 	key = rmvat(nxref(fam));
 
 /* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
@@ -176,7 +157,7 @@ remove_empty_fam (NODE fam, Database *database)
 		merge code's call */
 		msg_error("%s", _(qShaslnk));
 		join_fam(fam, refn, husb, wife, chil, rest);
-		return FALSE;
+		return false;
 	}
 
 	/* Remove fam from cache */
@@ -191,29 +172,20 @@ remove_empty_fam (NODE fam, Database *database)
 /* Remove any refn entries */
 	remove_refn_list(refn, key, database);
 
-#if !defined(DEADENDS)
-	/* Remove from on-disk database */
-	del_in_dbase(key);
-#endif
-
-	return TRUE;
+	return true;
 }
 /*=========================================
  * remove_child -- Remove child from family
  *  silent function
  *=======================================*/
-BOOLEAN
-remove_child (NODE indi, NODE fam, Database *database)
+bool
+remove_child (GNode *indi, GNode *fam, Database *database)
 {
-#if defined(DEADENDS)
 	GNode *node, *last;
-#else
-	NODE node, last;
-#endif
 
 /* Make sure child is in family and remove his/her CHIL line */
 	if (!(node = find_node(fam, "CHIL", nxref(indi), &last))) {
-		return FALSE;
+		return false;
 	}
 	if (last)
 		nsibling(last) = nsibling(node);
@@ -240,21 +212,17 @@ remove_child (NODE indi, NODE fam, Database *database)
 	else
 		fam_to_dbase(fam);
 #endif
-	return TRUE;
+	return true;
 }
 /*===========================================
  * remove_spouse -- Remove spouse from family
  *  both arguments required
  *  silent function
  *=========================================*/
-BOOLEAN
-remove_spouse (NODE indi, NODE fam, Database *database)
+bool
+remove_spouse (GNode *indi, GNode *fam, Database *database)
 {
-#if defined(DEADENDS)
 	GNode *node=0, *last=0;
-#else
-	NODE node=0, last=0;
-#endif
 
 /* Remove (one) reference from family */
 	node = find_node(fam, "HUSB", nxref(indi), &last);
@@ -262,7 +230,7 @@ remove_spouse (NODE indi, NODE fam, Database *database)
 		node = find_node(fam, "WIFE", nxref(indi), &last);
 	}
 	if (!node)
-		return FALSE;
+		return false;
 
 	if (last)
 		nsibling(last) = nsibling(node);
@@ -292,7 +260,7 @@ remove_spouse (NODE indi, NODE fam, Database *database)
 	else
 		remove_empty_fam(fam);
 #endif
-	return TRUE;
+	return true;
 }
 /*================================================================
  * remove_fam_record -- Delete family (and any family lineage linking)
@@ -300,11 +268,11 @@ remove_spouse (NODE indi, NODE fam, Database *database)
  *  fam:  [in]  family to remove - (must be valid)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
-BOOLEAN
+bool
 remove_fam_record (HINT_PARAM_UNUSED RECORD frec)
 {
 	msg_error("%s", _("Families may not yet be removed in this fashion."));
-	return FALSE;
+	return false;
 }
 
 /*================================================================
@@ -313,24 +281,18 @@ remove_fam_record (HINT_PARAM_UNUSED RECORD frec)
  *  record:  [in]  record to remove - (must be valid)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
-BOOLEAN
+bool
 remove_any_record (RECORD record, Database *database)
 {
-#if defined(DEADENDS)
 	GNode *root=0;
-	CNSTRING key = nzkey(record);
+	CString key = nzkey(record);
 	GNode *rest, *refn;
-#else
-	NODE root=0;
-	CNSTRING key = nzkey(record);
-	NODE rest, refn;
-#endif
 	ASSERT(record);
 
 	/* indi & family records take special handling, for lineage-linking */
 	if (nztype(record) == 'I') {
 		remove_indi_by_root(nztop(record), database);
-		return TRUE;
+		return true;
 	}
 	if (nztype(record) == 'F') {
 		return remove_fam_record(record);
@@ -342,9 +304,6 @@ remove_any_record (RECORD record, Database *database)
 	split_othr(root, &refn, &rest);
 
 /* Remove record from cache */
-#if !defined(DEADENDS)
-	remove_from_cache_by_key(key);
-#endif
 	record=NULL; /* record no longer valid */
 
 /* Remove any refn entries */
@@ -357,21 +316,17 @@ remove_any_record (RECORD record, Database *database)
 	join_othr(root, refn, rest);
 	free_nodes(root);
 
-	return TRUE;
+	return true;
 }
 /*=======================================================
  * num_fam_xrefs -- Find number of person links in family
  *   LOOSEEND -- How about other links in the future???
  *=====================================================*/
-INT
-num_fam_xrefs (NODE fam)
+int
+num_fam_xrefs (GNode *fam)
 {
-	INT num;
-#if defined(DEADENDS)
+	int num;
 	GNode *fref, *husb, *wife, *chil, *rest;
-#else
-	NODE fref, husb, wife, chil, rest;
-#endif
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	num = length_nodes(husb) + length_nodes(wife) + length_nodes(chil);
@@ -385,16 +340,16 @@ num_fam_xrefs (NODE fam)
  * Returns head of list (which might be different if first node removed)
  *========================================*/
 static NODE
-remove_any_xrefs_node_list (STRING xref, NODE list)
+remove_any_xrefs_node_list (String xref, GNode *list)
 {
-	NODE prev = NULL;
-	NODE curr = list;
-	NODE rtn = list;
+	GNode *prev = NULL;
+	GNode *curr = list;
+	GNode *rtn = list;
 
 	ASSERT(xref);
 
 	while (curr) {
-		NODE next = nsibling(curr);
+		GNode *next = nsibling(curr);
 		if (eqstr(xref, nval(curr))) {
 			if (prev)
 				nsibling(prev) = next;
@@ -414,9 +369,9 @@ remove_any_xrefs_node_list (STRING xref, NODE list)
  *  silent function, does not fail
  *=======================================*/
 static void
-remove_name_list (NODE name, CNSTRING key)
+remove_name_list (GNode *name, CString key)
 {
-	NODE node=0;
+	GNode *node=0;
 	for (node = name; node; node = nsibling(node)) {
 		remove_name(nval(node), key);
 	}
@@ -427,9 +382,9 @@ remove_name_list (NODE name, CNSTRING key)
  *  silent function, does not fail
  *=======================================*/
 static void
-remove_refn_list (NODE refn, CNSTRING key, Database *database)
+remove_refn_list (GNode *refn, CString key, Database *database)
 {
-	NODE node;
+	GNode *node;
 	for (node = refn; node; node = nsibling(node)) {
 		if (nval(node)) 
 			remove_refn(nval(node), key);

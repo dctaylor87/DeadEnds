@@ -45,12 +45,8 @@
 #include "readwrite.h"
 #include "codesets.h"
 #include "translat.h"
-//#include "gedcomi.h"
 #include "feedback.h"
-//#include "metadata.h"
-//#include "date.h"
 #include "messages.h"
-//#include "leaksi.h"
 #include "gedcom.h"
 #include "lineage.h"
 #include "llpy-externs.h"	/* XXX need to move __llpy_key_to_record elsewhere XXX */
@@ -97,17 +93,17 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
  *********************************************/
 
 //#define alloc_node(msg) alloc_node_int(msg,__FILE__,__LINE__)
-//static NODE alloc_node_int(char* msg, char *file, int line);
-//static STRING fixtag (STRING tag);
-static RECORD indi_to_prev_sib_impl(NODE indi, Database *database);
-static INT node_strlen(INT levl, NODE node);
+//static GNode *alloc_node_int(char* msg, char *file, int line);
+//static String fixtag (String tag);
+static RECORD indi_to_prev_sib_impl(GNode *indi, Database *database);
+static int node_strlen(int levl, GNode *node);
 
 /*********************************************
  * local variables
  *********************************************/
 
 /* node allocator's free list */
-LIST alloc_block_list = (LIST) 0;
+List *alloc_block_list = (List *) 0;
 //static NDALLOC first_blck = (NDALLOC) 0;
 //static int live_count = 0;
 
@@ -121,10 +117,10 @@ LIST alloc_block_list = (LIST) 0;
  * fixtag -- Keep tags in table
  * returns pointer to table's memory
  *===========================*/
-static STRING
-fixtag (STRING tag)
+static String
+fixtag (String tag)
 {
-	STRING str = valueof_str(tagtable, tag);
+	String str = valueof_str(tagtable, tag);
 	if (!str) {
 		insert_table_str(tagtable, tag, tag);
 		str = valueof_str(tagtable, tag);
@@ -138,7 +134,7 @@ fixtag (STRING tag)
  * change_node_tag -- Give new tag to node
  *===================================*/
 void
-change_node_tag (NODE node, STRING newtag)
+change_node_tag (GNode *node, String newtag)
 {
 	/* tag belongs to tagtable, so don't free old one */
 	ntag(node) = fixtag(newtag);
@@ -149,7 +145,7 @@ change_node_tag (NODE node, STRING newtag)
 /* free_nodes -- Free all NODEs in tree.  */
 
 void
-free_nodes (NODE node)
+free_nodes (GNode *node)
 {
 	GNode *sib;
 	while (node) {
@@ -167,11 +163,11 @@ free_nodes (NODE node)
 /*==============================================================
  * tree_strlen -- Compute string length of tree -- don't count 0
  *============================================================*/
-INT
-tree_strlen (INT levl,       /* level */
-             NODE node)      /* root */
+int
+tree_strlen (int levl,       /* level */
+             GNode *node)      /* root */
 {
-	INT len = 0;
+	int len = 0;
 	while (node) {
 		len += node_strlen(levl, node);
 		if (nchild(node))
@@ -183,11 +179,11 @@ tree_strlen (INT levl,       /* level */
 /*================================================================
  * node_strlen -- Compute NODE string length -- count \n but not 0
  *==============================================================*/
-static INT
-node_strlen (INT levl,       /* level */
-             NODE node)      /* node */
+static int
+node_strlen (int levl,       /* level */
+             GNode *node)      /* node */
 {
-	INT len;
+	int len;
 	char scratch[10];
 	snprintf(scratch, sizeof(scratch), FMT_INT, levl);
 	len = strlen(scratch) + 1;
@@ -202,7 +198,7 @@ node_strlen (INT levl,       /* level */
  * Created: 2001/04/06, Perry Rapp
  *========================================*/
 void
-unknown_node_to_dbase (NODE node)
+unknown_node_to_dbase (GNode *node)
 {
 	/* skip tag validation */
 	node_to_dbase(node, NULL);
@@ -210,7 +206,7 @@ unknown_node_to_dbase (NODE node)
 
 /*===============================================
  * next_spouse -- Return next spouse of family
- * NODE *node     [in/out] pass in nchild(fam) to start
+ * GNode **node     [in/out] pass in nchild(fam) to start
  *                or nsibling(previous node returned from this routine) to continue
  * RECORD *spouse [out]     next spouse in family
  * returns 1 for success, -1 if next HUSB/WIFE record is invalid
@@ -218,9 +214,9 @@ unknown_node_to_dbase (NODE node)
  * returns addref'd record in *spouse
  *=============================================*/
 int
-next_spouse (NODE *node, RECORD *spouse, Database *database)
+next_spouse (GNode **node, RECORD *spouse, Database *database)
 {
-	CNSTRING key=0;
+	CString key=0;
 	if (!node || !spouse) return 0;
 	while (*node) {
 	    if (eqstr(ntag(*node),"HUSB") || eqstr(ntag(*node),"WIFE")) {
@@ -240,7 +236,7 @@ next_spouse (NODE *node, RECORD *spouse, Database *database)
  *  returns addref'd record
  *================================================*/
 static RECORD
-indi_to_prev_sib_impl (NODE indi, Database *database)
+indi_to_prev_sib_impl (GNode *indi, Database *database)
 {
 #if defined(DEADENDS)
 	GNode *fam, *prev, *node;
@@ -273,22 +269,18 @@ indi_to_prev_sib (RECORD irec, Database *database)
  *  returns addref'd record
  *============================================*/
 static RECORD
-indi_to_next_sib_impl (NODE indi, Database *database)
+indi_to_next_sib_impl (GNode *indi, Database *database)
 {
-#if defined(DEADENDS)
 	GNode *fam, *node;
-#else
-	NODE fam, node;
-#endif
-	BOOLEAN found;
+	bool found;
 	if (!indi) return NULL;
 	if (!(fam = indi_to_famc(indi))) return NULL;
 	node = CHIL(fam);
-	found = FALSE;  /* until we find indi */
+	found = false;  /* until we find indi */
 	while (node) {
 		if (!found) {
 			if (eqstr(nxref(indi), nval(node)))
-				found = TRUE;
+				found = true;
 		} else {
 			if (eqstr(ntag(node),"CHIL"))
 				return key_to_record(rmvat(nval(node)));
@@ -308,20 +300,16 @@ indi_to_next_sib (RECORD irec, Database *database)
  * node_to_tag -- Return a subtag of a node
  * (presumably top level, but not necessarily)
  *====================================*/
-STRING node_to_tag (NODE node, STRING tag, INT len)
+String node_to_tag (GNode *node, String tag, int len)
 {
-#if defined(DEADENDS)
 	/* GEDCOM has no max, but MAXLINELEN is the longest line we support. */
 	static char scratch[MAXLINELEN+1];
-#else
-	static char scratch[MAXGEDNAMELEN+1];
-#endif
-	STRING refn;
+	String refn;
 	if (!node) return NULL;
 	if (!(node = find_tag(nchild(node), tag)))
 		return NULL;
 	refn = nval(node);
-	if (len > (INT)sizeof(scratch)-1)
+	if (len > (int)sizeof(scratch)-1)
 		len = sizeof(scratch)-1;
 	llstrsets(scratch, len, uu8, refn);
 	return scratch;
@@ -336,10 +324,10 @@ STRING node_to_tag (NODE node, STRING tag, INT len)
  * Created: 2003-01-12 (Perry Rapp)
  *============================================*/
 void
-record_to_date_place (RECORD record, STRING tag, STRING * date, STRING * plac
-	, INT * count)
+record_to_date_place (RECORD record, String tag, String * date, String * plac
+	, int * count)
 {
-	NODE node=0;
+	GNode *node=0;
 	for (node = record_to_first_event(record, tag)
 		; node
 		; node = node_to_next_event(node, tag)) {
@@ -354,10 +342,10 @@ record_to_date_place (RECORD record, STRING tag, STRING * date, STRING * plac
  *  tag:     [IN]  desired tag (eg, "BIRT")
  * Created: 2003-01-12 (Perry Rapp)
  *============================================*/
-NODE
-record_to_first_event (RECORD record, CNSTRING tag)
+GNode *
+record_to_first_event (RECORD record, CString tag)
 {
-	NODE node = nztop(record);
+	GNode *node = nztop(record);
 	if (!node) return NULL;
 	return find_tag(nchild(node), tag);
 }
@@ -367,8 +355,8 @@ record_to_first_event (RECORD record, CNSTRING tag)
  *  tag:   [IN]  desired tag (eg, "BIRT")
  * Created: 2003-01-12 (Perry Rapp)
  *============================================*/
-NODE
-node_to_next_event (NODE node, CNSTRING tag)
+GNode *
+node_to_next_event (GNode *node, CString tag)
 {
 	return find_tag(nsibling(node), tag);
 }
@@ -380,9 +368,9 @@ node_to_next_event (NODE node, CNSTRING tag)
  *  plac:  [OUT] value of first PLACE line (optional)
  *=========================================*/
 void
-event_to_date_place (NODE node, STRING * date, STRING * plac)
+event_to_date_place (GNode *node, String * date, String * plac)
 {
-	INT count=0;
+	int count=0;
 	if (date) {
 		*date = NULL;
 	} else {
@@ -417,11 +405,11 @@ event_to_date_place (NODE node, STRING * date, STRING * plac)
  *  ttm:   [IN]  translation table to use
  *  rfmt:  [IN]  reformatting info (may be NULL)
  *=========================================*/
-STRING
-event_to_string (NODE node, RFMT rfmt)
+String
+event_to_string (GNode *node, RFMT rfmt)
 {
 	static char scratch1[MAXLINELEN+1];
-	STRING date, plac;
+	String date, plac;
 	event_to_date_place(node, &date, &plac);
 	if (!date && !plac) return NULL;
 	/* Apply optional, caller-specified date & place reformatting */
@@ -447,7 +435,7 @@ event_to_string (NODE node, RFMT rfmt)
  * show_node -- Show tree -- DEBUG
  *==============================*/
 void
-show_node (NODE node)
+show_node (GNode *node)
 {
 	if (!node) llwprintf("%s", "(NIL)");
 	show_node_rec(0, node);
@@ -456,10 +444,10 @@ show_node (NODE node)
  * show_node_rec -- Recursive version of show_node
  *==============================================*/
 void
-show_node_rec (INT levl,
-               NODE node)
+show_node_rec (int levl,
+               GNode *node)
 {
-	INT i;
+	int i;
 	if (!node) return;
 	for (i = 1;  i < levl;  i++)
 		llwprintf("%s", "  ");
@@ -476,40 +464,40 @@ show_node_rec (INT levl,
 /*========================
  * copy_node_subtree -- Copy tree
  *======================*/
-NODE
-copy_node_subtree (NODE node)
+GNode *
+copy_node_subtree (GNode *node)
 {
-	return copy_nodes(node, TRUE, FALSE);
+	return copy_nodes(node, true, false);
 }
 
 /*===============================================================
  * traverse_nodes -- Traverse nodes in tree while doing something
  * NODE node:    root of tree to traverse
- * func:         function to call at each node (returns FALSE to stop traversal)
+ * func:         function to call at each node (returns false to stop traversal)
  * param:        opaque pointer for client use, passed thru to callback
  *=============================================================*/
-BOOLEAN
-traverse_nodes (NODE node, BOOLEAN (*func)(NODE, VPTR), VPTR param)
+bool
+traverse_nodes (GNode *node, bool (*func)(NODE, Word), Word param)
 {
 	while (node) {
-		if (!(*func)(node, param)) return FALSE;
+		if (!(*func)(node, param)) return false;
 		if (nchild(node)) {
 			if (!traverse_nodes(nchild(node), func, param))
-				return FALSE;
+				return false;
 		}
 		node = nsibling(node);
 	}
-	return TRUE;
+	return true;
 }
 
 #if 0		  /* no callers */
 /*==================================================
  * num_spouses_of_indi -- Returns number of spouses of person
  *================================================*/
-INT
-num_spouses_of_indi (NODE indi)
+int
+num_spouses_of_indi (GNode *indi)
 {
-	INT nsp;
+	int nsp;
 	if (!indi) return 0;
 #if defined(DEADENDS)
 	FORSPOUSES(indi, spouse, fam, nsp, database) ENDSPOUSES

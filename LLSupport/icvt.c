@@ -50,11 +50,11 @@
 /*===================================================
  * iconv_can_trans -- Can iconv do this translation ?
  *=================================================*/
-BOOLEAN
+bool
 #ifdef HAVE_ICONV
-iconv_can_trans (CNSTRING src, CNSTRING dest)
+iconv_can_trans (CString src, CString dest)
 #else
-iconv_can_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest)
+iconv_can_trans (HINT_PARAM_UNUSED CString src, HINT_PARAM_UNUSED CString dest)
 #endif
 {
 #ifdef HAVE_ICONV
@@ -62,11 +62,11 @@ iconv_can_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest
 
 	ict = iconv_open(dest, src);
 	if (ict == (iconv_t)-1)
-		return FALSE;
+		return false;
 	iconv_close(ict);
-	return TRUE;
+	return true;
 #else
-	return FALSE;
+	return false;
 #endif
 }
 /*===================================================
@@ -77,11 +77,11 @@ iconv_can_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest
  *  zout:    [I/O] converted result
  *  illegal: [IN]  character to use as placeholder for unconvertible input
  *=================================================*/
-BOOLEAN
+bool
 #ifdef HAVE_ICONV
-iconv_trans (CNSTRING src, CNSTRING dest, CNSTRING sin, ZSTR zout, char illegal)
+iconv_trans (CString src, CString dest, CString sin, ZSTR zout, char illegal)
 #else
-iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HINT_PARAM_UNUSED CNSTRING sin, HINT_PARAM_UNUSED ZSTR zout, HINT_PARAM_UNUSED char illegal)
+iconv_trans (HINT_PARAM_UNUSED CString src, HINT_PARAM_UNUSED CString dest, HINT_PARAM_UNUSED CString sin, HINT_PARAM_UNUSED ZSTR zout, HINT_PARAM_UNUSED char illegal)
 #endif
 {
 #ifdef HAVE_ICONV
@@ -105,7 +105,7 @@ iconv_trans (HINT_PARAM_UNUSED CNSTRING src, HINT_PARAM_UNUSED CNSTRING dest, HI
 	ict = iconv_open(dest, src);
 
 	if (ict == (iconv_t)-1) {
-		return FALSE;
+		return false;
 	}
 	if (!strncmp(src, "UCS-2", strlen("UCS-2"))) {
 		/* assume MS-Windows makenarrow call */
@@ -215,9 +215,9 @@ icvt_terminate_and_exit:
 	zs_set_len(zout, outptr-zs_str(zout));
 
 	iconv_close(ict);
-	return TRUE;
+	return true;
 #else
-	return FALSE;
+	return false;
 #endif /* HAVE_ICONV */
 }
 /*===================================================
@@ -225,9 +225,9 @@ icvt_terminate_and_exit:
  *=================================================*/
 void
 #ifdef WIN32_ICONV_SHIM
-init_win32_iconv_shim (CNSTRING dllpath)
+init_win32_iconv_shim (CString dllpath)
 #else
-init_win32_iconv_shim (HINT_PARAM_UNUSED CNSTRING dllpath)
+init_win32_iconv_shim (HINT_PARAM_UNUSED CString dllpath)
 #endif
 {
 #ifdef WIN32_ICONV_SHIM

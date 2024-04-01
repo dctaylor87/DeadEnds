@@ -56,9 +56,9 @@
  *********************************************/
 
 /* alphabetical */
-static void copy_process(STRING dest, STRING src);
-static void expand_variables(STRING valbuf, INT max);
-static INT load_config_file(STRING file, STRING * pmsg, STRING *chain);
+static void copy_process(String dest, String src);
+static void expand_variables(String valbuf, int max);
+static int load_config_file(String file, String * pmsg, String *chain);
 static void send_notifications(void);
 
 /*********************************************
@@ -74,7 +74,7 @@ static TABLE f_db=0; /* option values in current database (user/options) */
 static TABLE f_global=0; /* option values from lines config file */
 static TABLE f_predef=0; /* predefined variables during config file processing */
 static TABLE f_fallback=0; /* lowest priority option values */
-static LIST f_notifications=0; /* collection of callbacks for option table changes */
+static List *f_notifications=0; /* collection of callbacks for option table changes */
 
 /*********************************************
  * local function definitions
@@ -93,9 +93,9 @@ static LIST f_notifications=0; /* collection of callbacks for option table chang
  * Created: 2001/11/09, Perry Rapp
  *========================================*/
 static void
-copy_process (STRING dest, STRING src)
+copy_process (String dest, String src)
 {
-	STRING q=dest,p=src;
+	String q=dest,p=src;
 	while ((*q = *p++)) {
 		if (*q == '\\') {
 			switch (*p++) {
@@ -124,20 +124,20 @@ copy_process (STRING dest, STRING src)
  * Created: 2002/10/21, Perry Rapp
  *========================================*/
 static void
-expand_variables (STRING valbuf, INT max)
+expand_variables (String valbuf, int max)
 {
-	STRING start, end;
-	STRING ptr; /* remainder of valbuf to check */
+	String start, end;
+	String ptr; /* remainder of valbuf to check */
 	ptr = valbuf;
 	while ((start=strchr(ptr, '%')) && (end=strchr(start+1, '%'))) {
-		STRING name = allocsubbytes(start, 0, end-start+1);
-		STRING value = valueof_str(f_global, name);
+		String name = allocsubbytes(start, 0, end-start+1);
+		String value = valueof_str(f_global, name);
 		if (!value)
 			value = valueof_str(f_predef, name);
 		if (value) {
-			INT newlen = strlen(valbuf)-(end-start+1)+strlen(value);
+			int newlen = strlen(valbuf)-(end-start+1)+strlen(value);
 			if (newlen < max) {
-				STRING copy = strdup(valbuf);
+				String copy = strdup(valbuf);
 				if (start>valbuf)
 					strncpy(valbuf, copy, start-valbuf);
 				strcpy(start, value);
@@ -153,11 +153,11 @@ expand_variables (STRING valbuf, INT max)
  * dir_from_file -- return directory of file
  * heap-allocated
  *========================================*/
-static STRING
-dir_from_file (STRING file)
+static String
+dir_from_file (String file)
 {
-	STRING thisdir = strdup(file);
-	STRING ptr;
+	String thisdir = strdup(file);
+	String ptr;
 	for (ptr=thisdir+strlen(thisdir)-1; ptr>thisdir; --ptr) {
 		if (is_dir_sep(*ptr))
 			break;
@@ -170,15 +170,15 @@ dir_from_file (STRING file)
  *  and load into table (f_global)
  * returns 1 for success, 0 for not found, -1 for error (with pmsg)
  *========================================*/
-static INT
-load_config_file (STRING file, STRING * pmsg, STRING *chain)
+static int
+load_config_file (String file, String * pmsg, String *chain)
 {
 	FILE * fp = 0;
-	STRING ptr, val, key;
-	STRING thisdir = dir_from_file(file);
-	BOOLEAN failed, noesc;
+	String ptr, val, key;
+	String thisdir = dir_from_file(file);
+	bool failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
-	INT len;
+	int len;
 	fp = fopen(file, LLREADTEXT);
 	if (!fp) {
 		free(thisdir);
@@ -190,7 +190,7 @@ load_config_file (STRING file, STRING * pmsg, STRING *chain)
 	strfree(&thisdir);
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
-		noesc = FALSE;
+		noesc = false;
 		len = strlen(buffer);
 		if (len == 0)
 			continue; /* ignore blank lines */
@@ -208,7 +208,7 @@ load_config_file (STRING file, STRING * pmsg, STRING *chain)
 			continue; /* ignore lines without = or key */
 		*ptr=0; /* zero-terminate key */
 		if (ptr[-1] == ':') {
-			noesc = TRUE; /* := means don't do backslash escapes */
+			noesc = true; /* := means don't do backslash escapes */
 			ptr[-1] = 0;
 		}
 		/* ignore any previous value, it will be overwritten */
@@ -249,15 +249,15 @@ load_config_file (STRING file, STRING * pmsg, STRING *chain)
 /*=================================
  * load_global_options -- 
  *  Load internal table of global options from caller-specified config file
- * STRING * pmsg: heap-alloc'd error string if fails
+ * String * pmsg: heap-alloc'd error string if fails
  * returns 1 for ok, 0 for not found, -1 for error
  *===============================*/
-INT
-load_global_options (STRING configfile, STRING * pmsg)
+int
+load_global_options (String configfile, String * pmsg)
 {
-	STRING chain = NULL;
-	INT rtn = 0;
-	INT cnt = 0;
+	String chain = NULL;
+	int rtn = 0;
+	int cnt = 0;
 	*pmsg = NULL;
 	if (!f_global) 
 		f_global= create_table_str();
@@ -348,10 +348,10 @@ term_lloptions (void)
  *  str = getlloptstr("HDR_SUBM", "1 SUBM");
  * returns string belonging to table
  *=============================================*/
-STRING
-getlloptstr (CNSTRING optname, STRING defval)
+String
+getlloptstr (CString optname, String defval)
 {
-	STRING str = 0;
+	String str = 0;
 	if (!str && f_cmd)
 		str = valueof_str(f_cmd, optname);
 	if (!str && f_db)
@@ -370,10 +370,10 @@ getlloptstr (CNSTRING optname, STRING defval)
  *  str = getlloptstr_rpt("HDR_SUBM", "1 SUBM");
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
-STRING
-getlloptstr_rpt (CNSTRING optname, STRING defval)
+String
+getlloptstr_rpt (CString optname, String defval)
 {
-	STRING str = 0;
+	String str = 0;
 	if (!str && f_rpt)
 		str = valueof_str(f_rpt, optname);
 	if (!str)
@@ -386,10 +386,10 @@ getlloptstr_rpt (CNSTRING optname, STRING defval)
  *  str = getlloptstr_dbonly("codeset", 0);
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
-STRING
-getlloptstr_dbonly (CNSTRING optname, STRING defval)
+String
+getlloptstr_dbonly (CString optname, String defval)
 {
-	STRING str = 0;
+	String str = 0;
 	if (f_db)
 		str = valueof_str(f_db, optname);
 	if (!str)
@@ -405,17 +405,17 @@ getlloptstr_dbonly (CNSTRING optname, STRING defval)
 	if (getlloptint("FullReportCallStack", 0) > 0)
  * Created: 2001/11/22, Perry Rapp
  *=============================================*/
-INT
-getlloptint (CNSTRING optname, INT defval)
+int
+getlloptint (CString optname, int defval)
 {
-	STRING str = getlloptstr(optname, 0);
+	String str = getlloptstr(optname, 0);
 	return str ? atoi(str) : defval;
 }
 /*===============================================
  * setoptstr_fallback -- Set option fallback value
  *=============================================*/
 void
-setoptstr_fallback (STRING optname, STRING newval)
+setoptstr_fallback (String optname, String newval)
 {
 	if (!f_fallback)
 		f_fallback = create_table_str();

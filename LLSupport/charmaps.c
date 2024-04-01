@@ -73,10 +73,10 @@ const char *map_keys[] = {
 
 /* nodes that make up the tree that is a custom character translation table */
 /* MTE: Notes 12/24/2015
- * achar is defined as an INT16 here.
- * However, it is assigned from an INT parameter in create_xnode and step_xnode;
- * Compared with INT and uchar in translate_match;
- * Displayed as a uchar in show_xnode.
+ * achar is defined as an int16_t here.
+ * However, it is assigned from an int parameter in create_xnode and step_xnode;
+ * Compared with int and u_char in translate_match;
+ * Displayed as a u_char in show_xnode.
  * This needs to be cleaned up to be more consistent, possibly with different APIs
  * for translations between ASCII (8-bit) and  UTF-8, UTF-16 or Unicode encodings.
  */
@@ -85,16 +85,16 @@ struct tag_xnode {
 	XNODE parent;	/* parent node */
 	XNODE sibling;	/* next sib node */
 	XNODE child;	/* first child node */
-	INT16 achar;	/* my character */
-	INT16 count;	/* translation length */
-	STRING replace;	/* translation string */
+	int16_t achar;	/* my character */
+	int16_t count;	/* translation length */
+	String replace;	/* translation string */
 };
 
 /* root of a custom character translation table */
 struct tag_trantable {
 	XNODE start[256];
 	char name[20];
-	INT total;
+	int total;
 };
 
 
@@ -109,19 +109,19 @@ struct tag_trantable {
  *********************************************/
 
 /* alphabetical */
-static XNODE create_xnode(XNODE, INT, STRING);
-static BOOLEAN init_map_from_str(STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr);
+static XNODE create_xnode(XNODE, int, String);
+static bool init_map_from_str(String str, CString mapname, TRANTABLE * ptt, ZSTR zerr);
 #if !defined(DEADENDS)
-static void maperror(CNSTRING errmsg);
+static void maperror(CString errmsg);
 #endif
 static void remove_xnodes(XNODE);
 #ifdef DEBUG
 void show_trantable (TRANTABLE tt);
 static void show_xnode(XNODE node);
-static void show_xnodes(INT indent, XNODE node);
+static void show_xnodes(int indent, XNODE node);
 #endif
-static XNODE step_xnode(XNODE, INT);
-static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
+static XNODE step_xnode(XNODE, int);
+static int translate_match(TRANTABLE tt, CString in, CString * out);
 
 /*********************************************
  * local variables
@@ -142,11 +142,11 @@ static INT translate_match(TRANTABLE tt, CNSTRING in, CNSTRING * out);
  *  That is, it takes over their memory
  *===========================================*/
 TRANTABLE
-create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
+create_trantable (String *lefts, String *rights, int n, String name)
 {
 	TRANTABLE tt = (TRANTABLE) stdalloc(sizeof(*tt));
-	STRING left, right;
-	INT i, c;
+	String left, right;
+	int i, c;
 	XNODE node;
 	tt->name[0] = 0;
 	tt->total = n;
@@ -160,11 +160,11 @@ create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
 		ASSERT(left);
 		ASSERT(right);
 		ASSERT(*left);
-		c = (uchar) *left++;
+		c = (u_char) *left++;
 		if (tt->start[c] == NULL)
 			tt->start[c] = create_xnode(NULL, c, NULL);
 		node = tt->start[c];
-		while ((c = (uchar) *left++)) {
+		while ((c = (u_char) *left++)) {
 			node = step_xnode(node, c);
 		}
 		node->count = strlen(right);
@@ -179,7 +179,7 @@ create_trantable (STRING *lefts, STRING *rights, INT n, STRING name)
  *  string:  [in] replacement string for matches
  *===========================*/
 static XNODE
-create_xnode (XNODE parent, INT achar, STRING string)
+create_xnode (XNODE parent, int achar, String string)
 {
 	XNODE node = (XNODE) stdalloc(sizeof(*node));
 	node->parent = parent;
@@ -194,7 +194,7 @@ create_xnode (XNODE parent, INT achar, STRING string)
  * step_xnode -- Step to node from character
  *========================================*/
 static XNODE
-step_xnode (XNODE node, INT achar)
+step_xnode (XNODE node, int achar)
 {
 	XNODE prev, node0 = node;
 	if (node->child == NULL)
@@ -214,7 +214,7 @@ step_xnode (XNODE node, INT achar)
 void
 remove_trantable (TRANTABLE tt)
 {
-	INT i;
+	int i;
 	if (!tt) return;
 	for (i = 0; i < 256; i++)
 		remove_xnodes(tt->start[i]);
@@ -242,13 +242,13 @@ remove_xnodes (XNODE node)
  * memory, so it is longer-lived than a static buffer
  * Created: 2001/07/21 (Perry Rapp)
  *=================================================*/
-static INT
-translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
+static int
+translate_match (TRANTABLE tt, CString in, CString * out)
 {
 	XNODE node, chnode;
-	INT nxtch;
-	CNSTRING q = in;
-	node = tt->start[(uchar)*in];
+	int nxtch;
+	CString q = in;
+	node = tt->start[(u_char)*in];
 	if (!node) {
 		*out = "";
 		return 0;
@@ -256,7 +256,7 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 	q = in+1;
 /* Match as far as possible */
 	while (*q && node->child) {
-		nxtch = (uchar)*q;
+		nxtch = (u_char)*q;
 		chnode = node->child;
 		while (chnode && chnode->achar != nxtch)
 			chnode = chnode->sibling;
@@ -264,7 +264,7 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
 		node = chnode;
 		q++;
 	}
-	while (TRUE) {
+	while (true) {
 		if (node->replace) {
 			/* replacing match */
 			*out = node->replace;
@@ -294,21 +294,21 @@ translate_match (TRANTABLE tt, CNSTRING in, CNSTRING * out)
  * init_map_from_rec -- Init single translation table
  *  indx:  [IN]  which translation table (see defn of map_keys)
  *  ptt:   [OUT] new translation table, if created
- * Returns FALSE if error
- * But if no tt found, *ptt=0 and returns TRUE.
+ * Returns false if error
+ * But if no tt found, *ptt=0 and returns true.
  *=================================================*/
-BOOLEAN
-init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
+bool
+init_map_from_rec (CString key, int trnum, TRANTABLE * ptt)
 {
-	STRING rawrec=0;
-	INT len;
-	BOOLEAN ok;
+	String rawrec=0;
+	int len;
+	bool ok;
 	ZSTR zerr=0;
-	CNSTRING mapname = transl_get_map_name(trnum);
+	CString mapname = transl_get_map_name(trnum);
 
 	*ptt = 0;
 	if (!(rawrec = retrieve_raw_record(key, &len)))
-		return TRUE;
+		return true;
 	zerr = zs_new();
 	ok = init_map_from_str(rawrec, mapname, ptt, zerr);
 	stdfree(rawrec);
@@ -324,27 +324,27 @@ init_map_from_rec (CNSTRING key, INT trnum, TRANTABLE * ptt)
  *  file: [IN]  file from which to read translation table
  *  indx: [IN]  which translation table (see defn of map_keys)
  *  ptt:  [OUT] new translation table if created
- * Returns FALSE if error.
- * But if file is empty, *ptt=0 and returns TRUE.
+ * Returns false if error.
+ * But if file is empty, *ptt=0 and returns true.
  *==================================================*/
-BOOLEAN
-init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
+bool
+init_map_from_file (CString file, CString mapname, TRANTABLE * ptt, ZSTR zerr)
 {
 	FILE *fp;
 	struct stat buf;
-	STRING mem;
-	INT siz;
-	BOOLEAN ok;
+	String mem;
+	int siz;
+	bool ok;
 
 	*ptt = 0;
 
-	if ((fp = fopen(file, LLREADTEXT)) == NULL) return TRUE;
+	if ((fp = fopen(file, LLREADTEXT)) == NULL) return true;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
 		fclose(fp);
-		return TRUE;
+		return true;
 	}
-	mem = (STRING) stdalloc(buf.st_size+1);
+	mem = (String) stdalloc(buf.st_size+1);
 	mem[buf.st_size] = 0;
 	siz = fread(mem, 1, buf.st_size, fp);
 	/* may not read full buffer on Windows due to CR/LF translation */
@@ -368,19 +368,19 @@ init_map_from_file (CNSTRING file, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
  *  pzerr: [OUT] error string (set if fails)
  * Returns NULL if ok, else error string
  *================================================*/
-static BOOLEAN
-init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
+static bool
+init_map_from_str (String str, CString mapname, TRANTABLE * ptt, ZSTR zerr)
 {
-	INT i, n, maxn, entry=1, line=1, newc;
-	INT sep = (uchar)'\t'; /* default separator */
-	BOOLEAN done;
-	BOOLEAN skip;
-	BOOLEAN ok = TRUE; /* return value */
+	int i, n, maxn, entry=1, line=1, newc;
+	int sep = (u_char)'\t'; /* default separator */
+	bool done;
+	bool skip;
+	bool ok = true; /* return value */
 	unsigned char c;
 	char scratch[50];
-	STRING p, *lefts, *rights;
+	String p, *lefts, *rights;
 	TRANTABLE tt=NULL;
-	STRING errmsg=0;
+	String errmsg=0;
 	char name[sizeof(tt->name)];
 	name[0] = 0;
 
@@ -390,13 +390,13 @@ init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 /* Count newlines to find lefts and rights sizes */
 	p = str;
 	n = 0;
-	skip = TRUE;
+	skip = true;
 	/* first pass through, count # of entries */
 	while (*p) {
-		skip=FALSE;
+		skip=false;
 		/* skip blank lines and lines beginning with "##" */
-		if (*p == '\r' || *p == '\n') skip=TRUE;
-		if (*p =='#' && p[1] == '#') skip=TRUE;
+		if (*p == '\r' || *p == '\n') skip=true;
+		if (*p =='#' && p[1] == '#') skip=true;
 		if (skip) {
 			while(*p && (*p != '\n'))
 				p++;
@@ -416,32 +416,32 @@ init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 		/* empty translation table ignored */
 		goto none;
 	}
-	lefts = (STRING *) stdalloc(n*sizeof(STRING));
-	rights = (STRING *) stdalloc(n*sizeof(STRING));
+	lefts = (String *) stdalloc(n*sizeof(String));
+	rights = (String *) stdalloc(n*sizeof(String));
 	for (i = 0; i < n; i++) {
 		lefts[i] = NULL;
 		rights[i] = NULL;
 	}
 
 /* Lex the string for patterns and replacements */
-	done = FALSE;
+	done = false;
 	maxn = n;	/* don't exceed the entries you have allocated */
 	n = 0;
 	while (!done && (n < maxn)) {
-		skip=FALSE;
+		skip=false;
 		if (!*str) break;
 		/* skip blank lines and lines beginning with "##" */
-		if (*str == '\r' || *str == '\n') skip=TRUE;
+		if (*str == '\r' || *str == '\n') skip=true;
 		if (*str =='#' && str[1] == '#') {
-			skip=TRUE;
+			skip=true;
 			if (!strncmp(str, "##!sep", 6)) {
 				/* new separator character if legal */
 				if (str[6]=='=')
 					sep='=';
 			}
 			if (!strncmp(str, "##!name: ",9)) {
-				STRING p1=str+9, p2=name;
-				INT i=sizeof(name);
+				String p1=str+9, p2=name;
+				int i=sizeof(name);
 				while (*p1 && *p1 != '\n' && --i)
 					*p2++ = *p1++;
 				*p2=0;
@@ -455,7 +455,7 @@ init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 			continue;
 		}
 		p = scratch;
-		while (TRUE) {
+		while (true) {
 			c = *str++;
 			if (c == '#')  {
 				newc = get_decimal(str);
@@ -501,7 +501,7 @@ init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 		}
 		lefts[n] = strsave(scratch);
 		p = scratch;
-		while (TRUE) {
+		while (true) {
 			c = *str++;
 			if (c == '#')  {
 				newc = get_decimal(str);
@@ -526,7 +526,7 @@ init_map_from_str (STRING str, CNSTRING mapname, TRANTABLE * ptt, ZSTR zerr)
 				++entry;
 				break;
 			} else if (c == 0) {
-				done = TRUE;
+				done = true;
 				break;
 			} else if (c == '\\') {
 				c = *str++;
@@ -573,31 +573,31 @@ fail:
 
 	for (i = 0; i < n; i++) /* rights not consumed by tt */
 		stdfree(rights[i]);
-	ok = FALSE;
+	ok = false;
 	goto end;
 }
 /*==================================================
  * get_decimal -- Get decimal number from map string
  *================================================*/
-INT
-get_decimal (STRING str)
+int
+get_decimal (String str)
 {
-	INT value, c;
-	if (chartype(c = (uchar)*str++) != DIGIT) return -1;
+	int value, c;
+	if (chartype(c = (u_char)*str++) != DIGIT) return -1;
 	value = c - '0';
-	if (chartype(c = (uchar)*str++) != DIGIT) return -1;
+	if (chartype(c = (u_char)*str++) != DIGIT) return -1;
 	value = value*10 + c - '0';
-	if (chartype(c = (uchar)*str++) != DIGIT) return -1;
+	if (chartype(c = (u_char)*str++) != DIGIT) return -1;
 	value = value*10 + c - '0';
 	return (value >= 256) ? -1 : value;
 }
 /*==========================================================
  * get_hexidecimal -- Get hexidecimal number from map string
  *========================================================*/
-INT
-get_hexidecimal (STRING str)
+int
+get_hexidecimal (String str)
 {
-	INT value, h;
+	int value, h;
 	if ((h = hexvalue(*str++)) == -1) return -1;
 	value = h;
 	if ((h = hexvalue(*str++)) == -1) return -1;
@@ -606,8 +606,8 @@ get_hexidecimal (STRING str)
 /*================================================
  * hexvalue -- Find hexidecimal value of character
  *==============================================*/
-INT
-hexvalue (INT c)
+int
+hexvalue (int c)
 {
 	if (c >= '0' && c <= '9') return c - '0';
 	if (c >= 'a' && c <= 'f') return 10 + c - 'a';
@@ -620,9 +620,9 @@ hexvalue (INT c)
  * maperror -- Print error message from reading map
  *==================================================*/
 static void
-maperror (CNSTRING errmsg)
+maperror (CString errmsg)
 {
-	llwprintf("%s", (STRING)errmsg);
+	llwprintf("%s", (String)errmsg);
 }
 #endif
 
@@ -633,7 +633,7 @@ maperror (CNSTRING errmsg)
 void
 show_trantable (TRANTABLE tt)
 {
-	INT i;
+	int i;
 	XNODE node;
 	if (tt == NULL) {
 		llwprintf("%s\n", "EMPTY TABLE");
@@ -650,9 +650,9 @@ show_trantable (TRANTABLE tt)
  * show_xnodes -- DEBUG routine that shows XNODEs
  *=============================================*/
 static void
-show_xnodes (INT indent, XNODE node)
+show_xnodes (int indent, XNODE node)
 {
-	INT i;
+	int i;
 	if (!node) return;
 	for (i = 0; i < indent; i++)
 		llwprintf("%s", "  ");
@@ -695,13 +695,13 @@ custom_translatez (ZSTR zstr, TRANTABLE tt)
  * returns translated string
  *=================================================*/
 ZSTR
-custom_translate (CNSTRING str, TRANTABLE tt)
+custom_translate (CString str, TRANTABLE tt)
 {
 	ZSTR zout = zs_newn((unsigned int)(strlen(str)*1.3+2));
-	CNSTRING p = str;
+	CString p = str;
 	while (*p) {
-		CNSTRING tmp;
-		INT len = translate_match(tt, p, &tmp);
+		CString tmp;
+		int len = translate_match(tt, p, &tmp);
 		if (len) {
 			p += len;
 			zs_apps(zout, tmp);
@@ -713,19 +713,19 @@ custom_translate (CNSTRING str, TRANTABLE tt)
 }
 /*===================================================
  * custom_sort -- Compare two strings with custom sort
- * returns FALSE if no custom sort table
- * otherwise sets *rtn correctly & returns TRUE
+ * returns false if no custom sort table
+ * otherwise sets *rtn correctly & returns true
  * Created: 2001/07/21 (Perry Rapp)
  *=================================================*/
-BOOLEAN
-custom_sort (const char *str1, const char *str2, INT * rtn)
+bool
+custom_sort (const char *str1, const char *str2, int * rtn)
 {
 	TRANTABLE tts = transl_get_legacy_tt(MSORT);
 	TRANTABLE ttc = transl_get_legacy_tt(MCHAR);
-	CNSTRING rep1, rep2;
-	CNSTRING ptr1=str1, ptr2=str2;
-	INT len1, len2;
-	if (!tts) return FALSE;
+	CString rep1, rep2;
+	CString ptr1=str1, ptr2=str2;
+	int len1, len2;
+	if (!tts) return false;
 /* This was an attempt at handling skip-over prefixes (eg, Mc) */
 #if 0 /* must be done earlier */
 	if (ptr1[0] && ptr2[0]) {
@@ -750,7 +750,7 @@ custom_sort (const char *str1, const char *str2, INT * rtn)
 		if (!ptr1[0] || !ptr2[0]) {
 			/* only zero if both end simultaneously */
 			*rtn = ptr1[0] - ptr2[0];
-			return TRUE;
+			return true;
 		}
 		/* look up in sort table */
 		len1 = translate_match(tts, ptr1, &rep1);
@@ -758,14 +758,14 @@ custom_sort (const char *str1, const char *str2, INT * rtn)
 		if (len1 && len2) {
 			/* compare sort table results */
 			*rtn = atoi(rep1) - atoi(rep2);
-			if (*rtn) return TRUE;
+			if (*rtn) return true;
 			ptr1 += len1;
 			ptr2 += len2;
 		} else {
 			/* at least one not in sort table */
 			/* try comparing single chars */
 			*rtn = ptr1[0] - ptr2[0];
-			if (*rtn) return TRUE;
+			if (*rtn) return true;
 			/* use charset to see how wide they are */
 			if (ttc) {
 				len1 = translate_match(ttc, ptr1, &rep1);
@@ -779,7 +779,7 @@ custom_sort (const char *str1, const char *str2, INT * rtn)
 				len1 = len2 = 1;
 				*rtn = ptr1[0] - ptr2[0];
 			}
-			if (*rtn) return TRUE;
+			if (*rtn) return true;
 			/* advance both by at least one */
 			ptr1 += len1 ? len1 : 1;
 			ptr2 += len2 ? len2 : 1;
@@ -838,10 +838,10 @@ get_trantable_desc (TRANTABLE tt)
  *  or "unnamed"
  * Created: 2002/12/13 (Perry Rapp)
  *=================================================*/
-CNSTRING
+CString
 tt_get_name (TRANTABLE tt)
 {
-	CNSTRING name = tt->name;
+	CString name = tt->name;
 	if (!name || !name[0])
 		name = _("<unnamed>");
 	return name;

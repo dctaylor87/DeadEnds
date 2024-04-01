@@ -37,7 +37,7 @@ extern int xl_get_uparam(XLAT);
 extern XLAT xl_get_xlat(CString src, CString dest, bool adhoc);
 extern bool xl_is_xlat_valid(XLAT xlat);
 extern void xl_load_all_dyntts(CString ttpath);
-extern void xl_parse_codeset(CString codeset, ZSTR zcsname, LIST * subcodes);
+extern void xl_parse_codeset(CString codeset, ZSTR zcsname, List **subcodes);
 extern void xl_release_xlat(XLAT xlat);
 extern void xl_set_uparam(XLAT, int uparam);
 extern void xlat_shutdown(void);
