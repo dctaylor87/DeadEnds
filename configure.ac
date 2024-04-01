@@ -233,6 +233,7 @@ AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
 AC_CHECK_HEADERS( malloc.h malloc/malloc.h )
 AC_CHECK_HEADERS( langinfo.h )
+AC_CHECK_HEADERS( pwd.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf getpwuid setlocale )
