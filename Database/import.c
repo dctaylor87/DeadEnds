@@ -36,9 +36,6 @@
 //static void setupDatabase(List *recordIndexes);
 //static void addIndexToDatabase(RecordIndex *index, Database *database);
 
-// Error messages defined elsewhere.
-extern String idgedf, gdcker, gdnadd, dboldk, dbnewk, dbodel, cfoldk, dbdelk, dbrdon;
-
 static bool debugging = true;
 
 //  importFromFiles -- Import Gedcom files into a List of Databases, one Database per file. The
