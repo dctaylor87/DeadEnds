@@ -359,7 +359,7 @@ local_init (void)
 	int i;
 
 	ASSERT(NUM_TT_MAPS == ARRAYSIZE(conversions));
-	ASSERT(NUM_ZONES == ARRASYSIZE(zones));
+	ASSERT(NUM_ZONES == ARRAYSIZE(zones));
 
 	for (i=0; i<NUM_TT_MAPS; ++i)
 		legacytts[i].tt = 0;
