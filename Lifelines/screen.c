@@ -155,7 +155,6 @@ static UIWINDOW extra_menu_win=NULL;
 
 extern INT alldone;
 extern BOOLEAN progrunning;
-extern STRING idsortttl,idloc;
 
 
 /*********************************************
