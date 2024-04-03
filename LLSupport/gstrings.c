@@ -149,7 +149,7 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 	if (len>linelen)
 		len = linelen;
 	if (indi) {
-		ASSERT(name = PersonToName(indi, len));
+		ASSERT(name = personToName(indi, len));
 	} else
 		name = _(qSunksps);
 	snprintf(p, linelen, "%s", name);
@@ -317,7 +317,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 				templen = (mylen-4)/2;
 			else
 				templen = mylen;
-			tempname = PersonToName(node, templen);
+			tempname = personToName(node, templen);
 			limit_width(tempname, templen, uu8);
 			llstrcatn(&p, tempname, &mylen);
 			if (wives)
@@ -330,7 +330,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 			if (!templen)
 				templen = mylen;
 			/* othewise we set templen above */
-			llstrcatn(&p, PersonToName(node, templen), &mylen);
+			llstrcatn(&p, personToName(node, templen), &mylen);
 		}
 	}
 	joinFamily(fam, refn, husb, wife, chil, rest);
