@@ -19,7 +19,6 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "sys_inc.h"
