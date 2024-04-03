@@ -47,8 +47,6 @@ extern INT csz_sour;
 extern INT csz_even;
 extern INT csz_othr;
 
-extern int opterr;
-
 extern int yydebug;
 
 /*********************************************
@@ -91,8 +89,6 @@ static void platform_init(void);
 int
 main (int argc, char **argv)
 {
-	extern char *optarg;
-	extern int optind;
 	char * msg;
 	int c;
 	BOOLEAN ok=FALSE;

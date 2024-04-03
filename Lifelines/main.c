@@ -90,8 +90,6 @@ extern int yydebug;
 
 extern INT winx, winy;
 
-extern int opterr;
-
 /*********************************************
  * required global variables
  *********************************************/
@@ -130,8 +128,6 @@ static void print_usage(void);
 int
 main (int argc, char **argv)
 {
-	extern char *optarg;
-	extern int optind;
 	char * msg;
 	int c;
 	BOOLEAN ok=FALSE;
