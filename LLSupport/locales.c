@@ -501,7 +501,7 @@ static char *
 #if defined(_WIN32) && !defined(__CYGWIN__)
 win32_setlocale (int category, char * locale)
 #else
-win32_setlocale (HINT_PARAM_UNUSED int category, HINT_PARAM_UNUSED char * locale)
+win32_setlocale (ATTRIBUTE_UNUSED int category, ATTRIBUTE_UNUSED char * locale)
 #endif
 {
 	char * rtn = 0;

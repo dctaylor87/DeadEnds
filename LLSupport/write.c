@@ -301,7 +301,7 @@ write_indi_to_file (GNode *indi, CString file)
 	ASSERT(fp = fopen(file, LLWRITETEXT));
 	prefix_file(fp, ttmo);
 
-	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 	write_nodes(0, fp, ttmo, indi, true, true, true);
 	write_nodes(1, fp, ttmo, name, true, true, true);
 	write_nodes(1, fp, ttmo, refn, true, true, true);
@@ -310,7 +310,7 @@ write_indi_to_file (GNode *indi, CString file)
 	write_nodes(1, fp, ttmo, famc,  true, true, true);
 	write_nodes(1, fp, ttmo, fams,  true, true, true);
 	fclose(fp);
-	join_indi(indi, name, refn, sex, body, famc, fams);
+	joinPerson(indi, name, refn, sex, body, famc, fams);
 }
 /*=====================================
  * write_bom - whether to write Unicode BOM
@@ -363,13 +363,13 @@ write_fam_to_file (GNode *fam, CString file)
 	ASSERT(fp = fopen(file, LLWRITETEXT));
 	prefix_file(fp, ttmo);
 
-	split_fam(fam, &refn, &husb, &wife, &chil, &body);
+	splitFamily(fam, &refn, &husb, &wife, &chil, &body);
 	write_nodes(0, fp, ttmo, fam,  true, true, true);
 	write_nodes(1, fp, ttmo, refn, true, true, true);
 	write_nodes(1, fp, ttmo, husb,  true, true, true);
 	write_nodes(1, fp, ttmo, wife,  true, true, true);
 	write_nodes(1, fp, ttmo, body,  true, true, true);
 	write_nodes(1, fp, ttmo, chil,  true, true, true);
-	join_fam(fam, refn, husb, wife, chil, body);
+	joinFamily(fam, refn, husb, wife, chil, body);
 	fclose(fp);
 }

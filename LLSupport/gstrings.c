@@ -149,7 +149,7 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 	if (len>linelen)
 		len = linelen;
 	if (indi) {
-		ASSERT(name = indi_to_name(indi, len));
+		ASSERT(name = PersonToName(indi, len));
 	} else
 		name = _(qSunksps);
 	snprintf(p, linelen, "%s", name);
@@ -250,7 +250,7 @@ sour_to_list_string (GNode *sour, int len, String delim)
  * Created: 2001/12/16, Perry Rapp
  *==============================================*/
 String
-even_to_list_string (GNode *even, int len, HINT_PARAM_UNUSED String delim)
+even_to_list_string (GNode *even, int len, ATTRIBUTE_UNUSED String delim)
 {
 	char scratch[1024];
 	String name, p=scratch;
@@ -299,7 +299,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 		llstrcatn(&p, " ", &mylen);
 		llstrcatn(&p, name, &mylen);
 	}
-	split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 	for (node=husb; node; node=nsibling(node))
 		husbands++;
 	for (node=wife; node; node=nsibling(node))
@@ -317,7 +317,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 				templen = (mylen-4)/2;
 			else
 				templen = mylen;
-			tempname = indi_to_name(node, templen);
+			tempname = PersonToName(node, templen);
 			limit_width(tempname, templen, uu8);
 			llstrcatn(&p, tempname, &mylen);
 			if (wives)
@@ -330,10 +330,10 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 			if (!templen)
 				templen = mylen;
 			/* othewise we set templen above */
-			llstrcatn(&p, indi_to_name(node, templen), &mylen);
+			llstrcatn(&p, PersonToName(node, templen), &mylen);
 		}
 	}
-	join_fam(fam, refn, husb, wife, chil, rest);
+	joinFamily(fam, refn, husb, wife, chil, rest);
 	/* TO DO - print a husband and a wife out */
 	limit_width(scratch, len, uu8);
 	return strsave(scratch);
@@ -343,7 +343,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
  * Created: 2000/11/29, Perry Rapp
  *==============================================*/
 String
-other_to_list_string(GNode *node, int len, HINT_PARAM_UNUSED String delim)
+other_to_list_string(GNode *node, int len, ATTRIBUTE_UNUSED String delim)
 {
 	char scratch[1024];
 	String name, p=scratch;

@@ -61,7 +61,7 @@ add_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 	info->uparm = uparm;
 	if (!*notifiees)
 		*notifiees = create_list2(LISTDOFREE);
-	enqueue_list(*notifiees, (Word)info);
+	enqueueList(*notifiees, (Word)info);
 }
 /*===============================================
  * remove_listeners -- Empty & remove list
@@ -70,7 +70,7 @@ void
 remove_listeners (List **notifiees)
 {
 	if (*notifiees) {
-		destroy_list(*notifiees);
+		deleteList(*notifiees);
 		*notifiees = 0;
 	}
 }
@@ -84,22 +84,22 @@ delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 	/* Our lists don't have remove from middle, so we just make a new copy */
 	List *lold = 0;
 	bool found = false;
-	if (!*notifiees || is_empty_list(*notifiees))
+	if (!*notifiees || isEmptyList(*notifiees))
 		return;
 	lold = *notifiees;
 	*notifiees = create_list2(LISTDOFREE);
-	while (!is_empty_list(lold)) {
-		struct callback_info * info = (struct callback_info *)pop_list(lold);
+	while (!isEmptyList(lold)) {
+		struct callback_info * info = (struct callback_info *)removeFirstListElement(lold);
 		if (!found && info->fnc == fncptr && info->uparm == uparm) {
 			found = true;
 			info->fnc = NULL;
 			stdfree(info);
 		} else {
-			enqueue_list(*notifiees, (Word)info);
+			enqueueList(*notifiees, (Word)info);
 		}
 	}
 	destroy_empty_list(lold);
-	if (is_empty_list(*notifiees)) {
+	if (isEmptyList(*notifiees)) {
 		remove_listeners(notifiees);
 	}
 }
@@ -111,7 +111,7 @@ notify_listeners (List **notifiees)
 {
 	struct callback_info * info;
 	List  *list;
-	if (!notifiees || is_empty_list(*notifiees))
+	if (!notifiees || isEmptyList(*notifiees))
 		return;
 	list = *notifiees;
 	FORLIST(list, el)

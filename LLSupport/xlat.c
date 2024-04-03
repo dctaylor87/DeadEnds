@@ -120,7 +120,7 @@ static int select_tts(const struct dirent *entry);
  *********************************************/
 
 static List *f_xlats=0; /* cache of conversions */
-static TABLE f_dyntts=0; /* cache of dynamic translation tables */
+static HashTable *f_dyntts=0; /* cache of dynamic translation tables */
 static char f_ttext[] = ".tt";
 
 /*********************************************
@@ -144,7 +144,7 @@ create_null_xlat (bool adhoc)
 	if (!f_xlats) {
 		f_xlats = create_list();
 	}
-	enqueue_list(f_xlats, xlat);
+	enqueueList(f_xlats, xlat);
 	xlat->adhoc = adhoc;
 	return xlat;
 }
@@ -177,7 +177,7 @@ free_xlat (XLAT xlat)
 		strfree(&xstep->iconv_dest);
 		xstep->dyntt = 0; /* f_dyntts owns dyntt memory */
 	ENDLIST
-	destroy_list(xlat->steps);
+	deleteList(xlat->steps);
 	strfree(&xlat->src);
 	strfree(&xlat->dest);
 	stdfree(xlat);
@@ -287,7 +287,7 @@ xl_get_xlat (CString src, CString dest, bool adhoc)
 		/* main conversion is identity */
 	} else if (iconv_can_trans(zs_str(zsrc), zs_str(zdest))) {
 		XLSTEP xstep = create_iconv_step(zs_str(zsrc), zs_str(zdest));
-		enqueue_list(xlat->steps, xstep);
+		enqueueList(xlat->steps, xstep);
 	} else {
 		String src = zs_str(zsrc), dest = zs_str(zdest);
 		bool foundit = false;
@@ -325,8 +325,8 @@ end_get_xlat:
 	zs_free(&zdest);
 	zs_free(&zsrc_u);
 	zs_free(&zdest_u);
-	destroy_list(srcsubs);
-	destroy_list(destsubs);
+	deleteList(srcsubs);
+	deleteList(destsubs);
 	return xlat;
 }
 /*==========================================================
@@ -351,7 +351,7 @@ add_dyntt_step (XLAT xlat, DYNTT dyntt)
 	load_dyntt_if_needed(dyntt);
 	if (!dyntt->loadfailure) {
 		XLSTEP xstep = create_dyntt_step(dyntt);
-		enqueue_list(xlat->steps, xstep);
+		enqueueList(xlat->steps, xstep);
 	}
 }
 /*==========================================================
@@ -365,7 +365,7 @@ get_conversion_dyntt (CString src, CString dest)
 	ZSTR zttname = zs_news(src);
 	zs_appc(zttname, '_');
 	zs_apps(zttname, dest);
-	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
+	dyntt = (DYNTT)searchHashTable(f_dyntts, zs_str(zttname));
 	if (getlloptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath get_conversion_dyntt:from <%s> to <%s>: %s"),
@@ -387,7 +387,7 @@ get_subcoding_dyntt (CString codeset, CString subcoding)
 	ZSTR zttname = zs_news(codeset);
 	zs_apps(zttname, "__");
 	zs_apps(zttname, subcoding);
-	dyntt = (DYNTT)valueof_obj(f_dyntts, zs_str(zttname));
+	dyntt = (DYNTT)searchHashTable(f_dyntts, zs_str(zttname));
 	if (getlloptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"),
@@ -462,7 +462,7 @@ xl_load_all_dyntts (CString ttpath)
 	}
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = create_table_obj();
+	f_dyntts = createHashTable(NULL, NULL, NULL);
 	dirs = (String)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);
@@ -502,7 +502,7 @@ load_dynttlist_from_dir (String dir)
 		}
 		if (ntype==1 || ntype==2) {
 			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);
-			if (!valueof_obj(f_dyntts, zs_str(zfile_u))) {
+			if (!searchHashTable(f_dyntts, zs_str(zfile_u))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
 				String path = concat_path_alloc(dir, ttfile);
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
@@ -599,7 +599,7 @@ xl_free_adhoc_xlats (void)
 			back_list(newlist, xlattemp);
 		}
 	ENDLIST
-	destroy_list(f_xlats);
+	deleteList(f_xlats);
 	f_xlats = newlist;
 }
 /*==========================================================
@@ -616,7 +616,7 @@ xl_free_xlats (void)
 		xlattemp = (XLAT)el;
 		free_xlat(xlattemp);
 	ENDLIST
-	destroy_list(f_xlats);
+	deleteList(f_xlats);
 	f_xlats = 0;
 }
 /*==========================================================
@@ -627,7 +627,7 @@ static void
 free_dyntts (void)
 {
 	if (f_dyntts) {
-		destroy_table(f_dyntts);
+		deleteHashTable(f_dyntts);
 		f_dyntts = 0;
 	}
 }
@@ -643,7 +643,7 @@ xlat_shutdown (void)
 
 #if !defined(DEADENDS)
 /*=================================================
- * destroy_table -- destroy all element & memory for table
+ * destroy_dyntt -- destroy all element & memory for table
  *===============================================*/
 static void
 destroy_dyntt (DYNTT dyntt)
@@ -682,7 +682,7 @@ xl_parse_codeset (CString codeset, ZSTR zcsname, List **subcodes)
 						*subcodes = create_list2(LISTDOFREE);
 					}
 					ztemp = zs_newsubs(prev, p-prev);
-					enqueue_list(*subcodes, strsave(zs_str(ztemp)));
+					enqueueList(*subcodes, strsave(zs_str(ztemp)));
 					zs_free(&ztemp);
 				}
 			}
@@ -811,7 +811,7 @@ xl_is_xlat_valid (XLAT xlat)
  * Created: 2002/12/15 (Perry Rapp)
  *========================================================*/
 void
-xl_release_xlat (HINT_PARAM_UNUSED XLAT xlat)
+xl_release_xlat (ATTRIBUTE_UNUSED XLAT xlat)
 {
 	/*
 	TODO: If it is an adhoc xlat, free it

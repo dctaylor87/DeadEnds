@@ -120,10 +120,10 @@ List *alloc_block_list = (List *) 0;
 static String
 fixtag (String tag)
 {
-	String str = valueof_str(tagtable, tag);
+	String str = searchStringTable(tagtable, tag);
 	if (!str) {
-		insert_table_str(tagtable, tag, tag);
-		str = valueof_str(tagtable, tag);
+		insertInStringTable(tagtable, tag, tag);
+		str = searchStringTable(tagtable, tag);
 	}
 	return str;
 }
@@ -306,7 +306,7 @@ String node_to_tag (GNode *node, String tag, int len)
 	static char scratch[MAXLINELEN+1];
 	String refn;
 	if (!node) return NULL;
-	if (!(node = find_tag(nchild(node), tag)))
+	if (!(node = findTag(nchild(node), tag)))
 		return NULL;
 	refn = nval(node);
 	if (len > (int)sizeof(scratch)-1)
@@ -347,7 +347,7 @@ record_to_first_event (RECORD record, CString tag)
 {
 	GNode *node = nztop(record);
 	if (!node) return NULL;
-	return find_tag(nchild(node), tag);
+	return findTag(nchild(node), tag);
 }
 /*==============================================
  * node_to_next_event -- Find next event after node
@@ -358,7 +358,7 @@ record_to_first_event (RECORD record, CString tag)
 GNode *
 node_to_next_event (GNode *node, CString tag)
 {
-	return find_tag(nsibling(node), tag);
+	return findTag(nsibling(node), tag);
 }
 
 /*===========================================
@@ -536,5 +536,5 @@ check_node_leaks (void)
 void
 term_node_allocator (void)
 {
-	destroy_list(alloc_block_list);
+	deleteList(alloc_block_list);
 }

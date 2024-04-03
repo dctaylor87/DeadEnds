@@ -46,7 +46,7 @@
  * local variables
  *********************************************/
 
-static TABLE gt_localeDirs = NULL; /* most recent */ /* leaks */
+static HashTable *gt_localeDirs = NULL; /* most recent */ /* leaks */
 static String gt_codeset = 0; /* codeset passed to bind_textdomain_codeset */
 static String gt_defLocaleDir = 0; /* compiled default */ /* leak */
 
@@ -94,7 +94,7 @@ llgettext_term (void)
 {
 #if ENABLE_NLS
 	if (gt_localeDirs) {
-		destroy_table(gt_localeDirs);
+		deleteHashTable(gt_localeDirs);
 		gt_localeDirs = 0;
 	}
 	strfree(&gt_codeset);
@@ -144,13 +144,13 @@ ll_bindtextdomain (CString domain, CString localeDir)
 	String oldLocaleDir = 0;
 
 	if (!gt_localeDirs) {
-		gt_localeDirs = create_table_str();
+		gt_localeDirs = createStringTable();
 	}
 	/* skip if already set */
-	oldLocaleDir = valueof_str(gt_localeDirs, domain);
+	oldLocaleDir = searchStringTable(gt_localeDirs, domain);
 	if (eqstr_ex(oldLocaleDir, localeDir))
 		return;
-	insert_table_str(gt_localeDirs, domain, localeDir);
+	insertInStringTable(gt_localeDirs, domain, localeDir);
 
 	bindtextdomain(domain, localeDir);
 	locales_notify_language_change();
@@ -174,7 +174,7 @@ init_win32_gettext_shim (void)
 		{
 			/* clear cache of bindtextdomain calls */
 			if (gt_localeDirs) {
-				destroy_table(gt_localeDirs);
+				deleteHashTable(gt_localeDirs);
 				gt_localeDirs = 0;
 			}
 			ll_bindtextdomain(PACKAGE, LOCALEDIR);
@@ -202,7 +202,7 @@ void
 #if ENABLE_NLS
 set_gettext_codeset (CString domain, CString codeset)
 #else
-set_gettext_codeset (HINT_PARAM_UNUSED CString domain, HINT_PARAM_UNUSED CString codeset)
+set_gettext_codeset (ATTRIBUTE_UNUSED CString domain, ATTRIBUTE_UNUSED CString codeset)
 #endif
 {
 #if ENABLE_NLS

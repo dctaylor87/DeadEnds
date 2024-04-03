@@ -359,8 +359,8 @@ local_init (void)
 {
 	int i;
 
-	ASSERT(NUM_TT_MAPS == ARRSIZE(conversions));
-	ASSERT(NUM_ZONES == ARRSIZE(zones));
+	ASSERT(NUM_TT_MAPS == ARRAYSIZE(conversions));
+	ASSERT(NUM_ZONES == ARRASYSIZE(zones));
 
 	for (i=0; i<NUM_TT_MAPS; ++i)
 		legacytts[i].tt = 0;
@@ -477,7 +477,7 @@ ZSTR
 transl_get_predefined_menukey (int trnum)
 {
 	ASSERT(trnum>=0);
-	ASSERT(trnum<(int)ARRSIZE(conversions_keys));
+	ASSERT(trnum<(int)ARRAYSIZE(conversions_keys));
 	return zs_news(sgettext(conversions_keys[trnum]));
 }
 /*==========================================================

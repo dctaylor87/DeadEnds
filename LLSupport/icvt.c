@@ -54,7 +54,7 @@ bool
 #ifdef HAVE_ICONV
 iconv_can_trans (CString src, CString dest)
 #else
-iconv_can_trans (HINT_PARAM_UNUSED CString src, HINT_PARAM_UNUSED CString dest)
+iconv_can_trans (ATTRIBUTE_UNUSED CString src, ATTRIBUTE_UNUSED CString dest)
 #endif
 {
 #ifdef HAVE_ICONV
@@ -81,7 +81,7 @@ bool
 #ifdef HAVE_ICONV
 iconv_trans (CString src, CString dest, CString sin, ZSTR zout, char illegal)
 #else
-iconv_trans (HINT_PARAM_UNUSED CString src, HINT_PARAM_UNUSED CString dest, HINT_PARAM_UNUSED CString sin, HINT_PARAM_UNUSED ZSTR zout, HINT_PARAM_UNUSED char illegal)
+iconv_trans (ATTRIBUTE_UNUSED CString src, ATTRIBUTE_UNUSED CString dest, ATTRIBUTE_UNUSED CString sin, ATTRIBUTE_UNUSED ZSTR zout, ATTRIBUTE_UNUSED char illegal)
 #endif
 {
 #ifdef HAVE_ICONV
@@ -227,7 +227,7 @@ void
 #ifdef WIN32_ICONV_SHIM
 init_win32_iconv_shim (CString dllpath)
 #else
-init_win32_iconv_shim (HINT_PARAM_UNUSED CString dllpath)
+init_win32_iconv_shim (ATTRIBUTE_UNUSED CString dllpath)
 #endif
 {
 #ifdef WIN32_ICONV_SHIM

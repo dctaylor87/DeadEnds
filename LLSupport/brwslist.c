@@ -60,7 +60,7 @@
  * global/exported variables
  *********************************************/
 
-INDISEQ current_seq = NULL;
+Sequence *current_seq = NULL;
 
 /*********************************************
  * local types
@@ -69,7 +69,7 @@ INDISEQ current_seq = NULL;
 struct tag_blel {
 	int refcnt; /* ref-countable object */
 	String bl_name;
-	INDISEQ bl_seq;
+	Sequence *bl_seq;
 };
 typedef struct tag_blel *BLEL;
 
@@ -107,7 +107,7 @@ init_browse_lists (void)
 void
 term_browse_lists (void)
 {
-	destroy_list(browse_lists);
+	deleteList(browse_lists);
 }
 /*===========================================
  *  create_new_blel -- Create browse list entry
@@ -124,7 +124,7 @@ create_new_blel (void)
  *  add_browse_list -- Add named browse list.
  *=========================================*/
 void
-add_browse_list (String name, INDISEQ seq)
+add_browse_list (String name, Sequence *seq)
 {
 	BLEL blel;
 	bool done = false;
@@ -132,7 +132,7 @@ add_browse_list (String name, INDISEQ seq)
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		if (blel->bl_name && eqstr(name, blel->bl_name)) {
-			remove_indiseq(blel->bl_seq);
+			deleteSequence(blel->bl_seq, false);
 			blel->bl_seq = seq;
 			done = true;
 			break;
@@ -150,17 +150,17 @@ add_browse_list (String name, INDISEQ seq)
 	blel = create_new_blel();
 	blel->bl_name = name;
 	blel->bl_seq = seq;
-	enqueue_list(browse_lists, blel);
+	enqueueList(browse_lists, blel);
 }
 /*=================================================
  *  remove_browse_list -- Remove named browse list.
  *===============================================*/
 void
 remove_browse_list (String name,
-                    INDISEQ seq)
+                    Sequence *seq)
 {
 	BLEL blel;
-	remove_indiseq(seq);
+	deleteSequence(seq, false);
 	if (!name) return;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
@@ -194,14 +194,14 @@ Sequence *stringToSequence (String name, Database *database)
 /*===========================================
  * find_named_seq -- Find named browse list.
  *=========================================*/
-INDISEQ
+Sequence *
 find_named_seq (String name)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		if (eqstr(name, blel->bl_name)) {
-			return copy_indiseq(blel->bl_seq);
+			return copySequence(blel->bl_seq);
 		}
 	ENDLIST
 	return NULL;
@@ -227,11 +227,11 @@ new_name_browse_list (String oldstr, String newstr)
  *=================================================*/
 void
 update_browse_list (String name,
-                    INDISEQ seq)
+                    Sequence *seq)
 {
 	BLEL blel;
 	if (!name) {	/* remove anonymous lists */
-		remove_indiseq(seq);
+		deleteSequence(seq, false);
 		return;
 	}
 	FORLIST(browse_lists, e)
@@ -247,16 +247,16 @@ void
 remove_from_browse_lists (String key)
 {
 	BLEL blel;
-	INDISEQ seq;
+	Sequence *seq;
 	if (current_seq) {
 		seq = current_seq;
-		while (delete_indiseq(seq, key, NULL, 0))
+		while (removeFromSequence(seq, key, NULL, 0))
 			;
 	}
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		seq = blel->bl_seq;
-		while (delete_indiseq(seq, key, NULL, 0))
+		while (removeFromSequence(seq, key, NULL, 0))
 			;
 	ENDLIST
 }
@@ -267,16 +267,16 @@ remove_from_browse_lists (String key)
 void
 rename_from_browse_lists (String key)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	BLEL blel;
 	if (current_seq) {
 		seq = current_seq;
-		rename_indiseq(seq, key);
+		renameSequence(seq, key);
 	}
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		seq = blel->bl_seq;
-		rename_indiseq(seq, key);
+		renameSequence(seq, key);
 	ENDLIST
 }
 
@@ -289,7 +289,7 @@ static void
 destroy_blel (BLEL blel)
 {
 	stdfree(blel->bl_name);
-	remove_indiseq(blel->bl_seq);	
+	deleteSeqeunce(blel->bl_seq, false);
 	stdfree(blel);
 }
 */

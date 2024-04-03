@@ -91,17 +91,17 @@ remove_indi_by_root (GNode *indi, Database *database)
 	GNode *node, *husb, *wife, *chil, *rest, *fam, *fref;
 
 /* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
-	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 
 /* Remove person from families he/she is in as a parent */
 
 	for (node = fams; node; node = nsibling(node)) {
 		fam = key_to_fam(rmvat(nval(node)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		/* remove all occurrences of this person as spouse */
 		husb = remove_any_xrefs_node_list(nxref(indi), husb);
 		wife = remove_any_xrefs_node_list(nxref(indi), wife);
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
 		else
@@ -112,10 +112,10 @@ remove_indi_by_root (GNode *indi, Database *database)
 
 	for (node = famc; node; node = nsibling(node)) { 
 		fam = key_to_fam(rmvat(nval(node)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		/* remove all occurrences of this person as child */
 		chil = remove_any_xrefs_node_list(nxref(indi), chil);
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		if (husb || wife || chil)
 			fam_to_dbase(fam);
 		else
@@ -128,7 +128,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 	remove_refn_list(refn, key, database);
 
 /* Reassemble & delete the in-memory record we're holding (indi) */
-	join_indi(indi, name, refn, sex, body, famc, fams);
+	joinPerson(indi, name, refn, sex, body, famc, fams);
 
 /* Remove any entries in existing browse lists */
 	remove_from_browse_lists(key);
@@ -148,7 +148,7 @@ remove_empty_fam (GNode *fam, Database *database)
 	key = rmvat(nxref(fam));
 
 /* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
-	split_fam(fam, &refn, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 
 	/* We're only supposed to be called for empty families */
 	if (husb || wife || chil) {
@@ -156,20 +156,14 @@ remove_empty_fam (GNode *fam, Database *database)
 		changed to an assertion, 2001/11/08, Perry, but I've not checked
 		merge code's call */
 		msg_error("%s", _(qShaslnk));
-		join_fam(fam, refn, husb, wife, chil, rest);
+		joinFamily(fam, refn, husb, wife, chil, rest);
 		return false;
 	}
 
 	/* Remove fam from cache */
-	join_fam(fam, refn, husb, wife, chil, rest);
-#if !defined(DEADENDS)
-	remove_fam_cache(key);
-	/* this call leads to remove_cel_from_cache, which 
-	deletes the whole fam node tree, as the cache owned the nodes */
-	fam = 0; /* clear pointer to vanished nodes */
-#endif
+	joinFamily(fam, refn, husb, wife, chil, rest);
 
-/* Remove any refn entries */
+	/* Remove any refn entries */
 	remove_refn_list(refn, key, database);
 
 	return true;
@@ -269,7 +263,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 bool
-remove_fam_record (HINT_PARAM_UNUSED RECORD frec)
+remove_fam_record (ATTRIBUTE_UNUSED RECORD frec)
 {
 	msg_error("%s", _("Families may not yet be removed in this fashion."));
 	return false;
@@ -301,7 +295,7 @@ remove_any_record (RECORD record, Database *database)
 	root = nztop(record);
 	
 /* Factor out portions critical to lifelines (refns) */
-	split_othr(root, &refn, &rest);
+	splitOther(root, &refn, &rest);
 
 /* Remove record from cache */
 	record=NULL; /* record no longer valid */
@@ -313,8 +307,8 @@ remove_any_record (RECORD record, Database *database)
 	del_in_dbase(key);
 
 /* Reassemble & delete the in-memory record we're holding (root) */
-	join_othr(root, refn, rest);
-	free_nodes(root);
+	joinOther(root, refn, rest);
+	freeGNodes(root);
 
 	return true;
 }
@@ -328,9 +322,9 @@ num_fam_xrefs (GNode *fam)
 	int num;
 	GNode *fref, *husb, *wife, *chil, *rest;
 
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 	num = length_nodes(husb) + length_nodes(wife) + length_nodes(chil);
-	join_fam(fam, fref, husb, wife, chil, rest);
+	joinFamily(fam, fref, husb, wife, chil, rest);
 	return num;
 }
 /*==========================================
@@ -356,7 +350,7 @@ remove_any_xrefs_node_list (String xref, GNode *list)
 			else
 				rtn = next;
 			nsibling(curr) = NULL;
-			free_nodes(curr);
+			freeGNodes(curr);
 		}
 		prev = curr;
 		curr = next;

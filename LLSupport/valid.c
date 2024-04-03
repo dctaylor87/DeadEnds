@@ -96,7 +96,7 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 		*pmsg = _(qSbadmul);
 		return false;
 	}
-	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	splitPerson(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	if (getlloptint("RequireNames", 0) && !name1) {
 		*pmsg = _("This person record does not have a name line.");
 		goto bad2;
@@ -109,7 +109,7 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 	}
 	name0 = refn0 = sex0 = body0 = famc0 = fams0 = NULL;
 	if (orig)
-		split_indi_old(orig, &name0, &refn0, &sex0, &body0, &famc0,
+		splitPerson(orig, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
 	if (orig && !iso_nodes(indi1, orig, false, false)) {
 		*pmsg = _(qSbadind); 
@@ -140,14 +140,14 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 		}
 	}
 	if (orig)
-		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
-	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
+		joinPerson(orig, name0, refn0, sex0, body0, famc0, fams0);
+	joinPerson(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	return true;
 bad1:
 	if (orig)
-		join_indi(orig, name0, refn0, sex0, body0, famc0, fams0);
+		joinPerson(orig, name0, refn0, sex0, body0, famc0, fams0);
 bad2:
-	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
+	joinPerson(indi1, name1, refn1, sex1, body1, famc1, fams1);
 	return false;
 }
 /*===============================
@@ -178,8 +178,8 @@ valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0)
 
 	refn0 = husb0 = wife0 = chil0 = body0 = NULL;
 	if (fam0)
-		split_fam(fam0, &refn0, &husb0, &wife0, &chil0, &body0);
-	split_fam(fam1, &refn1, &husb1, &wife1, &chil1, &body1);
+		splitFamily(fam0, &refn0, &husb0, &wife0, &chil0, &body0);
+	splitFamily(fam1, &refn1, &husb1, &wife1, &chil1, &body1);
 	
 	if (fam0 && !iso_nodes(fam1, fam0, false, true)) {
 		*pmsg = _(qSbadfam); 
@@ -198,13 +198,13 @@ valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0)
 		goto bad3;
 	}
 	if (fam0)
-		join_fam(fam0, refn0, husb0, wife0, chil0, body0);
-	join_fam(fam1, refn1, husb1, wife1, chil1, body1);
+		joinFamily(fam0, refn0, husb0, wife0, chil0, body0);
+	joinFamily(fam1, refn1, husb1, wife1, chil1, body1);
 	return true;
 bad3:
 	if (fam0)
-		join_fam(fam0, refn0, husb0, wife0, chil0, body0);
-	join_fam(fam1, refn1, husb1, wife1, chil1, body1);
+		joinFamily(fam0, refn0, husb0, wife0, chil0, body0);
+	joinFamily(fam1, refn1, husb1, wife1, chil1, body1);
 	return false;
 }
 /*============================
@@ -246,7 +246,7 @@ valid_node_type (GNode *node, char ntype, String *pmsg, GNode *node0)
  *  orig:  [IN]  SOUR node to match 
  *====================================*/
 bool
-valid_sour_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
+valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
 {
 	*pmsg = NULL;
 	if (!node) {
@@ -274,7 +274,7 @@ valid_sour_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
  *  orig:  [IN]  EVEN node to match
  *====================================*/
 bool
-valid_even_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
+valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
 {
 	*pmsg = NULL;
 	if (!node) {
@@ -302,7 +302,7 @@ valid_even_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
  *  orig:  [IN]  OTHR node to match
  *====================================*/
 bool
-valid_othr_tree (GNode *node, String *pmsg, HINT_PARAM_UNUSED GNode *orig)
+valid_othr_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
 {
 	*pmsg = NULL;
 	if (!node) {

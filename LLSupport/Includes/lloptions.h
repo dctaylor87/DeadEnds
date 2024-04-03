@@ -19,10 +19,6 @@
 #ifndef LLOPTIONS_H_INCLUDED
 #define LLOPTIONS_H_INCLUDED
 
-//#ifndef TABLE_H_INCLUDED
-//typedef struct tag_table *TABLE;
-//#endif
-
 /* initialization & termination */
 void free_optable(HashTable **ptab);
 //void get_db_options(HashTable *opts); /* free with FREEBOTH */

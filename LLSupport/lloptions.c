@@ -67,13 +67,13 @@ static void send_notifications(void);
 
 /* table holding option values, both keys & values in heap */
 /* listed in descending priority */
-static TABLE f_cmd=0; /* option values from command line of current execution */
-static TABLE f_rpt=0; /* option values local to currently running report program */
+static HashTable *f_cmd=0; /* option values from command line of current execution */
+static HashTable *f_rpt=0; /* option values local to currently running report program */
 	/* NB: cannot actually set any report option values currently 2002-10-07 */
-static TABLE f_db=0; /* option values in current database (user/options) */
-static TABLE f_global=0; /* option values from lines config file */
-static TABLE f_predef=0; /* predefined variables during config file processing */
-static TABLE f_fallback=0; /* lowest priority option values */
+static HashTable *f_db=0; /* option values in current database (user/options) */
+static HashTable *f_global=0; /* option values from lines config file */
+static HashTable *f_predef=0; /* predefined variables during config file processing */
+static HashTable *f_fallback=0; /* lowest priority option values */
 static List *f_notifications=0; /* collection of callbacks for option table changes */
 
 /*********************************************
@@ -131,9 +131,9 @@ expand_variables (String valbuf, int max)
 	ptr = valbuf;
 	while ((start=strchr(ptr, '%')) && (end=strchr(start+1, '%'))) {
 		String name = allocsubbytes(start, 0, end-start+1);
-		String value = valueof_str(f_global, name);
+		String value = searchStringTable(f_global, name);
 		if (!value)
-			value = valueof_str(f_predef, name);
+			value = searchStringTable(f_predef, name);
 		if (value) {
 			int newlen = strlen(valbuf)-(end-start+1)+strlen(value);
 			if (newlen < max) {
@@ -184,9 +184,9 @@ load_config_file (String file, String * pmsg, String *chain)
 		free(thisdir);
 		return 0; /* 0 for not found */
 	}
-	f_predef = create_table_str();
+	f_predef = createStringTable();
 
-	insert_table_str(f_predef, "%thisdir%", thisdir);
+	insertInStringTable(f_predef, "%thisdir%", thisdir);
 	strfree(&thisdir);
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
@@ -232,7 +232,7 @@ load_config_file (String file, String * pmsg, String *chain)
 		     */
 		    *chain = strsave(val);
 		} else {
-		    insert_table_str(f_global, key, val);
+		    insertInStringTable(f_global, key, val);
 		}
 	}
 	failed = !feof(fp);
@@ -260,7 +260,7 @@ load_global_options (String configfile, String * pmsg)
 	int cnt = 0;
 	*pmsg = NULL;
 	if (!f_global) 
-		f_global= create_table_str();
+		f_global= createStringTable();
 	do {
 	    if (chain) strfree(&chain);
 	    rtn = load_config_file(configfile, pmsg, &chain);
@@ -279,12 +279,12 @@ load_global_options (String configfile, String * pmsg)
  * set_cmd_options -- Store cmdline options from caller
  *===============================*/
 void
-set_cmd_options (TABLE opts)
+set_cmd_options (HashTable *opts)
 {
 	ASSERT(opts);
-	release_table(f_cmd);
+	releaseHashTable(f_cmd);
 	f_cmd = opts;
-	addref_table(f_cmd);
+	addrefHashTable(f_cmd);
 	send_notifications();
 }
 
@@ -294,12 +294,12 @@ set_cmd_options (TABLE opts)
  * Created: 2002/06/16, Perry Rapp
  *===============================*/
 void
-set_db_options (TABLE opts)
+set_db_options (HashTable *opts)
 {
 	ASSERT(opts);
-	release_table(f_db);
+	releaseHashTable(f_db);
 	f_db = opts;
-	addref_table(f_db);
+	addrefHashTable(f_db);
 	send_notifications();
 }
 /*=================================
@@ -307,10 +307,10 @@ set_db_options (TABLE opts)
  * Created: 2002/06/16, Perry Rapp
  *===============================*/
 void
-get_db_options (TABLE opts)
+get_db_options (HashTable *opts)
 {
 	if (!f_db)
-		f_db = create_table_str();
+		f_db = createStringTable();
 	copy_table(f_db, opts);
 }
 #endif
@@ -319,10 +319,10 @@ get_db_options (TABLE opts)
  * free_optable -- free a table if it exists
  *========================================*/
 void
-free_optable (TABLE * ptab)
+free_optable (HashTable ** ptab)
 {
 	if (*ptab) {
-		release_table(*ptab);
+		releaseHashTable(*ptab);
 		*ptab = 0;
 	}
 }
@@ -353,13 +353,13 @@ getlloptstr (CString optname, String defval)
 {
 	String str = 0;
 	if (!str && f_cmd)
-		str = valueof_str(f_cmd, optname);
+		str = searchStringTable(f_cmd, optname);
 	if (!str && f_db)
-		str = valueof_str(f_db, optname);
+		str = searchStringTable(f_db, optname);
 	if (!str && f_global)
-		str = valueof_str(f_global, optname);
+		str = searchStringTable(f_global, optname);
 	if (!str && f_fallback)
-		str = valueof_str(f_fallback, optname);
+		str = searchStringTable(f_fallback, optname);
 	if (!str)
 		str = defval;
 	return str;
@@ -375,7 +375,7 @@ getlloptstr_rpt (CString optname, String defval)
 {
 	String str = 0;
 	if (!str && f_rpt)
-		str = valueof_str(f_rpt, optname);
+		str = searchStringTable(f_rpt, optname);
 	if (!str)
 		str = getlloptstr(optname, defval);
 	return str;
@@ -391,7 +391,7 @@ getlloptstr_dbonly (CString optname, String defval)
 {
 	String str = 0;
 	if (f_db)
-		str = valueof_str(f_db, optname);
+		str = searchStringTable(f_db, optname);
 	if (!str)
 		str = defval;
 	return str;
@@ -418,8 +418,8 @@ void
 setoptstr_fallback (String optname, String newval)
 {
 	if (!f_fallback)
-		f_fallback = create_table_str();
-	replace_table_str(f_fallback, optname, newval);
+		f_fallback = createStringTable();
+	insertInStringTable(f_fallback, optname, newval);
 	send_notifications();
 }
 /*===============================================

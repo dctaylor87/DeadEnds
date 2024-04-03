@@ -83,15 +83,15 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 
 
 	/* Move indi1 data into indi0 & delete it (saving names & refns */
-	split_indi_old(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
+	splitPerson(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
 	indi0 = copy_node(indi1);
-	join_indi(indi0, NULL, NULL, sex, body, famc, fams);
-	free_nodes(indi0);
+	joinPerson(indi0, NULL, NULL, sex, body, famc, fams);
+	freeGNodes(indi0);
 	/* Move indi2 data into indi1, also copy out lists of names & refns */
-	split_indi_old(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
+	splitPerson(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
 	namen = copy_nodes(name2, true, true);
 	refnn = copy_nodes(refn2, true, true);
-	join_indi(indi1, name2, refn2, sex, body, famc, fams);
+	joinPerson(indi1, name2, refn2, sex, body, famc, fams);
 	free_node(indi2,"replace_indi");
 	nodechk(indi1, "replace_indi");
 
@@ -116,12 +116,12 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 		if (nval(node)) add_refn(nval(node), key);
 
 /* now cleanup (indi1 tree is now composed of indi2 data) */
-	free_nodes(name1);
-	free_nodes(namen);
-	free_nodes(name1n);
-	free_nodes(refn1);
-	free_nodes(refnn);
-	free_nodes(refn1n);
+	freeGNodes(name1);
+	freeGNodes(namen);
+	freeGNodes(name1n);
+	freeGNodes(refn1);
+	freeGNodes(refnn);
+	freeGNodes(refn1n);
 }
 /*==================================================================
  * replace_fam -- Replace a family in database with modified version
@@ -139,14 +139,14 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 
 
 	/* Move fam1 data into fam0 & delete it (saving refns) */
-	split_fam(fam1, &refn1, &husb, &wife, &chil, &body);
+	splitFamily(fam1, &refn1, &husb, &wife, &chil, &body);
 	fam0 = copy_node(fam1);
-	join_fam(fam0, NULL, husb, wife, chil, body);
-	free_nodes(fam0);
+	joinFamily(fam0, NULL, husb, wife, chil, body);
+	freeGNodes(fam0);
 	/* Move fam2 data into fam1, also copy out list of refns */
-	split_fam(fam2, &refn2, &husb, &wife, &chil, &body);
+	splitFamily(fam2, &refn2, &husb, &wife, &chil, &body);
 	refnn = copy_nodes(refn2, true, true);
-	join_fam(fam1, refn2, husb, wife, chil, body);
+	joinFamily(fam1, refn2, husb, wife, chil, body);
 	free_node(fam2,"replace_fam");
 
 	/* Write data to database */
@@ -160,7 +160,7 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refnn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
-	free_nodes(refn1);
-	free_nodes(refnn);
-	free_nodes(refn1n);
+	freeGNodes(refn1);
+	freeGNodes(refnn);
+	freeGNodes(refn1n);
 }

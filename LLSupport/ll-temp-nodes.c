@@ -36,7 +36,7 @@
 GNode *
 create_temp_node (String xref, String tag, String val, GNode *prnt)
 {
-	GNode *node = create_node(xref, tag, val, prnt);
+	GNode *node = createGNode(xref, tag, val, prnt);
 	nflag(node) = ND_TEMP;
 	return node;
 }

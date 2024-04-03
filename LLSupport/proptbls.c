@@ -48,32 +48,32 @@
  * add_prop_dnum -- Add named property table as new last display order
  *========================================================*/
 void
-add_prop_dnum (TABLE props, CString name, CString value)
+add_prop_dnum (HashTable *props, CString name, CString value)
 {
-	String str = valueof_str(props, "dn");
+	String str = searchStringTable(props, "dn");
 	int n = ll_atoi(str, 0)+1;
 	char temp[FMT_INT_LEN+1];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
-	insert_table_str(props, temp, name);
-	insert_table_str(props, name, value);
+	insertInStringTable(props, temp, name);
+	insertInStringTable(props, name, value);
 	snprintf(temp, sizeof(temp), FMT_INT, n);
-	replace_table_str(props, "dn", temp);
+	insertInStringTable(props, "dn", temp);
 }
 /*==========================================================
  * set_prop_dnum -- Set named property in table, at specified display number
  *========================================================*/
 void
-set_prop_dnum (TABLE props, int n, CString name, CString value)
+set_prop_dnum (HashTable *props, int n, CString name, CString value)
 {
-	String str = valueof_str(props, "dn");
+	String str = searchStringTable(props, "dn");
 	int max = ll_atoi(str, 0);
 	char temp[24];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
-	replace_table_str(props, temp, name);
-	replace_table_str(props, name, value);
+	insertInStringTable(props, temp, name);
+	insertInStringTable(props, name, value);
 	if (n>max) {
 		snprintf(temp, sizeof(temp), FMT_INT, n);
-		replace_table_str(props, "dn", temp);
+		insertInStringTable(props, "dn", temp);
 	}
 }
 /*===================================================
@@ -87,12 +87,12 @@ add_dir_files_to_proplist (CString dir, SELECT_FNC selectfnc, List *list)
 	int n = scandir(dir, &programs, selectfnc, alphasort);
 	int i;
 	for (i=0; i<n; ++i) {
-		TABLE table = create_table_str();
+		HashTable *table = createStringTable();
 		set_prop_dnum(table, 1, "filename", programs[i]->d_name);
 		set_prop_dnum(table, 2, "dir", dir);
 		stdfree(programs[i]);
 		programs[i] = NULL;
-		enqueue_list(list, table);
+		enqueueList(list, table);
 	}
 	if (n>0)
 		stdfree(programs);
@@ -122,31 +122,31 @@ add_path_files_to_proplist (CString path, SELECT_FNC selectfnc, List *list)
  *  Output array is one larger than list, and last entry is NULL
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
-TABLE *
+HashTable **
 convert_proplist_to_proparray (List *list)
 {
-	TABLE * props;
+	HashTable ** props;
 	int i;
-	props = (TABLE *)malloc((length_list(list)+1)*sizeof(props[0]));
+	props = (HashTable **)malloc((lengthList(list)+1)*sizeof(props[0]));
 	i = 0;
 	FORLIST(list, el)
 		props[i++] = (TABLE)el;
 	ENDLIST
 	props[i] = NULL; /* null marker at end of array */
-	destroy_list(list);
+	deleteList(list);
 	return props;
 }
 /*===================================================
  * get_proparray_of_files_in_path -- get array of property tables of files in path
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
-TABLE *
+HashTable **
 get_proparray_of_files_in_path (CString path, SELECT_FNC selectfnc, int * nfiles)
 {
 	/* get array of file property tables */
 	List *list = create_list();
 	add_path_files_to_proplist(path, selectfnc, list);
-	*nfiles = length_list(list);
+	*nfiles = lengthList(list);
 	return convert_proplist_to_proparray(list);
 }
 /*===================================================
@@ -155,12 +155,12 @@ get_proparray_of_files_in_path (CString path, SELECT_FNC selectfnc, int * nfiles
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 void
-free_proparray (TABLE ** props)
+free_proparray (HashTable *** props)
 {
 	int i;
 	for (i=0; (*props)[i]; ++i) {
-		TABLE tab = (*props)[i];
-		destroy_table(tab);
+		HashTable *tab = (*props)[i];
+		deleteHashTable(tab);
 	}
 	stdfree((*props));
 	*props = NULL;
