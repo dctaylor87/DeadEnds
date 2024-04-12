@@ -23,6 +23,7 @@
 #include "recordindex.h"	/* RecordIndexEl */
 #include "nodeutils.h"		/* equal_tree */
 #include "py-messages.h"
+#include "ll-node.h"
 #else
 #include "standard.h"		/* STRING */
 #include "llstdlib.h"		/* CALLBACK_FNC */

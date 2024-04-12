@@ -175,7 +175,7 @@ remove_browse_list (String name,
 /* stringToSequence -- return sequence of records matching a string.
    The search order is: named sequence, key, REFN, name */
 
-Sequence *stringToSequence (String name, Database *database)
+Sequence *stringToSequence (CString name, Database *database)
 {
   Sequence *seq;
 
@@ -195,7 +195,7 @@ Sequence *stringToSequence (String name, Database *database)
  * find_named_seq -- Find named browse list.
  *=========================================*/
 Sequence *
-find_named_seq (String name)
+find_named_seq (CString name)
 {
 	BLEL blel;
 	FORLIST(browse_lists, e)

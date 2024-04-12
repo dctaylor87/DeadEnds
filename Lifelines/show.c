@@ -65,6 +65,7 @@
 #include "options.h"
 #include "xreffile.h"
 #include "de-strings.h"
+#include "ll-node.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

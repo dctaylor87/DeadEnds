@@ -74,6 +74,7 @@
 #include "de-strings.h"
 #include "ll-gedcom.h"
 #include "ll-sequence.h"
+#include "ll-node.h"
 
 #include "llpy-externs.h"
 

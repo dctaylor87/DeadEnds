@@ -57,6 +57,7 @@
 #include "liflines.h"
 #include "pvalue.h"
 #include "editing.h"
+#include "ll-node.h"
 
 #include "llpy-externs.h"
 

@@ -17,7 +17,7 @@
 
 //  searchRefnIndex -- Search a RefnIndex for a reference (REFN) value.
 //--------------------------------------------------------------------------------------------------
-String searchRefnIndex(RefnIndex *index, CString refn)
+CString searchRefnIndex(RefnIndex *index, CString refn)
 //  index -- Reference index to search
 //  refn -- Reference value to search for
 //  Returns the key of the record with the reference, if exists, or null otherwise

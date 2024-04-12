@@ -10,23 +10,56 @@
  * Copyright(c) 2002-2007 by Perry Rapp; all rights reserved
  *===========================================================*/
 
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include "table.h"
+
+#include <ansidecl.h>
+#include <stdarg.h>
+#include <stdint.h>
+
+#include "porting.h"
+#include "ll-porting.h"
+#include "standard.h"
+#include "llnls.h"
+
+#include "llgettext.h"
+#include "locales.h"
+#include "list.h"
+#include "zstr.h"
 #include "translat.h"
-#include "gedcom.h"
+#include "refnindex.h"
+#include "gnode.h"
+#include "rfmt.h"
+#include "sequence.h"
+#include "hashtable.h"
+#include "database.h"		/* currentDatabase */
+#include "uiprompts.h"
+#include "feedback.h"
+//#include "ui.h"
+#include "llinesi.h"
+//#include "version.h"
+#include "errors.h"
 #include "liflines.h"
-#include "arch.h"
+#include "messages.h"
+#include "readwrite.h"
+#include "options.h"
+#include "stringtable.h"
+#include "codesets.h"
+#include "ll-list.h"
+#include "gstrings.h"
+#include "de-strings.h"
+#include "uiio.h"
 #include "lloptions.h"
 #include "interp.h"
-#include "feedback.h"
-#include "ui.h"
-#include "llinesi.h"
-#include "version.h"
-#include "messages.h"
+#include "signals.h"
+
+/* for parser debugging */
+extern int yydebug;
 
 #ifdef HAVE_GETOPT
 #ifdef HAVE_GETOPT_H
@@ -34,20 +67,10 @@
 #endif /* HAVE_GETOPT_H */
 #endif /* HAVE_GETOPT */
 
+#if defined(HAVE_PYTHON)
 #include "llpy-externs.h"
-#include "uiio.h"
-
-/*********************************************
- * external variables (no header)
- *********************************************/
-
-extern INT csz_indi;
-extern INT csz_fam;
-extern INT csz_sour;
-extern INT csz_even;
-extern INT csz_othr;
-
-extern int yydebug;
+#endif
+//#include "uiio.h"
 
 /*********************************************
  * required global variables
@@ -65,7 +88,7 @@ BOOLEAN traditional = TRUE;    /* use traditional family rules */
 BOOLEAN showusage = FALSE;     /* show usage */
 BOOLEAN showversion = FALSE;   /* show version */
 STRING  ext_codeset = 0;       /* default codeset from locale */
-INT screen_width = 20; /* TODO */
+//INT screen_width = 20; /* TODO */
 
 /*********************************************
  * local function prototypes
@@ -105,8 +128,13 @@ main (int argc, char **argv)
 
 	current_uiio = uiio_stdio;
 
+	/* DEADENDS: init_arch is just 'return 0', init_stdlib is
+	   misnamed -- it initializes some btree stuff used by the LL
+	   on disk database. */
+#if !defined(DEADENDS)
 	/* initialize all the low-level library code */
 	init_stdlib();
+#endif
 
 #if HAVE_SETLOCALE
 	/* initialize locales */
@@ -147,7 +175,11 @@ main (int argc, char **argv)
 	while ((c = getopt(argc, argv, "adkntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
+#if defined(DEADENDS)
+			logAllocations(true);
+#else
 			alloclog = TRUE;
+#endif
 			break;
 		case 'd':	/* debug = no signal catchers */
 			debugmode = TRUE;
@@ -158,9 +190,11 @@ main (int argc, char **argv)
 		case 'n':	/* use non-traditional family rules */
 			traditional = FALSE;
 			break;
+#if !defined(DEADENDS)		/* XXX not currently supported by DeadEnds XXX */
 		case 't': /* show lots of trace statements for debugging */
 			prog_trace = TRUE;
 			break;
+#endif
 		case 'x': /* execute program */
 			if (!exprogs) {
 				exprogs = create_list2(LISTDOFREE);
@@ -225,6 +259,7 @@ prompt_for_db:
 
 	platform_init();
 	set_displaykeys(keyflag);
+
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
@@ -235,7 +270,8 @@ prompt_for_db:
 	crashlog = getlloptstr("CrashLog_llexec", NULL);
 	if (!crashlog) { crashlog = "Crashlog_llexec.log"; }
 	crash_setcrashlog(crashlog);
-	initializeInterpreter(); /* give interpreter its turn at initialization */
+	/* give interpreter its turn at initialization */
+	initializeInterpreter(currentDatabase);
 
 	c = argc - optind;
 	if (c > 1) {
@@ -313,8 +349,13 @@ finish:
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
 	strfree(&dbrequested);
+#if !defined(DEADENDS)
 	strfree(&readpath_file);
 	shutdown_interpreter();
+#endif
+#if HAVE_PYTHON
+	llpy_python_terminate ();
+#endif
 	close_lifelines();
 	shutdown_ui(!ok);
 	if (alldone == 2)

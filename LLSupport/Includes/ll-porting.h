@@ -46,6 +46,7 @@ typedef void *		VPTR;
 
 #define rename_indiseq(seq, key)			renameSequence(seq, key)
 #define element_indiseq(seq, index, pkey, pname)	elementSequence(seq, index, pkey, pname)
+#define str_to_indiseq(name, ctype)	stringToSequence(name, database)
 
 /* elt is an SequenceEl (SORTEL) */
 #define element_skey(elt)		(elt->key)

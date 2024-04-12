@@ -69,7 +69,7 @@ Sequence *familyToFathers(GNode *family, Database*);  //  Return sequence of a f
 Sequence *familyToMothers(GNode *family, Database*);  //  Return sequence of a family's mothers.
 Sequence *personToSpouses(GNode *person, Database*);  //  Return sequence of a person's spouses.
 Sequence *personToFamilies(GNode *person, bool, Database*);  //  Return sequence of a person's families.
-Sequence *nameToSequence(String, Database*);  //  Return sequence of persons who match a name.
+Sequence *nameToSequence(CString, Database*);  //  Return sequence of persons who match a name.
 #if defined(DEADENDS)
 Sequence *refnToSequence (CString ukey, Database *database);
 #else

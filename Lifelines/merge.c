@@ -71,6 +71,7 @@
 #include "browse.h"
 #include "refns.h"
 #include "xreffile.h"
+#include "name.h"
 
 #include "llpy-externs.h"
 

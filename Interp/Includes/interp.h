@@ -95,6 +95,6 @@ int yylex(void);
 int yyparse(void);
 
 //void poutput(String);
-void interp_main(void);
+//void interp_main(void);
 
 #endif // interp_h

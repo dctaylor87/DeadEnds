@@ -22,7 +22,7 @@ RefnIndexEl *createRefnIndexEl(CString refn, CString key);
 RefnIndex *createRefnIndex(void);
 void deleteRefnIndex(RefnIndex*);
 bool insertInRefnIndex(RefnIndex*, CString refn, CString key);
-String searchRefnIndex(RefnIndex*, CString refn);
+CString searchRefnIndex(RefnIndex*, CString refn);
 void showRefnIndex(RefnIndex*);
 
 #endif // refnindex_h

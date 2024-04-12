@@ -39,7 +39,6 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -54,6 +53,7 @@
 #include "rfmt.h"
 #include "refns.h"
 #include "browse.h"
+#include "name.h"
 
 #else
 

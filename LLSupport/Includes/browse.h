@@ -11,8 +11,8 @@ extern void new_name_browse_list(String, String);
 extern void update_browse_list(String, Sequence *);
 extern void remove_from_browse_lists(String);
 extern void rename_from_browse_lists(String);
-extern Sequence *stringToSequence (String name, Database *database);
-extern Sequence *find_named_seq(String);
+extern Sequence *stringToSequence (CString name, Database *database);
+extern Sequence *find_named_seq(CString);
 
 
 //extern void rename_indiseq(Sequence *, String);

@@ -38,7 +38,6 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -57,6 +56,7 @@
 #include "ll-addoperations.h"
 #include "sequence.h"
 #include "browse.h"
+#include "name.h"
 
 #else
 

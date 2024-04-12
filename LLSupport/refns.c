@@ -8,7 +8,6 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -22,6 +21,8 @@
 #include "gedcom.h"
 
 #include "refns.h"
+#include "locales.h"
+#include "lloptions.h"
 #include "llpy-externs.h"	/* XXX */
 
 struct tag_node_iter {
@@ -249,7 +250,11 @@ annotate_node (GNode *node, bool expand_refns,
 	key = value_to_xref(nval(node));
 	if (!key) return;
 	
+#if 0
 	rec = key_possible_to_record(key, *key);
+#else
+	rec = __llpy_key_to_record (key, NULL, database);
+#endif
 	if (!rec) return;
 	
 	if (expand_refns) {
@@ -377,11 +382,18 @@ RECORD key_possible_to_record (String str, /* string that may be a key */
    letr: [IN]  possible type of record (0 if any)
    eg, refn_to_record("1850.Census", "S").  */
 
-NODE
+GNode *
 refn_to_record (String ukey,    /* user refn key */
                 int letr,       /* type of record */
 		Database *database)
 {
+#if 1
+  CString key = getRefn (ukey, database);
+  if (! key)
+    return NULL;
+
+  return nztop (__llpy_key_to_record (key, NULL, database));
+#else
 	String *keys;
 	int num;
 
@@ -389,6 +401,7 @@ refn_to_record (String ukey,    /* user refn key */
 	get_refns(ukey, &num, &keys, letr);
 	if (!num) return NULL;
 	return nztop(key_possible_to_record(keys[0], *keys[0]));
+#endif
 }
 
 /* traverseRefns -- traverses all refns in the index calling func on
@@ -399,8 +412,8 @@ traverseRefns (TRAV_REFNS_FUNC func, Word param, Database *database)
 {
   int bucket = 0;
   int element = 0;
-  String refn;
-  String key;
+  CString refn;
+  CString key;
   RefnIndexEl *refn_elt;
 
   for (refn_elt = (RefnIndexEl *)firstInHashTable (database->refnIndex, &bucket, &element);

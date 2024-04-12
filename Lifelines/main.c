@@ -55,6 +55,7 @@
 #include "rfmt.h"
 #include "sequence.h"
 #include "hashtable.h"
+#include "database.h"		/* currentDatabase */
 #include "uiprompts.h"
 #include "feedback.h"
 #include "llinesi.h"
@@ -70,6 +71,9 @@
 #include "gstrings.h"
 #include "de-strings.h"
 #include "uiio.h"
+#include "lloptions.h"
+#include "interp.h"
+#include "signals.h"
 
 /* for parser debugging */
 extern int yydebug;
@@ -83,12 +87,6 @@ extern int yydebug;
 #if defined(HAVE_PYTHON)
 #include "llpy-externs.h"
 #endif
-
-/*********************************************
- * external variables (no header)
- *********************************************/
-
-extern INT winx, winy;
 
 /*********************************************
  * required global variables
@@ -308,7 +306,8 @@ prompt_for_db:
 		}
 		set_screen_graphical(graphical);
 	}
-	initializeInterpreter(); /* give interpreter its turn at initialization */
+	/* give interpreter its turn at initialization */
+	initializeInterpreter(currentDatabase);
 
 	c = argc - optind;
 	if (c > 1) {

@@ -954,7 +954,7 @@ static void writeLimitedFamily (GNode *family)
 //    name is treated as a wild card, and the sequencce will contain all persons that match the
 //    surname.
 //--------------------------------------------------------------------------------------------------
-Sequence *nameToSequence(String name, Database *database)
+Sequence *nameToSequence(CString name, Database *database)
 //  name -- Name.
 //  index -- Name index with the name information.
 {

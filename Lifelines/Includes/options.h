@@ -6,4 +6,7 @@
 
 extern bool keyflag;		/* whether to display key values */
 
+extern int winx;		/* screen size, columns */
+extern int winy;		/* screen size, rows */
+
 #endif

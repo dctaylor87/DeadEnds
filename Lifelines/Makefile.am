@@ -2,7 +2,7 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # what are we going to build?
-bin_PROGRAMS = llines
+bin_PROGRAMS = llines llexec
 
 # what goes into lines?
 # export.c import.c
@@ -18,6 +18,10 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	tandem.c \
 	signals.c version.c
 
+# what goes into llexec ?
+llexec_SOURCES = ask.c choose.c lines_usage.c llexec.c \
+	selectdb.c miscutls.c llexec.h
+
 PYTHON_LIBS = @PYTHON_LIBS@
 
 LDADD = ../Python/libpyllines.a \
@@ -31,6 +35,7 @@ LDADD = ../Python/libpyllines.a \
 LIBS =	$(PYTHON_LIBS) @LIBINTL@ @LIBICONV@ @LIBS@
 
 EXTRA_llines_DEPENDENCIES = $(LIBPYLLINES)
+EXTRA_llexec_DEPENDENCIES = $(LIBPYLLINES)
 
 # $(top_builddir)        for config.h
 # $(top_srcdir)/src/hdrs for headers
