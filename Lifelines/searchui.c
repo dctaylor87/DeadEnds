@@ -56,6 +56,7 @@
 #include "cscurses.h"
 #include "codesets.h"
 #include "de-strings.h"
+#include "ui.h"
 #else
 
 #include "llstdlib.h"

@@ -70,19 +70,11 @@ BOOLEAN ask_for_gedcom(STRING mode, STRING ttl, STRING *pfname, STRING *pfullpat
 	, STRING path, STRING ext, BOOLEAN picklist);
 
 /* askprogram.c */
-BOOLEAN ask_for_program(STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath
-	, STRING path, STRING ext, BOOLEAN picklist);
 void proparrdetails(ARRAY_DETAILS arrdets, void * param);
 
 /* screen.c functions */
-INT choose_from_array(STRING ttl, INT no, STRING *pstrngs);
-INT choose_from_list(STRING ttl, LIST list);
 INT choose_from_array_x(STRING ttl, INT count, STRING* list, DETAILFNC, void *);
-INT choose_list_from_indiseq(STRING, INDISEQ);
-INT choose_one_from_indiseq(STRING, INDISEQ);
 INT display_list(STRING ttl, LIST list);
-INT prompt_stdout(STRING prompt);
-void view_array(STRING ttl, INT no, STRING *pstrngs);
 
 /* selectdb.c */
 BOOLEAN open_or_create_database(INT alteration, STRING *dbused);

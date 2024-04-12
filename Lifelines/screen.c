@@ -81,6 +81,7 @@
 #include "ll-list.h"
 #include "locales.h"
 #include "de-strings.h"
+#include "ui.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -165,8 +166,8 @@ extern BOOLEAN progrunning;
 static void add_shims_info(LIST list);
 static void add_uiwin(UIWINDOW uiwin);
 static void append_to_msg_list(STRING msg);
-static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
-	, STRING buffer, INT buflen);
+//static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
+//	, STRING buffer, INT buflen);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
@@ -228,7 +229,7 @@ static void touch_all(BOOLEAN includeCurrent);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static INT update_browse_menu(INT screen);
 static void update_screen_size(void);
-static BOOLEAN yes_no_value(INT c);
+//static BOOLEAN yes_no_value(INT c);
 
 /*********************************************
  * local variables
@@ -1176,7 +1177,7 @@ ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, IN
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
  *====================================*/
-static BOOLEAN
+BOOLEAN
 ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
 {
 	/* display current path (truncated to fit) */
@@ -1253,7 +1254,7 @@ ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, IN
 /*========================================
  * yes_no_value -- Convert character to TRUE if y(es)
  *======================================*/
-static BOOLEAN
+BOOLEAN
 yes_no_value (INT c)
 {
 	STRING ptr;
@@ -1290,7 +1291,7 @@ ask_yes_or_no_msg (STRING msg, STRING ttl)
  *  ptrn:  [IN]  List of allowable character responses
  *=====================================*/
 INT
-ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
+ask_for_char (CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
 {
 	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
 }
@@ -1302,7 +1303,7 @@ ask_for_char (STRING ttl, STRING prmpt, STRING ptrn)
  *  ptrn:  [IN]  List of allowable character responses
  *=========================================*/
 INT
-ask_for_char_msg (STRING msg, STRING ttl, STRING prmpt, STRING ptrn)
+ask_for_char_msg (CNSTRING msg, CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
 {
 	UIWINDOW uiwin = (msg ? ask_msg_win : ask_win);
 	WINDOW *win = uiw_win(uiwin);

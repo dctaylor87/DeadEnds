@@ -42,6 +42,7 @@
 #include "codesets.h"
 #include "proptbls.h"
 #include "de-strings.h"
+#include "ui.h"
 #else
 
 #include "standard.h"

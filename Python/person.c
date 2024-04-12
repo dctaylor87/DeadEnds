@@ -25,6 +25,8 @@
 #include "set.h"
 #include "name.h"
 #include "py-messages.h"
+#include "sequence.h"
+#include "ui.h"
 #else
 #include "standard.h"		/* STRING */
 #include "llstdlib.h"		/* CALLBACK_FNC */

@@ -39,7 +39,6 @@ int choose_from_list (String ttl, List *list);
 int choose_list_from_indiseq (String ttl, Sequence *seq);
 int choose_one_from_indiseq (String ttl, Sequence *seq);
 int choose_one_or_list_from_indiseq(String ttl, Sequence *seq, bool multi); /* XXX */
-int choose_or_view_array(String ttl, int no, String *pstrngs, bool selectable);
 int prompt_stdout (String prompt);
 void view_array (String ttl, int no, String *pstrngs);
 bool yes_no_value(int c);

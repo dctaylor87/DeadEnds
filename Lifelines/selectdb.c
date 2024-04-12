@@ -56,6 +56,7 @@
 #include "codesets.h"
 #include "screen.h"
 #include "de-strings.h"
+#include "ui.h"
 #else
 
 #include "llstdlib.h"

@@ -157,9 +157,6 @@ INDISEQ scan_souce_by_title(STRING sts);
 /* screen.c */
 void clear_status_display(void);
 
-/* searchui.c */
-INDISEQ invoke_search_menu(void);
-
 #if defined(DEADENDS)
 /* show.c */
 STRING indi_to_ped_fix(NODE indi, INT len);

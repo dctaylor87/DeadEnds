@@ -57,6 +57,8 @@ static void outputln(const char * txt);
 static void output(const char * txt);
 static int interact(CString ptrn);
 
+static int
+choose_or_view_array (String ttl, int no, String *pstrngs, bool selectable);
 /*=============================================================
  * Xprintf() implementations
  *===========================================================*/
@@ -253,13 +255,21 @@ choose_from_list (String ttl, List *list)
 
 	array = (String *) stdalloc(len*sizeof(String));
 	i = 0;
+#if defined(DEADENDS)
+	FORLIST(list, el)
+	  choice = (String)el;
+	ASSERT(choice);
+	array[i] = strsave(choice);
+	++i;
+	ENDLIST
+#else
 	FORXLIST(list, el)
 		choice = (String)el;
 		ASSERT(choice);
 		array[i] = strsave(choice);
 		++i;
 	ENDXLIST
-
+#endif
 	rtn = choose_from_array(ttl, len, array);
 
 	for (i=0; i<len; ++i)
@@ -289,7 +299,7 @@ choose_one_from_indiseq (String ttl, Sequence *seq)
 	return choose_one_or_list_from_indiseq(ttl, seq, false);
 }
 
-int
+static int
 choose_or_view_array (String ttl, int no, String *pstrngs, bool selectable)
 {
 	String promptline = selectable ? _(qSchlistx) : _(qSvwlistx);

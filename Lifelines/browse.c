@@ -75,6 +75,7 @@
 #include "ll-gedcom.h"
 #include "ll-sequence.h"
 #include "ll-node.h"
+#include "ui.h"
 
 #include "llpy-externs.h"
 
