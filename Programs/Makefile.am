@@ -15,7 +15,7 @@ deadends_SOURCES = deadends.c de-scripts.c
 # 
 # 
 LDADD = ../Python/libpyllines.a ../LLSupport/libllsupport.a \
-	../Parser/libparser.a ../Interp/libinterp.a \
+	../Interp/libinterp.a ../Parser/libparser.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 

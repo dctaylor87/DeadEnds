@@ -26,7 +26,7 @@ PYTHON_LIBS = @PYTHON_LIBS@
 
 LDADD = ../Python/libpyllines.a \
 	../LLSupport/libllsupport.a \
-	../Parser/libparser.a ../Interp/libinterp.a \
+	../Interp/libinterp.a ../Parser/libparser.a \
 	../UI/libui.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../Validate/libvalidate.a \

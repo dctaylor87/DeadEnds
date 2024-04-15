@@ -26,7 +26,7 @@ test_SOURCES = test.c
 # 
 # 
 LDADD = ../Python/libpyllines.a \
-	../Parser/libparser.a ../Interp/libinterp.a \
+	../Interp/libinterp.a ../Parser/libparser.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../Validate/libvalidate.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
