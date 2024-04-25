@@ -121,7 +121,7 @@ void emptySequence(Sequence *sequence) {
 }
 
 // appendToSequence creates and appends a new SequenceEl to a Sequence.
-void appendToSequence(Sequence *sequence, String key, String name, void* value) {
+void appendToSequence(Sequence *sequence, CString key, String name, void* value) {
 	if (!sequence || !key) return;
 	SequenceEl *element = (SequenceEl*) malloc(sizeof(SequenceEl));
 	element->key = strsave(key);  // SequenceEls own their keys...

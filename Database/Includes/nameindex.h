@@ -28,6 +28,6 @@ NameIndex *createNameIndex(void);
 void deleteNameIndex(NameIndex *index);
 void insertInNameIndex(NameIndex *index, String nameKey, String personKey);
 void showNameIndex(NameIndex *index);
-Set *searchNameIndex(NameIndex *index, String name);
+Set *searchNameIndex(NameIndex *index, CString name);
 
 #endif // nameindex_h

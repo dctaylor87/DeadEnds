@@ -57,7 +57,7 @@ void insertInNameIndex(NameIndex* index, String nameKey, String recordKey)
 
 // searchNameIndex searches a NameIndex for a name and returns the Set of record keys that
 // have the name.
-Set *searchNameIndex(NameIndex *index, String name) {
+Set *searchNameIndex(NameIndex *index, CString name) {
 	String nameKey = nameToNameKey(name);
 	NameElement* element = searchHashTable(index, nameKey);
 	return element == null ? null : element->recordKeys;

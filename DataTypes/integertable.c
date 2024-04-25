@@ -35,4 +35,16 @@ void insertInIntegerTable(IntegerTable *table, String key, int value) {
     addToHashTable(table, element, false);
 }
 
+// incrementIntegerTable -- retrieve key and increment its value.
+void incrementIntegerTable (IntegerTable *table, CString key)
+{
+  IntegerElement *element = (IntegerElement *) searchHashTable (table, key);
+  int value;
 
+  if (element)
+    value = element->value + 1;
+  else
+    value = 1;
+ 
+  insertInIntegerTable (table, key, value);
+}

@@ -31,5 +31,6 @@ extern String integerGetKey(Word element);
 IntegerTable *createIntegerTable(int numBuckets);
 int searchIntegerTable(IntegerTable *table, String key);
 void insertInIntegerTable(IntegerTable *table, String key, int value);
+extern void incrementIntegerTable (IntegerTable *table, CString key);
 
 #endif // integertable_h

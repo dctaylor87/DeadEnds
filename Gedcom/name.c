@@ -30,7 +30,7 @@ static void cmpsqueeze (CString in, String out);
 static String nameSurnameFirst(CString);
 
 // nameToNameKey converts a Gedcom name or partial name to a name key.
-String nameToNameKey(String name) {
+String nameToNameKey(CString name) {
     static char key[6];
     char finitial = getFirstInitial(name);
     String sdex = soundex(getSurname(name));

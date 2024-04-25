@@ -45,7 +45,7 @@ Sequence *copySequence(Sequence*);  //  Copy a sequence.
 int lengthSequence(Sequence*);  //  Return the length of a sequence.
 void emptySequence(Sequence*);
 
-void appendToSequence(Sequence*, String key, String name, void*);
+void appendToSequence(Sequence*, CString key, String name, void*);
 bool isInSequence(Sequence*, String key);
 bool removeFromSequence(Sequence*, String key);
 void nameSortSequence(Sequence*);  //  Sort a sequence by name.

@@ -16,7 +16,7 @@ bool debuggingHash = false;
 bool sortChecking = false;
 extern FILE* debugFile;
 
-static void* searchBucket(Bucket*, String key, String(*g)(void*), int(*c)(String, String), int* index);
+static void* searchBucket(Bucket*, CString key, String(*g)(void*), int(*c)(String, String), int* index);
 static void* linearSearchBucket(Bucket*, CString key, String(*g)(void*), int* index);
 static void* binarySearchBucket(Bucket*, String key, String(*g)(void*), int(*c)(String, String), int* index);
 static void sortBucket(Bucket*, String(*g)(void*), int(*c)(String, String));
@@ -111,7 +111,7 @@ void* searchHashTableWithElement(HashTable* table, void* element) {
 
 // searchBucket searches a Bucket for an element by key. Depending on Bucket size either linear or
 // binary search is used.
-void* searchBucket(Bucket* bucket, String key, String(*getKey)(void*),
+void* searchBucket(Bucket* bucket, CString key, String(*getKey)(void*),
 				   int(*compare)(String, String), int* index) { //PH;
 	return searchBlock(&(bucket->block), key, getKey, index);
 }

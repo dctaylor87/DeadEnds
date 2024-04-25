@@ -27,7 +27,7 @@ String getGivenNames(CString);  // Get the given names of a Gedcom name.
 int getFirstInitial(CString name);  // Get the first initial of a Gedcom name.
 String soundex(CString surname);  // Get the Soundex code of a Gedcom surname.
 extern bool remove_name (String name, String key); // Remove entry from name record.
-String nameToNameKey(String name);  // Convert a partial or full Gedcom name to a name key.
+String nameToNameKey(CString name);  // Convert a partial or full Gedcom name to a name key.
 int compareNames(CString name1, CString name2); // Compare two Gedcom names.
 String* personKeysFromName(CString name, Database*, int* pcount /*[, bool exact]*/);
 String nameString(String name);  // Remove slashes from a name.
