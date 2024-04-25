@@ -20,16 +20,16 @@ typedef struct Database Database;
 
 // Prototypes of functions defined in names.c.
 //--------------------------------------------------------------------------------------------------
-extern String upsurname(String name); // Make a Gedcom name have an all uppercase surname.
+extern String upsurname(CString name); // Make a Gedcom name have an all uppercase surname.
 String manipulateName(String, bool caps, bool reg, int maxlen);  // Manipulate a name.
-String getSurname(String);  // Get the surname of a Gedcom name.
-String getGivenNames(String);  // Get the given names of a Gedcom name.
-int getFirstInitial(String name);  // Get the first initial of a Gedcom name.
+String getSurname(CString);  // Get the surname of a Gedcom name.
+String getGivenNames(CString);  // Get the given names of a Gedcom name.
+int getFirstInitial(CString name);  // Get the first initial of a Gedcom name.
 String soundex(CString surname);  // Get the Soundex code of a Gedcom surname.
 extern bool remove_name (String name, String key); // Remove entry from name record.
 String nameToNameKey(String name);  // Convert a partial or full Gedcom name to a name key.
-int compareNames(String name1, String name2); // Compare two Gedcom names.
-String* personKeysFromName(String name, Database*, int* pcount /*[, bool exact]*/);
+int compareNames(CString name1, CString name2); // Compare two Gedcom names.
+String* personKeysFromName(CString name, Database*, int* pcount /*[, bool exact]*/);
 String nameString(String name);  // Remove slashes from a name.
 String trimName (String name, int len);  // Trim name to specific length.
 bool nameToList(String name, List*, int *len, int *sind);

@@ -4,7 +4,7 @@
 //  intrpperson.c -- Built-in functions dealing with persons.
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 16 November 2023.
+//  Last changed on 3 April 2024.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -433,17 +433,24 @@ PValue __indi(PNode *pnode, Context *context, bool* errflg)
 //  firstindi -- Return the first person in the database.
 //    usage: firstindi() -> INDI
 //--------------------------------------------------------------------------------------------------
+extern int rootNameCompare(void* a, void* b);
+extern String rootNameGet(void* a);
+extern void checkPersonRoots(RootList*);
+
 PValue __firstindi (PNode *node ATTRIBUTE_UNUSED,
 		    Context *context ATTRIBUTE_UNUSED, bool *eflg)
 {
-	List *personKeys = context->database->personKeys;
-	if (!personKeys || lengthList(personKeys) == 0) {
+	List *personRoots = context->database->personRoots;
+	if (!personRoots || lengthList(personRoots) == 0) {
 		*eflg = true;
 		scriptError(node, "There must be persons in the database to call firstindi.");
 		return nullPValue;
 	}
-	sortList(personKeys, true);
-	return PVALUE(PVPerson, uGNode, keyToPerson((String) getListElement(personKeys, 0), context->database));
+	//checkPersonRoots(personRoots);  // DEBUG.
+	sortList(personRoots);
+	//checkPersonRoots(personRoots);  // DEBUG.
+	GNode *root = getListElement(personRoots, 0);
+	return PVALUE(PVPerson, uGNode, root);
 }
 
 //  nextindi -- Return the next person in the database.
@@ -458,20 +465,19 @@ PValue __nextindi (PNode *pnode, Context *context, bool *eflg)
         scriptError(pnode, "The argument to nextindi must be a person.");
         return nullPValue;
     }
-	List *personKeys = context->database->personKeys;
-	sortList(personKeys, true);
+	List *personRoots = context->database->personRoots;
+	sortList(personRoots);
 	int index;
-	searchList(personKeys, indi->key, &index);
-	if (index < 0 || index >= lengthList(personKeys)) {
+	findInList(personRoots, indi->key, &index);
+	if (index < 0 || index >= lengthList(personRoots)) {
 		*eflg = true;
 		scriptError(pnode, "The argument person doesn't have a valid index; call maintenance.");
 		return nullPValue;
 	}
-	if (index == lengthList(personKeys) - 1) { // We are at the last person.
+	if (index == lengthList(personRoots) - 1) { // We are at the last person.
 		return nullPValue;
 	}
-	return PVALUE(PVPerson, uGNode,
-				  keyToPerson((String) getListElement(personKeys, index + 1), context->database));
+	return PVALUE(PVPerson, uGNode, getListElement(personRoots, index + 1));
 }
 
 //  previndi -- Return the previous person in the database.
@@ -486,11 +492,11 @@ PValue __previndi (PNode *pnode, Context *context, bool *eflg)
 		scriptError(pnode, "The argument to previndi must be a person.");
 		return nullPValue;
 	}
-	List *personKeys = context->database->personKeys;
-	sortList(personKeys, true);
+	List *personRoots = context->database->personRoots;
+	sortList(personRoots);
 	int index;
-	searchList(personKeys, indi->key, &index);
-	if (index < 0 || index >= lengthList(personKeys)) {
+	findInList(personRoots, indi->key, &index);
+	if (index < 0 || index >= lengthList(personRoots)) {
 		*eflg = true;
 		scriptError(pnode, "The argument person doesn't have a valid index; call maintenance.");
 		return nullPValue;
@@ -498,8 +504,7 @@ PValue __previndi (PNode *pnode, Context *context, bool *eflg)
 	if (index == 0) { // We are at the first person.
 		return nullPValue;
 	}
-	return PVALUE(PVPerson, uGNode,
-				  keyToPerson((String) getListElement(personKeys, index - 1), context->database));
+	return PVALUE(PVPerson, uGNode, (GNode*) getListElement(personRoots, index - 1));
 }
 
 //  lastindi -- Return the last person in the database.
@@ -507,15 +512,12 @@ PValue __previndi (PNode *pnode, Context *context, bool *eflg)
 //--------------------------------------------------------------------------------------------------
 PValue __lastindi (PNode *pnode, Context *context, bool *eflg)
 {
-	List *personKeys = context->database->personKeys;
-	if (!personKeys || lengthList(personKeys) == 0) {
+	List *personRoots = context->database->personRoots;
+	if (!personRoots || lengthList(personRoots) == 0) {
 		*eflg = true;
 		scriptError(pnode, "There must be persons in the database to call lastindi.");
 		return nullPValue;
 	}
-	sortList(personKeys, true);
-	return PVALUE(PVPerson,
-				  uGNode,
-				  keyToPerson((String) getListElement(personKeys, lengthList(personKeys) - 1),
-							  context->database));
+	sortList(personRoots);
+	return PVALUE(PVPerson, uGNode, (GNode*) getListElement(personRoots, lengthList(personRoots) - 1));
 }

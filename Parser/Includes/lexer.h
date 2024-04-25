@@ -13,7 +13,7 @@
 #include <stdio.h>    // FILE.
 #include "standard.h" // String, Word.
 #include "pnode.h"    // PNode.
-#include "y.tab.h"    // Token types generated when yacc processes yacc.y.
+//#include "y.tab.h"    // Token types generated when yacc processes yacc.y.
 
 // LexerType -- Specifies whether the lexer reads from a file or string.
 //--------------------------------------------------------------------------------------------------

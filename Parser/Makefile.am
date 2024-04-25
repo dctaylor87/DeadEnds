@@ -3,7 +3,7 @@
 
 # Makefile for the DeadEnds Parser library
 
-.PRECIOUS: grammar.c
+#.PRECIOUS: grammar.c
 
 noinst_LIBRARIES = libparser.a
 
@@ -13,8 +13,10 @@ libparser_a_SOURCES = \
 	grammar.y
 
 YACC = byacc
+AM_YFLAGS = -d
 
 AM_CPPFLAGS = \
+	-I$(top_builddir)/Parser/ \
 	-I$(top_builddir)/Parser/Includes \
 	-I$(top_srcdir)/Parser/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \

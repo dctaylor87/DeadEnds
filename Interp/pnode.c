@@ -5,7 +5,7 @@
 //    different types.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 3 June 2023.
+//  Last changed on 3 April 2024.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -464,7 +464,7 @@ PNode *forlistPNode (PNode *lexpr, String evar, String nvar, PNode *body)
 {
     PNode *node = allocPNode(PNList);
     node->listExpr = lexpr;
-    node->elementIden = (Word) evar;
+    node->elementIden = (void*) evar;
     node->countIden = nvar;
     node->loopState = body;
     setParents(body, node);

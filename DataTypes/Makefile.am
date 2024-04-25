@@ -6,10 +6,12 @@
 noinst_LIBRARIES = libdatatypes.a
 
 libdatatypes_a_SOURCES = \
+	block.c \
 	list.c \
 	hashtable.c \
 	sort.c \
 	set.c \
+	stringset.c \
 	stringtable.c \
 	integertable.c \
 	zstr.c

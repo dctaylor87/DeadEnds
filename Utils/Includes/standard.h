@@ -1,47 +1,39 @@
+// DeadEnds
 //
-//  DeadEnds
+// standard.h -- Useful things.
 //
-//  standard.h -- Useful things.
-//
-//  Created by Thomas Wetmore on 1 November 2022.
-//  Last changed on 26 November 2023.
-//
+// Created by Thomas Wetmore on 1 November 2022.
+// Last changed on 3 April 2024.
 
 #ifndef standard_h
 #define standard_h
 
-#define DEBUGALLOCS // EMPTY
-
+typedef void* Word; // Deprecated.
 typedef char* String;
 typedef const char* CString;
 
 #include <sys/types.h>
-#include <stdlib.h>  // malloc, free, abort.
+#include <stdlib.h> // malloc, free, abort.
 #include <stdio.h>  // FILE, fopen, fclose, printf, sprintf, fprintf.
-#include <string.h>  // strlen, strcmp, strcpy, strcmp, strrchr.
+#include <string.h> // strlen, strcmp, strcpy, strcmp, strrchr.
 #include <ctype.h>
-#include <stdbool.h>  // bool, true and false.
+#include <stdbool.h> // bool, true and false.
 #include <unistd.h>
 #include "path.h"
 
+#define DEBUGALLOCS // EMPTY
 #define MAXSTRINGSIZE 512
 
-// Useful typedefs.
-//--------------------------------------------------------------------------------------------------
-typedef void* Word;
-//typedef char* String;
-
 // CharacterType -- Characters are partitioned into different types.
-//--------------------------------------------------------------------------------------------------
-typedef enum { Letter = 300, Digit, White, Other } CharType;  // TODO: NOT USED YET.
+typedef enum { Letter = 300, Digit, White, Other } CharType;  // TODO: not used.
 
-String strsave(CString);  // Save a string in the heap.
 // Catenate two strings and return a new String on the heap with the value.
 extern String strconcat(String s1, String s2);
-bool iswhite(int);       // Check if a character is white space.
-bool allwhite(String);   // Check if a string is all white space.
+String strsave(CString);  // Save String in heap.
+bool iswhite(int);       // Is character white space?
+bool allwhite(String);   // Is String all white space?
 void striptrail(String);  // Strip trailing white space.
-int chartype(int);      // Return the 'type' of a character.
+int chartype(int);      // Return type of a character.
 void alloc_out(String); // standard.c
 CharType characterType(int);  // standard.c
 String lower(String);  // Convert a string to lower case.
@@ -67,9 +59,8 @@ String capitalize(String);
 //--------------------------------------------------------------------------------------------------
 void *__alloc(size_t, String, int);
 void __free(void* ptr, String, int);
-bool isLetter(int ascii);  // Check if a character is a letter.
-String trim(String, int);
-//void logAllocations(bool);  // Turn allocation logging on and off.
+bool isLetter(int);  // Is character is an Ascii letter?
+String trim(String, int); // Trim String to size.
 void __logAllocations(bool);  // Turn allocation logging on and off.
 
 // Turn on alloc and free debugging.
@@ -107,6 +98,7 @@ extern CString version;		// standard.c
 
 // Debugging aids.
 //extern String lastPathSegment(String);
-#define PH if(debugging) printf("%s %s %d\n", __FUNCTION__, lastPathSegment(__FILE__), __LINE__);
+#define PH if(debugging && debugFile) fprintf(debugFile, "%s %s %d\n", __FUNCTION__,\
+	lastPathSegment(__FILE__), __LINE__);
 
-#endif
+#endif // standard_h
