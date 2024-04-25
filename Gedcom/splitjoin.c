@@ -1,13 +1,11 @@
+// DeadEnds
 //
-//  DeadEnds
+// splitjoin.c has the functions that split persons and families into parts and join them back
+// together. Calling split and join formats person and family node trees into standard form.
+// This makes followon operations more efficient.
 //
-//  splitjoin.c -- Functions that split persons and families into parts and join them back
-//    together. Calling split and then join formats person and family node trees into
-//    canonical order. This can make followon operations more efficient.
-//
-//  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 19 December 2023.
-//
+// Created by Thomas Wetmore on 7 November 2022.
+// Last changed on 25 April 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -17,44 +15,33 @@
 #include "gnode.h"
 #include "splitjoin.h"
 
-//  splitPerson -- Split a person Node tree into parts. The Nodes are not copied; they are
-//    separated into different lists.
-//--------------------------------------------------------------------------------------------------
-void splitPerson(GNode *indi, GNode **pname, GNode **prefn, GNode **psex, GNode **pbody,
-                 GNode **pfamc, GNode **pfams)
-// indi -- (in) Root of person node tree to split.
-// pname -- (out) Pointer to list of 1 NAME Nodes.
-// prefn -- (out) Pointer to list of 1 REFN Nodes.
-// psex -- (out) Pointer to first 1 SEX Node (others are in body).
-// pbody -- (out) Pointer to other level 1 Nodes.
-// pfamc -- (out) Pointer to list of 1 FAMC Nodes.
-// pfams -- (out) Pointer to list of 1 FAMS Nodes.
-{
+// splitPerson splits a person GNode tree into parts.
+void splitPerson(GNode* indi, GNode** pname, GNode** prefn, GNode** psex, GNode** pbody,
+                 GNode** pfamc, GNode** pfams) {
     GNode *name, *lnam, *refn, *sex, *body, *famc, *fams, *last;
     GNode *lfmc, *lfms, *lref, *prev, *node;
     ASSERT(eqstr("INDI", indi->tag));
     name = sex = body = famc = fams = last = lfms = lfmc = lnam = null;
     refn = lref = null;
-    node = indi->child;  // Prepare to iterate through the children of the INDI Node.
-    indi->child = indi->sibling = null;  // Disconnect the root from its child and sibling.
-    // Worry. Does disconnecting from a sibling cause any future issues?
-    while (node) {  // Iterate through the children of the INDI Node.
+    node = indi->child;
+    indi->child = indi->sibling = null;
+    while (node) {
         String tag = node->tag;
-        if (eqstr("NAME", tag)) {  // Handle 1 NAME Nodes.
+        if (eqstr("NAME", tag)) {
             if (!name) name = lnam = node;
             else lnam = lnam->sibling = node;
-        } else if (!sex && eqstr("SEX", tag)) {  // Handle the first 1 SEX Node.
+        } else if (!sex && eqstr("SEX", tag)) {
             sex = node;
-        } else if (eqstr("FAMC", tag)) {  // Handle the 1 FAMC Nodes.
+        } else if (eqstr("FAMC", tag)) {
             if (!famc) famc = lfmc = node;
             else lfmc = lfmc->sibling = node;
-         } else if (eqstr("FAMS", tag)) {  // Handle the 1 FAMS Nodes.
+         } else if (eqstr("FAMS", tag)) {
             if (!fams) fams = lfms = node;
             else lfms = lfms->sibling = node;
-         } else if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
+         } else if (eqstr("REFN", tag)) {
             if (!refn) refn = lref = node;
             else lref = lref->sibling = node;
-        } else {  // Handle all other level 1 Nodes.
+        } else {
             if (!body) body = last = node;
             else last = last->sibling = node;
         }
@@ -70,15 +57,11 @@ void splitPerson(GNode *indi, GNode **pname, GNode **prefn, GNode **psex, GNode 
     *pfams = fams;
 }
 
-//  joinPerson -- Join a person node tree from parts. This neither allocates nor frees any nodes.
-//--------------------------------------------------------------------------------------------------
-void joinPerson (GNode *indi, GNode *name, GNode *refn, GNode *sex, GNode *body, GNode *famc,
-                 GNode *fams)
-//  indi, name, refn, sex, body, famc, fams;
-{
+// joinPerson joins a person GNode tree from parts.
+void joinPerson (GNode* indi, GNode* name, GNode* refn, GNode* sex, GNode* body, GNode* famc,
+                 GNode* fams) {
     GNode *node = null;
     ASSERT(indi && eqstr("INDI", indi->tag));
-
     indi->child = null;
     if (name) {
         indi->child = node = name;
@@ -110,16 +93,12 @@ void joinPerson (GNode *indi, GNode *name, GNode *refn, GNode *sex, GNode *body,
     }
 }
 
-//  splitFamily -- Split a family into parts. This neither allocates nor frees nodes.
-//--------------------------------------------------------------------------------------------------
+// splitFamily splits a family GNode tree into parts.
 void splitFamily(GNode* fam, GNode** prefn, GNode** phusb, GNode** pwife, GNode** pchil,
-                  GNode** prest)
-//  fam, prefn, phusb, pwife, pchil, prest
-{
+                  GNode** prest) {
     GNode *node, *rest, *last, *husb, *lhsb, *wife, *lwfe, *chil, *lchl;
     GNode *prev, *refn, *lref;
     String tag;
-
     rest = last = husb = wife = chil = lchl = lhsb = lwfe = null;
     prev = refn = lref = null;
     node = fam->child;
@@ -161,13 +140,9 @@ void splitFamily(GNode* fam, GNode** prefn, GNode** phusb, GNode** pwife, GNode*
     *prest = rest;
 }
 
-//  joinFamily -- Join family from parts.
-//--------------------------------------------------------------------------------------------------
-void joinFamily (GNode *fam, GNode *refn, GNode *husb, GNode *wife, GNode *chil, GNode *rest)
-// Node fam, refn, husb, wife, chil, rest;
-{
+// joinFamily joins a family GNode tree from parts.
+void joinFamily (GNode* fam, GNode* refn, GNode* husb, GNode* wife, GNode* chil, GNode* rest) {
     GNode *node = null;
-
     fam->child = null;
     if (refn) {
         fam->child = node = refn;
@@ -393,30 +368,24 @@ void joinOther (GNode *root, GNode *refn, GNode *body)
   }
 }
 
-//  normalizePerson - Get a person gedcom tree into standard format.
-//--------------------------------------------------------------------------------------------------
-GNode *normalizePerson(GNode *indi)
-{
+// normalizePerson gets person GNode tree into standard format.
+GNode* normalizePerson(GNode *indi) {
     GNode *names, *refns, *sex, *body, *famcs, *famss;
     splitPerson(indi , &names, &refns, &sex, &body, &famcs, &famss);
     joinPerson(indi, names, refns, sex, body, famcs, famss);
     return indi;
 }
 
-//  normalizeFamily -- Get a family gedcom tree into standard format.
-//--------------------------------------------------------------------------------------------------
-GNode *normalizeFamily(GNode *fam)
-{
+// normalizeFamily gets a family GNode tree into standard format.
+GNode* normalizeFamily(GNode *fam) {
     GNode *refns, *husb, *wife, *chil, *body;
     splitFamily(fam, &refns, &husb, &wife, &chil, &body);
     joinFamily(fam, refns, husb, wife, chil, body);
     return fam;
 }
 
-// normalizeEvent -- Convert an event record into standard format.
-//--------------------------------------------------------------------------------------------------
-GNode *normalizeEvent(GNode *event)
-{
+// normalizeEvent gets an event GNode tree into standard format; currently a no-op.
+GNode* normalizeEvent(GNode* event) {
   GNode *refns, *body;
   splitEvent (event, &refns, &body);
   joinEvent (event, refns, body);
@@ -424,10 +393,8 @@ GNode *normalizeEvent(GNode *event)
   return event;
 }
 
-// normalizeSource -- Convert a source record into standard format.
-//--------------------------------------------------------------------------------------------------
-GNode *normalizeSource(GNode *source)
-{
+// normalizeSource gets a source GNode tree into standard format; currently a no-op.
+GNode* normalizeSource(GNode* source) {
   GNode *refns, *body;
   splitSource (source, &refns, &body);
   joinSource (source, refns, body);
@@ -435,10 +402,8 @@ GNode *normalizeSource(GNode *source)
   return source;
 }
 
-// normalizeOther -- Convert an other record into standard format.
-//--------------------------------------------------------------------------------------------------
-GNode *normalizeOther(GNode *other)
-{
+// normalizeOther gets an other GNode tree into to standard format; currently a no-op.
+GNode* normalizeOther(GNode* other) {
   GNode *refns, *body;
   splitOther (other, &refns, &body);
   joinOther (other, refns, body);

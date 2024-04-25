@@ -6,7 +6,6 @@
 // Created by Thomas Wetmore on 2 March 2024.
 // Last changed on 18 April 2024.
 
-#include <stdio.h>
 #include <stdint.h>
 #include "rootlist.h"
 #include "gnode.h"
@@ -27,7 +26,7 @@ static int compare(String a, String b) {
 	return 0;
 }
 
-//  createRootList creates and returns a RootList; a RootList is a sorted List.
+// createRootList creates and returns a RootList; a RootList is a sorted List.
 RootList *createRootList(void) {
 	return createList(getKey, compare, null, true);
 }
