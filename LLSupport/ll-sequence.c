@@ -66,7 +66,7 @@ getAllRecordIndex (Database *database, RecordIndex *index)
 
   if (lengthSequence (seq) <= 0)
     {
-      deleteSequence (seq, false);
+      deleteSequence (seq);
       seq = 0;
     }
 
@@ -88,7 +88,7 @@ getAllRefns (Database *database)
 
   if (lengthSequence (seq) <= 0)
     {
-      deleteSequence (seq, false);
+      deleteSequence (seq);
       seq = 0;
     }
 

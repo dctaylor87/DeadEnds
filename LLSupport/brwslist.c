@@ -132,7 +132,7 @@ add_browse_list (String name, Sequence *seq)
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		if (blel->bl_name && eqstr(name, blel->bl_name)) {
-			deleteSequence(blel->bl_seq, false);
+			deleteSequence(blel->bl_seq);
 			blel->bl_seq = seq;
 			done = true;
 			break;
@@ -160,7 +160,7 @@ remove_browse_list (String name,
                     Sequence *seq)
 {
 	BLEL blel;
-	deleteSequence(seq, false);
+	deleteSequence(seq);
 	if (!name) return;
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
@@ -231,7 +231,7 @@ update_browse_list (String name,
 {
 	BLEL blel;
 	if (!name) {	/* remove anonymous lists */
-		deleteSequence(seq, false);
+		deleteSequence(seq);
 		return;
 	}
 	FORLIST(browse_lists, e)
@@ -250,13 +250,13 @@ remove_from_browse_lists (String key)
 	Sequence *seq;
 	if (current_seq) {
 		seq = current_seq;
-		while (removeFromSequence(seq, key, NULL, 0))
+		while (removeFromSequence(seq, key))
 			;
 	}
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		seq = blel->bl_seq;
-		while (removeFromSequence(seq, key, NULL, 0))
+		while (removeFromSequence(seq, key))
 			;
 	ENDLIST
 }

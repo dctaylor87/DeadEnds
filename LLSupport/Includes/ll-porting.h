@@ -32,11 +32,11 @@ typedef void *		VPTR;
 #define qkey_to_indi(key)	keyToPerson(key, database)
 
 #define INDISEQ		Sequence *
-#define ISize(seq)	((seq)->size)
+//#define ISize(seq)	((seq)->size)
+#define ISize(seq)	((seq)->block.length)
 #define length_indiseq(seq)	ISize(seq)
 
-/* XXX not sure if second argument should be 'false' or 'true' XXX */
-#define remove_indiseq(seq)	deleteSequence(seq, false)
+#define remove_indiseq(seq)	deleteSequence(seq)
 
 /* remove an element from a sequence */
 #define delete_indiseq(seq,key,name,index) removeFromSequence(seq,key,name,index)
@@ -113,15 +113,15 @@ typedef void *		VPTR;
 #define addref_table(table)			addrefHashTable(table)
 
 #define LIST		List *
-#define create_list()			createList(NULL, NULL, NULL)
+#define create_list()			createList(NULL, NULL, NULL, false)
 #define enqueue_list			enqueueList
 
 #define back_list(list, elt)		appendListElement(list, elt)
 #define destroy_list(list)		deleteList(list)
 #define is_empty_list(list)		isEmptyList(list)
 #define length_list(list)		lengthList(list)
-#define pop_list(list)			removeFirstListElement(list)
-#define push_list(list, vptr)		prependListElement(list, vptr)
+#define pop_list(list)			getAndRemoveFirstListElement(list)
+#define push_list(list, vptr)		prependToList(list, vptr)
 
 #define num_indis()			numberPersons(database)
 #define num_fams()			numberFamilies(database)
