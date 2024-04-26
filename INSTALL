@@ -3,7 +3,12 @@ repository.  If you received a distribution [none has occurred as
 yet], then some of these steps can be skipped, but it won't hurt to
 perform them.
 
-. cd to the top of the workspace and type the following two commands:
+In this repository there are two branches.  The main branch which is
+identical to the main branch in Tom's Git repository.  And the
+dct-experiment branch.  The following assumes that you are on the
+dct-experiment branch.
+
+. cd to the top of the workspace and type the following three commands:
 
   automake
   autoheader
@@ -12,7 +17,8 @@ perform them.
 The automake command generates Makefile.in files that will
 be used by configure (in a later step) to generate the makefiles.
 
-The autoheader file generates the config.h.in file.
+The autoheader program generates the config.h.in file.  Which will be
+used by configure to generate config.h in the build tree.
 
 The autoconf command generates the configure command.
 
@@ -25,10 +31,11 @@ strongly discouraged.
 
   /path/to/the/top/of/the/source/tree/configure
 
-NOTE: giving a relative path is permissible.  For example, if you have
-decided to have your build tree as a directory in the directory that
-contains DeadEnds, then the following will work (assuming the DeadEnds
-directory is called DeadEnds, other modify as appropriate):
+NOTE: giving a relative path is permissible and will work just fine.
+For example, if you have decided to have your build tree as a
+directory in the directory that contains DeadEnds, then the following
+will work (assuming the DeadEnds directory is called DeadEnds,
+otherwise modify as appropriate):
 
   ../DeadEnds/configure
 
