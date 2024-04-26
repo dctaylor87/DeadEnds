@@ -36,10 +36,10 @@ static bool debugging = true;
 bool importDebugging = true;
 
 // toString returns the GNode in a NodeListElement as a string; for debugging.
-static String toString(void* element) {
-	GNode* gnode = ((NodeListElement*) element)->node;
-	return gnodeToString(gnode, 0);
-}
+//static String toString(void* element) {
+	//GNode* gnode = ((NodeListElement*) element)->node;
+	//return gnodeToString(gnode, 0);
+//}
 
 // importFromFiles imports a list of Gedcom files into a List of Databases, one per file. The list
 // is returned. If errors are found in a file, the list won't have a Database for that file, and
