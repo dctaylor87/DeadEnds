@@ -28,7 +28,6 @@ typedef struct Bucket {
 // HashTable is the type that implements a hash table. The getKey, compare and delete functions
 // customize the elements used in a specific HashTables. getKey gets the key of an element;
 // compare compares to keys; and delete deletes an element.
-//--------------------------------------------------------------------------------------------------
 typedef struct HashTable {
 	int refcount;	//  Number of references to the table.
 	int numBuckets; // Should be a prime number.

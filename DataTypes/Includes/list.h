@@ -69,8 +69,8 @@ void showList(List *list, String(*describe)(void*));
 	Block *block = &(list->block);\
 	void **_values = (void**) block->elements;\
 	for (int _i = 0; _i < block->length; _i++) {\
-        value = _values[_i];\
-        {
+		value = _values[_i];\
+		{
 #define ENDLIST\
 		}\
 	}\

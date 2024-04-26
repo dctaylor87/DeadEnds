@@ -1,6 +1,7 @@
 # writenode.c
 |Component|Description|
 |:---|:---|
+-|bool gnodesToFile(int level, GNode\* gnode, String fileName, bool indent)|Write a GNode tree to a gedcom file. Opens the file, calls writeGNodes to write the nodes, and closes the file. Returns whether the write occurred.|
 |static void writeGNode(FILE\*fp, int level, GNode\* gnode, bool indent)|Write a single GNode to a file. Called by writeGNodes.|
 |static void writeGNodes(FILE\*fp, int level, GNode\* gnode, bool indent, bool kids, bool sibs)|Write a GNode tree or forest to a Gedcom file. Recurse to children and siblings when flags are set.|
 |String gnodesToString(GNode\* gnode)|Convert a GNode tree into a Gedcom string. Find the length of final string and allocate it; fill the string with the output; and return the string.|

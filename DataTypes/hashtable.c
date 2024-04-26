@@ -1,4 +1,3 @@
-//
 // DeadEnds
 //
 // hashtable.c implements a general hash table. Specialized hash tables are created through
@@ -42,7 +41,7 @@ void deleteHashTable(HashTable *table) { //PH;
 	for (int i = 0; i < table->numBuckets; i++) {
 		if (table->buckets[i] == null) continue;
 		deleteBucket(table->buckets[i], table->delete);
- 	}
+	}
 	free(table);
 }
 
@@ -118,8 +117,8 @@ void* searchBucket(Bucket* bucket, CString key, String(*getKey)(void*),
 
 // linearSearchBucket uses linear search to look for an element in a Bucket.
 //void* linearSearchBucket(Bucket* bucket, CString key, String(*getKey)(void*), int* index) { PH;
-//	Block* block = &(bucket->block);
-//	return linearSearch(block->elements, block->length, key, getKey, index);
+       // Block* block = &(bucket->block);
+       // return linearSearch(block->elements, block->length, key, getKey, index);
 //}
 
 // isInHashTable returns whether an element with the given key is in the HashTable.

@@ -49,7 +49,7 @@ struct GNode {
 // Application programming interface to this type.
 //--------------------------------------------------------------------------------------------------
 GNode* createGNode(String key, String tag, String value, GNode* parent);  // Create a Node.
-void freeGNode(GNode*); // Free a GNode.
+void freeGNode(GNode*);  // Free a GNode.
 void freeGNodes(GNode*);  // Free a GNode forest.
 int gnodeLevel(GNode* node);  // Return the level of a GNode in its tree.
 
