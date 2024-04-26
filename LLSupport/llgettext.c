@@ -41,6 +41,12 @@
 #include "zstr.h"
 
 #endif
+
+#if !defined(NUMBER_LOCALE_BUCKETS)
+#define NUMBER_LOCALE_BUCKETS	5
+#endif
+int numLocaleBuckets = NUMBER_LOCALE_BUCKETS;
+
 /*********************************************
  * local variables
  *********************************************/
@@ -143,7 +149,7 @@ ll_bindtextdomain (CString domain, CString localeDir)
 	String oldLocaleDir = 0;
 
 	if (!gt_localeDirs) {
-		gt_localeDirs = createStringTable();
+		gt_localeDirs = createStringTable(numLocaleBuckets);
 	}
 	/* skip if already set */
 	oldLocaleDir = searchStringTable(gt_localeDirs, domain);

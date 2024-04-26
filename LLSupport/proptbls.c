@@ -44,6 +44,11 @@
 
 #endif
 
+#if !defined(NUM_PROP_ELEMENT_BUCKETS)
+#define NUM_PROP_ELEMENT_BUCKETS	17
+#endif
+int number_prop_element_buckets = NUM_PROP_ELEMENT_BUCKETS;
+
 /*==========================================================
  * add_prop_dnum -- Add named property table as new last display order
  *========================================================*/
@@ -87,7 +92,7 @@ add_dir_files_to_proplist (CString dir, SELECT_FNC selectfnc, List *list)
 	int n = scandir(dir, &programs, selectfnc, alphasort);
 	int i;
 	for (i=0; i<n; ++i) {
-		HashTable *table = createStringTable();
+		HashTable *table = createStringTable(number_prop_element_buckets);
 		set_prop_dnum(table, 1, "filename", programs[i]->d_name);
 		set_prop_dnum(table, 2, "dir", dir);
 		stdfree(programs[i]);

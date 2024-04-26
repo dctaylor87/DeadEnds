@@ -92,6 +92,12 @@
 #include "messages.h"
 
 #endif
+
+#if !defined(NUMBER_LINKAGE_BUCKETS)
+#define NUMBER_LINKAGE_BUCKETS	37
+#endif
+int num_linkage_buckets = NUMBER_LINKAGE_BUCKETS;
+
 /*********************************************
  * external/imported variables
  *********************************************/
@@ -859,12 +865,15 @@ check_indi_lineage_links (NODE indi)
 	int bucket_index = 0;
 	int element_index = 0;
 	IntegerElement *element;
+
+	IntegerTable *memtab = createIntegerTable(num_linkage_buckets);
 #else
 	NODE name=0, refn=0, sex=0, body=0, famc=0, fams=0;
 	NODE curs=0; /* for travesing node lists */
 	TABLE_ITER tabit=0;
-#endif
+
 	TABLE memtab = create_table_int();
+#endif
 	CNSTRING famkey=0; /* used inside traversal loops */
 	INT count=0;
 	CNSTRING ikey = nxref(indi);
@@ -925,7 +934,11 @@ check_indi_lineage_links (NODE indi)
 		}
 	}
 	destroy_table(memtab);
+#if defined(DEADENDS)
+	memtab = createIntegerTable(num_linkage_buckets);
+#else
 	memtab = create_table_int();
+#endif
 
 	/*
 	Make table listing all families this person is child in
@@ -993,12 +1006,15 @@ check_fam_lineage_links (NODE fam)
 	int bucket_index = 0;
 	int element_index = 0;
 	IntegerElement *element;
+
+	IntegerTable *memtab = createIntegerTable(num_linkage_buckets);
 #else
 	NODE fref=0, husb=0, wife=0, chil=0, rest=0;
 	NODE curs=0; /* for travesing node lists */
 	TABLE_ITER tabit=0;
-#endif
+
 	TABLE memtab = memtab = create_table_int();
+#endif
 	CNSTRING indikey=0; /* used inside traversal loops */
 	INT count=0;
 	CNSTRING fkey = nxref(fam);
@@ -1068,7 +1084,11 @@ check_fam_lineage_links (NODE fam)
 		}
 	}
 	destroy_table(memtab);
+#if defined(DEADENDS)
+	memtab = createIntegerTable(num_linkage_buckets);
+#else
 	memtab = create_table_int();
+#endif
 
 	/*
 	Make table listing all families this person is child in

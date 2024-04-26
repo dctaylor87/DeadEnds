@@ -123,6 +123,11 @@ static List *f_xlats=0; /* cache of conversions */
 static HashTable *f_dyntts=0; /* cache of dynamic translation tables */
 static char f_ttext[] = ".tt";
 
+#if !defined(NUMBER_DYNTTS_BUCKETS)
+#define NUMBER_DYNTTS_BUCKETS	13
+#endif
+int num_dyntts_buckets = NUMBER_DYNTTS_BUCKETS;
+
 /*********************************************
  * local & exported function definitions
  * body of module
@@ -462,7 +467,7 @@ xl_load_all_dyntts (CString ttpath)
 	}
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = createHashTable(NULL, NULL, NULL);
+	f_dyntts = createHashTable(NULL, NULL, NULL, num_dyntts_buckets);
 	dirs = (String)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chop_path(ttpath, dirs);

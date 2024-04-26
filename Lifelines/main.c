@@ -88,6 +88,11 @@ extern int yydebug;
 #include "llpy-externs.h"
 #endif
 
+#if !defined(NUMBER_EXARGS_BUCKETS)
+#define NUMBER_EXARGS_BUCKETS	17
+#endif
+int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
+
 /*********************************************
  * required global variables
  *********************************************/
@@ -227,7 +232,11 @@ main (int argc, char **argv)
 				parse_arg(optarg, &optname, &optval);
 				if (optname && optval) {
 					if (!exargs) {
+#if defined(DEADENDS)
+						exargs = createStringTable(num_exargs_buckets);
+#else
 						exargs = create_table_str();
+#endif
 					}
 					insert_table_str(exargs, optname, optval);
 				}

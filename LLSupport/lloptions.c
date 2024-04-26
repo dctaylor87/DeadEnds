@@ -50,6 +50,25 @@
 #include "messages.h"
 
 #endif
+
+//#if !defined(NUMBER_CONFIG_BUCKETS)
+//#define NUMBER_CONFIG_BUCKETS	5
+//#endif
+#if !defined(NUMBER_FALLBACK_BUCKETS)
+#define NUMBER_FALLBACK_BUCKETS	5
+#endif
+#if !defined(NUMBER_GLOBAL_BUCKETS)
+#define NUMBER_GLOBAL_BUCKETS	37
+#endif
+#if !defined(NUMBER_PREDEF_BUCKETS)
+#define NUMBER_PREDEF_BUCKETS	5
+#endif
+
+//int num_config_buckets = NUMBER_CONFIG_BUCKETS;
+int num_fallback_buckets = NUMBER_FALLBACK_BUCKETS;
+int num_global_buckets = NUMBER_GLOBAL_BUCKETS;
+int num_predef_buckets = NUMBER_PREDEF_BUCKETS;
+
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -183,7 +202,7 @@ load_config_file (String file, String * pmsg, String *chain)
 		free(thisdir);
 		return 0; /* 0 for not found */
 	}
-	f_predef = createStringTable();
+	f_predef = createStringTable(num_predef_buckets);
 
 	insertInStringTable(f_predef, "%thisdir%", thisdir);
 	strfree(&thisdir);
@@ -259,7 +278,7 @@ load_global_options (String configfile, String * pmsg)
 	int cnt = 0;
 	*pmsg = NULL;
 	if (!f_global) 
-		f_global= createStringTable();
+		f_global= createStringTable(num_global_buckets);
 	do {
 	    if (chain) strfree(&chain);
 	    rtn = load_config_file(configfile, pmsg, &chain);
@@ -417,7 +436,7 @@ void
 setoptstr_fallback (String optname, String newval)
 {
 	if (!f_fallback)
-		f_fallback = createStringTable();
+		f_fallback = createStringTable(num_fallback_buckets);
 	insertInStringTable(f_fallback, optname, newval);
 	send_notifications();
 }
