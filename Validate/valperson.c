@@ -1,11 +1,10 @@
+// DeadEnds
 //
-//  DeadEnds
+// valperson.c contains functions that validate person records in a Database.
 //
-//  valperson.c -- Functions that validate the person records in a Database.
-//
-//  Created by Thomas Wetmore on 17 December 2023.
-//  Last changed on 29 December 2023.
-//
+// Created by Thomas Wetmore on 17 December 2023.
+// Last changed on 26 April 2024.
+
 #include <stdint.h>
 
 #include "refnindex.h"
@@ -21,10 +20,8 @@ static bool validatePerson(GNode*, Database*, ErrorLog*);
 
 static bool debugging = false;
 
-//  validatePersonIndex -- Validate the person index of a database.
-//-------------------------------------------------------------------------------------------------
-bool validatePersonIndex(Database *database, ErrorLog *errorLog)
-{
+// validatePersonIndex validates the person index of a Database.
+bool validatePersonIndex(Database* database, ErrorLog* errorLog) {
 	bool valid = true;
 	FORHASHTABLE(database->personIndex, element)
 		GNode* person = ((RecordIndexEl*) element)->root;
@@ -40,12 +37,10 @@ bool validatePersonIndex(Database *database, ErrorLog *errorLog)
 	return valid;
 }
 
-//  validatePerson -- Validate a person record. Persons do not require NAME or SEX lines, but
-//    if there is a SEX line its value is checked. Check all FAMC and FAMS links to families,
-//    and that the families have the correct links back.
-//--------------------------------------------------------------------------------------------------
-static bool validatePerson(GNode *person, Database *database, ErrorLog *errorLog)
-{
+// validatePerson validates a person record. Persons do not require NAME or SEX lines, but
+// if there is a SEX line its value is checked. Checks all FAMC and FAMS links to families,
+// and that the families have the correct links back.
+static bool validatePerson(GNode* person, Database* database, ErrorLog* errorLog) {
 	String segment = database->lastSegment;
 	int errorCount = 0;
 	static char s[512];
@@ -137,14 +132,8 @@ a:;
 	return errorCount == 0;
 }
 
-//  personLineNumber -- Given a person root node, return its location (line number) in the
-//    original Gedcom file. Uses searchHashTable to get the RecordIndexEl of the record and
-//    takes the line number from there. Obviously won't work correctly for records that
-//    arrived from another source.
-//--------------------------------------------------------------------------------------------------
-int personLineNumber (GNode *person, Database* database)
-{
+// personLineNumber returns the line number where a person was located in its Gedcom file.
+int personLineNumber(GNode* person, Database* database) {
 	RecordIndexEl *element = searchHashTable(database->personIndex, person->key);
-	if (!element) return 0;  // Should not happen.
-	return element->lineNumber;  // Assume this is zero for records not from Gedcom files.
+	return element ? element->lineNumber : 0;
 }
