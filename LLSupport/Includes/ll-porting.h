@@ -100,7 +100,7 @@ typedef void *		VPTR;
 //#define insert_table_obj(table, element)	insertInHashTable(table, element)
 
 #define create_table_str()			createStringTable()
-#define insert_table_str(table, key, value)	insertInStringTable(table,key,value)
+#define insert_table_str(table, key, value)	addToStringTable(table,key,value)
 #define replace_table_str(table, key, value)	insertInStringTable(table,key,value)
 #define valueof_str(table, key)			searchStringTable(table,key)
 
