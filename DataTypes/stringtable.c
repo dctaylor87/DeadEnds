@@ -44,7 +44,7 @@ bool isInStringTable(StringTable *table, CString key) {
 }
 
 // addToStringTable creates a new StringElement from key and value, and adds it to the table.
-void addToStringTable(HashTable *table, String key, String value) {
+void addToStringTable(HashTable *table, CString key, CString value) {
 	StringElement *element = (StringElement*) searchHashTable(table, key);
 	if (element) removeFromHashTable(table, key); // If in table remove element before replacing.
 	element = (StringElement*) malloc(sizeof(StringElement));
