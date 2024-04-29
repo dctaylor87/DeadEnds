@@ -228,7 +228,11 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				current_seq = NULL;
 				return BROWSE_QUIT;
 			}
+#if defined(DEADENDS)
+			removeFromSequenceByIndex (seq, cur);
+#else
 			delete_indiseq(seq, NULL, NULL, cur);
+#endif
 			len--;
 			if (mark == cur) mark = -1;
 			if (mark > cur) mark--;

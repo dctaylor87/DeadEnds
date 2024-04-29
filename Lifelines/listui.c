@@ -326,7 +326,11 @@ resize_win: /* we come back here if we resize the window */
 			case 'r':
 				if (!multi)
 					break;
+#if defined(DEADENDS)
+				removeFromSequenceByIndex (seq, ld.cur);
+#else
 				delete_indiseq(seq, NULL, NULL, ld.cur);
+#endif
 				if (!(ld.listlen = length_indiseq(seq))) {
 					done=TRUE;
 					ld.cur = -1;

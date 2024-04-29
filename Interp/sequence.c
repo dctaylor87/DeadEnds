@@ -185,6 +185,19 @@ bool removeFromSequence(Sequence *sequence, String key)
 	return true;
 }
 
+// removeFromSequenceByIndex removes the SequenceEl having the given index
+bool removeFromSequenceByIndex (Sequence *sequence, int index)
+{
+  CString key;
+
+  if (! sequence)
+    return false;		/* no sequence */
+  if (! elementSequence (sequence, index, &key, NULL))
+    return false;		/* key out of range */
+
+  return removeFromSequence (sequence, key);
+}
+
 // elementSequence -- Return an element from a sequence
 bool elementSequence (Sequence *sequence, int index, String* pkey, String* pname)
 {

@@ -48,6 +48,7 @@ void emptySequence(Sequence*);
 void appendToSequence(Sequence*, CString key, String name, void*);
 bool isInSequence(Sequence*, String key);
 bool removeFromSequence(Sequence*, String key);
+bool removeFromSequenceByIndex (Sequence *sequence, int index);
 void nameSortSequence(Sequence*);  //  Sort a sequence by name.
 void keySortSequence(Sequence*);  //  Sort a sequence by key.
 void valueSortSequence(Sequence*); //  Sort a sequence by value (not properly implemented).
