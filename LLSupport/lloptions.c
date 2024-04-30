@@ -204,7 +204,7 @@ load_config_file (String file, String * pmsg, String *chain)
 	}
 	f_predef = createStringTable(num_predef_buckets);
 
-	insertInStringTable(f_predef, "%thisdir%", thisdir);
+	addToStringTable(f_predef, "%thisdir%", thisdir);
 	strfree(&thisdir);
 	/* read thru config file til done (or error) */
 	while (fgets(buffer, sizeof(buffer), fp)) {
@@ -250,7 +250,7 @@ load_config_file (String file, String * pmsg, String *chain)
 		     */
 		    *chain = strsave(val);
 		} else {
-		    insertInStringTable(f_global, key, val);
+		    addToStringTable(f_global, key, val);
 		}
 	}
 	failed = !feof(fp);
@@ -437,7 +437,7 @@ setoptstr_fallback (String optname, String newval)
 {
 	if (!f_fallback)
 		f_fallback = createStringTable(num_fallback_buckets);
-	insertInStringTable(f_fallback, optname, newval);
+	addToStringTable(f_fallback, optname, newval);
 	send_notifications();
 }
 /*===============================================
