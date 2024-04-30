@@ -20,14 +20,23 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 
 # what goes into llexec ?
 llexec_SOURCES = ask.c choose.c lines_usage.c llexec.c \
-	selectdb.c miscutls.c llexec.h
+	selectdb.c miscutls.c llexec.h \
+	signals.c version.c
 
 PYTHON_LIBS = @PYTHON_LIBS@
 
-LDADD = ../Python/libpyllines.a \
+llines_LDADD = ../Python/libpyllines.a \
 	../LLSupport/libllsupport.a \
 	../Interp/libinterp.a ../Parser/libparser.a \
 	../UI/libui.a \
+	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Validate/libvalidate.a \
+	../DataTypes/libdatatypes.a ../Utils/libutils.a
+
+llexec_LDADD = ../Python/libpyllines.a \
+	../LLSupport/libllsupport.a \
+	../Interp/libinterp.a ../Parser/libparser.a \
+	../UI/libuicli.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../Validate/libvalidate.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
