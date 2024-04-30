@@ -6,7 +6,6 @@
 noinst_LIBRARIES = libutils.a
 
 libutils_a_SOURCES = \
-	date.c \
 	errors.c \
 	standard.c \
 	unicode.c \

@@ -6,6 +6,7 @@
 noinst_LIBRARIES = libgedcom.a
 
 libgedcom_a_SOURCES = \
+	date.c \
 	gedcom.c \
 	gnode.c \
 	lineage.c \
