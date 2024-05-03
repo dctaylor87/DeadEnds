@@ -49,7 +49,7 @@ typedef void *		VPTR;
 #define str_to_indiseq(name, ctype)	stringToSequence(name, database)
 
 /* elt is an SequenceEl (SORTEL) */
-#define element_skey(elt)		(elt->key)
+#define element_skey(elt)		(elt->root->key)
 
 #define fam_to_children(node)		familyToChildren(node, database)
 #define fam_to_fathers(node)		familyToFathers(node, database)

@@ -62,7 +62,7 @@ getAllRecordIndex (Database *database, RecordIndex *index)
   for (record = firstInHashTable (index, &bucket, &element);
        record;
        record = nextInHashTable (index, &bucket, &element))
-    appendToSequence (seq, record->root->key, NULL, NULL);
+    appendToSequence (seq, record->root->key, NULL);
 
   if (lengthSequence (seq) <= 0)
     {
@@ -84,7 +84,7 @@ getAllRefns (Database *database)
   for (refnelt = firstInHashTable (database->refnIndex, &bucket, &element);
        refnelt;
        refnelt = nextInHashTable (database->refnIndex, &bucket, &element))
-    appendToSequence (seq, refnelt->refn, NULL, NULL);
+    appendToSequence (seq, refnelt->refn, NULL);
 
   if (lengthSequence (seq) <= 0)
     {
