@@ -84,31 +84,31 @@ bool isEmptyDatabase(Database* database) {
 }
 
 //  keyToPerson gets a person record from a database.
-GNode* keyToPerson(String key, Database* database) {
+GNode* keyToPerson(CString key, Database* database) {
 	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(database->personIndex, key);
 	return element ? element->root : null;
 }
 
 // keyToFamily gets a family record from a database.
-GNode* keyToFamily(String key, Database* database) {
+GNode* keyToFamily(CString key, Database* database) {
 	RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->familyIndex, key);
 	return element == null ? null : element->root;
 }
 
 // keyToSource gets a source record from a database.
-GNode* keyToSource(String key, Database* database) {
+GNode* keyToSource(CString key, Database* database) {
 	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(database->sourceIndex, key);
 	return element ? element->root : null;
 }
 
 // keyToEvent gets an event record from a database.
-GNode* keyToEvent(String key, Database* database) {
+GNode* keyToEvent(CString key, Database* database) {
 	RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->eventIndex, key);
 	return element ? element->root : null;
 }
 
 // keyToOther gets an other record from a database.
-GNode* keyToOther(String key, Database* database) {
+GNode* keyToOther(CString key, Database* database) {
 	RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->otherIndex, key);
 	return element ? element->root : null;
 }

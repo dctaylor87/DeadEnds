@@ -792,7 +792,7 @@ static void writeLimitedFamily (GNode *family) {
 
 // nameToSequence returns the Sequence of persons who match a Gedcom name. If the first letter of
 // the given names is '*', the Sequence will contain all persons who match the surname.
-Sequence* nameToSequence(String name, Database* database) {
+Sequence* nameToSequence(CString name, Database* database) {
 	ASSERT(name && *name && database);
 	if (!name || *name == 0 || !database) return null;
 	int num;
