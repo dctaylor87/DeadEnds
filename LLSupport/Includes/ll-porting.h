@@ -44,8 +44,8 @@ typedef void *		VPTR;
 #define copy_indiseq(seq)	copySequence(seq)
 #define create_indiseq_null()	createSequence(database)
 
-#define rename_indiseq(seq, key)			renameSequence(seq, key)
-#define element_indiseq(seq, index, pkey, pname)	elementSequence(seq, index, pkey, pname)
+#define rename_indiseq(seq, key)			renameElementInSequence(seq, key)
+#define element_indiseq(seq, index, pkey, pname)	elementFromSequence(seq, index, pkey, pname)
 #define str_to_indiseq(name, ctype)	stringToSequence(name, database)
 
 /* elt is an SequenceEl (SORTEL) */
@@ -101,7 +101,7 @@ typedef void *		VPTR;
 
 #define create_table_str()			createStringTable()
 #define insert_table_str(table, key, value)	addToStringTable(table,key,value)
-#define replace_table_str(table, key, value)	insertInStringTable(table,key,value)
+#define replace_table_str(table, key, value)	addToStringTable(table,key,value)
 #define valueof_str(table, key)			searchStringTable(table,key)
 
 #define create_table_int()			createIntegerTable()

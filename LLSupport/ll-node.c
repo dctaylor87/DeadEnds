@@ -121,7 +121,7 @@ fixtag (String tag)
 {
 	String str = searchStringTable(tagtable, tag);
 	if (!str) {
-		insertInStringTable(tagtable, tag, tag);
+		addToStringTable(tagtable, tag, tag);
 		str = searchStringTable(tagtable, tag);
 	}
 	return str;

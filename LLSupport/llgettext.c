@@ -155,7 +155,7 @@ ll_bindtextdomain (CString domain, CString localeDir)
 	oldLocaleDir = searchStringTable(gt_localeDirs, domain);
 	if (eqstr_ex(oldLocaleDir, localeDir))
 		return;
-	insertInStringTable(gt_localeDirs, domain, localeDir);
+	addToStringTable(gt_localeDirs, domain, localeDir);
 
 	bindtextdomain(domain, localeDir);
 	locales_notify_language_change();

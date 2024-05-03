@@ -601,7 +601,11 @@ xl_free_adhoc_xlats (void)
 		if (xlattemp->adhoc) {
 			free_xlat(xlattemp);
 		} else {
+#if defined(DEADENDS)
+			appendToList(newlist, xlattemp);
+#else
 			back_list(newlist, xlattemp);
+#endif
 		}
 	ENDLIST
 	deleteList(f_xlats);

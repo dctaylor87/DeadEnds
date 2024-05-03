@@ -59,10 +59,10 @@ add_prop_dnum (HashTable *props, CString name, CString value)
 	int n = ll_atoi(str, 0)+1;
 	char temp[FMT_INT_LEN+1];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
-	insertInStringTable(props, temp, name);
-	insertInStringTable(props, name, value);
+	addToStringTable(props, temp, name);
+	addToStringTable(props, name, value);
 	snprintf(temp, sizeof(temp), FMT_INT, n);
-	insertInStringTable(props, "dn", temp);
+	addToStringTable(props, "dn", temp);
 }
 /*==========================================================
  * set_prop_dnum -- Set named property in table, at specified display number
@@ -74,11 +74,11 @@ set_prop_dnum (HashTable *props, int n, CString name, CString value)
 	int max = ll_atoi(str, 0);
 	char temp[24];
 	snprintf(temp, sizeof(temp), "d" FMT_INT, n);
-	insertInStringTable(props, temp, name);
-	insertInStringTable(props, name, value);
+	addToStringTable(props, temp, name);
+	addToStringTable(props, name, value);
 	if (n>max) {
 		snprintf(temp, sizeof(temp), FMT_INT, n);
-		insertInStringTable(props, "dn", temp);
+		addToStringTable(props, "dn", temp);
 	}
 }
 /*===================================================

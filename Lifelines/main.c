@@ -143,6 +143,7 @@ main (int argc, char **argv)
 	STRING progout=NULL;
 	BOOLEAN graphical=TRUE;
 	STRING configfile=0;
+
 	STRING crashlog=NULL;
 	int i=0;
 	BOOLEAN have_python_scripts = FALSE;
