@@ -175,15 +175,6 @@ removeRefn (CString refn, CString key, Database *database)
   return true;
 }
 
-/* getRefn -- searches the index for a mapping for refn, if found, returns it.
-   If not found, null is returned.  */
-
-CString
-getRefn (CString refn, Database *database)
-{
-  return searchRefnIndex (database->refnIndex, refn);
-}
-
 /* XXX needs a better name XXX */
 /* indexByRefn -- scans all immediate children of node for REFNs.
    For each one found, we add a mapping in the REFN index.

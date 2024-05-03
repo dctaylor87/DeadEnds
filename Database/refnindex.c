@@ -76,3 +76,12 @@ bool addToRefnIndex(RefnIndex *index, String refn, String key) {
 	delete(element);
 	return false;
 }
+
+/* getRefn -- searches the index for a mapping for refn, if found, returns it.
+   If not found, null is returned.  */
+
+CString
+getRefn (CString refn, Database *database)
+{
+  return searchRefnIndex (database->refnIndex, refn);
+}
