@@ -1,36 +1,29 @@
-//
 //  DeadEnds
 //
-//  integertable.h
+// integertable.h
 //
-//  Created by Thomas Wetmore on 23 April 2023.
-//  Last changed on 17 April 2024.
-//
+// Created by Thomas Wetmore on 23 April 2023.
+// Last changed on 1 May 2024.
 
 #ifndef integertable_h
 #define integertable_h
 
 #include "hashtable.h"
 
-//  IntegerTable -- The integer table is based on the generic hash table. The element's values
-//    are integers.
-//--------------------------------------------------------------------------------------------------
+// IntegerTable is a hash table that maps Strings to integers.
 typedef HashTable IntegerTable;
 
-//  IntegerElement -- Elements for String to Integer mappings. This variant is quite good for
-//    sets of strings by ignoring the integer value.
-//--------------------------------------------------------------------------------------------------
+// IntegerElement is an element in an IntegerTable.
 typedef struct {
     String key;
     int value;
 } IntegerElement;
 
-//  User interface.
-//--------------------------------------------------------------------------------------------------
+// User interface.
 extern String integerGetKey(Word element);
 IntegerTable *createIntegerTable(int numBuckets);
-int searchIntegerTable(IntegerTable *table, String key);
-void insertInIntegerTable(IntegerTable *table, String key, int value);
-extern void incrementIntegerTable (IntegerTable *table, CString key);
+void insertInIntegerTable(IntegerTable* table, String key, int value);
+int searchIntegerTable(IntegerTable* table, String key);
+void incrIntegerTable (IntegerTable *table, CString key);
 
 #endif // integertable_h

@@ -1,11 +1,10 @@
-//
 //  DeadEnds
 //
-//  validate.c -- Functions that validate Gedcom records.
+// validate.c has the functions that validate Gedcom records.
 //
-//  Created by Thomas Wetmore on 12 April 2023.
-//  Last changed on 25 January 2024.
-//
+// Created by Thomas Wetmore on 12 April 2023.
+// Last changed on 29 April 2024.
+
 #include <stdint.h>
 
 #include "refnindex.h"
@@ -28,10 +27,8 @@ static void validateReferences(Database *database, ErrorLog*);
 
 int numValidations = 0;  //  DEBUG.
 
-//  validateDatabase
-//--------------------------------------------------------------------------------------------------
-bool validateDatabase(Database *database, ErrorLog *errorLog)
-{
+//  validateDatabase validates a Database.
+bool validateDatabase(Database* database, ErrorLog* errorLog) {
 	ASSERT(database);
 	validatePersonIndex(database, errorLog);
 	validateFamilyIndex(database, errorLog);
@@ -52,20 +49,20 @@ bool validateDatabase(Database *database, ErrorLog *errorLog)
 
 extern String nameString(String);
 
-void validateSource(GNode *source, Database *database, ErrorLog* errorLog) {}
+void validateSource(GNode* source, Database* database, ErrorLog* errorLog) {}
 
-void validateEvent(GNode *event, Database *database, ErrorLog* errorLog) {}
+void validateEvent(GNode* event, Database* database, ErrorLog* errorLog) {}
 
-void validateOther(GNode *other, Database *database, ErrorLog* errorLog) {}
+void validateOther(GNode* other, Database* database, ErrorLog* errorLog) {}
 
 
-static GNode *getFamily(String key, RecordIndex *index)
+static GNode *getFamily(String key, RecordIndex* index)
 {
 	GNode *root = searchRecordIndex(index, key);
 	return root && recordType(root) == GRFamily ? root : null;
 }
 
-static GNode *getPerson(String key, RecordIndex *index)
+static GNode *getPerson(String key, RecordIndex* index)
 {
 	GNode *root = searchRecordIndex(index, key);
 	return root && recordType(root) == GRPerson ? root : null;
@@ -74,7 +71,7 @@ static GNode *getPerson(String key, RecordIndex *index)
 #define LN(person, database, node)\
 	personLineNumber(person, database) + countNodesBefore(node)
 
-//  validateReferences -- Validate the 1 REFN nodes in the records.
+// validateReferences -- Validate the 1 REFN nodes in the records.
 //--------------------------------------------------------------------------------------------------
 static void validateReferences(Database *database, ErrorLog* errorLog)
 //  database -- Database to have its REFN values checked.

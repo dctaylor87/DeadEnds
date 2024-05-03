@@ -1,11 +1,9 @@
-//
 // DeadEnds
 //
 // integertable.c
 //
 // Created by Thomas Wetmore on 23 April 2023.
-// Last changed on 17 April 2024.
-//
+// Last changed on 1 May 2024.
 
 #include "integertable.h"
 
@@ -35,8 +33,8 @@ void insertInIntegerTable(IntegerTable *table, String key, int value) {
     addToHashTable(table, element, false);
 }
 
-// incrementIntegerTable -- retrieve key and increment its value.
-void incrementIntegerTable (IntegerTable *table, CString key)
+// incrIntegerTable -- retrieve key and increment its value.
+void incrIntegerTable (IntegerTable *table, CString key)
 {
   IntegerElement *element = (IntegerElement *) searchHashTable (table, key);
   int value;

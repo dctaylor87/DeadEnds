@@ -1,12 +1,10 @@
-//
 //  DeadEnds
 //
-//  builtin.c -- This file contains many of the built-in functions of the DeadEnds programming
-//    language.
+// builtin.c contains many of the built-in functions of the DeadEnds script language.
 //
-//  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 13 February 2024      	 	.
-//
+// Created by Thomas Wetmore on 14 December 2022.
+// Last changed on 2 May 2024.
+
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -29,10 +27,7 @@
 #include "place.h"
 #include "builtintable.h"
 
-//#define Table SymbolTable
-
 // Global constants for useful PValues.
-//--------------------------------------------------------------------------------------------------
 const PValue nullPValue = {PVNull, PV()};
 const PValue truePValue = PVALUE(PVBool, uBool, true);
 const PValue falsePValue = PVALUE(PVBool, uBool, false);
@@ -175,21 +170,17 @@ bool isZeroVUnion(PVType type, VUnion vunion)
 //    return NULL;
 //}
 
-//  __strsoundex -- SOUNDEX function on strings
-//    usage: strsoundex(STRING) -> STRING
-//--------------------------------------------------------------------------------------------------
-PValue __strsoundex(PNode *expr, Context *context, bool* eflg)
-{
+// __strsoundex computes the DeadEnds SOUNDEX function a string.
+// usage: strsoundex(STRING) -> STRING
+PValue __strsoundex(PNode* expr, Context* context, bool* eflg) {
 	PValue pvalue = evaluate(expr->arguments, context, eflg);
 	if (*eflg || pvalue.type != PVString || !pvalue.value.uString) return nullPValue;
 	return PVALUE(PVString, uString, strsave(soundex(pvalue.value.uString)));
 }
 
-//  __set -- Assignment "statement".
-//    usage: set(IDEN, ANY) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __set(PNode *pnode, Context *context, bool* eflg)
-{
+// __set performs the DeadEnds script assignment statement.
+//  usage: set(IDEN, ANY) -> VOID
+PValue __set(PNode* pnode, Context* context, bool* eflg) {
 	PNode *iden = pnode->arguments;
 	PNode *expr = iden->next;
 	if (iden->type != PNIdent) { *eflg = true; return nullPValue; }
@@ -199,11 +190,9 @@ PValue __set(PNode *pnode, Context *context, bool* eflg)
 	return nullPValue;
 }
 
-//  __d -- Return cardinal integer as a string.
-//    usage: d(INT) -> STRING
-//--------------------------------------------------------------------------------------------------
-PValue __d(PNode *expr, Context *context, bool* eflg)
-{
+// __d returns a cardinal integer as a string.
+// usage: d(INT) -> STRING
+PValue __d(PNode* expr, Context* context, bool* eflg) {
 	char scratch[20];
 	PValue value = evaluate(expr->arguments, context, eflg);
 	if (value.type == PVBool)
@@ -213,10 +202,9 @@ PValue __d(PNode *expr, Context *context, bool* eflg)
 	return PVALUE(PVString, uString, strsave(scratch));
 }
 
-//  __f -- Return floating point value as a string.
-//---------------------------------------------------------------------------------------------------
-PValue __f(PNode *expr, Context *context, bool *errflg)
-{
+// __f returns a string holding a floating point number.
+// usage: f(FLOAT) -> STRING
+PValue __f(PNode* expr, Context* context, bool* errflg) {
 	char scratch[20];
 	PValue value = evaluate(expr->arguments, context, errflg);
 	if (*errflg || value.type != PVFloat) return nullPValue;
@@ -224,11 +212,9 @@ PValue __f(PNode *expr, Context *context, bool *errflg)
 	return PVALUE(PVString, uString, strsave(scratch));
 }
 
-//  __alpha -- Convert small integer (between 1 and 26) to a letter.
-//    usage: alpha(INT) -> STRING
-//--------------------------------------------------------------------------------------------------
-PValue __alpha(PNode *expr, Context *context, bool* eflg)
-{
+// __alpha converts an integer between 1 and 26 to 'a' to 'z'. If out of range returns d(INT).
+// usage: alpha(INT) -> STRING.
+PValue __alpha(PNode* expr, Context* context, bool* eflg) {
 	char scratch[4];
 	PValue value = evaluate(expr->arguments, context, eflg);
 	if (*eflg || value.type != PVInt) return nullPValue;
@@ -239,15 +225,13 @@ PValue __alpha(PNode *expr, Context *context, bool* eflg)
 	return PVALUE(PVString, uString, strsave(scratch));
 }
 
-//  __ord -- Convert a small integer to an ordinal string.
-//    usage: ord(INT) -> STRING
-//--------------------------------------------------------------------------------------------------
+// __ord convert a small integer to an ordinal string. If out of range returns d(INT)
+// usage: ord(INT) -> STRING.
 static char *ordinals[] = {
 	"first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth",
 	"tenth", "eleventh", "twelfth"
 };
-PValue __ord(PNode *expr, Context *context, bool* eflg)
-{
+PValue __ord(PNode* expr, Context* context, bool* eflg) {
 	char scratch[12];
 	PValue value = evaluate(expr->arguments, context, eflg);
 	if (*eflg || value.type != PVInt) return nullPValue;
@@ -263,16 +247,14 @@ PValue __ord(PNode *expr, Context *context, bool* eflg)
 	return value;
 }
 
-//  __card -- Convert small integer to cardinal string
-//    usage: card(INT) -> STRING
-//--------------------------------------------------------------------------------------------------
+// __card convert a small integer to a cardinal string. If out of range returns d(INT).
+// usage: card(INT) -> STRING
 static char *cardinals[] = {
 	"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
 	"eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
 	"eighteen", "nineteen", "twenty"
 };
-PValue __card (PNode *expr, Context *context, bool* eflg)
-{
+PValue __card (PNode* expr, Context* context, bool* eflg) {
 	PValue value = evaluate(expr->arguments, context, eflg);
 	if (*eflg || value.type != PVInt) return nullPValue;
 	long lvalue = value.value.uInt;
@@ -280,11 +262,9 @@ PValue __card (PNode *expr, Context *context, bool* eflg)
 	return PVALUE(PVString, uString, cardinals[lvalue]);
 }
 
-//  __roman -- Convert integer to Roman numeral. If out of Roman range return as simple string.
-//    usage: roman(INT) -> STRING
-//--------------------------------------------------------------------------------------------------
-PValue __roman(PNode *node, Context *context, bool* eflg)
-{
+// __roman convert an integer to Roman numeral. If out of range returns d(INT).
+//  usage: roman(INT) -> STRING.
+PValue __roman(PNode* node, Context* context, bool* eflg) {
 	char scratch[256] = "";
 	static char* symbols[] = {"m", "cm", "d", "cd", "c", "xc", "l", "xl", "x", "ix", "v", "iv", "i"};
 	static int values[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};

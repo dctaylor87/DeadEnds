@@ -4,9 +4,9 @@ int main(void)
 {
     StringTable *table = createStringTable();
 
-    insertInStringTable(table, "a", "a");
-    insertInStringTable(table, "c", "c");
-    insertInStringTable(table, "tom", "Thomas Trask Wetmore IV");
+    addToStringTable(table, "a", "a");
+    addToStringTable(table, "c", "c");
+    addToStringTable(table, "tom", "Thomas Trask Wetmore IV");
 
     showStringTable(table);
 }
