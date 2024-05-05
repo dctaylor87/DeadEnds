@@ -3,7 +3,7 @@
 // sequence.h is the header file for the Sequence datatype.
 //
 // Created by Thomas Wetmore on 1 March 2023.
-// Last changed on 3 May 2024.
+// Last changed on 4 May 2024.
 
 #ifndef sequence_h
 #define sequence_h
@@ -11,26 +11,22 @@
 #include "standard.h"
 #include "block.h"
 #include "gnode.h"
-#include "pvalue.h"
 
 // SortType holds the possible sorted states of the elements in a Sequence.
 typedef enum {
 	SequenceNotSorted,
 	SequenceKeySorted,
 	SequenceNameSorted,
-	SequenceValueSorted
 } SortType;
 
 // SequenceEl is the type of Sequence elements.
 typedef struct SequenceEl {
-	//String key;
-	//String name;
 	GNode* root;
-	String name;
+	String name; // If element is a person.
 	void* value;
 } SequenceEl;
 
-// Sequence is a data type that holds sequences/sets/arrays of persons.
+// Sequence is a data type that holds sequences/sets/arrays of records.
 typedef struct Sequence {
 	Block block;
 	SortType sortType;
@@ -71,35 +67,28 @@ Sequence *refnToSequence (CString ukey, Database *database);
 Sequence *refn_to_indiseq(String refn);
 #endif
 
-Sequence *unionSequence(Sequence*, Sequence*);
-Sequence *intersectSequence(Sequence*, Sequence*);
-Sequence *differenceSequence(Sequence*, Sequence*);
-Sequence *childSequence(Sequence*);
-Sequence *parentSequence(Sequence*);
-Sequence *spouseSequence(Sequence*);
-Sequence *ancestorSequence(Sequence*);
-Sequence *descendentSequence(Sequence*);
-Sequence *siblingSequence(Sequence*, bool);
+Sequence* unionSequence(Sequence*, Sequence*);
+Sequence* intersectSequence(Sequence*, Sequence*);
+Sequence* differenceSequence(Sequence*, Sequence*);
+Sequence* childSequence(Sequence*);
+Sequence* parentSequence(Sequence*);
+Sequence* spouseSequence(Sequence*);
+Sequence* ancestorSequence(Sequence*);
+Sequence* descendentSequence(Sequence*);
+Sequence* siblingSequence(Sequence*, bool);
 bool elementFromSequence(Sequence* seq, int index, String* key, String* name);
 void renameElementInSequence(Sequence* seq, String key);
-
 void sequenceToGedcom(Sequence*, FILE*);
 void showSequence(Sequence*);
 
 bool limitPersonNode(GNode *node, int level);
 
-//  FORSEQUENCE -- Macro that iterates over a sequence in its current order.
-//--------------------------------------------------------------------------------------------------
-// NOTE: depending on code inserted between FORSEQUENCE and ENDSEQUENCE, some
-// variables might be unused, hence the ATTRIBUTE_UNUSED.
-
 //  FORSEQUENCE and ENDSEQUENCE iterate a Sequence.
-#define FORSEQUENCE(sequence, element, count)\
-{\
-	SequenceEl *element;\
+#define FORSEQUENCE(sequence, element, count) {\
+	SequenceEl* element;\
 	int count;\
-	Block *___block = &(sequence->block);\
-	SequenceEl **__elements = (SequenceEl**) ___block->elements;\
+	Block* ___block = &(sequence->block);\
+	SequenceEl** __elements = (SequenceEl**) ___block->elements;\
 	for (int __i = 0; __i < ___block->length; __i++){\
 		element = __elements[__i];\
 		count = __i + 1;
