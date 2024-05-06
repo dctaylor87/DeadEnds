@@ -62,6 +62,7 @@ extern PValue __firstchild(PNode*, Context*, bool*);
 extern PValue __firstfam(PNode*, Context*, bool*);
 extern PValue __firstindi(PNode*, Context*, bool*);
 extern PValue __fnode(PNode*, Context*, bool*);
+extern PValue __freerecord(PNode*, Context*, bool*);
 extern PValue __fullname(PNode*, Context*, bool*);
 extern PValue __ge(PNode*, Context*, bool*);
 extern PValue __gengedcom(PNode*, Context*, bool*);

@@ -127,7 +127,7 @@ static void activate_popup_list_uiwin (listdisp * ld);
 static void display_string(UIWINDOW uiwin, LLRECT rect, STRING text);
 static INT handle_list_cmds(listdisp * ld, INT code);
 static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
-static void print_list_title(char * buffer, INT len, const listdisp * ld, STRING ttl);
+static void print_list_title(char * buffer, INT len, const listdisp * ld, CString ttl);
 static void shw_array_of_strings(STRING *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
 static void shw_popup_list(INDISEQ seq, listdisp * ld);
@@ -173,7 +173,7 @@ listui_init_windows (INT extralines)
  * returns 0-based index chosen, or -1 if cancelled
  *============================================*/
 INT
-array_interact (STRING ttl, INT len, STRING *strings
+array_interact (CString ttl, INT len, STRING *strings
 	, BOOLEAN selectable, DETAILFNC detfnc, void * param)
 {
 	WINDOW *win=0;
@@ -588,7 +588,7 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
  *  ttl:     [IN]  title to print (localized)
  *================================*/
 static void
-print_list_title (char * buffer, INT len, const listdisp * ld, STRING ttl)
+print_list_title (char * buffer, INT len, const listdisp * ld, CString ttl)
 {
 	STRING ptr = buffer;
 	char suffix[30];

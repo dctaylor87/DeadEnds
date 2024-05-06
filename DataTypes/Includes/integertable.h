@@ -15,15 +15,15 @@ typedef HashTable IntegerTable;
 
 // IntegerElement is an element in an IntegerTable.
 typedef struct {
-    String key;
+    CString key;
     int value;
 } IntegerElement;
 
 // User interface.
-extern String integerGetKey(Word element);
+extern CString integerGetKey(Word element);
 IntegerTable *createIntegerTable(int numBuckets);
-void insertInIntegerTable(IntegerTable* table, String key, int value);
-int searchIntegerTable(IntegerTable* table, String key);
+void insertInIntegerTable(IntegerTable* table, CString key, int value);
+int searchIntegerTable(IntegerTable* table, CString key);
 void incrIntegerTable (IntegerTable *table, CString key);
 
 #endif // integertable_h

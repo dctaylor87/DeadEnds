@@ -43,6 +43,7 @@
 #include "readwrite.h"
 #include "messages.h"
 #include "codesets.h"
+#include "de-strings.h"
 #include "ui.h"
 
 /*********************************************

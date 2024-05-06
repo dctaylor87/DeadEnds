@@ -7,7 +7,7 @@
 #define screeni_h_included
 
 /* interact.c */
-INT interact_choice_string(UIWINDOW uiwin, STRING str);
+INT interact_choice_string(UIWINDOW uiwin, CString str);
 INT interact_screen_menu(UIWINDOW uiwin, INT screen);
 
 /* screen.h */

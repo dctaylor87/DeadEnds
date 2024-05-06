@@ -55,7 +55,7 @@ void advanced_person_edit(NODE);
 void advanced_family_edit(NODE);
 
 /* ask.c */
-RECORD ask_for_any(STRING ttl, ASK1Q ask1);
+RECORD ask_for_any(CString ttl, ASK1Q ask1);
 INDISEQ ask_for_indiseq(CNSTRING ttl, char ctype, INT *prc);
 
 /* browse.c */

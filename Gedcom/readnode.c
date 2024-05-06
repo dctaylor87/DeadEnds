@@ -243,7 +243,7 @@ NodeListElement *createNodeListElement(GNode *node, int level, int lineNo, Error
 }
 
 // getKey is the getKey function or NodeLists that returns the tag of the GNode in the element.
-static String getKey(void* element) {
+static CString getKey(void* element) {
 	return ((NodeListElement*) element)->node->tag;
 }
 

@@ -79,25 +79,25 @@ void setBlockElement(Block* block, void* element, void(*delete)(void*), int inde
 }
 
 // findInBlock returns the element with given key if it exists; null otherwise; uses linear search.
-void* findInBlock(Block* block, CString key, String(*getKey)(void*), int* index) {
+void* findInBlock(Block* block, CString key, CString(*getKey)(void*), int* index) {
 	return linearSearch(block->elements, block->length, key, getKey, index);
 }
 
 // findInSortedBlock returns the element with given key if it exists; null otherwise; uses
 // binary search.
-void* findInSortedBlock(Block* block, String key, String(*getKey)(void*),
+void* findInSortedBlock(Block* block, CString key, CString(*getKey)(void*),
 						int(*compare)(CString, CString), int* index) {
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);
 }
 
 // isInBlock returns true if an element with given key is in the Block; linear search is used.
-bool isInBlock(Block* block, String key, String(*getKey)(void*), int* index) {
+bool isInBlock(Block* block, CString key, CString(*getKey)(void*), int* index) {
 	return findInBlock(block, key, getKey, index) != null;
 }
 
 // isInSortedBlock returns true if an element with given key is in the Block; binary search is used.
-bool isInSortedBlock(Block* block, String key, String(*getKey)(void*),
-					 int(*compare)(String, String), int* index) {
+bool isInSortedBlock(Block* block, CString key, CString(*getKey)(void*),
+					 int(*compare)(CString, CString), int* index) {
 	return findInSortedBlock(block, key, getKey, compare, index);
 }
 
@@ -170,7 +170,7 @@ bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
 }
 
 // removeFromSortedBlock removes an element with specific key from a sorted Block's elements.
-bool removeFromSortedBlock(Block *block, String key, String(*getKey)(void *a),
+bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(void *a),
 						   int(*compare)(CString, CString), void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from sorted block\n", key);
 	int index = -1;
@@ -180,7 +180,7 @@ bool removeFromSortedBlock(Block *block, String key, String(*getKey)(void *a),
 }
 
 // removeFromUnsortedBlock removes an element with specific key from an unsorted Block's elements.
-bool removeFromUnsortedBlock(Block* block, CString key, String(*getKey)(void*),
+bool removeFromUnsortedBlock(Block* block, CString key, CString(*getKey)(void*),
 							 void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from unsorted block\n", key);
 	int index = -1;
@@ -190,19 +190,19 @@ bool removeFromUnsortedBlock(Block* block, CString key, String(*getKey)(void*),
 }
 
 //  sortBlock sorts the elements in a Block.
-void sortBlock(Block* block, String(*getKey)(void*), int(*compare)(String, String)) {
+void sortBlock(Block* block, CString(*getKey)(void*), int(*compare)(CString, CString)) {
 	if (blockDebugging) printf("sortBlock of length %d\n", block->length);
 	sortElements(block->elements, block->length, getKey, compare);
 }
 
 // searchBlock searches an unsorted Block for an element. Index is set to its location.
-void* searchBlock(Block* block, CString key, String(*getKey)(void*), int* index) {
+void* searchBlock(Block* block, CString key, CString(*getKey)(void*), int* index) {
 	if (index) *index = -1;
 	return linearSearch(block->elements, block->length, key, getKey, index);
 }
 
 // searchSortedBlock searches a sorted Block for an element. Index is set to its location.
-void* searchSortedBlock(Block *block, String key, String(*getKey)(void*),
+void* searchSortedBlock(Block *block, CString key, CString(*getKey)(void*),
 						int(*compare)(CString, CString), int* index) {
 	if (index) *index = -1;
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);
@@ -228,12 +228,12 @@ void fprintfBlock(FILE* file, Block* block, String(*toString)(void*)) {
 }
 
 // isSorted returns true if the Block is sorted.
-bool isSorted(Block *block, String(*getKey)(void*), int(*compare)(String, String)) {
+bool isSorted(Block *block, CString(*getKey)(void*), int(*compare)(CString, CString)) {
 	if (block->length <= 1) return true;
 	void **elements = block->elements;
-	String key = getKey(elements[0]);
+	CString key = getKey(elements[0]);
 	for (int i = 1; i < block->length; i++) {
-		String next = getKey(elements[i]);
+		CString next = getKey(elements[i]);
 		if (strcmp(key, next) > 0) return false;
 		key = next;
 	}

@@ -34,7 +34,7 @@ typedef struct Sequence {
 	Database *database;
 } Sequence;
 
-SequenceEl *createSequenceEl(Database*, String key, void* value);
+SequenceEl *createSequenceEl(Database*, CString key, void* value);
 
 Sequence *createSequence(Database*);
 void deleteSequence(Sequence*);
@@ -44,7 +44,7 @@ void emptySequence(Sequence*);
 
 void appendToSequence(Sequence*, CString key, void*);
 bool isInSequence(Sequence*, String key);
-bool removeFromSequence(Sequence*, String key);
+bool removeFromSequence(Sequence*, CString key);
 bool removeFromSequenceByIndex (Sequence *sequence, int index);
 void nameSortSequence(Sequence*); //  Sort by name.
 void keySortSequence(Sequence*); //  Sort by key.
@@ -61,7 +61,7 @@ Sequence *familyToMothers(GNode *family, Database*);
 Sequence *personToSpouses(GNode *person, Database*);
 Sequence *personToFamilies(GNode *person, bool, Database*);
 Sequence *nameToSequence(CString, Database*);
-#if defined(DEADENDS)
+#if 1
 Sequence *refnToSequence (CString ukey, Database *database);
 #else
 Sequence *refn_to_indiseq(String refn);
@@ -76,7 +76,7 @@ Sequence* spouseSequence(Sequence*);
 Sequence* ancestorSequence(Sequence*);
 Sequence* descendentSequence(Sequence*);
 Sequence* siblingSequence(Sequence*, bool);
-bool elementFromSequence(Sequence* seq, int index, String* key, String* name);
+bool elementFromSequence(Sequence* seq, int index, CString* key, String* name);
 void renameElementInSequence(Sequence* seq, String key);
 void sequenceToGedcom(Sequence*, FILE*);
 void showSequence(Sequence*);

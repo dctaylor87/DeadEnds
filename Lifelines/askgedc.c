@@ -208,8 +208,8 @@ set_gedcom_d0 (TABLE * fileprops)
  *  pfname: [OUT]  allocated on heap (name we tried to open)
  *=================================================*/
 BOOLEAN
-ask_for_gedcom (STRING mode,
-                 STRING ttl,
+ask_for_gedcom (CString mode,
+                 CString ttl,
                  STRING *pfname,
                  STRING *pfullpath,
                  STRING path,

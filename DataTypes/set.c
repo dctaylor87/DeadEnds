@@ -28,7 +28,7 @@ void deleteSet(Set *set) {
 void addToSet(Set* set, void* element) {
 	int index;
 	List* list = &(set->list);
-	String key = list->getKey(element);
+	CString key = list->getKey(element);
 	void* oldElement = findInList(list, key, &index);
 	if (oldElement)
 		removeFromList(list, index);

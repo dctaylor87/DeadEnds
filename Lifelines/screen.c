@@ -171,7 +171,7 @@ static void append_to_msg_list(STRING msg);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
-static INT choose_or_view_array (STRING ttl, INT no, STRING *pstrngs
+static INT choose_or_view_array (CString ttl, INT no, STRING *pstrngs
 	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
 static INT choose_tt(STRING prompt);
 static void clear_msgs(void);
@@ -712,7 +712,7 @@ display_screen (INT new_screen)
  *  if it is up
  *===================================*/
 static INT
-do_prompt_stdout (STRING prompt)
+do_prompt_stdout (CString prompt)
 {
 	INT ch=0;
 	llwprintf("\n%s\n", prompt);
@@ -1341,7 +1341,7 @@ choose_from_array (CString ttl, INT no, STRING *pstrngs)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-display_list (STRING ttl, LIST list)
+display_list (CString ttl, LIST list)
 {
 	/* TODO: Need to set some flag to suppress i & <enter> */
 	return choose_from_list(ttl, list);
@@ -1389,7 +1389,7 @@ choose_from_list (CString ttl, LIST list)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-choose_from_array_x (STRING ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
+choose_from_array_x (CString ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
 	, void *param)
 {
 	BOOLEAN selecting = TRUE;
@@ -1420,7 +1420,7 @@ view_array (CString ttl, INT no, STRING *pstrngs)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 static INT
-choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
+choose_or_view_array (CString ttl, INT no, STRING *pstrngs, BOOLEAN selecting
 	, DETAILFNC detfnc, void *param)
 {
 	INT rv;

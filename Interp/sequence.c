@@ -41,12 +41,12 @@ static String nameGetKey(void* element) {
 }
 
 // keyCompare is the compare function that compares SequenceEl's by key.
-static int keyCompare(String a, String b) {
+static int keyCompare(CString a, CString b) {
 	return compareRecordKeys(a, b);
 }
 
 // nameCompare is the compare function that compares SequenceEl's by name.
-static int nameCompare(String a, String b) {
+static int nameCompare(CString a, CString b) {
 	return compareNames(a, b);
 }
 
@@ -65,7 +65,7 @@ static SequenceEl** sequenceElements(Sequence *sequence) {
 }
 
 // createSequenceEl creates a SequenceEl.
-SequenceEl* createSequenceEl(Database* database, String key, void* value) {
+SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
 	SequenceEl* element = (SequenceEl*) malloc(sizeof(SequenceEl));
 	GNode* root = getRecord(key, database);
 	ASSERT(root);
@@ -144,7 +144,7 @@ bool isInSequence(Sequence *seq, String key) {
 }
 
 // removeFromSequence removes the SequenceEl with the given key from the Sequence.
-bool removeFromSequence(Sequence *sequence, String key) {
+bool removeFromSequence(Sequence *sequence, CString key) {
 	ASSERT(sequence && key);
 	if (!sequence || !key) return false;
 	Block *block = &(sequence->block);
@@ -174,7 +174,7 @@ bool removeFromSequenceByIndex (Sequence *sequence, int index)
 }
 
 // elementFromSequence returns the key and name values of an indexed Sequence element.
-bool elementFromSequence (Sequence* sequence, int index, String* pkey, String* pname) {
+bool elementFromSequence (Sequence* sequence, int index, CString* pkey, String* pname) {
 	ASSERT(sequence);
 	Block *block = &(sequence->block);
 	if (index < 0 || index >= block->length) return false;

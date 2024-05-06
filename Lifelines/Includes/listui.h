@@ -1,7 +1,7 @@
 #ifndef listui_h_included
 #define listui_h_included
 
-INT array_interact (STRING ttl, INT len, STRING *strings
+INT array_interact (CString ttl, INT len, STRING *strings
 	, BOOLEAN selectable, DETAILFNC detfnc, void * param);
 
 void listui_init_windows(INT extralines);

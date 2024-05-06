@@ -779,7 +779,7 @@ PValue __getrecord (PNode *pnode, Context *context, bool *errflg)
 		*errflg = true;
 		return nullPValue;
 	}
-	GNode* root = getRecord(context->database, key);
+	GNode* root = getRecord(key, context->database);
 	return root ? PVALUE(PVGNode, uGNode, root) : nullPValue;
 }
 

@@ -21,7 +21,7 @@ static String getKey(void* element) {
 static int compare(String a, String b) {
 	ASSERT(a && b && strlen(a) > 2 && strlen(b) > 2);
 	if (strlen(a) != strlen(b)) return (int) (strlen(a) - strlen(b));
-	for (int i = 0; i < strlen(a); i++)
+	for (int i = 0; i < (int)strlen(a); i++)
 		if (a[i] != b[i]) return a[i] - b[i];
 	return 0;
 }

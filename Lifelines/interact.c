@@ -72,7 +72,7 @@
  *********************************************/
 
 /* alphabetical */
-static INT interact_worker(UIWINDOW uiwin, STRING str, INT screen);
+static INT interact_worker(UIWINDOW uiwin, CString str, INT screen);
 static INT translate_control_key(INT c);
 static INT translate_hdware_key(INT c);
 
@@ -93,7 +93,7 @@ static int ui_time_elapsed = 0; /* total time waiting for user input */
  * also returns hardware and control keys, so caller must check & loop
  *=============================*/
 INT
-interact_choice_string (UIWINDOW uiwin, STRING str)
+interact_choice_string (UIWINDOW uiwin, CString str)
 {
 	return interact_worker(uiwin, str, -1);
 }
@@ -113,7 +113,7 @@ interact_screen_menu (UIWINDOW uiwin, INT screen)
  * This is just for browse screens (witness argument "screen")
  *=============================*/
 static INT
-interact_worker (UIWINDOW uiwin, STRING str, INT screen)
+interact_worker (UIWINDOW uiwin, CString str, INT screen)
 {
 	char buffer[4]; /* 3 char cmds max */
 	INT offset=0;

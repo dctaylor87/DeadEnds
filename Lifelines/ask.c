@@ -96,7 +96,7 @@ extern char badkeylist[];
  * local function prototypes
  *********************************************/
 
-static RECORD ask_for_any_once(STRING ttl, char ctype, ASK1Q ask1, INT *prc);
+static RECORD ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, INT *prc);
 static void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
 
 /*=====================================================
@@ -108,7 +108,7 @@ static void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
  *  sttl: [IN]  title for prompt to identify sibling
  *========================================================*/
 RECORD
-ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
+ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
 {
 	RECORD fam = ask_for_record(fttl, 'F');
 	return fam ? fam : ask_for_fam(pttl, sttl);
@@ -119,7 +119,7 @@ ask_for_fam_by_key (STRING fttl, STRING pttl, STRING sttl)
  *  sttl: [IN]  title for prompt to identify sibling
  *=========================================*/
 RECORD
-ask_for_fam (STRING pttl, STRING sttl)
+ask_for_fam (CString pttl, CString sttl)
 {
 #if defined(DEADENDS)
 	RecordIndexEl *sib=0, *prn=0;
@@ -152,7 +152,7 @@ ask_for_fam (STRING pttl, STRING sttl)
  * TODO: change to BOOLEAN return for failure
  *=========================================*/
 BOOLEAN
-ask_for_int (STRING ttl, INT * prtn)
+ask_for_int (CString ttl, INT * prtn)
 {
 	INT ival, c, neg;
 	char buffer[MAXPATHLEN];
@@ -195,8 +195,8 @@ ask_for_int (STRING ttl, INT * prtn)
  *====================================*/
 typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
-ask_for_file_worker (STRING mode,
-                     STRING ttl,
+ask_for_file_worker (CString mode,
+                     CString ttl,
                      STRING *pfname,
                      STRING *pfullpath,
                      STRING path,
@@ -289,8 +289,8 @@ make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
  *  pfullpath  [OUT] file as found (optional param)
  *====================================*/
 FILE *
-ask_for_input_file (STRING mode,
-                    STRING ttl,
+ask_for_input_file (CString mode,
+                    CString ttl,
                     STRING *pfname,
                     STRING *pfullpath,
                     STRING path,
@@ -305,8 +305,8 @@ ask_for_input_file (STRING mode,
  *  pfname [OUT] optional output parameter (pass NULL if undesired)
  *====================================*/
 FILE *
-ask_for_output_file (STRING mode,
-                     STRING ttl,
+ask_for_output_file (CString mode,
+                     CString ttl,
                      STRING *pfname,
                      STRING *pfullpath,
                      STRING path,
@@ -363,7 +363,7 @@ ask_for_indiseq (CNSTRING ttl, char ctype, INT *prc)
  *  prc:   [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/
 static RECORD
-ask_for_any_once (STRING ttl, char ctype, ASK1Q ask1, INT *prc)
+ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, INT *prc)
 {
 	RECORD indi = 0;
 	INDISEQ seq = ask_for_indiseq(ttl, ctype, prc);
@@ -388,7 +388,7 @@ ask_for_any_once (STRING ttl, char ctype, ASK1Q ask1, INT *prc)
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
 RECORD
-ask_for_indi (STRING ttl, ASK1Q ask1)
+ask_for_indi (CString ttl, ASK1Q ask1)
 {
 	INT rc = 0;
 	RECORD indi = ask_for_any_once(ttl, 'I', ask1, &rc);
@@ -402,7 +402,7 @@ ask_for_indi (STRING ttl, ASK1Q ask1)
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
 RECORD
-ask_for_any (STRING ttl, ASK1Q ask1)
+ask_for_any (CString ttl, ASK1Q ask1)
 {
 	char ctype = 0; /* code for any type */
 	while (TRUE) {
@@ -420,7 +420,7 @@ ask_for_any (STRING ttl, ASK1Q ask1)
  * used by both reports & interactive use
  *=================================================================*/
 INDISEQ
-ask_for_indi_list (STRING ttl, BOOLEAN reask)
+ask_for_indi_list (CString ttl, BOOLEAN reask)
 {
 	while (TRUE) {
 		INT rc = RC_DONE;
@@ -447,7 +447,7 @@ ask_for_indi_list (STRING ttl, BOOLEAN reask)
  * ask_for_indi_key -- Have user identify person; return key
  *========================================================*/
 STRING
-ask_for_indi_key (STRING ttl, ASK1Q ask1)
+ask_for_indi_key (CString ttl, ASK1Q ask1)
 {
 	RECORD indi = ask_for_indi(ttl, ask1);
 	if (!indi) return NULL;
@@ -520,7 +520,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
  *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
 RECORD
-ask_for_record (STRING idstr, INT letr)
+ask_for_record (CString idstr, INT letr)
 {
 	RECORD rec;
 	char answer[MAXPATHLEN];
@@ -547,7 +547,7 @@ ask_for_record (STRING idstr, INT letr)
  * returns NULL or strsave'd answer
  *=============================================*/
 STRING
-ask_for_record_key (STRING title, STRING prompt)
+ask_for_record_key (CString title, CString prompt)
 {
 	char answer[MAXPATHLEN];
 	if (!ask_for_string(title, prompt, answer, sizeof(answer)))

@@ -20,12 +20,12 @@
 #include "gedcom.h"
 
 // Local functions
-static NameElement* createNameElement(String nameKey, String recordKey);
+static NameElement* createNameElement(CString nameKey, String recordKey);
 static String getIndexKey(void*);
 static int compareIndexKeys(String, String);
 static void deleteIndexEl(void*);
-static String getSetKey(void*);
-static int compareSetKeys(String, String);
+static CString getSetKey(void*);
+static int compareSetKeys(CString, CString);
 static void deleteSetEl(void*);
 
 static int numNameIndexBuckets = 2048;
@@ -76,7 +76,7 @@ void showNameIndex(NameIndex* index) {
 }
 
 // createNameElement creates and returns a NameElement.
-static NameElement* createNameElement(String nameKey, String recordKey) {
+static NameElement* createNameElement(CString nameKey, String recordKey) {
 	NameElement* element = (NameElement*) stdalloc(sizeof(NameElement));
 	element->nameKey = strsave(nameKey);  // MNOTE: nameKey is in data space.
 	element->recordKeys = createSet(getSetKey, compareSetKeys, deleteSetEl);
@@ -102,12 +102,12 @@ static void deleteIndexEl(void* element) {
 }
 
 // getSetKey gets the key of a Set element.
-static String getSetKey(void* element) {
-	return (String) element;
+static CString getSetKey(void* element) {
+	return (CString) element;
 }
 
 // compareSetKeys compares two keys of Set elements.
-static int compareSetKeys(String a, String b) {
+static int compareSetKeys(CString a, CString b) {
 	return compareRecordKeys(a, b);
 }
 

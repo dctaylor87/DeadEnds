@@ -51,30 +51,30 @@ INT ask_child_order(NODE fam, PROMPTQ promptq, bool rfmt);
 void add_spouse_to_fam(NODE spouse, NODE fam, INT sex);
 INT ask_child_order(NODE fam, PROMPTQ promptq, RFMT rfmt);
 #endif
-STRING ask_for_indi_key(STRING, ASK1Q ask1);
-RECORD ask_for_indi(STRING ttl, ASK1Q ask1);
+STRING ask_for_indi_key(CString, ASK1Q ask1);
+RECORD ask_for_indi(CString ttl, ASK1Q ask1);
 
 /* ask.c */
-RECORD ask_for_fam(STRING, STRING);
-RECORD ask_for_fam_by_key(STRING fttl, STRING pttl, STRING sttl);
-FILE *ask_for_input_file (STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext);
-FILE *ask_for_output_file (STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext);
-INDISEQ ask_for_indi_list(STRING, BOOLEAN);
-BOOLEAN ask_for_int(STRING, INT *);
-RECORD ask_for_record(STRING, INT);
-STRING ask_for_record_key(STRING title, STRING prompt);
+RECORD ask_for_fam(CString, CString);
+RECORD ask_for_fam_by_key(CString fttl, CString pttl, CString sttl);
+FILE *ask_for_input_file (CString mode, CString ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext);
+FILE *ask_for_output_file (CString mode, CString ttl, STRING *pfname, STRING *pfullpath, STRING path, STRING ext);
+INDISEQ ask_for_indi_list(CString, BOOLEAN);
+BOOLEAN ask_for_int(CString, INT *);
+RECORD ask_for_record(CString, INT);
+STRING ask_for_record_key(CString title, CString prompt);
 RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
 
 /* askgedc.c */
-BOOLEAN ask_for_gedcom(STRING mode, STRING ttl, STRING *pfname, STRING *pfullpath
+BOOLEAN ask_for_gedcom(CString mode, CString ttl, STRING *pfname, STRING *pfullpath
 	, STRING path, STRING ext, BOOLEAN picklist);
 
 /* askprogram.c */
 void proparrdetails(ARRAY_DETAILS arrdets, void * param);
 
 /* screen.c functions */
-INT choose_from_array_x(STRING ttl, INT count, STRING* list, DETAILFNC, void *);
-INT display_list(STRING ttl, LIST list);
+INT choose_from_array_x(CString ttl, INT count, STRING* list, DETAILFNC, void *);
+INT display_list(CString ttl, LIST list);
 
 /* selectdb.c */
 BOOLEAN open_or_create_database(INT alteration, STRING *dbused);

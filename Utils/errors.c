@@ -14,7 +14,7 @@
 static bool debugging = false;
 
 // getKey returns the comparison key of an error.
-static String getKey(void* error) {
+static CString getKey(void* error) {
 	static char buffer[NUMKEYS][128];
 	static int dex = 0;
 	if (++dex > NUMKEYS - 1) dex = 0;
@@ -27,7 +27,7 @@ static String getKey(void* error) {
 }
 
 // compare compares two errors for their placement in an error log.
-static int compare(String a, String b) {
+static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
 

@@ -19,7 +19,7 @@ struct uiio
   /* for errors, we use uiio_error_data,
      for status and info we use uiio_output_data */
   void (*uiio_outputv_func)(void *data,
-			    MSG_LEVEL level, String fmt, va_list args);
+			    MSG_LEVEL level, CString fmt, va_list args);
 };
 
 extern const char *ui_prompt;

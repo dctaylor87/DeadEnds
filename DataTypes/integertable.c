@@ -7,7 +7,7 @@
 
 #include "integertable.h"
 
-String integerGetKey(void* element) { return ((IntegerElement*) element)->key; }
+CString integerGetKey(void* element) { return ((IntegerElement*) element)->key; }
 
 // createIntegerTable creates and returns an IntegerTable.
 IntegerTable *createIntegerTable(int numBuckets) {
@@ -15,13 +15,13 @@ IntegerTable *createIntegerTable(int numBuckets) {
 }
 
 // searchIntegerTable searches for a key in an IntegerTable and return its integer value.
-int searchIntegerTable(IntegerTable *table, String key) {
+int searchIntegerTable(IntegerTable *table, CString key) {
     IntegerElement* element = (IntegerElement*) searchHashTable(table, key);
     return element ? element->value : __INT_MAX__;
 }
 
 // insertInIntegerTable -- Insert a string key and integer value to an integer table.
-void insertInIntegerTable(IntegerTable *table, String key, int value) {
+void insertInIntegerTable(IntegerTable *table, CString key, int value) {
     IntegerElement* element = (IntegerElement*) searchHashTable(table, key);
     if (element) { // If there change value.
         element->value = value;

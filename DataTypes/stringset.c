@@ -8,8 +8,8 @@
 #include "stringset.h"
 
 // getKey is the getKey function for StringSets.
-static String getKey(void* element) {
-	return (String) element;
+static CString getKey(void* element) {
+	return (CString) element;
 }
 
 // compare is the compare function for StringSets.

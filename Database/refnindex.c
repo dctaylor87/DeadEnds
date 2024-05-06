@@ -45,7 +45,7 @@ static int compare (String a, String b) {
 }
 
 // getKey returns the key of a RefnIndexEl, which is a 1 REFN value.
-static String getKey(void* a) {
+static CString getKey(void* a) {
 	return ((RefnIndexEl*) a)->key;
 }
 

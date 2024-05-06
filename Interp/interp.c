@@ -514,7 +514,7 @@ InterpType interpForindi (PNode* pnode, Context* context, PValue* pvalue) {
 	int numPersons = lengthList(rootList);
 	for (int i = 0; i < numPersons; i++) {
 		// FOR DEBUGGING.
-		String keyFromRoot = rootList->getKey(getListElement(rootList, i));
+		CString keyFromRoot = rootList->getKey(getListElement(rootList, i));
 		// FOR DEBUGGING.
 		printf("key of the %dth person is %s\n", i, keyFromRoot);
 		GNode *person = keyToPerson(keyFromRoot, context->database);
