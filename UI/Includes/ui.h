@@ -32,15 +32,15 @@
 int ask_for_char(CString ttl, CString prmpt, CString ptrn);
 int ask_for_char_msg(CString msg, CString ttl, CString prmpt, CString ptrn);
 bool ask_for_db_filename (CString ttl, CString prmpt, CString basedir, String buffer, int buflen);
-bool ask_for_filename_impl(String ttl, String path, String prmpt, String buffer, int buflen);
-bool ask_for_program (String mode, String ttl, String *pfname, String *pfullpath, String path, String ext, bool picklist);
-int choose_from_array (String ttl, int no, String *pstrngs);
-int choose_from_list (String ttl, List *list);
-int choose_list_from_indiseq (String ttl, Sequence *seq);
-int choose_one_from_indiseq (String ttl, Sequence *seq);
-int choose_one_or_list_from_indiseq(String ttl, Sequence *seq, bool multi); /* XXX */
-int prompt_stdout (String prompt);
-void view_array (String ttl, int no, String *pstrngs);
+bool ask_for_filename_impl(CString ttl, CString path, CString prmpt, String buffer, int buflen);
+bool ask_for_program (CString mode, CString ttl, String *pfname, String *pfullpath, String path, String ext, bool picklist);
+int choose_from_array (CString ttl, int no, String *pstrngs);
+int choose_from_list (CString ttl, List *list);
+int choose_list_from_indiseq (CString ttl, Sequence *seq);
+int choose_one_from_indiseq (CString ttl, Sequence *seq);
+int choose_one_or_list_from_indiseq(CString ttl, Sequence *seq, bool multi); /* XXX */
+int prompt_stdout (CString prompt);
+void view_array (CString ttl, int no, String *pstrngs);
 bool yes_no_value(int c);
 Sequence *invoke_search_menu (void);
 

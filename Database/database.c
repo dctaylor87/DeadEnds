@@ -24,7 +24,7 @@
 extern FILE* debugFile;
 extern bool importDebugging;
 bool indexNameDebugging = true;
-static int keyLineNumber(Database*, String key);
+static int keyLineNumber(Database*, CString key);
 
 // createDatabase creates and returns a database.
 Database *createDatabase(CString filePath) {
@@ -247,7 +247,7 @@ void indexNames(Database* database) {
 
 // keyLineNumber checks if a record with a key is in the database; if so it returns the line
 // number where the record began in its Gedcom file.
-static int keyLineNumber (Database *database, String key) {
+static int keyLineNumber (Database *database, CString key) {
 	RecordIndexEl* element = (RecordIndexEl*)searchHashTable(database->personIndex, key);
 	if (!element) element = searchHashTable(database->familyIndex, key);
 	if (!element) element = searchHashTable(database->sourceIndex, key);

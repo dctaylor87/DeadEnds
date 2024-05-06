@@ -12,7 +12,7 @@
 #include "set.h"
 
 // createSet creates a Set; the getKey and compare functions are required; delete is optional.
-Set* createSet(String(*getKey)(void*), int(*compare)(String, String), void(*delete)(void*)) {
+Set* createSet(CString(*getKey)(void*), int(*compare)(CString, CString), void(*delete)(void*)) {
 	Set* set = (Set*) malloc(sizeof(Set));
 	initList(&(set->list), getKey, compare, delete, true);
 	return set;
@@ -36,12 +36,12 @@ void addToSet(Set* set, void* element) {
 }
 
 // isInSet checks whether an element with given key is in a Set.
-bool isInSet(Set* set, String key) {
+bool isInSet(Set* set, CString key) {
 	return isInList(&(set->list), key, null);
 }
 
 // removeFromSet removes the element with given key from a Set; if no such element does nothing.
-void removeFromSet(Set* set, String key) {
+void removeFromSet(Set* set, CString key) {
 	if (!set || !key) return;
 	List* list = &(set->list);
 	int index;

@@ -745,7 +745,7 @@ check_stdout (void)
  * and it doesn't clear stdout
  *===================================*/
 INT
-prompt_stdout (STRING prompt)
+prompt_stdout (CString prompt)
 {
 	INT i;
 	if (active_uiwin != stdout_win)
@@ -1149,7 +1149,7 @@ ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING ba
  *  buflen:  [IN]  max size of response
  *====================================*/
 BOOLEAN
-ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+ask_for_output_filename (CString ttl, CString path, CString prmpt, STRING buffer, INT buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
@@ -1163,7 +1163,7 @@ ask_for_output_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, I
  *  buflen:  [IN]  max size of response
  *====================================*/
 BOOLEAN
-ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+ask_for_input_filename (CString ttl, CString path, CString prmpt, STRING buffer, INT buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
@@ -1178,7 +1178,7 @@ ask_for_input_filename (STRING ttl, STRING path, STRING prmpt, STRING buffer, IN
  *  buflen:  [IN]  max size of response
  *====================================*/
 BOOLEAN
-ask_for_filename_impl (STRING ttl, STRING path, STRING prmpt, STRING buffer, INT buflen)
+ask_for_filename_impl (CString ttl, CString path, CString prmpt, STRING buffer, INT buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
@@ -1268,7 +1268,7 @@ yes_no_value (INT c)
  *  ttl:  [IN]  title to display
  *======================================*/
 BOOLEAN
-ask_yes_or_no (STRING ttl)
+ask_yes_or_no (CString ttl)
 {
 	INT c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
@@ -1279,7 +1279,7 @@ ask_yes_or_no (STRING ttl)
  *  ttl:   [IN]  2nd line displayed
  *=======================================================*/
 BOOLEAN
-ask_yes_or_no_msg (STRING msg, STRING ttl)
+ask_yes_or_no_msg (CString msg, CString ttl)
 {
 	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
@@ -1328,7 +1328,7 @@ ask_for_char_msg (CNSTRING msg, CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-choose_from_array (STRING ttl, INT no, STRING *pstrngs)
+choose_from_array (CString ttl, INT no, STRING *pstrngs)
 {
 	BOOLEAN selecting = TRUE;
 	if (!ttl) ttl=_(qSdefttl);
@@ -1353,7 +1353,7 @@ display_list (STRING ttl, LIST list)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-choose_from_list (STRING ttl, LIST list)
+choose_from_list (CString ttl, LIST list)
 {
 	STRING * array=0;
 	STRING choice=0;
@@ -1404,7 +1404,7 @@ choose_from_array_x (STRING ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 void
-view_array (STRING ttl, INT no, STRING *pstrngs)
+view_array (CString ttl, INT no, STRING *pstrngs)
 {
 	BOOLEAN selecting = FALSE;
 	choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
@@ -1435,7 +1435,7 @@ choose_or_view_array (STRING ttl, INT no, STRING *pstrngs, BOOLEAN selecting
  *  ttl:  [IN]  title
  *===========================================================*/
 INT
-choose_one_from_indiseq (STRING ttl, INDISEQ seq)
+choose_one_from_indiseq (CString ttl, INDISEQ seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, FALSE);
 }
@@ -1449,7 +1449,7 @@ choose_one_from_indiseq (STRING ttl, INDISEQ seq)
  * returns index of where user choose select (or -1 if quit)
  *========================================================*/
 INT
-choose_list_from_indiseq (STRING ttl, INDISEQ seq)
+choose_list_from_indiseq (CString ttl, INDISEQ seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
 }
@@ -2138,7 +2138,7 @@ place_std_msg (void)
  * Created: 2003-02-01 (Perry Rapp)
  *=================================*/
 void
-rpt_print (STRING str)
+rpt_print (CString str)
 {
 	llwprintf("%s", str);
 }
@@ -2146,7 +2146,7 @@ rpt_print (STRING str)
  * llvwprintf -- Called as wprintf(fmt, argp)
  *===============================================*/
 void
-llvwprintf (STRING fmt, va_list args)
+llvwprintf (CString fmt, va_list args)
 {
 	UIWINDOW uiwin = stdout_win;
 	if (uiwin) {
@@ -2925,7 +2925,7 @@ refresh_stdout (void)
  *  execute a shell command (for report interpreter)
  *==========================*/
 void
-call_system_cmd (STRING cmd)
+call_system_cmd (CString cmd)
 {
 	int rtn=-1;
 

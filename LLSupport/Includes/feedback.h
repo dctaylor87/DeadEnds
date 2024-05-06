@@ -22,29 +22,29 @@
 
 /* Ways for engine & code to report to ui */
 	/* report an error */
-void msg_error(String fmt, ...) ATTRIBUTE_PRINTF(1,2);
+void msg_error(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
 	/* report a message */
-void msg_info(String fmt, ...) ATTRIBUTE_PRINTF(1,2);
+void msg_info(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
 	/* report transitory state that should not be preserved */
-void msg_status(String fmt, ...) ATTRIBUTE_PRINTF(1,2);
+void msg_status(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
 	/* more longwinded ways */
 typedef enum { MSG_ERROR=-1, MSG_INFO, MSG_STATUS } MSG_LEVEL;
-void msg_output(MSG_LEVEL, String fmt, ...) ATTRIBUTE_PRINTF(2,3);
-void msg_outputv(MSG_LEVEL, String fmt, va_list args);
+void msg_output(MSG_LEVEL, CString fmt, ...) ATTRIBUTE_PRINTF(2,3);
+void msg_outputv(MSG_LEVEL, CString fmt, va_list args);
 	/* legacy */
 	/* message () is a macro -- does not localize */
-void message(String fmt, ...) ATTRIBUTE_PRINTF(1,2);
+void message(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
 	/* report to stdout style output (uses embedded carriage returns */
-void llwprintf(String fmt, ...) ATTRIBUTE_PRINTF(1,2);
-void llvwprintf(String fmt, va_list args);
+void llwprintf(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
+void llvwprintf(CString fmt, va_list args);
 	/* how many characters available for msg_xxx strings (-1 if unlimited) */
 int msg_width(void);
 	/* report language print function */
-void rpt_print(String str);
+void rpt_print(CString str);
 
 /* called by ask.c */
-bool ask_for_input_filename(String ttl, String path, String prmpt, String buffer, int buflen);
-bool ask_for_output_filename(String ttl, String path, String prmpt, String buffer, int buflen);
+bool ask_for_input_filename(CString ttl, CString path, CString prmpt, String buffer, int buflen);
+bool ask_for_output_filename(CString ttl, CString path, CString prmpt, String buffer, int buflen);
 
 /* called by signal handler before invoking exit() */
 void shutdown_ui(bool pause);
@@ -54,8 +54,8 @@ void shutdown_ui(bool pause);
 void do_edit(void);
 
 /* msg boxes */
-bool ask_yes_or_no(String ttl);
-bool ask_yes_or_no_msg(String msg, String ttl);
+bool ask_yes_or_no(CString ttl);
+bool ask_yes_or_no_msg(CString msg, CString ttl);
 bool ask_for_string(CString ttl, CString prmpt, String buffer, int buflen);
 bool ask_for_string2(CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen);
 
@@ -63,7 +63,7 @@ bool ask_for_string2(CString ttl1, CString ttl2, CString prmpt, String buffer, i
 void refresh_stdout(void);
 
 /* for report interpreter engine */
-void call_system_cmd(String cmd);
+void call_system_cmd(CString cmd);
 
 #endif /* _FEEDBACK_H */
 

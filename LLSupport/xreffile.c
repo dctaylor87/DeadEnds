@@ -121,7 +121,7 @@ static bool addsxref_impl(int32_t key, DUPS dups);
 static bool addexref_impl(int32_t key, DUPS dups);
 static bool addxref_impl(CString key, DUPS dups);
 static bool addxxref_impl(int32_t key, DUPS dups);
-static void dumpxrecs (String type, DELETESET set, int32_t *offset);
+static void dumpxrecs (CString type, DELETESET set, int32_t *offset);
 static int32_t find_slot(int32_t keynum, DELETESET set);
 #if !defined(DEADENDS)
 static void freexref(DELETESET set);
@@ -129,7 +129,7 @@ static void freexref(DELETESET set);
 static DELETESET get_deleteset_from_type(char ctype);
 static String getxref(DELETESET set);
 static void growxrefs(DELETESET set);
-static String newxref(String xrefp, bool flag, DELETESET set);
+static String newxref(CString xrefp, bool flag, DELETESET set);
 #if !defined(DEADENDS)
 static int num_set(DELETESET set);
 #endif
@@ -462,7 +462,7 @@ dumpxrefs (void)
  * dumpxrecs -- Print DELETESET to stdout
  *==============================*/
 static void
-dumpxrecs (String type, DELETESET set, int32_t *offset)
+dumpxrecs (CString type, DELETESET set, int32_t *offset)
 {
 	int i;
 
@@ -809,7 +809,7 @@ xref_max_any (void)
  *  returns static buffer
  *==============================================*/
 static String
-newxref (String xrefp, bool flag, DELETESET set)
+newxref (CString xrefp, bool flag, DELETESET set)
 {
 	int32_t keynum;
 #if !defined(DEADENDS)
@@ -840,27 +840,27 @@ newxref (String xrefp, bool flag, DELETESET set)
  * flag = use the current key
  *==============================================*/
 String
-newixref (String xrefp, bool flag)
+newixref (CString xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &irecs);
 }
 String
-newfxref (String xrefp, bool flag)
+newfxref (CString xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &frecs);
 }
 String
-newsxref (String xrefp, bool flag)
+newsxref (CString xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &srecs);
 }
 String
-newexref (String xrefp, bool flag)
+newexref (CString xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &erecs);
 }
 String
-newxxref (String xrefp, bool flag)
+newxxref (CString xrefp, bool flag)
 {
 	return newxref(xrefp, flag, &xrecs);
 }

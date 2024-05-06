@@ -29,7 +29,7 @@ typedef enum RecordType {
 
 RecordType recordType(GNode *root);  // Return the type of a Gedcom record tree.
 
-int compareRecordKeys(String, String);  // gedcom.c
+int compareRecordKeys(CString, CString);  // gedcom.c
 
 // FORCHILDREN / ENDCHILDREN is a macro pair that iterates the children in a family.
 #define FORCHILDREN(fam, childd, key, num, database) \

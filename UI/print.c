@@ -37,7 +37,7 @@ UIIO *current_uiio;
    TODO: replace with msg_error/info/status */
 
 void
-message (String fmt, ...)
+message (CString fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -49,7 +49,7 @@ message (String fmt, ...)
    delegates to msg_outputv */
 
 void
-msg_error (String fmt, ...)
+msg_error (CString fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -61,7 +61,7 @@ msg_error (String fmt, ...)
    delegates to msg_outputv */
 
 void
-msg_info (String fmt, ...)
+msg_info (CString fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -72,7 +72,7 @@ msg_info (String fmt, ...)
 /* msg_status -- handle transitory/status messages
    delegates to msg_outputv */
 void
-msg_status (String fmt, ...)
+msg_status (CString fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -84,7 +84,7 @@ msg_status (String fmt, ...)
    delegates to msg_outputv */
 
 void
-msg_output (MSG_LEVEL level, String fmt, ...)
+msg_output (MSG_LEVEL level, CString fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -93,9 +93,9 @@ msg_output (MSG_LEVEL level, String fmt, ...)
 }
 
 void
-msg_outputv (MSG_LEVEL level, String fmt, va_list args)
+msg_outputv (MSG_LEVEL level, CString fmt, va_list args)
 {
-  void (*func)(void *data, MSG_LEVEL level, String fmt, va_list args);
+  void (*func)(void *data, MSG_LEVEL level, CString fmt, va_list args);
   void *data;
 
   func = current_uiio->uiio_outputv_func;
@@ -110,7 +110,7 @@ msg_outputv (MSG_LEVEL level, String fmt, va_list args)
 /* llwprintf -- Called as wprintf(fmt, arg, arg, ...) */
 
 void
-llwprintf (String fmt, ...)
+llwprintf (CString fmt, ...)
 {
   va_list args;
   va_start(args, fmt);

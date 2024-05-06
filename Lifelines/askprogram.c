@@ -226,8 +226,8 @@ set_programs_d0 (TABLE * fileprops)
  *  pfname: [OUT]  allocated on heap (name we tried to open)
  *=================================================*/
 BOOLEAN
-ask_for_program (STRING mode,
-                 STRING ttl,
+ask_for_program (CString mode,
+                 CString ttl,
                  STRING *pfname,
                  STRING *pfullpath,
                  STRING path,

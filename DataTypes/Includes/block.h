@@ -31,7 +31,7 @@ void* getBlockElement(Block*, int);
 void setBlockElement(Block*, void*, void(*delete)(void*), int);
 
 void* findInBlock(Block*, CString, String(*g)(void*), int*);
-void* findInSortedBlock(Block*, String, String(*g)(void*), int(*c)(String, String), int*);
+void* findInSortedBlock(Block*, String, String(*g)(void*), int(*c)(CString, CString), int*);
 
 bool isInBlock(Block*, String, String(*g)(void*), int*); // Linear search.
 bool isInSortedBlock(Block*, String, String(*g)(void*), int(*c)(String, String), int*); // Binary search.
@@ -40,7 +40,7 @@ void prependToBlock(Block*, void*);
 void appendToBlock(Block*, void*);
 void insertInBlock(Block*, void*, int);
 bool removeFromBlock(Block*, int, void(*d)(void*));
-bool removeFromSortedBlock(Block*, String, String(*g)(void *a), int(*c)(String, String), void(*d)(void*));
+bool removeFromSortedBlock(Block*, String, String(*g)(void *a), int(*c)(CString, CString), void(*d)(void*));
 bool removeFromUnsortedBlock(Block*, CString, String(*g)(void *a), void(*d)(void*));
 bool removeFirstBlockElement(Block*, void(*d)(void*));
 bool removeLastBlockElement(Block*, void(*d)(void*));
@@ -56,7 +56,7 @@ Block *copyBlock(Block*, void*(*copy)(void*));
 void iterateBlock(Block*, void(*perform)(void*));
 
 void* searchBlock(Block* block, CString, String(*g)(void*), int*);
-void* searchSortedBlock(Block* block, String key, String(*g)(void*), int(*c)(String, String), int*);
+void* searchSortedBlock(Block* block, String key, String(*g)(void*), int(*c)(CString, CString), int*);
 
 // Debugging only.
 void showBlock(Block*, String(*describe)(void*));

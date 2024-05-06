@@ -10,12 +10,12 @@
 #include "stringtable.h"
 
 // getKey is the getKey function for StringTable.
-static String getKey(void *element) {
+static CString getKey(void *element) {
 	return ((StringElement*) element)->key;
 }
 
 // compare is the compare function for StringTable.
-static int compare(String a, String b) {
+static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
 
@@ -55,7 +55,7 @@ void addToStringTable(HashTable *table, CString key, CString value) {
 
 // fixString adds an element to a StringTable that maps a String to itself; key and value
 // point to different Strings.
-String fixString(StringTable *table, String string) {
+String fixString(StringTable *table, CString string) {
 	String saved = searchStringTable(table, string);
 	if (saved) return saved;
 	addToStringTable(table, string, string);

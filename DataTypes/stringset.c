@@ -13,7 +13,7 @@ static String getKey(void* element) {
 }
 
 // compare is the compare function for StringSets.
-static int compare(String element1, String element2) { return strcmp(element1, element2); }
+static int compare(CString element1, CString element2) { return strcmp(element1, element2); }
 
 // createStringSet creates a StringSet.
 StringSet* createStringSet(void) {

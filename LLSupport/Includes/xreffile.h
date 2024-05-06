@@ -34,11 +34,11 @@ extern int32_t xref_max_othrs (void);
 
 extern int32_t xref_max_any (void);
 
-extern String newixref (String xrefp, bool flag);
-extern String newfxref (String xrefp, bool flag);
-extern String newsxref (String xrefp, bool flag);
-extern String newexref (String xrefp, bool flag);
-extern String newxxref (String xrefp, bool flag);
+extern String newixref (CString xrefp, bool flag);
+extern String newfxref (CString xrefp, bool flag);
+extern String newsxref (CString xrefp, bool flag);
+extern String newexref (CString xrefp, bool flag);
+extern String newxxref (CString xrefp, bool flag);
 
 extern int xref_nexti (int i);
 extern int xref_nextf (int i);

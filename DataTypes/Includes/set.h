@@ -19,12 +19,12 @@ typedef struct Set {
 } Set;
 
 // Public interface.
-Set* createSet(String(*get)(void*), int(*cmp)(String, String), void(*del)(void*));
+Set* createSet(CString(*get)(void*), int(*cmp)(CString, CString), void(*del)(void*));
 void deleteSet(Set*);
 int lengthSet(Set*);
-bool isInSet(Set*, String);
+bool isInSet(Set*, CString);
 void addToSet(Set*, void*);
-void removeFromSet(Set*, String);
+void removeFromSet(Set*, CString);
 void iterateSet(Set*, void(*iter)(void*));
 void showSet(Set*, String(*show)(void*));
 

@@ -22,19 +22,19 @@ typedef struct List {
 	bool sorted; // Is a sorted list.
 	bool isSorted; // Is currently sorted.
 	void (*delete)(void*);
-	String (*getKey)(void*);
-	int (*compare)(String, String);
+	CString (*getKey)(void*);
+	int (*compare)(CString, CString);
 } List;
 
-List* createList(String(*g)(void*), int(*c)(String, String), void (*d)(void*), bool sorted);
-void initList(List*, String(*g)(void*), int(*c)(String, String), void(*d)(void*), bool sorted);
+List* createList(CString(*g)(void*), int(*c)(CString, CString), void (*d)(void*), bool sorted);
+void initList(List*, CString(*g)(void*), int(*c)(CString, CString), void(*d)(void*), bool sorted);
 void deleteList(List*);
 int lengthList(List*);
 void emptyList(List*);
 bool isEmptyList(List*);
 List* copyList(List*, void*(*c)(void*));
-bool isInList(List*, String, int*);
-void* findInList(List*, String, int* index);
+bool isInList(List*, CString, int*);
+void* findInList(List*, CString, int* index);
 // Array access.
 void setListElement(List*, void*, int);
 void *getListElement(List *list, int index);

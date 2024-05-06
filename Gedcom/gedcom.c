@@ -29,7 +29,7 @@ RecordType recordType(GNode *root)
 //  compareRecordKeys -- Compare function to use in Sets and Lists holding Gedcom record keys.
 //   Longer keys sort after shorter keys.
 //--------------------------------------------------------------------------------------------------
-int compareRecordKeys(String a, String b)
+int compareRecordKeys(CString a, CString b)
 {
     ASSERT(strlen(a) > 1 && strlen(b) > 1);  // Is this strictly necessary?
     if (strlen(a) != strlen(b)) return (int) (strlen(a) - strlen(b));

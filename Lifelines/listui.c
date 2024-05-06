@@ -259,7 +259,7 @@ resize_win: /* we come back here if we resize the window */
  * Localizes ttl
  *===========================================================*/
 INT
-choose_one_or_list_from_indiseq (STRING ttl, INDISEQ seq, BOOLEAN multi)
+choose_one_or_list_from_indiseq (CString ttl, INDISEQ seq, BOOLEAN multi)
 {
 	WINDOW *win=0;
 	INT row, done;

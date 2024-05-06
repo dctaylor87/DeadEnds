@@ -28,7 +28,7 @@ HashTable *createStringTable(int numBuckets);
 String searchStringTable(StringTable*, CString key);
 extern bool isInStringTable(StringTable *table, CString key);
 void addToStringTable(StringTable*, CString key, CString value);
-String fixString(StringTable *table, String string);
+String fixString(StringTable *table, CString string);
 void showStringTable(StringTable*);  //  For debugging.
 
 #endif // stringtable_h

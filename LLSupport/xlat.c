@@ -112,7 +112,7 @@ static void free_xlat(XLAT xlat);
 static DYNTT get_conversion_dyntt(CString src, CString dest);
 static DYNTT get_subcoding_dyntt(CString codeset, CString subcoding);
 static void load_dyntt_if_needed(DYNTT dyntt);
-static void load_dynttlist_from_dir(String dir);
+static void load_dynttlist_from_dir(CString dir);
 static int select_tts(const struct dirent *entry);
 
 /*********************************************
@@ -484,7 +484,7 @@ xl_load_all_dyntts (CString ttpath)
  * Created: 2002/11/27 (Perry Rapp)
  *========================================================*/
 static void
-load_dynttlist_from_dir (String dir)
+load_dynttlist_from_dir (CString dir)
 {
 	struct dirent **programs;
 	int n = scandir(dir, &programs, select_tts, alphasort);

@@ -12,9 +12,9 @@
 
 #include "standard.h"
 
-void sortElements(void**, int, String(*g)(void*), int(*c)(String, String));
-void* linearSearch(void**, int, CString, String(*)(void*), int*);
-void* binarySearch(void**, int, String, String(*)(void*), int(*c)(String, String), int*);
+void sortElements(void**, int, CString(*g)(void*), int(*c)(CString, CString));
+void* linearSearch(void**, int, CString, CString(*)(void*), int*);
+void* binarySearch(void**, int, CString, CString(*)(void*), int(*c)(CString, CString), int*);
 
 void insertAtIndex(void**, int len, void*, int index);
 

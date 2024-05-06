@@ -11,7 +11,7 @@
 #include "sort.h"
 
 // createList creates and returns a List.
-List* createList(String(*getKey)(void*), int(*compare)(String, String),
+List* createList(CString(*getKey)(void*), int(*compare)(CString, CString),
 				 void(*delete)(void*), bool sorted) {
 	List *list = (List *) malloc(sizeof(List));
 	initList(list, getKey, compare, delete, sorted);
@@ -19,7 +19,7 @@ List* createList(String(*getKey)(void*), int(*compare)(String, String),
 }
 
 // initList initializes a List.
-void initList(List *list, String(*getKey)(void*), int(*compare)(String, String),
+void initList(List *list, CString(*getKey)(void*), int(*compare)(CString, CString),
 			  void (*delete)(void*), bool sorted) {
 	initBlock(&(list->block));
 	list->compare = compare;
@@ -138,7 +138,7 @@ void sortList(List* list) {
 }
 
 // searchList searches a List for a given Key. If sorted is true the List must be sorted.
-void* searchList(List* list, String key, int* index, bool sorted) {
+void* searchList(List* list, CString key, int* index, bool sorted) {
 	if (sorted)
 		return searchSortedBlock(&(list->block), key, list->getKey, list->compare, index);
 	else
@@ -184,7 +184,7 @@ void showList(List *list, String (*describe)(void*)) {
 }
 
 // isInList checks if an element with given key is in the List.
-bool isInList(List* list, String key, int* index) {
+bool isInList(List* list, CString key, int* index) {
 	if (list->sorted) {
 		sortList(list);
 		return isInSortedBlock(&(list->block), key, list->getKey, list->compare, index);
@@ -200,7 +200,7 @@ void iterateList(List *list, void(*iterate)(void*)) {
 // findInList finds the element with given key in a list; the List may be sorted or unsorted.
 // If the element is in the List it is returned. The returned element also remains in the List
 // so the calling function must not modify it.
-void* findInList(List* list, String key, int* index) {
+void* findInList(List* list, CString key, int* index) {
 	if (list->sorted) {
 		sortList(list);
 		return findInSortedBlock(&(list->block), key, list->getKey, list->compare, index);

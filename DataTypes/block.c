@@ -86,7 +86,7 @@ void* findInBlock(Block* block, CString key, String(*getKey)(void*), int* index)
 // findInSortedBlock returns the element with given key if it exists; null otherwise; uses
 // binary search.
 void* findInSortedBlock(Block* block, String key, String(*getKey)(void*),
-						int(*compare)(String, String), int* index) {
+						int(*compare)(CString, CString), int* index) {
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);
 }
 
@@ -171,7 +171,7 @@ bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
 
 // removeFromSortedBlock removes an element with specific key from a sorted Block's elements.
 bool removeFromSortedBlock(Block *block, String key, String(*getKey)(void *a),
-						   int(*compare)(String, String), void(*delete)(void*)) {
+						   int(*compare)(CString, CString), void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from sorted block\n", key);
 	int index = -1;
 	if (!binarySearch(block->elements, block->length, key, getKey, compare, &index)) return false;
@@ -203,7 +203,7 @@ void* searchBlock(Block* block, CString key, String(*getKey)(void*), int* index)
 
 // searchSortedBlock searches a sorted Block for an element. Index is set to its location.
 void* searchSortedBlock(Block *block, String key, String(*getKey)(void*),
-						int(*compare)(String, String), int* index) {
+						int(*compare)(CString, CString), int* index) {
 	if (index) *index = -1;
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);
 }

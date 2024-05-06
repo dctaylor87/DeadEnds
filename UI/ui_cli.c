@@ -58,13 +58,13 @@ static void output(const char * txt);
 static int interact(CString ptrn);
 
 static int
-choose_or_view_array (String ttl, int no, String *pstrngs, bool selectable);
+choose_or_view_array (CString ttl, int no, String *pstrngs, bool selectable);
 /*=============================================================
  * Xprintf() implementations
  *===========================================================*/
 
 void
-llvwprintf (String fmt, va_list args)
+llvwprintf (CString fmt, va_list args)
 {
 	vprintf(fmt, args);
 }
@@ -73,7 +73,7 @@ llvwprintf (String fmt, va_list args)
  *===========================================================*/
 
 void
-rpt_print (String str)
+rpt_print (CString str)
 {
 	printf("%s", str);
 }
@@ -100,7 +100,7 @@ msg_width (void)
  *===========================================================*/
 
 void
-call_system_cmd (String cmd)
+call_system_cmd (CString cmd)
 {
 	int rtn=-1;
 
@@ -121,8 +121,8 @@ call_system_cmd (String cmd)
  *===========================================================*/
 
 bool
-ask_for_program (ATTRIBUTE_UNUSED String mode,
-                 ATTRIBUTE_UNUSED String ttl,
+ask_for_program (ATTRIBUTE_UNUSED CString mode,
+                 ATTRIBUTE_UNUSED CString ttl,
                  ATTRIBUTE_UNUSED String *pfname,
                  ATTRIBUTE_UNUSED String *pfullpath,
                  ATTRIBUTE_UNUSED String path,
@@ -176,14 +176,14 @@ ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 }
 
 bool
-ask_yes_or_no (String ttl)
+ask_yes_or_no (CString ttl)
 {
 	int c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
 }
 
 bool
-ask_yes_or_no_msg (String msg, String ttl)
+ask_yes_or_no_msg (CString msg, CString ttl)
 {
 	int c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
@@ -196,21 +196,21 @@ ask_for_db_filename (CString ttl, CString prmpt, ATTRIBUTE_UNUSED CString basedi
 }
 
 bool
-ask_for_output_filename (String ttl, String path, String prmpt, String buffer, int buflen)
+ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
 }
 
 bool
-ask_for_input_filename (String ttl, String path, String prmpt, String buffer, int buflen)
+ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
 }
 
 bool
-ask_for_filename_impl (String ttl, String path, String prmpt, String buffer, int buflen)
+ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
@@ -229,21 +229,21 @@ ask_for_filename_impl (String ttl, String path, String prmpt, String buffer, int
  *===========================================================*/
 
 int
-choose_from_array (String ttl, int no, String *pstrngs)
+choose_from_array (CString ttl, int no, String *pstrngs)
 {
 	bool selectable = true;
 	return choose_or_view_array(ttl, no, pstrngs, selectable);
 }
 
 void
-view_array (String ttl, int no, String *pstrngs)
+view_array (CString ttl, int no, String *pstrngs)
 {
 	bool selectable = false;
 	choose_or_view_array(ttl, no, pstrngs, selectable);
 }
 
 int
-choose_from_list (String ttl, List *list)
+choose_from_list (CString ttl, List *list)
 {
 	String * array=0;
 	String choice=0;
@@ -279,13 +279,13 @@ choose_from_list (String ttl, List *list)
 }
 
 int
-choose_list_from_indiseq (String ttl, Sequence *seq)
+choose_list_from_indiseq (CString ttl, Sequence *seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, true);
 }
 
 int
-choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED String ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
+choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
 {
 	calc_indiseq_names(seq); /* we certainly need the names */
 
@@ -294,13 +294,13 @@ choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED String ttl, Sequence *seq, ATT
 }
 
 int
-choose_one_from_indiseq (String ttl, Sequence *seq)
+choose_one_from_indiseq (CString ttl, Sequence *seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, false);
 }
 
 static int
-choose_or_view_array (String ttl, int no, String *pstrngs, bool selectable)
+choose_or_view_array (CString ttl, int no, String *pstrngs, bool selectable)
 {
 	String promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	String responses = selectable ? "0123456789udq" : "udq";
@@ -378,7 +378,7 @@ yes_no_value (int c)
 }
 
 int
-prompt_stdout (String prompt)
+prompt_stdout (CString prompt)
 {
 	return ask_for_char(NULL, prompt, NULL);
 }
