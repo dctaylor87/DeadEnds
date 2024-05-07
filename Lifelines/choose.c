@@ -76,7 +76,7 @@
  *  ask1: [IN] whether to prompt if only one child
  *===============================================*/
 RECORD
-choose_child (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
+choose_child (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RECORD rec=0;
 	INDISEQ seq=0;
@@ -99,7 +99,7 @@ choose_child (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
  *  asks if multiple
  *======================================*/
 RECORD
-choose_spouse (RECORD irec, STRING msg0, STRING msgn)
+choose_spouse (RECORD irec, CString msg0, CString msgn)
 {
 	RECORD rec=0;
 	INDISEQ seq=0;
@@ -119,7 +119,7 @@ choose_spouse (RECORD irec, STRING msg0, STRING msgn)
  *  always asks
  *======================================*/
 RECORD
-choose_source (RECORD current, STRING msg0, STRING msgn)
+choose_source (RECORD current, CString msg0, CString msgn)
 {
 	INDISEQ seq;
 	RECORD rec;
@@ -139,7 +139,7 @@ choose_source (RECORD current, STRING msg0, STRING msgn)
  * Created: 2001/02/11, Perry Rapp
  *======================================*/
 RECORD
-choose_note (RECORD current, STRING msg0, STRING msgn)
+choose_note (RECORD current, CString msg0, CString msgn)
 {
 	INDISEQ seq;
 	RECORD rec;
@@ -160,7 +160,7 @@ choose_note (RECORD current, STRING msg0, STRING msgn)
  * Returns addref'd record
  *======================================*/
 RECORD
-choose_pointer (RECORD current, STRING msg0, STRING msgn)
+choose_pointer (RECORD current, CString msg0, CString msgn)
 {
 	INDISEQ seq;
 	RECORD rec;
@@ -182,7 +182,7 @@ choose_pointer (RECORD current, STRING msg0, STRING msgn)
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
 RECORD
-choose_family (RECORD irec, STRING msg0, STRING msgn, BOOLEAN fams)
+choose_family (RECORD irec, CString msg0, CString msgn, BOOLEAN fams)
 {
 	RECORD rec=0;
 	INDISEQ seq = indi_to_families(nztop(irec), fams);
@@ -204,7 +204,7 @@ choose_family (RECORD irec, STRING msg0, STRING msgn, BOOLEAN fams)
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
 RECORD
-choose_father (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
+choose_father (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RECORD rec=0;
 	INDISEQ seq=0;
@@ -228,7 +228,7 @@ choose_father (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
 RECORD
-choose_mother (RECORD irec, RECORD frec, STRING msg0, STRING msgn, ASK1Q ask1)
+choose_mother (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RECORD rec=0;
 	INDISEQ seq=0;

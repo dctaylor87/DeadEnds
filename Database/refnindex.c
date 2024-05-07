@@ -40,7 +40,7 @@ void showRefnIndex(RefnIndex *index)
 // compare compares two record keys.
 // NOTE: There is a special key compare function that could be used here, though probably
 // unnessary
-static int compare (String a, String b) {
+static int compare (CString a, CString b) {
 	return strcmp(a, b);
 }
 

@@ -108,7 +108,7 @@ and used by both screen.c and menuitem.c
 */
 
 /* menuset.c */
-void menuset_init(MENUSET menu, STRING title, MenuItem ** MenuItems, MenuItem ** extraItems);
+void menuset_init(MENUSET menu, CString title, MenuItem ** MenuItems, MenuItem ** extraItems);
 INT menuset_check_cmd(MENUSET menuset, STRING str);
 void menuset_clear(MENUSET menuset);
 MenuItem ** menuset_get_items(MENUSET menuset);
@@ -118,7 +118,7 @@ void dynmenu_adjust_height(DYNMENU dynmenu, INT delta);
 void dynmenu_adjust_menu_cols(DYNMENU dynmenu, INT delta);
 void dynmenu_clear(DYNMENU dynmenu);
 MENUSET dynmenu_get_menuset(DYNMENU dynmenu);
-void dynmenu_init(DYNMENU dynmenu , STRING title, INT MenuRows, INT MenuCols
+void dynmenu_init(DYNMENU dynmenu , CString title, INT MenuRows, INT MenuCols
 	, INT MinCols, INT MaxCols
 	, INT MinRows, INT MaxRows
 	, INT MenuTop, INT MenuLeft, INT MenuWidth

@@ -149,14 +149,14 @@ static void init_hist_lists(void);
 static void init_hist(struct hist * histp, INT count);
 #if !defined(DEADENDS)
 static void load_hist_lists(void);
-static void load_nkey_list(STRING key, struct hist * histp);
+static void load_nkey_list(CString key, struct hist * histp);
 #endif
 static void prompt_add_spouse_with_candidate(RECORD fam, RECORD save);
 static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
 static void pick_remove_spouse_from_family(RECORD frec);
 #if !defined(DEADENDS)
 static void save_hist_lists(void);
-static void save_nkey_list(STRING key, struct hist * histp);
+static void save_nkey_list(CString key, struct hist * histp);
 #endif
 static void setrecord(RECORD * dest, RECORD * src);
 static void term_hist_lists(void);
@@ -1724,7 +1724,7 @@ term_hist (struct hist * histp)
  * TODO: should be moved to gedlib
  *================================================*/
 static void
-load_nkey_list (STRING key, struct hist * histp)
+load_nkey_list (CString key, struct hist * histp)
 {
 	STRING rawrec;
 	INT32 * ptr;
@@ -1806,7 +1806,7 @@ get_hist_count (struct hist * histp)
  * TODO: should be moved to gedlib
  *================================================*/
 static void
-save_nkey_list (STRING key, struct hist * histp)
+save_nkey_list (CString key, struct hist * histp)
 {
 	FILE * fp=0;
 	INT i, next;

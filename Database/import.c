@@ -41,9 +41,8 @@ bool importDebugging = true;
 	//return gnodeToString(gnode, 0);
 //}
 
-// importFromFiles imports a list of Gedcom files into a List of Databases, one per file. The list
-// is returned. If errors are found in a file, the list won't have a Database for that file, and
-// the ErrorLog will have the Errors.
+// importFromFiles imports a list of Gedcom files into a List of Databases, one per file. If errors
+// are found in a file the file's Database is not created and the ErrorLog will hold the errors.
 List* importFromFiles(String filePaths[], int count, ErrorLog* errorLog) {
 	List* listOfDatabases = createList(null, null, null, false);
 	Database* database = null;
@@ -55,9 +54,9 @@ List* importFromFiles(String filePaths[], int count, ErrorLog* errorLog) {
 }
 
 // importFromFile imports the records in a Gedcom file into a new Database. If errors are found
-// the function returns null, and the ErrorLog holds the Errors.
+// the function returns null, and ErrorLog holds the Errors.
 Database *importFromFile(CString filePath, ErrorLog* errorLog) {
-	if (importDebugging) printf("    IMPORT FROM FILE: start: %s\n", filePath);
+	if (importDebugging) printf("IMPORT FROM FILE: start: %s\n", filePath);
 	if (access(filePath, F_OK)) {
 		if (errno == ENOENT) {
 			addErrorToLog(errorLog, createError(systemError, filePath, 0, "File does not exist."));
@@ -80,10 +79,10 @@ Database *importFromFile(CString filePath, ErrorLog* errorLog) {
 Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 {
 	String lastSegment = lastPathSegment(filePath); // MNOTE: strsave not needed.
-	// Get the lines of the Gedcom file as a NodeList of GNodes and Errors.
+
 	if (importDebugging) fprintf(debugFile, "importFromFile: calling getNodeListFromFile(%s,...\n", filePath);
 	int numErrors = 0;
-	NodeList* listOfNodes = getNodeListFromFile(file, &numErrors);
+	NodeList* listOfNodes = getNodeListFromFile(file, &numErrors); // Get all lines as GNodes.
 	if (!listOfNodes) return null;
 	if (importDebugging) fprintf(debugFile, "importFromFile: back from getNodeListFromFile\n");
 	if (importDebugging) {

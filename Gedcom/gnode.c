@@ -500,7 +500,7 @@ String rmvat (String string)
 
 //  isKey -- Return true is a string has a Gedcom key format (surrounded by @signs).
 //--------------------------------------------------------------------------------------------------
-bool isKey(String str)
+bool isKey(CString str)
 {
 	return str && str[0] == '@' && str[strlen(str) - 1] == '@' && strlen(str) >= 3;
 }

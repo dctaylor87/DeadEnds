@@ -42,7 +42,7 @@ RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 RECORD add_indi_by_edit(RFMT rfmt);
 #endif
 BOOLEAN add_indi_no_cache(NODE);
-STRING get_unresolved_ref_error_string(INT count);
+CString get_unresolved_ref_error_string(INT count);
 #if defined(DEADENDS)
 NODE prompt_add_child(NODE child, NODE fam, bool rfmt);
 #else
@@ -148,11 +148,11 @@ void pedigree_increase_generations(INT delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
-INDISEQ full_name_scan(STRING sts);
-INDISEQ name_fragment_scan(STRING sts);
-INDISEQ refn_scan(STRING sts);
-INDISEQ scan_souce_by_author(STRING sts);
-INDISEQ scan_souce_by_title(STRING sts);
+INDISEQ full_name_scan(CString sts);
+INDISEQ name_fragment_scan(CString sts);
+INDISEQ refn_scan(CString sts);
+INDISEQ scan_souce_by_author(CString sts);
+INDISEQ scan_souce_by_title(CString sts);
 
 /* screen.c */
 void clear_status_display(void);

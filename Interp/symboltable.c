@@ -49,7 +49,7 @@ SymbolTable *createSymbolTable(void) {
 
 // assignValueToSymbol assigns a value to a Symbol. If the Symbol isn't in the local table, look
 // in the global table; only if there use the global table.
-void assignValueToSymbol(SymbolTable *symtab, String ident, PValue pvalue) {
+void assignValueToSymbol(SymbolTable *symtab, CString ident, PValue pvalue) {
 	SymbolTable *table = symtab; // Determine SymbolTable.
 	if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) table = globalTable;
 	PValue* ppvalue = (PValue*) malloc(sizeof(PValue)); // Copy pvalue to heap.
@@ -67,7 +67,7 @@ void assignValueToSymbol(SymbolTable *symtab, String ident, PValue pvalue) {
 }
 
 // getValueOfSymbol gets the value of a Symbol from a SymbolTable; Symbol's PValue is returned.
-PValue getValueOfSymbol(SymbolTable *symtab, String ident) {
+PValue getValueOfSymbol(SymbolTable *symtab, CString ident) {
 	if (debugging) printf("getValueOfSymbol %s from table\n", ident);
 	if (debugging) showSymbolTable(symtab);
 	Symbol *symbol = searchHashTable(symtab, ident); // Search local table.

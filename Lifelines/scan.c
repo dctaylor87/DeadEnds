@@ -122,7 +122,7 @@ static BOOLEAN scanner_set_pattern(SCANNER * scanner, STRING pattern);
  *  sts: [IN]  status to show during scan
  *============================================*/
 INDISEQ
-name_fragment_scan (STRING sts)
+name_fragment_scan (CString sts)
 {
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_NAME_FRAG, sts);
@@ -134,7 +134,7 @@ name_fragment_scan (STRING sts)
  *  sts: [IN]  status to show during scan
  *====================================*/
 INDISEQ
-full_name_scan (STRING sts)
+full_name_scan (CString sts)
 {
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_NAME_FULL, sts);
@@ -146,7 +146,7 @@ full_name_scan (STRING sts)
  *  sts: [IN]  status to show during scan
  *============================*/
 INDISEQ
-refn_scan (STRING sts)
+refn_scan (CString sts)
 {
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_REFN, sts);
@@ -171,7 +171,7 @@ refn_scan (STRING sts)
  *  sts: [IN]  status to show during scan
  *============================*/
 INDISEQ
-scan_souce_by_author (STRING sts)
+scan_souce_by_author (CString sts)
 {
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_SRC_AUTH, sts);
@@ -185,7 +185,7 @@ scan_souce_by_author (STRING sts)
  *  sts: [IN]  status to show during scan
  *============================*/
 INDISEQ
-scan_souce_by_title (STRING sts)
+scan_souce_by_title (CString sts)
 {
 	SCANNER scanner;
 	scanner_init(&scanner, SCAN_SRC_TITL, sts);

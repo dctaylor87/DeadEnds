@@ -71,7 +71,7 @@ static MenuItem * f_ExtraItems[] =
  * Created: 2002/10/24, Perry Rapp
  *==========================*/
 void
-dynmenu_init (DYNMENU dynmenu , STRING title, INT MenuRows, INT MenuCols
+dynmenu_init (DYNMENU dynmenu , CString title, INT MenuRows, INT MenuCols
 	, INT MinCols, INT MaxCols
 	, INT MinRows, INT MaxRows
 	, INT MenuTop, INT MenuLeft, INT MenuWidth

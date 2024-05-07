@@ -30,7 +30,7 @@ extern bool remove_name (String name, String key); // Remove entry from name rec
 String nameToNameKey(CString name);  // Convert a partial or full Gedcom name to a name key.
 int compareNames(CString name1, CString name2); // Compare two Gedcom names.
 String* personKeysFromName(CString name, Database*, int* pcount /*[, bool exact]*/);
-String nameString(String name);  // Remove slashes from a name.
+String nameString(CString name);  // Remove slashes from a name.
 String trimName (String name, int len);  // Trim name to specific length.
 bool nameToList(String name, List*, int *len, int *sind);
 extern bool exactMatch(String partial, String complete);

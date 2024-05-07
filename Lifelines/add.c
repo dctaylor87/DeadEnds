@@ -111,7 +111,7 @@ extern BOOLEAN traditional;
  *  xgettext doesn't support special keywords for plural forms, AFAIK
  *  so we can't put these in static variables
  *========================================================*/
-STRING
+CString
 get_unresolved_ref_error_string (INT count)
 {
 	return _pl("There was %d unresolved reference."

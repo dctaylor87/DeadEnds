@@ -226,7 +226,7 @@ GNode* difference_nodes (GNode* node1, GNode* node2, bool kids)
 
 //  value_in_nodes -- See if a list of nodes contains a given value.
 //--------------------------------------------------------------------------------------------------
-bool value_in_nodes(GNode* node, String value)
+bool value_in_nodes(GNode* node, CString value)
 //Node node;
 //String value;
 {

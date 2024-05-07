@@ -62,7 +62,7 @@ struct BrowseScreenInfo {
  *********************************************/
 
 /* alphabetical */
-static void browsescreen_init(struct BrowseScreenInfo * sinfo , STRING title, INT MenuRows, INT MenuCols
+static void browsescreen_init(struct BrowseScreenInfo * sinfo , CString title, INT MenuRows, INT MenuCols
 	, INT MinCols, INT MaxCols
 	, INT MinRows, INT MaxRows
 	, INT MenuTop, INT MenuLeft, INT MenuWidth
@@ -446,7 +446,7 @@ static MenuItem * f_MenuListPersons[] =
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
 static void
-browsescreen_init (struct BrowseScreenInfo * sinfo , STRING title, INT MenuRows, INT MenuCols
+browsescreen_init (struct BrowseScreenInfo * sinfo , CString title, INT MenuRows, INT MenuCols
 	, INT MinCols, INT MaxCols
 	, INT MinRows, INT MaxRows
 	, INT MenuTop, INT MenuLeft, INT MenuWidth

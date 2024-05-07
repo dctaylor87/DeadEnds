@@ -29,8 +29,8 @@ typedef struct {
 
 //  User interface to symbol tables.
 SymbolTable *createSymbolTable(void);
-void assignValueToSymbol(SymbolTable*, String, PValue);
-PValue getValueOfSymbol(SymbolTable*, String);
+void assignValueToSymbol(SymbolTable*, CString, PValue);
+PValue getValueOfSymbol(SymbolTable*, CString);
 void showSymbolTable(SymbolTable*);
 
 #endif // symboltable_h

@@ -77,7 +77,7 @@ GNode* parents_nodes(Database*, GNode*);
 int countNodes(GNode* node);
 int countNodesBefore(GNode*);
 
-bool isKey(String);
+bool isKey(CString);
 GNode* findTag(GNode*, CString);
 SexType valueToSex(GNode*);
 String full_value(GNode*);

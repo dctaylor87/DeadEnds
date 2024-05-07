@@ -86,7 +86,7 @@ static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
  * local variables
  *********************************************/
 
-static STRING f_current_title=0;
+static CString f_current_title=0;
 
 /*********************************************
  * local function definitions
@@ -99,7 +99,7 @@ static STRING f_current_title=0;
  * Created: 2001/01/28, Perry Rapp
  *==========================*/
 void
-menuset_init (MENUSET menuset, STRING title, MenuItem ** MenuItems, MenuItem ** extraItems)
+menuset_init (MENUSET menuset, CString title, MenuItem ** MenuItems, MenuItem ** extraItems)
 {
 	INT i;
 	CMDARRAY cmds = create_cmd_array(32);

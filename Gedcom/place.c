@@ -10,7 +10,7 @@
 #include "list.h"
 #include "place.h"
 
-static bool inString (int chr, String str);
+static bool inString (int chr, CString str);
 bool valueToList (String str, List *list, int *plen, String dlm);
 
 //  place_to_list -- Convert place string to word list
@@ -59,7 +59,7 @@ bool valueToList(String str, List* list, int* plen, String dlm) {
 	return true;
 }
 
-static bool inString (int chr, String str)
+static bool inString (int chr, CString str)
 {
 	while (*str && chr != *str)
 		str++;

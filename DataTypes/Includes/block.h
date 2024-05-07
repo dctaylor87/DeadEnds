@@ -50,7 +50,7 @@ void* getFromBlock(Block*, int);
 void* getFirstBlockElement(Block*);
 void* getLastBlockElement(Block*);
 
-void uniqueBlock(Block*, String(*g)(void*), void(*d)(void*));
+void uniqueBlock(Block*, CString(*g)(void*), void(*d)(void*));
 Block *copyBlock(Block*, void*(*copy)(void*));
 void iterateBlock(Block*, void(*perform)(void*));
 

@@ -579,7 +579,7 @@ fail:
  * get_decimal -- Get decimal number from map string
  *================================================*/
 int
-get_decimal (String str)
+get_decimal (CString str)
 {
 	int value, c;
 	if (chartype(c = (u_char)*str++) != DIGIT) return -1;
@@ -594,7 +594,7 @@ get_decimal (String str)
  * get_hexidecimal -- Get hexidecimal number from map string
  *========================================================*/
 int
-get_hexidecimal (String str)
+get_hexidecimal (CString str)
 {
 	int value, h;
 	if ((h = hexvalue(*str++)) == -1) return -1;

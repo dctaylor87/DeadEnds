@@ -63,7 +63,7 @@ INDISEQ ask_for_indi_list(CString, BOOLEAN);
 BOOLEAN ask_for_int(CString, INT *);
 RECORD ask_for_record(CString, INT);
 STRING ask_for_record_key(CString title, CString prompt);
-RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, STRING titl1, STRING titln);
+RECORD choose_from_indiseq(INDISEQ, ASK1Q ask1, CString titl1, CString titln);
 
 /* askgedc.c */
 BOOLEAN ask_for_gedcom(CString mode, CString ttl, STRING *pfname, STRING *pfullpath

@@ -1,5 +1,5 @@
-extern int get_decimal (String str);
-extern int get_hexidecimal (String str);
+extern int get_decimal (CString str);
+extern int get_hexidecimal (CString str);
 extern int hexvalue (int c);
 
 extern ZSTR custom_translate (CString str, TRANTABLE tt);

@@ -476,7 +476,7 @@ String manipulateName (String name, bool caps, bool reg, int len) {
 }
 
 // nameString removes the slashes from a Gedcom name; uses static memory.
-String nameString(String name) {
+String nameString(CString name) {
     static char scratch[MAXNAMELEN+1];
     String p = scratch;
     ASSERT(strlen(name) <= MAXNAMELEN);

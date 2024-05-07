@@ -18,7 +18,7 @@ static String getKey(void* element) {
 }
 
 // compare is the compare function for RootLists.
-static int compare(String a, String b) {
+static int compare(CString a, CString b) {
 	ASSERT(a && b && strlen(a) > 2 && strlen(b) > 2);
 	if (strlen(a) != strlen(b)) return (int) (strlen(a) - strlen(b));
 	for (int i = 0; i < (int)strlen(a); i++)

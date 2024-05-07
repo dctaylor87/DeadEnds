@@ -27,7 +27,7 @@ static int nodeStringLength(int, GNode*);
 // write the nodes, and closes the file. Returns whether the write occurred. Level is level of
 // the top GNode (always zero?); gnode is the root, fileName is the file name and indent
 // indicates whether the first should be indented.
-bool gnodesToFile(int level, GNode* gnode, String fileName, bool indent) {
+bool gnodesToFile(int level, GNode* gnode, CString fileName, bool indent) {
     FILE *fp;
     if (!(fp = fopen(fileName, "w"))) {
         printf("Could not open file: `%s'\n", fileName);

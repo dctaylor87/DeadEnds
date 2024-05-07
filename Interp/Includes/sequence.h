@@ -43,7 +43,7 @@ int lengthSequence(Sequence*);
 void emptySequence(Sequence*);
 
 void appendToSequence(Sequence*, CString key, void*);
-bool isInSequence(Sequence*, String key);
+bool isInSequence(Sequence*, CString key);
 bool removeFromSequence(Sequence*, CString key);
 bool removeFromSequenceByIndex (Sequence *sequence, int index);
 void nameSortSequence(Sequence*); //  Sort by name.
@@ -77,7 +77,7 @@ Sequence* ancestorSequence(Sequence*);
 Sequence* descendentSequence(Sequence*);
 Sequence* siblingSequence(Sequence*, bool);
 bool elementFromSequence(Sequence* seq, int index, CString* key, String* name);
-void renameElementInSequence(Sequence* seq, String key);
+void renameElementInSequence(Sequence* seq, CString key);
 void sequenceToGedcom(Sequence*, FILE*);
 void showSequence(Sequence*);
 

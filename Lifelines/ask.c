@@ -463,7 +463,7 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
  *  titln: [IN]  title if sequence has multiple elements
  *=============================================================*/
 static INT
-choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
+choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, CString titl1
 	, STRING titln)
 {
 	if (length_indiseq(seq) > 1)
@@ -483,7 +483,7 @@ choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, STRING titl1
  *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
 RECORD
-choose_from_indiseq (INDISEQ seq, ASK1Q ask1, STRING titl1, STRING titln)
+choose_from_indiseq (INDISEQ seq, ASK1Q ask1, CString titl1, CString titln)
 {
 	INT i = 0;
 	RECORD rec=0;
