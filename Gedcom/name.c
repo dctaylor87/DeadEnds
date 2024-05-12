@@ -70,13 +70,11 @@ String getSurname(CString name) {
 int getFirstInitial(CString name) {
     int c;
     while (true) {
-        while (iswhite(c = *name++))
-            ;
+        while (iswhite(c = *name++));
         if (isLetter(c)) return toupper(c);
         if (c == 0) return '$';
         if (c != '/') return '$';
-        while ((c = *name++) && c != '/')
-            ;
+        while ((c = *name++) && c != '/');
         if (c == 0) return '$';
     }
 }
@@ -125,8 +123,8 @@ static int codeOf(int letter) {
         new = '5'; break;
     case 'R':
         new = '6'; break;
-    default:    //  new stays zero
-        break;
+    default: // new stays zero
+		break;
     }
     if (new == 0) {
         old = 0;
@@ -216,6 +214,7 @@ String* personKeysFromName(CString name, Database* database, int* pcount)
 		GNode* person = keyToPerson((String) recordKey, database);
 		for (GNode* node = NAME(person); node && eqstr(node->tag, "NAME"); node = node->sibling) {
 			if (!exactMatch(name, node->value)) continue;
+			//printf("EXACT MATCH SAYS THESE ARE THE SAME: %s and %s\n", name, node->value);
 			appendToBlock(&recordKeys, recordKey);
 			count++;
 			break;
