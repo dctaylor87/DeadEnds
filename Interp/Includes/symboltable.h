@@ -23,7 +23,7 @@ typedef HashTable SymbolTable;
 // A Symbol is an element of a SymbolTable. ident is the name of a variable/identifier, and
 // value is its value.
 typedef struct {
-	String ident;
+	CString ident;
 	PValue *value;
 } Symbol;
 

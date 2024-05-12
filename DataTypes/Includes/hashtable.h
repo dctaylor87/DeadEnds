@@ -31,17 +31,18 @@ typedef struct Bucket {
 typedef struct HashTable {
 	int refcount;	//  Number of references to the table.
 	int numBuckets; // Should be a prime number.
-	String (*getKey)(void*);
-	int (*compare)(String, String);
+	CString (*getKey)(void*);
+	int (*compare)(CString, CString);
 	void (*delete)(void*);
 	Bucket** buckets;
 } HashTable;
 
 // User interface to HashTable.
-HashTable* createHashTable(String(*g)(void*), int(*c)(String, String), void(*d)(void*), int numBuckets);
+HashTable* createHashTable(CString(*g)(void*), int(*c)(CString, CString), void(*d)(void*), int numBuckets);
 void deleteHashTable(HashTable*);
 bool isInHashTable(HashTable*, CString key);
 void* searchHashTable(HashTable*, CString key);
+void* searchHashTableWithElement(HashTable* table, void* element);
 
 void addToHashTable(HashTable*, void*, bool);
 bool addToHashTableIfNew(HashTable*, void*);

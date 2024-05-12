@@ -43,6 +43,7 @@ int lengthSequence(Sequence*);
 void emptySequence(Sequence*);
 
 void appendToSequence(Sequence*, CString key, void*);
+void appendSequenceToSequence(Sequence* destination, Sequence* source);
 bool isInSequence(Sequence*, CString key);
 bool removeFromSequence(Sequence*, CString key);
 bool removeFromSequenceByIndex (Sequence *sequence, int index);
@@ -61,7 +62,9 @@ Sequence* familyToMothers(GNode *family, Database*);
 Sequence* personToSpouses(GNode *person, Database*);
 Sequence* personToFamilies(GNode *person, bool, Database*);
 Sequence* nameToSequence(CString, Database*);
-Sequence* refnToSequence (CString ukey, Database *database);
+Sequence* keyToSequence(CString key, Database* database);
+Sequence* refnToSequence (CString value, Database *database);
+Sequence* stringToSequence(CString name, Database* database);
 
 Sequence* unionSequence(Sequence*, Sequence*);
 Sequence* intersectSequence(Sequence*, Sequence*);

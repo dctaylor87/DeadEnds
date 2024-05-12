@@ -13,7 +13,7 @@
 static bool compareDebugging = true;
 
 // getKey is the get key function for RootLists.
-static String getKey(void* element) {
+static CString getKey(void* element) {
 	return ((GNode*) element)->key;
 }
 

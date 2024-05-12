@@ -485,7 +485,7 @@ shw_recordlist_details (INDISEQ seq, listdisp * ld)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	INT i;
-	STRING key, name;
+	CString key, name;
 	BOOLEAN reuse=FALSE; /* don't reuse display strings in list */
 	for (i=ld->rectDetails.top; i<=ld->rectDetails.bottom; ++i) {
 		clear_hseg(win, i, ld->rectDetails.left, ld->rectDetails.right-10);
@@ -816,7 +816,7 @@ manufacture a listdisp here
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row, len = length_indiseq(seq);
-	STRING key, name;
+	CString key, name;
 	NODE recnode=0;
 	char scratch[200];
 	INT mode = 'n';

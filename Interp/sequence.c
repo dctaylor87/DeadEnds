@@ -29,13 +29,13 @@
 static int numBucketsInSequenceTables = 359;
 
 // keyGetKey is the getKey function that returns the key of a SequenceEl.
-static String keyGetKey(void* element) {
+static CString keyGetKey(void* element) {
 	SequenceEl* el = (SequenceEl*) element;
 	return el->root->key;
 }
 
 // nameGetKey is the getKey function that returns the name of a SequenceEl.
-static String nameGetKey(void* element) {
+static CString nameGetKey(void* element) {
 	SequenceEl* el = (SequenceEl*) element;
 	return el->name;
 }
@@ -833,7 +833,7 @@ void showSequence(Sequence* sequence) {
 
 // keyToSequence returns a single element Sequence with the record with the given key; or null.
 // THIS NEEDS TO BE MADE MORE COMPLICATED--I & F optional, @-signs optional.
-Sequence* keyToSequence(String key, Database* database) {
+Sequence* keyToSequence(CString key, Database* database) {
 	GNode* record = getRecord(key, database);
 	if (!record) return null;
 	Sequence* sequence = createSequence(database);
@@ -843,7 +843,7 @@ Sequence* keyToSequence(String key, Database* database) {
 
 // refnToSequence returns a single element Sequence with the record with given refn value; or null.
 Sequence* refnToSequence(CString value, Database* database) {
-	String recordKey = searchRefnIndex(database->refnIndex, value);
+	CString recordKey = searchRefnIndex(database->refnIndex, value);
 	GNode* record = getRecord(recordKey, database);
 	if (!record) return null;
 	Sequence* sequence = createSequence(database);
@@ -853,7 +853,7 @@ Sequence* refnToSequence(CString value, Database* database) {
 
 // stringToSequence returns a person sequence whose members "match" a string. Order: a) named
 // Sequence (don't exist); b) key with or without leading 'I' (if used); c) REFN value; d) name.
-Sequence* stringToSequence(String name, Database* database) {
+Sequence* stringToSequence(CString name, Database* database) {
 	Sequence* sequence = null;
 //    sequence = find_named_seq(name);
 	if (!sequence) sequence = keyToSequence(name, database);

@@ -108,7 +108,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 #endif
 	INT nkey1p, nkey2p, modep;
 	RECORD tmp=0;
-	STRING key, name;
+	CString key, name;
 	INDISEQ seq;
 	INT c, rc;
 	BOOLEAN reuse=FALSE;

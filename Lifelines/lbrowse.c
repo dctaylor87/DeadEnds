@@ -95,7 +95,8 @@ INT
 browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	INT c, top, cur, mark, len, tmp, rc;
-	STRING key, name, lname="";
+	CString key, name;
+	STRING lname="";
 	RECORD rec=0;
 #if defined(DEADENDS)
 	Sequence *seq, *newseq;

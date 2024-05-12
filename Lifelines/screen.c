@@ -2559,7 +2559,7 @@ msg_width (void)
  *=======================================*/
 void
 curses_outputv (ARG_UNUSED(void *data),
-		MSG_LEVEL level, STRING fmt, va_list args)
+		MSG_LEVEL level, CString fmt, va_list args)
 {
 	char buffer[250];
 	STRING ptr;

@@ -205,7 +205,7 @@ static void
 prompt_for_browse (RECORD * prec, INT * code, INDISEQ * pseq)
 {
 	INT len, rc;
-	STRING key, name;
+	CString key, name;
 
 	/* verify & clear the output arguments */
 	ASSERT(prec);
@@ -311,7 +311,7 @@ main_browse (RECORD rec1, INT code)
 static RECORD
 goto_indi_child (RECORD irec, int childno)
 {
-  INT num1, num2, i = 0;
+  INT num1, num2;
   RECORD answer = 0;
   CString akey=0; /* answer key */
   NODE indi = nztop(irec);
@@ -359,11 +359,13 @@ goto_indi_child (RECORD irec, int childno)
 static RECORD
 goto_fam_child (RECORD frec, int childno)
 {
-  INT num, i = 0;
-  RECORD answer = 0;
 #if defined(DEADENDS)
+  INT num;
+  RECORD answer = 0;
   CString akey=0;
 #else
+  INT num, i = 0;
+  RECORD answer = 0;
   INT akeynum=0;
 #endif
   NODE fam = nztop(frec);
@@ -1154,7 +1156,7 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	RECORD save=0, tmp=0, tmp2=0;
 #endif
 	INDISEQ seq;
-	STRING key, name;
+	CString key, name;
 	char c2;
 	INT rtn=0; /* return code */
 

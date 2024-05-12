@@ -3,4 +3,4 @@
    function) */
 
 extern void
-curses_outputv (void *data, MSG_LEVEL level, STRING fmt, va_list args);
+curses_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args);

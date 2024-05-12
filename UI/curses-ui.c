@@ -50,7 +50,7 @@ curses_error (void *data, const char *buffer, char **err_msg);
 #if 0				/* for now... */
 static void
 curses_outputv (void *data, char **err_msg,
-		MSG_LEVEL level, STRING fmt, va_list args);
+		MSG_LEVEL level, CString fmt, va_list args);
 static void append_to_msg_list (STRING msg);
 static void display_status (STRING text);
 #endif
@@ -98,7 +98,7 @@ curses_error (void *data, const char *buffer, char **err_msg)
  
 static void
 curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
-		MSG_LEVEL level, STRING fmt, va_list args)
+		MSG_LEVEL level, CString fmt, va_list args)
 {
   char buffer[250];
   STRING ptr;

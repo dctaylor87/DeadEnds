@@ -33,6 +33,6 @@ String* personKeysFromName(CString name, Database*, int* pcount /*[, bool exact]
 String nameString(CString name);  // Remove slashes from a name.
 String trimName (String name, int len);  // Trim name to specific length.
 bool nameToList(String name, List*, int *len, int *sind);
-extern bool exactMatch(String partial, String complete);
+extern bool exactMatch(CString partial, CString complete);
 
 #endif // name_h

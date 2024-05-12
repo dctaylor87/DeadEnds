@@ -23,7 +23,7 @@ static void* searchBucket(Bucket*, CString key, String(*g)(void*), int(*c)(Strin
 
 // createHashTable creates and returns a HashTable. getKey is a function that returns the key of
 // an element, and delete is an optional function that frees an element.
-HashTable* createHashTable(String(*getKey)(void*), int(*compare)(String, String),
+HashTable* createHashTable(CString(*getKey)(void*), int(*compare)(CString, CString),
 						   void(*delete)(void*), int numBuckets) { PH;
 	HashTable *table = (HashTable*) malloc(sizeof(HashTable));
 	table->compare = compare;

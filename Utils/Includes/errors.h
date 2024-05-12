@@ -48,6 +48,8 @@ extern Error *createError(ErrorType type, CString fileName, int lineNumber, Stri
 extern void setSeverityError(Error *error, ErrorSeverity severity);
 extern void deleteError(Error*);
 extern void addErrorToLog(ErrorLog*, Error*);
+extern void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType,
+			     CString fileName, int lineNumber, String message);
 extern void showErrorLog(ErrorLog*);
 extern void showError(Error*);
 

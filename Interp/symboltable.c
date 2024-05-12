@@ -34,7 +34,7 @@ static String getKey(void *symbol) {
 }
 
 // createSymbol creates a Symbol.
-static Symbol *createSymbol(String iden, PValue *ppvalue) {
+static Symbol *createSymbol(CString iden, PValue *ppvalue) {
 	Symbol *symbol = (Symbol*) malloc(sizeof(Symbol));
 	symbol->ident = iden;
 	symbol->value = ppvalue;

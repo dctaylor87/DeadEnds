@@ -215,7 +215,7 @@ add_children (NODE indi, INT gen, INT maxgen, INT * count)
 			tn0=0;
 			for (i=0; i<length_indiseq(childseq); i++) {
 				NODE child;
-				STRING childkey, childname;
+				CString childkey, childname;
 				element_indiseq(childseq, i, &childkey, &childname);
 				child = key_to_indi(childkey);
 				tn1 = add_children(child, gen+1, maxgen, count);

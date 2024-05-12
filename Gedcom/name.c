@@ -138,7 +138,7 @@ static int codeOf(int letter) {
 }
 
 // exactMatch checks if a partial name is contained within a complete name.
-bool exactMatch(String partial, String complete) {
+bool exactMatch(CString partial, CString complete) {
     char part[MAXNAMELEN+2], comp[MAXNAMELEN+2], *p, *q;
     bool okay;
     if (strlen(partial) > MAXNAMELEN || strlen(complete) > MAXNAMELEN)

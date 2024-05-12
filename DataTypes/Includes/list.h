@@ -45,6 +45,7 @@ void insertInList(List*, void*, int);
 bool isSortedList(List*); // Uses sorted flag.
 bool isListSorted(List*); // Really checks.
 void sortList(List*);
+void* searchList(List* list, CString key, int* index, bool sorted);
 void uniqueList(List*);
 bool removeFromList(List*, int);
 bool removeFirstListElement(List*);
