@@ -52,20 +52,16 @@ void valueSortSequence(Sequence*); //  Sort a sequence by value (not properly im
 Sequence *uniqueSequence(Sequence*);  //Return sequence uniqueued from another.
 void uniqueSequenceInPlace(Sequence *sequence);  // Remove duplicate elements from a sequence.
 
-Sequence *personToChildren(GNode *person, Database*);
-Sequence *personToFathers(GNode *person, Database*);
-Sequence *personToMothers(GNode *person, Database*);
-Sequence *familyToChildren(GNode *family, Database*);
-Sequence *familyToFathers(GNode *family, Database*);
-Sequence *familyToMothers(GNode *family, Database*);
-Sequence *personToSpouses(GNode *person, Database*);
-Sequence *personToFamilies(GNode *person, bool, Database*);
-Sequence *nameToSequence(CString, Database*);
-#if 1
-Sequence *refnToSequence (CString ukey, Database *database);
-#else
-Sequence *refn_to_indiseq(String refn);
-#endif
+Sequence* personToChildren(GNode *person, Database*);
+Sequence* personToFathers(GNode *person, Database*);
+Sequence* personToMothers(GNode *person, Database*);
+Sequence* familyToChildren(GNode *family, Database*);
+Sequence* familyToFathers(GNode *family, Database*);
+Sequence* familyToMothers(GNode *family, Database*);
+Sequence* personToSpouses(GNode *person, Database*);
+Sequence* personToFamilies(GNode *person, bool, Database*);
+Sequence* nameToSequence(CString, Database*);
+Sequence* refnToSequence (CString ukey, Database *database);
 
 Sequence* unionSequence(Sequence*, Sequence*);
 Sequence* intersectSequence(Sequence*, Sequence*);
