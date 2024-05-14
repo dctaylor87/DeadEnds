@@ -174,7 +174,7 @@ bool removeFromSequenceByIndex (Sequence *sequence, int index)
 }
 
 // elementFromSequence returns the key and name values of an indexed Sequence element.
-bool elementFromSequence (Sequence* sequence, int index, CString* pkey, String* pname) {
+bool elementFromSequence (Sequence* sequence, int index, CString* pkey, CString* pname) {
 	ASSERT(sequence);
 	Block *block = &(sequence->block);
 	if (index < 0 || index >= block->length) return false;

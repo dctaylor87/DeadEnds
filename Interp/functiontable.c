@@ -13,12 +13,12 @@
 static bool debugging = false;
 
 // compare is the compare function for FunctionTables.
-static int compare(String a, String b) {
+static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
 
 // getKey is the getKey function for FunctionTables.
-static String getKey(void* element)
+static CString getKey(void* element)
 {
 	FunctionElement* funcEl = (FunctionElement*) element;
 	return funcEl->name;

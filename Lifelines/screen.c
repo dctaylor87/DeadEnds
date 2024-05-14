@@ -221,7 +221,7 @@ static void run_report(BOOLEAN picklist);
 static void screen_on_lang_change(VPTR uparm);
 static RECORD search_for_one_record(void);
 static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
-BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
+BOOLEAN show_record(UIWINDOW uiwin, CString key, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void switch_to_uiwin(UIWINDOW uiwin);
@@ -2073,7 +2073,7 @@ get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
  * returns TRUE if record was found, else FALSE (no record, nothing drawn)
  *==============================================================*/
 BOOLEAN
-show_record (UIWINDOW uiwin, STRING key, INT mode, LLRECT rect
+show_record (UIWINDOW uiwin, CString key, INT mode, LLRECT rect
 	, INT * scroll, BOOLEAN reuse)
 {
 	INT row = rect->top;

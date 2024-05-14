@@ -425,7 +425,7 @@ String upsurname(CString name) {
 
 // manipulateName converts a Gedcom name to various formats. caps specifies the surname to upper
 // case. If reg is false surname comes first followed by comma. len specifies the max length.
-String manipulateName(String name, bool caps, bool reg, int len) {
+String manipulateName(CString name, bool caps, bool reg, int len) {
     if (!name || *name == 0) return null;
     if (caps) name = upsurname(name);
     name = trimName(name, reg ? len: len-1);

@@ -13,10 +13,10 @@
 #include "pvaluetable.h"
 
 // getKey gets the key from a program value element.
-static String getKey(void* element) { return ((PValueElement*) element)->key; }
+static CString getKey(void* element) { return ((PValueElement*) element)->key; }
 
 // compare compares two program value elements.
-static int compare(String a, String b) { return strcmp(a, b); }
+static int compare(CString a, CString b) { return strcmp(a, b); }
 
 // delete deletes a program value element when it is removed from a table.
 // MNOTE: This has to be done carefully.

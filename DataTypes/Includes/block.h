@@ -58,7 +58,7 @@ void* searchBlock(Block* block, CString, CString(*g)(void*), int*);
 void* searchSortedBlock(Block* block, CString key, CString(*g)(void*), int(*c)(CString, CString), int*);
 
 // Debugging only.
-void showBlock(Block*, String(*describe)(void*));
-void fprintfBlock(FILE*, Block*, String(*toString)(void*));
+void showBlock(Block*, CString(*describe)(void*));
+void fprintfBlock(FILE*, Block*, CString(*toString)(void*));
 
 #endif // block_h

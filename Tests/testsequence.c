@@ -172,7 +172,7 @@ void testSequence(Database* database, int testNumber) {
 	// Test elementFromSequence.
 	printf("Testing elementFromSequence\n");
 	for (int i = 0; i < lengthSequence(tomwets); i++) {
-		String key, name;
+		CString key, name;
 		elementFromSequence(tomwets, i, &key, &name);
 		printf("%d: %s: %s\n", i, key, name);
 	}

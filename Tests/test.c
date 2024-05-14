@@ -94,10 +94,10 @@ Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorL
 }
 
 // getKey gets the key of a GNode element.
-static String getKey(void* element) { return ((GNode*) element)->key; }
+static CString getKey(void* element) { return ((GNode*) element)->key; }
 
 // compare compares two record keys.
-static int compare(String a, String b) { return compareRecordKeys(a, b); }
+static int compare(CString a, CString b) { return compareRecordKeys(a, b); }
 
 // listTest creates a list of all persons in a Database, sorts the list by key, and then
 // prints the records in key order.

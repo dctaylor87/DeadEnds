@@ -464,7 +464,7 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
  *=============================================================*/
 static INT
 choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, CString titl1
-	, STRING titln)
+	, CString titln)
 {
 	if (length_indiseq(seq) > 1)
 		return choose_one_from_indiseq(titln, seq);

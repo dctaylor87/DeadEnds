@@ -75,7 +75,7 @@ Sequence* spouseSequence(Sequence*);
 Sequence* ancestorSequence(Sequence*);
 Sequence* descendentSequence(Sequence*);
 Sequence* siblingSequence(Sequence*, bool);
-bool elementFromSequence(Sequence* seq, int index, CString* key, String* name);
+bool elementFromSequence(Sequence* seq, int index, CString* key, CString* name);
 void renameElementInSequence(Sequence* seq, CString key);
 void sequenceToGedcom(Sequence*, FILE*);
 void showSequence(Sequence*);

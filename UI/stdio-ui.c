@@ -35,7 +35,7 @@ static int
 stdio_output (void *data, const char *buffer, char **err_msg);
 
 static void
-stdio_outputv (void *data, MSG_LEVEL level, STRING fmt, va_list args);
+stdio_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args);
 
 /* local variables */
 
@@ -116,7 +116,7 @@ stdio_output (void *data, const char *buffer, char **err_msg)
 }
 
 static void
-stdio_outputv (void *data, MSG_LEVEL level, STRING fmt, va_list args)
+stdio_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args)
 {
   FILE *file = (FILE *)data;
 

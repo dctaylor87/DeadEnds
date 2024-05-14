@@ -21,7 +21,7 @@ typedef struct Database Database;
 // Prototypes of functions defined in names.c.
 //--------------------------------------------------------------------------------------------------
 extern String upsurname(CString name); // Make a Gedcom name have an all uppercase surname.
-String manipulateName(String, bool caps, bool reg, int maxlen);  // Manipulate a name.
+String manipulateName(CString, bool caps, bool reg, int maxlen);  // Manipulate a name.
 String getSurname(CString);  // Get the surname of a Gedcom name.
 String getGivenNames(CString);  // Get the given names of a Gedcom name.
 int getFirstInitial(CString name);  // Get the first initial of a Gedcom name.

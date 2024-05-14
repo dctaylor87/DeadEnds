@@ -23,12 +23,12 @@ static NameElement* createNameElement(CString nameKey, String recordKey);
 static int numNameIndexBuckets = 2048;
 
 // getKey gets the name key of a NameIndex element.
-static String getKey(void* element) {
+static CString getKey(void* element) {
 	return ((NameElement*) element)->nameKey;
 }
 
 // compare compares two name keys.
-static int compare(String a, String b) {
+static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
 

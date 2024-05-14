@@ -18,7 +18,7 @@ static bool debugging = false;
 extern SymbolTable *globalTable;
 
 // compare compares two symbols by ident fields.
-static int compare(String a, String b) {
+static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
 
@@ -29,7 +29,7 @@ static void delete(void* a) {
 }
 
 // getKey returns the Symbol's identifier.
-static String getKey(void *symbol) {
+static CString getKey(void *symbol) {
 	return ((Symbol*) symbol)->ident;
 }
 

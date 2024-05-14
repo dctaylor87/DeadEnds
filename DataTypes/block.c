@@ -208,7 +208,7 @@ void* searchSortedBlock(Block *block, CString key, CString(*getKey)(void*),
 }
 
 // showBlock is a debugging function that shows the contents of a Block.
-void showBlock(Block *block, String(*getString)(void*)) {
+void showBlock(Block *block, CString(*getString)(void*)) {
 	printf("Block: %d %d\n", (int) block->length, (int) block->maxLength);
 	for (int i = 0; i < block->length; i++) {
 		printf("%s\n", getString(block->elements[i]));
@@ -217,7 +217,7 @@ void showBlock(Block *block, String(*getString)(void*)) {
 }
 
 // fprintfBlock is a debugging function that prints the contents of a Block to an open file.
-void fprintfBlock(FILE* file, Block* block, String(*toString)(void*)) {
+void fprintfBlock(FILE* file, Block* block, CString(*toString)(void*)) {
 	if (!file) return;
 	fprintf(file, "Block: %d %d\n", (int)block->length, (int)block->maxLength);
 	for (int i = 0; i < block->length; i++) {

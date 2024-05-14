@@ -181,7 +181,7 @@ void show_horz_line(UIWINDOW, INT, INT, INT);
 void show_indi(UIWINDOW uiwin, RECORD indi, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 void show_indi_vitals(UIWINDOW uiwin, RECORD irec, LLRECT, INT *scroll, BOOLEAN reuse);
-BOOLEAN show_record(UIWINDOW uiwin, STRING key, INT mode, LLRECT
+BOOLEAN show_record(UIWINDOW uiwin, CString key, INT mode, LLRECT
 	, INT * scroll, BOOLEAN reuse);
 void show_vert_line(UIWINDOW, INT, INT, INT);
 void term_screen(void);

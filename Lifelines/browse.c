@@ -451,7 +451,7 @@ static INT
 browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 {
 	RECORD current=0;
-	STRING key, name;
+	CString key, name;
 	INT i, c, rc;
 	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
 	INT nkeyp, indimodep;

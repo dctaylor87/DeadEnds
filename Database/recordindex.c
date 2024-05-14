@@ -19,7 +19,7 @@
 static int numRecordIndexBuckets = 2048;
 
 // compare is the structure function that compares RecordIndexEl elements.
-static int compare(String left, String right) {
+static int compare(CString left, CString right) {
 	return compareRecordKeys(left, right);
 }
 
@@ -30,7 +30,7 @@ static void delete(void *word) {
 }
 
 // getKey returns the key of a RecordIndexEl; it is the key of the root GNode.
-static String getKey(void* word) {
+static CString getKey(void* word) {
 	return ((RecordIndexEl*) word)->root->key;
 }
 

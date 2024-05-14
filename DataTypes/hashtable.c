@@ -15,10 +15,10 @@ bool debuggingHash = false;
 bool sortChecking = false;
 extern FILE* debugFile;
 
-static void* searchBucket(Bucket*, CString key, String(*g)(void*), int(*c)(String, String), int* index);
-//static void* linearSearchBucket(Bucket*, CString key, String(*g)(void*), int* index);
-//static void* binarySearchBucket(Bucket*, String key, String(*g)(void*), int(*c)(String, String), int* index);
-//static void sortBucket(Bucket*, String(*g)(void*), int(*c)(String, String));
+static void* searchBucket(Bucket*, CString key, CString(*g)(void*), int(*c)(CString, CString), int* index);
+//static void* linearSearchBucket(Bucket*, CString key, CString(*g)(void*), int* index);
+//static void* binarySearchBucket(Bucket*, String key, CString(*g)(void*), int(*c)(CString, CString), int* index);
+//static void sortBucket(Bucket*, String(*g)(void*), int(*c)(CString, CString));
 //static void removeFromBucketByIndex(Bucket* bucket, int index, void (*delete)(void*));
 
 // createHashTable creates and returns a HashTable. getKey is a function that returns the key of
@@ -110,13 +110,13 @@ void* searchHashTableWithElement(HashTable* table, void* element) {
 
 // searchBucket searches a Bucket for an element by key. Depending on Bucket size either linear or
 // binary search is used.
-void* searchBucket(Bucket* bucket, CString key, String(*getKey)(void*),
-				   int(*compare)(String, String), int* index) { //PH;
+void* searchBucket(Bucket* bucket, CString key, CString(*getKey)(void*),
+				   int(*compare)(CString, CString), int* index) { //PH;
 	return searchBlock(&(bucket->block), key, getKey, index);
 }
 
 // linearSearchBucket uses linear search to look for an element in a Bucket.
-//void* linearSearchBucket(Bucket* bucket, CString key, String(*getKey)(void*), int* index) { PH;
+//void* linearSearchBucket(Bucket* bucket, CString key, CString(*getKey)(void*), int* index) { PH;
        // Block* block = &(bucket->block);
        // return linearSearch(block->elements, block->length, key, getKey, index);
 //}
@@ -129,7 +129,7 @@ bool isInHashTable(HashTable* table, CString key) {
 // addToHashTable adds a new element to a HashTable.
 void addToHashTable(HashTable* table, void* element, bool replace) { //PH;
 	//printf("addToHashTable called element with key %s\n", table->getKey(element)); // DEBUG
-	String key = table->getKey(element);
+	CString key = table->getKey(element);
 	int hash, index;
 	Bucket* bucket = null;
 	bool found = detailSearch(table, key, &hash, &index);
@@ -178,14 +178,14 @@ void appendToBucket(Bucket* bucket, void* element) { //PH;
 //    TODO: GET BINARY SEARCH WORKING IF LENGTH IS OVER THRESHHOLD.
 //--------------------------------------------------------------------------------------------------
 void removeElement(HashTable* table, void *element) { //PH;
-	String key = table->getKey(element);
+	CString key = table->getKey(element);
 	Bucket *bucket = table->buckets[getHash(key, table->numBuckets)];
 	Block *block = &(bucket->block);
 	void **elements = block->elements;
 	int length = block->length;
 	int i = 0;
 	for (; i < length; i++) {
-		String check = table->getKey(elements[i]);
+		CString check = table->getKey(elements[i]);
 		if (eqstr(key, check)) break;
 	}
 	if (i >= length) return; // without doing anything.
