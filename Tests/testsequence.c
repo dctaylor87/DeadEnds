@@ -3,7 +3,7 @@
 // testsequence.c has code to test the Sequence data type.
 //
 // Created by Thomas Wetmore on 2 May 2024.
-// Last changed on 2 May 2024.
+// Last changed on 16 May 2024.
 
 #include <stdint.h>
 
@@ -13,6 +13,7 @@
 static void checkTest(String, int, int);
 static Sequence* tomsAncestors(Database*);
 static Sequence* lusAncestors(Database*);
+static Sequence* tomAndLusAncestorsClosed(Database*);
 
 // testSequence is the starting function to test the Sequence type.
 void testSequence(Database* database, int testNumber) {
@@ -85,14 +86,18 @@ void testSequence(Database* database, int testNumber) {
 	printf("Sort ancestors by name\n");
 	nameSortSequence(ancestors);
 	showSequence(ancestors);
-	//exit(0);
+	// Test closed form of ancestorSequence.
+	printf("Testing ancestorSequence with close set to true\n");
+	emptySequence(ancestors);
+	ancestors = tomAndLusAncestorsClosed(database);
+	showSequence(ancestors);
 
 	// Test uniqueSequence.
 	printf("Setting up to test uniqueSequence\n");
 	emptySequence(sequence);
 	emptySequence(ancestors);
 	appendToSequence(sequence, "@I2@", null);
-	ancestors = ancestorSequence(sequence);
+	ancestors = ancestorSequence(sequence, false);
 	printf("THIS SHOULD BE LU'S ANCESTORS\n");
 	showSequence(ancestors);
 	emptySequence(copied);
@@ -163,7 +168,7 @@ void testSequence(Database* database, int testNumber) {
 	showSequence(spouses);
 	// Test descendentSequence.
 	printf("Testing descendentSequence\n");
-	Sequence* desc = descendentSequence(tomwets);
+	Sequence* desc = descendentSequence(tomwets, false);
 	showSequence(desc);
 	// Test siblingSequence
 	printf("Testing siblingSequence\n");
@@ -203,28 +208,36 @@ void testSequence(Database* database, int testNumber) {
 static Sequence* tomsAncestors(Database* database) {
 	Sequence* s = createSequence(database);
 	appendToSequence(s, "@I1@", null);
-	Sequence* a = ancestorSequence(s);
+	Sequence* a = ancestorSequence(s, false);
+	deleteSequence(s);
+	return a;
+}
+static Sequence* tomAndLusAncestorsClosed(Database* database) {
+	Sequence* s = createSequence(database);
+	appendToSequence(s, "@I1@", null);
+	appendToSequence(s, "@I2@", null);
+	Sequence* a = ancestorSequence(s, true);
 	deleteSequence(s);
 	return a;
 }
 static Sequence* lusAncestors(Database* database) {
 	Sequence* s = createSequence(database);
 	appendToSequence(s, "@I2@", null);
-	Sequence* a = ancestorSequence(s);
+	Sequence* a = ancestorSequence(s, false);
 	deleteSequence(s);
 	return a;
 }
 static Sequence* tomsDescendents(Database* database) {
 	Sequence* s = createSequence(database);
 	appendToSequence(s, "@I1@", null);
-	Sequence* d = descendentSequence(s);
+	Sequence* d = descendentSequence(s, false);
 	deleteSequence(s);
 	return d;
 }
 static Sequence* lssDescendents(Database* database) {
 	Sequence* s = createSequence(database);
 	appendToSequence(s, "@I2@", null);
-	Sequence* d = descendentSequence(s);
+	Sequence* d = descendentSequence(s, false);
 	deleteSequence(s);
 	return d;
 }
