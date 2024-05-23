@@ -96,7 +96,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 /* Remove person from families he/she is in as a parent */
 
 	for (node = fams; node; node = nsibling(node)) {
-		fam = key_to_fam(rmvat(nval(node)));
+		fam = keyToFamily(rmvat(nval(node)), database);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		/* remove all occurrences of this person as spouse */
 		husb = remove_any_xrefs_node_list(nxref(indi), husb);
@@ -111,7 +111,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 /* Remove person from families he/she is in as a child */
 
 	for (node = famc; node; node = nsibling(node)) { 
-		fam = key_to_fam(rmvat(nval(node)));
+		fam = keyToFamily(rmvat(nval(node)), database);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		/* remove all occurrences of this person as child */
 		chil = remove_any_xrefs_node_list(nxref(indi), chil);
@@ -381,6 +381,6 @@ remove_refn_list (GNode *refn, CString key, Database *database)
 	GNode *node;
 	for (node = refn; node; node = nsibling(node)) {
 		if (nval(node)) 
-			remove_refn(nval(node), key);
+			removeRefn(nval(node), key, database);
 	}
 }

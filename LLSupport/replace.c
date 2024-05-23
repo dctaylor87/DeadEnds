@@ -111,9 +111,9 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 		add_name(nval(node), key);
 	rename_from_browse_lists(key);
 	for (node = refn1; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
+		if (nval(node)) removeRefn(nval(node), key, database);
 	for (node = refnn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+		if (nval(node)) add_refn(nval(node), key, database);
 
 /* now cleanup (indi1 tree is now composed of indi2 data) */
 	freeGNodes(name1);
@@ -157,9 +157,9 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 	/* remove deleted refns & add new ones */
 	classify_nodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
+		if (nval(node)) removeRefn(nval(node), key, database);
 	for (node = refnn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+		if (nval(node)) addRefn(nval(node), key, database);
 	freeGNodes(refn1);
 	freeGNodes(refnn);
 	freeGNodes(refn1n);

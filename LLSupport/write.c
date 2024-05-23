@@ -334,7 +334,7 @@ write_indi_to_file_for_edit (GNode *indi, CString file, bool rfmt, Database *dat
 {
 	annotateWithSupplemental(indi, rfmt, database);
 	write_indi_to_file(indi, file);
-	resolve_refn_links(indi);
+	resolveRefnLinks(indi, database);
 }
 /*=====================================
  * write_indi_to_file_for_edit - write node tree into GEDCOM
@@ -346,7 +346,7 @@ write_fam_to_file_for_edit (GNode *fam, CString file, bool rfmt, Database *datab
 {
 	annotateWithSupplemental(fam, rfmt, database);
 	write_fam_to_file(fam, file);
-	resolve_refn_links(fam);
+	resolveRefnLinks(fam, database);
 }
 /*=====================================
  * write_fam_to_file -- write node tree into GEDCOM

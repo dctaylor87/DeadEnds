@@ -310,7 +310,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 	llstrcatn(&p, " ", &mylen);
 	llstrcatn(&p, counts, &mylen);
 	if (husbands) {
-		node = qkey_to_indi(rmvat(nval(husb)));
+		node = keyToPerson(rmvat(nval(husb)), database);
 		if (node) {
 			llstrcatn(&p, delim, &mylen);
 			if (wives)
@@ -325,7 +325,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 		}
 	}
 	if (wives) {
-		node = qkey_to_indi(rmvat(nval(wife)));
+		node = keyToPerson(rmvat(nval(wife)), database);
 		if (node) {
 			if (!templen)
 				templen = mylen;
@@ -408,7 +408,7 @@ generic_to_list_string (GNode *node, String key, int len, String delim,
 	String str;
 	str=NULL; /* set to appropriate format */
 	if (!node && key)
-		node = qkey_to_type(key);
+		node = keyToPerson (key, database);
 	if (!key && node)
 		key = rmvat(nxref(node));
 	if (node) {
