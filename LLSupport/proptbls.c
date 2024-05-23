@@ -135,7 +135,7 @@ convert_proplist_to_proparray (List *list)
 	props = (HashTable **)malloc((lengthList(list)+1)*sizeof(props[0]));
 	i = 0;
 	FORLIST(list, el)
-		props[i++] = (TABLE)el;
+		props[i++] = (HashTable *)el;
 	ENDLIST
 	props[i] = NULL; /* null marker at end of array */
 	deleteList(list);
