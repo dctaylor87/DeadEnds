@@ -1,21 +1,18 @@
-//
 // DeadEnds
 //
-// symboltable.c holds the functions that implement SymbolTable.
+// symboltable.c holds the functions that implement SymbolTables.
 //
 // Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 3 April 2024.
-//
+// Last changed on 23 May 2024.
+
 #include <stdint.h>
 
 #include "standard.h"
 #include "refnindex.h"
 #include "symboltable.h"
 
-static bool debugging = false;
-
 // globalTable holds the script symbols that defined in the global scope.
-extern SymbolTable *globalTable;
+extern SymbolTable* globalTable;
 
 // compare compares two symbols by ident fields.
 static int compare(CString a, CString b) {
@@ -24,7 +21,7 @@ static int compare(CString a, CString b) {
 
 // delete deletes a Symbol.
 static void delete(void* a) {
-	Symbol *symbol = (Symbol*) a;
+	Symbol* symbol = (Symbol*) a;
 	free(symbol->value);
 }
 
@@ -35,7 +32,7 @@ static CString getKey(void *symbol) {
 
 // createSymbol creates a Symbol.
 static Symbol *createSymbol(CString iden, PValue *ppvalue) {
-	Symbol *symbol = (Symbol*) malloc(sizeof(Symbol));
+	Symbol* symbol = (Symbol*) malloc(sizeof(Symbol));
 	symbol->ident = iden;
 	symbol->value = ppvalue;
 	return symbol;
@@ -43,33 +40,33 @@ static Symbol *createSymbol(CString iden, PValue *ppvalue) {
 
 // createSymbolTable creates a SymbolTable.
 static int numBucketsInSymbolTable = 37;
-SymbolTable *createSymbolTable(void) {
+SymbolTable* createSymbolTable(void) {
 	return createHashTable(getKey, compare, delete, numBucketsInSymbolTable);
 }
 
 // assignValueToSymbol assigns a value to a Symbol. If the Symbol isn't in the local table, look
 // in the global table; only if there use the global table.
-void assignValueToSymbol(SymbolTable *symtab, CString ident, PValue pvalue) {
-	SymbolTable *table = symtab; // Determine SymbolTable.
+void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
+	SymbolTable* table = symtab; // Determine SymbolTable.
 	if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) table = globalTable;
-	PValue* ppvalue = (PValue*) malloc(sizeof(PValue)); // Copy pvalue to heap.
+	PValue* ppvalue = (PValue*) malloc(sizeof(PValue)); // Heapify PValue.
 	memcpy(ppvalue, &pvalue, sizeof(PValue));
 	if (pvalue.type == PVString)
 		ppvalue->value.uString = strsave(pvalue.value.uString); // TODO: Is this required?
 	Symbol *symbol = searchHashTable(table, ident);
-	if (symbol) { // If symbol is in the table change its value.
+	if (symbol) { // If in table change value.
 		freePValue(symbol->value);
 		symbol->value = ppvalue;
 		return;
 	}
-	if (debugging) printf("assignValueToSymbol: %s = %s in %p\n", ident, pvalueToString(*ppvalue, true), symtab);
-	addToHashTable(table, createSymbol(ident, ppvalue), true); // Otherwise add new symbol to table.
+	//if (debugging) printf("assignValueToSymbol: %s = %s in %p\n", ident, pvalueToString(*ppvalue, true), symtab);
+	addToHashTable(table, createSymbol(ident, ppvalue), true); // Else add symbol.
 }
 
 // getValueOfSymbol gets the value of a Symbol from a SymbolTable; Symbol's PValue is returned.
-PValue getValueOfSymbol(SymbolTable *symtab, CString ident) {
-	if (debugging) printf("getValueOfSymbol %s from table\n", ident);
-	if (debugging) showSymbolTable(symtab);
+PValue getValueOfSymbol(SymbolTable* symtab, CString ident) {
+	//if (debugging) printf("getValueOfSymbol %s from table\n", ident);
+	//if (debugging) showSymbolTable(symtab);
 	Symbol *symbol = searchHashTable(symtab, ident); // Search local table.
 	if (symbol) {
 		PValue *ppvalue = symbol->value;

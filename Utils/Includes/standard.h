@@ -30,6 +30,7 @@ typedef enum { Letter = 300, Digit, White, Other } CharType;  // TODO: not used.
 // Catenate two strings and return a new String on the heap with the value.
 extern String strconcat(String s1, String s2);
 String strsave(CString);  // Save String in heap.
+String strnsave(CString, int);  // Save String prefix in heap.
 bool iswhite(int);       // Is character white space?
 bool allwhite(String);   // Is String all white space?
 void striptrail(String);  // Strip trailing white space.

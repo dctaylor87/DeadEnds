@@ -127,6 +127,15 @@ String strsave(CString string) {
 	return strcpy(stdalloc(strlen(string) + 1), string);
 }
 
+// strnsave saves a copy of first length characters of string on the
+// heap and returns a pointer to it.
+String strnsave(CString string, int length) {
+	if (string == null || *string == 0) return null;
+	String str = stdalloc(length + 1);
+	str[length] = 0;
+	return strncpy(str, string, length);
+}
+
 // strconcat -- Catenate two strings and return a new String on the heap with the value.
 //--------------------------------------------------------------------------------------------------
 String strconcat(String s1, String s2)
