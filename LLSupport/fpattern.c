@@ -66,6 +66,7 @@ static const char __attribute__ ((unused)) copyright[] =
 
 #include <ctype.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #if TEST
 #include <locale.h>
@@ -101,13 +102,13 @@ static const char __attribute__ ((unused)) copyright[] =
 #define NULL		((void *) 0)
 #endif
 
-#ifndef FALSE
-#define FALSE		0
-#endif
+//#ifndef FALSE
+//#define FALSE		0
+//#endif
 
-#ifndef TRUE
-#define TRUE		1
-#endif
+//#ifndef TRUE
+//#define TRUE		1
+//#endif
 
 #if TEST
 #define SUB		'~'
@@ -168,7 +169,7 @@ int fpattern_isvalid(const char *pat)
 
     /* Check args */
     if (pat == NULL)
-        return (FALSE);
+        return (false);
 
     /* Verify that the pattern is valid */
     for (len = 0;  pat[len] != '\0';  len++)
@@ -186,7 +187,7 @@ int fpattern_isvalid(const char *pat)
                 if (pat[len] == QUOTE)
                     len++;		/* Quoted char */
                 if (pat[len] == '\0')
-                    return (FALSE);	/* Missing closing bracket */
+                    return (false);	/* Missing closing bracket */
                 len++;
 
                 if (pat[len] == FPAT_SET_THRU)
@@ -196,12 +197,12 @@ int fpattern_isvalid(const char *pat)
                     if (pat[len] == QUOTE)
                         len++;		/* Quoted char */
                     if (pat[len] == '\0')
-                        return (FALSE);	/* Missing closing bracket */
+                        return (false);	/* Missing closing bracket */
                     len++;
                 }
 
                 if (pat[len] == '\0')
-                    return (FALSE);	/* Missing closing bracket */
+                    return (false);	/* Missing closing bracket */
             }
             break;
 
@@ -209,14 +210,14 @@ int fpattern_isvalid(const char *pat)
             /* Quoted char */
             len++;
             if (pat[len] == '\0')
-                return (FALSE);		/* Missing quoted char */
+                return (false);		/* Missing quoted char */
             break;
 
         case FPAT_NOT:
             /* Negated pattern */
             len++;
             if (pat[len] == '\0')
-                return (FALSE);		/* Missing subpattern */
+                return (false);		/* Missing subpattern */
             break;
 
         default:
@@ -225,7 +226,7 @@ int fpattern_isvalid(const char *pat)
         }
     }
 
-    return (TRUE);
+    return (true);
 }
 
 
@@ -266,10 +267,10 @@ static int fpattern_submatch(const char *pat, const char *fname)
             /* Match a single char */
         #if DELIM
             if (fch == DEL  ||  fch == DEL2  ||  fch == '\0')
-                return (FALSE);
+                return (false);
         #else
             if (fch == '\0')
-                return (FALSE);
+                return (false);
         #endif
             fname++;
             break;
@@ -288,10 +289,10 @@ static int fpattern_submatch(const char *pat, const char *fname)
             while (i >= 0)
             {
                 if (fpattern_submatch(pat, fname+i))
-                    return (TRUE);
+                    return (true);
                 i--;
             }
-            return (FALSE);
+            return (false);
 
         case SUB:
             /* Match zero or more chars */
@@ -305,27 +306,27 @@ static int fpattern_submatch(const char *pat, const char *fname)
             while (i >= 0)
             {
                 if (fpattern_submatch(pat, fname+i))
-                    return (TRUE);
+                    return (true);
                 i--;
             }
-            return (FALSE);
+            return (false);
 
         case QUOTE:
             /* Match a quoted char */
             pch = *pat;
             if (lowercase(fch) != lowercase(pch)  ||  pch == '\0')
-                return (FALSE);
+                return (false);
             fname++;
             pat++;
             break;
 
         case FPAT_SET_L:
             /* Match char set/range */
-            yes = TRUE;
+            yes = true;
             if (*pat == FPAT_SET_NOT)
             {
                pat++;
-               yes = FALSE;	/* Set negation */
+               yes = false;	/* Set negation */
             }
 
             /* Look for [s], [-], [abc], [a-c] */
@@ -363,10 +364,10 @@ static int fpattern_submatch(const char *pat, const char *fname)
             }
 
             if (!match)
-                return (FALSE);
+                return (false);
 
             if (*pat == '\0')
-                return (FALSE);		/* Missing closing bracket */
+                return (false);		/* Missing closing bracket */
 
             fname++;
             pat++;
@@ -375,7 +376,7 @@ static int fpattern_submatch(const char *pat, const char *fname)
         case FPAT_NOT:
             /* Match only if rest of pattern does not match */
             if (*pat == '\0')
-                return (FALSE);		/* Missing subpattern */
+                return (false);		/* Missing subpattern */
             i = fpattern_submatch(pat, fname);
             return !i;
 
@@ -386,7 +387,7 @@ static int fpattern_submatch(const char *pat, const char *fname)
     #endif
             /* Match path delimiter char */
             if (fch != DEL  &&  fch != DEL2)
-                return (FALSE);
+                return (false);
             fname++;
             break;
 #endif
@@ -394,7 +395,7 @@ static int fpattern_submatch(const char *pat, const char *fname)
         default:
             /* Match a (non-null) char exactly */
             if (lowercase(fch) != lowercase(pch))
-                return (FALSE);
+                return (false);
             fname++;
             break;
         }
@@ -402,10 +403,10 @@ static int fpattern_submatch(const char *pat, const char *fname)
 
     /* Check for complete match */
     if (*fname != '\0')
-        return (FALSE);
+        return (false);
 
     /* Successful match */
-    return (TRUE);
+    return (true);
 }
 
 
@@ -440,14 +441,14 @@ int fpattern_match(const char *pat, const char *fname)
 
     /* Check args */
     if (fname == NULL)
-        return (FALSE);
+        return (false);
 
     if (pat == NULL)
-        return (FALSE);
+        return (false);
 
     /* Verify that the pattern is valid, and get its length */
     if (!fpattern_isvalid(pat))
-        return (FALSE);
+        return (false);
 
     /* Attempt to match pattern against filename */
     if (fname[0] == '\0')
@@ -492,10 +493,10 @@ int fpattern_matchn(const char *pat, const char *fname)
 
     /* Check args */
     if (fname == NULL)
-        return (FALSE);
+        return (false);
 
     if (pat == NULL)
-        return (FALSE);
+        return (false);
 
     /* Assume that pattern is well-formed */
 
@@ -517,7 +518,7 @@ int fpattern_matchn(const char *pat, const char *fname)
 
 static int	count =	0;
 static int	fails =	0;
-static int	stop_on_fail = FALSE;
+static bool	stop_on_fail = false;
 
 
 /*-----------------------------------------------------------------------------
@@ -601,7 +602,7 @@ int main(int argc, char **argv)
 #endif
 
 #if 1	/* Set to nonzero to stop on first failure */
-    stop_on_fail = TRUE;
+    stop_on_fail = true;
 #endif
 
     test(0,	NULL,	NULL);

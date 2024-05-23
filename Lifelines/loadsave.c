@@ -80,17 +80,17 @@
 /* alphabetical */
 static void clear_rec_counts(INT pass);
 static void export_saved_rec(char ctype, INT count);
-static void import_added_rec(char ctype, STRING tag, INT count);
+static void import_added_rec(char ctype, String tag, INT count);
 static void import_adding_unused_keys(void);
-static void import_beginning_import(STRING msg);
-static void import_error_invalid(STRING reason);
+static void import_beginning_import(String msg);
+static void import_error_invalid(String reason);
 static void import_readonly(void);
 /* static void import_report_timing(INT elapsed_sec, INT uitime_sec); */
-static void import_validated_rec(char ctype, STRING tag, INT count);
+static void import_validated_rec(char ctype, String tag, INT count);
 static void import_validating(void);
-static void import_validation_error(STRING msg);
-static void import_validation_warning(STRING msg);
-static void update_rec_count(INT pass, char ctype, STRING tag, INT count);
+static void import_validation_error(String msg);
+static void import_validation_warning(String msg);
+static void update_rec_count(INT pass, char ctype, String tag, INT count);
 
 /*********************************************
  * local variables
@@ -106,11 +106,11 @@ static void update_rec_count(INT pass, char ctype, STRING tag, INT count);
  * Functions to display record counts
  *==============================*/
 static void
-update_rec_count (INT pass, char ctype, STRING tag, INT count)
+update_rec_count (INT pass, char ctype, String tag, INT count)
 {
 	INT offset = 9*pass;
 	char msg[100];
-	STRING numstr=0;
+	String numstr=0;
 	INT row=0;
 
 	switch(ctype) {
@@ -158,17 +158,17 @@ clear_rec_counts (INT pass)
  * Feedback functions for import
  *==============================*/
 static void
-import_validation_warning (STRING msg)
+import_validation_warning (String msg)
 {
 	wfield(7, 1, msg);
 }
 static void
-import_validation_error (STRING msg)
+import_validation_error (String msg)
 {
 	wfield(6, 1, msg);
 }
 static void
-import_error_invalid (STRING reason)
+import_error_invalid (String reason)
 {
 	wfield(9, 0, reason);
 	wpos(10, 0);
@@ -177,7 +177,7 @@ static void
 import_validating (void)
 {
 	char msg[100];
-	STRING numstr=0;
+	String numstr=0;
 	INT count=0;
 	INT row=0;
 
@@ -197,7 +197,7 @@ import_validating (void)
 	wfield(row, 1, msg);
 }
 static void
-import_beginning_import (STRING msg)
+import_beginning_import (String msg)
 {
 	wfield(9,  0, msg);
 	clear_rec_counts(1);
@@ -214,12 +214,12 @@ import_adding_unused_keys (void)
 	wfield(15, 0, _("Adding unused keys as deleted keys..."));
 }
 static void
-import_validated_rec (char ctype, STRING tag, INT count)
+import_validated_rec (char ctype, String tag, INT count)
 {
 	update_rec_count(0, ctype, tag, count);
 }
 static void
-import_added_rec (char ctype, STRING tag, INT count)
+import_added_rec (char ctype, String tag, INT count)
 {
 	update_rec_count(1, ctype, tag, count);
 }
@@ -232,12 +232,12 @@ export_saved_rec (char ctype, INT count)
  * load_gedcom -- have user select gedcom file & import it
  *==============================*/
 void
-load_gedcom (BOOLEAN picklist)
+load_gedcom (bool picklist)
 {
 	FILE *fp=NULL;
 	struct tag_import_feedback ifeed;
-	STRING srcdir=NULL;
-	STRING fullpath=0;
+	String srcdir=NULL;
+	String fullpath=0;
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 
@@ -292,19 +292,19 @@ load_gedcom (BOOLEAN picklist)
 /*================================
  * save_gedcom -- save gedcom file
  *==============================*/
-BOOLEAN
+bool
 save_gedcom (void)
 {
 	FILE *fp=NULL;
 	struct tag_export_feedback efeed;
-	STRING srcdir=NULL, fname=0, fullpath=0;
+	String srcdir=NULL, fname=0, fullpath=0;
 
 	srcdir = getlloptstr("LLARCHIVES", ".");
 	fp = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
 	if (!fp) {
 		strfree(&fname);
 		msg_error("%s", _("The database was not saved."));
-		return FALSE; 
+		return false; 
 	}
 	prefix_file_for_gedcom(fp);
 
@@ -323,5 +323,5 @@ save_gedcom (void)
 	msg_info(_(qSoutfin), readpath_file, fname);
 	strfree(&fname);
 	
-	return TRUE;
+	return true;
 }

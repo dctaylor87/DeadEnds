@@ -87,12 +87,12 @@ typedef struct gd_metadata_s {
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN do_import(IMPORT_FEEDBACK ifeed, FILE *fp);
-static BOOLEAN is_lossy_conversion(const char * cs_src, const char * cs_dest);
-static BOOLEAN is_unicode_encoding_name(const char * codeset);
+static bool do_import(IMPORT_FEEDBACK ifeed, FILE *fp);
+static bool is_lossy_conversion(const char * cs_src, const char * cs_dest);
+static bool is_unicode_encoding_name(const char * codeset);
 static void restore_record(NODE node, INT type, INT num);
-static STRING translate_key(STRING);
-static BOOLEAN translate_values(NODE, VPTR);
+static String translate_key(String);
+static bool translate_values(NODE, VPTR);
 
 /*********************************************
  * local variables
@@ -110,10 +110,10 @@ static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
  *  ifeed: [IN]  output methods
  *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
-BOOLEAN
+bool
 import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
-	BOOLEAN rtn=FALSE;
+	bool rtn=false;
 
 	flineno = 0;
 	rtn = do_import(ifeed, fp);
@@ -125,22 +125,22 @@ import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
  *  ifeed: [IN]  output methods
  *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
-static BOOLEAN
+static bool
 do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
 	NODE node, conv;
 	XLAT ttm = 0;
-	STRING msg;
-	BOOLEAN emp;
+	String msg;
+	bool emp;
 	INT nindi = 0, nfam = 0, neven = 0;
 	INT nsour = 0, nothr = 0, type, num = 0;
 	INT totkeys = 0, totused = 0;
 	char msgbuf[80];
-	BOOLEAN succeeded=FALSE;
-	STRING str,unistr=0;
+	bool succeeded=false;
+	String str,unistr=0;
 	ZSTR zerr=0;
 	TABLE metadatatab = create_table_str();
-	STRING gdcodeset=0;
+	String gdcodeset=0;
 	INT warnings=0;
 
 	/* start by assuming default */
@@ -227,7 +227,7 @@ retry_input_codeset:
 		if (!transl_is_xlat_valid(ttm)) {
 			ZSTR zstr=zs_new();
 			char csname[64];
-			BOOLEAN b;
+			bool b;
 			transl_release_xlat(ttm);
 			ttm = 0;
 			zs_setf(zstr, _("Cannot convert codeset (from <%s> to <%s>)")
@@ -249,7 +249,7 @@ retry_input_codeset:
 		|| (num_fams() > 0)
 		|| (num_sours() > 0)
 		|| (num_evens() > 0)
-		|| (num_othrs() > 0)) gd_reuse = FALSE;
+		|| (num_othrs() > 0)) gd_reuse = false;
 	else if((gd_reuse = check_stdkeys())) {
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
@@ -286,11 +286,11 @@ TODO: why were these here ?
 
 
 /* Add records to database */
-	node = convert_first_fp_to_node(fp, FALSE, ttm, &msg, &emp);
+	node = convert_first_fp_to_node(fp, false, ttm, &msg, &emp);
 	while (node) {
 		if (!(conv = node_to_node(node, &type))) {
 			free_nodes(node);
-			node = next_fp_to_node(fp, FALSE, ttm, &msg, &emp);
+			node = next_fp_to_node(fp, false, ttm, &msg, &emp);
 			continue;
 		}
 		switch (type) {
@@ -305,7 +305,7 @@ TODO: why were these here ?
 		if (ifeed && ifeed->added_rec_fnc)
 			ifeed->added_rec_fnc(nxref(conv)[1], ntag(conv), num);
 		free_nodes(node);
-		node = next_fp_to_node(fp, FALSE, ttm, &msg, &emp);
+		node = next_fp_to_node(fp, false, ttm, &msg, &emp);
 	}
 	if (msg) {
 		msg_error("%s", msg);
@@ -319,7 +319,7 @@ TODO: why were these here ?
 		addmissingkeys(SOUR_REC);
 		addmissingkeys(OTHR_REC);
 	}
-	succeeded = TRUE;
+	succeeded = true;
 
 end_import:
 	validate_end_import();
@@ -334,7 +334,7 @@ end_import:
 static void
 restore_record (NODE node, INT type, HINT_PARAM_UNUSED INT num)
 {
-	STRING old, new, str, key;
+	String old, new, str, key;
 
 	if (!node) return;
 	ASSERT(old = nxref(node));
@@ -366,8 +366,8 @@ restore_record (NODE node, INT type, HINT_PARAM_UNUSED INT num)
 /*==============================================================
  * translate_key -- Translate key from external to internal form
  *============================================================*/
-STRING
-translate_key (STRING key)    /* key does not have surrounding @ chars */
+String
+translate_key (String key)    /* key does not have surrounding @ chars */
 {
 	ELMNT elm;
 	INT dex = xref_to_index(key);
@@ -399,51 +399,51 @@ translate_key (STRING key)    /* key does not have surrounding @ chars */
 /*============================================================
  * translate_values -- Traverse function to translate pointers
  *==========================================================*/
-static BOOLEAN
+static bool
 translate_values (NODE node, HINT_PARAM_UNUSED VPTR param)
 {
-	STRING new;
-	if (!pointer_value(nval(node))) return TRUE;
+	String new;
+	if (!pointer_value(nval(node))) return true;
 	new = translate_key(rmvat(nval(node)));
 	stdfree(nval(node));
 	nval(node) = strsave(new);
-	return TRUE;
+	return true;
 }
 /*============================================================
  * is_lossy_conversion -- Is this a lossy codeset conversion?
  * (we say it is if from Unicode to non-Unicode)
  *==========================================================*/
-static BOOLEAN
+static bool
 is_lossy_conversion (const char * cs_src, const char * cs_dest)
 {
 	/* if no destination, then no conversion, not lossy */
-	if (!cs_dest || !cs_dest[0]) return FALSE;
+	if (!cs_dest || !cs_dest[0]) return false;
 	if (eqstr_ex(cs_src, cs_dest)) {
 		/* source same as destination, no conversion, not lossy */
-		return FALSE;
+		return false;
 	} else {
 		const char * cs_in = norm_charmap((char *)cs_src);
 		const char * cs_out = norm_charmap((char *)cs_dest);
 		/* conversion to unicode is not lossy */
-		if (is_unicode_encoding_name(cs_out)) return FALSE;
+		if (is_unicode_encoding_name(cs_out)) return false;
 		/* if source is ASCII, assume all ok, not lossy */
-		if (eqstr(cs_in, "ASCII")) return FALSE;
+		if (eqstr(cs_in, "ASCII")) return false;
 		/* everything else assumed lossy */
-		return TRUE;
+		return true;
 	}
 }
 /*============================================================
  * is_unicode_encoding_name -- Is this a unicode encoding?
  *==========================================================*/
-static BOOLEAN
+static bool
 is_unicode_encoding_name (const char * codeset)
 {
-	if (!codeset || !codeset[0]) return FALSE;
-	if (eqstr(codeset, "UTF-8")) return TRUE;
-	if (eqstr(codeset, "UCS-2LE")) return TRUE;
-	if (eqstr(codeset, "UCS-2BE")) return TRUE;
-	if (eqstr(codeset, "UTF-16LE")) return TRUE;
-	if (eqstr(codeset, "UTF-16BE")) return TRUE;
-	if (eqstr(codeset, "UTF-32")) return TRUE;
-	return FALSE;
+	if (!codeset || !codeset[0]) return false;
+	if (eqstr(codeset, "UTF-8")) return true;
+	if (eqstr(codeset, "UCS-2LE")) return true;
+	if (eqstr(codeset, "UCS-2BE")) return true;
+	if (eqstr(codeset, "UTF-16LE")) return true;
+	if (eqstr(codeset, "UTF-16BE")) return true;
+	if (eqstr(codeset, "UTF-32")) return true;
+	return false;
 }

@@ -37,7 +37,7 @@
  *  exename: [IN]  "Lines" or "llines" or "llexec"
  *=============================================*/
 void
-print_lines_usage (CNSTRING exename)
+print_lines_usage (CString exename)
 {
 	if (0 == strcmp(exename, "llexec")) {
 		printf(_("%s invokes the Lifelines report execution program without GUI."), exename);

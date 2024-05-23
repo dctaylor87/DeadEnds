@@ -97,7 +97,7 @@ choose_and_remove_family (void)
 	NODE fam, node, indi;
 	INDISEQ spseq, chseq;
 #endif
-	STRING tag, key;
+	String tag, key;
 	char confirm[512]="", members[64];
 	char spouses[32], children[32];
 	INT n;
@@ -113,10 +113,10 @@ choose_and_remove_family (void)
 		tag = ntag(node);
 		if (eqstr("HUSB", tag) || eqstr("WIFE", tag)) {
 			key = strsave(rmvat(nval(node)));
-			append_indiseq_null(spseq, key, NULL, TRUE, TRUE);
+			append_indiseq_null(spseq, key, NULL, true, true);
 		} else if (eqstr("CHIL", tag)) {
 			key = strsave(rmvat(nval(node)));
-			append_indiseq_null(chseq, key, NULL, TRUE, TRUE);
+			append_indiseq_null(chseq, key, NULL, true, true);
 		}
 	}
 
@@ -179,15 +179,15 @@ choose_and_remove_indi (NODE indi, CONFIRMQ confirmq)
  *  record:  [in]  record to remove (if null, will ask for record)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
-BOOLEAN
+bool
 choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1)))
-		return FALSE;
+		return false;
 	/* confirm if caller desired */
 	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfodel)))
-		return FALSE;
+		return false;
 
 	/* alright, we finished the UI, so delegate to the internal workhorse */
 	return remove_any_record(record, currentDatabase);
@@ -198,36 +198,36 @@ choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
  *  if NULL passed)
  *  nolast: don't remove last member of family?
  *=========================================*/
-BOOLEAN
-choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
+bool
+choose_and_remove_spouse (RECORD irec, RECORD frec, bool nolast)
 {
 	NODE fam;
 
 /* Identify spouse to remove */
 	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1);
-	if (!irec) return FALSE;
+	if (!irec) return false;
 	if (!FAMS(nztop(irec))) {
 		msg_error("%s", _(qSntprnt));
-		return FALSE;
+		return false;
 	}
 
 /* Identify family to remove spouse from */
-	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidsrmf), TRUE);
-	if (!frec) return FALSE;
+	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidsrmf), true);
+	if (!frec) return false;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
 		msg_error("%s", _(qSnormls));
-		return FALSE;
+		return false;
 	}
-	if (!ask_yes_or_no(_(qScfsrmv))) return FALSE;
+	if (!ask_yes_or_no(_(qScfsrmv))) return false;
 
 	/* call internal workhorse remove_spouse() to do the actual removal */
 	if (!remove_spouse(nztop(irec), fam, currentDatabase)) {
 		msg_error("%s", _(qSntsinf));
-		return FALSE;
+		return false;
 	}
 	msg_info("%s", _(qSoksrmv));
-	return TRUE;
+	return true;
 }
 /*===========================================
  * choose_and_remove_child -- Remove child
@@ -235,34 +235,34 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, BOOLEAN nolast)
  *  if NULL passed)
  *  nolast: don't remove last member of family?
  *=========================================*/
-BOOLEAN
-choose_and_remove_child (RECORD irec, RECORD frec, BOOLEAN nolast)
+bool
+choose_and_remove_child (RECORD irec, RECORD frec, bool nolast)
 {
 	NODE fam;
 
 /* Identify child and check for FAMC nodes */
 	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1);
-	if (!irec) return FALSE;
+	if (!irec) return false;
 	if (!FAMC(nztop(irec))) {
 		msg_error("%s", _(qSntchld));
-		return FALSE;
+		return false;
 	}
 
 /* Identify family to remove child from */
-	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidcrmf), FALSE);
-	if (!frec) return FALSE;
+	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidcrmf), false);
+	if (!frec) return false;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
 		msg_error("%s", _(qSnormls));
-		return FALSE;
+		return false;
 	}
-	if (!ask_yes_or_no(_(qScfcrmv))) return TRUE;
+	if (!ask_yes_or_no(_(qScfcrmv))) return true;
 
 	if (!remove_child(nztop(irec), fam, currentDatabase)) {
 		msg_error("%s", _(qSntcinf));
-		return FALSE;
+		return false;
 	}
 
 	msg_info("%s", _(qSokcrmv));
-	return TRUE;
+	return true;
 }

@@ -100,7 +100,7 @@ static PyObject *llpy_husband (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   NODE fam_node;
   NODE husb_node;
   LLINES_PY_RECORD *husb;
-  CNSTRING key;
+  CString key;
 
   fam_node = nztop (fam->llr_record);
   husb_node = HUSB (fam_node);
@@ -134,7 +134,7 @@ static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   NODE fam_node;
   NODE wife_node;
   LLINES_PY_RECORD *wife;
-  CNSTRING key;
+  CString key;
 
   fam_node = nztop (fam->llr_record);
   wife_node = WIFE (fam_node);
@@ -183,7 +183,7 @@ static PyObject *llpy_firstchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
   Database *database = fam->llr_database;
   NODE indi_node;
   LLINES_PY_RECORD *indi;
-  CNSTRING key;
+  CString key;
 
   indi_node = CHIL(nztop (fam->llr_record));
 
@@ -219,7 +219,7 @@ static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   NODE indi_node;
   NODE prev_node;
   LLINES_PY_RECORD *indi;
-  CNSTRING key;
+  CString key;
 
   indi_node = CHIL (nztop (fam->llr_record));
   prev_node = indi_node;
@@ -454,7 +454,7 @@ static PyObject *llpy_sync_fam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *py_record = (LLINES_PY_RECORD *) self;
   RECORD record = py_record->llr_record;
-  CNSTRING key = nzkey (record);
+  CString key = nzkey (record);
   String rawrec = 0;
   String msg = 0;
   int on_disk = 1;

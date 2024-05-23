@@ -51,8 +51,8 @@ curses_error (void *data, const char *buffer, char **err_msg);
 static void
 curses_outputv (void *data, char **err_msg,
 		MSG_LEVEL level, CString fmt, va_list args);
-static void append_to_msg_list (STRING msg);
-static void display_status (STRING text);
+static void append_to_msg_list (String msg);
+static void display_status (String text);
 #endif
 
 /* local variables */
@@ -101,7 +101,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
 		MSG_LEVEL level, CString fmt, va_list args)
 {
   char buffer[250];
-  STRING ptr;
+  String ptr;
   unsigned int width = MAINWIN_WIDTH-5;
   /* prefix errors & infos with * and space respectively */
   switch(level) {
@@ -128,7 +128,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
 	 so it is already on the msg list, we just need to make
 	 sure the msg list gets displayed */
       if (!viewing_msgs)
-	msg_flag = TRUE;
+	msg_flag = true;
     }
     display_status(buffer);
     return;
@@ -139,7 +139,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
   /* being careful in case we are currently *in* the msg list
      show routine */
   if (!viewing_msgs && (length_list(msg_list)>1 || lock_std_msg)) {
-    msg_flag = TRUE;
+    msg_flag = true;
   }
   /* now put it to status area if appropriate */
   if (!lock_std_msg) {
@@ -149,7 +149,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
       /*
 	TODO: This doesn't make sense until the msg list handles long strings
 	if (!viewing_msgs)
-	msg_flag = TRUE;
+	msg_flag = true;
       */
     }
     display_status(buffer);
@@ -164,7 +164,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
    put on the status bar, and it wasn't too wide. */
  
 static void
-append_to_msg_list (STRING msg)
+append_to_msg_list (String msg)
 {
   if (!msg_list)
     msg_list = create_list2(LISTDOFREE);
@@ -175,7 +175,7 @@ append_to_msg_list (STRING msg)
    That is caller's responsibility. */
  
 static void
-display_status (STRING text)
+display_status (String text)
 {
   UIWINDOW uiwin = main_win;
   WINDOW *win = uiw_win(uiwin);

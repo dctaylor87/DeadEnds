@@ -98,7 +98,7 @@ key_util (void)
 void
 who_is_he_she (void)
 {
-	STRING str, rawrec;
+	String str, rawrec;
 	NODE indi;
 	INT len;
 	char nkey[100];
@@ -160,7 +160,7 @@ sighand_cursesui(int sig)
   char abort_msg[len];
 
   close_lifelines();
-  shutdown_ui(TRUE); /* pause */
+  shutdown_ui(true); /* pause */
 
   showErrorLog(globalErrorLog);
 
@@ -177,7 +177,7 @@ void
 sighand_cursesui(HINT_PARAM_UNUSED int sig)
 {
 	char signum[20];
-	STRING signame;
+	String signame;
 	ZSTR zstr=0;
 
 	/* Ok, we'll want the descriptive name of the signal */
@@ -187,7 +187,7 @@ sighand_cursesui(HINT_PARAM_UNUSED int sig)
 	/* so we build the report msg, then close curses, then print it */
 	zstr = get_report_error_msg(qSprogsig);
 	close_lifelines();
-	shutdown_ui(TRUE); /* pause */
+	shutdown_ui(true); /* pause */
 
 	/* TODO: Shouldn't we be logging this ? */
 	/* now print report msg if we had one */

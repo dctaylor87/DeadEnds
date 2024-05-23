@@ -109,7 +109,7 @@ RECORD jumpnode; /* used by Ethel for direct navigation */
  * external/imported variables
  *********************************************/
 
-extern BOOLEAN traditional;
+extern bool traditional;
 
 /*********************************************
  * local enums & defines
@@ -134,12 +134,12 @@ static INT browse_indi_modes(RECORD *prec1, RECORD *prec2, INDISEQ *pseq
 static INT browse_pedigree(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 static RECORD disp_chistory_list(void);
 static RECORD disp_vhistory_list(void);
-static INT display_aux(RECORD rec, INT mode, BOOLEAN reuse);
+static INT display_aux(RECORD rec, INT mode, bool reuse);
 static INT get_hist_count(struct hist * histp);
 static INDISEQ get_history_list(struct hist * histp);
 static RECORD goto_fam_child(RECORD frec, int childno);
 static RECORD goto_indi_child(RECORD irec, int childno);
-static BOOLEAN handle_aux_mode_cmds(INT c, INT * mode);
+static bool handle_aux_mode_cmds(INT c, INT * mode);
 static INT handle_history_cmds(INT c, RECORD *prec1);
 static RECORD history_back(struct hist * histp);
 static RECORD do_disp_history_list(struct hist * histp);
@@ -152,7 +152,7 @@ static void load_hist_lists(void);
 static void load_nkey_list(CString key, struct hist * histp);
 #endif
 static void prompt_add_spouse_with_candidate(RECORD fam, RECORD save);
-static RECORD pick_create_new_family(RECORD current, RECORD save, STRING * addstrings);
+static RECORD pick_create_new_family(RECORD current, RECORD save, String * addstrings);
 static void pick_remove_spouse_from_family(RECORD frec);
 #if !defined(DEADENDS)
 static void save_hist_lists(void);
@@ -398,7 +398,7 @@ goto_fam_child (RECORD frec, int childno)
  * returns addref'd record
  *=============================================*/
 static RECORD
-pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
+pick_create_new_family (RECORD current, RECORD save, String * addstrings)
 {
 	INT i;
 	RECORD rec=0;
@@ -409,10 +409,10 @@ pick_create_new_family (RECORD current, RECORD save, STRING * addstrings)
 		rec = add_family_by_edit(NULL, NULL, current, false);
 	} else if (save) {
 		char scratch[100];
-		STRING name = indi_to_name(nztop(save), 55);
+		String name = indi_to_name(nztop(save), 55);
 		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
-			STRING key = rmvat(nxref(nztop(save)))+1;
+			String key = rmvat(nxref(nztop(save)))+1;
 			llstrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
 		}
 		if (ask_yes_or_no(scratch))
@@ -453,7 +453,7 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 	RECORD current=0;
 	CString key, name;
 	INT i, c, rc;
-	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
+	bool reuse=false; /* flag to reuse same display strings */
 	INT nkeyp, indimodep;
 #if defined(DEADENDS)
 	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
@@ -478,7 +478,7 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 	nkeyp = 0;
 	indimodep = indimode;
 
-	while (TRUE) {
+	while (true) {
 		setrecord(&tmp, NULL);
 		if (nzkeynum(current) != nkeyp 
 			|| indimode != indimodep) {
@@ -492,7 +492,7 @@ browse_indi_modes (RECORD *prec1, RECORD *prec2, INDISEQ *pseq, INT indimode)
 		nkeyp = nzkeynum(current);
 		indimodep = indimode;
 reprocess_indi_cmd: /* so one command can forward to another */
-		reuse = FALSE; /* don't reuse display unless specifically set */
+		reuse = false; /* don't reuse display unless specifically set */
 		if (c != CMD_NEWFAMILY) save = NULL;
 		if (handle_menu_cmds(c, &reuse))
 			continue;
@@ -515,7 +515,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
 			if ((tmp = choose_family(current, _(qSntprnt)
-				,  _(qSidfbrs), TRUE))) {
+				,  _(qSidfbrs), true))) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
 				goto exitbrowse;
@@ -523,9 +523,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_TANDEM_FAMILIES:
 			if ((tmp = choose_family(current, _(qSntprnt),
-				_(qSid1fbr), TRUE)) != 0) {
+				_(qSid1fbr), true)) != 0) {
 				if ((tmp2 = choose_family(current, _(qSntprnt),
-					_(qSid2fbr), TRUE)) != 0) {
+					_(qSid2fbr), true)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
 					rtn = BROWSE_2FAM;
@@ -667,7 +667,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((tmp = choose_family(current, _(qSnoprnt),
-				_(qSidfbrs), FALSE)) != 0) {
+				_(qSidfbrs), false)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
 				goto exitbrowse;
@@ -675,9 +675,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
 			if ((tmp = choose_family(current, _(qSnoprnt),
-				_(qSid1fbr), FALSE)) != 0) {
+				_(qSid1fbr), false)) != 0) {
 				if ((tmp2 = choose_family(current, _(qSnoprnt),
-					_(qSid2fbr), FALSE)) != 0) {
+					_(qSid2fbr), false)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
 					rtn = BROWSE_2FAM;
@@ -714,7 +714,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_NEWFAMILY:	/* Add family for current person */
 			{
-				STRING addstrings[2];
+				String addstrings[2];
 				addstrings[0] = _(qScrtcfm);
 				addstrings[1] = _(qScrtsfm);
 				if ((tmp = pick_create_new_family(current, save, addstrings)) != 0) {
@@ -753,7 +753,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			swap_families(current);
 			break;
 		case CMD_ADDASSPOUSE:	/* Add person as spouse */
-			prompt_add_spouse(current, NULL, TRUE);
+			prompt_add_spouse(current, NULL, true);
 			break;
 		case CMD_ADDASCHILD:    /* Add person as child */
 			my_prompt_add_child(nztop(current), NULL);
@@ -762,10 +762,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			indimode='i';
 			break;
 		case CMD_REMOVEASSPOUSE:	/* Remove person as spouse */
-			choose_and_remove_spouse(current, NULL, FALSE);
+			choose_and_remove_spouse(current, NULL, false);
 			break;
 		case CMD_REMOVEASCHILD:	/* Remove person as child */
-			choose_and_remove_child(current, NULL, FALSE);
+			choose_and_remove_child(current, NULL, false);
 			break;
 		case CMD_ADVANCED:	/* Advanced person edit */
 			advanced_person_edit(nztop(current));
@@ -831,7 +831,7 @@ exitbrowse:
  * Created: 2001/01/27, Perry Rapp
  *========================================*/
 static INT
-display_aux (RECORD rec, INT mode, BOOLEAN reuse)
+display_aux (RECORD rec, INT mode, bool reuse)
 {
 #if defined(DEADENDS)
 	INT c;
@@ -856,7 +856,7 @@ browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	RECORD current=0;
 	INT i, c;
-	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
+	bool reuse=false; /* flag to reuse same display strings */
 	INT nkeyp=0, auxmode=0, auxmodep=0;
 	char ntype=0, ntypep=0;
 	RECORD tmp=0;
@@ -881,7 +881,7 @@ browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	ntypep = 0;
 	auxmodep = auxmode;
 
-	while (TRUE) {
+	while (true) {
 		if (nzkeynum(current) != nkeyp
 			|| nztype(current) != ntypep
 			|| auxmode != auxmodep) {
@@ -895,7 +895,7 @@ browse_aux (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		ntypep = nztype(current);
 		auxmodep = auxmode;
 reprocess_aux_cmd:
-		reuse = FALSE; /* don't reuse display unless specifically set */
+		reuse = false; /* don't reuse display unless specifically set */
 		if (handle_menu_cmds(c, &reuse))
 			continue;
 		if (handle_scroll_cmds(c, &reuse))
@@ -1013,7 +1013,7 @@ pick_remove_spouse_from_family (RECORD frec)
 	NODE fref, husb, wife, chil, rest;
 	NODE root, node, spnodes[MAX_SPOUSES];
 #endif
-	STRING spstrings[MAX_SPOUSES];
+	String spstrings[MAX_SPOUSES];
 	INT i;
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
@@ -1026,10 +1026,10 @@ pick_remove_spouse_from_family (RECORD frec)
 		root = key_to_indi(rmvat(nval(node)));
 #if defined(DEADENDS)
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, true, TRUE);
+			 NULL, 66, true, true);
 #else
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, &disp_shrt_rfmt, TRUE);
+			 NULL, 66, &disp_shrt_rfmt, true);
 #endif
 		spnodes[i++] = root;
 	}
@@ -1037,10 +1037,10 @@ pick_remove_spouse_from_family (RECORD frec)
 		root = key_to_indi(rmvat(nval(node)));
 #if defined(DEADENDS)
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, true, TRUE);
+			 NULL, 66, true, true);
 #else
 		spstrings[i] = indi_to_list_string(root,
-			 NULL, 66, &disp_shrt_rfmt, TRUE);
+			 NULL, 66, &disp_shrt_rfmt, true);
 #endif
 		spnodes[i++] = root;
 		if (i == MAX_SPOUSES) {
@@ -1051,7 +1051,7 @@ pick_remove_spouse_from_family (RECORD frec)
 	join_fam(fam, fref, husb, wife, chil, rest);
 	i = choose_from_array(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
-	choose_and_remove_spouse(node_to_record(spnodes[i]), frec, TRUE);
+	choose_and_remove_spouse(node_to_record(spnodes[i]), frec, true);
 }
 /*===============================================
  * prompt_add_spouse_with_candidate -- 
@@ -1068,7 +1068,7 @@ prompt_add_spouse_with_candidate (RECORD fam, RECORD candidate)
 #else
 	NODE fref, husb, wife, chil, rest;
 #endif
-	BOOLEAN confirm;
+	bool confirm;
 	char scratch[100];
 
 	split_fam(nztop(fam), &fref, &husb, &wife, &chil, &rest);
@@ -1147,7 +1147,7 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	RECORD current=0;
 	INT i, c, rc;
-	BOOLEAN reuse=FALSE; /* flag to reuse same display strings */
+	bool reuse=false; /* flag to reuse same display strings */
 	static INT fammode='n';
 	INT nkeyp, fammodep;
 #if defined(DEADENDS)
@@ -1175,7 +1175,7 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	nkeyp = 0;
 	fammodep = fammode;
 
-	while (TRUE) {
+	while (true) {
 		setrecord(&tmp, NULL);
 		if (nzkeynum(current) != nkeyp
 			|| fammode != fammodep) {
@@ -1188,7 +1188,7 @@ browse_fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		nkeyp = nzkeynum(current);
 		fammodep = fammode;
 reprocess_fam_cmd: /* so one command can forward to another */
-		reuse = FALSE; /* don't reuse display unless specifically set */
+		reuse = false; /* don't reuse display unless specifically set */
 		if (c != CMD_ADDCHILD && c != CMD_ADDSPOUSE)
 			save = NULL;
 		if (handle_menu_cmds(c, &reuse))
@@ -1291,7 +1291,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		case CMD_REMOVECHILD:	/* Remove a child */
 			if ((tmp = choose_child(NULL, current, _(qSnocinf),
 				_(qSidcrmv), DOASK1)) != 0) {
-				choose_and_remove_child(tmp, current, TRUE);
+				choose_and_remove_child(tmp, current, true);
 				setrecord(&tmp, 0);
 			}
 			break;
@@ -1453,57 +1453,57 @@ exitbrowse:
  * system (eg, paging, changing current menu size).
  * Created: 2001/01/31, Perry Rapp
  *====================================================*/
-BOOLEAN
-handle_menu_cmds (INT c, BOOLEAN * reuse)
+bool
+handle_menu_cmds (INT c, bool * reuse)
 {
-	BOOLEAN old = *reuse;
+	bool old = *reuse;
 	/* if a menu command, then we CAN reuse the previous display strings */
-	*reuse = TRUE;
+	*reuse = true;
 	switch(c) {
-		case CMD_MENU_GROW: adjust_browse_menu_height(+1); return TRUE;
-		case CMD_MENU_SHRINK: adjust_browse_menu_height(-1); return TRUE;
-		case CMD_MENU_MORECOLS: adjust_browse_menu_cols(+1); return TRUE;
-		case CMD_MENU_LESSCOLS: adjust_browse_menu_cols(-1); return TRUE;
-		case CMD_MENU_MORE: cycle_browse_menu(); return TRUE;
-		case CMD_MENU_TOGGLE: toggle_browse_menu(); return TRUE;
+		case CMD_MENU_GROW: adjust_browse_menu_height(+1); return true;
+		case CMD_MENU_SHRINK: adjust_browse_menu_height(-1); return true;
+		case CMD_MENU_MORECOLS: adjust_browse_menu_cols(+1); return true;
+		case CMD_MENU_LESSCOLS: adjust_browse_menu_cols(-1); return true;
+		case CMD_MENU_MORE: cycle_browse_menu(); return true;
+		case CMD_MENU_TOGGLE: toggle_browse_menu(); return true;
 	}
 	*reuse = old;
-	return FALSE;
+	return false;
 }
 /*======================================================
  * handle_scroll_cmds -- Handle detail scrolling
  * Created: 2001/02/01, Perry Rapp
  *====================================================*/
-BOOLEAN
-handle_scroll_cmds (INT c, BOOLEAN * reuse)
+bool
+handle_scroll_cmds (INT c, bool * reuse)
 {
-	BOOLEAN old = *reuse;
+	bool old = *reuse;
 	/* if a menu command, then we CAN reuse the previous display strings */
-	*reuse = TRUE;
+	*reuse = true;
 	switch(c) {
-		case CMD_SCROLL_UP: show_scroll(-1); return TRUE;
-		case CMD_SCROLL_DOWN: show_scroll(+1); return TRUE;
+		case CMD_SCROLL_UP: show_scroll(-1); return true;
+		case CMD_SCROLL_DOWN: show_scroll(+1); return true;
 	}
 	*reuse = old;
-	return FALSE;
+	return false;
 }
 /*======================================================
  * handle_indi_mode_cmds -- Handle indi modes
  * Created: 2001/02/04, Perry Rapp
  *====================================================*/
-BOOLEAN
+bool
 handle_indi_mode_cmds (INT c, INT * mode)
 {
 	switch(c) {
-		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
-		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
-		case CMD_MODE_GEDCOMT: *mode = 't'; return TRUE;
+		case CMD_MODE_GEDCOM: *mode = 'g'; return true;
+		case CMD_MODE_GEDCOMX: *mode = 'x'; return true;
+		case CMD_MODE_GEDCOMT: *mode = 't'; return true;
 		case CMD_MODE_PEDIGREE:
 			*mode = (*mode=='a')?'d':'a';
-			return TRUE;
-		case CMD_MODE_ANCESTORS: *mode = 'a'; return TRUE;
-		case CMD_MODE_DESCENDANTS: *mode = 'd'; return TRUE;
-		case CMD_MODE_NORMAL: *mode = 'n'; return TRUE;
+			return true;
+		case CMD_MODE_ANCESTORS: *mode = 'a'; return true;
+		case CMD_MODE_DESCENDANTS: *mode = 'd'; return true;
+		case CMD_MODE_NORMAL: *mode = 'n'; return true;
 		case CMD_MODE_CYCLE: 
 			switch(*mode) {
 			case 'n': *mode = 'a'; break;
@@ -1513,22 +1513,22 @@ handle_indi_mode_cmds (INT c, INT * mode)
 			case 'x': *mode = 't'; break;
 			case 't': *mode = 'n'; break;
 			}
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 /*======================================================
  * handle_fam_mode_cmds -- Handle indi modes
  * Created: 2001/02/04, Perry Rapp
  *====================================================*/
-BOOLEAN
+bool
 handle_fam_mode_cmds (INT c, INT * mode)
 {
 	switch(c) {
-		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
-		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
-		case CMD_MODE_GEDCOMT: *mode = 't'; return TRUE;
-		case CMD_MODE_NORMAL: *mode = 'n'; return TRUE;
+		case CMD_MODE_GEDCOM: *mode = 'g'; return true;
+		case CMD_MODE_GEDCOMX: *mode = 'x'; return true;
+		case CMD_MODE_GEDCOMT: *mode = 't'; return true;
+		case CMD_MODE_NORMAL: *mode = 'n'; return true;
 		case CMD_MODE_CYCLE: 
 			switch(*mode) {
 			case 'n': *mode = 'g'; break;
@@ -1536,30 +1536,30 @@ handle_fam_mode_cmds (INT c, INT * mode)
 			case 'x': *mode = 't'; break;
 			case 't': *mode = 'n'; break;
 			}
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 /*======================================================
  * handle_aux_mode_cmds -- Handle aux modes
  * Created: 2001/02/11, Perry Rapp
  *====================================================*/
-BOOLEAN
+bool
 handle_aux_mode_cmds (INT c, INT * mode)
 {
 	switch(c) {
-		case CMD_MODE_GEDCOM: *mode = 'g'; return TRUE;
-		case CMD_MODE_GEDCOMX: *mode = 'x'; return TRUE;
-		case CMD_MODE_GEDCOMT: *mode = 't'; return TRUE;
+		case CMD_MODE_GEDCOM: *mode = 'g'; return true;
+		case CMD_MODE_GEDCOMX: *mode = 'x'; return true;
+		case CMD_MODE_GEDCOMT: *mode = 't'; return true;
 		case CMD_MODE_CYCLE: 
 			switch(*mode) {
 			case 'g': *mode = 'x'; break;
 			case 'x': *mode = 't'; break;
 			case 't': *mode = 'g'; break;
 			}
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 /*======================================================
  * browse_pedigree -- Handle pedigree browse selections.
@@ -1728,10 +1728,10 @@ term_hist (struct hist * histp)
 static void
 load_nkey_list (CString key, struct hist * histp)
 {
-	STRING rawrec;
-	INT32 * ptr;
-	INT32 count;
-	INT32 temp;
+	String rawrec;
+	int32_t * ptr;
+	int32_t count;
+	int32_t temp;
 	INT len, i;
 
 	count = 0;
@@ -1739,7 +1739,7 @@ load_nkey_list (CString key, struct hist * histp)
 		return;
 	if (len < 8 || (len % 8) != 0)
 		return;
-	ptr = (INT32 *)rawrec;
+	ptr = (int32_t *)rawrec;
 	temp = *ptr++;
 	if (temp<0 || temp > 9999) {
 		/* #records failed sanity check */
@@ -1812,8 +1812,8 @@ save_nkey_list (CString key, struct hist * histp)
 {
 	FILE * fp=0;
 	INT i, next;
-	INT32 count;	// write buffer for histp->count value
-	INT32 temp;	// write buffer for histp->list[] values
+	int32_t count;	// write buffer for histp->count value
+	int32_t temp;	// write buffer for histp->list[] values
 	size_t rtn;
 
 	count = get_hist_count(histp);
@@ -2025,8 +2025,8 @@ get_history_list (struct hist * histp)
 		NODE node=0;
 		nkey_to_node(&histp->list[next], &node);
 		if (node) {
-			STRING key = node_to_key(node);
-			append_indiseq_null(seq, key, NULL, TRUE, FALSE);
+			String key = node_to_key(node);
+			append_indiseq_null(seq, key, NULL, true, false);
 		}
 		next = (next+1) % histp->size;
 		if (next == histp->past_end)
@@ -2141,7 +2141,7 @@ add_new_rec_maybe_ref (RECORD current, char ntype)
 {
 	RECORD newrec=0;
 	NODE newnode;
-	STRING choices[4];
+	String choices[4];
 	char title[60];
 	INT rtn;
 
@@ -2165,13 +2165,13 @@ add_new_rec_maybe_ref (RECORD current, char ntype)
 	snprintf(title, sizeof(title), _(qSnewrecis), nxref(newnode));
 	msg_info("%s", title);
 	/* keep new node # in status so it will be visible during edit */
-	lock_status_msg(TRUE);
+	lock_status_msg(true);
 	choices[0] = _(qSautoxref);
 	choices[1] = _(qSeditcur);
 	choices[2] = _(qSgotonew);
 	choices[3] = _(qSstaycur);
 	rtn = choose_from_array(NULL, 4, choices);
-	lock_status_msg(FALSE);
+	lock_status_msg(false);
 	switch(rtn) {
 	case 0: 
 		autoadd_xref(current, newnode);

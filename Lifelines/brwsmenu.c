@@ -53,7 +53,7 @@ MenuItem g_MenuItemQuit = { N_("q  Return to main menu"), 0, CMD_QUIT, 0 };
  *********************************************/
 
 struct BrowseScreenInfo {
-	STRING title;
+	String title;
 	struct tag_dynmenu dynmenu;
 };
 
@@ -68,15 +68,15 @@ static void browsescreen_init(struct BrowseScreenInfo * sinfo , CString title, I
 	, INT MenuTop, INT MenuLeft, INT MenuWidth
 	, INT MenuSize, MenuItem ** MenuItems);
 static void brwsmenu_on_lang_change(VPTR uparm);
-static void register_brwsmenu_lang_callbacks(BOOLEAN registering);
+static void register_brwsmenu_lang_callbacks(bool registering);
 
 /*********************************************
  * local variables
  *********************************************/
 
 struct BrowseScreenInfo f_BrowseScreenInfo[MAX_SCREEN+1]; /* init'd by brwsmenu_initialize */
-static BOOLEAN f_initialized=FALSE;
-static BOOLEAN f_reloading=FALSE;
+static bool f_initialized=false;
+static bool f_reloading=false;
 static INT f_screenheight;
 static INT f_screenwidth;
 static INT f_cols;
@@ -507,7 +507,7 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 			memset(sinfo, 0, sizeof(*sinfo));
 			sinfo->title = strsave(_("Missing title"));
 		}
-		f_initialized = TRUE;
+		f_initialized = true;
 	}
 
 	scr = ONE_PER_SCREEN;
@@ -592,7 +592,7 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 		, MenuSize, MenuItems);
 
 	if (!f_reloading) {
-		register_brwsmenu_lang_callbacks(TRUE);
+		register_brwsmenu_lang_callbacks(true);
 	}
 }
 /*============================
@@ -603,21 +603,21 @@ menuitem_terminate (void)
 {
 	INT i;
 	if (!f_reloading) {
-		register_brwsmenu_lang_callbacks(FALSE);
+		register_brwsmenu_lang_callbacks(false);
 	}
 	for (i=1; i<=MAX_SCREEN; i++) {
 		struct BrowseScreenInfo * sinfo=&f_BrowseScreenInfo[i];
 		dynmenu_clear(&sinfo->dynmenu);
 		strfree(&sinfo->title);
 	}
-	f_initialized = FALSE;
+	f_initialized = false;
 }
 /*============================
  * register_brwsmenu_lang_callbacks -- (un)register our callbacks
  *  for language or codeset changes
  *==========================*/
 static void
-register_brwsmenu_lang_callbacks (BOOLEAN registering)
+register_brwsmenu_lang_callbacks (bool registering)
 {
 	if (registering) {
 		register_uilang_callback(brwsmenu_on_lang_change, 0);
@@ -633,10 +633,10 @@ register_brwsmenu_lang_callbacks (BOOLEAN registering)
 static void
 brwsmenu_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 {
-	f_reloading = TRUE;
+	f_reloading = true;
 	menuitem_terminate();
 	brwsmenu_initialize(0, 0); /* 0 means use stored values */
-	f_reloading = FALSE;
+	f_reloading = false;
 }
 /*============================
  * get_screen_menuset -- get menuset of specified browse screen
@@ -660,7 +660,7 @@ get_screen_dynmenu (INT screen)
  * get_screen_title -- get title of specified browse screen
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
-STRING
+String
 get_screen_title (INT screen)
 {
 	return f_BrowseScreenInfo[screen].title;

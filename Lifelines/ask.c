@@ -97,7 +97,7 @@ extern char badkeylist[];
  *********************************************/
 
 static RECORD ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, INT *prc);
-static void make_fname_prompt(STRING fnamebuf, INT len, STRING ext);
+static void make_fname_prompt(String fnamebuf, INT len, String ext);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by 
@@ -144,22 +144,22 @@ ask_for_fam (CString pttl, CString sttl)
 		msg_error("%s", _(qSntprnt));
 		return NULL;
 	}
-	return choose_family(prn, _(qSparadox), _(qSidfbrs), TRUE);
+	return choose_family(prn, _(qSparadox), _(qSidfbrs), true);
 }
 /*===========================================
  * ask_for_int -- Ask user to provide integer
  * titl: [IN]  prompt title
- * TODO: change to BOOLEAN return for failure
+ * TODO: change to bool return for failure
  *=========================================*/
-BOOLEAN
+bool
 ask_for_int (CString ttl, INT * prtn)
 {
 	INT ival, c, neg;
 	char buffer[MAXPATHLEN];
-	while (TRUE) {
-		STRING p = buffer;
+	while (true) {
+		String p = buffer;
 		if (!ask_for_string(ttl, _(qSaskint), buffer, sizeof(buffer)))
-			return FALSE;
+			return false;
 		neg = 1;
 		while (iswhite(*p++))
 			;
@@ -181,7 +181,7 @@ ask_for_int (CString ttl, INT * prtn)
 			--p;
 			if (*p == 0) {
 				*prtn = ival*neg;
-				return TRUE;
+				return true;
 			}
 		}
 	}
@@ -197,17 +197,17 @@ typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
 ask_for_file_worker (CString mode,
                      CString ttl,
-                     STRING *pfname,
-                     STRING *pfullpath,
-                     STRING path,
-                     STRING ext,
+                     String *pfname,
+                     String *pfullpath,
+                     String path,
+                     String ext,
                      DIRECTION direction)
 {
 	FILE *fp;
 	char prompt[MAXPATHLEN];
 	char fname[MAXPATHLEN];
 	int elen, flen;
-	BOOLEAN rtn;
+	bool rtn;
 
 	make_fname_prompt(prompt, sizeof(prompt), ext);
 
@@ -272,7 +272,7 @@ ask_for_file_try:
  * Created: 2001/12/24, Perry Rapp
  *====================================*/
 static void
-make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
+make_fname_prompt (String fnamebuf, INT len, String ext)
 {
 	if (ISNULL(ext)) {
 		ext = NULL;	/* a null extension is the same as no extension */
@@ -291,10 +291,10 @@ make_fname_prompt (STRING fnamebuf, INT len, STRING ext)
 FILE *
 ask_for_input_file (CString mode,
                     CString ttl,
-                    STRING *pfname,
-                    STRING *pfullpath,
-                    STRING path,
-                    STRING ext)
+                    String *pfname,
+                    String *pfullpath,
+                    String path,
+                    String ext)
 {
 	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, INPUT);
 }
@@ -307,10 +307,10 @@ ask_for_input_file (CString mode,
 FILE *
 ask_for_output_file (CString mode,
                      CString ttl,
-                     STRING *pfname,
-                     STRING *pfullpath,
-                     STRING path,
-                     STRING ext)
+                     String *pfname,
+                     String *pfullpath,
+                     String path,
+                     String ext)
 {
 	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, OUTPUT);
 }
@@ -327,7 +327,7 @@ ask_for_output_file (CString mode,
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 INDISEQ
-ask_for_indiseq (CNSTRING ttl, char ctype, INT *prc)
+ask_for_indiseq (CString ttl, char ctype, INT *prc)
 {
 	while (1)
 	{
@@ -405,7 +405,7 @@ RECORD
 ask_for_any (CString ttl, ASK1Q ask1)
 {
 	char ctype = 0; /* code for any type */
-	while (TRUE) {
+	while (true) {
 		INT rc;
 		RECORD record = ask_for_any_once(ttl, ctype, ask1, &rc);
 		if (rc == RC_DONE || rc == RC_SELECT)
@@ -420,9 +420,9 @@ ask_for_any (CString ttl, ASK1Q ask1)
  * used by both reports & interactive use
  *=================================================================*/
 INDISEQ
-ask_for_indi_list (CString ttl, BOOLEAN reask)
+ask_for_indi_list (CString ttl, bool reask)
 {
-	while (TRUE) {
+	while (true) {
 		INT rc = RC_DONE;
 		INDISEQ seq = ask_for_indiseq(ttl, 'I', &rc);
 		if (rc == RC_DONE)
@@ -446,7 +446,7 @@ ask_for_indi_list (CString ttl, BOOLEAN reask)
 /*==========================================================
  * ask_for_indi_key -- Have user identify person; return key
  *========================================================*/
-STRING
+String
 ask_for_indi_key (CString ttl, ASK1Q ask1)
 {
 	RECORD indi = ask_for_indi(ttl, ask1);
@@ -499,7 +499,7 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, CString titl1, CString titln)
 	if (-1 == get_indiseq_ival(seq, i)) /* invalid pointer */
 		badkeylist[0] = 0;
 	else {
-		CNSTRING skey = element_key_indiseq(seq, i);
+		CString skey = element_key_indiseq(seq, i);
 		rec = key_to_record(skey);
 	}
 	listbadkeys = 0;
@@ -546,7 +546,7 @@ ask_for_record (CString idstr, INT letr)
  * ask_for_record_key -- Ask user to enter record key
  * returns NULL or strsave'd answer
  *=============================================*/
-STRING
+String
 ask_for_record_key (CString title, CString prompt)
 {
 	char answer[MAXPATHLEN];

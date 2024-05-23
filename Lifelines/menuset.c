@@ -50,8 +50,8 @@
  *********************************************/
 
 struct tag_cmditem {
-	uchar c;
-	BOOLEAN direct; /* (T: command value, F: pointer) */
+	u_char c;
+	bool direct; /* (T: command value, F: pointer) */
 #if defined(DEADENDS)
 	VUnion value; /* command value, or pointer to CommandArray */
 #else
@@ -74,13 +74,13 @@ struct tag_cmdarray {
 static void add_menu_item(CMDARRAY cmds, MenuItem * mitem);
 static CMDARRAY create_cmd_array(INT alloc);
 static void copy_cmditem(CMDITEM dest, CMDITEM src);
-static BOOLEAN find_cmd(CMDARRAY cmds, uchar c, INT * pos);
+static bool find_cmd(CMDARRAY cmds, u_char c, INT * pos);
 static void free_cmds(CMDARRAY cmds);
-static void get_menu_choice(STRING display, STRING choice, INT max);
+static void get_menu_choice(String display, String choice, INT max);
 static void grow_cmd_array(CMDARRAY cmds);
-static void insert_cmd(CMDARRAY cmds, STRING str, INT cmdnum
-	, STRING display);
-static INT menuitem_find_cmd(CMDARRAY cmds, STRING cmd);
+static void insert_cmd(CMDARRAY cmds, String str, INT cmdnum
+	, String display);
+static INT menuitem_find_cmd(CMDARRAY cmds, String cmd);
 
 /*********************************************
  * local variables
@@ -178,7 +178,7 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
  *==========================*/
 /* This will work now, but it will break if we add arrows, PageUp, ... */
 static void
-get_menu_choice (STRING display, STRING choice, INT max)
+get_menu_choice (String display, String choice, INT max)
 {
 	INT i;
 	for (i=0; i<max && display[i] && display[i]!=' ' ; ++i) {
@@ -238,8 +238,8 @@ copy_cmditem (CMDITEM dest, CMDITEM src)
  * find_cmd -- search commands for command by character
  * Created: 2001/02/01, Perry Rapp
  *==========================*/
-static BOOLEAN
-find_cmd (CMDARRAY cmds, uchar c, INT * pos)
+static bool
+find_cmd (CMDARRAY cmds, u_char c, INT * pos)
 {
 	INT lo=0, hi=cmds->used-1, i;
 	while (lo<=hi) {
@@ -250,11 +250,11 @@ find_cmd (CMDARRAY cmds, uchar c, INT * pos)
 			hi=i-1;
 		else {
 			*pos = i;
-			return TRUE;
+			return true;
 		}
 	}
 	*pos = lo;
-	return FALSE;
+	return false;
 }
 /*============================
  * insert_cmd -- add cmd to array (recursive)
@@ -265,11 +265,11 @@ find_cmd (CMDARRAY cmds, uchar c, INT * pos)
  * Created: 2001/02/01, Perry Rapp
  *==========================*/
 static void
-insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
+insert_cmd (CMDARRAY cmds, String str, INT cmdnum, String display)
 {
 	INT len = strlen(str);
 	INT pos;
-	uchar c = str[0];
+	u_char c = str[0];
 	if (find_cmd(cmds, c, &pos)) {
 		if (len==1) {
 			crashlog(_("In menu: %s"), f_current_title);
@@ -305,7 +305,7 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 			copy_cmditem(&cmds->array[i], &cmds->array[i-1]);
 		cmds->array[pos].c = c;
 		if (len==1) {
-			cmds->array[pos].direct = TRUE;
+			cmds->array[pos].direct = true;
 #if defined(DEADENDS)
 			cmds->array[pos].value.uInt = cmdnum;
 #else
@@ -314,7 +314,7 @@ insert_cmd (CMDARRAY cmds, STRING str, INT cmdnum, STRING display)
 		} else {
 			/* multicharacter new cmd */
 			CMDARRAY newcmds = create_cmd_array(8);
-			cmds->array[pos].direct = FALSE;
+			cmds->array[pos].direct = false;
 #if defined(DEADENDS)
 			cmds->array[pos].value.uWord = newcmds;
 #else
@@ -351,7 +351,7 @@ free_cmds (CMDARRAY cmds)
  * Created: 2001/02/01, Perry Rapp
  *==========================*/
 INT
-menuset_check_cmd (MENUSET menuset, STRING str)
+menuset_check_cmd (MENUSET menuset, String str)
 {
 	CMDARRAY cmds = menuset->Commands;
 	if (*str == '*') return CMD_MENU_TOGGLE;
@@ -363,7 +363,7 @@ menuset_check_cmd (MENUSET menuset, STRING str)
  * Created: 2001/02/01, Perry Rapp
  *==========================*/
 static INT
-menuitem_find_cmd (CMDARRAY cmds, STRING str)
+menuitem_find_cmd (CMDARRAY cmds, String str)
 {
 	INT pos;
 	if (!find_cmd(cmds, *str, &pos))

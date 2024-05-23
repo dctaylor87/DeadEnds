@@ -93,7 +93,7 @@
  * (with user interaction)
  * returns TRUE if user makes changes (& saves them)
  *===================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 edit_indi (RECORD irec1, bool rfmt)
 #else
@@ -109,7 +109,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 
 /* Identify indi if necessary */
 	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOASK1)))
-		return FALSE;
+		return false;
 	indi1 = nztop(irec1);
 
 /* Prepare file for user to edit */
@@ -123,10 +123,10 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 /* Have user edit file */
 	do_edit();
 
-	while (TRUE) {
+	while (true) {
 		INT cnt;
-		STRING msg;
-		BOOLEAN emp;
+		String msg;
+		bool emp;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!indi2) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
@@ -168,10 +168,10 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 
 /* Editing done; see if database changes */
 
-	if (!indi2) return FALSE;
+	if (!indi2) return false;
 	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(qScfpupt))) {
 		free_nodes(indi2);
-		return FALSE;
+		return false;
 	}
 
 /* Move new data (in indi2 children) into existing indi1 tree */
@@ -181,13 +181,13 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 	history_record_change(irec1);
 	
 	msg_status(_(qSgdpmod), indi_to_name(indi1, 35));
-	return TRUE;
+	return true;
 }
 /*====================================
  * edit_fam -- Edit family in database
  * (with user interaction)
  *==================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 edit_family (RECORD frec1, bool rfmt)
 #else
@@ -201,19 +201,19 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 #endif
 	RECORD irec=0;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	STRING msg;
-	BOOLEAN changed = FALSE;
+	String msg;
+	bool changed = false;
 
 /* Identify family if necessary */
 	if (!frec1) {
 		irec = ask_for_indi(_(qSidspse), NOASK1);
-		if (!irec) return FALSE;
+		if (!irec) return false;
 		if (!FAMS(nztop(irec))) {
 			msg_error("%s", _(qSntprnt));
 			goto end_edit_fam;
 		} 
-		frec1 = choose_family(irec, _(qSparadox), _(qSidfbys), TRUE);
-		if (!frec1) return FALSE; 
+		frec1 = choose_family(irec, _(qSparadox), _(qSidfbys), true);
+		if (!frec1) return false; 
 	}
 	fam1 = nztop(frec1);
 
@@ -226,9 +226,9 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 
 /* Have user edit record */
 	do_edit();
-	while (TRUE) {
+	while (true) {
 		INT cnt;
-		BOOLEAN emp;
+		bool emp;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
@@ -270,7 +270,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 
 /* If error or user backs out return */
 
-	if (!fam2) return FALSE;
+	if (!fam2) return false;
 	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(qScffupt)))
 		goto end_edit_fam;
 
@@ -279,7 +279,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 	fam2 = NULL;
 
 	msg_status("%s", _(qSgdfmod));
-	changed = TRUE;
+	changed = true;
 
 end_edit_fam:
 	if (fam2)

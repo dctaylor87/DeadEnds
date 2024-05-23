@@ -59,7 +59,7 @@ PyObject *llpy_date (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
   NODE node = event->lnn_node;
-  String str = event_to_date (node, FALSE);
+  String str = event_to_date (node, false);
 
   if (! str)			/* no date recorded for event */
     Py_RETURN_NONE;
@@ -71,7 +71,7 @@ PyObject *llpy_place (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
   NODE node = event->lnn_node;
-  String str = event_to_plac (node, FALSE);
+  String str = event_to_plac (node, false);
 
   if (! str)			/* no place recorded for event */
     Py_RETURN_NONE;
@@ -96,7 +96,7 @@ PyObject *llpy_year (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 PyObject *llpy_year (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
-  String str = event_to_date (event->lnn_node, FALSE);
+  String str = event_to_date (event->lnn_node, false);
   GDATEVAL gdv;
   char buffer[20];
 
@@ -331,7 +331,7 @@ PyObject *llpy_complexdate_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   String input_str;
   String output_str;
 
-  input_str = event_to_date (py_node->lnn_node, FALSE);
+  input_str = event_to_date (py_node->lnn_node, false);
   output_str = do_format_date (input_str,
 			       py_dateformat.pyd_dayformat,
 			       py_dateformat.pyd_monthformat,
@@ -361,7 +361,7 @@ static PyObject *llpy_stddate_str  (PyObject *self ATTRIBUTE_UNUSED, PyObject *a
 				py_dateformat.pyd_monthformat,
 				py_dateformat.pyd_yearformat,
 				py_dateformat.pyd_dateformat,
-				py_dateformat.pyd_eraformat, FALSE);
+				py_dateformat.pyd_eraformat, false);
 
   return Py_BuildValue ("s", output_date);
 }
@@ -376,14 +376,14 @@ PyObject *llpy_stddate_node  (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   char *input_date;
   char *output_date;
 
-  input_date = event_to_date (py_node->lnn_node, FALSE);
+  input_date = event_to_date (py_node->lnn_node, false);
 
   output_date = do_format_date (input_date,
 				py_dateformat.pyd_dayformat,
 				py_dateformat.pyd_monthformat,
 				py_dateformat.pyd_yearformat,
 				py_dateformat.pyd_dateformat,
-				py_dateformat.pyd_eraformat, FALSE);
+				py_dateformat.pyd_eraformat, false);
 
   return Py_BuildValue ("s", output_date);
 }

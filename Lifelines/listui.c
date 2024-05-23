@@ -124,11 +124,11 @@ typedef struct listdisp_s
 
 /* alphabetical */
 static void activate_popup_list_uiwin (listdisp * ld);
-static void display_string(UIWINDOW uiwin, LLRECT rect, STRING text);
+static void display_string(UIWINDOW uiwin, LLRECT rect, String text);
 static INT handle_list_cmds(listdisp * ld, INT code);
-static BOOLEAN handle_popup_list_resize(listdisp * ld, INT code);
+static bool handle_popup_list_resize(listdisp * ld, INT code);
 static void print_list_title(char * buffer, INT len, const listdisp * ld, CString ttl);
-static void shw_array_of_strings(STRING *strings, listdisp *ld
+static void shw_array_of_strings(String *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
 static void shw_popup_list(INDISEQ seq, listdisp * ld);
 static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
@@ -173,14 +173,14 @@ listui_init_windows (INT extralines)
  * returns 0-based index chosen, or -1 if cancelled
  *============================================*/
 INT
-array_interact (CString ttl, INT len, STRING *strings
-	, BOOLEAN selectable, DETAILFNC detfnc, void * param)
+array_interact (CString ttl, INT len, String *strings
+	, bool selectable, DETAILFNC detfnc, void * param)
 {
 	WINDOW *win=0;
 	INT row, done;
 	char fulltitle[128];
-	STRING responses = len<10 ? "jkiq123456789[]()$^" : "jkiq[]()$^";
-	STRING promptline=0;
+	String responses = len<10 ? "jkiq123456789[]()$^" : "jkiq[]()$^";
+	String promptline=0;
 	listdisp ld; /* structure used in resizable list displays */
 
 	if (selectable)
@@ -200,7 +200,7 @@ resize_win: /* we come back here if we resize the window */
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
 	mvccwaddstr(win, row, ld.rectMenu.left, promptline);
-	done = FALSE;
+	done = false;
 	while (!done) {
 		INT code=0, ret=0;
 		print_list_title(fulltitle, sizeof(fulltitle), &ld, _(ttl));
@@ -221,7 +221,7 @@ resize_win: /* we come back here if we resize the window */
 			case 'i': /* select current item */
 			case CMD_KY_ENTER:
 				if (selectable) {
-					done=TRUE;
+					done=true;
 				}
 				break;
 			case '1':
@@ -234,12 +234,12 @@ resize_win: /* we come back here if we resize the window */
 			case '8':
 			case '9':
 				if (len < 10 && selectable && code - '1' < len) {
-					done=TRUE;
+					done=true;
 					ld.cur = code - '1';
 				}
 				break;
 			case 'q':
-				done=TRUE;
+				done=true;
 				ld.cur = -1; /* ld.cur == -1 means cancelled */
 			}
 		}
@@ -259,15 +259,15 @@ resize_win: /* we come back here if we resize the window */
  * Localizes ttl
  *===========================================================*/
 INT
-choose_one_or_list_from_indiseq (CString ttl, INDISEQ seq, BOOLEAN multi)
+choose_one_or_list_from_indiseq (CString ttl, INDISEQ seq, bool multi)
 {
 	WINDOW *win=0;
 	INT row, done;
 	char fulltitle[128];
 	INT elemwidth;
 	listdisp ld; /* structure used in resizable list displays */
-	STRING menu, choices;
-	BOOLEAN first=TRUE;
+	String menu, choices;
+	bool first=true;
 
 	ASSERT(seq);
 
@@ -297,14 +297,14 @@ resize_win: /* we come back here if we resize the window */
 #else
 			preprint_indiseq(seq, elemwidth, &disp_shrt_rfmt);
 #endif
-		first=FALSE;
+		first=false;
 	}
 	uierase(ld.uiwin);
 	draw_win_box(win);
 	row = ld.rectMenu.top-1;
 	show_horz_line(ld.uiwin, row++, 0, uiw_cols(ld.uiwin));
 	mvccwaddstr(win, row, ld.rectMenu.left, menu);
-	done = FALSE;
+	done = false;
 	while (!done) {
 		INT code=0, ret=0;
 		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
@@ -332,7 +332,7 @@ resize_win: /* we come back here if we resize the window */
 				delete_indiseq(seq, NULL, NULL, ld.cur);
 #endif
 				if (!(ld.listlen = length_indiseq(seq))) {
-					done=TRUE;
+					done=true;
 					ld.cur = -1;
 				}
 				if (ld.cur == ld.listlen) ld.cur--;
@@ -340,7 +340,7 @@ resize_win: /* we come back here if we resize the window */
 				break;
 			case 'i':
 			case CMD_KY_ENTER:
-				done=TRUE;
+				done=true;
 				/* ld.cur points to currently selected */
 				break;
 			case '1':
@@ -353,12 +353,12 @@ resize_win: /* we come back here if we resize the window */
 			case '8':
 			case '9':
 				if (ld.listlen < 10 && code - '1' < ld.listlen) {
-					done=TRUE;
+					done=true;
 					ld.cur = code - '1';
 				}
 				break;
 			case 'q':
-				done=TRUE;
+				done=true;
 				ld.cur = -1; /* ld.cur == -1 means cancelled */
 				break;
 			}
@@ -390,7 +390,7 @@ handle_list_cmds (listdisp * ld, INT code)
 			if (ld->cur >= ld->top + rows)
 				ld->top = ld->cur + 1 - rows;
 		}
-		return TRUE; /* handled */
+		return true; /* handled */
 	case 'd':
 	case CMD_KY_PGDN:
 		if (ld->top + rows < ld->listlen) {
@@ -399,7 +399,7 @@ handle_list_cmds (listdisp * ld, INT code)
 			if (ld->cur > ld->listlen - 1)
 				ld->cur = ld->listlen - 1;
 		}
-		return TRUE; /* handled */
+		return true; /* handled */
 	case 'D':
 	case CMD_KY_SHPGDN:
 		if (ld->top + rows < ld->listlen) {
@@ -412,14 +412,14 @@ handle_list_cmds (listdisp * ld, INT code)
 			if (ld->cur > ld->listlen - 1)
 				ld->cur = ld->listlen - 1;
 		}
-		return TRUE; /* handled */
+		return true; /* handled */
 	case '$': /* jump to end of list */
 	case CMD_KY_END:
 		ld->top = ld->listlen - rows;
 		if (ld->top < 0)
 			ld->top = 0;
 		ld->cur = ld->listlen-1;
-		return TRUE; /* handled */
+		return true; /* handled */
 	case 'k': /* previous item */
 	case CMD_KY_UP:
 		if (ld->cur > 0) {
@@ -427,14 +427,14 @@ handle_list_cmds (listdisp * ld, INT code)
 			if (ld->cur < ld->top)
 				ld->top = ld->cur;
 		}
-		return TRUE; /* handled */
+		return true; /* handled */
 	case 'u':
 	case CMD_KY_PGUP:
 		tmp = rows;
 		if (tmp > ld->top) tmp = ld->top;
 		ld->top -= tmp;
 		ld->cur -= tmp;
-		return TRUE; /* handled */
+		return true; /* handled */
 	case 'U':
 	case CMD_KY_SHPGUP:
 		tmp = (ld->listlen)/10;
@@ -442,21 +442,21 @@ handle_list_cmds (listdisp * ld, INT code)
 		if (tmp > ld->top) tmp = ld->top;
 		ld->cur -= tmp;
 		ld->top -= tmp;
-		return TRUE; /* handled */
+		return true; /* handled */
 	case '^': /* jump to top of list */
 	case CMD_KY_HOME:
 		ld->top = ld->cur = 0;
-		return TRUE; /* handled */
+		return true; /* handled */
 	case '(': /* scroll detail area up */
 		if (ld->details_scroll)
 			ld->details_scroll--;
-		return TRUE; /* handled */
+		return true; /* handled */
 	case ')': /* scroll detail area down */
 		if (ld->details_scroll<2)
 			ld->details_scroll++;
 		return 1; /* handled */
 	}
-	return FALSE; /* unhandled */
+	return false; /* unhandled */
 }
 /*=====================================================
  * shw_popup_list -- Draw list & details of popup list
@@ -486,7 +486,7 @@ shw_recordlist_details (INDISEQ seq, listdisp * ld)
 	WINDOW *win = uiw_win(ld->uiwin);
 	INT i;
 	CString key, name;
-	BOOLEAN reuse=FALSE; /* don't reuse display strings in list */
+	bool reuse=false; /* don't reuse display strings in list */
 	for (i=ld->rectDetails.top; i<=ld->rectDetails.bottom; ++i) {
 		clear_hseg(win, i, ld->rectDetails.left, ld->rectDetails.right-10);
 	}
@@ -500,9 +500,9 @@ shw_recordlist_details (INDISEQ seq, listdisp * ld)
 /*=============================================================
  * handle_popup_list_resize -- Process resizes of popup list
  * In popup list, details & list compete, & menu is fixed
- * Returns TRUE if handled, FALSE if not
+ * Returns true if handled, FALSE if not
  *===========================================================*/
-static BOOLEAN
+static bool
 handle_popup_list_resize (listdisp * ld, INT code)
 {
 	INT delta;
@@ -522,11 +522,11 @@ handle_popup_list_resize (listdisp * ld, INT code)
 			ld->details += delta;
 			ld->rectDetails.bottom += delta;
 			ld->rectList.top += delta;
-			return TRUE; /* handled */
+			return true; /* handled */
 		}
-		return TRUE; /* handled (nothing) */
+		return true; /* handled (nothing) */
 	}
-	return FALSE; /* unhandled */
+	return false; /* unhandled */
 }
 /*=====================================================
  * shw_recordlist_list -- Draw actual list items
@@ -541,7 +541,7 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 	INT i, j, row;
 	INT offset=4;
 	char buffer[160];
-	BOOLEAN scrollable = (rows < ld->listlen);
+	bool scrollable = (rows < ld->listlen);
 	/* for short lists, use leading numbers */
 	if (ld->listlen < 10) {
 		snprintf(buffer, sizeof(buffer), FMT_INT ": ", ld->listlen);
@@ -590,7 +590,7 @@ shw_recordlist_list (INDISEQ seq, listdisp * ld)
 static void
 print_list_title (char * buffer, INT len, const listdisp * ld, CString ttl)
 {
-	STRING ptr = buffer;
+	String ptr = buffer;
 	char suffix[30];
 	if (len > uiw_cols(ld->uiwin)-2)
 		len = uiw_cols(ld->uiwin)-2;
@@ -616,11 +616,11 @@ print_list_title (char * buffer, INT len, const listdisp * ld, CString ttl)
  *  param:   [IN]  opaque data for callback
  *==============================================================*/
 static void
-shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
+shw_array_of_strings (String *strings, listdisp * ld, DETAILFNC detfnc
 	, void * param)
 {
 	/* 120 spaces */
-	STRING empstr120 = "                                                                                                                        ";
+	String empstr120 = "                                                                                                                        ";
 	WINDOW *win = uiw_win(ld->uiwin);
 	INT i, j, row, lines;
 	INT rows = ld->rectList.bottom - ld->rectList.top + 1;
@@ -664,7 +664,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		row++;
 	}
 	if (ld->details) {
-		STRING ptr = strings[ld->cur];
+		String ptr = strings[ld->cur];
 		INT count;
 		row = 2;
 		mvccwaddstr(win, row++, 2, _("-- CURRENT SELECTION --"));
@@ -679,7 +679,7 @@ shw_array_of_strings (STRING *strings, listdisp * ld, DETAILFNC detfnc
 		if (count && detfnc) {
 			/* caller gave us a detail callback, so we set up the
 			data needed & call it */
-			STRING * linestr = (STRING *)stdalloc(count * sizeof(STRING));
+			String * linestr = (String *)stdalloc(count * sizeof(String));
 			struct tag_array_details dets;
 			for (j=0; j<count; ++j) {
 				linestr[j] = stdalloc(width);
@@ -725,7 +725,7 @@ activate_popup_list_uiwin (listdisp * ld)
 	if (hgt>POPUP_LINES)
 		hgt = POPUP_LINES;
 	create_newwin2(&ld->uiwin, "list", hgt, LISTWIN_WIDTH);
-	uiw_dynamic(ld->uiwin) = TRUE; /* delete when finished */
+	uiw_dynamic(ld->uiwin) = true; /* delete when finished */
 	/* list is below details to nearly bottom */
 	ld->rectList.left = 1;
 	ld->rectList.right = LISTWIN_WIDTH-2;
@@ -770,10 +770,10 @@ activate_popup_list_uiwin (listdisp * ld)
  *  handle embedded carriage returns
  *===================================================*/
 static void
-display_string (UIWINDOW uiwin, LLRECT rect, STRING text)
+display_string (UIWINDOW uiwin, LLRECT rect, String text)
 {
 	INT max = rect->right - rect->left + 2;
-	STRING str = stdalloc(max), p2;
+	String str = stdalloc(max), p2;
 	WINDOW *win = uiw_win(uiwin);
 	INT row = rect->top;
 	wipe_window_rect(uiwin, rect);
@@ -812,7 +812,7 @@ A solution would be to pass in what is known from browse_list, and then
 manufacture a listdisp here
 - Perry, 2002/01/01
 */
-	static STRING empstr51 = (STRING) "                                                   ";
+	static String empstr51 = (String) "                                                   ";
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	INT i, j, row, len = length_indiseq(seq);
@@ -821,7 +821,7 @@ manufacture a listdisp here
 	char scratch[200];
 	INT mode = 'n';
 	INT viewlines = 13;
-	BOOLEAN scrollable = (viewlines < len);
+	bool scrollable = (viewlines < len);
 
 	calc_indiseq_names(seq); /* we certainly need the names */
 	
@@ -837,7 +837,7 @@ manufacture a listdisp here
 		if (i == cur) {
 			INT drow=1;
 			INT scroll=0;
-			BOOLEAN reuse=FALSE;
+			bool reuse=false;
 			struct tag_llrect rectList;
 			rectList.top = drow;
 			rectList.bottom = drow + LIST_LINES-1;

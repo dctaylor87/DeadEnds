@@ -121,7 +121,7 @@ interact_worker (UIWINDOW uiwin, CString str, INT screen)
 	INT c, i, n = str ? strlen(str) : 0;
 
 	/* Menu Loop */
-	while (TRUE)
+	while (true)
 	{
 		INT time_start=time(NULL);
 		crmode();
@@ -145,7 +145,7 @@ interact_worker (UIWINDOW uiwin, CString str, INT screen)
 		}
 		if (str) { /* traditional: list of choice letters */
 			for (i = 0; i < n; i++) {
-				if (c == (uchar)str[i]) return c;
+				if (c == (u_char)str[i]) return c;
 			}
 		} else { /* new menus (in menuitem.c) */
 			if (offset < (INT)sizeof(buffer)-1) {

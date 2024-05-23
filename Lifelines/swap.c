@@ -84,7 +84,7 @@
  * local function prototypes
  *********************************************/
 static INT child_index(NODE child, NODE fam);
-static BOOLEAN confirm_and_swap_children_impl(NODE fam, NODE one, NODE two);
+static bool confirm_and_swap_children_impl(NODE fam, NODE one, NODE two);
 static void swap_children_impl(NODE fam, NODE one, NODE two);
 
 /*=============================================
@@ -92,7 +92,7 @@ static void swap_children_impl(NODE fam, NODE one, NODE two);
  *  prnt: [IN]  parent (may be NULL)
  *  fam:  [IN]  family (may be NULL)
  *===========================================*/
-BOOLEAN
+bool
 swap_children (RECORD prnt, RECORD frec)
 {
 #if defined(DEADENDS)
@@ -105,11 +105,11 @@ swap_children (RECORD prnt, RECORD frec)
 /* Identify parent if need be */
 	if (frec) goto gotfam;
 	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
-	if (!prnt) return FALSE;
+	if (!prnt) return false;
 	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
 		msg_error("%s", _(qSntchld));
-		return FALSE;
+		return false;
 	}
 
 /* Identify family if need be */
@@ -117,14 +117,14 @@ swap_children (RECORD prnt, RECORD frec)
 		frec = key_to_frecord(rmvat(nval(FAMS(nztop(prnt)))));
 		goto gotfam;
 	}
-	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE)))
-		return FALSE;
+	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), true)))
+		return false;
 gotfam:
 	fam = nztop(frec);
 	nchil = num_children(fam);
 	if (nchil < 2) {
 		msg_error("%s", _(qSless2c));
-		return FALSE;
+		return false;
 	}
 
 	if (nchil == 2) {
@@ -140,10 +140,10 @@ gotfam:
 		STRING key1, key2;
 		/* Identify children to swap */
 		chil1 = choose_child(NULL, frec, "e", _(qSid1csw), NOASK1);
-		if (!chil1) return FALSE;
+		if (!chil1) return false;
 		chil2 = choose_child(NULL, frec, "e", _(qSid2csw), NOASK1);
-		if (!chil2) return FALSE;
-		if (chil1 == chil2) return FALSE;
+		if (!chil2) return false;
+		if (chil1 == chil2) return false;
 		key1 = nxref(nztop(chil1));
 		key2 = nxref(nztop(chil2));
 
@@ -159,9 +159,9 @@ gotfam:
 	}
 
 	if (!confirm_and_swap_children_impl(fam, one, two))
-		return FALSE;
+		return false;
 	msg_info("%s", _(qSokcswp));
-	return TRUE;
+	return true;
 }
 /*=============================================
  * confirm_and_swap_children_impl -- Swap input children in input family
@@ -170,14 +170,14 @@ gotfam:
  * inputs assumed valie
  * confirm then call worker
  *===========================================*/
-static BOOLEAN
+static bool
 confirm_and_swap_children_impl (NODE fam, NODE one, NODE two)
 {
 	if (!ask_yes_or_no(_(qScfchswp)))
-		return FALSE;
+		return false;
 
 	swap_children_impl(fam, one, two);
-	return TRUE;
+	return true;
 }
 /*=============================================
  * swap_children_impl -- Swap input children in input family
@@ -207,7 +207,7 @@ swap_children_impl (NODE fam, NODE one, NODE two)
  *  fam:  [IN]  family (may be NULL)
  *  rftm: [IN]  person formatting for prompts
  *===========================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 reorder_child (RECORD prnt, RECORD frec, bool rfmt)
 #else
@@ -225,11 +225,11 @@ reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 /* Identify parent if need be */
 	if (frec) goto gotfam;
 	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
-	if (!prnt) return FALSE;
+	if (!prnt) return false;
 	nfam = num_families(nztop(prnt));
 	if (nfam <= 0) {
 		msg_error("%s", _(qSntchld));
-		return FALSE;
+		return false;
 	}
 
 /* Identify family if need be */
@@ -237,14 +237,14 @@ reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
 		frec = key_to_frecord(rmvat(nval(FAMS(nztop(prnt)))));
 		goto gotfam;
 	}
-	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), TRUE))) 
-		return FALSE;
+	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), true))) 
+		return false;
 gotfam:
 	fam = nztop(frec);
 	nchil = num_children(fam);
 	if (nchil < 2) {
 		msg_error("%s", _(qSless2c));
-		return FALSE;
+		return false;
 	}
 
 	if (nchil == 2) {
@@ -252,14 +252,14 @@ gotfam:
 		NODE one = CHIL(fam);
 		NODE two = nsibling(one);
 		if (!confirm_and_swap_children_impl(fam, one, two))
-			return FALSE;
+			return false;
 		message("%s", _(qSokcswp));
-		return TRUE;
+		return true;
 	}
 
 	/* Identify children to swap */
 	child = nztop(choose_child(NULL, frec, "e", _(qSidcrdr), NOASK1));
-	if (!child) return FALSE;
+	if (!child) return false;
 
 	prevorder = child_index(child, fam);
 
@@ -270,7 +270,7 @@ gotfam:
 	if (i == -1 || !ask_yes_or_no(_(qScfchswp))) {
 		/* must put child back if cancel */
 		add_child_to_fam(child, fam, prevorder);
-		return FALSE;
+		return false;
 	}
 
 /* Add FAMC node to child */
@@ -278,7 +278,7 @@ gotfam:
 	add_child_to_fam(child, fam, i);
 
 	fam_to_dbase(fam);
-	return TRUE;
+	return true;
 }
 /*=============================================
  * child_index -- What is child's birth index in this family ?
@@ -313,7 +313,7 @@ child_index (NODE child, NODE fam)
  *  prompt for families if person chosen has >2
  *  Ask for yes/no confirm
  *===========================================*/
-BOOLEAN
+bool
 swap_families (RECORD irec)
 {
 #if defined(DEADENDS)
@@ -326,16 +326,16 @@ swap_families (RECORD irec)
 
 /* Find person and assure has >= 2 families */
 	if (!irec) irec = ask_for_indi(_(qSidfswp), NOASK1);
-	if (!irec) return FALSE;
+	if (!irec) return false;
 	indi = nztop(irec);
 	if (!(fams = FAMS(indi))) {
 		msg_error("%s", _(qSntprnt));
-		return FALSE;
+		return false;
 	}
 	nfam = num_families(indi);
 	if (nfam < 2) {
 		msg_error("%s", _(qSless2f));
-		return FALSE;
+		return false;
 	}
 
 /* Find families to swap */
@@ -352,11 +352,11 @@ swap_families (RECORD irec)
 #endif
 		STRING key1, key2;
 		/* prompt for families */
-		fam1 = nztop(choose_family(irec, _(qSparadox), _(qSid1fsw), TRUE));
-		if (!fam1) return FALSE;
-		fam2 = nztop(choose_family(irec, _(qSparadox), _(qSid2fsw), TRUE));
-		if (!fam2) return FALSE;
-		if (fam1 == fam2) return FALSE;
+		fam1 = nztop(choose_family(irec, _(qSparadox), _(qSid1fsw), true));
+		if (!fam1) return false;
+		fam2 = nztop(choose_family(irec, _(qSparadox), _(qSid2fsw), true));
+		if (!fam2) return false;
+		if (fam1 == fam2) return false;
 		key1 = nxref(fam1);
 		key2 = nxref(fam2);
 		/* loop through families & find the ones chosen */
@@ -374,7 +374,7 @@ swap_families (RECORD irec)
 
 /* Ask user to confirm */
 	if (!ask_yes_or_no(_(qScffswp)))
-		return FALSE;
+		return false;
 
 /* Swap FAMS nodes and update database */
 	str = nval(one);
@@ -385,5 +385,5 @@ swap_families (RECORD irec)
 	nchild(two) = tmp;
 	indi_to_dbase(indi);
 	msg_info("%s", _(qSokfswp));
-	return TRUE;
+	return true;
 }

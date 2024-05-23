@@ -99,7 +99,7 @@
 #include "messages.h"
 #endif
 
-extern BOOLEAN traditional;
+extern bool traditional;
 
 /*********************************************
  * local function prototypes
@@ -132,8 +132,8 @@ add_indi_by_edit (RFMT rfmt)
 	FILE *fp;
 	RECORD indi0=0;
 	NODE indi=0;
-	STRING str, msg;
-	BOOLEAN emp;
+	String str, msg;
+	bool emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Create person template for user to edit */
@@ -155,7 +155,7 @@ add_indi_by_edit (RFMT rfmt)
 
 	fclose(fp);
 	do_edit();
-	while (TRUE) {
+	while (true) {
 		INT cnt;
 		if (indi0) {
 			release_record(indi0);
@@ -225,7 +225,7 @@ add_new_indi_to_db (RECORD indi0)
 	NODE name, refn, sex, body, dumb, node;
 #endif
 	char key[MAXKEYWIDTH]="";
-	INT32 keynum=0;
+	int32_t keynum=0;
 	NODE indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
@@ -252,7 +252,7 @@ add_new_indi_to_db (RECORD indi0)
  *  (used by import)
  * (no user interaction)
  *==============================================================*/
-BOOLEAN
+bool
 add_indi_no_cache (NODE indi)
 {
 #if defined(DEADENDS)
@@ -260,7 +260,7 @@ add_indi_no_cache (NODE indi)
 #else
 	NODE node, name, refn, sex, body, famc, fams;
 #endif
-	STRING str, key;
+	String str, key;
 
 	// Save INDI key value since rmvat static array entries may get reused
 	// before we write the INDI out (for example, >32 ASSO tags). This
@@ -278,7 +278,7 @@ add_indi_no_cache (NODE indi)
 	store_record(key, str, strlen(str));
 	stdfree(str);
 	stdfree(key);
-	return TRUE;
+	return true;
 }
 /*========================================================
  * ask_child_order --  ask user in what order to put child
@@ -295,7 +295,7 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
 #endif
 {
 	INT i, nchildren;
-	STRING *childstrings, *childkeys;
+	String *childstrings, *childkeys;
 /* If first child in family, confirm and add */
 
 	childstrings = get_child_strings(fam, rfmt, &nchildren, &childkeys,
@@ -435,8 +435,8 @@ add_child_to_fam (NODE child, NODE fam, INT i)
  *  conf:    [IN]  whether or not caller wants user to confirm
  * (with user interaction)
  *=================================*/
-BOOLEAN
-prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
+bool
+prompt_add_spouse (RECORD sprec, RECORD frec, bool conf)
 {
 #if defined(DEADENDS)
 	SexType sex;
@@ -449,23 +449,23 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 	/* Identify spouse to add to family */
 
 	if (!sprec) sprec = ask_for_indi(_(qSidsadd), DOASK1);
-	if (!sprec) return FALSE;
+	if (!sprec) return false;
 	spouse = nztop(sprec);
 #if defined(DEADENDS)
 	if ((sex = SEXV(spouse)) == sexUnknown) {
 		msg_error("%s", _(qSnosex));
-		return FALSE;
+		return false;
 	}
 #else
 	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
 	  msg_error("%s", _(qSnosex));
-	  return FALSE;
+	  return false;
 	}
 #endif
 /* Identify family to add spouse to */
 
 	if (!fam) fam = nztop(ask_for_fam(_(qSidsinf), _(qSkchild)));
-	if (!fam) return FALSE;
+	if (!fam) return false;
 
 /* Check that spouse can be added */
 
@@ -480,30 +480,30 @@ prompt_add_spouse (RECORD sprec, RECORD frec, BOOLEAN conf)
 #if defined(DEADENDS)
 		if (sex == sexMale && husb) {
 			msg_error("%s", _(qShashsb));
-			return FALSE;
+			return false;
 		}
 		if (sex == sexFemale && wife) {
 			msg_error("%s", _(qShaswif));
-			return FALSE;
+			return false;
 		}
 #else
 		if (sex == SEX_MALE && husb) {
 			msg_error("%s", _(qShashsb));
-			return FALSE;
+			return false;
 		}
 		if (sex == SEX_FEMALE && wife) {
 			msg_error("%s", _(qShaswif));
-			return FALSE;
+			return false;
 		}
 #endif
 	}
 
 	if (conf && !ask_yes_or_no(_(qScfsadd)))
-		return FALSE;
+		return false;
 
 	add_spouse_to_fam(spouse, fam, sex);
 	msg_status(_(qSgdsadd), indi_to_name(spouse, 35));
-	return TRUE;
+	return true;
 }
 /*===================================
  * add_spouse_to_fam -- Add spouse to family
@@ -580,7 +580,7 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
  * (no user interaction)
  *=======================================*/
 static void
-add_members_to_family (STRING xref, NODE spouse1, NODE spouse2, NODE child)
+add_members_to_family (String xref, NODE spouse1, NODE spouse2, NODE child)
 {
 #if defined(DEADENDS)
 	GNode *refn, *body;
@@ -655,8 +655,8 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 #endif
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
-	STRING msg=0, key=0, str=0;
-	BOOLEAN emp;
+	String msg=0, key=0, str=0;
+	bool emp;
 	FILE *fp=NULL;
 
 /* Handle case where child is known */
@@ -751,22 +751,22 @@ editfam:
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	prefix_file_for_edit(fp);
 
-	write_nodes(0, fp, ttmo, fam1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, husb, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, wife, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, fam1, true, true, true);
+	write_nodes(1, fp, ttmo, husb, true, true, true);
+	write_nodes(1, fp, ttmo, wife, true, true, true);
 	/* prefer user option in db */
 	if ((str = getlloptstr("FAMRECBODY", NULL)))
 		fprintf(fp, "%s\n", str);
 	else /* default */
 		fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
-	write_nodes(1, fp, ttmo, chil, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, ttmo, chil, true, true, true);
 	fclose(fp);
 	join_fam(fam1, NULL, husb, wife, chil, NULL);
 
 /* Have user edit family info */
 
 	do_edit();
-	while (TRUE) {
+	while (true) {
 		INT cnt;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
@@ -838,8 +838,8 @@ add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
 	NODE refn, husb, wife, chil, body;
 	NODE node;
 #endif
-	STRING key=0;
-	STRING xref = getfxref();
+	String key=0;
+	String xref = getfxref();
 
 	nxref(fam2) = strsave(xref);
 
@@ -887,8 +887,8 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 	NODE node;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
-	STRING xref, msg, key;
-	BOOLEAN emp;
+	String xref, msg, key;
+	bool emp;
 	FILE *fp;
 
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
@@ -919,11 +919,11 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 /* Create file */
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	write_nodes(0, fp, tto, fam1, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, husb, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, tto, wife, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, tto, fam1, true, true, true);
+	write_nodes(1, fp, tto, husb, true, true, true);
+	write_nodes(1, fp, tto, wife, true, true, true);
 	fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
-	write_nodes(1, fp, tto, chil, TRUE, TRUE, TRUE);
+	write_nodes(1, fp, tto, chil, true, true, true);
 	fclose(fp);
 	join_fam(fam1, NULL, husb, wife, chil, NULL);
 

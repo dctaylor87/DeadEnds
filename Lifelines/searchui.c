@@ -105,7 +105,7 @@ invoke_search_menu (void)
 	UIWINDOW uiwin=0;
 	INDISEQ seq=0;
 	INT code=0;
-	BOOLEAN done=FALSE;
+	bool done=false;
 
 	if (!search_menu_win) {
 		create_newwin2(&search_menu_win, "search_menu", 7,66);
@@ -126,17 +126,17 @@ invoke_search_menu (void)
 		case 'c':
 			seq = get_chistory_list();
 			if (seq)
-				done=TRUE;
+				done=true;
 			break;
 		case 'f':
 			seq = invoke_fullscan_menu();
 			break;
 		case 'q': 
-			done=TRUE;
+			done=true;
 			break;
 		}
 		if (seq)
-			done=TRUE;
+			done=true;
 		deactivate_uiwin_and_touch_all();
 	}
 	return seq;
@@ -149,7 +149,7 @@ repaint_search_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	STRING title = _(qSmn_sea_ttl);
+	String title = _(qSmn_sea_ttl);
 	INT n = 0;
 	char buffer[80];
 	draw_win_box(win);
@@ -191,7 +191,7 @@ invoke_fullscan_menu (void)
 	UIWINDOW uiwin=0;
 	INDISEQ seq=0;
 	INT code=0;
-	BOOLEAN done=FALSE;
+	bool done=false;
 
 	if (!fullscan_menu_win) {
 		create_newwin2(&fullscan_menu_win, "fullscan", 8, 66);
@@ -219,12 +219,12 @@ invoke_fullscan_menu (void)
 			seq = invoke_search_source_menu();
 			break;
 		case 'q': 
-			done=TRUE;
+			done=true;
 			break;
 		}
 		if (seq) {
 			if (length_indiseq(seq) > 0) {
-				done=TRUE;
+				done=true;
 			} else {
 				remove_indiseq(seq);
 				seq = NULL;
@@ -244,7 +244,7 @@ repaint_fullscan_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	STRING title = _("What scan type?");
+	String title = _("What scan type?");
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, title);
 	mvccwaddstr(win, row++, 4, _("f  Full name scan"));
@@ -266,7 +266,7 @@ invoke_search_source_menu (void)
 	UIWINDOW uiwin=0;
 	INDISEQ seq=0;
 	INT code=0;
-	BOOLEAN done=FALSE;
+	bool done=false;
 
 	if (!search_source_menu_win) {
 		create_newwin2(&search_source_menu_win, "search_source", 7 ,66);
@@ -288,12 +288,12 @@ invoke_search_source_menu (void)
 			seq = scan_souce_by_title(_(qSsts_sca_src));
 			break;
 		case 'q': 
-			done=TRUE;
+			done=true;
 			break;
 		}
 		if (seq) {
 			if (length_indiseq(seq) > 0) {
-				done=TRUE;
+				done=true;
 			} else {
 				remove_indiseq(seq);
 				seq = NULL;
@@ -314,7 +314,7 @@ repaint_search_source_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
 	INT row = 1;
-	STRING title = _("Scan on what source field?");
+	String title = _("Scan on what source field?");
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, title);
 	mvccwaddstr(win, row++, 4, _("a  Scan by author"));

@@ -98,17 +98,17 @@ int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
  *********************************************/
 
 
-static STRING usage_summary = "";      /* usage string */
-BOOLEAN debugmode = FALSE;     /* no signal handling, so we can get coredump */
-BOOLEAN opt_nocb  = FALSE;     /* no cb. data is displayed if TRUE */
-BOOLEAN keyflag   = TRUE;      /* show key values */
+static String usage_summary = "";      /* usage string */
+bool debugmode = false;     /* no signal handling, so we can get coredump */
+bool opt_nocb  = false;     /* no cb. data is displayed if TRUE */
+bool keyflag   = true;      /* show key values */
 INT alldone       = 0;         /* completion flag */
-extern BOOLEAN progrunning;
-extern BOOLEAN progparsing;
+extern bool progrunning;
+extern bool progparsing;
 extern INT     progerror;
-BOOLEAN traditional = TRUE;    /* use traditional family rules */
-BOOLEAN showusage = FALSE;     /* show usage */
-BOOLEAN showversion = FALSE;   /* show version */
+bool traditional = true;    /* use traditional family rules */
+bool showusage = false;     /* show usage */
+bool showversion = false;   /* show version */
 
 /*********************************************
  * local function prototypes
@@ -116,7 +116,7 @@ BOOLEAN showversion = FALSE;   /* show version */
 
 /* alphabetical */
 static void load_usage(void);
-static void main_db_notify(STRING db, BOOLEAN opening);
+static void main_db_notify(String db, bool opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void print_usage(void);
 
@@ -133,20 +133,20 @@ main (int argc, char **argv)
 {
 	char * msg;
 	int c;
-	BOOLEAN ok=FALSE;
-	BOOLEAN python_interactive = FALSE;
-	STRING dbrequested=NULL; /* database (path) requested */
-	STRING dbused=NULL; /* database (path) found */
+	bool ok=false;
+	bool python_interactive = false;
+	String dbrequested=NULL; /* database (path) requested */
+	String dbused=NULL; /* database (path) found */
 	INT alteration=0;
 	LIST exprogs=NULL;
 	TABLE exargs=NULL;
-	STRING progout=NULL;
-	BOOLEAN graphical=TRUE;
-	STRING configfile=0;
+	String progout=NULL;
+	bool graphical=true;
+	String configfile=0;
 
-	STRING crashlog=NULL;
+	String crashlog=NULL;
 	int i=0;
-	BOOLEAN have_python_scripts = FALSE;
+	bool have_python_scripts = false;
 
 	current_uiio = uiio_curses;
 
@@ -201,21 +201,21 @@ main (int argc, char **argv)
 #if defined(DEADENDS)
 		  logAllocations(true);
 #else
-			alloclog = TRUE;
+			alloclog = true;
 #endif
 			break;
 		case 'd':	/* debug = no signal catchers */
-			debugmode = TRUE;
+			debugmode = true;
 			break;
 		case 'k':	/* don't show key values */
-			keyflag = FALSE;
+			keyflag = false;
 			break;
 		case 'n':	/* use non-traditional family rules */
-			traditional = FALSE;
+			traditional = false;
 			break;
 #if !defined(DEADENDS)		/* XXX not currently supported by DeadEnds XXX */
 		case 't': /* show lots of trace statements for debugging */
-			prog_trace = TRUE;
+			prog_trace = true;
 			break;
 #endif
 		case 'u': /* specify screen dimensions */
@@ -229,7 +229,7 @@ main (int argc, char **argv)
 			break;
 		case 'I': /* program arguments */
 			{
-				STRING optname=0, optval=0;
+				String optname=0, optval=0;
 				parse_arg(optarg, &optname, &optval);
 				if (optname && optval) {
 					if (!exargs) {
@@ -249,28 +249,28 @@ main (int argc, char **argv)
 			progout = optarg;
 			break;
 		case 'z': /* nongraphical box */
-			graphical = FALSE;
+			graphical = false;
 			break;
 		case 'C': /* specify config file */
 			configfile = optarg;
 			break;
 		case 'P':	/* python interactive */
-			python_interactive = TRUE;
+			python_interactive = true;
 			break;
 		case 'p':
 #if HAVE_PYTHON
 			llpy_register_script (optarg);
 #endif
-			have_python_scripts = TRUE;
+			have_python_scripts = true;
 			break;
 		case 'v': /* show version */
-			showversion = TRUE;
+			showversion = true;
 			goto usage;
 			break;
 		case 'h': /* show usage */
 		case '?': /* show usage */
-			showusage = TRUE;
-			showversion = TRUE;
+			showusage = true;
+			showversion = true;
 			goto usage;
 			break;
 		}
@@ -321,7 +321,7 @@ prompt_for_db:
 
 	c = argc - optind;
 	if (c > 1) {
-		showusage = TRUE;
+		showusage = true;
 		goto usage;
 	}
 
@@ -332,7 +332,7 @@ prompt_for_db:
 	}
 	/* Open database, prompting user if necessary */
 	if (1) {
-		STRING errmsg=0;
+		String errmsg=0;
 		if (!alldone && c>0) {
 			dbrequested = strsave(argv[optind]);
 		} else {
@@ -367,31 +367,31 @@ prompt_for_db:
 #endif
 
 	if (exprogs) {
-		BOOLEAN picklist = FALSE;
-		BOOLEAN timing = FALSE;
+		bool picklist = false;
+		bool timing = false;
 		interp_main(exprogs, progout, picklist, timing);
 		destroy_list(exprogs);
 	} else if (have_python_scripts) {
 #if HAVE_PYTHON
-		int status = llpy_execute_scripts (FALSE);
+		int status = llpy_execute_scripts (false);
 		if (status < 0)
-			ok = FALSE;
+			ok = false;
 		else
-			ok = TRUE;
+			ok = true;
 #else
 		fprintf (stderr, "Sorry, but Python support is not available in this version of Lifelines\n");
-		ok=FALSE;
+		ok=false;
 #endif
 	} else if (python_interactive) {
 #if HAVE_PYTHON
 		int status = llpy_python_interactive ();
 		if ((status == 0))
-			ok=TRUE;
+			ok=true;
 		else
-			ok=FALSE;
+			ok=false;
 #else
 		fprintf (stderr, "Sorry, but Python support is not available in this version of Lifelines\n");
-		ok=FALSE;
+		ok=false;
 #endif
 	} else {
 		alldone = 0;
@@ -400,7 +400,7 @@ prompt_for_db:
 	}
 	term_show_module();
 	term_browse_module();
-	ok=TRUE;
+	ok=true;
 
 finish:
 	/* we free this not because we care so much about these tiny amounts
@@ -462,7 +462,7 @@ parse_arg (const char * optarg, char ** optname, char **optval)
  * Created: 2001/11/08, Perry Rapp
  *=================================================*/
 void
-shutdown_ui (BOOLEAN pause)
+shutdown_ui (bool pause)
 {
 	term_screen();
 	if (pause) /* if error, give user a second to read it */
@@ -507,7 +507,7 @@ print_usage (void)
  * Created: 2002/06/16, Perry Rapp
  *================================================*/
 static void
-main_db_notify (STRING db, BOOLEAN opening)
+main_db_notify (String db, bool opening)
 {
 	/* store name away for reporting in case of crash later */
 	if (opening)

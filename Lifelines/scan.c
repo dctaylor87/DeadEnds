@@ -78,11 +78,11 @@
 typedef struct
 {
 	INT scantype;
-	CNSTRING statusmsg;
+	CString statusmsg;
 	char pattern[64];
 	INDISEQ seq;
-	STRING field; /* field to scan, eg "AUTH" for sources by author */
-	BOOLEAN conts; /* include CONC & CONT children tags? */
+	String field; /* field to scan, eg "AUTH" for sources by author */
+	bool conts; /* include CONC & CONT children tags? */
 } SCANNER;
 
 /*********************************************
@@ -100,17 +100,17 @@ static INT SCAN_SRC_TITL=4;
  *********************************************/
 
 static void do_fields_scan(SCANNER * scanner, RECORD rec);
-static void do_name_scan(SCANNER * scanner, STRING prompt);
-static void do_sources_scan(SCANNER * scanner, CNSTRING prompt);
-static BOOLEAN ns_callback(CNSTRING key, CNSTRING name, BOOLEAN newset, void *param);
-static BOOLEAN rs_callback(CNSTRING key, CNSTRING refn, BOOLEAN newset, void *param);
-static void scanner_add_result(SCANNER * scanner, CNSTRING key);
-static BOOLEAN scanner_does_pattern_match(SCANNER *scanner, CNSTRING text);
+static void do_name_scan(SCANNER * scanner, String prompt);
+static void do_sources_scan(SCANNER * scanner, CString prompt);
+static bool ns_callback(CString key, CString name, bool newset, void *param);
+static bool rs_callback(CString key, CString refn, bool newset, void *param);
+static void scanner_add_result(SCANNER * scanner, CString key);
+static bool scanner_does_pattern_match(SCANNER *scanner, CString text);
 static INDISEQ scanner_free_and_return_seq(SCANNER * scanner);
-static void scanner_init(SCANNER * scanner, INT scantype, CNSTRING statusmsg);
+static void scanner_init(SCANNER * scanner, INT scantype, CString statusmsg);
 static void scanner_scan_titles(SCANNER * scanner);
-static void scanner_set_field(SCANNER * scanner, STRING field);
-static BOOLEAN scanner_set_pattern(SCANNER * scanner, STRING pattern);
+static void scanner_set_field(SCANNER * scanner, String field);
+static bool scanner_set_pattern(SCANNER * scanner, String pattern);
 
 /*********************************************
  * local function definitions
@@ -153,8 +153,8 @@ refn_scan (CString sts)
 
 	while (1) {
 		char request[MAXPATHLEN];
-		STRING prompt = _("Enter pattern to match against refn.");
-		BOOLEAN rtn = ask_for_string(prompt, _("pattern: "),
+		String prompt = _("Enter pattern to match against refn.");
+		bool rtn = ask_for_string(prompt, _("pattern: "),
 			request, sizeof(request));
 		if (!rtn || !request[0])
 			return scanner_free_and_return_seq(&scanner);
@@ -199,18 +199,18 @@ scan_souce_by_title (CString sts)
  *  prompt:    [IN]  appropriate prompt to ask for pattern
  *============================*/
 static void
-do_name_scan (SCANNER * scanner, STRING prompt)
+do_name_scan (SCANNER * scanner, String prompt)
 {
 	while (1) {
 		char request[MAXPATHLEN];
-		BOOLEAN rtn = ask_for_string(prompt, _("pattern: "),
+		bool rtn = ask_for_string(prompt, _("pattern: "),
 			request, sizeof(request));
 		if (!rtn || !request[0])
 			return;
 		if (scanner_set_pattern(scanner, request))
 			break;
 	}
-	msg_status("%s", (STRING)scanner->statusmsg);
+	msg_status("%s", (String)scanner->statusmsg);
 	traverse_names(ns_callback, scanner);
 }
 /*==============================
@@ -219,21 +219,21 @@ do_name_scan (SCANNER * scanner, STRING prompt)
  *  prompt:    [IN]  appropriate prompt to ask for pattern
  *============================*/
 static void
-do_sources_scan (SCANNER * scanner, CNSTRING prompt)
+do_sources_scan (SCANNER * scanner, CString prompt)
 {
 	INT keynum = 0;
 
 	while (1) {
 		char request[MAXPATHLEN];
-		BOOLEAN rtn = ask_for_string(prompt, _("pattern: "),
+		bool rtn = ask_for_string(prompt, _("pattern: "),
 			request, sizeof(request));
 		if (!rtn || !request[0])
 			return;
 		if (scanner_set_pattern(scanner, request))
 			break;
 	}
-	/* msg_status takes STRING arg, should take CNSTRING - const declaration error */
-	msg_status("%s", (STRING)scanner->statusmsg);
+	/* msg_status takes String arg, should take CString - const declaration error */
+	msg_status("%s", (String)scanner->statusmsg);
 
 	while (1) {
 		RECORD rec = 0;
@@ -255,22 +255,22 @@ do_fields_scan (SCANNER * scanner, RECORD rec)
 	/* NB: Only scanning top-level nodes right now */
 	NODE node = nztop(rec);
 	for (node = nchild(node); node; node = nsibling(node)) {
-		STRING tag = ntag(node);
+		String tag = ntag(node);
 		if (tag && eqstr(tag, scanner->field)) {
-			STRING val = nval(node);
+			String val = nval(node);
 			if (val && scanner_does_pattern_match(scanner, val)) {
-				CNSTRING key = nzkey(rec);
+				CString key = nzkey(rec);
 				scanner_add_result(scanner, key);
 				return;
 			}
 			if (scanner->conts) {
 				NODE node2 = 0;
 				for (node2 = nchild(node); node2; node2 = nsibling(node2)) {
-					STRING tag2 = ntag(node2);
+					String tag2 = ntag(node2);
 					if (tag2 && (eqstr(tag2, "CONC") || eqstr(tag2, "CONT"))) {
-						STRING val2 = nval(node2);
+						String val2 = nval(node2);
 						if (val2 && scanner_does_pattern_match(scanner, val2)) {
-							CNSTRING key = nzkey(rec);
+							CString key = nzkey(rec);
 							scanner_add_result(scanner, key);
 							return;
 						}
@@ -286,14 +286,14 @@ do_fields_scan (SCANNER * scanner, RECORD rec)
  * init_scan_pattern -- Initialize scan pattern fields
  *============================*/
 static void
-scanner_init (SCANNER * scanner, INT scantype, CNSTRING statusmsg)
+scanner_init (SCANNER * scanner, INT scantype, CString statusmsg)
 {
 	scanner->scantype = scantype;
 	scanner->seq = create_indiseq_null();
 	strcpy(scanner->pattern, "");
 	scanner->statusmsg = statusmsg;
 	scanner->field = NULL;
-	scanner->conts = FALSE;
+	scanner->conts = false;
 }
 /*==============================
  * free_scanner_and_return_seq -- Free scanner data, except return result sequence
@@ -307,32 +307,32 @@ scanner_free_and_return_seq (SCANNER * scanner)
 /*=================================================
  * set_pattern -- Store scanner pattern (or return FALSE if invalid)
  *===============================================*/
-static BOOLEAN
-scanner_set_pattern (SCANNER * scanner, STRING str)
+static bool
+scanner_set_pattern (SCANNER * scanner, String str)
 {
 	INT i;
 	/* spaces don't make sense in a name fragment */
 	if (scanner->scantype == SCAN_NAME_FRAG) {
 		for (i=0; str[i]; i++)
 			if (str[i] == ' ')
-				return FALSE;
+				return false;
 	}
 
 	if (!fpattern_isvalid(str))
-		return FALSE;
+		return false;
 
 	if (strlen(str) > sizeof(scanner->pattern)-1)
-		return FALSE;
+		return false;
 
 	strcpy(scanner->pattern, str);
 
-	return TRUE;
+	return true;
 }
 /*=================================================
  * scanner_set_field -- Search specified field
  *===============================================*/
 static void
-scanner_set_field (SCANNER * scanner, STRING field)
+scanner_set_field (SCANNER * scanner, String field)
 {
 	strupdate(&scanner->field, field);
 }
@@ -344,13 +344,13 @@ static void
 scanner_scan_titles (SCANNER * scanner)
 {
 	strupdate(&scanner->field, "TITL");
-	scanner->conts = TRUE;
+	scanner->conts = true;
 }
 /*=============================================
  * scanner_does_pattern_match -- Compare a name to a pattern
  *===========================================*/
-static BOOLEAN
-scanner_does_pattern_match (SCANNER *scanner, CNSTRING text)
+static bool
+scanner_does_pattern_match (SCANNER *scanner, CString text)
 {
 	return (fpattern_matchn(scanner->pattern, text));
 }
@@ -358,19 +358,19 @@ scanner_does_pattern_match (SCANNER *scanner, CNSTRING text)
  * scanner_add_result -- Add a hit to the result list
  *===========================================*/
 static void
-scanner_add_result (SCANNER * scanner, CNSTRING key)
+scanner_add_result (SCANNER * scanner, CString key)
 {
 	/* if we pass in name, append_indiseq won't check for dups */
-	append_indiseq_null(scanner->seq, strsave(key), NULL, FALSE, TRUE);
+	append_indiseq_null(scanner->seq, strsave(key), NULL, false, true);
 }
 /*===========================================
  * ns_callback -- callback for name traversal
  *=========================================*/
-static BOOLEAN
-ns_callback (CNSTRING key, CNSTRING name, HINT_PARAM_UNUSED BOOLEAN newset, void *param)
+static bool
+ns_callback (CString key, CString name, HINT_PARAM_UNUSED bool newset, void *param)
 {
 	INT len, ind;
-	STRING piece;
+	String piece;
 	SCANNER * scanner = (SCANNER *)param;
 	if (scanner->scantype == SCAN_NAME_FULL) {
 		if (scanner_does_pattern_match(scanner, name)) {
@@ -380,7 +380,7 @@ ns_callback (CNSTRING key, CNSTRING name, HINT_PARAM_UNUSED BOOLEAN newset, void
 		/* SCAN_NAME_FRAG */
 		LIST list = name_to_list(name, &len, &ind);
 		FORLIST(list, el)
-			piece = (STRING)el;
+			piece = (String)el;
 			if (scanner_does_pattern_match(scanner, piece)) {
 				scanner_add_result(scanner, key);
 #if !defined(DEADENDS)
@@ -391,13 +391,13 @@ ns_callback (CNSTRING key, CNSTRING name, HINT_PARAM_UNUSED BOOLEAN newset, void
 		ENDLIST
 		destroy_list(list);
 	}
-	return TRUE;
+	return true;
 }
 /*===========================================
  * rs_callback -- callback for refn traversal
  *=========================================*/
-static BOOLEAN
-rs_callback (CNSTRING key, CNSTRING refn, HINT_PARAM_UNUSED BOOLEAN newset, void *param)
+static bool
+rs_callback (CString key, CString refn, HINT_PARAM_UNUSED bool newset, void *param)
 {
 	SCANNER * scanner = (SCANNER *)param;
 	ASSERT(scanner->scantype == SCAN_REFN);
@@ -405,5 +405,5 @@ rs_callback (CNSTRING key, CNSTRING refn, HINT_PARAM_UNUSED BOOLEAN newset, void
 	if (scanner_does_pattern_match(scanner, refn)) {
 		scanner_add_result(scanner, key);
 	}
-	return TRUE;
+	return true;
 }

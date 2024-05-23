@@ -96,7 +96,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 {
 	INT c, top, cur, mark, len, tmp, rc;
 	CString key, name;
-	STRING lname="";
+	String lname="";
 	RECORD rec=0;
 #if defined(DEADENDS)
 	Sequence *seq, *newseq;
@@ -120,7 +120,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	calc_indiseq_names(seq); /* ensure we have names */
 	current_seq = seq;
 
-	while (TRUE) {
+	while (true) {
 		element_indiseq(seq, cur, &key, &name);
 		rec = key_to_record(key);
 		switch (c = list_browse(seq, top, &cur, mark)) {
@@ -291,7 +291,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			break;
 		case 'a':        /* Add persons to current list */
 		{
-			CNSTRING skey=0, snam=0;
+			CString skey=0, snam=0;
 			newseq = ask_for_indiseq(_(qSlstpad), 'I', &rc);
 			if (!newseq) {
 				message("%s", _(qSlstnad));
@@ -300,7 +300,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			FORINDISEQ(newseq, el, i)
 				skey = element_skey(el);
 				snam = element_name(el);
-				append_indiseq_null(seq, strsave(skey), snam, FALSE, TRUE);
+				append_indiseq_null(seq, strsave(skey), snam, false, true);
 			ENDINDISEQ
 			namesort_indiseq(seq);
 			cur = top = 0;

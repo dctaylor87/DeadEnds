@@ -41,14 +41,14 @@ RECORD add_indi_by_edit(bool rfmt);
 RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt);
 RECORD add_indi_by_edit(RFMT rfmt);
 #endif
-BOOLEAN add_indi_no_cache(NODE);
+bool add_indi_no_cache(NODE);
 CString get_unresolved_ref_error_string(INT count);
 #if defined(DEADENDS)
 NODE prompt_add_child(NODE child, NODE fam, bool rfmt);
 #else
 NODE prompt_add_child(NODE child, NODE fam, RFMT rfmt);
 #endif
-BOOLEAN prompt_add_spouse(RECORD spouse, RECORD fam, BOOLEAN conf);
+bool prompt_add_spouse(RECORD spouse, RECORD fam, bool conf);
 
 /* advedit.c */
 void advanced_person_edit(NODE);
@@ -56,7 +56,7 @@ void advanced_family_edit(NODE);
 
 /* ask.c */
 RECORD ask_for_any(CString ttl, ASK1Q ask1);
-INDISEQ ask_for_indiseq(CNSTRING ttl, char ctype, INT *prc);
+INDISEQ ask_for_indiseq(CString ttl, char ctype, INT *prc);
 
 /* browse.c */
 RECORD choose_any_event(void);
@@ -66,10 +66,10 @@ INT get_chist_len(void);
 INDISEQ get_chistory_list(void);
 INT get_vhist_len(void);
 INDISEQ get_vhistory_list(void);
-BOOLEAN handle_fam_mode_cmds(INT c, INT * mode);
-BOOLEAN handle_indi_mode_cmds(INT c, INT * mode);
-BOOLEAN handle_menu_cmds(INT c, BOOLEAN * reuse);
-BOOLEAN handle_scroll_cmds(INT c, BOOLEAN * reuse);
+bool handle_fam_mode_cmds(INT c, INT * mode);
+bool handle_indi_mode_cmds(INT c, INT * mode);
+bool handle_menu_cmds(INT c, bool * reuse);
+bool handle_scroll_cmds(INT c, bool * reuse);
 void history_record_change(RECORD);
 void init_browse_module(void);
 void main_browse(RECORD, INT code);
@@ -79,28 +79,28 @@ void term_browse_module(void);
 /* delete.c */
 void choose_and_remove_indi(NODE indi, CONFIRMQ confirmq);
 void choose_and_delete_family(void);
-BOOLEAN choose_and_remove_child(RECORD irec, RECORD frec, BOOLEAN nolast);
-BOOLEAN choose_and_remove_spouse(RECORD irec, RECORD frec, BOOLEAN nolast);
-BOOLEAN choose_and_remove_any_record(RECORD rec, CONFIRMQ confirmq);
+bool choose_and_remove_child(RECORD irec, RECORD frec, bool nolast);
+bool choose_and_remove_spouse(RECORD irec, RECORD frec, bool nolast);
+bool choose_and_remove_any_record(RECORD rec, CONFIRMQ confirmq);
 
 /* edit.c */
 #if defined(DEADENDS)
-BOOLEAN edit_family(RECORD frec1, bool rfmt);
-BOOLEAN edit_indi(RECORD irec1, bool rfmt);
+bool edit_family(RECORD frec1, bool rfmt);
+bool edit_indi(RECORD irec1, bool rfmt);
 #else
-BOOLEAN edit_family(RECORD frec1, RFMT rfmt);
-BOOLEAN edit_indi(RECORD irec1, RFMT rfmt);
+bool edit_family(RECORD frec1, RFMT rfmt);
+bool edit_indi(RECORD irec1, RFMT rfmt);
 #endif
 
 /* lbrowse.c */
 INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
 
 /* lines_usage.c */
-void print_lines_usage(CNSTRING exename);
+void print_lines_usage(CString exename);
 
 
 /* merge.c */
-RECORD merge_two_indis(NODE, NODE, BOOLEAN);
+RECORD merge_two_indis(NODE, NODE, bool);
 RECORD merge_two_fams(NODE, NODE);
 
 /* miscutls.c */
@@ -117,15 +117,15 @@ RECORD edit_add_event(void);
 RECORD edit_add_other(void);
 RECORD edit_add_source(void);
 #if defined(DEADENDS)
-BOOLEAN edit_any_record(RECORD rec, bool rfmt);
-BOOLEAN edit_event(RECORD rec, bool rfmt);
-BOOLEAN edit_other(RECORD rec, bool rfmt);
-BOOLEAN edit_source(RECORD rec, bool rfmt);
+bool edit_any_record(RECORD rec, bool rfmt);
+bool edit_event(RECORD rec, bool rfmt);
+bool edit_other(RECORD rec, bool rfmt);
+bool edit_source(RECORD rec, bool rfmt);
 #else
-BOOLEAN edit_any_record(RECORD rec, RFMT rfmt);
-BOOLEAN edit_event(RECORD rec, RFMT rfmt);
-BOOLEAN edit_other(RECORD rec, RFMT rfmt);
-BOOLEAN edit_source(RECORD rec, RFMT rfmt);
+bool edit_any_record(RECORD rec, RFMT rfmt);
+bool edit_event(RECORD rec, RFMT rfmt);
+bool edit_other(RECORD rec, RFMT rfmt);
+bool edit_source(RECORD rec, RFMT rfmt);
 #endif
 
 /* pedigree.c */
@@ -136,14 +136,14 @@ enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	struct tag_canvasdata;
 		/* callback to output a line */
 	typedef void (*PEDLINE)(struct tag_canvasdata * canvas, INT x, INT y
-		, STRING string, INT overflow);
+		, String string, INT overflow);
 		/* collection of data needed by pedigree */
 	typedef struct tag_canvasdata { LLRECT rect; INT scroll; void * param;
 		PEDLINE line; } *CANVASDATA;
 	/* functions */
-void pedigree_draw_ancestors(RECORD rec, CANVASDATA canvasdata, BOOLEAN reuse);
-void pedigree_draw_descendants(RECORD rec, CANVASDATA canvasdata, BOOLEAN reuse);
-void pedigree_draw_gedcom(RECORD rec, INT gdvw, CANVASDATA canvasdata, BOOLEAN reuse);
+void pedigree_draw_ancestors(RECORD rec, CANVASDATA canvasdata, bool reuse);
+void pedigree_draw_descendants(RECORD rec, CANVASDATA canvasdata, bool reuse);
+void pedigree_draw_gedcom(RECORD rec, INT gdvw, CANVASDATA canvasdata, bool reuse);
 void pedigree_increase_generations(INT delta);
 void pedigree_toggle_mode(void);
 
@@ -159,17 +159,17 @@ void clear_status_display(void);
 
 #if defined(DEADENDS)
 /* show.c */
-STRING indi_to_ped_fix(NODE indi, INT len);
+String indi_to_ped_fix(NODE indi, INT len);
 #endif
 
 /* swap.c */
-BOOLEAN swap_children(RECORD prnt, RECORD frec);
+bool swap_children(RECORD prnt, RECORD frec);
 #if defined(DEADENDS)
-BOOLEAN reorder_child(RECORD prnt, RECORD frec, bool rfmt);
+bool reorder_child(RECORD prnt, RECORD frec, bool rfmt);
 #else
-BOOLEAN reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
+bool reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
 #endif
-BOOLEAN swap_families(RECORD);
+bool swap_families(RECORD);
 
 /* tandem.c */
 INT browse_tandem(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
@@ -180,12 +180,12 @@ void addmissingkeys (INT);
 int check_stdkeys (void);
 
 #if !defined(DEADENDS) /* scan_header is only used by import.c and valgdcom.c */
-BOOLEAN scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
+bool scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
 #endif
-BOOLEAN validate_gedcom(IMPORT_FEEDBACK ifeed, FILE*);
+bool validate_gedcom(IMPORT_FEEDBACK ifeed, FILE*);
 void validate_end_import(void);
 INT validate_get_warning_count(void);
-INT xref_to_index (STRING);
+INT xref_to_index (String);
 
 
 #endif /* llinesi_h_included */

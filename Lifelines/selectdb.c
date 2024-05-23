@@ -86,7 +86,7 @@
 
 #if !defined(DEADENDS)
 /* alphabetical */
-static BOOLEAN is_unadorned_directory(STRING path);
+static bool is_unadorned_directory(String path);
 static void show_open_error(INT dberr);
 #endif
 
@@ -100,11 +100,11 @@ static void show_open_error(INT dberr);
  * if fail, return FALSE, and possibly a message to display
  *  perrmsg - [OUT]  translated error message
  *================================================*/
-BOOLEAN
-select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
+bool
+select_database (String * dbrequested, INT alteration, String * perrmsg)
 {
-	STRING dbdir = getlloptstr("LLDATABASES", ".");
-	STRING dbused = NULL;
+	String dbdir = getlloptstr("LLDATABASES", ".");
+	String dbused = NULL;
 	ASSERT(dbrequested);
 	ASSERT(*dbrequested);
 
@@ -115,7 +115,7 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 		if (!ask_for_db_filename(_(qSidldir), _(qSidldrp), dbdir, dbname, sizeof(dbname))
 			|| !dbname[0]) {
 			*perrmsg = _(qSiddbse);
-			return FALSE;
+			return false;
 		}
 		strupdate(dbrequested, dbname);
 		if (eqstr(*dbrequested, "?")) {
@@ -138,11 +138,11 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 				release_dblist(dbdesclist);
 			} else {
 				*perrmsg = _("No databases found in database path");
-				return FALSE;
+				return false;
 			}
 			if (!*dbrequested) {
 				*perrmsg = _(qSiddbse);
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -155,11 +155,11 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
 
 	if (!open_or_create_database(alteration, &dbused)) {
 		strfree(&dbused);
-		return FALSE;
+		return false;
 	}
 
 	stdfree(dbused);
-	return TRUE;
+	return true;
 }
 
 #if !defined(DEADENDS)
@@ -173,8 +173,8 @@ select_database (STRING * dbrequested, INT alteration, STRING * perrmsg)
  * If this routine creates new database, it will alter dbused
  * Created: 2001/04/29, Perry Rapp
  *================================================*/
-BOOLEAN
-open_or_create_database (INT alteration, STRING *dbused)
+bool
+open_or_create_database (INT alteration, String *dbused)
 {
 	INT lldberrnum=0;
 	char dbdir[MAXPATHLEN] = "";
@@ -182,13 +182,13 @@ open_or_create_database (INT alteration, STRING *dbused)
 
 	/* Open Database */
 	if (open_database(alteration, *dbused, &lldberrnum))
-		return TRUE;
+		return true;
 
 	/* filter out real errors */
 	if (lldberrnum != BTERR_NODB && lldberrnum != BTERR_NOKEY)
 	{
 		show_open_error(lldberrnum);
-		return FALSE;
+		return false;
 	}
 
 	/*
@@ -198,13 +198,13 @@ open_or_create_database (INT alteration, STRING *dbused)
 	/* First construct directory to use */
 	if (is_unadorned_directory(*dbused)) {
 		/* no dir specified, so use first from LLDATABASES */
-		STRING dbpath = getlloptstr("LLDATABASES", ".");
-		CNSTRING newdbdir = get_first_path_entry(dbpath);
+		String dbpath = getlloptstr("LLDATABASES", ".");
+		CString newdbdir = get_first_path_entry(dbpath);
 		if (newdbdir) {
 			/* newdbdir is static from get_first_path_entry */
 			newdbdir = strdup(newdbdir);
 			concat_path(newdbdir, *dbused, uu8, dbdir, sizeof(dbdir));
-			stdfree((STRING)newdbdir);
+			stdfree((String)newdbdir);
 		} else {
 			llstrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
 		}
@@ -217,14 +217,14 @@ open_or_create_database (INT alteration, STRING *dbused)
 	/* Is user willing to make a new db ? */
         snprintf(newmsg,sizeof(newmsg),qScrdbse,*dbused);
 	if (!ask_yes_or_no_msg(_(qSnodbse), newmsg))
-		return FALSE;
+		return false;
 
 	/* try to make a new db */
 	if (create_database(*dbused, &lldberrnum))
-		return TRUE;
+		return true;
 
 	show_open_error(lldberrnum);
-	return FALSE;
+	return false;
 }
 /*===================================================
  * show_open_error -- Display database opening error
@@ -243,13 +243,13 @@ show_open_error (INT dberr)
  *  with no subdirectories ?
  * Created: 2001/01/24, Perry Rapp
  *================================================*/
-static BOOLEAN
-is_unadorned_directory (STRING path)
+static bool
+is_unadorned_directory (String path)
 {
 	for ( ; *path; path++) {
 		if (is_dir_sep(*path))
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 #endif	/* !DEADENDS */

@@ -126,7 +126,7 @@ static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
   if (! PyArg_ParseTupleAndKeywords (args, kw, "|s", keywords, &prompt))
     return NULL;
 
-  seq = rptui_ask_for_indi_list (prompt, TRUE);
+  seq = rptui_ask_for_indi_list (prompt, true);
   abort ();			/* XXX */
 }
 

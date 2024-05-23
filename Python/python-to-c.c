@@ -59,7 +59,7 @@ PyObject *_llpy_key (PyObject *self, PyObject *args, PyObject *kw)
   static char *keywords[] = { "strip_prefix", NULL };
   LLINES_PY_RECORD *record = (LLINES_PY_RECORD *)self;
   int strip_prefix = 0;		/* by default, leave the prefix on */
-  CNSTRING key;
+  CString key;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "|p", keywords, &strip_prefix))
     return NULL;

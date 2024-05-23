@@ -68,7 +68,7 @@ INT gd_xmax = 0;        /* maximum other key number */
 
 static TABLE convtab = NULL;
 static INT rec_type;
-static BOOLEAN named = FALSE; /* found a NAME in current INDI ? */
+static bool named = false; /* found a NAME in current INDI ? */
 static INT members = 0; /* number members (HUSB,WIFE,CHIL) in current FAM */
 static INT person = -1;
 static INT family = -1;
@@ -80,13 +80,13 @@ static INT struct_max = 0;
 static INT num_errors;
 static INT num_warns;
 static INT defline;
-static BOOLEAN f_logopen = FALSE;
+static bool f_logopen = false;
 static FILE *f_flog = NULL;
 static char f_logpath[MAXPATHLEN] = "import.log";
 
-static STRING qSundrec      = N_("Record %s is referred to but not defined.");
-static STRING qSundrecl     = N_("Line %d: Reference to undefined record %s");
-static STRING qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s %s.");
+static String qSundrec      = N_("Record %s is referred to but not defined.");
+static String qSundrecl     = N_("Line %d: Reference to undefined record %s");
+static String qSlinlev1     = N_("Line %d: Tag %s found in unexpected record: %s %s.");
 
 ELMNT *index_data = NULL;
 
@@ -96,53 +96,53 @@ ELMNT *index_data = NULL;
  *********************************************/
 
 /* alphabetical */
-static INT add_even_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
-static INT add_fam_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
-static INT add_indi_defn(IMPORT_FEEDBACK ifeed, STRING, INT, ELMNT*);
-static INT add_othr_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
-static INT add_sour_defn(IMPORT_FEEDBACK ifeed, STRING, INT);
-static INT add_to_structures(STRING, ELMNT);
-static void append_path(ZSTR zstr, char delim, CNSTRING str);
-static int check_akey (int firstchar, STRING keyp, INT *maxp);
+static INT add_even_defn(IMPORT_FEEDBACK ifeed, String, INT);
+static INT add_fam_defn(IMPORT_FEEDBACK ifeed, String, INT);
+static INT add_indi_defn(IMPORT_FEEDBACK ifeed, String, INT, ELMNT*);
+static INT add_othr_defn(IMPORT_FEEDBACK ifeed, String, INT);
+static INT add_sour_defn(IMPORT_FEEDBACK ifeed, String, INT);
+static INT add_to_structures(String, ELMNT);
+static void append_path(ZSTR zstr, char delim, CString str);
+static int check_akey (int firstchar, String keyp, INT *maxp);
 static void check_even_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_fam_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_indi_links(IMPORT_FEEDBACK ifeed, ELMNT per);
-static void check_level1_tag(IMPORT_FEEDBACK ifeed, CNSTRING tag, CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0);
+static void check_level1_tag(IMPORT_FEEDBACK ifeed, CString tag, CString val, INT line, CString tag0, CString xref0);
 static void check_othr_links(IMPORT_FEEDBACK ifeed, ELMNT);
 static void check_references(IMPORT_FEEDBACK ifeed);
 static void check_sour_links(IMPORT_FEEDBACK ifeed, ELMNT src);
 static void clear_structures(void);
-static ELMNT create_elmnt(CHAR eltype, CNSTRING xref);
+static ELMNT create_elmnt(CHAR eltype, CString xref);
 static void free_elmnt(ELMNT el);
-static void handle_fam_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0);
-static void handle_indi_lev1(IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0);
-static void handle_head_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
-static void handle_trlr_lev1(IMPORT_FEEDBACK ifeed, STRING, STRING, INT);
-static void handle_value(STRING, INT);
-static BOOLEAN openlog(void);
+static void handle_fam_lev1(IMPORT_FEEDBACK ifeed, String tag, String val, INT line, CString tag0, CString xref0);
+static void handle_indi_lev1(IMPORT_FEEDBACK ifeed, String tag, String val, INT line, CString tag0, CString xref0);
+static void handle_head_lev1(IMPORT_FEEDBACK ifeed, String, String, INT);
+static void handle_trlr_lev1(IMPORT_FEEDBACK ifeed, String, String, INT);
+static void handle_value(String, INT);
+static bool openlog(void);
 static void closelog(void);
-static void handle_warn(IMPORT_FEEDBACK ifeed, STRING, ...);
-static void handle_err(IMPORT_FEEDBACK ifeed, STRING, ...);
-static void set_import_log(STRING logpath);
-static void report_missing_value(IMPORT_FEEDBACK ifeed, STRING tag, INT line, CNSTRING tag0, CNSTRING xref0);
+static void handle_warn(IMPORT_FEEDBACK ifeed, String, ...);
+static void handle_err(IMPORT_FEEDBACK ifeed, String, ...);
+static void set_import_log(String logpath);
+static void report_missing_value(IMPORT_FEEDBACK ifeed, String tag, INT line, CString tag0, CString xref0);
 
 /*===================================================
  * validate_gedcom -- Validate GEDCOM records in file
  *=================================================*/
-BOOLEAN
+bool
 validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 {
 	INT lev, rc, curlev = 0;
 	INT nhead, ntrlr, nindi, nfam, nsour, neven, nothr;
 	ELMNT el;
 	XLAT xlat = transl_get_predefined_xlat(MGDIN);
-	STRING xref, tag, val, msg;
-	STRING tag0=0;
-	STRING xref0=0;
+	String xref, tag, val, msg;
+	String tag0=0;
+	String xref0=0;
 
 	nhead = ntrlr = nindi = nfam = nsour = neven = nothr = 0;
 	num_errors = num_warns = 0;
-	f_logopen = FALSE;
+	f_logopen = false;
 	f_flog = NULL;
 	set_import_log(getlloptstr("ImportLog", "errs.log"));
 	openlog();
@@ -201,10 +201,10 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 				if (eqstr("INDI", tag)) {
 					count = ++nindi;
 					rec_type = INDI_REC;
-					named = FALSE;
+					named = false;
 					person = add_indi_defn(ifeed, xref, flineno, &el);
 					/* pretend a NAME if the record is skipped */
-					if (person == -2) named = TRUE;
+					if (person == -2) named = true;
 				} else if (eqstr("FAM", tag)) {
 					count = ++nfam;
 					rec_type = FAM_REC;
@@ -261,7 +261,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
  * create_elmnt -- Return newly alloc'd ELMNT
  *=====================================*/
 static ELMNT
-create_elmnt (CHAR eltype, CNSTRING xref)
+create_elmnt (CHAR eltype, CString xref)
 {
 	ELMNT el = (ELMNT) stdalloc(sizeof(*el));
 	memset(el, 0, sizeof(*el));
@@ -290,7 +290,7 @@ free_elmnt (ELMNT el)
  *  pel:
  *=====================================*/
 static INT
-add_indi_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line, ELMNT *pel)
+add_indi_defn (IMPORT_FEEDBACK ifeed, String xref, INT line, ELMNT *pel)
 {
 	ELMNT el;
 	INT dex;
@@ -336,7 +336,7 @@ add_indi_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line, ELMNT *pel)
  *  line:    line num
  *====================================*/
 static INT
-add_fam_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
+add_fam_defn (IMPORT_FEEDBACK ifeed, String xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -378,7 +378,7 @@ add_fam_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
  *  line:    line num
  *=====================================*/
 static INT
-add_sour_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
+add_sour_defn (IMPORT_FEEDBACK ifeed, String xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -422,7 +422,7 @@ add_sour_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
  *  line:    line num
  *====================================*/
 static INT
-add_even_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
+add_even_defn (IMPORT_FEEDBACK ifeed, String xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -465,7 +465,7 @@ add_even_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
  *  line:    line num
  *================================================*/
 static INT
-add_othr_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
+add_othr_defn (IMPORT_FEEDBACK ifeed, String xref, INT line)
 {
 	ELMNT el;
 	INT dex;
@@ -507,7 +507,7 @@ add_othr_defn (IMPORT_FEEDBACK ifeed, STRING xref, INT line)
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_head_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, STRING tag, STRING val, HINT_PARAM_UNUSED INT line)
+handle_head_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, String tag, String val, HINT_PARAM_UNUSED INT line)
 {
 	if (eqstr(tag, "CHAR")) {
 		strupdate(&gedcom_codeset_in, (val ? val : ""));
@@ -518,14 +518,14 @@ handle_head_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, STRING tag, STRING va
  * Created: 2002-12-15 (Perry Rapp)
  *=========================================================*/
 static void
-handle_trlr_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, HINT_PARAM_UNUSED STRING tag, HINT_PARAM_UNUSED STRING val, HINT_PARAM_UNUSED INT line)
+handle_trlr_lev1 (HINT_PARAM_UNUSED IMPORT_FEEDBACK ifeed, HINT_PARAM_UNUSED String tag, HINT_PARAM_UNUSED String val, HINT_PARAM_UNUSED INT line)
 {
 }
 /*===========================================================
  * report_missing_value -- Report line with incorrectly empty value
  *=========================================================*/
 static void
-report_missing_value (IMPORT_FEEDBACK ifeed, STRING tag, INT line, CNSTRING tag0, CNSTRING xref0)
+report_missing_value (IMPORT_FEEDBACK ifeed, String tag, INT line, CString tag0, CString xref0)
 {
 	handle_err(ifeed, _("Line " FMT_INT ": This %s line is missing a value field (%s %s).")
 		, line, tag, tag0, xref0);
@@ -534,7 +534,7 @@ report_missing_value (IMPORT_FEEDBACK ifeed, STRING tag, INT line, CNSTRING tag0
  * handle_indi_lev1 -- Handle level 1 lines in person records
  *=========================================================*/
 static void
-handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0)
+handle_indi_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, INT line, CString tag0, CString xref0)
 {
 	ELMNT indi, pers;
 	ASSERT(person != -1);
@@ -576,7 +576,7 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTR
 		else if (val && (*val == 'F'))
 			Sex(indi) |= IS_FEMALE;
 	} else if (eqstr(tag, "NAME")) {
-		named = TRUE;
+		named = true;
 		if (!val || *val == 0 || !valid_name(val)) {
 			handle_err(ifeed, _("Line " FMT_INT ": Bad NAME syntax (%s %s)."),
 				line, tag0, xref0);
@@ -589,7 +589,7 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTR
  * handle_fam_lev1 -- Handle level 1 lines in family records
  *========================================================*/
 static void
-handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRING tag0, CNSTRING xref0)
+handle_fam_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, INT line, CString tag0, CString xref0)
 {
 	ELMNT fam, pers;
 	fam = (family != -1) ? index_data[family] : NULL;
@@ -625,7 +625,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, STRING tag, STRING val, INT line, CNSTRI
  * check_level1_tag -- Warnings for specific tags at level 1
  *========================================================*/
 static void
-check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, HINT_PARAM_UNUSED CNSTRING val, INT line, CNSTRING tag0, CNSTRING xref0)
+check_level1_tag (IMPORT_FEEDBACK ifeed, CString tag, HINT_PARAM_UNUSED CString val, INT line, CString tag0, CString xref0)
 {
 	/*
 	lifelines expects lineage-linking records (FAMS, FAMC, HUSB, & WIFE)
@@ -660,7 +660,7 @@ check_level1_tag (IMPORT_FEEDBACK ifeed, CNSTRING tag, HINT_PARAM_UNUSED CNSTRIN
  *===============================================*/
 static int
 check_akey (int firstchar,
-            STRING keyp,
+            String keyp,
             INT *maxp)
 {
     INT val;
@@ -669,11 +669,11 @@ check_akey (int firstchar,
 	if(*keyp && (*keyp != '0') && isdigit(*keyp)) {
 	    val = atoi(keyp);
 	    if(val > *maxp) *maxp = val;
-	    while(*keyp && isdigit((uchar)*keyp)) keyp++;
-	    if(*keyp == '\0') return TRUE;
+	    while(*keyp && isdigit((u_char)*keyp)) keyp++;
+	    if(*keyp == '\0') return true;
 	}
     }
-    return FALSE;
+    return false;
 }
 /*=================================================
  * check_stdkeys -- Check for standard format keys
@@ -682,7 +682,7 @@ int
 check_stdkeys (void)
 {
 	INT i;
-	int retval = TRUE;
+	int retval = true;
 	gd_imax = 0; gd_itot = 0;
 	gd_fmax = 0; gd_ftot = 0;
 	gd_emax = 0; gd_etot = 0;
@@ -690,10 +690,10 @@ check_stdkeys (void)
 	gd_xmax = 0; gd_xtot = 0;
 	for (i = 0; retval && (i < struct_len); i++) {
 		ELMNT el = index_data[i];
-		STRING skey = Key(el);
+		String skey = Key(el);
 		/* check that key is not too long */
 		if (strlen(skey)>RKEYLEN) {
-			retval = FALSE;
+			retval = false;
 			break;
 		}
 		switch (Type(el)) {
@@ -717,7 +717,7 @@ check_stdkeys (void)
 		    gd_xtot++;
 		    retval = check_akey('X', skey, &gd_xmax);
 		    break;
-		default: retval = FALSE; break;
+		default: retval = false; break;
 		}
 	}
 	return retval;
@@ -804,7 +804,7 @@ check_references (IMPORT_FEEDBACK ifeed)
 static void
 check_indi_links (IMPORT_FEEDBACK ifeed, ELMNT per)
 {
-	BOOLEAN jm, jf, bm, bf;
+	bool jm, jf, bm, bf;
 	if (Male(per) > 1)
 		handle_warn(ifeed
 		, _("Line %d: Person %s has multiple father links.")
@@ -883,10 +883,10 @@ check_othr_links (IMPORT_FEEDBACK ifeed, ELMNT otr)
  * handle_value -- Handle arbitrary value
  *=====================================*/
 static void
-handle_value (STRING val, INT line)
+handle_value (String val, INT line)
 {
 	ELMNT el;
-	STRING xref;
+	String xref;
 
 	if (rec_type == IGNR_REC) return;
 	if (!pointer_value(val)) return;
@@ -901,7 +901,7 @@ handle_value (STRING val, INT line)
  * handle_err -- Handle GEDCOM error
  *================================*/
 static void
-handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
+handle_err (IMPORT_FEEDBACK ifeed, String fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
@@ -929,7 +929,7 @@ handle_err (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
  * handle_warn -- Handle GEDCOM warning
  *===================================*/
 static void
-handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
+handle_warn (IMPORT_FEEDBACK ifeed, String fmt, ...)
 {
 	ZSTR zstr=zs_new();
 
@@ -955,15 +955,15 @@ handle_warn (IMPORT_FEEDBACK ifeed, STRING fmt, ...)
 /*=====================================
  * openlog -- open import error log if not already open
  *===================================*/
-static BOOLEAN
+static bool
 openlog (void)
 {
 	if (f_logopen)
-		return TRUE;
+		return true;
 
 	ASSERT(!f_flog);
 	if (!f_logpath[0])
-		return FALSE;
+		return false;
 
 	f_flog = fopen(f_logpath, LLWRITETEXT);
 	f_logopen = (f_flog != 0);
@@ -977,7 +977,7 @@ closelog (void)
 {
 	if (f_logopen) {
 		fclose(f_flog);
-		f_logopen = FALSE;
+		f_logopen = false;
 		f_flog = NULL;
 	}
 }
@@ -985,9 +985,9 @@ closelog (void)
  * xref_to_index - Convert pointer to index
  *=======================================*/
 INT
-xref_to_index (STRING xref)
+xref_to_index (String xref)
 {
-	BOOLEAN there;
+	bool there;
 	INT dex = valueofbool_int(convtab, xref, &there);
 	return there ? dex : -1;
 }
@@ -995,7 +995,7 @@ xref_to_index (STRING xref)
  * add_to_structures -- Add new elements to data structures
  *=======================================================*/
 static INT
-add_to_structures (STRING xref, ELMNT el)
+add_to_structures (String xref, ELMNT el)
 {
 	INT i, n;
 
@@ -1041,7 +1041,7 @@ clear_structures (void)
  * set_import_log -- Specify where import errors logged
  *===================================*/
 static void
-set_import_log (STRING logpath)
+set_import_log (String logpath)
 {
 	if (!logpath)
 		logpath = "";
@@ -1052,10 +1052,10 @@ set_import_log (STRING logpath)
  *  collecting metadata as found (metadatatab is a FREEBOTH tab)
  * Created: 2003-02-03 (Perry Rapp)
  *==========================================================*/
-BOOLEAN
+bool
 scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 {
-	STRING parents[2] = { 0, 0 };
+	String parents[2] = { 0, 0 };
 	INT linno, head=0, lev=-1, curlev,i;
 	INT lastoff=0;
 	ZSTR zpath = zs_new();
@@ -1065,7 +1065,7 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		/* no codeset translation yet, b/c we've not found the file's
 		encoding declaration yet */
 		INT rc;
-		STRING xref, tag, val, msg;
+		String xref, tag, val, msg;
 		lastoff = ftell(fp);
 		curlev = lev;
 		if (linno==500) {
@@ -1130,7 +1130,7 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
  * Created: 2003-02-03 (Perry Rapp)
  *==========================================================*/
 static void
-append_path (ZSTR zstr, char delim, CNSTRING str)
+append_path (ZSTR zstr, char delim, CString str)
 {
 	if (zs_len(zstr))
 		zs_appc(zstr, delim);

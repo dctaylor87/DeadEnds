@@ -150,7 +150,7 @@ static PyObject *llpy_copy_node_tree (PyObject *self, PyObject *args ATTRIBUTE_U
 
   copy->lnn_type = node->lnn_type;
   copy->lnn_database = node->lnn_database;
-  copy->lnn_node = copy_nodes (node->lnn_node, TRUE, TRUE);
+  copy->lnn_node = copy_nodes (node->lnn_node, true, true);
   nrefcnt_inc(copy->lnn_node);
   TRACK_NODE_REFCNT_INC(copy->lnn_node);
 
@@ -222,7 +222,7 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
   /* XXX the following lines bracketed by dolock_node_in_cache need to
      be double and triple checked XXX */
 
-  dolock_node_in_cache (orig_node, FALSE);
+  dolock_node_in_cache (orig_node, false);
   nparent (orig_node) = parent_node;
   if (parent_node)
     orig_node->n_cel = parent_node->n_cel;
@@ -230,7 +230,7 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
     orig_node->n_cel = NULL;	/* XXX double check this! XXX */
 
   set_temp_node (orig_node, is_temp_node (parent_node));
-  dolock_node_in_cache (orig_node, TRUE);
+  dolock_node_in_cache (orig_node, true);
 #endif
 
   /* if both prev_node and parent_node are NULL, then there is nothing to do */
@@ -313,15 +313,15 @@ static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
   nparent (node) = NULL;
 #else
   /* unparent node, but ensure its locking is only releative to new parent */
-  dolock_node_in_cache (node, FALSE);
+  dolock_node_in_cache (node, false);
   nparent (node) = NULL;
-  dolock_node_in_cache (node, TRUE);
+  dolock_node_in_cache (node, true);
 #endif
 
   nsibling (node) = NULL;
 
   /* whether it was permanent before or not, it is now temporary */
-  set_temp_node (node, TRUE);
+  set_temp_node (node, true);
 
   return (self);
 }

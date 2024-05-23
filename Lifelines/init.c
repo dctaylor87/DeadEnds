@@ -93,23 +93,23 @@
 
 TABLE tagtable=NULL;		/* table for tag strings */
 TABLE placabbvs=NULL;	/* table for place abbrevs */
-STRING editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
-STRING editfile=NULL; /* file used for editing, name obtained via mktemp */
-STRING readpath = NULL;		/* path to database */
-STRING readpath_file = NULL;	/* final component of path to database */
+String editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
+String editfile=NULL; /* file used for editing, name obtained via mktemp */
+String readpath = NULL;		/* path to database */
+String readpath_file = NULL;	/* final component of path to database */
 
 /*********************************************
  * external/imported variables
  *********************************************/
 
-extern STRING illegal_char;
+extern String illegal_char;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 static void check_installation_path(void);
-static BOOLEAN load_configs(STRING configfile, STRING * pmsg);
+static bool load_configs(String configfile, String * pmsg);
 static void post_codesets_hook(void);
 static void pre_codesets_hook(void);
 static void update_db_options(void);
@@ -118,7 +118,7 @@ static void update_db_options(void);
  * local variables
  *********************************************/
 
-static BOOLEAN suppress_reload=FALSE;
+static bool suppress_reload=false;
 static char global_conf_path[MAXPATHLEN]="";
 
 /*********************************************
@@ -130,11 +130,11 @@ static char global_conf_path[MAXPATHLEN]="";
  * init_lifelines_global -- Initialization options & misc. stuff
  *  This is called before first (or later) database opened
  *===============================*/
-BOOLEAN
-init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING db, BOOLEAN opening))
+bool
+init_lifelines_global (String configfile, String * pmsg, void (*notify)(String db, bool opening))
 {
-	STRING e;
-	STRING dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
+	String e;
+	String dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
 		, "LLDATABASES", };
 	INT i;
 
@@ -142,14 +142,14 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 
 	/* request notification when options change */
 	register_notify(&update_useropts);
-	suppress_reload = TRUE;
+	suppress_reload = true;
 
 	dbnotify_set(notify);
 
 	if (!load_configs(configfile, pmsg)) {
-		suppress_reload = FALSE;
+		suppress_reload = false;
 		update_useropts(NULL);
-		return FALSE;
+		return false;
 	}
 
 	pre_codesets_hook(); /* For MS-Windows user config of console codepages */
@@ -174,14 +174,14 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
 	for (i=0; i<ARRSIZE(dirvars); ++i) {
-		STRING str = getenv(dirvars[i]);
+		String str = getenv(dirvars[i]);
 		if (!str)
 			str = ".";
 		setoptstr_fallback(dirvars[i], str);
 	}
 	/* also check environment variable for editor */
 	{
-		STRING str = getenv("LLEDITOR");
+		String str = getenv("LLEDITOR");
 		if (!str)
 			str = environ_determine_editor(PROGRAM_LIFELINES);
 		setoptstr_fallback("LLEDITOR", str);
@@ -192,26 +192,26 @@ init_lifelines_global (STRING configfile, STRING * pmsg, void (*notify)(STRING d
 	editfile = environ_determine_tempfile();
 	if (!editfile) {
 		*pmsg = strsave("Error creating temp file");
-		return FALSE;
+		return false;
 	}
 	editfile = strsave(editfile );
-	editstr = (STRING) stdalloc(strlen(e) + strlen(editfile) + 2);
+	editstr = (String) stdalloc(strlen(e) + strlen(editfile) + 2);
 	snprintf(editstr, strlen(e) + strlen(editfile) + 2, "%s %s", e, editfile);
 	set_usersort(custom_sort);
-	suppress_reload = FALSE;
+	suppress_reload = false;
 	update_useropts(0);
 
-	return TRUE;
+	return true;
 }
 /*=================================
  * init_lifelines_postdb -- 
  * Initialize stuff maintained in-memory
  *  which requires the database to already be opened
  *===============================*/
-BOOLEAN
+bool
 init_lifelines_postdb (void)
 {
-	STRING emsg;
+	String emsg;
 	TABLE dbopts = create_table_str();
 
 	tagtable = create_table_str(); /* values are same as keys */
@@ -227,11 +227,11 @@ init_lifelines_postdb (void)
 	init_browse_lists();
 #if !defined(DEADENDS)
 	if (!openxref(readonly))
-		return FALSE;
+		return false;
 #endif
 	transl_load_xlats();
 
-	return TRUE;
+	return true;
 }
 /*===================================
  * close_lifelines -- Close LifeLines
@@ -264,13 +264,13 @@ close_lifelines (void)
 /*===================================================
  * is_codeset_utf8 -- Is this the name of UTF-8 ?
  *=================================================*/
-BOOLEAN
-is_codeset_utf8 (CNSTRING codename)
+bool
+is_codeset_utf8 (CString codename)
 {
-	if (!codename || !codename[0]) return FALSE;
+	if (!codename || !codename[0]) return false;
 	if (eqstr("UTF-8", codename)||eqstr("utf-8", codename)||eqstr("65001", codename))
-		return TRUE;
-	return FALSE;
+		return true;
+	return false;
 }
 /*===================================================
  * update_useropts -- Set any global variables
@@ -305,7 +305,7 @@ static void
 update_db_options (void)
 {
 	TABLE opttab = create_table_str();
-	CNSTRING str=0;
+	CString str=0;
 	get_db_options(opttab);
 
 	str = valueof_str(opttab, "codeset");
@@ -371,11 +371,11 @@ post_codesets_hook (void)
  * load_configs -- Load global config file(s)
  * returns FALSE if error, with message in pmsg
  *================================================*/
-static BOOLEAN
-load_configs (STRING configfile, STRING * pmsg)
+static bool
+load_configs (String configfile, String * pmsg)
 {
 	INT rtn=0;
-	STRING str=0;
+	String str=0;
 	char cfg_name[MAXPATHLEN];
 
 	/* TODO: Should read a system-wide config file */
@@ -389,7 +389,7 @@ load_configs (STRING configfile, STRING * pmsg)
 	if (configfile && configfile[0]) {
 
 		rtn = load_global_options(configfile, pmsg);
-		if (rtn == -1) return FALSE;
+		if (rtn == -1) return false;
 
 	} else {
 
@@ -400,7 +400,7 @@ load_configs (STRING configfile, STRING * pmsg)
 		llstrncpy(cfg_name, global_conf_path, sizeof(cfg_name), 0);
 		llstrapps(cfg_name, sizeof(cfg_name), 0, "/lifelines.conf");
 		rtn = load_global_options(cfg_name, pmsg);
-		if (rtn == -1) return FALSE;
+		if (rtn == -1) return false;
 
 		/* look for one in user's home directory */
 		/* TODO: Shouldn't Win32 use getenv("USERPROFILE") ? */
@@ -413,14 +413,14 @@ load_configs (STRING configfile, STRING * pmsg)
 #endif
 
 		rtn = load_global_options(cfg_name, pmsg);
-		if (rtn == -1) return FALSE;
+		if (rtn == -1) return false;
 
 #if defined(DEADENDS)
 		rtn = load_global_options(DEADENDS_CONFIG_FILE, pmsg);
 #else
 		rtn = load_global_options(LINES_CONFIG_FILE, pmsg);
 #endif
-		if (rtn == -1) return FALSE;
+		if (rtn == -1) return false;
 	}
 
 	/* allow chaining to one more config file 
@@ -429,9 +429,9 @@ load_configs (STRING configfile, STRING * pmsg)
 	str = getlloptstr("LLCONFIGFILE", NULL);
 	if (str && str[0]) {
 		rtn = load_global_options(str, pmsg);
-		if (rtn == -1) return FALSE;
+		if (rtn == -1) return false;
 	}
-	return TRUE;
+	return true;
 }
 /*==================================================
  * check_installation_path -- Figure out installed path

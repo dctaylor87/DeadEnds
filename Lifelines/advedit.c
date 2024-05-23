@@ -81,7 +81,7 @@
 
 /* alphabetical */
 static NODE expand_tree(NODE);
-static BOOLEAN advedit_expand_traverse(NODE, VPTR param);
+static bool advedit_expand_traverse(NODE, VPTR param);
 
 /*********************************************
  * local & exported function definitions
@@ -99,13 +99,13 @@ expand_tree (NODE root0)
 #else
 	NODE copy, node, sub;
 #endif
-	STRING key;
+	String key;
 	static NODE root;	/* root of record being edited */
 	LIST subs;	/* list of contained records */
 	NODE expd;	/* expanded main record - copy - our retval */
 
 	root = root0;
-	expd = copy_nodes(root, TRUE, TRUE);
+	expd = copy_nodes(root, true, true);
 	subs = create_list();
 	traverse_nodes(expd, advedit_expand_traverse, subs);
 
@@ -152,7 +152,7 @@ advanced_person_edit (NODE root0)
 #endif
 	expd = expand_tree(root0);
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, NULL, expd, true, true, true);
 	fclose(fp);
 	do_edit();
 }
@@ -172,19 +172,19 @@ advanced_family_edit (NODE root0)
 #endif
 	expd = expand_tree(root0);
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	write_nodes(0, fp, NULL, expd, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, NULL, expd, true, true, true);
 	fclose(fp);
 	do_edit();
 }
 /*=================================================================
  * advedit_expand_traverse -- Traverse routine called when expanding record
  *===============================================================*/
-static BOOLEAN
+static bool
 advedit_expand_traverse (NODE node, VPTR param)
 {
 	LIST subs = (LIST)param;
-	STRING key = value_to_xref(nval(node));
-	if (!key) return TRUE;
+	String key = value_to_xref(nval(node));
+	if (!key) return true;
 	key = strsave(key);
 #ifdef DEBUG
 	llwprintf("expand_traverse: %s %s\n", ntag(node), nval(node));
@@ -198,10 +198,10 @@ advedit_expand_traverse (NODE node, VPTR param)
 			STOPLIST
 #endif
 			stdfree(key);
-			return TRUE;
+			return true;
 		}
 	ENDLIST
 	enqueue_list(subs, node);
 	stdfree(key);
-	return TRUE;
+	return true;
 }

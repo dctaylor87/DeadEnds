@@ -65,7 +65,7 @@ struct tag_trav_parm {
  *********************************************/
 
 /* alphabetical */
-static BOOLEAN archive(BTREE btree, BLOCK block, void * param);
+static bool archive(BTREE btree, BLOCK block, void * param);
 static void copy_and_translate(FILE *fo, INT len, struct tag_trav_parm * travparm, char ctype, XLAT xlat);
 
 /*********************************************
@@ -89,13 +89,13 @@ static INT nindi, nfam, neven, nsour, nothr;
 /*===================================================
  * archive_in_file -- Archive database in GEDCOM file
  *=================================================*/
-BOOLEAN
+bool
 archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 {
 	char dat[30]="", tim[20]="";
 	struct tm *pt=0;
 	time_t curtime;
-	STRING str=0;
+	String str=0;
 	struct tag_trav_parm travparm;
 	xlat_gedout = transl_get_predefined_xlat(MINGD); /* internal to GEDCOM */
 
@@ -122,7 +122,7 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	} else {
 		/* xlat_gedout is the actual conversion used, so
 		we should use the name of its output */
-		CNSTRING outcharset = xl_get_dest_codeset(xlat_gedout);
+		CString outcharset = xl_get_dest_codeset(xlat_gedout);
 		fprintf(fp, "1 CHAR %s\n", outcharset);
 	}
 	/* finished header */
@@ -133,12 +133,12 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	travparm.fp = fp;
 	traverse_index_blocks(BTR, bmaster(BTR), &travparm, NULL, archive);
 	fprintf(fp, "0 TRLR\n");
-	return TRUE;
+	return true;
 }
 /*========================================================
  * archive -- Traverse function called on each btree block
  *======================================================*/
-static BOOLEAN
+static bool
 archive (BTREE btree, BLOCK block, void * param)
 {
 	INT i, n, l;
@@ -151,7 +151,7 @@ archive (BTREE btree, BLOCK block, void * param)
 	ASSERT(fo);
 	n = nkeys(block);
 	for (i = 0; i < n; i++) {
-		STRING key = rkey2str(rkeys(block, i));
+		String key = rkey2str(rkeys(block, i));
 		if (*key != 'I' && *key != 'F' && *key != 'E' &&
 		    *key != 'S' && *key != 'X')
 			continue;
@@ -161,7 +161,7 @@ archive (BTREE btree, BLOCK block, void * param)
 			copy_and_translate(fo, l, travparm, *key, xlat_gedout);
 	}
 	fclose(fo);
-	return TRUE;
+	return true;
 }
 /*===================================================
  * copy_and_translate -- Copy record with translation
@@ -178,7 +178,7 @@ copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, char cty
 	inp = in;		/* location for next read */
 	remlen = BUFLEN;	/* max for next read */
 	while (len > 0) {
-		BOOLEAN last=FALSE, ok=FALSE;
+		bool last=false, ok=false;
 		if(len < remlen) remlen = len;
 		ASSERT(fread(inp, remlen, 1, fo) == 1);
 		len -= remlen;

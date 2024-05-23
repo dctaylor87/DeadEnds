@@ -140,12 +140,12 @@ mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 		rtn = mvwaddstr(wp, y, x, zs_str(zstr));
 	} else {
 		if (output_width(zstr) > (size_t)n) {
-			STRING str = zs_str(zstr);
+			String str = zs_str(zstr);
 			/* We need to do length truncation correctly for UTF-8 output */
 			/* #1) We need to not break UTF-8 multibytes */
 
 			INT width=0;
-			STRING prev = find_prev_char(&str[n-1], &width, str, gui8);
+			String prev = find_prev_char(&str[n-1], &width, str, gui8);
 			width += (prev - str);
 			zs_chop(zstr, width);
 

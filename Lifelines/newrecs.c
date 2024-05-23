@@ -97,18 +97,18 @@
  *********************************************/
 
 /* alphabetical */
-static RECORD edit_add_record(STRING recstr, STRING redt, STRING redtopt
-	, char ntype, STRING cfrm);
+static RECORD edit_add_record(String recstr, String redt, String redtopt
+	, char ntype, String cfrm);
 #if defined(DEADENDS)
-static BOOLEAN edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
+static bool edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
 			   String redtopt,
 			   bool (*val)(GNode *, String *, GNode *), String cfrm,
 			   bool (*todbase)(GNode *, Database *),
 			   String gdmsg, bool rfmt);
 #else
-static BOOLEAN edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
-	, STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
-	, void (*todbase)(NODE), STRING gdmsg, RFMT rfmt);
+static bool edit_record(RECORD rec1, String idedt, INT letr, String redt
+	, String redtopt , bool (*val)(NODE, String *, NODE), String cfrm
+	, void (*todbase)(NODE), String gdmsg, RFMT rfmt);
 #endif
 
 /*********************************************
@@ -122,7 +122,7 @@ static BOOLEAN edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 RECORD
 edit_add_source (void)
 {
-	STRING str;
+	String str;
 
 	str = getlloptstr("SOURREC", _(qSdefsour));
 	return edit_add_record(str, _(qSrredit), _(qSrreditopt), 'S', _(qScfradd));
@@ -133,7 +133,7 @@ edit_add_source (void)
 RECORD
 edit_add_event (void)
 {
-	STRING str;
+	String str;
 
 	str = getlloptstr("EVENREC", _(qSdefeven));
 	return edit_add_record(str, _(qSeredit), _(qSereditopt), 'E', _(qScfeadd));
@@ -144,7 +144,7 @@ edit_add_event (void)
 RECORD
 edit_add_other (void)
 {
-	STRING str;
+	String str;
 
 	str = getlloptstr("OTHR", _(qSdefothr));
 	return edit_add_record(str, _(qSxredit), _(qSxreditopt), 'X', _(qScfxadd));
@@ -158,7 +158,7 @@ edit_add_other (void)
  *  cfrm:    [IN] confirm message
  *==============================================*/
 static RECORD
-edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING cfrm)
+edit_add_record (String recstr, String redt, String redtopt, char ntype, String cfrm)
 {
 	FILE *fp;
 #if defined(DEADENDS)
@@ -166,10 +166,10 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 #else
 	NODE node=0, refn;
 #endif
-	STRING msg, key;
-	BOOLEAN emp;
+	String msg, key;
+	bool emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	STRING (*getreffnc)(void) = NULL; /* get next internal key */
+	String (*getreffnc)(void) = NULL; /* get next internal key */
 #if defined(DEADENDS)
 	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
 #else
@@ -207,7 +207,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 /* Create template for user to edit */
 	if (!(fp = fopen(editfile, LLWRITETEXT))) {
 		msg_error(_(qSnofopn), editfile);
-		return FALSE;
+		return false;
 	}
 	prefix_file_for_edit(fp);
 	fprintf(fp, "%s\n", recstr);
@@ -215,7 +215,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 /* Have user edit new record */
 	fclose(fp);
 	do_edit();
-	while (TRUE) {
+	while (true) {
 		INT cnt;
 		node = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!node) {
@@ -255,7 +255,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 		if (node) free_nodes(node);
 		return NULL;
 	}
-	nxref(node) = strsave((STRING)(*getreffnc)());
+	nxref(node) = strsave((String)(*getreffnc)());
 	key = rmvat(nxref(node));
 	for (refn = nchild(node); refn; refn = nsibling(refn)) {
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
@@ -272,7 +272,7 @@ edit_add_record (STRING recstr, STRING redt, STRING redtopt, char ntype, STRING 
 /*=======================================
  * edit_source -- Edit source in database
  *=====================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 edit_source (RECORD rec, bool rfmt)
 #else
@@ -291,7 +291,7 @@ edit_source (RECORD rec, RFMT rfmt)
 /*=====================================
  * edit_event -- Edit event in database
  *===================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 edit_event (RECORD rec, bool rfmt)
 #else
@@ -310,7 +310,7 @@ edit_event (RECORD rec, RFMT rfmt)
 /*===========================================
  * edit_other -- Edit other record in database (eg, NOTE)
  *=========================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 edit_other (RECORD rec, bool rfmt)
 #else
@@ -329,7 +329,7 @@ edit_other (RECORD rec, RFMT rfmt)
 /*=======================================
  * edit_any_record -- Edit record of any type
  *=====================================*/
-BOOLEAN
+bool
 #if defined(DEADENDS)
 edit_any_record (RECORD rec, bool rfmt)
 #else
@@ -343,7 +343,7 @@ edit_any_record (RECORD rec, RFMT rfmt)
 	case 'S': return edit_source(rec, rfmt);
 	case 'E': return edit_event(rec, rfmt);
 	case 'X': return edit_other(rec, rfmt);
-	default: ASSERT(0); return FALSE;
+	default: ASSERT(0); return false;
 	}
 }
 /*========================================================
@@ -359,7 +359,7 @@ write_node_to_editfile (NODE node)
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	prefix_file_for_edit(fp);
 
-	write_nodes(0, fp, ttmo, node,  TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, node,  true, true, true);
 	fclose(fp);
 }
 /*=======================================
@@ -384,15 +384,15 @@ edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
 	    bool (*todbase)(GNode *, Database *),
 	    String gdmsg, bool rfmt)
 #else
-static BOOLEAN
-edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
-	    , STRING redtopt , BOOLEAN (*val)(NODE, STRING *, NODE), STRING cfrm
-	    , void (*todbase)(NODE), STRING gdmsg, RFMT rfmt)
+static bool
+edit_record(RECORD rec1, String idedt, INT letr, String redt
+	    , String redtopt , bool (*val)(NODE, String *, NODE), String cfrm
+	    , void (*todbase)(NODE), String gdmsg, RFMT rfmt)
 #endif
 {
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	STRING msg, key;
-	BOOLEAN emp;
+	String msg, key;
+	bool emp;
 #if defined(DEADENDS)
 	GNode *root0=0, *root1=0, *root2=0;
 	GNode *refn1=0, *refn2=0, *refnn=0, *refn1n=0;
@@ -410,7 +410,7 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	root1 = nztop(rec1);
 	if (!root1) {
 		msg_error("%s", _(qSnosuchrec));
-		return FALSE;
+		return false;
 	}
 
 /* Have user edit record */
@@ -424,7 +424,7 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 
 	do_edit();
 
-	while (TRUE) {
+	while (true) {
 		INT cnt;
 		root2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!root2) {
@@ -462,10 +462,10 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	}
 
 /* If error or no change or user backs out return */
-	if (!root2) return FALSE;
+	if (!root2) return false;
 	if (equal_tree(root1, root2) || !ask_yes_or_no(cfrm)) {
 		free_nodes(root2);
-		return FALSE;
+		return false;
 	}
 
 /* Prepare to change database */
@@ -480,7 +480,7 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	/* now copy root2 node into root1, then root2 tree under it */
 	root1 = copy_node(root2);
 	split_othr(root2, &refn2, &body);
-	refnn = copy_nodes(refn2, TRUE, TRUE);
+	refnn = copy_nodes(refn2, true, true);
 	join_othr(root1, refn2, body);
 	/* now root2 is solitary node, delete it */
 	free_node(root2,"edit_record"); root2 = 0;
@@ -503,5 +503,5 @@ edit_record(RECORD rec1, STRING idedt, INT letr, STRING redt
 	free_nodes(refnn);
 	free_nodes(refn1n);
 	msg_info("%s", gdmsg);
-	return TRUE;
+	return true;
 }

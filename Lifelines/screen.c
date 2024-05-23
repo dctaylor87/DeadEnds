@@ -140,7 +140,7 @@ INT MAINWIN_WIDTH=0;
 
 INT ll_lines = -1; /* update to be number of lines in screen */
 INT ll_cols = -1;	 /* number of columns in screen used by LifeLines */
-BOOLEAN stdout_vis = FALSE;
+bool stdout_vis = false;
 INT cur_screen = 0;
 UIWINDOW main_win = NULL;
 UIWINDOW stdout_win=NULL;
@@ -155,7 +155,7 @@ static UIWINDOW extra_menu_win=NULL;
  *********************************************/
 
 extern INT alldone;
-extern BOOLEAN progrunning;
+extern bool progrunning;
 
 
 /*********************************************
@@ -165,38 +165,38 @@ extern BOOLEAN progrunning;
 /* alphabetical */
 static void add_shims_info(LIST list);
 static void add_uiwin(UIWINDOW uiwin);
-static void append_to_msg_list(STRING msg);
-//static BOOLEAN ask_for_filename_impl(STRING ttl, STRING path, STRING prmpt
-//	, STRING buffer, INT buflen);
+static void append_to_msg_list(String msg);
+//static bool ask_for_filename_impl(String ttl, String path, String prmpt
+//	, String buffer, INT buflen);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
-static INT choose_or_view_array (CString ttl, INT no, STRING *pstrngs
-	, BOOLEAN selecting, DETAILFNC detfnc, void *param);
-static INT choose_tt(STRING prompt);
+static INT choose_or_view_array (CString ttl, INT no, String *pstrngs
+	, bool selecting, DETAILFNC detfnc, void *param);
+static INT choose_tt(String prompt);
 static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
 static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
-static void create_boxed_newwin2(UIWINDOW * puiw, CNSTRING name, INT rows, INT cols);
-static void create_newwin(UIWINDOW * puiw, CNSTRING name, INT rows, INT cols, INT begy, INT begx);
-static void create_uisubwindow(UIWINDOW * puiw, CNSTRING name, UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
-static void create_uiwindow_impl(UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, INT cols);
+static void create_boxed_newwin2(UIWINDOW * puiw, CString name, INT rows, INT cols);
+static void create_newwin(UIWINDOW * puiw, CString name, INT rows, INT cols, INT begy, INT begx);
+static void create_uisubwindow(UIWINDOW * puiw, CString name, UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
+static void create_uiwindow_impl(UIWINDOW * puiw, CString name, WINDOW * win, INT rows, INT cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void delete_uiwindow_impl(UIWINDOW uiw);
 static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, INT indx);
-static void display_status(STRING text);
-static BOOLEAN does_match(VPTR param, VPTR el);
+static void display_status(String text);
+static bool does_match(VPTR param, VPTR el);
 static void edit_tt_menu(void);
 #if !defined(DEADENDS)
 static void edit_user_options(void);
 static void edit_place_table(void);
 #endif
 static void end_action(void);
-BOOLEAN get_answer(UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen);
+bool get_answer(UIWINDOW uiwin, INT row, INT col, String buffer, INT buflen);
 static INT get_brwsmenu_size(INT screen);
 static RECORD invoke_add_menu(void);
 static void invoke_cset_display(void);
@@ -208,7 +208,7 @@ static void place_cursor_main(void);
 static void place_std_msg(void);
 static void platform_postcurses_init(void);
 static void refresh_main(void);
-static void register_screen_lang_callbacks(BOOLEAN registering);
+static void register_screen_lang_callbacks(bool registering);
 static void remove_uiwin(UIWINDOW uiwin);
 static void repaint_add_menu(UIWINDOW uiwin);
 static void repaint_delete_menu(UIWINDOW uiwin);
@@ -217,19 +217,19 @@ static void repaint_utils_menu(UIWINDOW uiwin);
 static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_main_menu(UIWINDOW uiwin);
 static int resize_screen_impl(char * errmsg, int errsize);
-static void run_report(BOOLEAN picklist);
+static void run_report(bool picklist);
 static void screen_on_lang_change(VPTR uparm);
 static RECORD search_for_one_record(void);
-static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, BOOLEAN reuse);
-BOOLEAN show_record(UIWINDOW uiwin, CString key, INT mode, LLRECT
-	, INT * scroll, BOOLEAN reuse);
+static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, bool reuse);
+bool show_record(UIWINDOW uiwin, CString key, INT mode, LLRECT
+	, INT * scroll, bool reuse);
 static void show_tandem_line(UIWINDOW uiwin, INT row);
 static void switch_to_uiwin(UIWINDOW uiwin);
-static void touch_all(BOOLEAN includeCurrent);
+static void touch_all(bool includeCurrent);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
 static INT update_browse_menu(INT screen);
 static void update_screen_size(void);
-//static BOOLEAN yes_no_value(INT c);
+//static bool yes_no_value(INT c);
 
 /*********************************************
  * local variables
@@ -238,7 +238,7 @@ static void update_screen_size(void);
 /* what is showing now in status bar */
 static char status_showing[150];
 /* flag if it is not important to keep */
-static BOOLEAN status_transitory = FALSE;
+static bool status_transitory = false;
 
 
 /* total screen lines used */
@@ -255,9 +255,9 @@ static int AUX_LINES=0;
 int winx=0, winy=0; /* user specified window size */
 
 static LIST msg_list = 0;
-static BOOLEAN msg_flag = FALSE; /* need to show msg list */
-static BOOLEAN viewing_msgs = FALSE; /* user is viewing msgs */
-static BOOLEAN lock_std_msg = FALSE; /* to hold status message */
+static bool msg_flag = false; /* need to show msg list */
+static bool viewing_msgs = false; /* user is viewing msgs */
+static bool lock_std_msg = false; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
 static LIST list_uiwin = 0; /* list of all uiwindows */
 
@@ -277,7 +277,7 @@ static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
  *  graphical:   [IN]  whether to use ncurses graphical box lines
  *==========================*/
 void
-set_screen_graphical (BOOLEAN graphical)
+set_screen_graphical (bool graphical)
 {
 	if (graphical) {
 		gr_btee = ACS_BTEE;
@@ -316,7 +316,7 @@ init_screen (char * errmsg, int errsize)
 {
 	int rtn = resize_screen_impl(errmsg, errsize);
 	if (rtn) { /* success */
-		register_screen_lang_callbacks(TRUE);
+		register_screen_lang_callbacks(true);
 		platform_postcurses_init();
 	}
 	return rtn;
@@ -416,7 +416,7 @@ resize_screen_impl (char * errmsg, int errsize)
 void
 term_screen (void)
 {
-	register_screen_lang_callbacks(FALSE);
+	register_screen_lang_callbacks(false);
 	menuitem_terminate();
 	active_uiwin = 0;
 	destroy_windows();
@@ -448,7 +448,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	INT row;
 	char title[80];
 	INT width=sizeof(title);
-	STRING str;
+	String str;
 
 	uierase(uiwin);
 	draw_win_box(win);
@@ -489,7 +489,7 @@ repaint_main_menu (UIWINDOW uiwin)
  *  safe to call on existing UIWINDOW
  *========================================*/
 static void
-create_uiwindow_impl (UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, INT cols)
+create_uiwindow_impl (UIWINDOW * puiw, CString name, WINDOW * win, INT rows, INT cols)
 {
 	UIWINDOW uiwin=0;
 	ASSERT(puiw);
@@ -500,7 +500,7 @@ create_uiwindow_impl (UIWINDOW * puiw, CNSTRING name, WINDOW * win, INT rows, IN
 		add_uiwin(uiwin);
 	}
 	if (uiwin->name)
-		stdfree((STRING)uiwin->name);
+		stdfree((String)uiwin->name);
 	uiwin->name = strsave(name);
 	if (uiw_win(uiwin) != win) {
 		if (uiw_win(uiwin))
@@ -527,7 +527,7 @@ static void
 remove_uiwin (UIWINDOW uiwin)
 {
 	VPTR param = uiwin;
-	BOOLEAN deleteall = FALSE;
+	bool deleteall = false;
 	ASSERT(list_uiwin);
 	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
 }
@@ -535,7 +535,7 @@ remove_uiwin (UIWINDOW uiwin)
  * does_match -- Used as callback to remove_uiwin
  *  in finding an element in a list
  *========================================*/
-static BOOLEAN
+static bool
 does_match (VPTR param, VPTR el)
 {
 	return param == el;
@@ -545,7 +545,7 @@ does_match (VPTR param, VPTR el)
  *  an auxiliary box window outside it
  *========================================*/
 static void
-create_boxed_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
+create_boxed_newwin2 (UIWINDOW * puiw, CString name, INT rows, INT cols)
 {
 	INT begy = (LINES - rows)/2;
 	INT begx = (COLS - cols)/2;
@@ -574,7 +574,7 @@ delete_uiwindow_impl (UIWINDOW w)
 			delwin(uiw_boxwin(w));
 		// delete window name
 		ASSERT(w->name);
-		stdfree((STRING)w->name);
+		stdfree((String)w->name);
 		// delete window
 		stdfree(w);
 	}
@@ -605,7 +605,7 @@ delete_uiwindow (UIWINDOW * uiw)
  *  and return that
  *========================================*/
 static void
-create_newwin (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols, INT begy, INT begx)
+create_newwin (UIWINDOW * puiw, CString name, INT rows, INT cols, INT begy, INT begx)
 {
 	WINDOW * win = newwin(rows, cols, begy, begx);
 	create_uiwindow_impl(puiw, name, win, rows, cols);
@@ -617,7 +617,7 @@ create_newwin (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols, INT begy, INT
  *  and return that
  *========================================*/
 void
-create_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
+create_newwin2 (UIWINDOW * puiw, CString name, INT rows, INT cols)
 {
 	/* NEWWIN centers window on current physical screen */
 	WINDOW * win = NEWWIN(rows, cols);
@@ -628,14 +628,14 @@ create_newwin2 (UIWINDOW * puiw, CNSTRING name, INT rows, INT cols)
  *  for a true (& permanent) subwindow
  *========================================*/
 static void
-create_uisubwindow (UIWINDOW * puiw, CNSTRING name, UIWINDOW parent
+create_uisubwindow (UIWINDOW * puiw, CString name, UIWINDOW parent
 	, INT rows, INT cols
 	, INT begy, INT begx)
 {
 	WINDOW * win = subwin(uiw_win(parent), rows, cols, begy, begx);
 	create_uiwindow_impl(puiw, name, win, rows, cols);
 	uiw_parent(*puiw) = parent;
-	uiw_permsub(*puiw) = TRUE;
+	uiw_permsub(*puiw) = true;
 }
 /*==========================================
  * destroy_windows -- Undo create_windows
@@ -662,13 +662,13 @@ create_windows (void)
 	INT col;
 	
 	create_boxed_newwin2(&stdout_win, "stdout_win", ll_lines-4, ll_cols-4);
-	scrollok(uiw_win(stdout_win), TRUE);
+	scrollok(uiw_win(stdout_win), true);
 	
 	col = COLS/4;
 	create_newwin(&debug_box_win, "debug_box", 8, ll_cols-col-2, 1, col);
 
 	create_uisubwindow(&debug_win, "debug", debug_box_win, 6, ll_cols-col-4, 2, col+1);
-	scrollok(uiw_win(debug_win), TRUE);
+	scrollok(uiw_win(debug_win), true);
 
 	MAINWIN_WIDTH = ll_cols;
 	create_newwin2(&main_win, "main", ll_lines, MAINWIN_WIDTH);
@@ -733,7 +733,7 @@ check_stdout (void)
 	if (active_uiwin == stdout_win) {
 		if (stdout_vis) {
 			do_prompt_stdout(_(qShitkey));
-			stdout_vis = FALSE;
+			stdout_vis = false;
 		}
 		deactivate_uiwin_and_touch_all();
 	}
@@ -750,7 +750,7 @@ prompt_stdout (CString prompt)
 	INT i;
 	if (active_uiwin != stdout_win)
 		activate_uiwin(stdout_win);
-	stdout_vis = TRUE;
+	stdout_vis = true;
 	i = do_prompt_stdout(prompt);
 	return i;
 }
@@ -808,8 +808,8 @@ main_menu (void)
 			invoke_del_menu();
 		}
 		break;
-	case 'p': run_report(TRUE); break;
-	case 'r': run_report(FALSE); break;
+	case 'p': run_report(true); break;
+	case 'r': run_report(false); break;
 	case 't': edit_tt_menu(); break;
 	case 'u': invoke_utils_menu(); break;
 	case 'x':
@@ -833,11 +833,11 @@ main_menu (void)
  *  @picklist:  [IN]  display list of reports to user ?
  *=======================================*/
 void
-run_report (BOOLEAN picklist)
+run_report (bool picklist)
 {
 	LIST progfiles = NULL; /* will prompt for report */
-	STRING ofile = NULL; /* will prompt for output file */
-	BOOLEAN timing = TRUE;
+	String ofile = NULL; /* will prompt for output file */
+	bool timing = true;
 	begin_action();
 	interp_main(progfiles, ofile, picklist, timing);
 	end_action(); /* displays any errors that happened */
@@ -879,7 +879,7 @@ update_browse_menu (INT screen)
 			output_menu(uiwin, dynmenu);
 		}
 	}
-	dynmenu->dirty = FALSE;
+	dynmenu->dirty = false;
 	return lines;
 }
 /*=========================================
@@ -893,7 +893,7 @@ update_browse_menu (INT screen)
  *=======================================*/
 void
 show_indi (UIWINDOW uiwin, RECORD irec, INT mode, LLRECT rect
-	, INT * scroll, BOOLEAN reuse)
+	, INT * scroll, bool reuse)
 {
 #if !defined(DEADENDS)
 	CACHEEL icel;
@@ -927,7 +927,7 @@ show_indi (UIWINDOW uiwin, RECORD irec, INT mode, LLRECT rect
  *=======================================*/
 static void
 show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
-	, INT width, INT * scroll, BOOLEAN reuse)
+	, INT width, INT * scroll, bool reuse)
 {
 	struct tag_llrect rect;
 #if !defined(DEADENDS)
@@ -955,7 +955,7 @@ show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
  * display_indi -- Paint indi on-screen
  *=======================================*/
 void
-display_indi (RECORD indi, INT mode, BOOLEAN reuse)
+display_indi (RECORD indi, INT mode, bool reuse)
 {
 	INT screen = ONE_PER_SCREEN;
 	INT lines=0;
@@ -982,7 +982,7 @@ interact_indi (void)
  * display_fam -- Paint fam on-screen
  *=====================================*/
 void
-display_fam (RECORD frec, INT mode, BOOLEAN reuse)
+display_fam (RECORD frec, INT mode, bool reuse)
 {
 	INT width=0;
 	INT screen = ONE_FAM_SCREEN;
@@ -1010,7 +1010,7 @@ display_2indi (RECORD irec1, RECORD irec2, INT mode)
 	INT screen = TWO_PER_SCREEN;
 	INT lines=0;
 	INT lines1=0,lines2=0;
-	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
+	bool reuse = false; /* can't reuse display strings in tandem */
 	struct tag_llrect rect;
 
 	update_screen_size(); /* ensure screen size is current */
@@ -1063,7 +1063,7 @@ display_2fam (RECORD frec1, RECORD frec2, INT mode)
 	INT screen = TWO_FAM_SCREEN;
 	INT lines=0;
 	INT lines1=0,lines2=0;
-	BOOLEAN reuse = FALSE; /* can't reuse display strings in tandem */
+	bool reuse = false; /* can't reuse display strings in tandem */
 
 	update_screen_size(); /* ensure screen size is current */
 	width=MAINWIN_WIDTH;
@@ -1093,7 +1093,7 @@ interact_2fam (void)
  * interact_popup -- Get menu choice for a popup window
  *=======================================*/
 INT
-interact_popup (UIWINDOW uiwin, STRING str)
+interact_popup (UIWINDOW uiwin, String str)
 {
 	return interact_choice_string(uiwin, str);
 }
@@ -1102,7 +1102,7 @@ interact_popup (UIWINDOW uiwin, STRING str)
  * This is used for browsing S, E, or X records.
  *=====================================*/
 INT
-aux_browse (RECORD rec, INT mode, BOOLEAN reuse)
+aux_browse (RECORD rec, INT mode, bool reuse)
 {
 	UIWINDOW uiwin = main_win;
 	INT lines = update_browse_menu(AUX_SCREEN);
@@ -1134,8 +1134,8 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
  *  ttl:   [IN]  title of question (1rst line)
  *  prmpt: [IN]  prompt of question (2nd line)
  *====================================*/
-BOOLEAN
-ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING basedir, STRING buffer, INT buflen)
+bool
+ask_for_db_filename (CString ttl, CString prmpt, HINT_PARAM_UNUSED CString basedir, String buffer, INT buflen)
 {
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
@@ -1148,8 +1148,8 @@ ask_for_db_filename (CNSTRING ttl, CNSTRING prmpt, HINT_PARAM_UNUSED CNSTRING ba
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
  *====================================*/
-BOOLEAN
-ask_for_output_filename (CString ttl, CString path, CString prmpt, STRING buffer, INT buflen)
+bool
+ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer, INT buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
@@ -1162,8 +1162,8 @@ ask_for_output_filename (CString ttl, CString path, CString prmpt, STRING buffer
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
  *====================================*/
-BOOLEAN
-ask_for_input_filename (CString ttl, CString path, CString prmpt, STRING buffer, INT buflen)
+bool
+ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, INT buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
@@ -1177,8 +1177,8 @@ ask_for_input_filename (CString ttl, CString path, CString prmpt, STRING buffer,
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
  *====================================*/
-BOOLEAN
-ask_for_filename_impl (CString ttl, CString path, CString prmpt, STRING buffer, INT buflen)
+bool
+ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, INT buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
@@ -1209,12 +1209,12 @@ refresh_main (void)
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
  *====================================*/
-BOOLEAN
-ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
+bool
+ask_for_string (CString ttl, CString prmpt, String buffer, INT buflen)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
-	BOOLEAN rtn;
+	bool rtn;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvccuwaddstr(uiwin, 1, 1, ttl);
@@ -1234,12 +1234,12 @@ ask_for_string (CNSTRING ttl, CNSTRING prmpt, STRING buffer, INT buflen)
  *  buffer:  [OUT] response
  *  buflen:  [IN]  max size of response
  *====================================*/
-BOOLEAN
-ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, INT buflen)
+bool
+ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, INT buflen)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
-	BOOLEAN rtn;
+	bool rtn;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, 1, 1, ttl1);
@@ -1252,22 +1252,22 @@ ask_for_string2 (CNSTRING ttl1, CNSTRING ttl2, CNSTRING prmpt, STRING buffer, IN
 	return rtn;
 }
 /*========================================
- * yes_no_value -- Convert character to TRUE if y(es)
+ * yes_no_value -- Convert character to true if y(es)
  *======================================*/
-BOOLEAN
+bool
 yes_no_value (INT c)
 {
-	STRING ptr;
+	String ptr;
 	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (c == *ptr) return TRUE;
+		if (c == *ptr) return true;
 	}
-	return FALSE;
+	return false;
 }
 /*========================================
  * ask_yes_or_no -- Ask yes or no question
  *  ttl:  [IN]  title to display
  *======================================*/
-BOOLEAN
+bool
 ask_yes_or_no (CString ttl)
 {
 	INT c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
@@ -1278,7 +1278,7 @@ ask_yes_or_no (CString ttl)
  *  msg:   [IN]  top line displayed
  *  ttl:   [IN]  2nd line displayed
  *=======================================================*/
-BOOLEAN
+bool
 ask_yes_or_no_msg (CString msg, CString ttl)
 {
 	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
@@ -1291,7 +1291,7 @@ ask_yes_or_no_msg (CString msg, CString ttl)
  *  ptrn:  [IN]  List of allowable character responses
  *=====================================*/
 INT
-ask_for_char (CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
+ask_for_char (CString ttl, CString prmpt, CString ptrn)
 {
 	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
 }
@@ -1303,7 +1303,7 @@ ask_for_char (CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
  *  ptrn:  [IN]  List of allowable character responses
  *=========================================*/
 INT
-ask_for_char_msg (CNSTRING msg, CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
+ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 {
 	UIWINDOW uiwin = (msg ? ask_msg_win : ask_win);
 	WINDOW *win = uiw_win(uiwin);
@@ -1328,9 +1328,9 @@ ask_for_char_msg (CNSTRING msg, CNSTRING ttl, CNSTRING prmpt, CNSTRING ptrn)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-choose_from_array (CString ttl, INT no, STRING *pstrngs)
+choose_from_array (CString ttl, INT no, String *pstrngs)
 {
-	BOOLEAN selecting = TRUE;
+	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
 	return choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
 }
@@ -1355,18 +1355,18 @@ display_list (CString ttl, LIST list)
 INT
 choose_from_list (CString ttl, LIST list)
 {
-	STRING * array=0;
-	STRING choice=0;
+	String * array=0;
+	String choice=0;
 	INT i=0, rtn=-1;
 	INT len = length_list(list);
 
 	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);
 
-	array = (STRING *) stdalloc(len*sizeof(STRING));
+	array = (String *) stdalloc(len*sizeof(String));
 	i = 0;
 	FORLIST(list, el)
-		choice = (STRING)el;
+		choice = (String)el;
 		ASSERT(choice);
 		array[i] = strsave(choice);
 		++i;
@@ -1389,10 +1389,10 @@ choose_from_list (CString ttl, LIST list)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 INT
-choose_from_array_x (CString ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
+choose_from_array_x (CString ttl, INT no, String *pstrngs, DETAILFNC detfnc
 	, void *param)
 {
-	BOOLEAN selecting = TRUE;
+	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
 	return choose_or_view_array(ttl, no, pstrngs, selecting, detfnc, param);
 }
@@ -1404,9 +1404,9 @@ choose_from_array_x (CString ttl, INT no, STRING *pstrngs, DETAILFNC detfnc
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 void
-view_array (CString ttl, INT no, STRING *pstrngs)
+view_array (CString ttl, INT no, String *pstrngs)
 {
-	BOOLEAN selecting = FALSE;
+	bool selecting = false;
 	choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
@@ -1420,7 +1420,7 @@ view_array (CString ttl, INT no, STRING *pstrngs)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 static INT
-choose_or_view_array (CString ttl, INT no, STRING *pstrngs, BOOLEAN selecting
+choose_or_view_array (CString ttl, INT no, String *pstrngs, bool selecting
 	, DETAILFNC detfnc, void *param)
 {
 	INT rv;
@@ -1437,7 +1437,7 @@ choose_or_view_array (CString ttl, INT no, STRING *pstrngs, BOOLEAN selecting
 INT
 choose_one_from_indiseq (CString ttl, INDISEQ seq)
 {
-	return choose_one_or_list_from_indiseq(ttl, seq, FALSE);
+	return choose_one_or_list_from_indiseq(ttl, seq, false);
 }
 /*==========================================================
  * choose_list_from_indiseq -- User chooses subsequence from
@@ -1451,13 +1451,13 @@ choose_one_from_indiseq (CString ttl, INDISEQ seq)
 INT
 choose_list_from_indiseq (CString ttl, INDISEQ seq)
 {
-	return choose_one_or_list_from_indiseq(ttl, seq, TRUE);
+	return choose_one_or_list_from_indiseq(ttl, seq, true);
 }
 /*==============================
  * draw_tt_win -- Draw menu for edit translations
  *============================*/
 static void
-draw_tt_win (STRING prompt)
+draw_tt_win (String prompt)
 {
 	UIWINDOW uiwin = tt_menu_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1515,7 +1515,7 @@ invoke_add_menu (void)
 
 	if (!add_menu_win) {
 		create_newwin2(&add_menu_win, "add_menu", 8, 66);
-		add_menu_win->outdated = TRUE; /* needs drawing */
+		add_menu_win->outdated = true; /* needs drawing */
 	}
 
 	if (add_menu_win->outdated) {
@@ -1535,7 +1535,7 @@ invoke_add_menu (void)
 		break;
 	case 'f': add_family_by_edit(NULL, NULL, NULL, false); break;
 	case 'c': my_prompt_add_child(NULL, NULL); break;
-	case 's': prompt_add_spouse(NULL, NULL, TRUE); break;
+	case 's': prompt_add_spouse(NULL, NULL, true); break;
 	case 'q': break;
 	}
 	return rec;
@@ -1551,7 +1551,7 @@ invoke_del_menu (void)
 	WINDOW * win=0;
 	if (!del_menu_win) {
 		create_newwin2(&del_menu_win, "del_menu", 9, 66);
-		del_menu_win->outdated = TRUE; /* needs drawing */
+		del_menu_win->outdated = true; /* needs drawing */
 	}
 	if (del_menu_win->outdated) {
 		repaint_delete_menu(del_menu_win);
@@ -1565,8 +1565,8 @@ invoke_del_menu (void)
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
-	case 'c': choose_and_remove_child(NULL, NULL, FALSE); break;
-	case 's': choose_and_remove_spouse(NULL, NULL, FALSE); break;
+	case 'c': choose_and_remove_child(NULL, NULL, false); break;
+	case 's': choose_and_remove_spouse(NULL, NULL, false); break;
 	case 'i': choose_and_remove_indi(NULL, DOCONFIRM); break;
 	case 'f': choose_and_remove_family(); break;
 	case 'o': choose_and_remove_any_record(NULL, DOCONFIRM); break;
@@ -1606,7 +1606,7 @@ invoke_cset_display (void)
 	}
 
 	if (1) {
-		CNSTRING str = get_gettext_codeset();
+		CString str = get_gettext_codeset();
 		str = str ? str : "";
 		zs_setf(zstr, "bind_textdomain_codeset: %s", str);
 		enqueue_list(list, strsave(zs_str(zstr)));
@@ -1759,7 +1759,7 @@ invoke_trans_menu (void)
 {
 	INT code;
 	UIWINDOW uiwin=0;
-	BOOLEAN done=FALSE;
+	bool done=false;
 
 	if (!trans_menu_win) {
 		create_newwin2(&trans_menu_win,"trans_menu",10,66);
@@ -1767,7 +1767,7 @@ invoke_trans_menu (void)
 	uiwin = trans_menu_win;
 
 	while (!done) {
-		stdout_vis=FALSE;
+		stdout_vis=false;
 		repaint_trans_menu(uiwin);
 		reactivate_uiwin(uiwin);
 		wmove(uiw_win(uiwin), 1, strlen(_(qSmn_tt_ttl))+3);
@@ -1780,7 +1780,7 @@ invoke_trans_menu (void)
 		case 's': save_tt_action(); break;
 		case 'x': export_tts(); break;
 		case 'i': import_tts(); break;
-		case 'q': done=TRUE; break;
+		case 'q': done=true; break;
 		}
 		end_action(); /* displays any errors that happened */
 	}
@@ -1796,7 +1796,7 @@ edit_tt_menu (void)
 	INT ttnum;
 	while ((ttnum = choose_tt(_(qSmn_edttttl))) != -1) {
 		edit_mapping(ttnum);
-		stdout_vis = FALSE; /* don't need to see errors after done */
+		stdout_vis = false; /* don't need to see errors after done */
 	}
 }
 /*======================================
@@ -1807,9 +1807,9 @@ static void
 load_tt_action (void)
 {
 	FILE * fp;
-	STRING fname=0;
+	String fname=0;
 	INT ttnum;
-	STRING ttimportdir;
+	String ttimportdir;
 
 	/* Ask which table */
 	ttnum = choose_tt(_(qSmn_svttttl));
@@ -1838,9 +1838,9 @@ static void
 save_tt_action (void)
 {
 	FILE * fp;
-	STRING fname=0;
+	String fname=0;
 	INT ttnum;
-	STRING ttexportdir;
+	String ttexportdir;
 	
 	/* Ask which table */
 	ttnum = choose_tt(_(qSmn_svttttl));
@@ -1872,7 +1872,7 @@ save_tt_action (void)
  * choose_tt -- select a translation table (-1 for none)
  *====================================*/
 static INT
-choose_tt (STRING prompt)
+choose_tt (String prompt)
 {
 	INT code;
 	UIWINDOW uiwin = tt_menu_win;
@@ -1906,7 +1906,7 @@ invoke_utils_menu (void)
 
 	if (!utils_menu_win) {
 		create_newwin2(&utils_menu_win, "utils_menu", 14, 66);
-		utils_menu_win->outdated = TRUE; /* needs drawing */
+		utils_menu_win->outdated = true; /* needs drawing */
 	}
 	if (utils_menu_win->outdated) {
 		repaint_utils_menu(utils_menu_win);
@@ -1922,8 +1922,8 @@ invoke_utils_menu (void)
 	begin_action();
 	switch (code) {
 	case 's': save_gedcom(); break;
-	case 'r': load_gedcom(FALSE); break;
-	case 'R': load_gedcom(TRUE); break;
+	case 'r': load_gedcom(false); break;
+	case 'R': load_gedcom(true); break;
 	case 'k': key_util(); break;
 #if !defined(DEADENDS)
 	case 'i': who_is_he_she(); break;
@@ -1955,7 +1955,7 @@ invoke_extra_menu (RECORD *prec)
 
 	if (!extra_menu_win) {
 		create_newwin2(&extra_menu_win, "extra_menu", 13,66);
-		extra_menu_win->outdated = TRUE; /* needs drawing */
+		extra_menu_win->outdated = true; /* needs drawing */
 	}
 	if (extra_menu_win->outdated) {
 		repaint_extra_menu(extra_menu_win);
@@ -1988,11 +1988,11 @@ invoke_extra_menu (RECORD *prec)
  * uopt_validate -- Validator when user edits 'user options table'
  *  returns descriptive string for failure, 0 for pass
  *=============================*/
-static STRING
+static String
 uopt_validate (TABLE tab, void * param)
 {
-	STRING codeset = valueof_str(tab, "codeset");
-	STRING original_codeset = (STRING)param;
+	String codeset = valueof_str(tab, "codeset");
+	String original_codeset = (String)param;
 	/*
 	our only rule currently is that user may not change codeset
 	of a populated database
@@ -2022,7 +2022,7 @@ static void
 edit_user_options (void)
 {
 	TABLE uopts = create_table_str();
-	STRING param=0;
+	String param=0;
 	get_db_options(uopts);
 	param = valueof_str(uopts, "codeset");
 	param = (param ? strsave(param) : 0);
@@ -2043,11 +2043,11 @@ edit_user_options (void)
  *  buflen:  [IN]  max size of response
  *  Has not been codeset-converted to internal yet
  *==========================================*/
-BOOLEAN
-get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
+bool
+get_answer (UIWINDOW uiwin, INT row, INT col, String buffer, INT buflen)
 {
 	WINDOW *win = uiw_win(uiwin);
-	BOOLEAN rtn = FALSE;
+	bool rtn = false;
 
 	/* TODO: Is this necessary ? It prevents entering long paths */
 	if (buflen > uiw_cols(uiwin)-col-1)
@@ -2056,7 +2056,7 @@ get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
 	echo();
 	wmove(win, row, col);
 	if (wgetccnstr(win, buffer, buflen) != ERR)
-		rtn = TRUE;
+		rtn = true;
 	noecho();
 	buffer[buflen-1] = 0; /* ensure zero-termination */
 
@@ -2070,11 +2070,11 @@ get_answer (UIWINDOW uiwin, INT row, INT col, STRING buffer, INT buflen)
  *  rect:   [IN]  where to draw
  *  scroll: [I/O] current scroll setting
  *  reuse:  [IN]  flag indicating if same record drawn last time
- * returns TRUE if record was found, else FALSE (no record, nothing drawn)
+ * returns true if record was found, else FALSE (no record, nothing drawn)
  *==============================================================*/
-BOOLEAN
+bool
 show_record (UIWINDOW uiwin, CString key, INT mode, LLRECT rect
-	, INT * scroll, BOOLEAN reuse)
+	, INT * scroll, bool reuse)
 {
 	INT row = rect->top;
 	INT hgt = rect->bottom - rect->top + 1;
@@ -2101,7 +2101,7 @@ show_record (UIWINDOW uiwin, CString key, INT mode, LLRECT rect
 /*===================================================
  * message_string -- Return background message string
  *=================================================*/
-STRING
+String
 message_string (void)
 {
 	if (!cur_screen) return "";
@@ -2120,7 +2120,7 @@ place_std_msg (void)
 	/* msg is placed on main window */
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
-	STRING str = message_string();
+	String str = message_string();
 	INT row = ll_lines-2;
 	clear_hseg(win, row, 2, ll_cols-2);
 	mvccwaddstr(win, row, 2, str);
@@ -2128,7 +2128,7 @@ place_std_msg (void)
 	subwindows up, instead we call the touch_all routine,
 	which does them all from ancestor to descendant */
 	if (active_uiwin)
-		touch_all(TRUE);
+		touch_all(true);
 	else
 		wrefresh(win);
 	place_cursor_main();
@@ -2182,14 +2182,14 @@ clearw (void)
 	uierase(uiwin);
 	draw_win_box(boxwin);
 	wmove(win, 0, 0);
-	stdout_vis = TRUE;
+	stdout_vis = true;
 	wrefresh(boxwin);
 }
 /*=======================================
  * wfield -- Write field in stdout window
  *=====================================*/
 void
-wfield (INT row, INT col, STRING str)
+wfield (INT row, INT col, String str)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -2299,7 +2299,7 @@ place_cursor_main (void)
  * dbprintf -- Debug printf(fmt, arg, arg, ...)
  *===========================================*/
 void
-dbprintf (STRING fmt, ...)
+dbprintf (String fmt, ...)
 {
 	va_list args;
 	touchwin(uiw_win(debug_box_win));
@@ -2520,7 +2520,7 @@ color_hseg (WINDOW *win, INT row, INT x1, INT x2, char ch)
    That is caller's responsibility. */
 
 static void
-display_status (STRING text)
+display_status (String text)
 {
   UIWINDOW uiwin = main_win;
   WINDOW *win = uiw_win(uiwin);
@@ -2562,7 +2562,7 @@ curses_outputv (ARG_UNUSED(void *data),
 		MSG_LEVEL level, CString fmt, va_list args)
 {
 	char buffer[250];
-	STRING ptr;
+	String ptr;
 	unsigned int width = MAINWIN_WIDTH-5;
 	/* prefix errors & infos with * and space respectively */
 	switch(level) {
@@ -2589,7 +2589,7 @@ curses_outputv (ARG_UNUSED(void *data),
 			so it is already on the msg list, we just need to make
 			sure the msg list gets displayed */
 			if (!viewing_msgs)
-				msg_flag = TRUE;
+				msg_flag = true;
 		}
 		display_status(buffer);
 		return;
@@ -2600,7 +2600,7 @@ curses_outputv (ARG_UNUSED(void *data),
 	/* being careful in case we are currently *in* the msg list
 	show routine */
 	if (!viewing_msgs && (length_list(msg_list)>1 || lock_std_msg)) {
-		msg_flag = TRUE;
+		msg_flag = true;
 	}
 	/* now put it to status area if appropriate */
 	if (!lock_std_msg) {
@@ -2610,7 +2610,7 @@ curses_outputv (ARG_UNUSED(void *data),
 /*
 TODO: This doesn't make sense until the msg list handles long strings
 			if (!viewing_msgs)
-				msg_flag = TRUE;
+				msg_flag = true;
 */
 		}
 		display_status(buffer);
@@ -2624,7 +2624,7 @@ TODO: This doesn't make sense until the msg list handles long strings
  * put on the status bar, and it wasn't too wide.
  *=======================================*/
 static void
-append_to_msg_list (STRING msg)
+append_to_msg_list (String msg)
 {
 		if (!msg_list)
 			msg_list = create_list2(LISTDOFREE);
@@ -2650,14 +2650,14 @@ void end_action (void)
 	check_stdout();
 	/* put up list of errors if appropriate */
 	if (msg_flag && msg_list) {
-		STRING * strngs = (STRING *)stdalloc(length_list(msg_list)*sizeof(STRING));
+		String * strngs = (String *)stdalloc(length_list(msg_list)*sizeof(String));
 		INT i=0;
 		FORLIST(msg_list, el)
 			strngs[i++] = el;
 		ENDLIST
-		viewing_msgs = TRUE; /* suppress msg generation */
+		viewing_msgs = true; /* suppress msg generation */
 		view_array(_(qSerrlist), length_list(msg_list), strngs);
-		viewing_msgs = FALSE;
+		viewing_msgs = false;
 		stdfree(strngs);
 		clear_msgs();
 	}
@@ -2674,7 +2674,7 @@ clear_msgs (void)
 		destroy_list(msg_list);
 		msg_list = 0;
 	}
-	msg_flag = FALSE;
+	msg_flag = false;
 	/* also clear status bar */
 	clear_status();
 }
@@ -2693,7 +2693,7 @@ clear_status (void)
  * lock_status_msg -- temporarily hold status message
  *=======================================*/
 void
-lock_status_msg (BOOLEAN lock)
+lock_status_msg (bool lock)
 {
 	lock_std_msg = lock;
 }
@@ -2713,7 +2713,7 @@ repaint_add_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_add_chil));
 	mvccwaddstr(win, row++, 4, _(qSmn_add_spou));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
-	uiwin->outdated = FALSE;
+	uiwin->outdated = false;
 }
 /*=====================================
  * repaint_delete_menu -- Draw menu choices for main delete item menu
@@ -2732,7 +2732,7 @@ repaint_delete_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_del_fam));
 	mvccwaddstr(win, row++, 4, _(qSmn_del_any));
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
-	uiwin->outdated = FALSE;
+	uiwin->outdated = false;
 }
 /*=====================================
  * repaint_utils_menu --
@@ -2760,7 +2760,7 @@ repaint_utils_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_utusropt));
 	mvccwaddstr(win, row++, 4, _(qSmn_mmcset));
 	mvccwaddstr(win, row++, 4, _(qSmn_quit));
-	uiwin->outdated = FALSE;
+	uiwin->outdated = false;
 }
 /*=====================================
  * repaint_extra_menu --
@@ -2783,7 +2783,7 @@ repaint_extra_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 4, _(qSmn_xxaothr));
 	mvccwaddstr(win, row++, 4, _(qSmn_xxeothr));
 	mvccwaddstr(win, row++, 4, _(qSmn_quit));
-	uiwin->outdated = FALSE;
+	uiwin->outdated = false;
 }
 /*============================
  * activate_uiwin --
@@ -2857,14 +2857,14 @@ deactivate_uiwin_and_touch_all (void)
 {
 	deactivate_uiwin();
 	if (active_uiwin)
-		touch_all(TRUE);
+		touch_all(true);
 }
 /*============================
  * touch_all -- Repaint all ancestors of current window
  * from furthest to nearest
  *==========================*/
 static void
-touch_all (BOOLEAN includeCurrent)
+touch_all (bool includeCurrent)
 {
 	UIWINDOW uiwin=active_uiwin;
 	ASSERT(uiwin);
@@ -3017,7 +3017,7 @@ platform_postcurses_init (void)
 {
 #ifdef WIN32
 	char buffer[80];
-	STRING title = _(qSmtitle);
+	String title = _(qSmtitle);
 #if defined(DEADENDS)
 	snprintf(buffer, sizeof(buffer), title, get_deadends_version(sizeof(buffer)-1-strlen(title)));
 #else
@@ -3061,7 +3061,7 @@ clear_status_display (void)
  *  for language or codeset changes
  *==========================*/
 static void
-register_screen_lang_callbacks (BOOLEAN registering)
+register_screen_lang_callbacks (bool registering)
 {
 	if (registering) {
 		register_uilang_callback(screen_on_lang_change, 0);
@@ -3084,7 +3084,7 @@ screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
   for (ndx = 0; ndx < max; ndx++)
     {
       UIWINDOW uiwin = (UIWINDOW) getListElement (list_uiwin, ndx);
-      uiwin->outdated = TRUE;
+      uiwin->outdated = true;
     }
 #else
 	LIST_ITER listit=0;
@@ -3092,7 +3092,7 @@ screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
 	listit = begin_list(list_uiwin);
 	while (next_list_ptr(listit, &ptr)) {
 		UIWINDOW uiwin = (UIWINDOW)ptr;
-		uiwin->outdated = TRUE;
+		uiwin->outdated = true;
 	}
 	end_list_iter(&listit);
 #endif

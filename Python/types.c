@@ -171,7 +171,7 @@ Py_hash_t llines_record_hash (PyObject *obj)
 {
   LLINES_PY_RECORD *pyobj = (LLINES_PY_RECORD *)obj;
   RECORD record;
-  CNSTRING key;
+  CString key;
   PyObject *hash_arg;
   Py_hash_t hash;
 

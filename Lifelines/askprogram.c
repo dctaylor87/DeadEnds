@@ -70,7 +70,7 @@ static void set_programs_d0(TABLE * fileprops);
 
 enum { P_PROGNAME=0, P_VERSION=1, P_OUTPUT=4 };
 
-static CNSTRING f_tags[] = {
+static CString f_tags[] = {
   "progname"    /* The name of the script */
   , "version"     /* The version of the script */
   , "author"      /* The author of the script */
@@ -86,9 +86,9 @@ static CNSTRING f_tags[] = {
 static int
 select_programs (const struct dirent *entry)
 {
-	CNSTRING goodext = ".ll";
+	CString goodext = ".ll";
 	/* examine end of entry->d_name */
-	CNSTRING entext = entry->d_name + strlen(entry->d_name) - strlen(goodext);
+	CString entext = entry->d_name + strlen(entry->d_name) - strlen(goodext);
 
 	/* is it what we want ? use platform correct comparison, from path.c */
 	if (!path_match(goodext, entext))
@@ -103,7 +103,7 @@ select_programs (const struct dirent *entry)
 static void
 add_program_props (TABLE fileprops)
 {
-	STRING tagsfound[ARRSIZE(f_tags)];
+	String tagsfound[ARRSIZE(f_tags)];
 	FILE *fp;
 	char str[MAXLINELEN];
 	INT i;
@@ -112,9 +112,9 @@ add_program_props (TABLE fileprops)
 	char * charset=0; /* charset of report, if found */
 
 	/* first get full path & open file */
-	STRING fname = valueof_str(fileprops, "filename");
-	STRING dir = valueof_str(fileprops, "dir");
-	STRING filepath = concat_path_alloc(dir, fname);
+	String fname = valueof_str(fileprops, "filename");
+	String dir = valueof_str(fileprops, "dir");
+	String filepath = concat_path_alloc(dir, fname);
 	char enc_cmd[] = "char_encoding(\"";
 
 	if (NULL == (fp = fopen(filepath, LLREADTEXT)))
@@ -142,16 +142,16 @@ add_program_props (TABLE fileprops)
 		}
 		if (!endcomment) {
 			/* pick up any tag values specified */
-			STRING p;
+			String p;
 			chomp(str); /* trim trailing CR or LF */
 			for (i=0; i<(int)ARRSIZE(f_tags); ++i) {
-				CNSTRING tag = f_tags[i];
+				CString tag = f_tags[i];
 				if (tagsfound[i])
 					continue; /* already have this tag */
 				if (NULL != (p = strstr(str, tag))) {
-					STRING s = p + strlen(tag);
+					String s = p + strlen(tag);
 					/* skip leading space */
-					while (s[0] && isspace((uchar)s[0]))
+					while (s[0] && isspace((u_char)s[0]))
 						++s;
 					striptrail(s);
 					if (s[0])
@@ -207,9 +207,9 @@ set_programs_d0 (TABLE * fileprops)
 	for (i=0; fileprops[i]; ++i) {
 		TABLE props = fileprops[i];
 		char buf[MAXLINELEN];
-		STRING program = valueof_str(props, (STRING)f_tags[P_PROGNAME]);
-		STRING version = valueof_str(props, (STRING)f_tags[P_VERSION]);
-		STRING output = valueof_str(props, (STRING)f_tags[P_OUTPUT]);
+		String program = valueof_str(props, (String)f_tags[P_PROGNAME]);
+		String version = valueof_str(props, (String)f_tags[P_VERSION]);
+		String output = valueof_str(props, (String)f_tags[P_OUTPUT]);
 		if (!program)
 			program = valueof_str(props, "filename");
 		if (!output)
@@ -225,19 +225,19 @@ set_programs_d0 (TABLE * fileprops)
  * ask_for_program -- Ask for program
  *  pfname: [OUT]  allocated on heap (name we tried to open)
  *=================================================*/
-BOOLEAN
+bool
 ask_for_program (CString mode,
                  CString ttl,
-                 STRING *pfname,
-                 STRING *pfullpath,
-                 STRING path,
-                 STRING ext,
-                 BOOLEAN picklist)
+                 String *pfname,
+                 String *pfullpath,
+                 String path,
+                 String ext,
+                 bool picklist)
 {
 	int choice;
 	INT nfiles, i;
 	TABLE * fileprops;
-	STRING * choices;
+	String * choices;
 	FILE * fp;
 
 	if (pfname) *pfname = 0;
@@ -253,7 +253,7 @@ ask_for_program (CString mode,
 	set_programs_d0(fileprops);
 	if (!nfiles) goto AskForString;
 
-	choices = (STRING *)stdalloc(sizeof(STRING)*(nfiles+1));
+	choices = (String *)stdalloc(sizeof(String)*(nfiles+1));
 	/* choices are all shared pointers */
 	choices[0] = _(qSextchoos);
 	for (i=0; i<nfiles; ++i) {
@@ -262,9 +262,9 @@ ask_for_program (CString mode,
 	choice = choose_from_array_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
 	if (choice > 0) {
 		TABLE props = fileprops[choice-1];
-		STRING fname = valueof_str(props, "filename");
-		STRING dir = valueof_str(props, "dir");
-		STRING filepath = concat_path_alloc(dir, fname);
+		String fname = valueof_str(props, "filename");
+		String dir = valueof_str(props, "dir");
+		String filepath = concat_path_alloc(dir, fname);
 		*pfname = strsave(fname);
 		*pfullpath = filepath;
 	}
@@ -310,9 +310,9 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 
 	/* print tags & values */
 	for (i=scroll; i<dnum && row<count; ++i, ++row) {
-		STRING detail = arrdets->lines[row];
+		String detail = arrdets->lines[row];
 		char temp[FMT_INT_LEN+1];
-		STRING name=0, value=0;
+		String name=0, value=0;
 		snprintf(temp, sizeof(temp), "d" FMT_INT, i+1);
 		name = valueof_str(props, temp);
 		detail[0]=0;

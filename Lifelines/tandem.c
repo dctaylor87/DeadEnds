@@ -89,7 +89,7 @@
  * local function prototypes
  *********************************************/
 
-static BOOLEAN handle_tandem_scroll_cmds(INT c);
+static bool handle_tandem_scroll_cmds(INT c);
 
 /*********************************************
  * local function definitions
@@ -111,7 +111,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	CString key, name;
 	INDISEQ seq;
 	INT c, rc;
-	BOOLEAN reuse=FALSE;
+	bool reuse=false;
 	static INT mode = 'n';
 
 	ASSERT(prec1);
@@ -133,7 +133,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	nkey2p = 0;
 	modep = mode;
 
-	while (TRUE) {
+	while (true) {
 		if (nzkeynum(current1) != nkey1p
 			|| nzkeynum(current2) != nkey2p
 			|| mode != modep) {
@@ -181,7 +181,7 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				current1 = tmp;
 			break;
 		case CMD_MERGE_BOTTOM_TO_TOP: 	/* merge two persons */
-			if ((tmp = merge_two_indis(nztop(current2), nztop(current1), TRUE))) {
+			if ((tmp = merge_two_indis(nztop(current2), nztop(current1), true))) {
 				*prec1 = tmp;
 				return BROWSE_INDI;
 			}
@@ -238,7 +238,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 #endif
 	INT nkey1p, nkey2p, modep;
 	INT c;
-	BOOLEAN reuse=FALSE;
+	bool reuse=false;
 	static INT mode = 'n';
 
 	ASSERT(prec1);
@@ -260,7 +260,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 	nkey2p = 0;
 	modep = mode;
 
-	while (TRUE) {
+	while (true) {
 		if (nzkeynum(current1) != nkey1p
 			|| nzkeynum(current2) != nkey2p
 			|| mode != modep) {
@@ -359,16 +359,16 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
  * handle_tandem_scroll_cmds -- Handle tandem scrolling
  * Created: 2001/02/04, Perry Rapp
  *====================================================*/
-static BOOLEAN
+static bool
 handle_tandem_scroll_cmds (INT c)
 {
 	switch(c) {
-	case CMD_SCROLL_TOP_UP: show_scroll(-1); return TRUE;
-	case CMD_SCROLL_TOP_DOWN: show_scroll(+1); return TRUE;
-	case CMD_SCROLL_BOTTOM_UP: show_scroll2(-1); return TRUE;
-	case CMD_SCROLL_BOTTOM_DOWN: show_scroll2(+1); return TRUE;
-	case CMD_SCROLL_BOTH_UP: show_scroll(-1); show_scroll2(-1); return TRUE;
-	case CMD_SCROLL_BOTH_DOWN: show_scroll(+1); show_scroll2(+1); return TRUE;
+	case CMD_SCROLL_TOP_UP: show_scroll(-1); return true;
+	case CMD_SCROLL_TOP_DOWN: show_scroll(+1); return true;
+	case CMD_SCROLL_BOTTOM_UP: show_scroll2(-1); return true;
+	case CMD_SCROLL_BOTTOM_DOWN: show_scroll2(+1); return true;
+	case CMD_SCROLL_BOTH_UP: show_scroll(-1); show_scroll2(-1); return true;
+	case CMD_SCROLL_BOTH_DOWN: show_scroll(+1); show_scroll2(+1); return true;
 	}
-	return FALSE;
+	return false;
 }

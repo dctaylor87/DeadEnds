@@ -35,10 +35,10 @@
   and does not use the Choices string.
 */
 typedef struct MenuItem_s {
-	STRING Display;
-	STRING Choices;
+	String Display;
+	String Choices;
 	INT Command;
-	STRING LocalizedDisplay;
+	String LocalizedDisplay;
 } MenuItem;
 /*
 A LongDisplay could be added (for, eg, status bar,
@@ -47,9 +47,9 @@ or for some type of extended command info display).
 */
 /*
 typedef struct MenuItemOption_struct {
-	STRING Display1;
-	STRING Display2;
-	STRING Choices;
+	String Display1;
+	String Display2;
+	String Choices;
 	INT Command;
 } MenuItemOption;
 */
@@ -109,7 +109,7 @@ and used by both screen.c and menuitem.c
 
 /* menuset.c */
 void menuset_init(MENUSET menu, CString title, MenuItem ** MenuItems, MenuItem ** extraItems);
-INT menuset_check_cmd(MENUSET menuset, STRING str);
+INT menuset_check_cmd(MENUSET menuset, String str);
 void menuset_clear(MENUSET menuset);
 MenuItem ** menuset_get_items(MENUSET menuset);
 
@@ -129,13 +129,13 @@ void dynmenu_toggle_menu(DYNMENU dynmenu);
 /* brwsmenu.c */
 MENUSET get_screen_menuset(INT screen);
 DYNMENU get_screen_dynmenu(INT screen);
-STRING get_screen_title(INT screen);
+String get_screen_title(INT screen);
 void brwsmenu_initialize(INT screenheight, INT screenwidth);
 
 
 void menuitem_initialize(INT cols);
 void menuitem_terminate(void);
-INT menuitem_check_cmd(INT screen, STRING cmd);
+INT menuitem_check_cmd(INT screen, String cmd);
 
 enum { 
 	CMD_NONE /* unrecognized or unimplemented */

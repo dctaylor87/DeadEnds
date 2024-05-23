@@ -50,7 +50,7 @@
  * get_deadends_version -- Return version string
  *  returns static buffer
  *=============================================*/
-STRING
+String
 get_deadends_version (INT maxlen)
 {
         static char version[48];
@@ -66,7 +66,7 @@ get_deadends_version (INT maxlen)
  *  displays to stdout
  *=============================================*/
 void
-print_version (CNSTRING program)
+print_version (CString program)
 {
         printf("%s (DeadEnds) %s\n", program, get_deadends_version(48));
         printf("\n");

@@ -201,7 +201,7 @@ static PyObject *llpy_surname (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE node_name = 0;
-  CNSTRING name = 0;
+  CString name = 0;
 
   node_name = nztop (indi->llr_record);
   if (! (node_name = NAME(node_name)) || ! nval(node_name))
@@ -486,7 +486,7 @@ static PyObject *llpy_male (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE indi_node = nztop (indi->llr_record);
-  BOOLEAN abool = (SEXV(indi_node) == sexMale);
+  bool abool = (SEXV(indi_node) == sexMale);
 
   if (abool)
     Py_RETURN_TRUE;
@@ -502,7 +502,7 @@ static PyObject *llpy_female (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   NODE indi_node = nztop (indi->llr_record);
-  BOOLEAN abool = (SEXV(indi_node) == sexFemale);
+  bool abool = (SEXV(indi_node) == sexFemale);
 
   if (abool)
     Py_RETURN_TRUE;
@@ -802,7 +802,7 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   INDISEQ seq;
   RECORD record;
 
-  seq = indi_to_families (nztop (indi->llr_record), TRUE);
+  seq = indi_to_families (nztop (indi->llr_record), true);
   if (! seq || length_indiseq (seq) < 1)
     Py_RETURN_NONE;		/* person is not in any families */
 
@@ -1174,7 +1174,7 @@ static PyObject *llpy_sync_indi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 {
   LLINES_PY_RECORD *py_record = (LLINES_PY_RECORD *) self;
   RECORD record = py_record->llr_record;
-  CNSTRING key = nzkey (record);
+  CString key = nzkey (record);
   String rawrec = 0;
   String msg = 0;
   int on_disk = 1;

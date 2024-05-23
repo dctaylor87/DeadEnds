@@ -102,7 +102,7 @@ int num_linkage_buckets = NUMBER_LINKAGE_BUCKETS;
  * external/imported variables
  *********************************************/
 
-extern BOOLEAN traditional;
+extern bool traditional;
 
 static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
 static NODE remove_dupes(NODE, NODE);
@@ -132,7 +132,7 @@ static void check_fam_lineage_links(NODE fam);
  *   indi4 - merged version of the two persons after editing
  *==============================================================*/
 RECORD
-merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
+merge_two_indis (NODE indi1, NODE indi2, bool conf)
 {
 #if defined(DEADENDS)
 	GNode *indi01, *indi02;	/* original arguments */
@@ -163,8 +163,8 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 #else
 	INT sx2;
 #endif
-	STRING msg, key;
- 	BOOLEAN emp;
+	String msg, key;
+ 	bool emp;
 
 /* Do start up checks */
 
@@ -219,15 +219,15 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
     	 * of the originals.
 	 */
 	indi01 = indi1;	/* keep original indi1 for later delete */
-	indi1 = copy_nodes(indi1, TRUE, TRUE);
+	indi1 = copy_nodes(indi1, true, true);
 	indi02 = indi2;	/* keep original indi2 for later update and return */
-	indi2 = copy_nodes(indi2, TRUE, TRUE);
+	indi2 = copy_nodes(indi2, true, true);
 
 /* we split indi1 & indi2 and leave them split until near the end */
 	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	split_indi_old(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
-	indi2 = copy_nodes(indi2, TRUE, TRUE);
+	indi2 = copy_nodes(indi2, true, true);
 #if defined(DEADENDS)
 	sx2 = sexUnknown;
 	if (fams1) sx2 = valueToSex(sex1);
@@ -241,19 +241,19 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 /*CONDITION: 1s, 2s - build first version of merged person */
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	name3 = union_nodes(name1, name2, TRUE, TRUE);
-	refn3 = union_nodes(refn1, refn2, TRUE, TRUE);
-	sex3  = union_nodes(sex1,  sex2,  TRUE, TRUE);
-	body3 = union_nodes(body1, body2, TRUE, TRUE);
-	famc3 = union_nodes(famc1, famc2, TRUE, TRUE);
-	fams3 = union_nodes(fams1, fams2, TRUE, TRUE);
-	write_nodes(0, fp, ttmo, indi3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, name3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, refn3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, sex3,  TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, body3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, famc3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, fams3, TRUE, TRUE, TRUE);
+	name3 = union_nodes(name1, name2, true, true);
+	refn3 = union_nodes(refn1, refn2, true, true);
+	sex3  = union_nodes(sex1,  sex2,  true, true);
+	body3 = union_nodes(body1, body2, true, true);
+	famc3 = union_nodes(famc1, famc2, true, true);
+	fams3 = union_nodes(fams1, fams2, true, true);
+	write_nodes(0, fp, ttmo, indi3, true, true, true);
+	write_nodes(1, fp, ttmo, name3, true, true, true);
+	write_nodes(1, fp, ttmo, refn3, true, true, true);
+	write_nodes(1, fp, ttmo, sex3,  true, true, true);
+	write_nodes(1, fp, ttmo, body3, true, true, true);
+	write_nodes(1, fp, ttmo, famc3, true, true, true);
+	write_nodes(1, fp, ttmo, fams3, true, true, true);
 	fclose(fp);
 	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
 
@@ -266,7 +266,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 */
 /* Have user edit merged person */
 	do_edit();
-	while (TRUE) {
+	while (true) {
 		indi4 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!indi4 && !emp) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
@@ -336,7 +336,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
 		while (keep && that) {
 			if (eqstr(nval(that), nxref(indi2))) {
 				nchild(that) = union_nodes(nchild(that),
-					keep, TRUE, FALSE);
+					keep, true, false);
 			}
 			that = nsibling(that);
 		}
@@ -467,7 +467,7 @@ merge_two_indis (NODE indi1, NODE indi2, BOOLEAN conf)
   we'll make a scratch copy (in indi3, which is not used now)
 */
 
-	indi3 = copy_nodes(indi4, TRUE, TRUE);
+	indi3 = copy_nodes(indi4, true, true);
 
 	split_indi_old(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
 	classify_nodes(&name2, &name3, &name24);
@@ -545,8 +545,8 @@ merge_two_fams (NODE fam1, NODE fam2)
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
-	STRING msg;
-	BOOLEAN emp;
+	String msg;
+	bool emp;
 
 	ASSERT(fam1);
 	ASSERT(fam2);
@@ -565,14 +565,14 @@ merge_two_fams (NODE fam1, NODE fam2)
 	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
 	split_fam(fam2, &fref2, &husb2, &wife2, &chil2, &rest2);
 	if (traditional) {
-		BOOLEAN ok = TRUE;
+		bool ok = true;
 		if (husb1 && husb2 && nestr(nval(husb1), nval(husb2))) {
 			msg_error("%s", _(qSdhusb));
-			ok = FALSE;
+			ok = false;
 		}
 		if (ok && wife1 && wife2 && nestr(nval(wife1), nval(wife2))) {
 			msg_error("%s", _(qSdwife));
-			ok = FALSE;
+			ok = false;
 		}
 		if (!ok) {
 			join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
@@ -583,24 +583,24 @@ merge_two_fams (NODE fam1, NODE fam2)
 
 /* Create merged file with both families together */
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	fam3 = copy_nodes(fam2, TRUE, TRUE);
-	fref3 = union_nodes(fref1, fref2, TRUE, TRUE);
-	husb3 = union_nodes(husb1, husb2, TRUE, TRUE);
-	wife3 = union_nodes(wife1, wife2, TRUE, TRUE);
-	rest3 = union_nodes(rest1, rest2, TRUE, TRUE);
+	fam3 = copy_nodes(fam2, true, true);
+	fref3 = union_nodes(fref1, fref2, true, true);
+	husb3 = union_nodes(husb1, husb2, true, true);
+	wife3 = union_nodes(wife1, wife2, true, true);
+	rest3 = union_nodes(rest1, rest2, true, true);
 	chil3 = sort_children(chil1, chil2);
-	write_nodes(0, fp, ttmo, fam3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, fref3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, husb3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, wife3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, rest3, TRUE, TRUE, TRUE);
-	write_nodes(1, fp, ttmo, chil3, TRUE, TRUE, TRUE);
+	write_nodes(0, fp, ttmo, fam3, true, true, true);
+	write_nodes(1, fp, ttmo, fref3, true, true, true);
+	write_nodes(1, fp, ttmo, husb3, true, true, true);
+	write_nodes(1, fp, ttmo, wife3, true, true, true);
+	write_nodes(1, fp, ttmo, rest3, true, true, true);
+	write_nodes(1, fp, ttmo, chil3, true, true, true);
 	fclose(fp);
 
 /* Have user edit merged family */
 	join_fam(fam3, fref3, husb3, wife3, rest3, chil3);
 	do_edit();
-	while (TRUE) {
+	while (true) {
 		fam4 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam4 && !emp) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
@@ -718,7 +718,7 @@ merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 				if (eqstr(nval(this), nxref(fam2))) {
 					nchild(this) =
 					    union_nodes(nchild(this), keep,
-					    TRUE, FALSE);
+					    true, false);
 /*HERE*/
 				}
 				this = nsibling(this);
@@ -757,26 +757,26 @@ sort_children (NODE chil1,
 #else
 	NODE copy1, copy2, chil3, prev, kid1, kid2;
 #endif
-	STRING year1, year2;
+	String year1, year2;
 	INT int1, int2;
 	/* copy1 contains all children in chil1 not in chil2 */
 	copy1 = remove_dupes(chil1, chil2);
-	copy2 = copy_nodes(chil2, TRUE, TRUE);
+	copy2 = copy_nodes(chil2, true, true);
 	int1 = int2 = 1;
 	prev = chil3 = NULL;
 	while (copy1 && copy2) {
 		if (int1 == 1) {
 			kid1 = key_to_indi(rmvat(nval(copy1)));
-			year1 = event_to_date(BIRT(kid1), TRUE);
+			year1 = event_to_date(BIRT(kid1), true);
 			if (!year1)
-				year1 = event_to_date(BAPT(kid1), TRUE);
+				year1 = event_to_date(BAPT(kid1), true);
 			int1 = year1 ? atoi(year1) : 0;
 		}
 		if (int2 == 1) {
 			kid2 = key_to_indi(rmvat(nval(copy2)));
-			year2 = event_to_date(BIRT(kid2), TRUE);
+			year2 = event_to_date(BIRT(kid2), true);
 			if (!year2)
-				year2 = event_to_date(BAPT(kid2), TRUE);
+				year2 = event_to_date(BAPT(kid2), true);
 			int2 = year2 ? atoi(year2) : 0;
 		}
 		if (int1 < int2) {
@@ -824,10 +824,10 @@ static NODE
 remove_dupes (NODE list1, NODE list2)
 {
 #if defined(DEADENDS)
-	GNode *copy1 = copy_nodes(list1, TRUE, TRUE);
+	GNode *copy1 = copy_nodes(list1, true, true);
 	GNode *prev1, *next1, *curs1, *curs2;
 #else
-	NODE copy1 = copy_nodes(list1, TRUE, TRUE);
+	NODE copy1 = copy_nodes(list1, true, true);
 	NODE prev1, next1, curs1, curs2;
 #endif
 	prev1 = NULL;
@@ -874,9 +874,9 @@ check_indi_lineage_links (NODE indi)
 
 	TABLE memtab = create_table_int();
 #endif
-	CNSTRING famkey=0; /* used inside traversal loops */
+	CString famkey=0; /* used inside traversal loops */
 	INT count=0;
-	CNSTRING ikey = nxref(indi);
+	CString ikey = nxref(indi);
 
 	/* sanity check record is not deleted */
 	ASSERT(is_key_in_use(ikey));
@@ -1015,9 +1015,9 @@ check_fam_lineage_links (NODE fam)
 
 	TABLE memtab = memtab = create_table_int();
 #endif
-	CNSTRING indikey=0; /* used inside traversal loops */
+	CString indikey=0; /* used inside traversal loops */
 	INT count=0;
-	CNSTRING fkey = nxref(fam);
+	CString fkey = nxref(fam);
 
 	/* sanity check record is not deleted */
 	ASSERT(is_key_in_use(fkey));

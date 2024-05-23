@@ -40,7 +40,7 @@
 
 /* forward references */
 
-static int execute_script (CNSTRING script);
+static int execute_script (CString script);
 
 /* start of code */
 
@@ -117,7 +117,7 @@ llpy_execute_scripts (int continue_on_failure)
 }
 
 static int
-execute_script (CNSTRING report_name)
+execute_script (CString report_name)
 {
   FILE *report_fp;
   /* XXX might want to open in binary mode -- LLREADBINARY XXX */

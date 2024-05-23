@@ -182,7 +182,7 @@ choose_pointer (RECORD current, CString msg0, CString msgn)
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
 RECORD
-choose_family (RECORD irec, CString msg0, CString msgn, BOOLEAN fams)
+choose_family (RECORD irec, CString msg0, CString msgn, bool fams)
 {
 	RECORD rec=0;
 	INDISEQ seq = indi_to_families(nztop(irec), fams);
