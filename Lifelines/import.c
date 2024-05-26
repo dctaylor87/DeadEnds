@@ -53,16 +53,16 @@
 
 /* external data set by check_stdkeys() */
 
-extern INT gd_itot;	/* total number of individuals */
-extern INT gd_ftot;	/* total number of families */
-extern INT gd_stot;	/* total number of sources */
-extern INT gd_etot;	/* total number of events */
-extern INT gd_xtot;	/* total number of others */
-extern INT gd_imax;	/* maximum individual key number */
-extern INT gd_fmax;	/* maximum family key number */
-extern INT gd_smax;	/* maximum source key number */
-extern INT gd_emax;	/* maximum event key number */
-extern INT gd_xmax;	/* maximum other key number */
+extern int gd_itot;	/* total number of individuals */
+extern int gd_ftot;	/* total number of families */
+extern int gd_stot;	/* total number of sources */
+extern int gd_etot;	/* total number of events */
+extern int gd_xtot;	/* total number of others */
+extern int gd_imax;	/* maximum individual key number */
+extern int gd_fmax;	/* maximum family key number */
+extern int gd_smax;	/* maximum source key number */
+extern int gd_emax;	/* maximum event key number */
+extern int gd_xmax;	/* maximum other key number */
 
 /*********************************************
  * local types
@@ -90,15 +90,15 @@ typedef struct gd_metadata_s {
 static bool do_import(IMPORT_FEEDBACK ifeed, FILE *fp);
 static bool is_lossy_conversion(const char * cs_src, const char * cs_dest);
 static bool is_unicode_encoding_name(const char * codeset);
-static void restore_record(NODE node, INT type, INT num);
+static void restore_record(NODE node, int type, int num);
 static String translate_key(String);
-static bool translate_values(NODE, VPTR);
+static bool translate_values(NODE, void *);
 
 /*********************************************
  * local variables
  *********************************************/
 
-static INT gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
+static int gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
 
 /*********************************************
  * local & exported function definitions
@@ -132,16 +132,16 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	XLAT ttm = 0;
 	String msg;
 	bool emp;
-	INT nindi = 0, nfam = 0, neven = 0;
-	INT nsour = 0, nothr = 0, type, num = 0;
-	INT totkeys = 0, totused = 0;
+	int nindi = 0, nfam = 0, neven = 0;
+	int nsour = 0, nothr = 0, type, num = 0;
+	int totkeys = 0, totused = 0;
 	char msgbuf[80];
 	bool succeeded=false;
 	String str,unistr=0;
 	ZSTR zerr=0;
 	TABLE metadatatab = create_table_str();
 	String gdcodeset=0;
-	INT warnings=0;
+	int warnings=0;
 
 	/* start by assuming default */
 	strupdate(&gdcodeset, gedcom_codeset_in);
@@ -254,7 +254,7 @@ retry_input_codeset:
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
 		if((totkeys-totused) > 0) {
-			INT delkeys = totkeys-totused;
+			int delkeys = totkeys-totused;
 			snprintf(msgbuf, sizeof(msgbuf)
 				, _pl("Using original keys, " FMT_INT " deleted record will be in the database."
 					, "Using original keys, " FMT_INT " deleted records will be in the database."
@@ -332,7 +332,7 @@ end_import:
  * restore_record -- Restore record to database
  *===========================================*/
 static void
-restore_record (NODE node, INT type, HINT_PARAM_UNUSED INT num)
+restore_record (NODE node, int type, ATTRIBUTE_UNUSED int num)
 {
 	String old, new, str, key;
 
@@ -370,7 +370,7 @@ String
 translate_key (String key)    /* key does not have surrounding @ chars */
 {
 	ELMNT elm;
-	INT dex = xref_to_index(key);
+	int dex = xref_to_index(key);
 	ASSERT(dex > -1);
 	elm = index_data[dex];
 	ASSERT(elm);
@@ -400,7 +400,7 @@ translate_key (String key)    /* key does not have surrounding @ chars */
  * translate_values -- Traverse function to translate pointers
  *==========================================================*/
 static bool
-translate_values (NODE node, HINT_PARAM_UNUSED VPTR param)
+translate_values (NODE node, ATTRIBUTE_UNUSED void *param)
 {
 	String new;
 	if (!pointer_value(nval(node))) return true;

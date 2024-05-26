@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -53,28 +52,15 @@
 #include "messages.h"
 #include "screen.h"
 #include "screeni.h"
-#else
 
-#include "llstdlib.h"
-#include "liflines.h"
-#include "llinesi.h"
-#include "menuitem.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "screen.h"
-#include "screeni.h"
-#include "cscurses.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static INT interact_worker(UIWINDOW uiwin, CString str, INT screen);
-static INT translate_control_key(INT c);
-static INT translate_hdware_key(INT c);
+static int interact_worker(UIWINDOW uiwin, CString str, int screen);
+static int translate_control_key(int c);
+static int translate_hdware_key(int c);
 
 /*********************************************
  * local variables
@@ -92,7 +78,7 @@ static int ui_time_elapsed = 0; /* total time waiting for user input */
  * Handle string of choices as passed
  * also returns hardware and control keys, so caller must check & loop
  *=============================*/
-INT
+int
 interact_choice_string (UIWINDOW uiwin, CString str)
 {
 	return interact_worker(uiwin, str, -1);
@@ -103,8 +89,8 @@ interact_choice_string (UIWINDOW uiwin, CString str)
  * and uses the preconfigured menu for that screen
  * also returns hardware and control keys, so caller must check & loop
  *=============================*/
-INT
-interact_screen_menu (UIWINDOW uiwin, INT screen)
+int
+interact_screen_menu (UIWINDOW uiwin, int screen)
 {
 	return interact_worker(uiwin, NULL, screen);
 }
@@ -112,18 +98,18 @@ interact_screen_menu (UIWINDOW uiwin, INT screen)
  * interact_worker -- Interact with user
  * This is just for browse screens (witness argument "screen")
  *=============================*/
-static INT
-interact_worker (UIWINDOW uiwin, CString str, INT screen)
+static int
+interact_worker (UIWINDOW uiwin, CString str, int screen)
 {
 	char buffer[4]; /* 3 char cmds max */
-	INT offset=0;
-	INT cmdnum;
-	INT c, i, n = str ? strlen(str) : 0;
+	int offset=0;
+	int cmdnum;
+	int c, i, n = str ? strlen(str) : 0;
 
 	/* Menu Loop */
 	while (true)
 	{
-		INT time_start=time(NULL);
+		int time_start=time(NULL);
 		crmode();
 		keypad(uiw_win(uiwin),1);
 		c = wgetch(uiw_win(uiwin));
@@ -148,7 +134,7 @@ interact_worker (UIWINDOW uiwin, CString str, INT screen)
 				if (c == (u_char)str[i]) return c;
 			}
 		} else { /* new menus (in menuitem.c) */
-			if (offset < (INT)sizeof(buffer)-1) {
+			if (offset < (int)sizeof(buffer)-1) {
 				buffer[offset] = c;
 				buffer[offset+1] = 0;
 				offset++;
@@ -178,8 +164,8 @@ interact_worker (UIWINDOW uiwin, CString str, INT screen)
  *  translate curses keycode into menuitem.h constant
  *=============================*/
 struct hdkeycvt { int key; int cmd; };
-static INT
-translate_hdware_key (INT c)
+static int
+translate_hdware_key (int c)
 {
 	/* curses constant, menuitem constant */
 	static struct hdkeycvt hdkey[] = {
@@ -204,8 +190,8 @@ translate_hdware_key (INT c)
  * translate_control_key -- 
  *  translate control keys into menuitem.h constant
  *=============================*/
-static INT
-translate_control_key (INT c)
+static int
+translate_control_key (int c)
 {
 	static struct hdkeycvt hdkey[] = {
 		{ '\r', CMD_KY_ENTER } /* Win32 */

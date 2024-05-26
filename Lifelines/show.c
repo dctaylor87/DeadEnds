@@ -35,7 +35,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -69,37 +68,19 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "cache.h"
-#include "liflines.h"
-#include "lloptions.h"
-#include "date.h"
-#include "zstr.h"
-#include "messages.h"
-
-#include "llinesi.h"
-#include "screen.h"
-#include "cscurses.h"
-
-#endif
 /*********************************************
  * global/exported variables
  *********************************************/
 
-INT Scroll1=0;
+int Scroll1=0;
 
 /*********************************************
  * external/imported variables
  *********************************************/
 
 extern bool opt_nocb;	/* TRUE to suppress display of cb. data */
-extern INT listbadkeys;
+extern int listbadkeys;
 extern char badkeylist[];
 
 /*********************************************
@@ -125,27 +106,23 @@ variable, and checked & resized at init_display_indi time */
  *********************************************/
 
 /* alphabetical */
-#if defined(DEADENDS)
-static void add_child_line(INT, GNode *node, INT width);
-#else
-static void add_child_line(INT, RECORD, INT width);
-#endif
-static void add_spouse_line(INT, NODE, NODE, INT width);
-static bool append_event(String * pstr, String evt, INT * plen, INT minlen);
-static void disp_person_birthdeath(ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt);
-static void disp_person_name(ZSTR zstr, String prefix, RECORD irec, INT width);
-static void indi_events(String outstr, NODE indi, INT len);
-static void init_display_indi(RECORD irec, INT width);
-static void init_display_fam(RECORD frec, INT width);
-static void pedigree_line(CANVASDATA canvas, INT x, INT y, String string, INT overflow);
-static String person_display(NODE, NODE, INT);
-static void put_out_line(UIWINDOW uiwin, INT x, INT y, String string, INT maxcol, INT flag);
-static String sh_fam_to_event_shrt(NODE node, String tag, String head
-	, INT len);
-static String sh_indi_to_event_long(NODE node, String tag
-	, String head, INT len);
-static String sh_indi_to_event_shrt(NODE node, String tag
-	, String head, INT len);
+static void add_child_line(int, GNode *node, int width);
+static void add_spouse_line(int, GNode *, GNode *, int width);
+static bool append_event(String * pstr, String evt, int * plen, int minlen);
+static void disp_person_birthdeath(ZSTR zstr, RecordIndexEl *irec, struct tag_prefix * tags, RFMT rfmt);
+static void disp_person_name(ZSTR zstr, String prefix, RecordIndexEl *irec, int width);
+static void indi_events(String outstr, GNode *indi, int len);
+static void init_display_indi(RecordIndexEl *irec, int width);
+static void init_display_fam(RecordIndexEl *frec, int width);
+static void pedigree_line(CANVASDATA canvas, int x, int y, String string, int overflow);
+static String person_display(GNode *, GNode *, int);
+static void put_out_line(UIWINDOW uiwin, int x, int y, String string, int maxcol, int flag);
+static String sh_fam_to_event_shrt(GNode *node, String tag, String head
+	, int len);
+static String sh_indi_to_event_long(GNode *node, String tag
+	, String head, int len);
+static String sh_indi_to_event_shrt(GNode *node, String tag
+	, String head, int len);
 
 /*********************************************
  * local variables
@@ -156,10 +133,10 @@ static ZSTR Spers=0, Sbirt=0, Sdeat=0;
 static ZSTR Shusb=0, Swife=0;
 static ZSTR Shbirt=0, Shdeat=0, Swbirt=0, Swdeat=0;
 static LINESTRING Sothers[MAXOTHERS];
-static INT liwidth;
-static INT Solen = 0;
-static INT Scroll2 = 0;
-static INT number_child_enable = 0;
+static int liwidth;
+static int Solen = 0;
+static int Scroll2 = 0;
+static int number_child_enable = 0;
 static struct tag_prefix f_birth_tags[] = {
 	{ "BIRT", N_("born") } /* GEDCOM BIRT tag, label to precede date on display */
 	,{ "CHR", N_("bapt") } /* GEDCOM CHR tag, label to precede date on display */
@@ -189,7 +166,7 @@ static struct tag_prefix f_death_tags[] = {
 void
 init_show_module (void)
 {
-	INT i;
+	int i;
 	liwidth = ll_cols+1;
 
 	Spers = zs_new();
@@ -214,7 +191,7 @@ init_show_module (void)
 void
 term_show_module (void)
 {
-	INT i;
+	int i;
 
 	zs_free(&Spers);
 	zs_free(&Sbirt);
@@ -237,12 +214,12 @@ term_show_module (void)
  * Created: 2003-01-11 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_name (ZSTR zstr, String prefix, RECORD irec, INT width)
+disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
 {
 /* TODO: width handling is wrong, it should not be byte based */
 	ZSTR zkey = zs_news(key_of_record(nztop(irec)));
 	/* ": " between prefix and name, and " ()" for key */
-	INT avail = width - strlen(prefix)-zs_len(zkey)-5;
+	int avail = width - strlen(prefix)-zs_len(zkey)-5;
 	String name = indi_to_name(nztop(irec), avail);
 	zs_clear(zstr);
 	zs_setf(zstr, "%s: %s ", prefix, name);
@@ -266,10 +243,10 @@ disp_person_name (ZSTR zstr, String prefix, RECORD irec, INT width)
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT rfmt)
+disp_person_birthdeath (ZSTR zstr, RecordIndexEl *irec, struct tag_prefix * tags, RFMT rfmt)
 {
 	struct tag_prefix *tg;
-	INT ct=0;
+	int ct=0;
 	ZSTR ztemp=zs_new();
 	zs_clear(zstr);
 	for (tg = tags; tg->tag; ++tg) {
@@ -317,17 +294,14 @@ disp_person_birthdeath (ZSTR zstr, RECORD irec, struct tag_prefix * tags, RFMT r
  *  display mode (Spers, Sbirt, etc)
  *=============================================*/
 static void
-init_display_indi (RECORD irec, INT width)
+init_display_indi (RecordIndexEl *irec, int width)
 {
-	NODE pers=nztop(irec);
-	NODE this_fam = 0;
-	INT nsp, nch, num, nm;
+	GNode *pers=nztop(irec);
+	GNode *this_fam = 0;
+	int nsp, nch, num, nm;
 	String s;
-	NODE fth;
-	NODE mth;
-#if !defined(DEADENDS)
-	CACHEEL icel;
-#endif
+	GNode *fth;
+	GNode *mth;
 
 	ASSERT(width < ll_cols+1); /* size of Spers etc */
 
@@ -352,32 +326,15 @@ init_display_indi (RECORD irec, INT width)
 
 	Solen = 0;
 	nsp = nch = 0;
-#if !defined(DEADENDS)
-	icel = indi_to_cacheel_old(pers);
-	lock_cache(icel);
-#endif
-#if defined(DEADENDS)
 	FORSPOUSES(pers, sp, fam, num, database)
-#else
-	FORFAMSS(pers, fam, sp, num)
-#endif
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
 	        if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
-#if defined(DEADENDS)
 			FORCHILDREN(fam, chld, key, nm, database)
-#else
-			FORCHILDREN(fam, chld, nm)
-#endif
 				if(chld) add_child_line(++nch, chld, width);
 			ENDCHILDREN
 		}
-#if defined(DEADENDS)
 	ENDSPOUSES
-#else
-	ENDFAMSS
-	unlock_cache(icel);
-#endif
 }
 /*==============================
  * show_indi_vitals -- Display person using
@@ -393,16 +350,16 @@ init_display_indi (RECORD irec, INT width)
  * person displayed last.
  *============================*/
 void
-show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
-	, INT *scroll, bool reuse)
+show_indi_vitals (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
+	, int *scroll, bool reuse)
 {
-	INT i;
-	INT localrow;
-	INT overflow;
+	int i;
+	int localrow;
+	int overflow;
 	WINDOW * win = uiw_win(uiwin);
-	INT row = rect->top;
-	INT width = rect->right - rect->left + 1;
-	INT hgt = rect->bottom - rect->top + 1;
+	int row = rect->top;
+	int width = rect->right - rect->left + 1;
+	int hgt = rect->bottom - rect->top + 1;
 
 	badkeylist[0] = '\0';
 	listbadkeys = 1;
@@ -451,10 +408,10 @@ show_indi_vitals (UIWINDOW uiwin, RECORD irec, LLRECT rect
  * add_spouse_line -- Add spouse line to others
  *===========================================*/
 static void
-add_spouse_line (HINT_PARAM_UNUSED INT num, NODE indi, NODE fam, INT width)
+add_spouse_line (ATTRIBUTE_UNUSED int num, GNode *indi, GNode *fam, int width)
 {
 	String line, ptr=Sothers[Solen];
-	INT mylen=liwidth;
+	int mylen=liwidth;
 	if (Solen >= MAXOTHERS) return;
 	if (mylen>width) mylen=width;
 	llstrcatn(&ptr, " ", &mylen);
@@ -468,20 +425,12 @@ add_spouse_line (HINT_PARAM_UNUSED INT num, NODE indi, NODE fam, INT width)
  * add_child_line -- Add child line to others
  *=========================================*/
 static void
-#if defined(DEADENDS)
-add_child_line (INT num, GNode *node, INT width)
-#else
-add_child_line (INT num, RECORD irec, INT width)
-#endif
+add_child_line (int num, GNode *node, int width)
 {
 	String line;
 	String child = _(qSdspl_child);
 	if (Solen >= MAXOTHERS) return;
-#if defined(DEADENDS)
 	line = person_display(node, NULL, width-15);
-#else
-	line = person_display(nztop(irec), NULL, width-15);
-#endif
 	if (number_child_enable)
 		llstrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
 	else
@@ -492,27 +441,19 @@ add_child_line (INT num, RECORD irec, INT width)
  * init_display_fam -- Initialize display family
  *============================================*/
 static void
-init_display_fam (RECORD frec, INT width)
+init_display_fam (RecordIndexEl *frec, int width)
 {
-	NODE fam=nztop(frec);
-#if defined(DEADENDS)
+	GNode *fam=nztop(frec);
 	GNode *husb=0, *wife=0;
-#else
-	NODE husb=0, wife=0;
-#endif
 	String s=0;
 	ZSTR famkey = zs_news(key_of_record(fam));
-	INT nch, nm, wtemp;
+	int nch, nm, wtemp;
 	String father = _(qSdspl_fath);
 	String mother = _(qSdspl_moth);
-#if defined(DEADENDS)
 	RecordIndexEl *ihusb=0, *iwife=0;
-#else
-	RECORD ihusb=0, iwife=0;
-#endif
-	INT husbstatus = 0;
-	INT wifestatus = 0;
-	NODE fnode;
+	int husbstatus = 0;
+	int wifestatus = 0;
+	GNode *fnode;
 
 	/* Get the first two spouses in the family and use them rather than
 	 * displaying first husband and first mother
@@ -534,11 +475,7 @@ init_display_fam (RECORD frec, INT width)
 	/* if the only spouse is female, list in second slot
 	 * hiding the non-traditional behavior
 	 */
-#if defined(DEADENDS)
 	if (!wife && husb && SEXV(husb) == sexFemale)
-#else
-	if (!wife && husb && SEX(husb) == SEX_FEMALE)
-#endif
 	{
 		wife = husb;
 		husb = 0;
@@ -549,12 +486,8 @@ init_display_fam (RECORD frec, INT width)
 	}
 
 	if (husbstatus == 1) {
-		INT avail = width - zs_len(famkey) - 3;
-#if defined(DEADENDS)
+		int avail = width - zs_len(famkey) - 3;
 		disp_person_name(Shusb, SEXV(husb)==sexMale?father:mother, ihusb, avail);
-#else
-		disp_person_name(Shusb, SEX(husb)==SEX_MALE?father:mother, ihusb, avail);
-#endif
 	} else {
 		zs_setf(Shusb, "%s:", father);
 		if (husbstatus == -1)
@@ -571,12 +504,8 @@ init_display_fam (RECORD frec, INT width)
 	disp_person_birthdeath(Shdeat, ihusb, f_death_tags, false);
 
 	if (wifestatus == 1) {
-		INT avail = width;
-#if defined(DEADENDS)
+		int avail = width;
 		disp_person_name(Swife, SEXV(wife)==sexMale?father:mother, iwife, avail);
-#else
-		disp_person_name(Swife, SEX(wife)==SEX_MALE?father:mother, iwife, avail);
-#endif
 	} else {
 		zs_setf(Swife, "%s:", mother);
 		if (wifestatus == -1)
@@ -604,15 +533,9 @@ init_display_fam (RECORD frec, INT width)
 
 	Solen = 0;
 	nch = 0;
-#if defined(DEADENDS)
 	FORCHILDREN(fam, chld, key, nm, database)
 	  add_child_line(++nch, chld, width);
 	ENDCHILDREN
-#else
-	FORCHILDREN(fam, chld, nm)
-		add_child_line(++nch, chld, width);
-	ENDCHILDREN
-#endif
 	release_record(ihusb);
 	release_record(iwife);
 }
@@ -625,14 +548,14 @@ init_display_fam (RECORD frec, INT width)
  * [in] reuse: flag to save recalculating display strings
  *=================================*/
 void
-show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
-	, INT width, INT *scroll, bool reuse)
+show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
+	, int width, int *scroll, bool reuse)
 {
-	INT i;
-	INT localrow;
-	INT overflow;
+	int i;
+	int localrow;
+	int overflow;
 	char buf[132];
-	INT maxcol = width-1;
+	int maxcol = width-1;
 	WINDOW * win = uiw_win(uiwin);
 	struct tag_llrect rect;
 
@@ -684,8 +607,8 @@ show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_ancestors (UIWINDOW uiwin, RECORD irec, LLRECT rect
-	, INT * scroll, bool reuse)
+show_ancestors (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
+	, int * scroll, bool reuse)
 {
 	struct tag_canvasdata canvas;
 		/* parameters for drawing tree */
@@ -703,8 +626,8 @@ show_ancestors (UIWINDOW uiwin, RECORD irec, LLRECT rect
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_descendants (UIWINDOW uiwin, RECORD rec, LLRECT rect
-	, INT * scroll, bool reuse)
+show_descendants (UIWINDOW uiwin, RecordIndexEl *rec, LLRECT rect
+	, int * scroll, bool reuse)
 {
 	struct tag_canvasdata canvas;
 		/* parameters for drawing tree */
@@ -722,8 +645,8 @@ show_descendants (UIWINDOW uiwin, RECORD rec, LLRECT rect
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 void
-show_gedcom (UIWINDOW uiwin, RECORD rec, INT gdvw, LLRECT rect
-	, INT * scroll, bool reuse)
+show_gedcom (UIWINDOW uiwin, RecordIndexEl *rec, int gdvw, LLRECT rect
+	, int * scroll, bool reuse)
 {
 	struct tag_canvasdata canvas;
 		/* parameters for drawing */
@@ -747,7 +670,7 @@ show_gedcom (UIWINDOW uiwin, RECORD rec, INT gdvw, LLRECT rect
 void
 switch_scrolls (void)
 {
-	INT save = Scroll1;
+	int save = Scroll1;
 	Scroll1 = Scroll2;
 	Scroll2 = save;
 }
@@ -759,10 +682,10 @@ switch_scrolls (void)
  * Does internal-to-display translation
  *=============================================================*/
 String
-indi_to_ped_fix (NODE indi, INT len)
+indi_to_ped_fix (GNode *indi, int len)
 {
 	String bevt, devt, name, key;
-	INT tmp1_length, name_length;
+	int tmp1_length, name_length;
 	static char scratch[200];
 	char tmp1[200]; /* holds birth, death, key string */
 
@@ -789,7 +712,7 @@ indi_to_ped_fix (NODE indi, INT len)
 	
 	/* a long name may need to be truncated to fit on the screen */
 	len = min(len, ((int)ARRSIZE(scratch) - 1));
-	tmp1_length = (INT)strlen(tmp1);
+	tmp1_length = (int)strlen(tmp1);
 	name_length = len - tmp1_length - 1;
 	name_length = max(0, name_length);
 	name = indi_to_name(indi, name_length);
@@ -810,7 +733,7 @@ indi_to_ped_fix (NODE indi, INT len)
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static bool
-append_event (String * pstr, String evt, INT * plen, INT minlen)
+append_event (String * pstr, String evt, int * plen, int minlen)
 {
 	llstrcatn(pstr, ", ", plen);
 	llstrcatn(pstr, evt, plen);
@@ -827,11 +750,11 @@ append_event (String * pstr, String evt, INT * plen, INT minlen)
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static void
-family_events (String outstr, NODE indi, NODE fam, INT len)
+family_events (String outstr, GNode *indi, GNode *fam, int len)
 {
 	String evt = NULL;
 	String p = outstr;
-	INT mylen = len;
+	int mylen = len;
 	p[0] = 0;
 
 	/* find marriage (or marital contract, or engagement) */
@@ -857,7 +780,7 @@ family_events (String outstr, NODE indi, NODE fam, INT len)
 	if we ever have too few left (<10), append_event will return FALSE
 */
 	if (!opt_nocb) {
-		NODE chld;
+		GNode *chld;
 		/* Look for birth or christening of first child */
 		if ((chld = fam_to_first_chil(fam))) {
 			evt = sh_indi_to_event_shrt(chld, "BIRT", _(qSdspa_chbr), mylen-2);
@@ -893,12 +816,12 @@ family_events (String outstr, NODE indi, NODE fam, INT len)
  * Created: 2001/07/04 (Perry Rapp)
  *===========================================*/
 static void
-indi_events (String outstr, NODE indi, INT len)
+indi_events (String outstr, GNode *indi, int len)
 {
 	String evt = NULL;
-	INT width = (len-2)/2;
+	int width = (len-2)/2;
 	String p = outstr;
-	INT mylen = len;
+	int mylen = len;
 	p[0] = 0;
 
 	evt = sh_indi_to_event_shrt(indi, "BIRT", _(qSdspa_bir), width);
@@ -920,7 +843,7 @@ indi_events (String outstr, NODE indi, INT len)
 /*==========================================================
  * max_keywidth -- Figure the width of the widest extant key
  *========================================================*/
-static INT
+static int
 max_keywidth (void)
 {
 	int32_t maxkey = xref_max_any();
@@ -944,14 +867,14 @@ max_keywidth (void)
  *  len:   max length of output
  *===========================================*/
 static String
-person_display (NODE indi, NODE fam, INT len)
+person_display (GNode *indi, GNode *fam, int len)
 {
 	static char scratch1[120];
 	static char scratch2[100];
 	String p;
 	/* parentheses & leading space & possible "i" */
-	INT keyspace = max_keywidth() + 4; 
-	INT evlen, namelen, temp;
+	int keyspace = max_keywidth() + 4; 
+	int evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
 	if (len > (int)ARRSIZE(scratch1)-1)
 		len = ARRSIZE(scratch1)-1;
@@ -979,8 +902,8 @@ person_display (NODE indi, NODE fam, INT len)
 	}
 
 	/* give name any unused space events left */
-	if ((INT)strlen(scratch2)<evlen)
-		namelen += evlen-(INT)strlen(scratch2);
+	if ((int)strlen(scratch2)<evlen)
+		namelen += evlen-(int)strlen(scratch2);
 	p = scratch1;
 	strcpy(p, indi_to_name(indi, namelen));
 	p += strlen(p);
@@ -1000,8 +923,8 @@ person_display (NODE indi, NODE fam, INT len)
  * show_aux -- Show source, event or other record
  *======================================================*/
 void
-show_aux (UIWINDOW uiwin, RECORD rec, INT mode, LLRECT rect
-	, INT * scroll, bool reuse)
+show_aux (UIWINDOW uiwin, RecordIndexEl *rec, int mode, LLRECT rect
+	, int * scroll, bool reuse)
 {
 	if (mode == 'g')
 		show_gedcom(uiwin, rec, GDVW_NORMAL, rect, scroll, reuse);
@@ -1014,7 +937,7 @@ show_aux (UIWINDOW uiwin, RECORD rec, INT mode, LLRECT rect
  * show_scroll - vertically scroll person display
  *=============================================*/
 void
-show_scroll (INT delta)
+show_scroll (int delta)
 {
 	Scroll1 += delta;
 	if (Scroll1 < 0)
@@ -1025,7 +948,7 @@ show_scroll (INT delta)
  *  (in tandem mode)
  *=================================*/
 void
-show_scroll2 (INT delta)
+show_scroll2 (int delta)
 {
 	Scroll2 += delta;
 	if (Scroll2 < 0)
@@ -1045,15 +968,15 @@ show_reset_scroll (void)
  *  to put out each line of pedigree
  *====================================*/
 static void
-pedigree_line (CANVASDATA canvas, INT y, INT x, String string, INT overflow)
+pedigree_line (CANVASDATA canvas, int y, int x, String string, int overflow)
 {
 	if (!string || !string[0]) return;
 	/* vertical clip to rect */
 	if (y < canvas->rect->top || y > canvas->rect->bottom) return;
 	/* horizontal clip to rect */
 	if (x < canvas->rect->left) {
-		INT delta = canvas->rect->left - x;
-		if ((INT)strlen(string) <= delta) return;
+		int delta = canvas->rect->left - x;
+		if ((int)strlen(string) <= delta) return;
 		string += delta;
 		x = canvas->rect->left;
 	}
@@ -1066,10 +989,10 @@ pedigree_line (CANVASDATA canvas, INT y, INT x, String string, INT overflow)
  * _disp version means string is already in display encoding
  *====================================*/
 static void
-put_out_line (UIWINDOW uiwin, INT y, INT x, String string, INT maxcol, INT flag)
+put_out_line (UIWINDOW uiwin, int y, int x, String string, int maxcol, int flag)
 {
 	WINDOW * win = uiw_win(uiwin);
-	INT buflen = (maxcol - x + 1) + 1;
+	int buflen = (maxcol - x + 1) + 1;
 	LINESTRING buffer = (LINESTRING)stdalloc(buflen);
 
 	/* TODO: Should convert to output codeset now, before limiting text */
@@ -1078,8 +1001,8 @@ put_out_line (UIWINDOW uiwin, INT y, INT x, String string, INT maxcol, INT flag)
 	llstrncpy(buffer, string, buflen, uu8);
 	if (flag) {
 		/* put ++ against right, padding if needed */
-		INT i = strlen(buffer);
-		INT pos = maxcol-x-3;
+		int i = strlen(buffer);
+		int pos = maxcol-x-3;
 		if (i>pos)
 			i = pos;
 		for (; i<pos; i++)
@@ -1100,60 +1023,30 @@ show_childnumbers (void)
 {
 	number_child_enable = !number_child_enable;
 }
-/*================================
- * cache_stats -- Show cache stats
- *==============================*/
-#if !defined(DEADENDS)		/* DeadEnds has no cache -- everything is in memory */
-void
-display_cache_stats (void)
-{
-	ZSTR zstr = zs_new();
-	ZSTR zstr_ind = get_cache_stats_indi();
-	ZSTR zstr_fam = get_cache_stats_fam();
-	zs_appf(zstr, _("Cached: I:%s; F:%s")
-		, zs_str(zstr_ind), zs_str(zstr_fam));
-	msg_info("%s", zs_str(zstr));
-	zs_free(&zstr);
-	zs_free(&zstr_ind);
-	zs_free(&zstr_fam);
-}
-#endif
 /*================================================
  * sh_indi_to_event -- Pass-thru to indi_to_event
  *  using long display reformatting
  *==============================================*/
 static String
-sh_indi_to_event_long (NODE node, String tag, String head, INT len)
+sh_indi_to_event_long (GNode *node, String tag, String head, int len)
 {
-#if defined(DEADENDS)
 	return personToEvent(node, tag, head, len, false);
-#else
-	return indi_to_event(node, tag, head, len, false);
-#endif
 }
 /*================================================
  * sh_indi_to_event_shrt -- Pass-thru to indi_to_event, short display
  *  using short display reformatting
  *==============================================*/
 static String
-sh_indi_to_event_shrt (NODE node, String tag, String head, INT len)
+sh_indi_to_event_shrt (GNode *node, String tag, String head, int len)
 {
-#if defined(DEADENDS)
 	return personToEvent(node, tag, head, len, true);
-#else
-	return indi_to_event(node, tag, head, len, &disp_shrt_rfmt);
-#endif
 }
 /*==================================================
  * sh_fam_to_event_shrt -- Pass-thru to fam_to_event
  *  using display reformatting
  *================================================*/
 static String
-sh_fam_to_event_shrt (NODE node, String tag, String head, INT len)
+sh_fam_to_event_shrt (GNode *node, String tag, String head, int len)
 {
-#if defined(DEADENDS)
 	return fam_to_event(node, tag, head, len, true);
-#else
-	return fam_to_event(node, tag, head, len, &disp_shrt_rfmt);
-#endif
 }

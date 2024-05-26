@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 
 #include <ansidecl.h>
 #include <stdint.h>
@@ -55,15 +54,6 @@
 #include "editing.h"
 #include "messages.h"
 #include "refns.h"
-#else
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "liflines.h"
-#include "lloptions.h"
-#include "messages.h"
-#endif
 
 /*===================================
  * valid_indi_tree -- Validate person tree

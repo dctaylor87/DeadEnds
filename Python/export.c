@@ -314,7 +314,7 @@ write_trailer (FILE *file)
 static bool
 valid_submitter (CString submitter, Database *database)
 {
-  RECORD record;
+  RecordIndexEl *record;
   int type = 'X';
 
   record = __llpy_key_to_record (submitter, &type, database);

@@ -18,7 +18,6 @@
 #include <dirent.h>
 #endif
 
-#if defined(DEADENDS)
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -40,17 +39,7 @@
 #include "readwrite.h"
 #include "proptbls.h"
 #include "de-strings.h"
-#else
 
-#include "standard.h"
-#include "llstdlib.h"
-#include "table.h"
-#include "liflines.h"
-#include "arch.h"
-#include "proptbls.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -80,7 +69,7 @@ static int
 select_gedcoms (const struct dirent *entry)
 {
 	CString goodexts[] = { ".ged", ".gedcom" };
-	INT i;
+	int i;
 	/* examine end of entry->d_name */
 	for (i=0; i<(int)ARRSIZE(goodexts); ++i) {
 		CString entext = entry->d_name + strlen(entry->d_name) - strlen(goodexts[i]);
@@ -100,8 +89,8 @@ add_gedcom_props (TABLE fileprops)
 	String tagsfound[ARRSIZE(f_tags)];
 	FILE *fp;
 	char str[MAXLINELEN];
-	INT i;
-	INT line=0;
+	int i;
+	int line=0;
 	struct stat sbuf;
 
 	/* first get full path & open file */
@@ -174,7 +163,7 @@ end_add_program_props:
 static void
 parse_gedcoms (TABLE * fileprops)
 {
-	INT i;
+	int i;
 	for (i=0; fileprops[i]; ++i) {
 		add_gedcom_props(fileprops[i]);
 	}
@@ -187,7 +176,7 @@ parse_gedcoms (TABLE * fileprops)
 static void
 set_gedcom_d0 (TABLE * fileprops)
 {
-	INT i;
+	int i;
 	for (i=0; fileprops[i]; ++i) {
 		TABLE props = fileprops[i];
 		char buf[MAXLINELEN];
@@ -217,7 +206,7 @@ ask_for_gedcom (CString mode,
                  bool picklist)
 {
 	int choice;
-	INT nfiles, i;
+	int nfiles, i;
 	TABLE * fileprops;
 	String * choices;
 	FILE * fp;

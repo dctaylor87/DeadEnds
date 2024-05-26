@@ -5,13 +5,13 @@ extern bool is_temp_node (GNode *node);
 extern void set_temp_node (GNode *node, bool temp);
 extern int tree_strlen (int levl, GNode *node);
 extern void unknown_node_to_dbase (GNode *node); /* XXX */
-extern int next_spouse (GNode **node, RECORD *spouse, Database *database);
-extern RECORD indi_to_prev_sib (RECORD irec, Database *database);
-extern RECORD indi_to_next_sib (RECORD irec, Database *database);
+extern int next_spouse (GNode **node, RecordIndexEl **spouse, Database *database);
+extern RecordIndexEl *indi_to_prev_sib (RecordIndexEl *irec, Database *database);
+extern RecordIndexEl *indi_to_next_sib (RecordIndexEl *irec, Database *database);
 extern String node_to_tag (GNode *node, String tag, int len);
-extern void record_to_date_place (RECORD record, String tag,
+extern void record_to_date_place (RecordIndexEl *record, String tag,
 				  String * date, String * plac, int * count);
-extern GNode *record_to_first_event (RECORD record, CString tag);
+extern GNode *record_to_first_event (RecordIndexEl *record, CString tag);
 extern GNode *node_to_next_event (GNode *node, CString tag);
 extern void event_to_date_place (GNode *node, String * date, String * plac);
 //extern String event_to_string (GNode *node, RFMT rfmt);

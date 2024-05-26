@@ -47,7 +47,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   const char *key = 0;
   const char *type = 0;
   int int_type = 0;
-  RECORD record;
+  RecordIndexEl *record;
   LLINES_PY_RECORD *py_record = 0;
   LLINES_PY_DATABASE *py_db = 0;
   Database *database = 0;
@@ -194,9 +194,9 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
    broken out of llpy_key_to_record so that it could also be used by
    the DE port of the LL curses UI.  XXX */
 
-RECORD __llpy_key_to_record (CString key, int *int_type, Database *database)
+RecordIndexEl *__llpy_key_to_record (CString key, int *int_type, Database *database)
 {
-  RECORD record;
+  RecordIndexEl *record;
   int added_at = 0;
   int ndx;
   int type = 0;
@@ -293,7 +293,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   char *type = 0;
   char key_buffer[22]; /* prefix (1) + unsigned long (<=20) + nul (1) */
   int int_type = 0;
-  RECORD record;
+  RecordIndexEl *record;
   LLINES_PY_RECORD *py_record;
   int use_keybuf = 0;
 
@@ -475,7 +475,7 @@ static PyObject *llpy_keynum_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObjec
   char *type = 0;
   char key_buffer[22]; /* prefix (1) + unsigned long (<=20) + nul (1) */
   int int_type = 0;
-  RECORD record;
+  RecordIndexEl *record;
   LLINES_PY_RECORD *py_record;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "ks", keywords, &keynum, &type))

@@ -80,8 +80,8 @@
  *********************************************/
 
 /* alphabetical */
-static NODE expand_tree(NODE);
-static bool advedit_expand_traverse(NODE, VPTR param);
+static GNode *expand_tree(GNode *);
+static bool advedit_expand_traverse(GNode *, void *param);
 
 /*********************************************
  * local & exported function definitions
@@ -91,18 +91,14 @@ static bool advedit_expand_traverse(NODE, VPTR param);
 /*=================================================================
  * expand_tree -- Create copy of node tree with additional link info
  *===============================================================*/
-static NODE
-expand_tree (NODE root0)
+static GNode *
+expand_tree (GNode *root0)
 {
-#if defined(DEADENDS)
 	GNode *copy, *node, *sub;
-#else
-	NODE copy, node, sub;
-#endif
 	String key;
-	static NODE root;	/* root of record being edited */
-	LIST subs;	/* list of contained records */
-	NODE expd;	/* expanded main record - copy - our retval */
+	static GNode *root;	/* root of record being edited */
+	List *subs;	/* list of contained records */
+	GNode *expd;	/* expanded main record - copy - our retval */
 
 	root = root0;
 	expd = copy_nodes(root, true, true);
@@ -111,7 +107,7 @@ expand_tree (NODE root0)
 
    /* expand the list of records into the copied record */
 	FORLIST(subs, el)
-		node = (NODE) el;
+		node = (GNode *) el;
 #ifdef DEBUG
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
@@ -128,11 +124,7 @@ expand_tree (NODE root0)
 	ENDLIST
 	/* Shouldn't we free subs now ? Perry 2001/06/22 */
 #ifdef DEBUG
-#if defined(DEADENDS)
 	showGNode (expd);
-#else
-	show_node(expd);
-#endif
 #endif
 	return expd;
 }
@@ -141,10 +133,10 @@ expand_tree (NODE root0)
  * advanced_person_edit --
  *===============================================================*/
 void
-advanced_person_edit (NODE root0)
+advanced_person_edit (GNode *root0)
 {
 	FILE *fp;
-	NODE expd;
+	GNode *expd;
 
 #ifdef DEBUG
 	llwprintf("advanced_person_edit: %s %s %s\n", nxref(root0), 
@@ -161,10 +153,10 @@ advanced_person_edit (NODE root0)
  * advanced_family_edit --
  *===============================================================*/
 void
-advanced_family_edit (NODE root0)
+advanced_family_edit (GNode *root0)
 {
 	FILE *fp;
-	NODE expd;
+	GNode *expd;
 
 #ifdef DEBUG
 	llwprintf("advanced_family_edit: %s %s %s\n", nxref(root0),
@@ -180,9 +172,9 @@ advanced_family_edit (NODE root0)
  * advedit_expand_traverse -- Traverse routine called when expanding record
  *===============================================================*/
 static bool
-advedit_expand_traverse (NODE node, VPTR param)
+advedit_expand_traverse (GNode *node, void *param)
 {
-	LIST subs = (LIST)param;
+	List *subs = (List *)param;
 	String key = value_to_xref(nval(node));
 	if (!key) return true;
 	key = strsave(key);
@@ -191,9 +183,9 @@ advedit_expand_traverse (NODE node, VPTR param)
 #endif /* DEBUG */
 	FORLIST(subs, el)
 #ifdef DEBUG
-	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((NODE) el)));
+	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((GNode *) el)));
 #endif /* DEBUG */
-		if (eqstr(key, rmvat(nval((NODE) el)))) {
+		if (eqstr(key, rmvat(nval((GNode *) el)))) {
 #if !defined(DEADENDS)
 			STOPLIST
 #endif

@@ -66,7 +66,7 @@ struct tag_trav_parm {
 
 /* alphabetical */
 static bool archive(BTREE btree, BLOCK block, void * param);
-static void copy_and_translate(FILE *fo, INT len, struct tag_trav_parm * travparm, char ctype, XLAT xlat);
+static void copy_and_translate(FILE *fo, int len, struct tag_trav_parm * travparm, char ctype, XLAT xlat);
 
 /*********************************************
  * local variables
@@ -78,7 +78,7 @@ static char *mabbv[] = {
 	"JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
 };
 
-static INT nindi, nfam, neven, nsour, nothr;
+static int nindi, nfam, neven, nsour, nothr;
 
 
 /*********************************************
@@ -141,7 +141,7 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 static bool
 archive (BTREE btree, BLOCK block, void * param)
 {
-	INT i, n, l;
+	int i, n, l;
 	char scratch[100];
 	FILE *fo=0;
 	struct tag_trav_parm * travparm = (struct tag_trav_parm *)param;
@@ -167,11 +167,11 @@ archive (BTREE btree, BLOCK block, void * param)
  * copy_and_translate -- Copy record with translation
  *=================================================*/
 static void
-copy_and_translate (FILE *fo, INT len, struct tag_trav_parm * travparm, char ctype, XLAT xlat)
+copy_and_translate (FILE *fo, int len, struct tag_trav_parm * travparm, char ctype, XLAT xlat)
 {
 	char in[BUFLEN]="";
 	char *inp=0;
-	INT remlen=0, num=0;
+	int remlen=0, num=0;
 	FILE * fn = travparm->fp;
 	struct tag_export_feedback * efeed = travparm->efeed;
 	

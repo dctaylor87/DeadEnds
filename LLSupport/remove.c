@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -54,19 +53,6 @@
 #include "refns.h"
 #include "browse.h"
 #include "name.h"
-
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "messages.h"
-
-#endif
 
 /*********************************************
  * local function prototypes
@@ -196,16 +182,8 @@ remove_child (GNode *indi, GNode *fam, Database *database)
 	free_node(node,"remove_child FAMC");
 
 	/* Update database with changed records */
-#if defined(DEADENDS)
 	if (num_fam_xrefs(fam) == 0)
 		remove_empty_fam(fam, database);
-#else
-	indi_to_dbase(indi);
-	if (num_fam_xrefs(fam) == 0)
-		remove_empty_fam(fam);
-	else
-		fam_to_dbase(fam);
-#endif
 	return true;
 }
 /*===========================================
@@ -241,19 +219,8 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
 	free_node(node,"remove_spouse FAMS");
 	node = NULL;
 
-#if defined(DEADENDS)
 	if (num_fam_xrefs(fam) == 0)
 		remove_empty_fam(fam, database);
-#else
-	/* Update database with change records */
-	indi_to_dbase(indi);
-
-	/* Update family (delete if empty) */
-	if (num_fam_xrefs(fam) > 0)
-		fam_to_dbase(fam);
-	else
-		remove_empty_fam(fam);
-#endif
 	return true;
 }
 /*================================================================
@@ -263,7 +230,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 bool
-remove_fam_record (ATTRIBUTE_UNUSED RECORD frec)
+remove_fam_record (ATTRIBUTE_UNUSED RecordIndexEl *frec)
 {
 	msg_error("%s", _("Families may not yet be removed in this fashion."));
 	return false;
@@ -276,7 +243,7 @@ remove_fam_record (ATTRIBUTE_UNUSED RECORD frec)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 bool
-remove_any_record (RECORD record, Database *database)
+remove_any_record (RecordIndexEl *record, Database *database)
 {
 	GNode *root=0;
 	CString key = nzkey(record);
@@ -333,7 +300,7 @@ num_fam_xrefs (GNode *fam)
  * Eg, removing @I2@ from a husband list of a family
  * Returns head of list (which might be different if first node removed)
  *========================================*/
-static NODE
+static GNode *
 remove_any_xrefs_node_list (String xref, GNode *list)
 {
 	GNode *prev = NULL;

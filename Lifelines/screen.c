@@ -128,7 +128,7 @@ OVERHEAD_MENU:
 This is how many lines can't be used by person (or whatever)
 */
 #define OVERHEAD_MENU 5
-INT MAINWIN_WIDTH=0;
+int MAINWIN_WIDTH=0;
 
 /* center windows on real physical screen (LINES x COLS) */
 #define NEWWIN(r,c)   newwin(r,c,(LINES - (r))/2,(COLS - (c))/2)
@@ -138,10 +138,10 @@ INT MAINWIN_WIDTH=0;
  * global/exported variables
  *********************************************/
 
-INT ll_lines = -1; /* update to be number of lines in screen */
-INT ll_cols = -1;	 /* number of columns in screen used by LifeLines */
+int ll_lines = -1; /* update to be number of lines in screen */
+int ll_cols = -1;	 /* number of columns in screen used by LifeLines */
 bool stdout_vis = false;
-INT cur_screen = 0;
+int cur_screen = 0;
 UIWINDOW main_win = NULL;
 UIWINDOW stdout_win=NULL;
 static UIWINDOW debug_win=NULL, debug_box_win=NULL;
@@ -154,7 +154,7 @@ static UIWINDOW extra_menu_win=NULL;
  * external/imported variables
  *********************************************/
 
-extern INT alldone;
+extern int alldone;
 extern bool progrunning;
 
 
@@ -163,45 +163,45 @@ extern bool progrunning;
  *********************************************/
 
 /* alphabetical */
-static void add_shims_info(LIST list);
+static void add_shims_info(List *list);
 static void add_uiwin(UIWINDOW uiwin);
 static void append_to_msg_list(String msg);
 //static bool ask_for_filename_impl(String ttl, String path, String prmpt
-//	, String buffer, INT buflen);
+//	, String buffer, int buflen);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
-static INT choose_or_view_array (CString ttl, INT no, String *pstrngs
+static int choose_or_view_array (CString ttl, int no, String *pstrngs
 	, bool selecting, DETAILFNC detfnc, void *param);
-static INT choose_tt(String prompt);
+static int choose_tt(String prompt);
 static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
-static void color_hseg(WINDOW *win, INT row, INT x1, INT x2, char ch);
-static void create_boxed_newwin2(UIWINDOW * puiw, CString name, INT rows, INT cols);
-static void create_newwin(UIWINDOW * puiw, CString name, INT rows, INT cols, INT begy, INT begx);
-static void create_uisubwindow(UIWINDOW * puiw, CString name, UIWINDOW parent, INT rows, INT cols, INT begy, INT begx);
-static void create_uiwindow_impl(UIWINDOW * puiw, CString name, WINDOW * win, INT rows, INT cols);
+static void color_hseg(WINDOW *win, int row, int x1, int x2, char ch);
+static void create_boxed_newwin2(UIWINDOW * puiw, CString name, int rows, int cols);
+static void create_newwin(UIWINDOW * puiw, CString name, int rows, int cols, int begy, int begx);
+static void create_uisubwindow(UIWINDOW * puiw, CString name, UIWINDOW parent, int rows, int cols, int begy, int begx);
+static void create_uiwindow_impl(UIWINDOW * puiw, CString name, WINDOW * win, int rows, int cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
 static void delete_uiwindow_impl(UIWINDOW uiw);
 static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
-static void disp_trans_table_choice(UIWINDOW uiwin, INT row, INT col, INT indx);
+static void disp_trans_table_choice(UIWINDOW uiwin, int row, int col, int indx);
 static void display_status(String text);
-static bool does_match(VPTR param, VPTR el);
+static bool does_match(void *param, void *el);
 static void edit_tt_menu(void);
 #if !defined(DEADENDS)
 static void edit_user_options(void);
 static void edit_place_table(void);
 #endif
 static void end_action(void);
-bool get_answer(UIWINDOW uiwin, INT row, INT col, String buffer, INT buflen);
-static INT get_brwsmenu_size(INT screen);
-static RECORD invoke_add_menu(void);
+bool get_answer(UIWINDOW uiwin, int row, int col, String buffer, int buflen);
+static int get_brwsmenu_size(int screen);
+static RecordIndexEl *invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
-static INT invoke_extra_menu(RECORD *rec);
+static int invoke_extra_menu(RecordIndexEl **rec);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
 static void place_cursor_main(void);
@@ -218,18 +218,18 @@ static void repaint_extra_menu(UIWINDOW uiwin);
 static void repaint_main_menu(UIWINDOW uiwin);
 static int resize_screen_impl(char * errmsg, int errsize);
 static void run_report(bool picklist);
-static void screen_on_lang_change(VPTR uparm);
-static RECORD search_for_one_record(void);
-static void show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt, INT width, INT * scroll, bool reuse);
-bool show_record(UIWINDOW uiwin, CString key, INT mode, LLRECT
-	, INT * scroll, bool reuse);
-static void show_tandem_line(UIWINDOW uiwin, INT row);
+static void screen_on_lang_change(void *uparm);
+static RecordIndexEl *search_for_one_record(void);
+static void show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt, int width, int * scroll, bool reuse);
+bool show_record(UIWINDOW uiwin, CString key, int mode, LLRECT
+	, int * scroll, bool reuse);
+static void show_tandem_line(UIWINDOW uiwin, int row);
 static void switch_to_uiwin(UIWINDOW uiwin);
 static void touch_all(bool includeCurrent);
 static void uicolor(UIWINDOW, LLRECT rect, char ch);
-static INT update_browse_menu(INT screen);
+static int update_browse_menu(int screen);
 static void update_screen_size(void);
-//static bool yes_no_value(INT c);
+//static bool yes_no_value(int c);
 
 /*********************************************
  * local variables
@@ -242,9 +242,9 @@ static bool status_transitory = false;
 
 
 /* total screen lines used */
-static INT LINESTOTAL = LINESREQ;
+static int LINESTOTAL = LINESREQ;
 /* number of lines for various menus */
-static INT EMPTY_MENU = -1; /* save one horizontal line */
+static int EMPTY_MENU = -1; /* save one horizontal line */
 /* the following values are default (larger screens get more) */
 static int TANDEM_LINES_DEF = 6;     /* number of lines of tandem info */
 static int AUX_LINES_DEF = 15;       /* number of lines in aux window */
@@ -254,12 +254,12 @@ static int AUX_LINES=0;
 
 int winx=0, winy=0; /* user specified window size */
 
-static LIST msg_list = 0;
+static List *msg_list = 0;
 static bool msg_flag = false; /* need to show msg list */
 static bool viewing_msgs = false; /* user is viewing msgs */
 static bool lock_std_msg = false; /* to hold status message */
 static UIWINDOW active_uiwin = 0;
-static LIST list_uiwin = 0; /* list of all uiwindows */
+static List *list_uiwin = 0; /* list of all uiwindows */
 
 /* we ought to use chtype, but only if it is typedef'd, but there is no
 test to see if a type is typedef'd */
@@ -341,8 +341,8 @@ update_screen_size (void)
 static int
 resize_screen_impl (char * errmsg, int errsize)
 {
-	INT extralines=0;
-	INT newlines=0, newcols=0;
+	int extralines=0;
+	int newlines=0, newcols=0;
 
 	/* stop & restart ncurses to update LINES & COLS */
 	if (ll_lines > 0) {
@@ -445,9 +445,9 @@ static void
 repaint_main_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row;
+	int row;
 	char title[80];
-	INT width=sizeof(title);
+	int width=sizeof(title);
 	String str;
 
 	uierase(uiwin);
@@ -489,7 +489,7 @@ repaint_main_menu (UIWINDOW uiwin)
  *  safe to call on existing UIWINDOW
  *========================================*/
 static void
-create_uiwindow_impl (UIWINDOW * puiw, CString name, WINDOW * win, INT rows, INT cols)
+create_uiwindow_impl (UIWINDOW * puiw, CString name, WINDOW * win, int rows, int cols)
 {
 	UIWINDOW uiwin=0;
 	ASSERT(puiw);
@@ -526,7 +526,7 @@ add_uiwin (UIWINDOW uiwin)
 static void
 remove_uiwin (UIWINDOW uiwin)
 {
-	VPTR param = uiwin;
+	void *param = uiwin;
 	bool deleteall = false;
 	ASSERT(list_uiwin);
 	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
@@ -536,7 +536,7 @@ remove_uiwin (UIWINDOW uiwin)
  *  in finding an element in a list
  *========================================*/
 static bool
-does_match (VPTR param, VPTR el)
+does_match (void *param, void *el)
 {
 	return param == el;
 }
@@ -545,10 +545,10 @@ does_match (VPTR param, VPTR el)
  *  an auxiliary box window outside it
  *========================================*/
 static void
-create_boxed_newwin2 (UIWINDOW * puiw, CString name, INT rows, INT cols)
+create_boxed_newwin2 (UIWINDOW * puiw, CString name, int rows, int cols)
 {
-	INT begy = (LINES - rows)/2;
-	INT begx = (COLS - cols)/2;
+	int begy = (LINES - rows)/2;
+	int begx = (COLS - cols)/2;
 	WINDOW * boxwin = newwin(rows, cols, begy, begx);
 	WINDOW * win=0;
 	ASSERT(puiw);
@@ -605,7 +605,7 @@ delete_uiwindow (UIWINDOW * uiw)
  *  and return that
  *========================================*/
 static void
-create_newwin (UIWINDOW * puiw, CString name, INT rows, INT cols, INT begy, INT begx)
+create_newwin (UIWINDOW * puiw, CString name, int rows, int cols, int begy, int begx)
 {
 	WINDOW * win = newwin(rows, cols, begy, begx);
 	create_uiwindow_impl(puiw, name, win, rows, cols);
@@ -617,7 +617,7 @@ create_newwin (UIWINDOW * puiw, CString name, INT rows, INT cols, INT begy, INT 
  *  and return that
  *========================================*/
 void
-create_newwin2 (UIWINDOW * puiw, CString name, INT rows, INT cols)
+create_newwin2 (UIWINDOW * puiw, CString name, int rows, int cols)
 {
 	/* NEWWIN centers window on current physical screen */
 	WINDOW * win = NEWWIN(rows, cols);
@@ -629,8 +629,8 @@ create_newwin2 (UIWINDOW * puiw, CString name, INT rows, INT cols)
  *========================================*/
 static void
 create_uisubwindow (UIWINDOW * puiw, CString name, UIWINDOW parent
-	, INT rows, INT cols
-	, INT begy, INT begx)
+	, int rows, int cols
+	, int begy, int begx)
 {
 	WINDOW * win = subwin(uiw_win(parent), rows, cols, begy, begx);
 	create_uiwindow_impl(puiw, name, win, rows, cols);
@@ -659,7 +659,7 @@ destroy_windows (void)
 static void
 create_windows (void)
 {
-	INT col;
+	int col;
 	
 	create_boxed_newwin2(&stdout_win, "stdout_win", ll_lines-4, ll_cols-4);
 	scrollok(uiw_win(stdout_win), true);
@@ -694,7 +694,7 @@ create_windows (void)
  * cur_screen tells which is active.
  *===============================*/
 void
-display_screen (INT new_screen)
+display_screen (int new_screen)
 {
 	UIWINDOW uiwin = main_win;
 	WINDOW * win = uiw_win(uiwin);
@@ -711,10 +711,10 @@ display_screen (INT new_screen)
  * do_check_stdout -- Pause for stdout/err display
  *  if it is up
  *===================================*/
-static INT
+static int
 do_prompt_stdout (CString prompt)
 {
-	INT ch=0;
+	int ch=0;
 	llwprintf("\n%s\n", prompt);
 	crmode();
 	ch = wgetch(uiw_win(stdout_win));
@@ -744,10 +744,10 @@ check_stdout (void)
  * prompts, and it returns the response char,
  * and it doesn't clear stdout
  *===================================*/
-INT
+int
 prompt_stdout (CString prompt)
 {
-	INT i;
+	int i;
 	if (active_uiwin != stdout_win)
 		activate_uiwin(stdout_win);
 	stdout_vis = true;
@@ -757,7 +757,7 @@ prompt_stdout (CString prompt)
 /*=====================================
  * search_for_one_record -- Invoke search menu & trim to one record
  *===================================*/
-static RECORD
+static RecordIndexEl *
 search_for_one_record (void)
 {
 	INDISEQ seq = invoke_search_menu();
@@ -777,7 +777,7 @@ search_for_one_record (void)
 void
 main_menu (void)
 {
-	INT c;
+	int c;
 	UIWINDOW uiwin = main_win;
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
@@ -789,14 +789,14 @@ main_menu (void)
 	case 'b': main_browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-			RECORD rec = search_for_one_record();
+			RecordIndexEl *rec = search_for_one_record();
 			if (rec)
 				main_browse(rec, BROWSE_UNK);
 		}
 		break;
 	case 'a':
 		{
-			RECORD rec = 0;
+			RecordIndexEl *rec = 0;
 
 			rec = invoke_add_menu();
 			if (rec)
@@ -814,7 +814,7 @@ main_menu (void)
 	case 'u': invoke_utils_menu(); break;
 	case 'x':
 		{
-			RECORD rec=0;
+			RecordIndexEl *rec=0;
 			c = invoke_extra_menu(&rec);
 			if (c != BROWSE_QUIT)
 				main_browse(rec, c);
@@ -835,7 +835,7 @@ main_menu (void)
 void
 run_report (bool picklist)
 {
-	LIST progfiles = NULL; /* will prompt for report */
+	List *progfiles = NULL; /* will prompt for report */
 	String ofile = NULL; /* will prompt for output file */
 	bool timing = true;
 	begin_action();
@@ -848,11 +848,11 @@ run_report (bool picklist)
  *  in rectangle at bottom of screen
  * Returns number lines used by menu
  *=======================================*/
-static INT
-update_browse_menu (INT screen)
+static int
+update_browse_menu (int screen)
 {
 	DYNMENU dynmenu = get_screen_dynmenu(screen);
-	INT lines = LINESTOTAL-OVERHEAD_MENU - get_brwsmenu_size(screen);
+	int lines = LINESTOTAL-OVERHEAD_MENU - get_brwsmenu_size(screen);
 	if (dynmenu->dirty || (cur_screen != screen)) {
 		UIWINDOW uiwin = main_win;
 		WINDOW *win = uiw_win(uiwin);
@@ -861,7 +861,7 @@ update_browse_menu (INT screen)
 		show_horz_line(uiwin, ll_lines-3,  0, ll_cols);
 		if (!dynmenu->hidden) {
 			/* display title */
-			INT width = ll_cols;
+			int width = ll_cols;
 			char prompt[128];
 			check_menu(dynmenu);
 			/* display prompt immediately above menu */
@@ -892,8 +892,8 @@ update_browse_menu (INT screen)
  *  @reuse:  [IN]  flag to save recalculating display strings
  *=======================================*/
 void
-show_indi (UIWINDOW uiwin, RECORD irec, INT mode, LLRECT rect
-	, INT * scroll, bool reuse)
+show_indi (UIWINDOW uiwin, RecordIndexEl *irec, int mode, LLRECT rect
+	, int * scroll, bool reuse)
 {
 #if !defined(DEADENDS)
 	CACHEEL icel;
@@ -926,8 +926,8 @@ show_indi (UIWINDOW uiwin, RECORD irec, INT mode, LLRECT rect
  *  reuse: [IN]  flag to save recalculating display strings
  *=======================================*/
 static void
-show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
-	, INT width, INT * scroll, bool reuse)
+show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt
+	, int width, int * scroll, bool reuse)
 {
 	struct tag_llrect rect;
 #if !defined(DEADENDS)
@@ -955,10 +955,10 @@ show_fam (UIWINDOW uiwin, RECORD frec, INT mode, INT row, INT hgt
  * display_indi -- Paint indi on-screen
  *=======================================*/
 void
-display_indi (RECORD indi, INT mode, bool reuse)
+display_indi (RecordIndexEl *indi, int mode, bool reuse)
 {
-	INT screen = ONE_PER_SCREEN;
-	INT lines=0;
+	int screen = ONE_PER_SCREEN;
+	int lines=0;
 	struct tag_llrect rect;
 	update_screen_size(); /* ensure screen size is current */
 	lines = update_browse_menu(screen);
@@ -973,7 +973,7 @@ display_indi (RECORD indi, INT mode, bool reuse)
 /*=========================================
  * interact_indi -- Get menu choice for indi browse
  *=======================================*/
-INT
+int
 interact_indi (void)
 {
 	return interact_screen_menu(main_win, ONE_PER_SCREEN);
@@ -982,11 +982,11 @@ interact_indi (void)
  * display_fam -- Paint fam on-screen
  *=====================================*/
 void
-display_fam (RECORD frec, INT mode, bool reuse)
+display_fam (RecordIndexEl *frec, int mode, bool reuse)
 {
-	INT width=0;
-	INT screen = ONE_FAM_SCREEN;
-	INT lines=0;
+	int width=0;
+	int screen = ONE_FAM_SCREEN;
+	int lines=0;
 	update_screen_size(); /* ensure screen size is current */
 	lines = update_browse_menu(screen);
 	width = MAINWIN_WIDTH;
@@ -996,7 +996,7 @@ display_fam (RECORD frec, INT mode, bool reuse)
 /*=========================================
  * interact_fam -- Get menu choice for indi browse
  *=======================================*/
-INT
+int
 interact_fam (void)
 {
 	return interact_screen_menu(main_win, ONE_FAM_SCREEN);
@@ -1005,11 +1005,11 @@ interact_fam (void)
  * display_2indi -- Paint tandem indi screen
  *===========================================*/
 void
-display_2indi (RECORD irec1, RECORD irec2, INT mode)
+display_2indi (RecordIndexEl *irec1, RecordIndexEl *irec2, int mode)
 {
-	INT screen = TWO_PER_SCREEN;
-	INT lines=0;
-	INT lines1=0,lines2=0;
+	int screen = TWO_PER_SCREEN;
+	int lines=0;
+	int lines1=0,lines2=0;
 	bool reuse = false; /* can't reuse display strings in tandem */
 	struct tag_llrect rect;
 
@@ -1038,7 +1038,7 @@ display_2indi (RECORD irec1, RECORD irec2, INT mode)
 /*=========================================
  * interact_2indi -- Get menu choice for tandem indi
  *=======================================*/
-INT
+int
 interact_2indi (void)
 {
 	return interact_screen_menu(main_win, TWO_PER_SCREEN);
@@ -1048,7 +1048,7 @@ interact_2indi (void)
  * PR 1999/03
  *==================================*/
 static void
-show_tandem_line (UIWINDOW win, INT row)
+show_tandem_line (UIWINDOW win, int row)
 {
 	show_horz_line(win, row, 0, ll_cols);
 }
@@ -1056,13 +1056,13 @@ show_tandem_line (UIWINDOW win, INT row)
  * display_2fam -- Paint tandem families
  *===========================================*/
 void
-display_2fam (RECORD frec1, RECORD frec2, INT mode)
+display_2fam (RecordIndexEl *frec1, RecordIndexEl *frec2, int mode)
 {
 	UIWINDOW uiwin = main_win;
-	INT width=0;
-	INT screen = TWO_FAM_SCREEN;
-	INT lines=0;
-	INT lines1=0,lines2=0;
+	int width=0;
+	int screen = TWO_FAM_SCREEN;
+	int lines=0;
+	int lines1=0,lines2=0;
 	bool reuse = false; /* can't reuse display strings in tandem */
 
 	update_screen_size(); /* ensure screen size is current */
@@ -1084,7 +1084,7 @@ display_2fam (RECORD frec1, RECORD frec2, INT mode)
 /*=========================================
  * interact_2fam -- Get menu choice for tandem fam
  *=======================================*/
-INT
+int
 interact_2fam (void)
 {
 	return interact_screen_menu(main_win, TWO_FAM_SCREEN);
@@ -1092,7 +1092,7 @@ interact_2fam (void)
 /*=========================================
  * interact_popup -- Get menu choice for a popup window
  *=======================================*/
-INT
+int
 interact_popup (UIWINDOW uiwin, String str)
 {
 	return interact_choice_string(uiwin, str);
@@ -1101,11 +1101,11 @@ interact_popup (UIWINDOW uiwin, String str)
  * aux_browse -- Handle aux_browse screen
  * This is used for browsing S, E, or X records.
  *=====================================*/
-INT
-aux_browse (RECORD rec, INT mode, bool reuse)
+int
+aux_browse (RecordIndexEl *rec, int mode, bool reuse)
 {
 	UIWINDOW uiwin = main_win;
-	INT lines = update_browse_menu(AUX_SCREEN);
+	int lines = update_browse_menu(AUX_SCREEN);
 	struct tag_llrect rect;
 	rect.top = 1;
 	rect.bottom = lines;
@@ -1121,8 +1121,8 @@ aux_browse (RECORD rec, INT mode, bool reuse)
  *  direct navigation in list
  *  this curses implementation does not use them
  *=======================================*/
-INT
-list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
+int
+list_browse (INDISEQ seq, int top, int * cur, int mark)
 {
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
@@ -1135,7 +1135,7 @@ list_browse (INDISEQ seq, INT top, INT * cur, INT mark)
  *  prmpt: [IN]  prompt of question (2nd line)
  *====================================*/
 bool
-ask_for_db_filename (CString ttl, CString prmpt, HINT_PARAM_UNUSED CString basedir, String buffer, INT buflen)
+ask_for_db_filename (CString ttl, CString prmpt, ATTRIBUTE_UNUSED CString basedir, String buffer, int buflen)
 {
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
@@ -1149,7 +1149,7 @@ ask_for_db_filename (CString ttl, CString prmpt, HINT_PARAM_UNUSED CString based
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer, INT buflen)
+ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
@@ -1163,7 +1163,7 @@ ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, INT buflen)
+ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
@@ -1178,11 +1178,11 @@ ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer,
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, INT buflen)
+ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
-	INT len = sizeof(curpath);
+	int len = sizeof(curpath);
 	if (len > uiw_cols(ask_msg_win)-2)
 		len = uiw_cols(ask_msg_win)-2;
 	curpath[0] = 0;
@@ -1210,7 +1210,7 @@ refresh_main (void)
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_string (CString ttl, CString prmpt, String buffer, INT buflen)
+ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1235,7 +1235,7 @@ ask_for_string (CString ttl, CString prmpt, String buffer, INT buflen)
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, INT buflen)
+ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1255,7 +1255,7 @@ ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, INT b
  * yes_no_value -- Convert character to true if y(es)
  *======================================*/
 bool
-yes_no_value (INT c)
+yes_no_value (int c)
 {
 	String ptr;
 	for (ptr = _(qSaskyY); *ptr; ptr++) {
@@ -1270,7 +1270,7 @@ yes_no_value (INT c)
 bool
 ask_yes_or_no (CString ttl)
 {
-	INT c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
+	int c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
 }
 /*=========================================================
@@ -1281,7 +1281,7 @@ ask_yes_or_no (CString ttl)
 bool
 ask_yes_or_no_msg (CString msg, CString ttl)
 {
-	INT c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
+	int c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
 }
 /*=======================================
@@ -1290,7 +1290,7 @@ ask_yes_or_no_msg (CString msg, CString ttl)
  *  prmpt: [IN]  2nd line text before cursor
  *  ptrn:  [IN]  List of allowable character responses
  *=====================================*/
-INT
+int
 ask_for_char (CString ttl, CString prmpt, CString ptrn)
 {
 	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
@@ -1302,13 +1302,13 @@ ask_for_char (CString ttl, CString prmpt, CString ptrn)
  *  prmpt: [IN]  3rd line text before cursor
  *  ptrn:  [IN]  List of allowable character responses
  *=========================================*/
-INT
+int
 ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 {
 	UIWINDOW uiwin = (msg ? ask_msg_win : ask_win);
 	WINDOW *win = uiw_win(uiwin);
-	INT y;
-	INT rv;
+	int y;
+	int rv;
 	uierase(uiwin);
 	draw_win_box(win);
 	y = 1;
@@ -1327,8 +1327,8 @@ ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
  *  pstrngs:  [IN] array of choices
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
-INT
-choose_from_array (CString ttl, INT no, String *pstrngs)
+int
+choose_from_array (CString ttl, int no, String *pstrngs)
 {
 	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
@@ -1340,8 +1340,8 @@ choose_from_array (CString ttl, INT no, String *pstrngs)
  *  list    [IN] list of string entries
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
-INT
-display_list (CString ttl, LIST list)
+int
+display_list (CString ttl, List *list)
 {
 	/* TODO: Need to set some flag to suppress i & <enter> */
 	return choose_from_list(ttl, list);
@@ -1352,13 +1352,13 @@ display_list (CString ttl, LIST list)
  *  list    [IN] list of string choices
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
-INT
-choose_from_list (CString ttl, LIST list)
+int
+choose_from_list (CString ttl, List *list)
 {
 	String * array=0;
 	String choice=0;
-	INT i=0, rtn=-1;
-	INT len = length_list(list);
+	int i=0, rtn=-1;
+	int len = length_list(list);
 
 	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);
@@ -1388,8 +1388,8 @@ choose_from_list (CString ttl, LIST list)
  *  param:    [IN]  opaque type for callback
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
-INT
-choose_from_array_x (CString ttl, INT no, String *pstrngs, DETAILFNC detfnc
+int
+choose_from_array_x (CString ttl, int no, String *pstrngs, DETAILFNC detfnc
 	, void *param)
 {
 	bool selecting = true;
@@ -1404,7 +1404,7 @@ choose_from_array_x (CString ttl, INT no, String *pstrngs, DETAILFNC detfnc
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 void
-view_array (CString ttl, INT no, String *pstrngs)
+view_array (CString ttl, int no, String *pstrngs)
 {
 	bool selecting = false;
 	choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
@@ -1419,11 +1419,11 @@ view_array (CString ttl, INT no, String *pstrngs)
  *  param:     [IN]  opaque type for callback
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
-static INT
-choose_or_view_array (CString ttl, INT no, String *pstrngs, bool selecting
+static int
+choose_or_view_array (CString ttl, int no, String *pstrngs, bool selecting
 	, DETAILFNC detfnc, void *param)
 {
-	INT rv;
+	int rv;
 	rv = array_interact(ttl, no, pstrngs, selecting, detfnc, param);
 	refresh_main();
 	return rv;
@@ -1434,7 +1434,7 @@ choose_or_view_array (CString ttl, INT no, String *pstrngs, bool selecting
  * Returns index of selected item (or -1 if user quit)
  *  ttl:  [IN]  title
  *===========================================================*/
-INT
+int
 choose_one_from_indiseq (CString ttl, INDISEQ seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, false);
@@ -1448,7 +1448,7 @@ choose_one_from_indiseq (CString ttl, INDISEQ seq)
  *  seq:  [I/O] list from which to choose (user may delete items)
  * returns index of where user choose select (or -1 if quit)
  *========================================================*/
-INT
+int
 choose_list_from_indiseq (CString ttl, INDISEQ seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, true);
@@ -1461,7 +1461,7 @@ draw_tt_win (String prompt)
 {
 	UIWINDOW uiwin = tt_menu_win;
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 0;
+	int row = 0;
 	uierase(uiwin);
 	draw_win_box(win);
 	row = 1;
@@ -1482,7 +1482,7 @@ draw_tt_win (String prompt)
  * Created: 2001/07/20
  *============================*/
 static void
-disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, INT trnum)
+disp_trans_table_choice (UIWINDOW uiwin, int row, int col, int trnum)
 {
 	XLAT xlat;
 	ZSTR zstr, z1;
@@ -1505,13 +1505,13 @@ disp_trans_table_choice (UIWINDOW uiwin, INT row, INT col, INT trnum)
  * invoke_add_menu -- Handle add menu
  * returns addref'd record
  *==========================*/
-static RECORD
+static RecordIndexEl *
 invoke_add_menu (void)
 {
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
-	RECORD rec=0;
-	INT code;
+	RecordIndexEl *rec=0;
+	int code;
 
 	if (!add_menu_win) {
 		create_newwin2(&add_menu_win, "add_menu", 8, 66);
@@ -1546,7 +1546,7 @@ invoke_add_menu (void)
 void
 invoke_del_menu (void)
 {
-	INT code;
+	int code;
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
 	if (!del_menu_win) {
@@ -1579,7 +1579,7 @@ invoke_del_menu (void)
 static void
 invoke_cset_display (void)
 {
-	LIST list = create_list2(LISTDOFREE);
+	List *list = create_list2(LISTDOFREE);
 	ZSTR zstr=zs_newn(80);
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
@@ -1693,9 +1693,9 @@ invoke_cset_display (void)
  *====================================*/
 static void
 #if defined WIN32_INTL_SHIM || defined WIN32_ICONV_SHIM
-add_shims_info (LIST list)
+add_shims_info (List *list)
 #else
-add_shims_info (HINT_PARAM_UNUSED LIST list)
+add_shims_info (ATTRIBUTE_UNUSED List *list)
 #endif
 {
 #if defined WIN32_INTL_SHIM || defined WIN32_ICONV_SHIM
@@ -1757,7 +1757,7 @@ add_shims_info (HINT_PARAM_UNUSED LIST list)
 static void
 invoke_trans_menu (void)
 {
-	INT code;
+	int code;
 	UIWINDOW uiwin=0;
 	bool done=false;
 
@@ -1793,7 +1793,7 @@ invoke_trans_menu (void)
 static void
 edit_tt_menu (void)
 {
-	INT ttnum;
+	int ttnum;
 	while ((ttnum = choose_tt(_(qSmn_edttttl))) != -1) {
 		edit_mapping(ttnum);
 		stdout_vis = false; /* don't need to see errors after done */
@@ -1808,7 +1808,7 @@ load_tt_action (void)
 {
 	FILE * fp;
 	String fname=0;
-	INT ttnum;
+	int ttnum;
 	String ttimportdir;
 
 	/* Ask which table */
@@ -1839,7 +1839,7 @@ save_tt_action (void)
 {
 	FILE * fp;
 	String fname=0;
-	INT ttnum;
+	int ttnum;
 	String ttexportdir;
 	
 	/* Ask which table */
@@ -1871,10 +1871,10 @@ save_tt_action (void)
 /*======================================
  * choose_tt -- select a translation table (-1 for none)
  *====================================*/
-static INT
+static int
 choose_tt (String prompt)
 {
-	INT code;
+	int code;
 	UIWINDOW uiwin = tt_menu_win;
 	while (1) {
 		draw_tt_win(prompt);
@@ -1900,7 +1900,7 @@ choose_tt (String prompt)
 static void
 invoke_utils_menu (void)
 {
-	INT code;
+	int code;
 	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 
@@ -1946,10 +1946,10 @@ invoke_utils_menu (void)
 /*================================
  * invoke_extra_menu -- Handle extra menu
  *==============================*/
-static INT
-invoke_extra_menu (RECORD *prec)
+static int
+invoke_extra_menu (RecordIndexEl **prec)
 {
-	INT code;
+	int code;
 	UIWINDOW uiwin=0;
 	WINDOW *win=0;
 
@@ -2044,7 +2044,7 @@ edit_user_options (void)
  *  Has not been codeset-converted to internal yet
  *==========================================*/
 bool
-get_answer (UIWINDOW uiwin, INT row, INT col, String buffer, INT buflen)
+get_answer (UIWINDOW uiwin, int row, int col, String buffer, int buflen)
 {
 	WINDOW *win = uiw_win(uiwin);
 	bool rtn = false;
@@ -2073,26 +2073,26 @@ get_answer (UIWINDOW uiwin, INT row, INT col, String buffer, INT buflen)
  * returns true if record was found, else FALSE (no record, nothing drawn)
  *==============================================================*/
 bool
-show_record (UIWINDOW uiwin, CString key, INT mode, LLRECT rect
-	, INT * scroll, bool reuse)
+show_record (UIWINDOW uiwin, CString key, int mode, LLRECT rect
+	, int * scroll, bool reuse)
 {
-	INT row = rect->top;
-	INT hgt = rect->bottom - rect->top + 1;
-	INT width = rect->right - rect->left + 1;
+	int row = rect->top;
+	int hgt = rect->bottom - rect->top + 1;
+	int width = rect->right - rect->left + 1;
 	if (key[0]=='I') {
-		RECORD irec = key_to_irecord(key);
+		RecordIndexEl *irec = key_to_irecord(key);
 		if (irec)
 			show_indi(uiwin, irec, mode, rect, scroll, reuse);
 		return irec != NULL;
 	} else if (key[0]=='F') {
-		RECORD frec = key_to_frecord(key);
+		RecordIndexEl *frec = key_to_frecord(key);
 		if (frec)
 			show_fam(uiwin, frec, mode, row, hgt, width, scroll, reuse);
 		return frec != NULL;
 
 	} else {
 		/* could be S,E,X -- show_aux handles all of these */
-		RECORD rec = qkey_to_record(key);
+		RecordIndexEl *rec = qkey_to_record(key);
 		if (rec)
 			show_aux(uiwin, rec, mode, rect, scroll, reuse);
 		return rec != NULL;
@@ -2121,7 +2121,7 @@ place_std_msg (void)
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
 	String str = message_string();
-	INT row = ll_lines-2;
+	int row = ll_lines-2;
 	clear_hseg(win, row, 2, ll_cols-2);
 	mvccwaddstr(win, row, 2, str);
 	/* now we need to repaint main window, but if there are
@@ -2189,7 +2189,7 @@ clearw (void)
  * wfield -- Write field in stdout window
  *=====================================*/
 void
-wfield (INT row, INT col, String str)
+wfield (int row, int col, String str)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -2201,7 +2201,7 @@ wfield (INT row, INT col, String str)
  * wpos -- Position to place in stdout window
  *=========================================*/
 void
-wpos (INT row, INT col)
+wpos (int row, int col)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -2211,10 +2211,10 @@ wpos (INT row, INT col)
  * show_horz_line -- Draw horizontal line
  *=====================================*/
 void
-show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
+show_horz_line (UIWINDOW uiwin, int row, int col, int len)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT i;
+	int i;
 	mvwaddch(win, row, col, gr_ltee);
 	for (i = 0; i < len-2; i++)
 		waddch(win, gr_hline);
@@ -2224,10 +2224,10 @@ show_horz_line (UIWINDOW uiwin, INT row, INT col, INT len)
  * show_vert_line -- Draw vertical line
  *===================================*/
 void
-show_vert_line (UIWINDOW uiwin, INT row, INT col, INT len)
+show_vert_line (UIWINDOW uiwin, int row, int col, int len)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT i;
+	int i;
 	mvwaddch(win, row++, col, gr_ttee);
 	for (i = 0; i < len-2; i++)
 		mvwaddch(win, row++, col, gr_vline);
@@ -2251,7 +2251,7 @@ place_cursor_popup (UIWINDOW uiwin)
 static void
 place_cursor_main (void)
 {
-	INT row=0, col = 30;
+	int row=0, col = 30;
 	DYNMENU dynmenu = get_screen_dynmenu(cur_screen);
 
 	/* Hide/Display Cursor */
@@ -2342,13 +2342,13 @@ do_edit (void)
  *  except trim it to no more than maxlen wide
  *==============================================*/
 static void
-mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, INT maxlen)
+mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, int maxlen)
 {
 	char buffer[60];
-	if ((INT)strlen(cp)<=maxlen)
+	if ((int)strlen(cp)<=maxlen)
 		mvccwaddstr(wp, x, y, cp);
 	else {
-		if (maxlen > (INT)sizeof(buffer)-1)
+		if (maxlen > (int)sizeof(buffer)-1)
 			maxlen = sizeof(buffer)-1;
 		llstrncpy(buffer, cp, maxlen-1, uu8);
 		strcat(buffer, "*");
@@ -2381,21 +2381,21 @@ static void
 output_menu (UIWINDOW uiwin, DYNMENU dynmenu)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row;
-	INT icol=0;
-	INT col=3;
+	int row;
+	int icol=0;
+	int col=3;
 	/* more legible names */
-	INT MenuSize = dynmenu->size;
-	INT MenuCols = dynmenu->cols;
-	INT MenuPage = dynmenu->page;
-	INT MenuPages = dynmenu->pages;
-	INT pageitems = dynmenu->pageitems;
+	int MenuSize = dynmenu->size;
+	int MenuCols = dynmenu->cols;
+	int MenuPage = dynmenu->page;
+	int MenuPages = dynmenu->pages;
+	int pageitems = dynmenu->pageitems;
 	MENUSET menuset = dynmenu_get_menuset(dynmenu);
 	MenuItem ** items = menuset_get_items(menuset);
-	INT width = dynmenu->width;
+	int width = dynmenu->width;
 	/* reserve 2 spaces at each end, and one space in front of each Col */
-	INT colwidth = (width-4)/MenuCols-1;
-	INT Item = 0;
+	int colwidth = (width-4)/MenuCols-1;
+	int Item = 0;
 	Item = MenuPage * pageitems;
 	if (Item >= MenuSize)
 		Item = ((MenuSize-1)/pageitems)*pageitems;
@@ -2453,7 +2453,7 @@ cycle_browse_menu (void)
  * adjust_browse_menu_height - Change height of current browse screen menu
  *================================================================*/
 void
-adjust_browse_menu_height (INT delta)
+adjust_browse_menu_height (int delta)
 {
 	dynmenu_adjust_height(get_screen_dynmenu(cur_screen), delta);
 }
@@ -2461,15 +2461,15 @@ adjust_browse_menu_height (INT delta)
  * adjust_browse_menu_cols - Change # of columns in current menu
  *================================================================*/
 void
-adjust_browse_menu_cols (INT delta)
+adjust_browse_menu_cols (int delta)
 {
 	dynmenu_adjust_menu_cols(get_screen_dynmenu(cur_screen), delta);
 }
 /*=========================================
  * get_brwsmenu_size -- How many lines does browse menu take ?
  *=======================================*/
-static INT
-get_brwsmenu_size (INT screen)
+static int
+get_brwsmenu_size (int screen)
 {
 	DYNMENU dynmenu = get_screen_dynmenu(screen);
 	return dynmenu->hidden ? EMPTY_MENU : dynmenu->rows+1;
@@ -2478,7 +2478,7 @@ get_brwsmenu_size (INT screen)
  * clear_stdout_hseg -- clear a horizontal line segment on stdout win
  *====================*/
 void
-clear_stdout_hseg (INT row, INT x1, INT x2)
+clear_stdout_hseg (int row, int x1, int x2)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -2489,7 +2489,7 @@ clear_stdout_hseg (INT row, INT x1, INT x2)
  *  (used for partial screen clears)
  *====================*/
 void
-clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
+clear_hseg (WINDOW *win, int row, int x1, int x2)
 {
 	/* workaround for curses bug with spacs */
 	if (getlloptint("ForceScreenErase", 0) > 0) {
@@ -2508,9 +2508,9 @@ clear_hseg (WINDOW *win, INT row, INT x1, INT x2)
  *  (used for clearing)
  *====================*/
 static void
-color_hseg (WINDOW *win, INT row, INT x1, INT x2, char ch)
+color_hseg (WINDOW *win, int row, int x1, int x2, char ch)
 {
-	INT i;
+	int i;
 	for (i=x1; i<=x2; ++i)
 		mvwaddch(win, row, i, ch);
 }
@@ -2524,10 +2524,10 @@ display_status (String text)
 {
   UIWINDOW uiwin = main_win;
   WINDOW *win = uiw_win(uiwin);
-  INT row;
+  int row;
   /* first store it */
   llstrncpy(status_showing, text, sizeof(status_showing), uu8);
-  if ((INT)strlen(text)>ll_cols-6) {
+  if ((int)strlen(text)>ll_cols-6) {
     status_showing[ll_cols-8] = 0;
     strcat(status_showing, "...");
   }
@@ -2543,7 +2543,7 @@ display_status (String text)
 /*=====================================
  * msg_width -- get max width of msgs
  *===================================*/
-INT
+int
 msg_width (void)
 {
 	return ll_cols-6;
@@ -2651,7 +2651,7 @@ void end_action (void)
 	/* put up list of errors if appropriate */
 	if (msg_flag && msg_list) {
 		String * strngs = (String *)stdalloc(length_list(msg_list)*sizeof(String));
-		INT i=0;
+		int i=0;
 		FORLIST(msg_list, el)
 			strngs[i++] = el;
 		ENDLIST
@@ -2704,7 +2704,7 @@ static void
 repaint_add_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_add_ttl));
@@ -2722,7 +2722,7 @@ static void
 repaint_delete_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_del_ttl));
@@ -2741,7 +2741,7 @@ static void
 repaint_utils_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_uttl));
@@ -2769,7 +2769,7 @@ static void
 repaint_extra_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	uierase(uiwin);
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, _(qSmn_xttl));
@@ -2993,7 +2993,7 @@ wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
 static void
 uicolor (UIWINDOW uiwin, LLRECT rect, char ch)
 {
-	INT i;
+	int i;
 	WINDOW *win = uiw_win(uiwin);
 	struct tag_llrect rects;
 
@@ -3029,7 +3029,7 @@ platform_postcurses_init (void)
 /*==================================================
  * get_main_screen_width -- current width of main screen
  *================================================*/
-INT
+int
 get_main_screen_width (void)
 {
 	return MAINWIN_WIDTH;
@@ -3075,7 +3075,7 @@ register_screen_lang_callbacks (bool registering)
  * screen_on_lang_change -- UI language or codeset has changed
  *==========================*/
 static void
-screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
+screen_on_lang_change (ATTRIBUTE_UNUSED void *uparm)
 {
 #if defined(DEADENDS)
   int max = lengthList (list_uiwin);
@@ -3088,7 +3088,7 @@ screen_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
     }
 #else
 	LIST_ITER listit=0;
-	VPTR ptr=0;
+	void *ptr=0;
 	listit = begin_list(list_uiwin);
 	while (next_list_ptr(listit, &ptr)) {
 		UIWINDOW uiwin = (UIWINDOW)ptr;

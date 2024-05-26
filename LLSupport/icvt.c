@@ -13,21 +13,12 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "de-strings.h"
-
-#else
-
-#include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */
-/* wcslen may be declared in "arch.h" or <wchar.h> */
-#include "arch.h"
-
-#endif
 
 #include <errno.h>
 #ifdef HAVE_ICONV

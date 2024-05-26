@@ -14,7 +14,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -38,18 +37,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
-#else
 
-#include "llstdlib.h"
-#include "liflines.h"
-#include "llinesi.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "screen.h"
-#include "cscurses.h"
-#include "zstr.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -144,7 +132,7 @@ mvccwaddnstr (WINDOW *wp, int y, int x, const char *cp, int n)
 			/* We need to do length truncation correctly for UTF-8 output */
 			/* #1) We need to not break UTF-8 multibytes */
 
-			INT width=0;
+			int width=0;
 			String prev = find_prev_char(&str[n-1], &width, str, gui8);
 			width += (prev - str);
 			zs_chop(zstr, width);

@@ -36,7 +36,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -85,20 +84,6 @@
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
 
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "llinesi.h"
-#include "feedback.h"
-#include "lloptions.h"
-#include "messages.h"
-#endif
-
 extern bool traditional;
 
 /*********************************************
@@ -112,7 +97,7 @@ extern bool traditional;
  *  so we can't put these in static variables
  *========================================================*/
 CString
-get_unresolved_ref_error_string (INT count)
+get_unresolved_ref_error_string (int count)
 {
 	return _pl("There was %d unresolved reference."
 		, "There were %d unresolved references.", count);
@@ -122,16 +107,12 @@ get_unresolved_ref_error_string (INT count)
  * (with user interaction)
  * returns addref'd record
  *========================================================*/
-RECORD
-#if defined(DEADENDS)
+RecordIndexEl *
 add_indi_by_edit (bool rfmt)
-#else
-add_indi_by_edit (RFMT rfmt)
-#endif
 {
 	FILE *fp;
-	RECORD indi0=0;
-	NODE indi=0;
+	RecordIndexEl *indi0=0;
+	GNode *indi=0;
 	String str, msg;
 	bool emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
@@ -156,7 +137,7 @@ add_indi_by_edit (RFMT rfmt)
 	fclose(fp);
 	do_edit();
 	while (true) {
-		INT cnt;
+		int cnt;
 		if (indi0) {
 			release_record(indi0);
 			indi0=0;
@@ -189,11 +170,7 @@ add_indi_by_edit (RFMT rfmt)
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-#if defined(DEADENDS)
 				write_indi_to_file_for_edit(indi, editfile, rfmt, currentDatabase);
-#else
-				write_indi_to_file_for_edit(indi, editfile, rfmt);
-#endif
 				do_edit();
 				continue;
 			}
@@ -217,16 +194,12 @@ add_indi_by_edit (RFMT rfmt)
  * creates record & adds to cache
  *========================================================*/
 void
-add_new_indi_to_db (RECORD indi0)
+add_new_indi_to_db (RecordIndexEl *indi0)
 {
-#if defined(DEADENDS)
 	GNode *name, *refn, *sex, *body, *dumb, *node;
-#else
-	NODE name, refn, sex, body, dumb, node;
-#endif
 	char key[MAXKEYWIDTH]="";
 	int32_t keynum=0;
-	NODE indi = nztop(indi0);
+	GNode *indi = nztop(indi0);
 
 	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	keynum = getixrefnum();
@@ -242,9 +215,6 @@ add_new_indi_to_db (RECORD indi0)
 	join_indi(indi, name, refn, sex, body, NULL, NULL);
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);
-#if !defined(DEADENDS)
-	add_new_indi_to_cache(indi0);
-#endif
 }
 /*================================================================
  * add_indi_no_cache -- Add new person to database
@@ -253,13 +223,9 @@ add_new_indi_to_db (RECORD indi0)
  * (no user interaction)
  *==============================================================*/
 bool
-add_indi_no_cache (NODE indi)
+add_indi_no_cache (GNode *indi)
 {
-#if defined(DEADENDS)
 	GNode *node, *name, *refn, *sex, *body, *famc, *fams;
-#else
-	NODE node, name, refn, sex, body, famc, fams;
-#endif
 	String str, key;
 
 	// Save INDI key value since rmvat static array entries may get reused
@@ -287,14 +253,10 @@ add_indi_no_cache (NODE indi)
  *  promptq: [in] what question to ask
  *  rfmt:    [in] reformatting info
  *======================================================*/
-INT
-#if defined(DEADENDS)
-ask_child_order (NODE fam, PROMPTQ promptq, bool rfmt)
-#else
-ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
-#endif
+int
+ask_child_order (GNode *fam, PROMPTQ promptq, bool rfmt)
 {
-	INT i, nchildren;
+	int i, nchildren;
 	String *childstrings, *childkeys;
 /* If first child in family, confirm and add */
 
@@ -317,19 +279,15 @@ ask_child_order (NODE fam, PROMPTQ promptq, RFMT rfmt)
  *  child: [in] new child to add
  *  fam:   [in] family to which to add
  *================================*/
-NODE
-#if defined(DEADENDS)
-prompt_add_child (NODE child, NODE fam, bool rfmt)
-#else
-prompt_add_child (NODE child, NODE fam, RFMT rfmt)
-#endif
+GNode *
+prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 {
-	INT i;
+	int i;
 
 /* Identify child if caller did not */
 
 	if (!child) {
-		RECORD rec = ask_for_indi(_(qSidchld), DOASK1);
+		RecordIndexEl *rec = ask_for_indi(_(qSidchld), DOASK1);
 		child = nztop(rec);
 		release_record(rec);
 	}
@@ -344,7 +302,7 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
 /* Identify family if caller did not */
 
 	if (!fam) {
-		RECORD rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
+		RecordIndexEl *rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
 		fam = nztop(rec);
 		release_record(rec);
 	}
@@ -365,18 +323,12 @@ prompt_add_child (NODE child, NODE fam, RFMT rfmt)
  * (no user interaction)
  *======================================*/
 void
-add_child_to_fam (NODE child, NODE fam, INT i)
+add_child_to_fam (GNode *child, GNode *fam, int i)
 {
-#if defined(DEADENDS)
 	GNode *node, *new, *name, *sex, *body, *famc, *fams;
 	GNode *husb, *wife, *chil, *rest, *refn, *fref;
 	GNode *nfmc, *this, *prev;
-#else
-	NODE node, new, name, sex, body, famc, fams;
-	NODE husb, wife, chil, rest, refn, fref;
-	NODE nfmc, this, prev;
-#endif
-	INT j;
+	int j;
 
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	prev = NULL;
@@ -436,32 +388,20 @@ add_child_to_fam (NODE child, NODE fam, INT i)
  * (with user interaction)
  *=================================*/
 bool
-prompt_add_spouse (RECORD sprec, RECORD frec, bool conf)
+prompt_add_spouse (RecordIndexEl *sprec, RecordIndexEl *frec, bool conf)
 {
-#if defined(DEADENDS)
 	SexType sex;
 	GNode *spouse, *fam = nztop(frec);
-#else
-	INT sex;
-	NODE spouse, fam = nztop(frec);
-#endif
 
 	/* Identify spouse to add to family */
 
 	if (!sprec) sprec = ask_for_indi(_(qSidsadd), DOASK1);
 	if (!sprec) return false;
 	spouse = nztop(sprec);
-#if defined(DEADENDS)
 	if ((sex = SEXV(spouse)) == sexUnknown) {
 		msg_error("%s", _(qSnosex));
 		return false;
 	}
-#else
-	if ((sex = SEX(spouse)) == SEX_UNKNOWN) {
-	  msg_error("%s", _(qSnosex));
-	  return false;
-	}
-#endif
 /* Identify family to add spouse to */
 
 	if (!fam) fam = nztop(ask_for_fam(_(qSidsinf), _(qSkchild)));
@@ -470,14 +410,9 @@ prompt_add_spouse (RECORD sprec, RECORD frec, bool conf)
 /* Check that spouse can be added */
 
 	if (traditional) {
-#if defined(DEADENDS)
 		GNode *husb, *wife, *chil, *rest, *fref;
-#else
-		NODE husb, wife, chil, rest, fref;
-#endif
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		join_fam(fam, fref, husb, wife, chil, rest);
-#if defined(DEADENDS)
 		if (sex == sexMale && husb) {
 			msg_error("%s", _(qShashsb));
 			return false;
@@ -486,16 +421,6 @@ prompt_add_spouse (RECORD sprec, RECORD frec, bool conf)
 			msg_error("%s", _(qShaswif));
 			return false;
 		}
-#else
-		if (sex == SEX_MALE && husb) {
-			msg_error("%s", _(qShashsb));
-			return false;
-		}
-		if (sex == SEX_FEMALE && wife) {
-			msg_error("%s", _(qShaswif));
-			return false;
-		}
-#endif
 	}
 
 	if (conf && !ask_yes_or_no(_(qScfsadd)))
@@ -511,24 +436,12 @@ prompt_add_spouse (RECORD sprec, RECORD frec, bool conf)
  * (no user interaction)
  *=================================*/
 void
-#if defined(DEADENDS)
-add_spouse_to_fam (NODE spouse, NODE fam, SexType sex)
-#else
-add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
-#endif
+add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 {
 /* Add HUSB or WIFE node to family */
-#if defined(DEADENDS)
 	GNode *husb, *wife, *chil, *rest, *fams, *prev, *fref, *this, *new;
-#else
-	NODE husb, wife, chil, rest, fams, prev, fref, this, new;
-#endif
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
-#if defined(DEADENDS)
 	if (sex == sexMale)
-#else
-	if (sex == SEX_MALE)
-#endif
 	{
 		prev = NULL;
 		this = husb;
@@ -580,15 +493,10 @@ add_spouse_to_fam (NODE spouse, NODE fam, INT sex)
  * (no user interaction)
  *=======================================*/
 static void
-add_members_to_family (String xref, NODE spouse1, NODE spouse2, NODE child)
+add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child)
 {
-#if defined(DEADENDS)
 	GNode *refn, *body;
 	GNode *name, *sex, *famc, *fams, *node, *prev, *new, *this;
-#else
-	NODE refn, body;
-	NODE name, sex, famc, fams, node, prev, new, this;
-#endif
 	if (spouse1) {
 		new = create_node(NULL, "FAMS", xref, spouse1);
 		prev = NULL;
@@ -635,24 +543,14 @@ add_members_to_family (String xref, NODE spouse1, NODE spouse2, NODE child)
  * add_family_by_edit -- Add new family to database
  * (with user interaction)
  *=======================================*/
-RECORD
-#if defined(DEADENDS)
-add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, bool rfmt)
-#else
-add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
-#endif
+RecordIndexEl *
+add_family_by_edit (RecordIndexEl *sprec1, RecordIndexEl *sprec2,
+		    RecordIndexEl *chrec, bool rfmt)
 {
-#if defined(DEADENDS)
 	SexType sex1 = sexUnknown;
 	SexType sex2 = sexUnknown;
 	GNode *spouse1, *spouse2, *child;
 	GNode *fam1, *fam2=0, *husb, *wife, *chil;
-#else
-	INT sex1 = 0;
-	INT sex2 = 0;
-	NODE spouse1, spouse2, child;
-	NODE fam1, fam2=0, husb, wife, chil;
-#endif
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	String msg=0, key=0, str=0;
@@ -672,11 +570,7 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 		sprec1 = ask_for_indi(_(qSidsps1), NOASK1);
 	if (!sprec1) 
 		return NULL;
-#if defined(DEADENDS)
 	if ((sex1 = SEXV(nztop(sprec1))) == sexUnknown)
-#else
-	if ((sex1 = SEX(nztop(sprec1))) == SEX_UNKNOWN)
-#endif
 	{
 		msg_error("%s", _(qSunksex));
 		return NULL;
@@ -687,13 +581,8 @@ add_family_by_edit (RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt)
 	if (!sprec2)
 		sprec2 = ask_for_indi(_(qSidsps2), DOASK1);
 	if (sprec2) {
-#if defined(DEADENDS)
 		if ((sex2 = SEXV(nztop(sprec2))) == sexUnknown || 
 			(traditional && sex1 == sex2))
-#else
-		if ((sex2 = SEX(nztop(sprec2))) == SEX_UNKNOWN || 
-			(traditional && sex1 == sex2))
-#endif
 		{
 			msg_error("%s", _(qSnotopp));
 			return NULL;
@@ -712,7 +601,6 @@ editfam:
 	 * to do this we make slightly fib about the use of the
 	 * terms husb and wife in setting up spouse nodes
 	 */
-#if defined(DEADENDS)
 	if (sex1 == sex2 && sex2 == sexFemale) {
 	    husb = create_node(NULL, "WIFE", nxref(spouse1), fam1);
 	} else if (sex1 == sexMale ) {
@@ -727,22 +615,6 @@ editfam:
 	} else if (sex1 == sex2 && sex2 == sexMale) {
 	    wife = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 	}
-#else
-	if (sex1 == sex2 && sex2 == SEX_FEMALE) {
-	    husb = create_node(NULL, "WIFE", nxref(spouse1), fam1);
-	} else if (sex1 == SEX_MALE ) {
-	    husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
-	} else if (sex2 == SEX_MALE && sex1 != SEX_MALE) {
-	    husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
-	}
-	if (sex1 == SEX_FEMALE && sex2 != SEX_FEMALE) {
-	    wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
-	} else if (sex2 == SEX_FEMALE) {
-	    wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
-	} else if (sex1 == sex2 && sex2 == SEX_MALE) {
-	    wife = create_node(NULL, "HUSB", nxref(spouse2), fam1);
-	}
-#endif
 	if (child)
 		chil = create_node(NULL, "CHIL", nxref(child), fam1);
 
@@ -767,7 +639,7 @@ editfam:
 
 	do_edit();
 	while (true) {
-		INT cnt;
+		int cnt;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
@@ -795,11 +667,7 @@ editfam:
 			llstrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
-#if defined(DEADENDS)
 				write_fam_to_file_for_edit(fam2, editfile, rfmt, currentDatabase);
-#else
-				write_fam_to_file_for_edit(fam2, editfile, rfmt);
-#endif
 				do_edit();
 				continue;
 			}
@@ -829,15 +697,10 @@ editfam:
  * creates record & adds to cache
  *========================================================*/
 void
-add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
+add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 {
-#if defined(DEADENDS)
 	GNode *refn, *husb, *wife, *chil, *body;
 	GNode *node;
-#else
-	NODE refn, husb, wife, chil, body;
-	NODE node;
-#endif
 	String key=0;
 	String xref = getfxref();
 
@@ -859,9 +722,6 @@ add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
 	resolve_refn_links(spouse2);
 	resolve_refn_links(child);
 	fam_to_dbase(fam2);
-#if !defined(DEADENDS)
-	fam_to_cache(fam2);
-#endif
 	if (spouse1) indi_to_dbase(spouse1);
 	if (spouse2) indi_to_dbase(spouse2);
 	if (child) indi_to_dbase(child);
@@ -873,18 +733,13 @@ add_new_fam_to_db (NODE fam2, NODE spouse1, NODE spouse2, NODE child)
  * This is stolen from add_family
  * and may not be terribly efficient - Perry
  *=======================================*/
-NODE
-add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
+GNode *
+add_family_to_db (GNode *spouse1, GNode *spouse2, GNode *child)
 {
-#if defined(DEADENDS)
 	SexType sex1 = spouse1 ? SEXV(spouse1) : sexUnknown;
 	SexType sex2 = spouse1 ? SEXV(spouse2) : sexUnknown;
-#else
-	INT sex1 = spouse1 ? SEX(spouse1) : SEX_UNKNOWN;
-	INT sex2 = spouse1 ? SEX(spouse2) : SEX_UNKNOWN;
-#endif
-	NODE fam1, fam2, refn, husb, wife, chil, body;
-	NODE node;
+	GNode *fam1, *fam2, *refn, *husb, *wife, *chil, *body;
+	GNode *node;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	String xref, msg, key;
@@ -894,21 +749,13 @@ add_family_to_db (NODE spouse1, NODE spouse2, NODE child)
 	fam1 = create_node(NULL, "FAM", NULL, NULL);
 	husb = wife = chil = NULL;
 	if (spouse1) {
-#if defined(DEADENDS)
 		if (sex1 == sexMale)
-#else
-		if (sex1 == SEX_MALE)
-#endif
 			husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
 		else
 			wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
 	}
 	if (spouse2) {
-#if defined(DEADENDS)
 		if (sex2 == sexMale)
-#else
-		if (sex2 == SEX_MALE)
-#endif
 			husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
 		else
 			wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);

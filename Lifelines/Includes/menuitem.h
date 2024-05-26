@@ -37,7 +37,7 @@
 typedef struct MenuItem_s {
 	String Display;
 	String Choices;
-	INT Command;
+	int Command;
 	String LocalizedDisplay;
 } MenuItem;
 /*
@@ -50,7 +50,7 @@ typedef struct MenuItemOption_struct {
 	String Display1;
 	String Display2;
 	String Choices;
-	INT Command;
+	int Command;
 } MenuItemOption;
 */
 
@@ -79,25 +79,25 @@ typedef struct tag_menuset *MENUSET;
 /* dynamically resizing & pageable menu */
 struct tag_dynmenu {
 	struct tag_menuset menuset;
-	INT rows;      /* height of menu (at start) */
-	INT cols;      /* (menu) columns in this menu (3 for big, 1 for list) */
-	INT size;      /* total #items in this menu */
-	INT page;      /* which page of menu currently displayed */
-	INT pages;     /* # of pages total */
-	INT pageitems; /* # of items per page */
-	INT mincols;   /* minimum width in colums*/
-	INT maxcols;   /* maximum width in columns */
-	INT minrows;   /* minimum height */
-	INT maxrows;   /* maximum height */
-	INT hidden;    /* for hideable menus */
-	INT dirty;     /* for repainting code */
+	int rows;      /* height of menu (at start) */
+	int cols;      /* (menu) columns in this menu (3 for big, 1 for list) */
+	int size;      /* total #items in this menu */
+	int page;      /* which page of menu currently displayed */
+	int pages;     /* # of pages total */
+	int pageitems; /* # of items per page */
+	int mincols;   /* minimum width in colums*/
+	int maxcols;   /* maximum width in columns */
+	int minrows;   /* minimum height */
+	int maxrows;   /* maximum height */
+	int hidden;    /* for hideable menus */
+	int dirty;     /* for repainting code */
 	/* character coordinates of menu size & location */
-	INT top;
-	INT bottom;
-	INT left;
-	INT width;
-	INT cur_y;     /* row for input cursor */
-	INT cur_x;     /* col for input cursor */
+	int top;
+	int bottom;
+	int left;
+	int width;
+	int cur_y;     /* row for input cursor */
+	int cur_x;     /* col for input cursor */
 };
 typedef struct tag_dynmenu *DYNMENU;
 
@@ -109,33 +109,33 @@ and used by both screen.c and menuitem.c
 
 /* menuset.c */
 void menuset_init(MENUSET menu, CString title, MenuItem ** MenuItems, MenuItem ** extraItems);
-INT menuset_check_cmd(MENUSET menuset, String str);
+int menuset_check_cmd(MENUSET menuset, String str);
 void menuset_clear(MENUSET menuset);
 MenuItem ** menuset_get_items(MENUSET menuset);
 
 /* dynmenu.c */
-void dynmenu_adjust_height(DYNMENU dynmenu, INT delta);
-void dynmenu_adjust_menu_cols(DYNMENU dynmenu, INT delta);
+void dynmenu_adjust_height(DYNMENU dynmenu, int delta);
+void dynmenu_adjust_menu_cols(DYNMENU dynmenu, int delta);
 void dynmenu_clear(DYNMENU dynmenu);
 MENUSET dynmenu_get_menuset(DYNMENU dynmenu);
-void dynmenu_init(DYNMENU dynmenu , CString title, INT MenuRows, INT MenuCols
-	, INT MinCols, INT MaxCols
-	, INT MinRows, INT MaxRows
-	, INT MenuTop, INT MenuLeft, INT MenuWidth
-	, INT MenuSize, MenuItem ** MenuItems);
+void dynmenu_init(DYNMENU dynmenu , CString title, int MenuRows, int MenuCols
+	, int MinCols, int MaxCols
+	, int MinRows, int MaxRows
+	, int MenuTop, int MenuLeft, int MenuWidth
+	, int MenuSize, MenuItem ** MenuItems);
 void dynmenu_next_page(DYNMENU dynmenu);
 void dynmenu_toggle_menu(DYNMENU dynmenu);
 
 /* brwsmenu.c */
-MENUSET get_screen_menuset(INT screen);
-DYNMENU get_screen_dynmenu(INT screen);
-String get_screen_title(INT screen);
-void brwsmenu_initialize(INT screenheight, INT screenwidth);
+MENUSET get_screen_menuset(int screen);
+DYNMENU get_screen_dynmenu(int screen);
+String get_screen_title(int screen);
+void brwsmenu_initialize(int screenheight, int screenwidth);
 
 
-void menuitem_initialize(INT cols);
+void menuitem_initialize(int cols);
 void menuitem_terminate(void);
-INT menuitem_check_cmd(INT screen, String cmd);
+int menuitem_check_cmd(int screen, String cmd);
 
 enum { 
 	CMD_NONE /* unrecognized or unimplemented */

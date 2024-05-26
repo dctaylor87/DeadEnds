@@ -85,15 +85,15 @@ static String usage_summary = "";      /* usage string */
 bool debugmode = false;     /* no signal handling, so we can get coredump */
 bool opt_nocb  = false;     /* no cb. data is displayed if TRUE */
 bool keyflag   = true;      /* show key values */
-INT alldone       = 0;         /* completion flag */
+int alldone       = 0;         /* completion flag */
 extern bool progrunning;
 extern bool progparsing;
-extern INT     progerror;
+extern int     progerror;
 bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 String  ext_codeset = 0;       /* default codeset from locale */
-//INT screen_width = 20; /* TODO */
+//int screen_width = 20; /* TODO */
 
 /*********************************************
  * local function prototypes
@@ -122,8 +122,8 @@ main (int argc, char **argv)
 	bool ok=false;
 	bool python_interactive = false;
 	String dbrequested=NULL; /* database (path) requested */
-	INT alteration=0;
-	LIST exprogs=NULL;
+	int alteration=0;
+	List *exprogs=NULL;
 	TABLE exargs=NULL;
 	String progout=NULL;
 	String configfile=0;
@@ -395,7 +395,7 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 		if (*ptr == '=') {
 			char * namebuff = 0;
 			char * valbuff = 0;
-			INT namelen = ptr - optarg;
+			int namelen = ptr - optarg;
 			if (!namelen)
 				return;
 			namebuff = (char *)malloc(namelen+1);
@@ -412,7 +412,7 @@ parse_arg (const char * optarg, char ** optname, char **optval)
  * shutdown_ui -- (Placeholder, we don't need it)
  *=================================================*/
 void
-shutdown_ui (HINT_PARAM_UNUSED bool pause)
+shutdown_ui (ATTRIBUTE_UNUSED bool pause)
 {
 }
 /*==================================================

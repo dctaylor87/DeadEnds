@@ -13,7 +13,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -31,16 +30,6 @@
 #include "hashtable.h"
 #include "stringtable.h"
 #include "de-strings.h"
-#else
-
-#include "llstdlib.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "codesets.h"
-#include "lloptions.h"
-#include "zstr.h"
-
-#endif
 
 #if !defined(NUMBER_LOCALE_BUCKETS)
 #define NUMBER_LOCALE_BUCKETS	5

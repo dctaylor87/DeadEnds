@@ -104,7 +104,7 @@ invoke_search_menu (void)
 {
 	UIWINDOW uiwin=0;
 	INDISEQ seq=0;
-	INT code=0;
+	int code=0;
 	bool done=false;
 
 	if (!search_menu_win) {
@@ -148,9 +148,9 @@ static void
 repaint_search_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	String title = _(qSmn_sea_ttl);
-	INT n = 0;
+	int n = 0;
 	char buffer[80];
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, title);
@@ -190,7 +190,7 @@ invoke_fullscan_menu (void)
 {
 	UIWINDOW uiwin=0;
 	INDISEQ seq=0;
-	INT code=0;
+	int code=0;
 	bool done=false;
 
 	if (!fullscan_menu_win) {
@@ -243,7 +243,7 @@ static void
 repaint_fullscan_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	String title = _("What scan type?");
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, title);
@@ -265,7 +265,7 @@ invoke_search_source_menu (void)
 {
 	UIWINDOW uiwin=0;
 	INDISEQ seq=0;
-	INT code=0;
+	int code=0;
 	bool done=false;
 
 	if (!search_source_menu_win) {
@@ -313,7 +313,7 @@ static void
 repaint_search_source_menu (UIWINDOW uiwin)
 {
 	WINDOW *win = uiw_win(uiwin);
-	INT row = 1;
+	int row = 1;
 	String title = _("Scan on what source field?");
 	draw_win_box(win);
 	mvccwaddstr(win, row++, 2, title);

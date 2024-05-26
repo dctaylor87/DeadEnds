@@ -43,7 +43,7 @@ static PyObject *llpy_menuchoose (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_getindi (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
   String prompt = _("Identify person for program:");
-  RECORD rec;
+  RecordIndexEl *rec;
   static char *keywords[] = { "prompt", NULL };
   LLINES_PY_RECORD *indi;
 
@@ -63,7 +63,7 @@ static PyObject *llpy_getindi (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, 
 static PyObject *llpy_getfam (PyObject *self ATTRIBUTE_UNUSED, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *family;
-  RECORD record;
+  RecordIndexEl *record;
 
   record = rptui_ask_for_fam(_("Enter a spouse from family."),
 			     _("Enter a sibling from family."));
@@ -85,7 +85,7 @@ static PyObject *llpy_getint (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, P
 {
   String prompt = _("Enter integer for program");
   static char *keywords[] = { "prompt", NULL };
-  INT num;
+  int num;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "|s", keywords, &prompt))
     return NULL;

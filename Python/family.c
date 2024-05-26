@@ -66,8 +66,8 @@ static void llpy_family_dealloc (PyObject *self);
 static PyObject *llpy_marriage (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  NODE fam_node;
-  NODE event = NULL;
+  GNode *fam_node;
+  GNode *event = NULL;
   LLINES_PY_NODE *marr;
 
   fam_node = nztop (fam->llr_record);
@@ -97,8 +97,8 @@ static PyObject *llpy_husband (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   Database *database = fam->llr_database;
-  NODE fam_node;
-  NODE husb_node;
+  GNode *fam_node;
+  GNode *husb_node;
   LLINES_PY_RECORD *husb;
   CString key;
 
@@ -131,8 +131,8 @@ static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   Database *database = fam->llr_database;
-  NODE fam_node;
-  NODE wife_node;
+  GNode *fam_node;
+  GNode *wife_node;
   LLINES_PY_RECORD *wife;
   CString key;
 
@@ -167,7 +167,7 @@ static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_nchildren (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  RECORD fam_record = fam->llr_record;
+  RecordIndexEl *fam_record = fam->llr_record;
   int count = length_nodes (CHIL (nztop (fam_record)));
 
   return (Py_BuildValue ("i", count));
@@ -181,7 +181,7 @@ static PyObject *llpy_firstchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   Database *database = fam->llr_database;
-  NODE indi_node;
+  GNode *indi_node;
   LLINES_PY_RECORD *indi;
   CString key;
 
@@ -216,8 +216,8 @@ static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   Database *database = fam->llr_database;
-  NODE indi_node;
-  NODE prev_node;
+  GNode *indi_node;
+  GNode *prev_node;
   LLINES_PY_RECORD *indi;
   CString key;
 
@@ -263,7 +263,7 @@ static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 static PyObject *llpy_nextfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  INT key_val = nzkeynum(fam->llr_record);
+  int key_val = nzkeynum(fam->llr_record);
 
   if (key_val == 0)
     {
@@ -271,7 +271,7 @@ static PyObject *llpy_nextfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
       PyErr_SetString(PyExc_SystemError, "nextfam: unable to determine RECORD's key");
       return NULL;
     }
-  key_val = (long)xref_nextf ((INT)key_val);
+  key_val = (long)xref_nextf ((int)key_val);
 
   if (key_val == 0)
     Py_RETURN_NONE;		/* no more -- we have reached the end */
@@ -289,7 +289,7 @@ static PyObject *llpy_nextfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  INT key_val = nzkeynum(fam->llr_record);
+  int key_val = nzkeynum(fam->llr_record);
 
   if (key_val == 0)
     {
@@ -297,7 +297,7 @@ static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
       PyErr_SetString(PyExc_SystemError, "prevfam: unable to determine RECORDs key");
       return NULL;
     }
-  key_val = (long)xref_prevf ((INT)key_val);
+  key_val = (long)xref_prevf ((int)key_val);
 
   if (key_val == 0)
     Py_RETURN_NONE;		/* no more -- we have reached the end */
@@ -351,7 +351,7 @@ static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 
 static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  RECORD fam = ((LLINES_PY_RECORD *)self)->llr_record;
+  RecordIndexEl *fam = ((LLINES_PY_RECORD *)self)->llr_record;
   Database *database = ((LLINES_PY_RECORD *)self)->llr_database;
   PyObject *output_set = PySet_New (NULL);
 
@@ -391,10 +391,10 @@ static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  NODE node = nztop (fam->llr_record);
+  GNode *node = nztop (fam->llr_record);
   Database *database = fam->llr_database;
   INDISEQ seq=0;
-  RECORD record;
+  RecordIndexEl *record;
   LLINES_PY_RECORD *indi;
 
   if (! node)
@@ -425,8 +425,8 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
 static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  NODE node = nztop (fam->llr_record);
-  RECORD record;
+  GNode *node = nztop (fam->llr_record);
+  RecordIndexEl *record;
   INDISEQ seq;
   LLINES_PY_RECORD *py_indi;
 
@@ -453,15 +453,15 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
 static PyObject *llpy_sync_fam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *py_record = (LLINES_PY_RECORD *) self;
-  RECORD record = py_record->llr_record;
+  RecordIndexEl *record = py_record->llr_record;
   CString key = nzkey (record);
   String rawrec = 0;
   String msg = 0;
   int on_disk = 1;
-  INT len;
-  INT cnt;
-  NODE old_tree = 0;
-  NODE new_tree = 0;
+  int len;
+  int cnt;
+  GNode *old_tree = 0;
+  GNode *new_tree = 0;
 
   if (! key)
     {

@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -69,20 +68,6 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "llstdlib.h"
-#include "btree.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "lloptions.h"
-#include "messages.h"
-
-#endif
 
 #include "llinesi.h"
 
@@ -97,19 +82,13 @@
  *********************************************/
 
 /* alphabetical */
-static RECORD edit_add_record(String recstr, String redt, String redtopt
+static RecordIndexEl *edit_add_record(String recstr, String redt, String redtopt
 	, char ntype, String cfrm);
-#if defined(DEADENDS)
-static bool edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
+static bool edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 			   String redtopt,
 			   bool (*val)(GNode *, String *, GNode *), String cfrm,
 			   bool (*todbase)(GNode *, Database *),
 			   String gdmsg, bool rfmt);
-#else
-static bool edit_record(RECORD rec1, String idedt, INT letr, String redt
-	, String redtopt , bool (*val)(NODE, String *, NODE), String cfrm
-	, void (*todbase)(NODE), String gdmsg, RFMT rfmt);
-#endif
 
 /*********************************************
  * local function definitions
@@ -119,7 +98,7 @@ static bool edit_record(RECORD rec1, String idedt, INT letr, String redt
 /*================================================
  * edit_add_source -- Add source to database by editing
  *==============================================*/
-RECORD
+RecordIndexEl *
 edit_add_source (void)
 {
 	String str;
@@ -130,7 +109,7 @@ edit_add_source (void)
 /*==============================================
  * edit_add_event -- Add event to database by editing
  *============================================*/
-RECORD
+RecordIndexEl *
 edit_add_event (void)
 {
 	String str;
@@ -141,7 +120,7 @@ edit_add_event (void)
 /*====================================================
  * edit_add_other -- Add user record to database by editing
  *==================================================*/
-RECORD
+RecordIndexEl *
 edit_add_other (void)
 {
 	String str;
@@ -157,51 +136,27 @@ edit_add_other (void)
  *  ntype,   [IN] S, E, or X
  *  cfrm:    [IN] confirm message
  *==============================================*/
-static RECORD
+static RecordIndexEl *
 edit_add_record (String recstr, String redt, String redtopt, char ntype, String cfrm)
 {
 	FILE *fp;
-#if defined(DEADENDS)
 	GNode *node=0, *refn;
-#else
-	NODE node=0, refn;
-#endif
 	String msg, key;
 	bool emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	String (*getreffnc)(void) = NULL; /* get next internal key */
-#if defined(DEADENDS)
 	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
-#else
-	void (*todbasefnc)(NODE) = NULL;  /* write record to dbase */
-	void (*tocachefnc)(NODE) = NULL;  /* write record to cache */
-#endif
 	
 	/* set up functions according to type */
 	if (ntype == 'S') {
 		getreffnc = getsxref;
-#if defined(DEADENDS)
 		todbasefnc = addOrUpdateSourceInDatabase;
-#else
-		todbasefnc = sour_to_dbase;
-		tocachefnc = sour_to_cache;
-#endif
 	} else if (ntype == 'E') {
 		getreffnc = getexref;
-#if defined(DEADENDS)
 		todbasefnc = addOrUpdateEventInDatabase;
-#else
-		todbasefnc = even_to_dbase;
-		tocachefnc = even_to_cache;
-#endif
 	} else { /* X */
 		getreffnc = getxxref;
-#if defined(DEADENDS)
 		todbasefnc = addOrUpdateOtherInDatabase;
-#else
-		todbasefnc = othr_to_dbase;
-		tocachefnc = othr_to_cache;
-#endif
 	}
 
 /* Create template for user to edit */
@@ -216,7 +171,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	fclose(fp);
 	do_edit();
 	while (true) {
-		INT cnt;
+		int cnt;
 		node = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!node) {
 			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
@@ -261,80 +216,44 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
 			add_refn(nval(refn), key);
 	}
-#if defined(DEADENDS)
 	(*todbasefnc)(node, database);
-#else
-	(*todbasefnc)(node);
-	(*tocachefnc)(node);
-#endif
 	return key_to_record(key);
 }
 /*=======================================
  * edit_source -- Edit source in database
  *=====================================*/
 bool
-#if defined(DEADENDS)
-edit_source (RECORD rec, bool rfmt)
-#else
-edit_source (RECORD rec, RFMT rfmt)
-#endif
+edit_source (RecordIndexEl *rec, bool rfmt)
 {
-#if defined(DEADENDS)
 	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt),
 			   valid_sour_tree, _(qScfrupt),
 			   addOrUpdateSourceInDatabase, _(qSgdrmod), rfmt);
-#else
-	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt)
-		, valid_sour_tree, _(qScfrupt), sour_to_dbase, _(qSgdrmod), rfmt);
-#endif
 }
 /*=====================================
  * edit_event -- Edit event in database
  *===================================*/
 bool
-#if defined(DEADENDS)
-edit_event (RECORD rec, bool rfmt)
-#else
-edit_event (RECORD rec, RFMT rfmt)
-#endif
+edit_event (RecordIndexEl *rec, bool rfmt)
 {
-#if defined(DEADENDS)
 	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt),
 			   valid_even_tree, _(qScfeupt),
 			   addOrUpdateEventInDatabase, _(qSgdemod), rfmt);
-#else
-	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt)
-		, valid_even_tree, _(qScfeupt), even_to_dbase, _(qSgdemod), rfmt);
-#endif
 }
 /*===========================================
  * edit_other -- Edit other record in database (eg, NOTE)
  *=========================================*/
 bool
-#if defined(DEADENDS)
-edit_other (RECORD rec, bool rfmt)
-#else
-edit_other (RECORD rec, RFMT rfmt)
-#endif
+edit_other (RecordIndexEl *rec, bool rfmt)
 {
-#if defined(DEADENDS)
 	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt),
 			   valid_othr_tree, _(qScfxupt),
 			   addOrUpdateOtherInDatabase, _(qSgdxmod), rfmt);
-#else
-	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt)
-		, valid_othr_tree, _(qScfxupt), othr_to_dbase, _(qSgdxmod), rfmt);
-#endif
 }
 /*=======================================
  * edit_any_record -- Edit record of any type
  *=====================================*/
 bool
-#if defined(DEADENDS)
-edit_any_record (RECORD rec, bool rfmt)
-#else
-edit_any_record (RECORD rec, RFMT rfmt)
-#endif
+edit_any_record (RecordIndexEl *rec, bool rfmt)
 {
 	ASSERT(rec);
 	switch (nztype(rec)) {
@@ -351,7 +270,7 @@ edit_any_record (RECORD rec, RFMT rfmt)
  *  to a file for editing
  *======================================================*/
 void
-write_node_to_editfile (NODE node)
+write_node_to_editfile (GNode *node)
 {
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
@@ -376,32 +295,19 @@ write_node_to_editfile (NODE node)
  *  gdmsg:   [IN]  success message
  *  rfmt:    [IN]  display reformatter
  *=====================================*/
-#if defined(DEADENDS)
 static bool
-edit_record(RecordIndexEl *rec1, String idedt, INT letr, String redt,
+edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	    String redtopt,
 	    bool (*val)(GNode *, String *, GNode *), String cfrm,
 	    bool (*todbase)(GNode *, Database *),
 	    String gdmsg, bool rfmt)
-#else
-static bool
-edit_record(RECORD rec1, String idedt, INT letr, String redt
-	    , String redtopt , bool (*val)(NODE, String *, NODE), String cfrm
-	    , void (*todbase)(NODE), String gdmsg, RFMT rfmt)
-#endif
 {
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	String msg, key;
 	bool emp;
-#if defined(DEADENDS)
 	GNode *root0=0, *root1=0, *root2=0;
 	GNode *refn1=0, *refn2=0, *refnn=0, *refn1n=0;
 	GNode *body=0, *node=0;
-#else
-	NODE root0=0, root1=0, root2=0;
-	NODE refn1=0, refn2=0, refnn=0, refn1n=0;
-	NODE body=0, node=0;
-#endif
 
 /* Identify record if need be */
 	if (!rec1) {
@@ -414,18 +320,14 @@ edit_record(RECORD rec1, String idedt, INT letr, String redt
 	}
 
 /* Have user edit record */
-#if defined(DEADENDS)
 	annotateWithSupplemental(root1, rfmt, database);
-#else
-	annotate_with_supplemental(root1, rfmt);
-#endif
 	write_node_to_editfile(root1);
 	resolve_refn_links(root1);
 
 	do_edit();
 
 	while (true) {
-		INT cnt;
+		int cnt;
 		root2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!root2) {
 			if (ask_yes_or_no_msg(msg, redt)) {
@@ -487,11 +389,7 @@ edit_record(RECORD rec1, String idedt, INT letr, String redt
 
 /* Change the database */
 
-#if defined(DEADENDS)
 	(*todbase)(root1, database);
-#else
-	(*todbase)(root1);
-#endif
 	key = rmvat(nxref(root1));
 	/* remove deleted refns & add new ones */
 	classify_nodes(&refn1, &refnn, &refn1n);

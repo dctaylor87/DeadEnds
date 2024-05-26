@@ -78,19 +78,19 @@
  *********************************************/
 
 /* alphabetical */
-static void clear_rec_counts(INT pass);
-static void export_saved_rec(char ctype, INT count);
-static void import_added_rec(char ctype, String tag, INT count);
+static void clear_rec_counts(int pass);
+static void export_saved_rec(char ctype, int count);
+static void import_added_rec(char ctype, String tag, int count);
 static void import_adding_unused_keys(void);
 static void import_beginning_import(String msg);
 static void import_error_invalid(String reason);
 static void import_readonly(void);
-/* static void import_report_timing(INT elapsed_sec, INT uitime_sec); */
-static void import_validated_rec(char ctype, String tag, INT count);
+/* static void import_report_timing(int elapsed_sec, int uitime_sec); */
+static void import_validated_rec(char ctype, String tag, int count);
 static void import_validating(void);
 static void import_validation_error(String msg);
 static void import_validation_warning(String msg);
-static void update_rec_count(INT pass, char ctype, String tag, INT count);
+static void update_rec_count(int pass, char ctype, String tag, int count);
 
 /*********************************************
  * local variables
@@ -106,12 +106,12 @@ static void update_rec_count(INT pass, char ctype, String tag, INT count);
  * Functions to display record counts
  *==============================*/
 static void
-update_rec_count (INT pass, char ctype, String tag, INT count)
+update_rec_count (int pass, char ctype, String tag, int count)
 {
-	INT offset = 9*pass;
+	int offset = 9*pass;
 	char msg[100];
 	String numstr=0;
-	INT row=0;
+	int row=0;
 
 	switch(ctype) {
 	case 'I':
@@ -146,7 +146,7 @@ update_rec_count (INT pass, char ctype, String tag, INT count)
  * Display 0 counts for all types
  *==============================*/
 static void
-clear_rec_counts (INT pass)
+clear_rec_counts (int pass)
 {
 	update_rec_count(pass, 'I', 0, 0);
 	update_rec_count(pass, 'F', 0, 0);
@@ -178,8 +178,8 @@ import_validating (void)
 {
 	char msg[100];
 	String numstr=0;
-	INT count=0;
-	INT row=0;
+	int count=0;
+	int row=0;
 
 	llwprintf("%s\n", _("Checking GEDCOM file for errors."));
 	clear_rec_counts(0);
@@ -214,17 +214,17 @@ import_adding_unused_keys (void)
 	wfield(15, 0, _("Adding unused keys as deleted keys..."));
 }
 static void
-import_validated_rec (char ctype, String tag, INT count)
+import_validated_rec (char ctype, String tag, int count)
 {
 	update_rec_count(0, ctype, tag, count);
 }
 static void
-import_added_rec (char ctype, String tag, INT count)
+import_added_rec (char ctype, String tag, int count)
 {
 	update_rec_count(1, ctype, tag, count);
 }
 static void
-export_saved_rec (char ctype, INT count)
+export_saved_rec (char ctype, int count)
 {
 	update_rec_count(0, ctype, "", count);
 }
@@ -272,8 +272,8 @@ load_gedcom (bool picklist)
 
 
 	if (1) {
-		INT duration = time(NULL) - begin;
-		INT uitime = get_uitime() - beginui;
+		int duration = time(NULL) - begin;
+		int uitime = get_uitime() - beginui;
 		ZSTR zt1=approx_time(duration-uitime), zt2=approx_time(uitime);
 		/* TRANSLATORS: how long Import ran, and how much of that was UI delay */
 		ZSTR zout = zs_newf(_("Import time %s (ui %s)\n")

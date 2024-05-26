@@ -8,7 +8,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -21,12 +20,6 @@
 #include "uiprompts.h"
 #include "refnindex.h"
 #include "sequence.h"
-#else
-
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-
-#endif
 
 #include "llinesi.h"
 #include "messages.h"
@@ -71,12 +64,6 @@ print_lines_usage (CString exename)
 	printf("\n\t-a\n\t\t");
 	printf(_("log dynamic memory operation (for debugging)"));
 	printf("\n\t");
-#if !defined(DEADENDS)
-	printf(_("-c[TYPE][DIRECT,INDIRECT]"));
-	printf("\n\t\t");
-	printf(_("supply cache values (eg, -ci400,4000f400,4000 sets direct indi\n"
-		"\t\t& fam caches to 400, and indirect indi & fam caches to 4000)"));
-#endif
 	printf("\n\t-d\n\t\t");
 	printf(_("debug mode (disable signal trapping)"));
 	printf("\n\t-f\n\t\t");

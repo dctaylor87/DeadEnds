@@ -76,9 +76,6 @@
 #include "messages.h"
 
 #endif
-#if !defined(DEADENDS)
-extern BTREE BTR;
-#endif
 
 /*======================================
  * key_util -- Return person's key value
@@ -86,7 +83,7 @@ extern BTREE BTR;
 void
 key_util (void)
 {
-	RECORD indi = ask_for_indi(_("Whose key value do you want?"), NOASK1);
+	RecordIndexEl *indi = ask_for_indi(_("Whose key value do you want?"), NOASK1);
 	if (!indi) return;
 	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), 70));
 }
@@ -99,8 +96,8 @@ void
 who_is_he_she (void)
 {
 	String str, rawrec;
-	NODE indi;
-	INT len;
+	GNode *indi;
+	int len;
 	char nkey[100];
 	char key[20];
 
@@ -147,10 +144,11 @@ show_database_stats (void)
 		, num_sours(), num_evens(), num_othrs());
 	msg_info("%s", msg);
 }
+
 /*======================================
  * sighand_cursesui -- Catch and handle signal (UI)
  *====================================*/
-#if defined(DEADENDS)
+
 void
 sighand_cursesui(int sig)
 {
@@ -171,54 +169,11 @@ sighand_cursesui(int sig)
   exit(1);
 }
 
-#else
-
-void
-sighand_cursesui(HINT_PARAM_UNUSED int sig)
-{
-	char signum[20];
-	String signame;
-	ZSTR zstr=0;
-
-	/* Ok, we'll want the descriptive name of the signal */
-	load_signames();
-
-	/* We don't know whether curses is up or not right now */
-	/* so we build the report msg, then close curses, then print it */
-	zstr = get_report_error_msg(qSprogsig);
-	close_lifelines();
-	shutdown_ui(true); /* pause */
-
-	/* TODO: Shouldn't we be logging this ? */
-	/* now print report msg if we had one */
-	if (zs_len(zstr))
-		printf("%s", zs_str(zstr));
-	zs_free(&zstr);
-	/* now build description of signal (# and name) */
-	/* name is not translated til sprint'd into msg */
-	snprintf(signum, sizeof(signum), "%d", sig);
-	signame = get_signame(sig);
-	zstr = zprintpic2(_(qSsignal), signum, signame); 
-	ll_optional_abort(zs_str(zstr));
-	zs_free(&zstr);
-	exit(1);
-}
-#endif
-
 /*======================================
  * sighand_cmdline - Catch and handle signal cleanly (command-line)
  *====================================*/
-#if defined(DEADENDS)
 void
 sighand_cmdline(int sig ATTRIBUTE_UNUSED)
 {
   exit(1);
 }
-#else
-void
-sighand_cmdline(HINT_PARAM_UNUSED int sig)
-{
-	closebtree(BTR);
-        exit(1);
-}
-#endif

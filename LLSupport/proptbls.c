@@ -14,7 +14,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <inttypes.h>
 #include <dirent.h>
@@ -35,14 +34,6 @@
 #include "readwrite.h"
 #include "de-strings.h"
 #include "proptbls.h"
-
-#else
-#include "llstdlib.h"
-#include "arch.h" /* dirent used in scandir */
-#include "table.h"
-#include "proptbls.h"
-
-#endif
 
 #if !defined(NUM_PROP_ELEMENT_BUCKETS)
 #define NUM_PROP_ELEMENT_BUCKETS	17

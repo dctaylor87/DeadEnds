@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -69,20 +68,7 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "sys_inc.h"
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "llinesi.h"
-#include "feedback.h"
-#include "messages.h"
-
-#endif
 /*=====================================================
  * choose_and_remove_family -- Choose & delete a family
  *  (remove all members, and delete F record)
@@ -90,17 +76,12 @@
 void
 choose_and_remove_family (void)
 {
-#if defined(DEADENDS)
 	GNode *fam, *node, *indi;
 	Sequence *spseq, *chseq;
-#else
-	NODE fam, node, indi;
-	INDISEQ spseq, chseq;
-#endif
 	String tag, key;
 	char confirm[512]="", members[64];
 	char spouses[32], children[32];
-	INT n;
+	int n;
 
 	fam = nztop(ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch)));
 	if (!fam)
@@ -162,7 +143,7 @@ choose_and_remove_family (void)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 void
-choose_and_remove_indi (NODE indi, CONFIRMQ confirmq)
+choose_and_remove_indi (GNode *indi, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), DOASK1))))
@@ -180,7 +161,7 @@ choose_and_remove_indi (NODE indi, CONFIRMQ confirmq)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 bool
-choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
+choose_and_remove_any_record (RecordIndexEl *record, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1)))
@@ -199,9 +180,9 @@ choose_and_remove_any_record (RECORD record, CONFIRMQ confirmq)
  *  nolast: don't remove last member of family?
  *=========================================*/
 bool
-choose_and_remove_spouse (RECORD irec, RECORD frec, bool nolast)
+choose_and_remove_spouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 {
-	NODE fam;
+	GNode *fam;
 
 /* Identify spouse to remove */
 	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1);
@@ -236,9 +217,9 @@ choose_and_remove_spouse (RECORD irec, RECORD frec, bool nolast)
  *  nolast: don't remove last member of family?
  *=========================================*/
 bool
-choose_and_remove_child (RECORD irec, RECORD frec, bool nolast)
+choose_and_remove_child (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 {
-	NODE fam;
+	GNode *fam;
 
 /* Identify child and check for FAMC nodes */
 	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1);

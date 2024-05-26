@@ -14,7 +14,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -46,29 +45,6 @@
 #include "listener.h"
 #include "de-strings.h"
 
-#else
-
-#include "llstdlib.h"
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
-#if defined(_WIN32) && !defined(__CYGWIN__)
-# include "isolangs.h"
-#endif
-#endif
-#ifdef HAVE_LANGINFO_CODESET
-# include <langinfo.h>
-#else
-# include "langinfz.h"
-#endif
-#include "translat.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "icvt.h"
-#include "lloptions.h"
-#include "date.h"
-#include "gedcomi.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/

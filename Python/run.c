@@ -126,7 +126,7 @@ execute_script (CString report_name)
 #else
   String mode = LLREADTEXT;	/* "r" on POSIX, on M$ systems this is "rt" */
   String ext = ".py";
-  INT utf8 = uu8;
+  int utf8 = uu8;
   String report_pathname;
 #endif
   char *path;

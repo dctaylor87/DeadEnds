@@ -35,19 +35,12 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "standard.h"
 #include "llnls.h"
 
 #include "norm_charmap.h"
-
-#else
-
-#include "llstdlib.h"
-
-#endif
 
 #define digit(x) ((x) >= '0' && (x) <= '9')
 

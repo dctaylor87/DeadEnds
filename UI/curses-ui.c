@@ -179,10 +179,10 @@ display_status (String text)
 {
   UIWINDOW uiwin = main_win;
   WINDOW *win = uiw_win(uiwin);
-  INT row;
+  int row;
   /* first store it */
   llstrncpy(status_showing, text, sizeof(status_showing), uu8);
-  if ((INT)strlen(text)>ll_cols-6) {
+  if ((int)strlen(text)>ll_cols-6) {
     status_showing[ll_cols-8] = 0;
     strcat(status_showing, "...");
   }

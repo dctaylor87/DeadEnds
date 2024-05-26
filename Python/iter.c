@@ -386,7 +386,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 static PyObject *llpy_record_iternext (PyObject *self)
 {
   LLINES_PY_RECORD_ITER *iter = (LLINES_PY_RECORD_ITER *)self;
-  RECORD record;
+  RecordIndexEl *record;
 
   if (llpy_debug)
     {
@@ -549,8 +549,8 @@ static PyObject *llpy_node_iternext (PyObject *self)
   /* these are only used if llpy_debug is true */
 
   /* these are for debugging ref counts which DeadEnds currently lacks */
-  NODE old_cur_node = iter->ni_cur_node;
-  NODE old_top_node = iter->ni_top_node;
+  GNode *old_cur_node = iter->ni_cur_node;
+  GNode *old_top_node = iter->ni_top_node;
 
 #if 0
   /* if this is ever stored or returned, something is screwed up */
@@ -724,9 +724,9 @@ static int nodeiter_next_child (LLINES_PY_NODEITER *iter)
 
 static int nodeiter_next_traverse (LLINES_PY_NODEITER *iter)
 {
-  NODE new_node;
+  GNode *new_node;
   int new_level;
-  NODE cur_node;
+  GNode *cur_node;
 
   if (iter->ni_level < 0)
     {

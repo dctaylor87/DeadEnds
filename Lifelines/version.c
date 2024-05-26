@@ -51,10 +51,10 @@
  *  returns static buffer
  *=============================================*/
 String
-get_deadends_version (INT maxlen)
+get_deadends_version (int maxlen)
 {
         static char version[48];
-        INT len=sizeof(version);
+        int len=sizeof(version);
         if (len>maxlen)
                 len=maxlen;
         llstrncpyf(version, len, 0, "%s %s", LIFELINES_VERSION, LIFELINES_VERSION_EXTRA);

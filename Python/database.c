@@ -65,7 +65,7 @@ static PyObject *llpy_others_db (PyObject *self, PyObject *args);
 
 static PyObject *llpy_firstindi (PyObject *Py_UNUSED(self), PyObject *args ATTRIBUTE_UNUSED)
 {
-  INT keynum = xref_firsti();
+  int keynum = xref_firsti();
   LLINES_PY_RECORD *rec;
 
   if (keynum == 0)
@@ -86,7 +86,7 @@ static PyObject *llpy_firstindi (PyObject *Py_UNUSED(self), PyObject *args ATTRI
 
 static PyObject *llpy_lastindi (PyObject *Py_UNUSED(self), PyObject *args ATTRIBUTE_UNUSED)
 {
-  INT keynum = xref_lasti();
+  int keynum = xref_lasti();
   LLINES_PY_RECORD *rec;
 
   if (keynum == 0)
@@ -107,7 +107,7 @@ static PyObject *llpy_lastindi (PyObject *Py_UNUSED(self), PyObject *args ATTRIB
 
 static PyObject *llpy_firstfam (PyObject *Py_UNUSED(self), PyObject *args ATTRIBUTE_UNUSED)
 {
-  INT keynum = xref_firstf();
+  int keynum = xref_firstf();
   LLINES_PY_RECORD *rec;
 
   if (keynum == 0)
@@ -128,7 +128,7 @@ static PyObject *llpy_firstfam (PyObject *Py_UNUSED(self), PyObject *args ATTRIB
 
 static PyObject *llpy_lastfam (PyObject *Py_UNUSED(self), PyObject *args ATTRIBUTE_UNUSED)
 {
-  INT keynum = xref_lastf();
+  int keynum = xref_lastf();
   LLINES_PY_RECORD *rec;
 
   if (keynum == 0)

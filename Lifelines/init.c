@@ -136,7 +136,7 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 	String e;
 	String dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
 		, "LLDATABASES", };
-	INT i;
+	int i;
 
 	check_installation_path();
 
@@ -277,7 +277,7 @@ is_codeset_utf8 (CString codename)
  * dependent on user options
  *=================================================*/
 void
-update_useropts (HINT_PARAM_UNUSED VPTR uparm)
+update_useropts (ATTRIBUTE_UNUSED void *uparm)
 {
 	if (suppress_reload)
 		return;
@@ -350,7 +350,7 @@ pre_codesets_hook (void)
 #ifdef WIN32
 	/* On MS-Windows, attempt to set any requested non-standard codepage */
 	/* Do this now, before init_codesets below */
-	INT i = getlloptint("ConsoleCodepage", 0);
+	int i = getlloptint("ConsoleCodepage", 0);
 	if (i) {
 		w_set_oemout_codepage(i);
 		w_set_oemin_codepage(i);
@@ -374,7 +374,7 @@ post_codesets_hook (void)
 static bool
 load_configs (String configfile, String * pmsg)
 {
-	INT rtn=0;
+	int rtn=0;
 	String str=0;
 	char cfg_name[MAXPATHLEN];
 
@@ -439,7 +439,7 @@ load_configs (String configfile, String * pmsg)
 static void
 check_installation_path (void)
 {
-	INT maxlen = sizeof(global_conf_path)-1;
+	int maxlen = sizeof(global_conf_path)-1;
 #ifdef WIN32
 	/* TODO: Installation should set value in registry
 	and we should read it here */

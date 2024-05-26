@@ -34,8 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
-
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -56,18 +54,6 @@
 #include "messages.h"
 #include "signals.h"
 
-#else
-
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include "translat.h"
-#include "interp.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "zstr.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/

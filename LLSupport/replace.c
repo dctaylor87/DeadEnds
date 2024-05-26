@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -57,15 +56,6 @@
 #include "sequence.h"
 #include "browse.h"
 #include "name.h"
-
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-
-#endif
 
 /*===================================================================
  * replace_indi -- Replace a person in database with modified version

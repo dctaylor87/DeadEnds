@@ -8,9 +8,9 @@
 
 #define FORSPOUSES_RECORD(record,spouse_r) \
 	{\
-	  NODE _fam = 0; \
-	  INT _num = 0; \
-	  NODE _indi = nztop (record);	\
+	  GNode *_fam = 0; \
+	  int _num = 0; \
+	  GNode *_indi = nztop (record);	\
 	  FORSPOUSES(_indi,_spouse,_fam,_num) \
 	    spouse_r = node_to_record (_spouse);
 
@@ -25,8 +25,8 @@
 
 #define FORCHILDREN_RECORD(fam,child,database)	\
 	{\
-        NODE __node = find_tag(nchild(nztop(fam)), "CHIL");	\
-	RECORD child=0;\
+        GNode *__node = find_tag(nchild(nztop(fam)), "CHIL");	\
+	RecordIndexEl *child=0;\
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "CHIL")) break;\
@@ -48,8 +48,8 @@
 
 #define FORFAMS_RECORD(indi,fam) \
 	{\
-	RECORD fam=0; \
-	NODE __node = find_tag(nchild(nztop(indi)),"FAMS");	\
+	RecordIndexEl *fam=0; \
+	GNode *__node = find_tag(nchild(nztop(indi)),"FAMS");	\
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "FAMS")) break;\
@@ -74,8 +74,8 @@
 
 #define FORFAMSPOUSES_RECORD(fam,spouse, database)	\
 	{\
-	NODE __node = nchild(nztop(fam));	\
-	RECORD spouse=0;\
+	GNode *__node = nchild(nztop(fam));	\
+	RecordIndexEl *spouse=0;\
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "HUSB") && !eqstr(ntag(__node), "WIFE")) {\

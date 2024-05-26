@@ -75,7 +75,7 @@ static PyObject *llpy_parent_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
 {
   LLINES_PY_NODE *node = (LLINES_PY_NODE *) self;
   LLINES_PY_NODE *parent;
-  NODE pnode = nparent (node->lnn_node);
+  GNode *pnode = nparent (node->lnn_node);
 
   if (! pnode)
     Py_RETURN_NONE;		/* No parent -- already top of the tree */
@@ -97,7 +97,7 @@ static PyObject *llpy_child_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 {
   LLINES_PY_NODE *py_node = (LLINES_PY_NODE *) self;
   LLINES_PY_NODE *new_py_node;
-  NODE node = py_node->lnn_node;
+  GNode *node = py_node->lnn_node;
 
   node = nchild (node);
   if (! node)
@@ -121,7 +121,7 @@ static PyObject *llpy_sibling_node (PyObject *self, PyObject *args ATTRIBUTE_UNU
 {
   LLINES_PY_NODE *py_node = (LLINES_PY_NODE *) self;
   LLINES_PY_NODE *new_py_node;
-  NODE node = py_node->lnn_node;
+  GNode *node = py_node->lnn_node;
 
   node = nsibling (node);
   if (! node)
@@ -160,9 +160,9 @@ static PyObject *llpy_copy_node_tree (PyObject *self, PyObject *args ATTRIBUTE_U
 static PyObject *llpy_level (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *node = (LLINES_PY_NODE *) self;
-  INT level = -1;
+  int level = -1;
 
-  for (NODE llnode = node->lnn_node; llnode; llnode = nparent (llnode))
+  for (GNode *llnode = node->lnn_node; llnode; llnode = nparent (llnode))
     level++;
 
   return Py_BuildValue ("i", level);
@@ -174,12 +174,12 @@ static PyObject *llpy_level (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
 {
   LLINES_PY_NODE *orig = (LLINES_PY_NODE *) self;
-  NODE orig_node = orig->lnn_node;
+  GNode *orig_node = orig->lnn_node;
   static char *keywords[] = { "parent", "prev", NULL };
   PyObject *parent= Py_None;
   PyObject *prev = Py_None;
-  NODE parent_node = NULL;
-  NODE prev_node = NULL;
+  GNode *parent_node = NULL;
+  GNode *prev_node = NULL;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "|OO", keywords, &parent, &prev))
     return NULL;
@@ -276,8 +276,8 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
    NODE is the top node */
 static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  NODE node = ((LLINES_PY_NODE *) self)->lnn_node;
-  NODE parent = nparent(node);
+  GNode *node = ((LLINES_PY_NODE *) self)->lnn_node;
+  GNode *parent = nparent(node);
 
   if (! parent)
     {
@@ -285,8 +285,8 @@ static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
       PyErr_SetString (PyExc_ValueError, "detach_node: detaching top-node of a record is not (currently?) supported");
       return NULL;
     }
-  NODE previous = NULL;
-  NODE current = nchild (parent);
+  GNode *previous = NULL;
+  GNode *current = nchild (parent);
 
   /* walk list of immediate children of parent looking for node
      being detached */
@@ -302,7 +302,7 @@ static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
       PyErr_SetString (PyExc_SystemError, "llpy_detach_node: node tree is inconsistent");
       return NULL;
     }
-  NODE next = nsibling (node);
+  GNode *next = nsibling (node);
   if (previous == NULL)
     nchild (parent) = next;	/* our node is the first child */
   else
@@ -336,8 +336,8 @@ static PyObject *llpy_create_node (PyObject *self ATTRIBUTE_UNUSED, PyObject *ar
   String xref = 0;
   String tag = 0;
   String value = 0;
-  NODE parent = 0;
-  NODE node;
+  GNode *parent = 0;
+  GNode *node;
   LLINES_PY_NODE *py_node;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "s|z", keywords, &tag, &value))
@@ -427,7 +427,7 @@ static void llpy_node_dealloc (PyObject *self)
 
 static void llpy_debug_print_node (const char *prefix, PyObject *self)
 {
-  NODE node;
+  GNode *node;
 
   fprintf (stderr, "%s: self %p refcnt %ld type %s\n",
 	   prefix, (void *)self, Py_REFCNT (self), Py_TYPE (self)->tp_name);

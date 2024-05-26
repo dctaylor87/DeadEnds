@@ -15,7 +15,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -24,18 +23,6 @@
 #include "sys_inc.h"
 
 #include "de-strings.h"
-
-#else
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include "arch.h" /* vsnprintf */
-
-#ifndef INCLUDED_STDARG_H
-#include <stdarg.h>
-#define INCLUDED_STDARG_H
-#endif
-
-#endif
 
 /*==================================
  * llstrset -- llstrncpy adopted to strset/strapp API

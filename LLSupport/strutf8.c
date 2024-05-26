@@ -13,7 +13,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
@@ -22,11 +21,6 @@
 
 #include "de-strings.h"
 
-#else
-
-#include "llstdlib.h"
-
-#endif
 /*==============================
  * utf8len -- Length of a UTF-8 character
  *  ch: [in] starting byte

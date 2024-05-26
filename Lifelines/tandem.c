@@ -35,7 +35,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -68,28 +67,12 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "llinesi.h"
-#include "messages.h"
-
-#include "menuitem.h"
-#include "screen.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/
 
-static bool handle_tandem_scroll_cmds(INT c);
+static bool handle_tandem_scroll_cmds(int c);
 
 /*********************************************
  * local function definitions
@@ -99,20 +82,16 @@ static bool handle_tandem_scroll_cmds(INT c);
 /*=============================================
  * browse_tandem -- Two person browse operation
  *===========================================*/
-INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
+int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
 {
-#if defined(DEADENDS)
 	RecordIndexEl *current1, *current2;
-#else
-	RECORD current1, current2;
-#endif
-	INT nkey1p, nkey2p, modep;
-	RECORD tmp=0;
+	int nkey1p, nkey2p, modep;
+	RecordIndexEl *tmp=0;
 	CString key, name;
 	INDISEQ seq;
-	INT c, rc;
+	int c, rc;
 	bool reuse=false;
-	static INT mode = 'n';
+	static int mode = 'n';
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
@@ -227,19 +206,14 @@ INT browse_tandem (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 /*==================================================
  * browse_2fam -- Handle two family browse operation
  *================================================*/
-INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
+int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
 {
-#if defined(DEADENDS)
 	RecordIndexEl *current1, *current2;
 	RecordIndexEl *tmp, *tmp2;
-#else
-	RECORD current1, current2;
-	RECORD tmp, tmp2;
-#endif
-	INT nkey1p, nkey2p, modep;
-	INT c;
+	int nkey1p, nkey2p, modep;
+	int c;
 	bool reuse=false;
-	static INT mode = 'n';
+	static int mode = 'n';
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
@@ -281,11 +255,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 		switch (c)
 		{
 		case CMD_EDIT:	/* edit top fam */
-#if defined(DEADENDS)
 			edit_family(current1, false);
-#else
-			edit_family(current1, false);
-#endif
 			break;
 		case CMD_TOP:	/* browse top fam */
 			*prec1 = current1;
@@ -295,7 +265,6 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			return BROWSE_FAM;
 		case CMD_BOTH_FATHERS:	/* browse to husbs/faths */
 			{
-#if defined(DEADENDS)
 				RecordIndexEl *fam1=0, *fam2=0;
 				GNode *node1;
 				GNode *node2;
@@ -311,16 +280,6 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				  *prec2 = fam2;
 				  return BROWSE_TAND;
 				}
-#else
-				RECORD fam1=0, fam2=0;
-
-				if (fam_to_husb(current1, &fam1) == 1
-					&& fam_to_husb(current2, &fam2) == 1) {
-					*prec1 = fam1;
-					*prec2 = fam2;
-					return BROWSE_TAND;
-				}
-#endif
 			}
 			msg_error("%s", _(qStwohsb));
 			break;
@@ -360,7 +319,7 @@ INT browse_2fam (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
  * Created: 2001/02/04, Perry Rapp
  *====================================================*/
 static bool
-handle_tandem_scroll_cmds (INT c)
+handle_tandem_scroll_cmds (int c)
 {
 	switch(c) {
 	case CMD_SCROLL_TOP_UP: show_scroll(-1); return true;

@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -65,19 +64,6 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "menuitem.h"
-#include "messages.h"
-
-#endif
 
 #include "llinesi.h"
 #include "screen.h"
@@ -91,18 +77,14 @@ static void name_the_list(INDISEQ seq);
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/
-INT
-browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
+int
+browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
 {
-	INT c, top, cur, mark, len, tmp, rc;
+	int c, top, cur, mark, len, tmp, rc;
 	CString key, name;
 	String lname="";
-	RECORD rec=0;
-#if defined(DEADENDS)
+	RecordIndexEl *rec=0;
 	Sequence *seq, *newseq;
-#else
-	INDISEQ seq, newseq;
-#endif
 	
 	ASSERT(prec1);
 	ASSERT(!*prec1);
@@ -229,11 +211,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 				current_seq = NULL;
 				return BROWSE_QUIT;
 			}
-#if defined(DEADENDS)
 			removeFromSequenceByIndex (seq, cur);
-#else
-			delete_indiseq(seq, NULL, NULL, cur);
-#endif
 			len--;
 			if (mark == cur) mark = -1;
 			if (mark > cur) mark--;
@@ -243,11 +221,7 @@ browse_list (RECORD *prec1, RECORD *prec2, INDISEQ *pseq)
 			break;
 		case 't':        /* Enter tandem mode */
 		{
-#if defined(DEADENDS)
 			RecordIndexEl *cand1=0, *cand2=0;
-#else
-			RECORD cand1=0, cand2=0;
-#endif
 			if (mark == -1 || cur == mark) {
 				msg_error("%s", _(qSmrkrec));
 				break;

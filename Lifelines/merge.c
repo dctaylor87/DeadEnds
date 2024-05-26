@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -77,21 +76,6 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "sys_inc.h"
-#include "llstdlib.h"
-#include "btree.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "llinesi.h"
-#include "feedback.h"
-#include "messages.h"
-
-#endif
 
 #if !defined(NUMBER_LINKAGE_BUCKETS)
 #define NUMBER_LINKAGE_BUCKETS	37
@@ -104,9 +88,9 @@ int num_linkage_buckets = NUMBER_LINKAGE_BUCKETS;
 
 extern bool traditional;
 
-static void merge_fam_links(NODE, NODE, NODE, NODE, INT);
-static NODE remove_dupes(NODE, NODE);
-static NODE sort_children(NODE, NODE);
+static void merge_fam_links(GNode *, GNode *, GNode *, GNode *, int);
+static GNode *remove_dupes(GNode *, GNode *);
+static GNode *sort_children(GNode *, GNode *);
 
 
 /*********************************************
@@ -114,8 +98,8 @@ static NODE sort_children(NODE, NODE);
  *********************************************/
 
 /* alphabetical */
-static void check_indi_lineage_links(NODE indi);
-static void check_fam_lineage_links(NODE fam);
+static void check_indi_lineage_links(GNode *indi);
+static void check_fam_lineage_links(GNode *fam);
 
 
 /*================================================================
@@ -131,10 +115,9 @@ static void check_fam_lineage_links(NODE fam);
  *   indi3 - merged version of the two persons before editing
  *   indi4 - merged version of the two persons after editing
  *==============================================================*/
-RECORD
-merge_two_indis (NODE indi1, NODE indi2, bool conf)
+RecordIndexEl *
+merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 {
-#if defined(DEADENDS)
 	GNode *indi01, *indi02;	/* original arguments */
 	GNode *name1, *refn1, *sex1, *body1, *famc1, *fams1;
 	GNode *name2, *refn2, *sex2, *body2, *famc2, *fams2;
@@ -144,25 +127,10 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
 	GNode *this, *that, *prev, *next, *node, *head;
 	GNode *fam12;
 	GNode *name24, *refn24;
-#else
-	NODE indi01, indi02;	/* original arguments */
-	NODE name1, refn1, sex1, body1, famc1, fams1;
-	NODE name2, refn2, sex2, body2, famc2, fams2;
-	NODE indi3, name3, refn3, sex3, body3, famc3, fams3;
-	NODE indi4=0;
-	NODE fam, husb, wife, chil, rest, fref, keep=NULL;
-	NODE this, that, prev, next, node, head;
-	NODE fam12;
-	NODE name24, refn24;
-#endif
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
-#if defined(DEADENDS)
 	SexType sx2;
-#else
-	INT sx2;
-#endif
 	String msg, key;
  	bool emp;
 
@@ -193,17 +161,10 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
 	}
 	fams1 = FAMS(indi1);
 	fams2 = FAMS(indi2);
-#if defined(DEADENDS)
 	if (fams1 && fams2 && SEXV(indi1) != SEXV(indi2)) {
 		msg_error("%s", _(qSnoxmrg));
 		return NULL;
 	}
-#else
-	if (fams1 && fams2 && SEX(indi1) != SEX(indi2)) {
-		msg_error("%s", _(qSnoxmrg));
-		return NULL;
-	}
-#endif
 
 /* sanity check lineage links */
 	check_indi_lineage_links(indi1);
@@ -228,15 +189,9 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
 	split_indi_old(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
 	indi2 = copy_nodes(indi2, true, true);
-#if defined(DEADENDS)
 	sx2 = sexUnknown;
 	if (fams1) sx2 = valueToSex(sex1);
 	if (fams2) sx2 = valueToSex(sex2);
-#else
-	sx2 = SEX_UNKNOWN;
-	if (fams1) sx2 = val_to_sex(sex1);
-	if (fams2) sx2 = val_to_sex(sex2);
-#endif
 
 /*CONDITION: 1s, 2s - build first version of merged person */
 
@@ -385,17 +340,10 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
 		fam = key_to_fam(rmvat(nval(this)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
-#if defined(DEADENDS)
 		if (sx2 == sexMale)
 			head = that = husb;
 		else
 			head = that = wife;
-#else
-		if (sx2 == SEX_MALE)
-			head = that = husb;
-		else
-			head = that = wife;
-#endif
 		while (that) {
 			if (eqstr(nval(that), nxref(indi1))) {
 				next = nsibling(that);
@@ -411,17 +359,10 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
 				that = nsibling(that);
 			}
 		}
-#if defined(DEADENDS)
 		if (sx2 == sexMale)
 			husb = head;
 		else
 			wife = head;
-#else
-		if (sx2 == SEX_MALE)
-			husb = head;
-		else
-			wife = head;
-#endif
 		join_fam(fam, fref, husb, wife, chil, rest);
 		fam_to_dbase(fam);
 		this = nsibling(this);
@@ -435,11 +376,7 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
 		fam = key_to_fam(rmvat(nval(this)));
 		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
-#if defined(DEADENDS)
 		that = (sx2 == sexMale) ? husb : wife;
-#else
-		that = (sx2 == SEX_MALE) ? husb : wife;
-#endif
 		while (that) {
 			if (eqstr(nval(that), nxref(indi1))) {
 				stdfree(nval(that));
@@ -528,20 +465,13 @@ merge_two_indis (NODE indi1, NODE indi2, bool conf)
  *   fam4 - merged version of the two persons after editing
  *     the nodes inside fam4 are stored into fam2 & to dbase at the very end
  *===============================================================*/
-RECORD
-merge_two_fams (NODE fam1, NODE fam2)
+RecordIndexEl *
+merge_two_fams (GNode *fam1, GNode *fam2)
 {
-#if defined(DEADENDS)
 	GNode *husb1, *wife1, *chil1, *rest1, *husb2, *wife2, *chil2, *rest2;
 	GNode *fref1, *fref2;
 	GNode *fam3, *husb3, *wife3, *chil3, *rest3, *fref3;
 	GNode *fam4=0, *husb4, *wife4, *chil4, *rest4, *fref4;
-#else
-	NODE husb1, wife1, chil1, rest1, husb2, wife2, chil2, rest2;
-	NODE fref1, fref2;
-	NODE fam3, husb3, wife3, chil3, rest3, fref3;
-	NODE fam4=0, husb4, wife4, chil4, rest4, fref4;
-#endif
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
@@ -671,15 +601,10 @@ merge_two_fams (NODE fam1, NODE fam2)
  *   families to the persons.
  *================================================================*/
 void
-merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
+merge_fam_links (GNode *fam1, GNode *fam2, GNode *list1, GNode *list2, int code)
 {
-#if defined(DEADENDS)
 	GNode *curs1, *curs2, *prev, *this, *next, *first, *keep=NULL;
 	GNode *indi, *name, *refn, *sex, *body, *famc, *fams;
-#else
-	NODE curs1, curs2, prev, this, next, first, keep=NULL;
-	NODE indi, name, refn, sex, body, famc, fams;
-#endif
 
 	curs1 = list1;
 	while (curs1) {
@@ -748,17 +673,13 @@ merge_fam_links (NODE fam1, NODE fam2, NODE list1, NODE list2, INT code)
 /*================================================
  * sort_children -- Return sorted list of children
  *==============================================*/
-static NODE
-sort_children (NODE chil1,
-               NODE chil2)
+static GNode *
+sort_children (GNode *chil1,
+               GNode *chil2)
 {
-#if defined(DEADENDS)
 	GNode *copy1, *copy2, *chil3, *prev, *kid1, *kid2;
-#else
-	NODE copy1, copy2, chil3, prev, kid1, kid2;
-#endif
 	String year1, year2;
-	INT int1, int2;
+	int int1, int2;
 	/* copy1 contains all children in chil1 not in chil2 */
 	copy1 = remove_dupes(chil1, chil2);
 	copy2 = copy_nodes(chil2, true, true);
@@ -820,16 +741,11 @@ sort_children (NODE chil1,
  *  on list2 first, and then use that to check each item
  *  in list1.
  *===============================================*/
-static NODE
-remove_dupes (NODE list1, NODE list2)
+static GNode *
+remove_dupes (GNode *list1, GNode *list2)
 {
-#if defined(DEADENDS)
 	GNode *copy1 = copy_nodes(list1, true, true);
 	GNode *prev1, *next1, *curs1, *curs2;
-#else
-	NODE copy1 = copy_nodes(list1, true, true);
-	NODE prev1, next1, curs1, curs2;
-#endif
 	prev1 = NULL;
 	curs1 = copy1;
 	while (curs1) {
@@ -857,9 +773,8 @@ remove_dupes (NODE list1, NODE list2)
  *  this person to make sure they point back to this person
  *===============================================*/
 static void
-check_indi_lineage_links (NODE indi)
+check_indi_lineage_links (GNode *indi)
 {
-#if defined(DEADENDS)
 	GNode *name=0, *refn=0, *sex=0, *body=0, *famc=0, *fams=0;
 	GNode *curs=0; /* for travesing node lists */
 	int bucket_index = 0;
@@ -867,15 +782,8 @@ check_indi_lineage_links (NODE indi)
 	IntegerElement *element;
 
 	IntegerTable *memtab = createIntegerTable(num_linkage_buckets);
-#else
-	NODE name=0, refn=0, sex=0, body=0, famc=0, fams=0;
-	NODE curs=0; /* for travesing node lists */
-	TABLE_ITER tabit=0;
-
-	TABLE memtab = create_table_int();
-#endif
 	CString famkey=0; /* used inside traversal loops */
-	INT count=0;
+	int count=0;
 	CString ikey = nxref(indi);
 
 	/* sanity check record is not deleted */
@@ -902,22 +810,17 @@ check_indi_lineage_links (NODE indi)
 	Check that all listed families contain person as spouse as many times
 	as expected
 	*/
-#if defined(DEADENDS)
 	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
 	     element;
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        famkey = element->key;
 	        count = element->value;
-#else
-	tabit = begin_table_iter(memtab);
-	while (next_table_int(tabit, &famkey, &count)) {
-#endif
-		NODE fam = key_to_fam(famkey);
+		GNode *fam = key_to_fam(famkey);
 		/*
 		count how many times our main person (ikey)
 		occurs in this family (fam) as a spouse (HUSB or WIFE)
 		*/
-		INT occur = 0;
+		int occur = 0;
 		for (curs = nchild(fam); curs; curs = nsibling(curs)) {
 			if (eqstr(ntag(curs), "HUSB") || eqstr(ntag(curs), "WIFE")) {
 				if (eqstr(nval(curs), ikey)) {
@@ -934,11 +837,7 @@ check_indi_lineage_links (NODE indi)
 		}
 	}
 	destroy_table(memtab);
-#if defined(DEADENDS)
 	memtab = createIntegerTable(num_linkage_buckets);
-#else
-	memtab = create_table_int();
-#endif
 
 	/*
 	Make table listing all families this person is child in
@@ -958,22 +857,17 @@ check_indi_lineage_links (NODE indi)
 	Check that all listed families contain person as child (CHIL) as many times
 	as expected
 	*/
-#if defined(DEADENDS)
 	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
 	     element;
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        famkey = element->key;
 	        count = element->value;
-#else
-	tabit = begin_table_iter(memtab);
-	while (next_table_int(tabit, &famkey, &count)) {
-#endif
-		NODE fam = key_to_fam(famkey);
+		GNode *fam = key_to_fam(famkey);
 		/*
 		count how many times our main person (ikey)
 		occurs in this family (fam) as a child (CHIL)
 		*/
-		INT occur = 0;
+		int occur = 0;
 		for (curs = nchild(fam); curs; curs = nsibling(curs)) {
 			if (eqstr(ntag(curs), "CHIL")) {
 				if (eqstr(nval(curs), ikey)) {
@@ -998,9 +892,8 @@ check_indi_lineage_links (NODE indi)
  *  this family to make sure they point back to this family
  *===============================================*/
 static void
-check_fam_lineage_links (NODE fam)
+check_fam_lineage_links (GNode *fam)
 {
-#if defined(DEADENDS)
 	GNode *fref=0, *husb=0, *wife=0, *chil=0, *rest=0;
 	GNode *curs=0; /* for travesing node lists */
 	int bucket_index = 0;
@@ -1008,15 +901,8 @@ check_fam_lineage_links (NODE fam)
 	IntegerElement *element;
 
 	IntegerTable *memtab = createIntegerTable(num_linkage_buckets);
-#else
-	NODE fref=0, husb=0, wife=0, chil=0, rest=0;
-	NODE curs=0; /* for travesing node lists */
-	TABLE_ITER tabit=0;
-
-	TABLE memtab = memtab = create_table_int();
-#endif
 	CString indikey=0; /* used inside traversal loops */
-	INT count=0;
+	int count=0;
 	CString fkey = nxref(fam);
 
 	/* sanity check record is not deleted */
@@ -1052,22 +938,17 @@ check_fam_lineage_links (NODE fam)
 	Check that all listed persons contain family as FAMS as many times
 	as expected
 	*/
-#if defined(DEADENDS)
 	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
 	     element;
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        indikey = element->key;
 	        count = element->value;
-#else
-	tabit = begin_table_iter(memtab);
-	while (next_table_int(tabit, &indikey, &count)) {
-#endif
-		NODE indi = key_to_indi(indikey);
+		GNode *indi = key_to_indi(indikey);
 		/*
 		count how many times our main family (fkey)
 		occurs in this person (indi) as a spousal family (FAMS)
 		*/
-		INT occur = 0;
+		int occur = 0;
 		for (curs = nchild(indi); curs; curs = nsibling(curs)) {
 			if (eqstr(ntag(curs), "FAMS")) {
 				if (eqstr(nval(curs), fkey)) {
@@ -1084,11 +965,7 @@ check_fam_lineage_links (NODE fam)
 		}
 	}
 	destroy_table(memtab);
-#if defined(DEADENDS)
 	memtab = createIntegerTable(num_linkage_buckets);
-#else
-	memtab = create_table_int();
-#endif
 
 	/*
 	Make table listing all families this person is child in
@@ -1108,22 +985,17 @@ check_fam_lineage_links (NODE fam)
 	Check that all listed families contain person as FAMC as many times
 	as expected
 	*/
-#if defined(DEADENDS)
 	for (element = (IntegerElement *)firstInHashTable (memtab, &bucket_index, &element_index);
 	     element;
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        indikey = element->key;
 	        count = element->value;
-#else
-	tabit = begin_table_iter(memtab);
-	while (next_table_int(tabit, &indikey, &count)) {
-#endif
-		NODE indi = key_to_indi(indikey);
+		GNode *indi = key_to_indi(indikey);
 		/*
 		count how many times our main family (fkey)
 		occurs in this person (indi) as a parental family (FAMC)
 		*/
-		INT occur = 0;
+		int occur = 0;
 		for (curs = nchild(indi); curs; curs = nsibling(curs)) {
 			if (eqstr(ntag(curs), "FAMC")) {
 				if (eqstr(nval(curs), fkey)) {

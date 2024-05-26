@@ -16,7 +16,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
@@ -27,15 +26,7 @@
 #include "feedback.h"
 #include "menuitem.h"
 #include "messages.h"
-#else
 
-#include "llstdlib.h"
-#include "feedback.h"
-#include "gedcom.h"
-#include "menuitem.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local types
  *********************************************/
@@ -71,11 +62,11 @@ static MenuItem * f_ExtraItems[] =
  * Created: 2002/10/24, Perry Rapp
  *==========================*/
 void
-dynmenu_init (DYNMENU dynmenu , CString title, INT MenuRows, INT MenuCols
-	, INT MinCols, INT MaxCols
-	, INT MinRows, INT MaxRows
-	, INT MenuTop, INT MenuLeft, INT MenuWidth
-	, INT MenuSize, MenuItem ** MenuItems)
+dynmenu_init (DYNMENU dynmenu , CString title, int MenuRows, int MenuCols
+	, int MinCols, int MaxCols
+	, int MinRows, int MaxRows
+	, int MenuTop, int MenuLeft, int MenuWidth
+	, int MenuSize, MenuItem ** MenuItems)
 {
 	dynmenu->rows = MenuRows;
 	dynmenu->cols = MenuCols;
@@ -112,8 +103,8 @@ dynmenu_clear (DYNMENU dynmenu)
 void
 dynmenu_next_page (DYNMENU dynmenu)
 {
-	INT MenuSize = dynmenu->size;
-	INT pageitems = dynmenu->pageitems;
+	int MenuSize = dynmenu->size;
+	int pageitems = dynmenu->pageitems;
 	if (dynmenu->pages == 1) return;
 	++dynmenu->page;
 	if (dynmenu->page > (MenuSize-1)/pageitems)
@@ -125,9 +116,9 @@ dynmenu_next_page (DYNMENU dynmenu)
  * Created: 2002/10/28, Perry Rapp
  *================================================================*/
 void
-dynmenu_adjust_height (DYNMENU dynmenu, INT delta)
+dynmenu_adjust_height (DYNMENU dynmenu, int delta)
 {
-	INT oldrows = dynmenu->rows;
+	int oldrows = dynmenu->rows;
 	dynmenu->rows += delta;
 	if (dynmenu->rows < dynmenu->minrows)
 		dynmenu->rows = dynmenu->minrows;
@@ -142,9 +133,9 @@ dynmenu_adjust_height (DYNMENU dynmenu, INT delta)
  * Created: 2002/10/28, Perry Rapp
  *================================================================*/
 void
-dynmenu_adjust_menu_cols (DYNMENU dynmenu, INT delta)
+dynmenu_adjust_menu_cols (DYNMENU dynmenu, int delta)
 {
-	INT oldcols = dynmenu->cols;
+	int oldcols = dynmenu->cols;
 	dynmenu->cols += delta;
 	if (dynmenu->cols < dynmenu->mincols)
 		dynmenu->cols = dynmenu->mincols;

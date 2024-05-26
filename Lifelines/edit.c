@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -69,20 +68,7 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "messages.h"
-
-#include "llinesi.h"
-
-#endif
 /*********************************************
  * local function definitions
  * body of module
@@ -94,17 +80,9 @@
  * returns TRUE if user makes changes (& saves them)
  *===================================*/
 bool
-#if defined(DEADENDS)
-edit_indi (RECORD irec1, bool rfmt)
-#else
-edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
-#endif
+edit_indi (RecordIndexEl *irec1, bool rfmt)
 {
-#if defined(DEADENDS)
 	GNode *indi1, *indi2=0;
-#else
-	NODE indi1, indi2=0;
-#endif
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Identify indi if necessary */
@@ -114,17 +92,13 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 
 /* Prepare file for user to edit */
 	nodechk(indi1, "edit_indi");
-#if defined(DEADENDS)
 	write_indi_to_file_for_edit(indi1, editfile, rfmt, currentDatabase);
-#else
-	write_indi_to_file_for_edit(indi1, editfile, rfmt);
-#endif
 
 /* Have user edit file */
 	do_edit();
 
 	while (true) {
-		INT cnt;
+		int cnt;
 		String msg;
 		bool emp;
 		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
@@ -154,11 +128,7 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
-#if defined(DEADENDS)
 				write_indi_to_file_for_edit(indi2, editfile, rfmt, currentDatabase);
-#else
-				write_indi_to_file_for_edit(indi2, editfile, rfmt);
-#endif
 				do_edit();
 				continue;
 			}
@@ -188,18 +158,10 @@ edit_indi (RECORD irec1, RFMT rfmt)  /* may be NULL */
  * (with user interaction)
  *==================================*/
 bool
-#if defined(DEADENDS)
-edit_family (RECORD frec1, bool rfmt)
-#else
-edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
-#endif
+edit_family (RecordIndexEl *frec1, bool rfmt)
 {
-#if defined(DEADENDS)
 	GNode *fam1=0, *fam2=0;
-#else
-	NODE fam1=0, fam2=0;
-#endif
-	RECORD irec=0;
+	RecordIndexEl *irec=0;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	String msg;
 	bool changed = false;
@@ -218,16 +180,12 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 	fam1 = nztop(frec1);
 
 /* Prepare file for user to edit */
-#if defined(DEADENDS)
 	write_fam_to_file_for_edit(fam1, editfile, rfmt, currentDatabase);
-#else
-	write_fam_to_file_for_edit(fam1, editfile, rfmt);
-#endif
 
 /* Have user edit record */
 	do_edit();
 	while (true) {
-		INT cnt;
+		int cnt;
 		bool emp;
 		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
 		if (!fam2) {
@@ -256,11 +214,7 @@ edit_family (RECORD frec1, RFMT rfmt) /* may be NULL */
 			snprintf(msgb, sizeof(msgb)
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
-#if defined(DEADENDS)
 				write_fam_to_file_for_edit(fam2, editfile, rfmt, currentDatabase);
-#else
-				write_fam_to_file_for_edit(fam2, editfile, rfmt);
-#endif
 				do_edit();
 				continue;
 			}

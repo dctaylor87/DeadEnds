@@ -59,11 +59,7 @@ free_temp_node_tree (GNode *node)
 		nsibling(node) = 0;
 	}
 	if (get_nrefcnt (node) == 0) {
-#if defined(DEADENDS)
 		freeGNode(node);
-#else
-		free_node(node,"free_temp_node_tree");
-#endif
 	}
 }
 /* is_temp_node -- Return whether node is a temp

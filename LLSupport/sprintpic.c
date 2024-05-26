@@ -14,8 +14,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
-
 #include <ansidecl.h>
 
 #include "standard.h"
@@ -24,13 +22,6 @@
 #include "zstr.h"
 #include "de-strings.h"
 #include "sprintpic.h"
-
-#else
-
-#include "llstdlib.h"
-#include "zstr.h"
-
-#endif
 
 /*********************************************
  * local function prototypes

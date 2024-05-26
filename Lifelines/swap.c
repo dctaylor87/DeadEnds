@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -64,28 +63,15 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "messages.h"
-
-#endif
 
 #include "llinesi.h"
 
 /*********************************************
  * local function prototypes
  *********************************************/
-static INT child_index(NODE child, NODE fam);
-static bool confirm_and_swap_children_impl(NODE fam, NODE one, NODE two);
-static void swap_children_impl(NODE fam, NODE one, NODE two);
+static int child_index(GNode *child, GNode *fam);
+static bool confirm_and_swap_children_impl(GNode *fam, GNode *one, GNode *two);
+static void swap_children_impl(GNode *fam, GNode *one, GNode *two);
 
 /*=============================================
  * swap_children -- Swap two children in family
@@ -93,14 +79,10 @@ static void swap_children_impl(NODE fam, NODE one, NODE two);
  *  fam:  [IN]  family (may be NULL)
  *===========================================*/
 bool
-swap_children (RECORD prnt, RECORD frec)
+swap_children (RecordIndexEl *prnt, RecordIndexEl *frec)
 {
-#if defined(DEADENDS)
 	GNode *fam, *chil, *one, *two;
-#else
-	NODE fam, chil, one, two;
-#endif
-	INT nfam, nchil;
+	int nfam, nchil;
 
 /* Identify parent if need be */
 	if (frec) goto gotfam;
@@ -132,11 +114,7 @@ gotfam:
 		one = CHIL(fam);
 		two = nsibling(one);
 	} else {
-#if defined(DEADENDS)
 		RecordIndexEl *chil1, *chil2;
-#else
-		RECORD chil1, chil2;
-#endif
 		STRING key1, key2;
 		/* Identify children to swap */
 		chil1 = choose_child(NULL, frec, "e", _(qSid1csw), NOASK1);
@@ -171,7 +149,7 @@ gotfam:
  * confirm then call worker
  *===========================================*/
 static bool
-confirm_and_swap_children_impl (NODE fam, NODE one, NODE two)
+confirm_and_swap_children_impl (GNode *fam, GNode *one, GNode *two)
 {
 	if (!ask_yes_or_no(_(qScfchswp)))
 		return false;
@@ -186,10 +164,10 @@ confirm_and_swap_children_impl (NODE fam, NODE one, NODE two)
  * all inputs assumed valid - no user feedback here
  *===========================================*/
 static void
-swap_children_impl (NODE fam, NODE one, NODE two)
+swap_children_impl (GNode *fam, GNode *one, GNode *two)
 {
 	STRING str;
-	NODE tmp;
+	GNode *tmp;
 	ASSERT(one);
 	ASSERT(two);
    /* Swap CHIL nodes and update database */
@@ -208,19 +186,11 @@ swap_children_impl (NODE fam, NODE one, NODE two)
  *  rftm: [IN]  person formatting for prompts
  *===========================================*/
 bool
-#if defined(DEADENDS)
-reorder_child (RECORD prnt, RECORD frec, bool rfmt)
-#else
-reorder_child (RECORD prnt, RECORD frec, RFMT rfmt)
-#endif
+reorder_child (RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt)
 {
-	INT nfam, nchil;
-	INT prevorder, i;
-#if defined(DEADENDS)
+	int nfam, nchil;
+	int prevorder, i;
 	GNode *fam, *child;
-#else
-	NODE fam, child;
-#endif
 
 /* Identify parent if need be */
 	if (frec) goto gotfam;
@@ -249,8 +219,8 @@ gotfam:
 
 	if (nchil == 2) {
 		/* swap the two existing ones */
-		NODE one = CHIL(fam);
-		NODE two = nsibling(one);
+		GNode *one = CHIL(fam);
+		GNode *two = nsibling(one);
 		if (!confirm_and_swap_children_impl(fam, one, two))
 			return false;
 		message("%s", _(qSokcswp));
@@ -285,17 +255,12 @@ gotfam:
  *  child:  [in] child of interest
  *  fam:    [in] family of interest
  *===========================================*/
-static INT
-child_index (NODE child, NODE fam)
+static int
+child_index (GNode *child, GNode *fam)
 {
-	INT j;
-#if defined(DEADENDS)
+	int j;
 	GNode *husb, *wife, *chil, *rest, *fref;
 	GNode *node;
-#else
-	NODE husb, wife, chil, rest, fref;
-	NODE node;
-#endif
 	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
 	node = chil;
 	j = 0;
@@ -314,14 +279,10 @@ child_index (NODE child, NODE fam)
  *  Ask for yes/no confirm
  *===========================================*/
 bool
-swap_families (RECORD irec)
+swap_families (RecordIndexEl *irec)
 {
-#if defined(DEADENDS)
 	GNode *indi, *fams, *one, *two, *tmp;
-#else
-	NODE indi, fams, one, two, tmp;
-#endif
-	INT nfam;
+	int nfam;
 	STRING str;
 
 /* Find person and assure has >= 2 families */
@@ -345,11 +306,7 @@ swap_families (RECORD irec)
 		one = fams;
 		two = nsibling(fams);
 	} else {
-#if defined(DEADENDS)
 		GNode *fam1, *fam2;
-#else
-		NODE fam1, fam2;
-#endif
 		STRING key1, key2;
 		/* prompt for families */
 		fam1 = nztop(choose_family(irec, _(qSparadox), _(qSid1fsw), true));

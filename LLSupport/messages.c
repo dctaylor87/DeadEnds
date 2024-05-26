@@ -35,7 +35,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -47,13 +46,6 @@
 #include "readwrite.h"
 
 #include "messages.h"
-
-#else
-
-#include "llstdlib.h"
-#include "messages.h"
-
-#endif
 
 /* strings used to clear the screen */
 String empstr = SS "                                                ";

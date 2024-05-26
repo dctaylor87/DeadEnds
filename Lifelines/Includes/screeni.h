@@ -7,8 +7,8 @@
 #define screeni_h_included
 
 /* interact.c */
-INT interact_choice_string(UIWINDOW uiwin, CString str);
-INT interact_screen_menu(UIWINDOW uiwin, INT screen);
+int interact_choice_string(UIWINDOW uiwin, CString str);
+int interact_screen_menu(UIWINDOW uiwin, int screen);
 
 /* screen.h */
 void place_cursor_popup(UIWINDOW uiwin);

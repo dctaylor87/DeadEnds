@@ -31,7 +31,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -44,17 +43,6 @@
 #include "zstr.h"
 #include "strcvt.h"
 #include "norm_charmap.h"
-
-#else
-
-#include "llstdlib.h"
-#include "codesets.h"
-#include "gedcom.h"
-#include "lloptions.h"
-#include "zstr.h"
-#include "arch.h"
-
-#endif
 
 #ifdef HAVE_LANGINFO_H
 # include <langinfo.h>
@@ -130,12 +118,8 @@ init_codesets (void)
 	defval = norm_charmap(defval);
 	if (!defval || !defval[0])
 		defval = "ASCII";
-#if defined(DEADENDS)
 	stdfree (defcodeset);
 	defcodeset = defval;
-#else
-	strupdate(&defcodeset, defval);
-#endif
 	/*
 	We are using Markus Kuhn's emulator for systems without nl_langinfo
 	see arch/langinfo.c
@@ -199,7 +183,6 @@ init_codesets (void)
  *  eg, GedcomCodesetOut & GedcomCodesetIn
  * Created: 2002/11/28 (Perry Rapp)
  *===============================================*/
-#if defined(DEADENDS)
 static void
 set_codeset_pair (CString base, CString defval, String *pcsout, String *pcsin)
 {
@@ -227,33 +210,6 @@ set_codeset_pair (CString base, CString defval, String *pcsout, String *pcsin)
     e = defval;
   strupdate (pcsin, e);
 }
-
-#else
-
-static void
-set_codeset_pair (CString base, CString defval, String *pcsout, String *pcsin)
-{
-	ZSTR zstr = zs_news(base);
-	CString e;
-	zs_apps(zstr, "Out");
-	e = getlloptstr(zs_str(zstr), "");
-	if (!e[0])
-		e = getlloptstr(base, "");
-	if (!e[0])
-		e = defval;
-	strupdate(pcsout, e);
-
-	zs_sets(zstr, base);
-	zs_apps(zstr, "In");
-    e = getlloptstr(zs_str(zstr), "");
-	if (!e[0])
-		e = getlloptstr(base, "");
-	if (!e[0])
-		e = defval;
-	strupdate(pcsin, e);
-	zs_free(&zstr);
-}
-#endif
 
 /*=================================================
  * term_codesets -- free all codeset variables

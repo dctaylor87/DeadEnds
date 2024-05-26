@@ -8,7 +8,7 @@
 #define LIFELINES_VERSION_EXTRA "(alpha)"
 
 /* Function prototypes */
-String get_deadends_version (INT maxlen);
+String get_deadends_version (int maxlen);
 void print_version (CString program);
 
 #endif /* _VERSION_H */

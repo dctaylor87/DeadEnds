@@ -31,7 +31,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -48,12 +47,6 @@
 #include "xlat.h"
 #include "editing.h"
 #include "equaliso.h"
-#else
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#endif
 
 /*=========================================
  * equal_tree -- See if two trees are equal

@@ -15,7 +15,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
@@ -27,12 +26,7 @@
 #include "ll-list.h"
 #include "locales.h"
 #include "listener.h"
-#else
 
-#include "llstdlib.h"
-#include "gedcom.h"
-
-#endif
 /*********************************************
  * local types
  *********************************************/

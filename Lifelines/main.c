@@ -102,10 +102,10 @@ static String usage_summary = "";      /* usage string */
 bool debugmode = false;     /* no signal handling, so we can get coredump */
 bool opt_nocb  = false;     /* no cb. data is displayed if TRUE */
 bool keyflag   = true;      /* show key values */
-INT alldone       = 0;         /* completion flag */
+int alldone       = 0;         /* completion flag */
 extern bool progrunning;
 extern bool progparsing;
-extern INT     progerror;
+extern int     progerror;
 bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
@@ -137,8 +137,8 @@ main (int argc, char **argv)
 	bool python_interactive = false;
 	String dbrequested=NULL; /* database (path) requested */
 	String dbused=NULL; /* database (path) found */
-	INT alteration=0;
-	LIST exprogs=NULL;
+	int alteration=0;
+	List *exprogs=NULL;
 	TABLE exargs=NULL;
 	String progout=NULL;
 	bool graphical=true;
@@ -444,7 +444,7 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 		if (*ptr == '=') {
 			char * namebuff = 0;
 			char * valbuff = 0;
-			INT namelen = ptr - optarg;
+			int namelen = ptr - optarg;
 			if (!namelen)
 				return;
 			namebuff = (char *)malloc(namelen+1);

@@ -34,7 +34,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -59,16 +58,6 @@
 #include "ll-node.h"
 #include "gstrings.h"
 
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "lloptions.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local variables
  *********************************************/
@@ -114,17 +103,10 @@ get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *d
 		chkeys = (String *) stdalloc((nchil+5)*sizeof(String));
 		maxchil = nchil + 5;
 	}
-#if defined(DEADENDS)
 	FORCHILDREN(fam,child,key, i, database)
 		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, true);
 		chkeys[i-1] = strsave(rmvat(nxref(child)));
 	ENDCHILDREN
-#else
-	FORCHILDRENx(fam,child,i)
-		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, true);
-		chkeys[i-1] = strsave(rmvat(nxref(child)));
-	ENDCHILDRENx
-#endif
 	*pnum = nchil;
 	*pkeys = chkeys;
 	return chstrings;

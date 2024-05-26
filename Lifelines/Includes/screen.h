@@ -88,10 +88,10 @@ typedef struct tag_uiwindow {
 	bool permsub;   /* TRUE if a fixed subwindow */
 	bool dynamic;   /* TRUE means delete when finished */
 	bool outdated;  /* for language changes */
-	INT rows;
-	INT cols;
-	INT cur_y;         /* row for input cursor */
-	INT cur_x;         /* col for input cursor */
+	int rows;
+	int cols;
+	int cur_y;         /* row for input cursor */
+	int cur_x;         /* col for input cursor */
 } * UIWINDOW;
 #define uiw_win(x)      ((x)->win)
 #define uiw_boxwin(x)   ((x)->boxwin)
@@ -104,19 +104,19 @@ typedef struct tag_uiwindow {
 #define uiw_cury(x)     ((x)->cur_y)
 #define uiw_curx(x)     ((x)->cur_x)
 
-extern INT ll_lines; /* number of lines used by LifeLines (usually LINES) */
-extern INT ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
-extern INT cur_screen;
+extern int ll_lines; /* number of lines used by LifeLines (usually LINES) */
+extern int ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
+extern int cur_screen;
 extern UIWINDOW stdout_win;
 extern UIWINDOW main_win;
 
 /* Keep this in sync with llinesi.h */
 #ifndef llinesi_h_included
 typedef struct tag_llrect {
-        INT top;
-        INT bottom;
-        INT left;
-        INT right;
+        int top;
+        int bottom;
+        int left;
+        int right;
 } *LLRECT;
 #endif
 
@@ -146,76 +146,77 @@ bool save_gedcom(void);
 
 /* screen.c */
 void activate_uiwin(UIWINDOW uiwin);
-void adjust_browse_menu_cols(INT delta);
-void adjust_browse_menu_height(INT delta);
-INT aux_browse(RECORD rec, INT mode, bool reuse);
-void clear_hseg(WINDOW *, INT row, INT x1, INT x2);
-void clear_stdout_hseg(INT row, INT x1, INT x2);
-void create_newwin2(UIWINDOW * puiw, CString name, INT rows, INT cols);
+void adjust_browse_menu_cols(int delta);
+void adjust_browse_menu_height(int delta);
+int aux_browse(RecordIndexEl *rec, int mode, bool reuse);
+void clear_hseg(WINDOW *, int row, int x1, int x2);
+void clear_stdout_hseg(int row, int x1, int x2);
+void create_newwin2(UIWINDOW * puiw, CString name, int rows, int cols);
 void cycle_browse_menu(void);
 void deactivate_uiwin_and_touch_all(void);
-void display_2fam(RECORD frec1, RECORD frec2, INT mode);
-void display_2indi(RECORD irec1, RECORD irec2, INT mode);
-void display_fam(RECORD fam, INT mode, bool reuse);
-void display_indi(RECORD indi, INT mode, bool reuse);
-void display_screen(INT);
-void dbprintf(String, ...) HINT_PRINTF(1,2);
+void display_2fam(RecordIndexEl *frec1, RecordIndexEl *frec2, int mode);
+void display_2indi(RecordIndexEl *irec1, RecordIndexEl *irec2, int mode);
+void display_fam(RecordIndexEl *fam, int mode, bool reuse);
+void display_indi(RecordIndexEl *indi, int mode, bool reuse);
+void display_screen(int);
+void dbprintf(String, ...) ATTRIBUTE_PRintF(1,2);
 void draw_win_box(WINDOW * win);
 llchtype get_gr_ttee(void);
-INT get_main_screen_width(void);
+int get_main_screen_width(void);
 int get_uitime(void);
 int init_screen(char * errmsg, int errsize);
-INT interact_2fam(void);
-INT interact_2indi(void);
-INT interact_fam(void);
-INT interact_indi(void);
-INT interact_popup(UIWINDOW uiwin, String str);
-INT list_browse(INDISEQ seq, INT top, INT *cur, INT mark);
+int interact_2fam(void);
+int interact_2indi(void);
+int interact_fam(void);
+int interact_indi(void);
+int interact_popup(UIWINDOW uiwin, String str);
+int list_browse(INDISEQ seq, int top, int *cur, int mark);
 void lock_status_msg(bool lock);
 void main_menu(void);
 String message_string (void);
 void paint_main_screen(void);
 void paint_two_fam_screen(void);
 void set_screen_graphical(bool graphical);
-void show_horz_line(UIWINDOW, INT, INT, INT);
-void show_indi(UIWINDOW uiwin, RECORD indi, INT mode, LLRECT
-	, INT * scroll, bool reuse);
-void show_indi_vitals(UIWINDOW uiwin, RECORD irec, LLRECT, INT *scroll, bool reuse);
-bool show_record(UIWINDOW uiwin, CString key, INT mode, LLRECT
-	, INT * scroll, bool reuse);
-void show_vert_line(UIWINDOW, INT, INT, INT);
+void show_horz_line(UIWINDOW, int, int, int);
+void show_indi(UIWINDOW uiwin, RecordIndexEl *indi, int mode, LLRECT
+	, int * scroll, bool reuse);
+void show_indi_vitals(UIWINDOW uiwin, RecordIndexEl *irec, LLRECT,
+		      int *scroll, bool reuse);
+bool show_record(UIWINDOW uiwin, CString key, int mode, LLRECT
+	, int * scroll, bool reuse);
+void show_vert_line(UIWINDOW, int, int, int);
 void term_screen(void);
 void toggle_browse_menu(void);
-INT twofam_browse(NODE, NODE, INT mode);
-INT twoindi_browse(NODE, NODE, INT mode);
+int twofam_browse(GNode *, GNode *, int mode);
+int twoindi_browse(GNode *, GNode *, int mode);
 void uierase(UIWINDOW uiwin);
-void wfield(INT, INT, String);
+void wfield(int, int, String);
 void wipe_window_rect(UIWINDOW uiwin, LLRECT rect);
-void wpos (INT, INT);
+void wpos (int, int);
 
 
 /* show.c (curses specific) */
-extern INT Scroll1;
+extern int Scroll1;
 #if !defined(DEADENDS)
 void display_cache_stats(void);
 #endif
 void init_show_module(void);
-void show_ancestors (UIWINDOW uiwin, RECORD irec, LLRECT
-	, INT * scroll, bool reuse);
-void show_aux(UIWINDOW uiwin, RECORD rec, INT mode, LLRECT
-	, INT * scroll, bool reuse);
-void show_big_list(INDISEQ, INT, INT, INT);
+void show_ancestors (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT
+	, int * scroll, bool reuse);
+void show_aux(UIWINDOW uiwin, RecordIndexEl *rec, int mode, LLRECT
+	, int * scroll, bool reuse);
+void show_big_list(INDISEQ, int, int, int);
 void show_childnumbers(void);
-void show_descendants(UIWINDOW uiwin, RECORD rec, LLRECT
-	, INT * scroll, bool reuse);
-void show_fam_vitals (UIWINDOW uiwin, RECORD frec, INT row, INT hgt
-	, INT width, INT *scroll, bool reuse);
-void show_gedcom (UIWINDOW uiwin, RECORD rec, INT gdvw, LLRECT
-	, INT * scroll, bool reuse);
+void show_descendants(UIWINDOW uiwin, RecordIndexEl *rec, LLRECT
+	, int * scroll, bool reuse);
+void show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
+	, int width, int *scroll, bool reuse);
+void show_gedcom (UIWINDOW uiwin, RecordIndexEl *rec, int gdvw, LLRECT
+	, int * scroll, bool reuse);
 void show_reset_scroll(void);
-void show_sour_display(NODE, INT, INT);
-void show_scroll(INT delta);
-void show_scroll2(INT delta);
+void show_sour_display(GNode *, int, int);
+void show_scroll(int delta);
+void show_scroll2(int delta);
 void switch_scrolls(void);
 void term_show_module(void);
 

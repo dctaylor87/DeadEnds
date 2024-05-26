@@ -73,8 +73,8 @@ PyObject *_llpy_key (PyObject *self, PyObject *args, PyObject *kw)
 PyObject *_llpy_top_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *py_record = (LLINES_PY_RECORD *) self;
-  RECORD record = py_record->llr_record;
-  NODE top = nztop (record);
+  RecordIndexEl *record = py_record->llr_record;
+  GNode *top = nztop (record);
   LLINES_PY_NODE *py_node;
 
   if (! top)

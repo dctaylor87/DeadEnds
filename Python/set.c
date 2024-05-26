@@ -78,8 +78,8 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
   while ((py_indi = PyIter_Next (iterator)))
     {
       Database *database;
-      RECORD indi;
-      NODE node;
+      RecordIndexEl *indi;
+      GNode *node;
 
       if (py_indi->ob_type != &llines_individual_type)
 	{
@@ -90,7 +90,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
       indi = ((LLINES_PY_RECORD *)py_indi)->llr_record;
 
       /* for most individuals, the for loop stops after one iteration */
-      for (NODE famc = findTag (nztop (indi)->child, "FAMC");
+      for (GNode *famc = findTag (nztop (indi)->child, "FAMC");
 	   famc;
 	   famc = findTag (famc->sibling, "FAMC"))
 	{
@@ -98,7 +98,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	  node = keyToFamily (nval(famc), database); /* top node of family */
 
 	  /* for each child of that family... */
-	  for (NODE child = findTag (node->child, "CHIL");
+	  for (GNode *child = findTag (node->child, "CHIL");
 	       child;
 	       child = findTag (child->sibling, "CHIL"))
 	    {
@@ -106,7 +106,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	      if (nestr (child_key, nzkey (indi)))
 		{
 		  /* child in same family, different key, must be sibling */
-		  RECORD sibling = keyToPersonRecord (child_key, database);
+		  RecordIndexEl *sibling = keyToPersonRecord (child_key, database);
 		  LLINES_PY_RECORD *new_indi;
 
 		  new_indi = PyObject_New (LLINES_PY_RECORD,
@@ -316,13 +316,13 @@ static PyObject *llpy_parentset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args
 
 static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_set)
 {
-  RECORD indi = ((LLINES_PY_RECORD *)obj)->llr_record;
+  RecordIndexEl *indi = ((LLINES_PY_RECORD *)obj)->llr_record;
   Database *database = ((LLINES_PY_RECORD *)obj)->llr_database;
-  NODE indi_node = nztop (indi);
-  NODE famc = FAMC (indi_node);
-  RECORD fam;
-  NODE fam_node;
-  NODE parent;
+  GNode *indi_node = nztop (indi);
+  GNode *famc = FAMC (indi_node);
+  RecordIndexEl *fam;
+  GNode *fam_node;
+  GNode *parent;
   int status;
 
   if (output_set)
@@ -366,7 +366,7 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
   fam_node = nztop (fam);
   if ((parent = HUSB (fam_node)))
     {
-      RECORD record = keyToPersonRecord (rmvat (nval (parent)), database);
+      RecordIndexEl *record = keyToPersonRecord (rmvat (nval (parent)), database);
       LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
       if (! new_indi)
@@ -391,7 +391,7 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
     }
   if ((parent = WIFE (fam_node)))
     {
-      RECORD record = keyToPersonRecord (rmvat (nval (parent)), database);
+      RecordIndexEl *record = keyToPersonRecord (rmvat (nval (parent)), database);
       LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
       if (! new_indi)

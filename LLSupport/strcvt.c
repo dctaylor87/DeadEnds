@@ -36,7 +36,6 @@
 #include <wctype.h>
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
@@ -51,15 +50,6 @@
 #include "de-strings.h"
 #include "strcvt.h"
 
-#else
-
-#include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */
-
-#include "zstr.h"
-#include "icvt.h"
-#include "stdlibi.h"
-
-#endif
 static const char * get_wchar_codeset_name(void);
 static ZSTR (*upperfunc)(CString) = 0;
 static ZSTR (*lowerfunc)(CString) = 0;

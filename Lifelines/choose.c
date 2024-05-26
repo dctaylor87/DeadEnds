@@ -31,7 +31,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -56,17 +55,7 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-
-#endif
 /*=================================================
  * choose_child -- Choose child of person or family
  *  irec: [IN] parent (may be null if fam provided)
@@ -75,10 +64,10 @@
  *  msgn: [IN] title for choosing child from list
  *  ask1: [IN] whether to prompt if only one child
  *===============================================*/
-RECORD
-choose_child (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
+RecordIndexEl *
+choose_child (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-	RECORD rec=0;
+	RecordIndexEl *rec=0;
 	INDISEQ seq=0;
 
 	if (irec) seq = indi_to_children(nztop(irec));
@@ -98,10 +87,10 @@ choose_child (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
  *  msgn: [IN] title for choosing spouse from list
  *  asks if multiple
  *======================================*/
-RECORD
-choose_spouse (RECORD irec, CString msg0, CString msgn)
+RecordIndexEl *
+choose_spouse (RecordIndexEl *irec, CString msg0, CString msgn)
 {
-	RECORD rec=0;
+	RecordIndexEl *rec=0;
 	INDISEQ seq=0;
 
 	if (!irec) return NULL;
@@ -118,11 +107,11 @@ choose_spouse (RECORD irec, CString msg0, CString msgn)
  *  presumably top level, node
  *  always asks
  *======================================*/
-RECORD
-choose_source (RECORD current, CString msg0, CString msgn)
+RecordIndexEl *
+choose_source (RecordIndexEl *current, CString msg0, CString msgn)
 {
 	INDISEQ seq;
-	RECORD rec;
+	RecordIndexEl *rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_sources(nztop(current)))) {
 		msg_error("%s", msg0);
@@ -138,11 +127,11 @@ choose_source (RECORD current, CString msg0, CString msgn)
  *  always asks
  * Created: 2001/02/11, Perry Rapp
  *======================================*/
-RECORD
-choose_note (RECORD current, CString msg0, CString msgn)
+RecordIndexEl *
+choose_note (RecordIndexEl *current, CString msg0, CString msgn)
 {
 	INDISEQ seq;
-	RECORD rec;
+	RecordIndexEl *rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_notes(nztop(current)))) {
 		msg_error("%s", msg0);
@@ -159,11 +148,11 @@ choose_note (RECORD current, CString msg0, CString msgn)
  * Created: 2001/02/24, Perry Rapp
  * Returns addref'd record
  *======================================*/
-RECORD
-choose_pointer (RECORD current, CString msg0, CString msgn)
+RecordIndexEl *
+choose_pointer (RecordIndexEl *current, CString msg0, CString msgn)
 {
 	INDISEQ seq;
-	RECORD rec;
+	RecordIndexEl *rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_pointers(nztop(current)))) {
 		msg_error("%s", msg0);
@@ -181,10 +170,10 @@ choose_pointer (RECORD current, CString msg0, CString msgn)
  * msgn: [IN]  title if need to choose which family
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
-RECORD
-choose_family (RECORD irec, CString msg0, CString msgn, bool fams)
+RecordIndexEl *
+choose_family (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
 {
-	RECORD rec=0;
+	RecordIndexEl *rec=0;
 	INDISEQ seq = indi_to_families(nztop(irec), fams);
 	if (!seq) {
 		if (msg0)
@@ -203,10 +192,10 @@ choose_family (RECORD irec, CString msg0, CString msgn, bool fams)
  * msgn: [IN]  title if need to choose which father
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
-RECORD
-choose_father (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
+RecordIndexEl *
+choose_father (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-	RECORD rec=0;
+	RecordIndexEl *rec=0;
 	INDISEQ seq=0;
 
 	if (irec) seq = indi_to_fathers(nztop(irec));
@@ -227,10 +216,10 @@ choose_father (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
  * msgn: [IN]  title if need to choose which mother
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
-RECORD
-choose_mother (RECORD irec, RECORD frec, CString msg0, CString msgn, ASK1Q ask1)
+RecordIndexEl *
+choose_mother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-	RECORD rec=0;
+	RecordIndexEl *rec=0;
 	INDISEQ seq=0;
 
 	if (irec) seq = indi_to_mothers(nztop(irec));

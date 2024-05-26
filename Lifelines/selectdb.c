@@ -87,7 +87,7 @@
 #if !defined(DEADENDS)
 /* alphabetical */
 static bool is_unadorned_directory(String path);
-static void show_open_error(INT dberr);
+static void show_open_error(int dberr);
 #endif
 
 /*********************************************
@@ -101,7 +101,7 @@ static void show_open_error(INT dberr);
  *  perrmsg - [OUT]  translated error message
  *================================================*/
 bool
-select_database (String * dbrequested, INT alteration, String * perrmsg)
+select_database (String * dbrequested, int alteration, String * perrmsg)
 {
 	String dbdir = getlloptstr("LLDATABASES", ".");
 	String dbused = NULL;
@@ -119,15 +119,11 @@ select_database (String * dbrequested, INT alteration, String * perrmsg)
 		}
 		strupdate(dbrequested, dbname);
 		if (eqstr(*dbrequested, "?")) {
-			INT n=0;
-#if defined(DEADENDS)
+			int n=0;
 			List *dblist=0, *dbdesclist=0;
-#else
-			LIST dblist=0, dbdesclist=0;
-#endif
 			strfree(dbrequested);
 			if ((n=get_dblist(dbdir, &dblist, &dbdesclist)) > 0) {
-				INT i;
+				int i;
 				i = choose_from_list(
 					_("Choose database to open")
 					, dbdesclist);
@@ -174,9 +170,9 @@ select_database (String * dbrequested, INT alteration, String * perrmsg)
  * Created: 2001/04/29, Perry Rapp
  *================================================*/
 bool
-open_or_create_database (INT alteration, String *dbused)
+open_or_create_database (int alteration, String *dbused)
 {
-	INT lldberrnum=0;
+	int lldberrnum=0;
 	char dbdir[MAXPATHLEN] = "";
         char newmsg[MAXPATHLEN+100] = "";
 
@@ -230,7 +226,7 @@ open_or_create_database (INT alteration, String *dbused)
  * show_open_error -- Display database opening error
  *=================================================*/
 static void
-show_open_error (INT dberr)
+show_open_error (int dberr)
 {
 	char buffer[256];
 	describe_dberror(dberr, buffer, ARRSIZE(buffer));

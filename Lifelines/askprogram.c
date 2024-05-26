@@ -19,7 +19,6 @@
 #include <dirent.h>
 #endif
 
-#if defined(DEADENDS)
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -43,17 +42,7 @@
 #include "proptbls.h"
 #include "de-strings.h"
 #include "ui.h"
-#else
 
-#include "standard.h"
-#include "llstdlib.h"
-#include "table.h"
-#include "liflines.h"
-#include "arch.h"
-#include "proptbls.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -106,9 +95,9 @@ add_program_props (TABLE fileprops)
 	String tagsfound[ARRSIZE(f_tags)];
 	FILE *fp;
 	char str[MAXLINELEN];
-	INT i;
-	INT line=0;
-	INT endcomment=0; /* flag when finished header comment */
+	int i;
+	int line=0;
+	int endcomment=0; /* flag when finished header comment */
 	char * charset=0; /* charset of report, if found */
 
 	/* first get full path & open file */
@@ -190,7 +179,7 @@ end_add_program_props:
 static void
 parse_programs (TABLE * fileprops)
 {
-	INT i;
+	int i;
 	for (i=0; fileprops[i]; ++i) {
 		add_program_props(fileprops[i]);
 	}
@@ -203,7 +192,7 @@ parse_programs (TABLE * fileprops)
 static void
 set_programs_d0 (TABLE * fileprops)
 {
-	INT i;
+	int i;
 	for (i=0; fileprops[i]; ++i) {
 		TABLE props = fileprops[i];
 		char buf[MAXLINELEN];
@@ -235,7 +224,7 @@ ask_for_program (CString mode,
                  bool picklist)
 {
 	int choice;
-	INT nfiles, i;
+	int nfiles, i;
 	TABLE * fileprops;
 	String * choices;
 	FILE * fp;
@@ -294,13 +283,13 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 {
 	TABLE * fileprops = (TABLE *)param;
 	TABLE props;
-	INT count = arrdets->count;
-	INT maxlen = arrdets->maxlen;
-	INT index = arrdets->cur - 1; /* slot#0 used by choose string */
-	INT row=0;
-	INT scroll = arrdets->scroll;
-	INT i;
-	INT dnum;
+	int count = arrdets->count;
+	int maxlen = arrdets->maxlen;
+	int index = arrdets->cur - 1; /* slot#0 used by choose string */
+	int row=0;
+	int scroll = arrdets->scroll;
+	int i;
+	int dnum;
 
 	if (index<0) return;
 

@@ -16,7 +16,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -26,16 +25,6 @@
 
 #include "de-strings.h"
 
-#else
-#include "llstdlib.h"
-#include "arch.h" /* vsnprintf */
-
-#ifndef INCLUDED_STDARG_H
-#include <stdarg.h>
-#define INCLUDED_STDARG_H
-#endif
-
-#endif
 /*==================================
  * llstrapp -- llstrncat except limit includes existing string
  *  ie, strncat except it always terminates, it handles UTF-8,

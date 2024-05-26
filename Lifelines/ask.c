@@ -37,7 +37,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -71,33 +70,20 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "llinesi.h"
-#include "feedback.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * external/imported variables
  *********************************************/
 
-extern INT listbadkeys;
+extern int listbadkeys;
 extern char badkeylist[];
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
-static RECORD ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, INT *prc);
-static void make_fname_prompt(String fnamebuf, INT len, String ext);
+static RecordIndexEl *ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, int *prc);
+static void make_fname_prompt(String fnamebuf, int len, String ext);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by 
@@ -107,10 +93,10 @@ static void make_fname_prompt(String fnamebuf, INT len, String ext);
  *  pttl: [IN]  title for prompt to identify spouse
  *  sttl: [IN]  title for prompt to identify sibling
  *========================================================*/
-RECORD
+RecordIndexEl *
 ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
 {
-	RECORD fam = ask_for_record(fttl, 'F');
+	RecordIndexEl *fam = ask_for_record(fttl, 'F');
 	return fam ? fam : ask_for_fam(pttl, sttl);
 }
 /*===========================================
@@ -118,18 +104,14 @@ ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
  *  pttl: [IN]  title for prompt to identify spouse
  *  sttl: [IN]  title for prompt to identify sibling
  *=========================================*/
-RECORD
+RecordIndexEl *
 ask_for_fam (CString pttl, CString sttl)
 {
-#if defined(DEADENDS)
 	RecordIndexEl *sib=0, *prn=0;
-#else
-	RECORD sib=0, prn=0;
-#endif
 	prn = ask_for_indi(pttl, DOASK1);
 	if (!prn)  {
-		NODE fam=0;
-		RECORD frec=0;
+		GNode *fam=0;
+		RecordIndexEl *frec=0;
 		sib = ask_for_indi(sttl, DOASK1);
 		if (!sib) return NULL;
 		fam = FAMC(nztop(sib));
@@ -152,9 +134,9 @@ ask_for_fam (CString pttl, CString sttl)
  * TODO: change to bool return for failure
  *=========================================*/
 bool
-ask_for_int (CString ttl, INT * prtn)
+ask_for_int (CString ttl, int * prtn)
 {
-	INT ival, c, neg;
+	int ival, c, neg;
 	char buffer[MAXPATHLEN];
 	while (true) {
 		String p = buffer;
@@ -272,7 +254,7 @@ ask_for_file_try:
  * Created: 2001/12/24, Perry Rapp
  *====================================*/
 static void
-make_fname_prompt (String fnamebuf, INT len, String ext)
+make_fname_prompt (String fnamebuf, int len, String ext)
 {
 	if (ISNULL(ext)) {
 		ext = NULL;	/* a null extension is the same as no extension */
@@ -327,7 +309,7 @@ ask_for_output_file (CString mode,
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 INDISEQ
-ask_for_indiseq (CString ttl, char ctype, INT *prc)
+ask_for_indiseq (CString ttl, char ctype, int *prc)
 {
 	while (1)
 	{
@@ -362,10 +344,10 @@ ask_for_indiseq (CString ttl, char ctype, INT *prc)
  *  ask1:  [IN]  whether to present list if only one matches their desc.
  *  prc:   [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/
-static RECORD
-ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, INT *prc)
+static RecordIndexEl *
+ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
 {
-	RECORD indi = 0;
+	RecordIndexEl *indi = 0;
 	INDISEQ seq = ask_for_indiseq(ttl, ctype, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	ASSERT(*prc == RC_SELECT);
@@ -387,11 +369,11 @@ ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, INT *prc)
  * ttl:      [in] title for question
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
-RECORD
+RecordIndexEl *
 ask_for_indi (CString ttl, ASK1Q ask1)
 {
-	INT rc = 0;
-	RECORD indi = ask_for_any_once(ttl, 'I', ask1, &rc);
+	int rc = 0;
+	RecordIndexEl *indi = ask_for_any_once(ttl, 'I', ask1, &rc);
 	return indi;
 }
 /*=================================================================
@@ -401,13 +383,13 @@ ask_for_indi (CString ttl, ASK1Q ask1)
  * confirmq: [in] whether to confirm after choice
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
-RECORD
+RecordIndexEl *
 ask_for_any (CString ttl, ASK1Q ask1)
 {
 	char ctype = 0; /* code for any type */
 	while (true) {
-		INT rc;
-		RECORD record = ask_for_any_once(ttl, ctype, ask1, &rc);
+		int rc;
+		RecordIndexEl *record = ask_for_any_once(ttl, ctype, ask1, &rc);
 		if (rc == RC_DONE || rc == RC_SELECT)
 			return record;
 		return NULL;
@@ -423,7 +405,7 @@ INDISEQ
 ask_for_indi_list (CString ttl, bool reask)
 {
 	while (true) {
-		INT rc = RC_DONE;
+		int rc = RC_DONE;
 		INDISEQ seq = ask_for_indiseq(ttl, 'I', &rc);
 		if (rc == RC_DONE)
 			return NULL;
@@ -449,9 +431,9 @@ ask_for_indi_list (CString ttl, bool reask)
 String
 ask_for_indi_key (CString ttl, ASK1Q ask1)
 {
-	RECORD indi = ask_for_indi(ttl, ask1);
+	RecordIndexEl *indi = ask_for_indi(ttl, ask1);
 	if (!indi) return NULL;
-	NODE node = nztop(indi);
+	GNode *node = nztop(indi);
 	release_record(indi);
 	return rmvat(nxref(node));
 }
@@ -462,7 +444,7 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
  *  titl1: [IN]  title if sequence has one element
  *  titln: [IN]  title if sequence has multiple elements
  *=============================================================*/
-static INT
+static int
 choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, CString titl1
 	, CString titln)
 {
@@ -482,11 +464,11 @@ choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, CString titl1
  *  titl1: [IN]  title if sequence has one element
  *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
-RECORD
+RecordIndexEl *
 choose_from_indiseq (INDISEQ seq, ASK1Q ask1, CString titl1, CString titln)
 {
-	INT i = 0;
-	RECORD rec=0;
+	int i = 0;
+	RecordIndexEl *rec=0;
 
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
@@ -519,10 +501,10 @@ choose_from_indiseq (INDISEQ seq, ASK1Q ask1, CString titl1, CString titln)
  *  idstr: [IN]  question prompt
  *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
-RECORD
-ask_for_record (CString idstr, INT letr)
+RecordIndexEl *
+ask_for_record (CString idstr, int letr)
 {
-	RECORD rec;
+	RecordIndexEl *rec;
 	char answer[MAXPATHLEN];
 	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer)))
 		return NULL;
@@ -531,11 +513,7 @@ ask_for_record (CString idstr, INT letr)
 	rec = key_possible_to_record(answer, letr);
 	if (!rec) {
 		INDISEQ seq;
-#if defined(DEADENDS)
 		seq = refnToSequence(answer, currentDatabase);
-#else
-		seq = refn_to_indiseq(answer, letr, KEYSORT);
-#endif
 		if (!seq) return NULL;
 		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
 		remove_indiseq(seq);

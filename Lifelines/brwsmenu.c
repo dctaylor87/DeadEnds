@@ -15,7 +15,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -30,15 +29,7 @@
 #include "codesets.h"
 #include "locales.h"
 #include "de-strings.h"
-#else
 
-#include "llstdlib.h"
-#include "feedback.h"
-#include "gedcom.h"
-#include "menuitem.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * global/exported variables
  *********************************************/
@@ -62,12 +53,12 @@ struct BrowseScreenInfo {
  *********************************************/
 
 /* alphabetical */
-static void browsescreen_init(struct BrowseScreenInfo * sinfo , CString title, INT MenuRows, INT MenuCols
-	, INT MinCols, INT MaxCols
-	, INT MinRows, INT MaxRows
-	, INT MenuTop, INT MenuLeft, INT MenuWidth
-	, INT MenuSize, MenuItem ** MenuItems);
-static void brwsmenu_on_lang_change(VPTR uparm);
+static void browsescreen_init(struct BrowseScreenInfo * sinfo , CString title, int MenuRows, int MenuCols
+	, int MinCols, int MaxCols
+	, int MinRows, int MaxRows
+	, int MenuTop, int MenuLeft, int MenuWidth
+	, int MenuSize, MenuItem ** MenuItems);
+static void brwsmenu_on_lang_change(void *uparm);
 static void register_brwsmenu_lang_callbacks(bool registering);
 
 /*********************************************
@@ -77,9 +68,9 @@ static void register_brwsmenu_lang_callbacks(bool registering);
 struct BrowseScreenInfo f_BrowseScreenInfo[MAX_SCREEN+1]; /* init'd by brwsmenu_initialize */
 static bool f_initialized=false;
 static bool f_reloading=false;
-static INT f_screenheight;
-static INT f_screenwidth;
-static INT f_cols;
+static int f_screenheight;
+static int f_screenwidth;
+static int f_cols;
 
 /* normal menu items */
 static MenuItem f_MenuItemEditIndi = { N_("e  Edit the person"), 0, CMD_EDIT, 0 };
@@ -446,11 +437,11 @@ static MenuItem * f_MenuListPersons[] =
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
 static void
-browsescreen_init (struct BrowseScreenInfo * sinfo , CString title, INT MenuRows, INT MenuCols
-	, INT MinCols, INT MaxCols
-	, INT MinRows, INT MaxRows
-	, INT MenuTop, INT MenuLeft, INT MenuWidth
-	, INT MenuSize, MenuItem ** MenuItems)
+browsescreen_init (struct BrowseScreenInfo * sinfo , CString title, int MenuRows, int MenuCols
+	, int MinCols, int MaxCols
+	, int MinRows, int MaxRows
+	, int MenuTop, int MenuLeft, int MenuWidth
+	, int MenuSize, MenuItem ** MenuItems)
 {
 	DYNMENU dynmenu = &sinfo->dynmenu;
 
@@ -470,22 +461,22 @@ browsescreen_init (struct BrowseScreenInfo * sinfo , CString title, INT MenuRows
  * Created: 2001/01/28, Perry Rapp
  *==========================*/
 void
-brwsmenu_initialize (INT screenheightx, INT screenwidthx)
+brwsmenu_initialize (int screenheightx, int screenwidthx)
 {
-	INT i;
-	INT scr;
-	INT MenuRows, MenuCols, MenuSize;
+	int i;
+	int scr;
+	int MenuRows, MenuCols, MenuSize;
 	MenuItem ** MenuItems;
 	struct BrowseScreenInfo * sinfo=0;
 	char title[120];
 	/* defaults used by all browse screens except list browse */
-	INT MinRows=4;
-	INT MaxRows=10;
-	INT MinCols=1;
-	INT MaxCols=7;
-	INT MenuTop=0;
-	INT MenuLeft=3;
-	INT MenuWidth=0;
+	int MinRows=4;
+	int MaxRows=10;
+	int MinCols=1;
+	int MaxCols=7;
+	int MenuTop=0;
+	int MenuLeft=3;
+	int MenuWidth=0;
 	if (screenheightx > 0)
 		f_screenheight = screenheightx;
 	if (screenwidthx > 0) {
@@ -601,7 +592,7 @@ brwsmenu_initialize (INT screenheightx, INT screenwidthx)
 void
 menuitem_terminate (void)
 {
-	INT i;
+	int i;
 	if (!f_reloading) {
 		register_brwsmenu_lang_callbacks(false);
 	}
@@ -631,7 +622,7 @@ register_brwsmenu_lang_callbacks (bool registering)
  * brwsmenu_on_lang_change -- UI language or codeset has changed
  *==========================*/
 static void
-brwsmenu_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
+brwsmenu_on_lang_change (ATTRIBUTE_UNUSED void *uparm)
 {
 	f_reloading = true;
 	menuitem_terminate();
@@ -643,7 +634,7 @@ brwsmenu_on_lang_change (HINT_PARAM_UNUSED VPTR uparm)
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
 MENUSET
-get_screen_menuset (INT screen)
+get_screen_menuset (int screen)
 {
 	return dynmenu_get_menuset(get_screen_dynmenu(screen));
 }
@@ -652,7 +643,7 @@ get_screen_menuset (INT screen)
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
 DYNMENU
-get_screen_dynmenu (INT screen)
+get_screen_dynmenu (int screen)
 {
 	return &f_BrowseScreenInfo[screen].dynmenu;
 }
@@ -661,7 +652,7 @@ get_screen_dynmenu (INT screen)
  * Created: 2002/10/27, Perry Rapp
  *==========================*/
 String
-get_screen_title (INT screen)
+get_screen_title (int screen)
 {
 	return f_BrowseScreenInfo[screen].title;
 }

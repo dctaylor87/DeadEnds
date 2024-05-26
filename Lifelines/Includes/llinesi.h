@@ -19,10 +19,10 @@
 #endif
 
 typedef struct tag_llrect {
-	INT top;
-	INT bottom;
-	INT left;
-	INT right;
+	int top;
+	int bottom;
+	int left;
+	int right;
 } *LLRECT;
 
 struct tag_import_feedback;
@@ -34,74 +34,68 @@ typedef struct tag_import_feedback *IMPORT_FEEDBACK;
 struct tag_export_feedback;
 
 /* add.c */
-#if defined(DEADENDS)
-RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, bool rfmt);
-RECORD add_indi_by_edit(bool rfmt);
-#else
-RECORD add_family_by_edit(RECORD sprec1, RECORD sprec2, RECORD chrec, RFMT rfmt);
-RECORD add_indi_by_edit(RFMT rfmt);
-#endif
-bool add_indi_no_cache(NODE);
-CString get_unresolved_ref_error_string(INT count);
-#if defined(DEADENDS)
-NODE prompt_add_child(NODE child, NODE fam, bool rfmt);
-#else
-NODE prompt_add_child(NODE child, NODE fam, RFMT rfmt);
-#endif
-bool prompt_add_spouse(RECORD spouse, RECORD fam, bool conf);
+RecordIndexEl *add_family_by_edit(RecordIndexEl *sprec1, RecordIndexEl *sprec2,
+				  RecordIndexEl *chrec, bool rfmt);
+RecordIndexEl *add_indi_by_edit(bool rfmt);
+bool add_indi_no_cache(GNode *);
+CString get_unresolved_ref_error_string(int count);
+GNode *prompt_add_child(GNode *child, GNode *fam, bool rfmt);
+bool prompt_add_spouse(RecordIndexEl *spouse, RecordIndexEl *fam, bool conf);
 
 /* advedit.c */
-void advanced_person_edit(NODE);
-void advanced_family_edit(NODE);
+void advanced_person_edit(GNode *);
+void advanced_family_edit(GNode *);
 
 /* ask.c */
-RECORD ask_for_any(CString ttl, ASK1Q ask1);
-INDISEQ ask_for_indiseq(CString ttl, char ctype, INT *prc);
+RecordIndexEl *ask_for_any(CString ttl, ASK1Q ask1);
+INDISEQ ask_for_indiseq(CString ttl, char ctype, int *prc);
 
 /* browse.c */
-RECORD choose_any_event(void);
-RECORD choose_any_other(void);
-RECORD choose_any_source(void);
-INT get_chist_len(void);
+RecordIndexEl *choose_any_event(void);
+RecordIndexEl *choose_any_other(void);
+RecordIndexEl *choose_any_source(void);
+int get_chist_len(void);
 INDISEQ get_chistory_list(void);
-INT get_vhist_len(void);
+int get_vhist_len(void);
 INDISEQ get_vhistory_list(void);
-bool handle_fam_mode_cmds(INT c, INT * mode);
-bool handle_indi_mode_cmds(INT c, INT * mode);
-bool handle_menu_cmds(INT c, bool * reuse);
-bool handle_scroll_cmds(INT c, bool * reuse);
-void history_record_change(RECORD);
+bool handle_fam_mode_cmds(int c, int * mode);
+bool handle_indi_mode_cmds(int c, int * mode);
+bool handle_menu_cmds(int c, bool * reuse);
+bool handle_scroll_cmds(int c, bool * reuse);
+void history_record_change(RecordIndexEl *);
 void init_browse_module(void);
-void main_browse(RECORD, INT code);
-NODE my_prompt_add_child(NODE child, NODE fam);
+void main_browse(RecordIndexEl *, int code);
+GNode *my_prompt_add_child(GNode *child, GNode *fam);
 void term_browse_module(void);
 
 /* delete.c */
-void choose_and_remove_indi(NODE indi, CONFIRMQ confirmq);
+void choose_and_remove_indi(GNode *indi, CONFIRMQ confirmq);
 void choose_and_delete_family(void);
-bool choose_and_remove_child(RECORD irec, RECORD frec, bool nolast);
-bool choose_and_remove_spouse(RECORD irec, RECORD frec, bool nolast);
-bool choose_and_remove_any_record(RECORD rec, CONFIRMQ confirmq);
+bool choose_and_remove_child(RecordIndexEl *irec, RecordIndexEl *frec,
+			     bool nolast);
+bool choose_and_remove_spouse(RecordIndexEl *irec, RecordIndexEl *frec,
+			      bool nolast);
+bool choose_and_remove_any_record(RecordIndexEl *rec, CONFIRMQ confirmq);
 
 /* edit.c */
 #if defined(DEADENDS)
-bool edit_family(RECORD frec1, bool rfmt);
-bool edit_indi(RECORD irec1, bool rfmt);
+bool edit_family(RecordIndexEl *frec1, bool rfmt);
+bool edit_indi(RecordIndexEl *irec1, bool rfmt);
 #else
-bool edit_family(RECORD frec1, RFMT rfmt);
-bool edit_indi(RECORD irec1, RFMT rfmt);
+bool edit_family(RecordIndexEl *frec1, RFMT rfmt);
+bool edit_indi(RecordIndexEl *irec1, RFMT rfmt);
 #endif
 
 /* lbrowse.c */
-INT browse_list(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+int browse_list(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
 
 /* lines_usage.c */
 void print_lines_usage(CString exename);
 
 
 /* merge.c */
-RECORD merge_two_indis(NODE, NODE, bool);
-RECORD merge_two_fams(NODE, NODE);
+RecordIndexEl *merge_two_indis(GNode *, GNode *, bool);
+RecordIndexEl *merge_two_fams(GNode *, GNode *);
 
 /* miscutls.c */
 void key_util(void);
@@ -113,19 +107,19 @@ void sighand_cursesui(int sig);
 void sighand_cmdline(int sig);
 
 /* newrecs.c */
-RECORD edit_add_event(void);
-RECORD edit_add_other(void);
-RECORD edit_add_source(void);
+RecordIndexEl *edit_add_event(void);
+RecordIndexEl *edit_add_other(void);
+RecordIndexEl *edit_add_source(void);
 #if defined(DEADENDS)
-bool edit_any_record(RECORD rec, bool rfmt);
-bool edit_event(RECORD rec, bool rfmt);
-bool edit_other(RECORD rec, bool rfmt);
-bool edit_source(RECORD rec, bool rfmt);
+bool edit_any_record(RecordIndexEl *rec, bool rfmt);
+bool edit_event(RecordIndexEl *rec, bool rfmt);
+bool edit_other(RecordIndexEl *rec, bool rfmt);
+bool edit_source(RecordIndexEl *rec, bool rfmt);
 #else
-bool edit_any_record(RECORD rec, RFMT rfmt);
-bool edit_event(RECORD rec, RFMT rfmt);
-bool edit_other(RECORD rec, RFMT rfmt);
-bool edit_source(RECORD rec, RFMT rfmt);
+bool edit_any_record(RecordIndexEl *rec, RFMT rfmt);
+bool edit_event(RecordIndexEl *rec, RFMT rfmt);
+bool edit_other(RecordIndexEl *rec, RFMT rfmt);
+bool edit_source(RecordIndexEl *rec, RFMT rfmt);
 #endif
 
 /* pedigree.c */
@@ -135,16 +129,19 @@ enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	/* NB: pedigree will adjust scroll if out of limits */
 	struct tag_canvasdata;
 		/* callback to output a line */
-	typedef void (*PEDLINE)(struct tag_canvasdata * canvas, INT x, INT y
-		, String string, INT overflow);
+	typedef void (*PEDLINE)(struct tag_canvasdata * canvas, int x, int y
+		, String string, int overflow);
 		/* collection of data needed by pedigree */
-	typedef struct tag_canvasdata { LLRECT rect; INT scroll; void * param;
+	typedef struct tag_canvasdata { LLRECT rect; int scroll; void * param;
 		PEDLINE line; } *CANVASDATA;
 	/* functions */
-void pedigree_draw_ancestors(RECORD rec, CANVASDATA canvasdata, bool reuse);
-void pedigree_draw_descendants(RECORD rec, CANVASDATA canvasdata, bool reuse);
-void pedigree_draw_gedcom(RECORD rec, INT gdvw, CANVASDATA canvasdata, bool reuse);
-void pedigree_increase_generations(INT delta);
+void pedigree_draw_ancestors(RecordIndexEl *rec, CANVASDATA canvasdata,
+			     bool reuse);
+void pedigree_draw_descendants(RecordIndexEl *rec, CANVASDATA canvasdata,
+			       bool reuse);
+void pedigree_draw_gedcom(RecordIndexEl *rec, int gdvw, CANVASDATA canvasdata,
+			  bool reuse);
+void pedigree_increase_generations(int delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
@@ -159,24 +156,20 @@ void clear_status_display(void);
 
 #if defined(DEADENDS)
 /* show.c */
-String indi_to_ped_fix(NODE indi, INT len);
+String indi_to_ped_fix(GNode *indi, int len);
 #endif
 
 /* swap.c */
-bool swap_children(RECORD prnt, RECORD frec);
-#if defined(DEADENDS)
-bool reorder_child(RECORD prnt, RECORD frec, bool rfmt);
-#else
-bool reorder_child(RECORD prnt, RECORD frec, RFMT rfmt);
-#endif
-bool swap_families(RECORD);
+bool swap_children(RecordIndexEl *prnt, RecordIndexEl *frec);
+bool reorder_child(RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt);
+bool swap_families(RecordIndexEl *);
 
 /* tandem.c */
-INT browse_tandem(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
-INT browse_2fam(RECORD *prec1, RECORD *prec2, INDISEQ *pseq);
+int browse_tandem(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
+int browse_2fam(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
 
 /* valgdcom.c */
-void addmissingkeys (INT);
+void addmissingkeys (int);
 int check_stdkeys (void);
 
 #if !defined(DEADENDS) /* scan_header is only used by import.c and valgdcom.c */
@@ -184,8 +177,8 @@ bool scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
 #endif
 bool validate_gedcom(IMPORT_FEEDBACK ifeed, FILE*);
 void validate_end_import(void);
-INT validate_get_warning_count(void);
-INT xref_to_index (String);
+int validate_get_warning_count(void);
+int xref_to_index (String);
 
 
 #endif /* llinesi_h_included */

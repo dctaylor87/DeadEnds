@@ -77,7 +77,7 @@
 
 typedef struct
 {
-	INT scantype;
+	int scantype;
 	CString statusmsg;
 	char pattern[64];
 	INDISEQ seq;
@@ -89,17 +89,17 @@ typedef struct
  * local enums
  *********************************************/
 
-static INT SCAN_NAME_FULL=0;
-static INT SCAN_NAME_FRAG=1;
-static INT SCAN_REFN=2;
-static INT SCAN_SRC_AUTH=3;
-static INT SCAN_SRC_TITL=4;
+static int SCAN_NAME_FULL=0;
+static int SCAN_NAME_FRAG=1;
+static int SCAN_REFN=2;
+static int SCAN_SRC_AUTH=3;
+static int SCAN_SRC_TITL=4;
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
-static void do_fields_scan(SCANNER * scanner, RECORD rec);
+static void do_fields_scan(SCANNER * scanner, RecordIndexEl *rec);
 static void do_name_scan(SCANNER * scanner, String prompt);
 static void do_sources_scan(SCANNER * scanner, CString prompt);
 static bool ns_callback(CString key, CString name, bool newset, void *param);
@@ -107,7 +107,7 @@ static bool rs_callback(CString key, CString refn, bool newset, void *param);
 static void scanner_add_result(SCANNER * scanner, CString key);
 static bool scanner_does_pattern_match(SCANNER *scanner, CString text);
 static INDISEQ scanner_free_and_return_seq(SCANNER * scanner);
-static void scanner_init(SCANNER * scanner, INT scantype, CString statusmsg);
+static void scanner_init(SCANNER * scanner, int scantype, CString statusmsg);
 static void scanner_scan_titles(SCANNER * scanner);
 static void scanner_set_field(SCANNER * scanner, String field);
 static bool scanner_set_pattern(SCANNER * scanner, String pattern);
@@ -221,7 +221,7 @@ do_name_scan (SCANNER * scanner, String prompt)
 static void
 do_sources_scan (SCANNER * scanner, CString prompt)
 {
-	INT keynum = 0;
+	int keynum = 0;
 
 	while (1) {
 		char request[MAXPATHLEN];
@@ -236,7 +236,7 @@ do_sources_scan (SCANNER * scanner, CString prompt)
 	msg_status("%s", (String)scanner->statusmsg);
 
 	while (1) {
-		RECORD rec = 0;
+		RecordIndexEl *rec = 0;
 		keynum = xref_nexts(keynum);
 		if (!keynum)
 			break;
@@ -250,10 +250,10 @@ do_sources_scan (SCANNER * scanner, CString prompt)
  *  rec:       [IN]  record to search
  *============================*/
 static void
-do_fields_scan (SCANNER * scanner, RECORD rec)
+do_fields_scan (SCANNER * scanner, RecordIndexEl *rec)
 {
 	/* NB: Only scanning top-level nodes right now */
-	NODE node = nztop(rec);
+	GNode *node = nztop(rec);
 	for (node = nchild(node); node; node = nsibling(node)) {
 		String tag = ntag(node);
 		if (tag && eqstr(tag, scanner->field)) {
@@ -264,7 +264,7 @@ do_fields_scan (SCANNER * scanner, RECORD rec)
 				return;
 			}
 			if (scanner->conts) {
-				NODE node2 = 0;
+				GNode *node2 = 0;
 				for (node2 = nchild(node); node2; node2 = nsibling(node2)) {
 					String tag2 = ntag(node2);
 					if (tag2 && (eqstr(tag2, "CONC") || eqstr(tag2, "CONT"))) {
@@ -286,7 +286,7 @@ do_fields_scan (SCANNER * scanner, RECORD rec)
  * init_scan_pattern -- Initialize scan pattern fields
  *============================*/
 static void
-scanner_init (SCANNER * scanner, INT scantype, CString statusmsg)
+scanner_init (SCANNER * scanner, int scantype, CString statusmsg)
 {
 	scanner->scantype = scantype;
 	scanner->seq = create_indiseq_null();
@@ -310,7 +310,7 @@ scanner_free_and_return_seq (SCANNER * scanner)
 static bool
 scanner_set_pattern (SCANNER * scanner, String str)
 {
-	INT i;
+	int i;
 	/* spaces don't make sense in a name fragment */
 	if (scanner->scantype == SCAN_NAME_FRAG) {
 		for (i=0; str[i]; i++)
@@ -367,9 +367,9 @@ scanner_add_result (SCANNER * scanner, CString key)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static bool
-ns_callback (CString key, CString name, HINT_PARAM_UNUSED bool newset, void *param)
+ns_callback (CString key, CString name, ATTRIBUTE_UNUSED bool newset, void *param)
 {
-	INT len, ind;
+	int len, ind;
 	String piece;
 	SCANNER * scanner = (SCANNER *)param;
 	if (scanner->scantype == SCAN_NAME_FULL) {
@@ -378,7 +378,7 @@ ns_callback (CString key, CString name, HINT_PARAM_UNUSED bool newset, void *par
 		}
 	} else {
 		/* SCAN_NAME_FRAG */
-		LIST list = name_to_list(name, &len, &ind);
+		List *list = name_to_list(name, &len, &ind);
 		FORLIST(list, el)
 			piece = (String)el;
 			if (scanner_does_pattern_match(scanner, piece)) {
@@ -397,7 +397,7 @@ ns_callback (CString key, CString name, HINT_PARAM_UNUSED bool newset, void *par
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static bool
-rs_callback (CString key, CString refn, HINT_PARAM_UNUSED bool newset, void *param)
+rs_callback (CString key, CString refn, ATTRIBUTE_UNUSED bool newset, void *param)
 {
 	SCANNER * scanner = (SCANNER *)param;
 	ASSERT(scanner->scantype == SCAN_REFN);
