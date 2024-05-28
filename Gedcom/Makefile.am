@@ -9,6 +9,7 @@ libgedcom_a_SOURCES = \
 	date.c \
 	gedcom.c \
 	gnode.c \
+	gnodelist.c \
 	lineage.c \
 	name.c \
 	nodeutls.c \

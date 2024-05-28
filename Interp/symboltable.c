@@ -3,7 +3,7 @@
 // symboltable.c holds the functions that implement SymbolTables.
 //
 // Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 23 May 2024.
+// Last changed on 24 May 2024.
 
 #include <stdint.h>
 
@@ -11,10 +11,10 @@
 #include "refnindex.h"
 #include "symboltable.h"
 
-// globalTable holds the script symbols that defined in the global scope.
+// globalTable holds the symbols defined in the global scope.
 extern SymbolTable* globalTable;
 
-// compare compares two symbols by ident fields.
+// compare compares two Symbols by ident fields.
 static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
@@ -44,17 +44,17 @@ SymbolTable* createSymbolTable(void) {
 	return createHashTable(getKey, compare, delete, numBucketsInSymbolTable);
 }
 
-// assignValueToSymbol assigns a value to a Symbol. If the Symbol isn't in the local table, look
-// in the global table; only if there use the global table.
+// assignValueToSymbol assigns a value to a Symbol. If the Symbol isn't in the local table, check
+// the global table.
 void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
-	SymbolTable* table = symtab; // Determine SymbolTable.
+	SymbolTable* table = symtab;
 	if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) table = globalTable;
-	PValue* ppvalue = (PValue*) malloc(sizeof(PValue)); // Heapify PValue.
+	PValue* ppvalue = (PValue*) malloc(sizeof(PValue)); // Heapify
 	memcpy(ppvalue, &pvalue, sizeof(PValue));
 	if (pvalue.type == PVString)
-		ppvalue->value.uString = strsave(pvalue.value.uString); // TODO: Is this required?
+		ppvalue->value.uString = strsave(pvalue.value.uString); // TODO: Required?
 	Symbol *symbol = searchHashTable(table, ident);
-	if (symbol) { // If in table change value.
+	if (symbol) { // Change value.
 		freePValue(symbol->value);
 		symbol->value = ppvalue;
 		return;
@@ -63,19 +63,17 @@ void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
 	addToHashTable(table, createSymbol(ident, ppvalue), true); // Else add symbol.
 }
 
-// getValueOfSymbol gets the value of a Symbol from a SymbolTable; Symbol's PValue is returned.
+// getValueOfSymbol gets the value of a Symbol from a SymbolTable; PValue is returned on stack..
 PValue getValueOfSymbol(SymbolTable* symtab, CString ident) {
-	//if (debugging) printf("getValueOfSymbol %s from table\n", ident);
-	//if (debugging) showSymbolTable(symtab);
-	Symbol *symbol = searchHashTable(symtab, ident); // Search local table.
+	Symbol *symbol = searchHashTable(symtab, ident); // Local.
 	if (symbol) {
 		PValue *ppvalue = symbol->value;
 		if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};
 	}
-	symbol = searchHashTable(globalTable, ident); // Search global table.
+	symbol = searchHashTable(globalTable, ident); // Global.
 	if (symbol) {
 		PValue *ppvalue = symbol->value;
-		if (ppvalue) return (PValue){ppvalue->type, ppvalue->value}; // Put on stack.
+		if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};
 	}
 	return nullPValue; // Undefined.
 }

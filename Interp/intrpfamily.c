@@ -148,7 +148,7 @@ PValue __fam(PNode *pnode, Context *context, bool* eflg)
 //        sprintf(key, "F%d", ++i);
 //        if (!(record = retrieve_record(key, &len)))
 //            return NULL;
-//        if (!(fam = stringToNodeTree(record))) {
+//        if (!(fam = stringToGNodeTree(record))) {
 //            stdfree(record);
 //            continue;
 //        }
@@ -175,7 +175,7 @@ PValue __fam(PNode *pnode, Context *context, bool* eflg)
 //        sprintf(key, "F%d", ++i);
 //        if (!(record = retrieve_record(key, &len)))
 //            return NULL;
-//        if (!(fam = stringToNodeTree(record))) {
+//        if (!(fam = stringToGNodeTree(record))) {
 //            stdfree(record);
 //            continue;
 //        }
@@ -202,7 +202,7 @@ PValue __fam(PNode *pnode, Context *context, bool* eflg)
 //        sprintf(key, "F%d", --i);
 //        if (!(record = retrieve_record(key, &len)))
 //            return NULL;
-//        if (!(fam = stringToNodeTree(record))) {
+//        if (!(fam = stringToGNodeTree(record))) {
 //            stdfree(record);
 //            continue;
 //        }
