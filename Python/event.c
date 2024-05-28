@@ -59,7 +59,7 @@ PyObject *llpy_date (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
   GNode *node = event->lnn_node;
-  String str = event_to_date (node, false);
+  String str = eventToDate (node, false);
 
   if (! str)			/* no date recorded for event */
     Py_RETURN_NONE;
@@ -71,7 +71,7 @@ PyObject *llpy_place (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
   GNode *node = event->lnn_node;
-  String str = event_to_plac (node, false);
+  String str = eventToPlace (node, false);
 
   if (! str)			/* no place recorded for event */
     Py_RETURN_NONE;
@@ -81,7 +81,6 @@ PyObject *llpy_place (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
 /* llpy_year -- this is non static because it must appear in the
    methods table found in nodes.c */
-#if defined(DEADENDS)
 PyObject *llpy_year (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
@@ -92,49 +91,12 @@ PyObject *llpy_year (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
   return Py_BuildValue ("s", str);
 }
-#else
-PyObject *llpy_year (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
-{
-  LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
-  String str = event_to_date (event->lnn_node, false);
-  GDATEVAL gdv;
-  char buffer[20];
-
-  if (! str)
-    Py_RETURN_NONE;
-
-  gdv = extract_date (str);
-  str = date_get_year_string (gdv); /* prefer year's string if it has one */
-  if (! str || ! *str)
-    {
-      /* year string is NULL or empty */
-      int year = date_get_year (gdv);
-      if (year != BAD_YEAR)
-	{
-	  snprintf (buffer, sizeof (buffer), FMT_INT, year);
-	  str = buffer;
-	}
-      else
-	str = NULL;
-    }
-  free_gdateval (gdv);
-  if (! str)
-    Py_RETURN_NONE;
-
-  return Py_BuildValue ("s", str);
-}
-#endif
 
 PyObject *llpy_long (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
   GNode *node = event->lnn_node;
-#if defined(DEADENDS)
   String str = eventToString (node, false);
-#else
-  struct tag_rfmt rpt_format = { NULL, NULL, "%1 %2" };
-  String str = event_to_string (node, &rpt_format);
-#endif
 
   if (! str)
     str = "";
@@ -146,12 +108,7 @@ PyObject *llpy_short (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_NODE *event = (LLINES_PY_NODE *) self;
   GNode *node = event->lnn_node;
-#if defined(DEADENDS)
   String str = eventToString (node, true);
-#else
-  struct tag_rfmt rpt_format = { shorten_date, shorten_plac, "%1 %2" };
-  String str = event_to_string (node, &rpt_format);
-#endif
   if (! str)
     str = "";
 
@@ -331,7 +288,7 @@ PyObject *llpy_complexdate_node (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   String input_str;
   String output_str;
 
-  input_str = event_to_date (py_node->lnn_node, false);
+  input_str = eventToDate (py_node->lnn_node, false);
   output_str = do_format_date (input_str,
 			       py_dateformat.pyd_dayformat,
 			       py_dateformat.pyd_monthformat,
@@ -376,7 +333,7 @@ PyObject *llpy_stddate_node  (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   char *input_date;
   char *output_date;
 
-  input_date = event_to_date (py_node->lnn_node, false);
+  input_date = eventToDate (py_node->lnn_node, false);
 
   output_date = do_format_date (input_date,
 				py_dateformat.pyd_dayformat,

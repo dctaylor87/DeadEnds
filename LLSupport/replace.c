@@ -59,7 +59,7 @@
 
 /*===================================================================
  * replace_indi -- Replace a person in database with modified version
- *  indi1 = current record (copy from database, may or may not be in cache)
+ *  indi1 = current record (copy from database)
  *  indi2 = new data
  *  replaces all children nodes of indi1 with children nodes of indi2
  *  consumes indi2 (calls free_node on it)
@@ -115,7 +115,7 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 }
 /*==================================================================
  * replace_fam -- Replace a family in database with modified version
- *  fam1 = current record (copy from database, may or may not be in cache)
+ *  fam1 = current record (copy from database)
  *  fam2 = new data
  *  replaces all children nodes of fam1 with children nodes of fam2
  *  consumes fam2 (calls free_node on it)

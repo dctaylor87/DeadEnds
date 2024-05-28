@@ -121,7 +121,7 @@ static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 {
   static char *keywords[] = { "prompt", NULL };
   String prompt = _("Identify list of persons for program:");
-  INDISEQ seq = 0;
+  Sequence *seq = 0;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "|s", keywords, &prompt))
     return NULL;

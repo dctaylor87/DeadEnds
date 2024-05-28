@@ -82,13 +82,13 @@ static bool handle_tandem_scroll_cmds(int c);
 /*=============================================
  * browse_tandem -- Two person browse operation
  *===========================================*/
-int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	RecordIndexEl *current1, *current2;
 	int nkey1p, nkey2p, modep;
 	RecordIndexEl *tmp=0;
 	CString key, name;
-	INDISEQ seq;
+	Sequence *seq;
 	int c, rc;
 	bool reuse=false;
 	static int mode = 'n';
@@ -206,7 +206,7 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
 /*==================================================
  * browse_2fam -- Handle two family browse operation
  *================================================*/
-int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	RecordIndexEl *current1, *current2;
 	RecordIndexEl *tmp, *tmp2;

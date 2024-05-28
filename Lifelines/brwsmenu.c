@@ -503,10 +503,10 @@ brwsmenu_initialize (int screenheightx, int screenwidthx)
 
 	scr = ONE_PER_SCREEN;
 	sinfo = &f_BrowseScreenInfo[scr];
-	llstrncpy(title, _(qSttlindibrw), ARRSIZE(title), uu8);
+	llstrncpy(title, _(qSttlindibrw), ARRAYSIZE(title), uu8);
 	MenuRows = 8;
 	MenuTop = f_screenheight-MenuRows - 3;
-	MenuSize = ARRSIZE(f_MenuPerson)-1;
+	MenuSize = ARRAYSIZE(f_MenuPerson)-1;
 	MenuItems = f_MenuPerson;
 	browsescreen_init(sinfo, title, MenuRows, MenuCols
 		, MinCols, MaxCols
@@ -516,10 +516,10 @@ brwsmenu_initialize (int screenheightx, int screenwidthx)
 
 	scr = ONE_FAM_SCREEN;
 	sinfo = &f_BrowseScreenInfo[scr];
-	llstrncpy(title, _(qSttlfambrw), ARRSIZE(title), uu8);
+	llstrncpy(title, _(qSttlfambrw), ARRAYSIZE(title), uu8);
 	MenuRows = 6;
 	MenuTop = f_screenheight-MenuRows - 3;
-	MenuSize = ARRSIZE(f_MenuFamily)-1;
+	MenuSize = ARRAYSIZE(f_MenuFamily)-1;
 	MenuItems = f_MenuFamily;
 	browsescreen_init(sinfo, title, MenuRows, MenuCols
 		, MinCols, MaxCols
@@ -529,10 +529,10 @@ brwsmenu_initialize (int screenheightx, int screenwidthx)
 
 	scr = TWO_PER_SCREEN;
 	sinfo = &f_BrowseScreenInfo[scr];
-	llstrncpy(title, _(qSttl2perbrw), ARRSIZE(title), uu8);
+	llstrncpy(title, _(qSttl2perbrw), ARRAYSIZE(title), uu8);
 	MenuRows = 5;
 	MenuTop = f_screenheight-MenuRows - 3;
-	MenuSize = ARRSIZE(f_Menu2Person)-1;
+	MenuSize = ARRAYSIZE(f_Menu2Person)-1;
 	MenuItems = f_Menu2Person;
 	browsescreen_init(sinfo, title, MenuRows, MenuCols
 		, MinCols, MaxCols
@@ -542,10 +542,10 @@ brwsmenu_initialize (int screenheightx, int screenwidthx)
 
 	scr = TWO_FAM_SCREEN;
 	sinfo = &f_BrowseScreenInfo[scr];
-	llstrncpy(title, _(qSttl2fambrw), ARRSIZE(title), uu8);
+	llstrncpy(title, _(qSttl2fambrw), ARRAYSIZE(title), uu8);
 	MenuRows = 5;
 	MenuTop = f_screenheight-MenuRows - 3;
-	MenuSize = ARRSIZE(f_Menu2Family)-1;
+	MenuSize = ARRAYSIZE(f_Menu2Family)-1;
 	MenuItems = f_Menu2Family;
 	browsescreen_init(sinfo, title, MenuRows, MenuCols
 		, MinCols, MaxCols
@@ -555,10 +555,10 @@ brwsmenu_initialize (int screenheightx, int screenwidthx)
 
 	scr = AUX_SCREEN;
 	sinfo = &f_BrowseScreenInfo[scr];
-	llstrncpy(title, _(qSttlauxbrw), ARRSIZE(title), uu8);
+	llstrncpy(title, _(qSttlauxbrw), ARRAYSIZE(title), uu8);
 	MenuRows = 4;
 	MenuTop = f_screenheight-MenuRows - 3;
-	MenuSize = ARRSIZE(f_MenuAux)-1;
+	MenuSize = ARRAYSIZE(f_MenuAux)-1;
 	MenuItems = f_MenuAux;
 	browsescreen_init(sinfo, title, MenuRows, MenuCols
 		, MinCols, MaxCols
@@ -569,10 +569,10 @@ brwsmenu_initialize (int screenheightx, int screenwidthx)
 	/* TO DO: this is not used right now */
 	scr = LIST_SCREEN;
 	sinfo = &f_BrowseScreenInfo[scr];
-	llstrncpy(title, _(qSttllstbrw), ARRSIZE(title), uu8);
+	llstrncpy(title, _(qSttllstbrw), ARRAYSIZE(title), uu8);
 	MenuRows = 13;
 	MenuCols = 1;
-	MenuSize = ARRSIZE(f_MenuListPersons)-1;
+	MenuSize = ARRAYSIZE(f_MenuListPersons)-1;
 	MenuItems = f_MenuListPersons;
 	MinRows = 5;
 	MaxRows = 14;

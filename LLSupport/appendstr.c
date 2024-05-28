@@ -16,7 +16,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "standard.h"
@@ -24,12 +23,6 @@
 #include "sys_inc.h"
 
 #include "de-strings.h"
-
-#else
-
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#endif
 
 /*==================================
  * appendstr -- Append to string, subject to length limit

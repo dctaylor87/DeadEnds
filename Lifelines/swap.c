@@ -115,7 +115,7 @@ gotfam:
 		two = nsibling(one);
 	} else {
 		RecordIndexEl *chil1, *chil2;
-		STRING key1, key2;
+		String key1, key2;
 		/* Identify children to swap */
 		chil1 = choose_child(NULL, frec, "e", _(qSid1csw), NOASK1);
 		if (!chil1) return false;
@@ -166,7 +166,7 @@ confirm_and_swap_children_impl (GNode *fam, GNode *one, GNode *two)
 static void
 swap_children_impl (GNode *fam, GNode *one, GNode *two)
 {
-	STRING str;
+	String str;
 	GNode *tmp;
 	ASSERT(one);
 	ASSERT(two);
@@ -261,7 +261,7 @@ child_index (GNode *child, GNode *fam)
 	int j;
 	GNode *husb, *wife, *chil, *rest, *fref;
 	GNode *node;
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 	node = chil;
 	j = 0;
 	while (node && !eqstr(nval(node), nxref(child))) {
@@ -283,7 +283,7 @@ swap_families (RecordIndexEl *irec)
 {
 	GNode *indi, *fams, *one, *two, *tmp;
 	int nfam;
-	STRING str;
+	String str;
 
 /* Find person and assure has >= 2 families */
 	if (!irec) irec = ask_for_indi(_(qSidfswp), NOASK1);
@@ -307,7 +307,7 @@ swap_families (RecordIndexEl *irec)
 		two = nsibling(fams);
 	} else {
 		GNode *fam1, *fam2;
-		STRING key1, key2;
+		String key1, key2;
 		/* prompt for families */
 		fam1 = nztop(choose_family(irec, _(qSparadox), _(qSid1fsw), true));
 		if (!fam1) return false;

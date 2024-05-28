@@ -8,18 +8,12 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
-#else
-#include "llstdlib.h"
-#include "gedcom.h"
-#include "pvalue.h"
-#endif
 
 #include "types.h"
 
@@ -56,16 +50,12 @@ llines_record_richcompare (PyObject *self, PyObject *other, int op)
       obj2 = (LLINES_PY_RECORD *) other;
 
       if (nztype (obj1->llr_record) == nztype (obj2->llr_record))
-#if defined(DEADENDS)
 	{
 	  int keynum1 = atoi (&(obj1->llr_record->root->key[1]));
 	  int keynum2 = atoi (&(obj2->llr_record->root->key[1]));
 
 	  Py_RETURN_RICHCOMPARE (keynum1, keynum2, op);
 	}
-#else
-	Py_RETURN_RICHCOMPARE (nzkeynum (obj1->llr_record), nzkeynum (obj2->llr_record), op);
-#endif
       else
 	Py_RETURN_RICHCOMPARE (nztype (obj1->llr_record), nztype (obj2->llr_record), op);
     }
@@ -107,16 +97,12 @@ llines_node_richcompare (PyObject *self, PyObject *other, int op)
 				   ((LLINES_PY_NODE *)other)->lnn_database);
 
       if (nztype (obj1) == nztype (obj2))
-#if defined(DEADENDS)
 	{
 	  int keynum1 = atoi (&(obj1->root->key[1]));
 	  int keynum2 = atoi (&(obj2->root->key[1]));
 
 	  Py_RETURN_RICHCOMPARE (keynum1, keynum2, op);
 	}
-#else
-	Py_RETURN_RICHCOMPARE (nzkeynum (obj1), nzkeynum (obj2), op);
-#endif
       else
 	Py_RETURN_RICHCOMPARE (nztype (obj1), nztype (obj2), op);
     }

@@ -180,7 +180,7 @@ translate_hdware_key (int c)
 		, { KEY_ENTER, CMD_KY_ENTER }
 	};
 	int i;
-	for (i=0; i<(int)ARRSIZE(hdkey); ++i) {
+	for (i=0; i<(int)ARRAYSIZE(hdkey); ++i) {
 		if (c == hdkey[i].key)
 			return hdkey[i].cmd;
 	}
@@ -198,7 +198,7 @@ translate_control_key (int c)
 		, { '\n', CMD_KY_ENTER } /* UNIX */
 	};
 	int i;
-	for (i=0; i<(int)ARRSIZE(hdkey); ++i) {
+	for (i=0; i<(int)ARRAYSIZE(hdkey); ++i) {
 		if (c == hdkey[i].key)
 			return hdkey[i].cmd;
 	}

@@ -308,12 +308,12 @@ ask_for_output_file (CString mode,
  *  ctype: [IN]  type of record (eg, 'I') (0 for any)
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
-INDISEQ
+Sequence *
 ask_for_indiseq (CString ttl, char ctype, int *prc)
 {
 	while (1)
 	{
-		INDISEQ seq=0;
+		Sequence *seq=0;
 		char name[MAXPATHLEN];
 		*prc = RC_DONE;
 		if (!ask_for_string(ttl, _(qSidbrws), name, sizeof(name)))
@@ -348,7 +348,7 @@ static RecordIndexEl *
 ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
 {
 	RecordIndexEl *indi = 0;
-	INDISEQ seq = ask_for_indiseq(ttl, ctype, prc);
+	Sequence *seq = ask_for_indiseq(ttl, ctype, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	ASSERT(*prc == RC_SELECT);
 	/* user chose a set of possible answers */
@@ -401,12 +401,12 @@ ask_for_any (CString ttl, ASK1Q ask1)
  * returns null value indiseq
  * used by both reports & interactive use
  *=================================================================*/
-INDISEQ
+Sequence *
 ask_for_indi_list (CString ttl, bool reask)
 {
 	while (true) {
 		int rc = RC_DONE;
-		INDISEQ seq = ask_for_indiseq(ttl, 'I', &rc);
+		Sequence *seq = ask_for_indiseq(ttl, 'I', &rc);
 		if (rc == RC_DONE)
 			return NULL;
 		if (rc == RC_NOSELECT) {
@@ -445,7 +445,7 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
  *  titln: [IN]  title if sequence has multiple elements
  *=============================================================*/
 static int
-choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, CString titl1
+choose_one_from_indiseq_if_needed (Sequence *seq, ASK1Q ask1, CString titl1
 	, CString titln)
 {
 	if (length_indiseq(seq) > 1)
@@ -465,7 +465,7 @@ choose_one_from_indiseq_if_needed (INDISEQ seq, ASK1Q ask1, CString titl1
  *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
 RecordIndexEl *
-choose_from_indiseq (INDISEQ seq, ASK1Q ask1, CString titl1, CString titln)
+choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 {
 	int i = 0;
 	RecordIndexEl *rec=0;
@@ -512,7 +512,7 @@ ask_for_record (CString idstr, int letr)
 
 	rec = key_possible_to_record(answer, letr);
 	if (!rec) {
-		INDISEQ seq;
+		Sequence *seq;
 		seq = refnToSequence(answer, currentDatabase);
 		if (!seq) return NULL;
 		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));

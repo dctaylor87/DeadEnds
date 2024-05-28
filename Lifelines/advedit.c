@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -63,17 +62,6 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "feedback.h"
-#include "liflines.h"
-#include "llinesi.h"
-
-#endif
 
 /*********************************************
  * local function prototypes
@@ -186,9 +174,6 @@ advedit_expand_traverse (GNode *node, void *param)
 	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((GNode *) el)));
 #endif /* DEBUG */
 		if (eqstr(key, rmvat(nval((GNode *) el)))) {
-#if !defined(DEADENDS)
-			STOPLIST
-#endif
 			stdfree(key);
 			return true;
 		}

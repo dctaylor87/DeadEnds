@@ -269,7 +269,7 @@ static PyObject *llpy_trimname (PyObject *self, PyObject *args, PyObject *kw)
 #endif
       Py_RETURN_NONE;
     }
-  str = name_string (trim_name (nval (indi), max_length));
+  str = name_string (trimName (nval (indi), max_length));
   if (! str)
     str = "";
 
@@ -642,7 +642,7 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 #endif
       Py_RETURN_NONE;
     }
-  return Py_BuildValue ("s", trad_soundex (getsxsurname (nval (name))));
+  return Py_BuildValue ("s", soundex (getsxsurname (nval (name))));
 }
 
 #if !defined(DEADENDS)		/* need a 'highest indi key' variable */
@@ -730,7 +730,7 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   GNode *node = nztop (indi->llr_record);
   Database *database = indi->llr_database;
-  INDISEQ seq=0;
+  Sequence *seq=0;
   RecordIndexEl *record;
 
   if (! node)
@@ -769,7 +769,7 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
   GNode *node = nztop (indi->llr_record);
   Database *database = indi->llr_database;
   RecordIndexEl *record;
-  INDISEQ seq;
+  Sequence *seq;
   LLINES_PY_RECORD *py_indi;
 
   seq = indi_to_spouses (node);
@@ -799,7 +799,7 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
   LLINES_PY_RECORD *fam;
-  INDISEQ seq;
+  Sequence *seq;
   RecordIndexEl *record;
 
   seq = indi_to_families (nztop (indi->llr_record), true);
@@ -1201,7 +1201,7 @@ static PyObject *llpy_sync_indi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
     on_disk = 0;
   else
     {
-      ASSERT (old_tree = string_to_node (rawrec));
+      ASSERT (old_tree = stringToNodeTree (rawrec));
     }
 
   cnt = resolve_refn_links (new_tree);

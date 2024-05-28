@@ -224,11 +224,7 @@ llpy_python_interactive (void)
       Py_Initialize ();
       initialized = 1;
     }
-#if 1
   status = PyRun_InteractiveLoop (stdin, "<stdin>");
-#else
-
-#endif
   return (status);
 }
 

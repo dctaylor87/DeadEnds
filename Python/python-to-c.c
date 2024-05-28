@@ -10,20 +10,12 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
-#else
-
-#include "llstdlib.h"
-#include "gedcom.h"
-#include "../gedlib/leaksi.h"
-#include "version.h"		/* get_deadends_version */
-#endif
 
 #include "python-to-c.h"
 #include "llpy-externs.h"
@@ -47,11 +39,7 @@ static PyObject *llpy_version (PyObject *self, PyObject *args);
 
 static PyObject *llpy_version (PyObject *self ATTRIBUTE_UNUSED, PyObject *args ATTRIBUTE_UNUSED)
 {
-#if defined(DEADENDS)
   return (Py_BuildValue ("s", version));
-#else
-  return (Py_BuildValue ("s", get_lifelines_version(100)));
-#endif
 }
 
 PyObject *_llpy_key (PyObject *self, PyObject *args, PyObject *kw)

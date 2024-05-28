@@ -180,11 +180,7 @@ main (int argc, char **argv)
 	while ((c = getopt(argc, argv, "adkntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
-#if defined(DEADENDS)
 			logAllocations(true);
-#else
-			alloclog = true;
-#endif
 			break;
 		case 'd':	/* debug = no signal catchers */
 			debugmode = true;
@@ -212,11 +208,7 @@ main (int argc, char **argv)
 				parse_arg(optarg, &optname, &optval);
 				if (optname && optval) {
 					if (!exargs) {
-#if defined(DEADENDS)
 						exargs = createStringTable(num_exargs_buckets);
-#else
-						exargs = create_table_str();
-#endif
 					}
 					insert_table_str(exargs, optname, optval);
 				}

@@ -31,7 +31,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -57,28 +56,15 @@
 #include "codesets.h"
 #include "de-strings.h"
 #include "ui.h"
-#else
 
-#include "llstdlib.h"
-#include "liflines.h"
-#include "lloptions.h"
-#include "llinesi.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "screen.h"
-#include "screeni.h"
-#include "cscurses.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static INDISEQ invoke_fullscan_menu(void);
+static Sequence *invoke_fullscan_menu(void);
 static void repaint_fullscan_menu(UIWINDOW uiwin);
-static INDISEQ invoke_search_source_menu(void);
+static Sequence *invoke_search_source_menu(void);
 static void repaint_search_menu(UIWINDOW uiwin);
 static void repaint_search_source_menu(UIWINDOW uiwin);
 
@@ -99,11 +85,11 @@ static UIWINDOW search_source_menu_win=NULL;
  * invoke_search_menu -- Handle search menu
  * If return set has one element, it has already been confirmed
  *============================*/
-INDISEQ
+Sequence *
 invoke_search_menu (void)
 {
 	UIWINDOW uiwin=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 	int code=0;
 	bool done=false;
 
@@ -185,11 +171,11 @@ repaint_search_menu (UIWINDOW uiwin)
  * invoke_fullscan_menu -- Handle fullscan menu
  * If return set has one element, it has already been confirmed
  *============================*/
-static INDISEQ
+static Sequence *
 invoke_fullscan_menu (void)
 {
 	UIWINDOW uiwin=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 	int code=0;
 	bool done=false;
 
@@ -260,11 +246,11 @@ repaint_fullscan_menu (UIWINDOW uiwin)
  * invoke_search_source_menu -- Handle fullscan menu
  * If return set has one element, it has already been confirmed
  *============================*/
-static INDISEQ
+static Sequence *
 invoke_search_source_menu (void)
 {
 	UIWINDOW uiwin=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 	int code=0;
 	bool done=false;
 

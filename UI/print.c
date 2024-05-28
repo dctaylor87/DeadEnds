@@ -8,8 +8,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#if defined(DEADENDS)
-
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"		/* ASSERT */
@@ -17,15 +15,6 @@
 
 #include "messages.h"
 #include "feedback.h"
-
-#else
-
-#include "llstdlib.h"		/* __fatal */
-#include "standard.h"		/* ASSERT */
-#include "messages.h"
-#include "feedback.h"
-
-#endif
 
 #include "uiio.h"
 #include "uiioi.h"

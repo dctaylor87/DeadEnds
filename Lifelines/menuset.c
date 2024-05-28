@@ -137,7 +137,7 @@ add_menu_item (CMDARRAY cmds, MenuItem * mitem)
 	char display[32];
 
 	/* localize string into current target language */
-	llstrncpy(display, _(mitem->Display), ARRSIZE(display), uu8);
+	llstrncpy(display, _(mitem->Display), ARRAYSIZE(display), uu8);
 	if (mitem->LocalizedDisplay)
 		strfree(&mitem->LocalizedDisplay);
 	mitem->LocalizedDisplay = strsave(display);

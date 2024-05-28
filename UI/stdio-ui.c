@@ -5,23 +5,12 @@
 #include <string.h>
 #include <errno.h>
 
-#if defined(DEADENDS)
-
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"		/* ASSERT */
 //#include "llnls.h"
 #include "feedback.h"
 #include "messages.h"
-
-#else
-
-#include "llstdlib.h"		/* __fatal */
-#include "standard.h"		/* ASSERT */
-#include "feedback.h"
-#include "messages.h"
-
-#endif
 
 #include "uiio.h"
 #include "uiioi.h"

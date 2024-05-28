@@ -146,7 +146,6 @@ remove_empty_fam (GNode *fam, Database *database)
 		return false;
 	}
 
-	/* Remove fam from cache */
 	joinFamily(fam, refn, husb, wife, chil, rest);
 
 	/* Remove any refn entries */
@@ -264,7 +263,6 @@ remove_any_record (RecordIndexEl *record, Database *database)
 /* Factor out portions critical to lifelines (refns) */
 	splitOther(root, &refn, &rest);
 
-/* Remove record from cache */
 	record=NULL; /* record no longer valid */
 
 /* Remove any refn entries */

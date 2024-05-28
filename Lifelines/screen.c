@@ -32,7 +32,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -85,36 +84,6 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "llstdlib.h"
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include "table.h"
-#include "liflines.h"
-#include "arch.h"
-#include "lloptions.h"
-#include "interp.h"
-#include "llinesi.h"
-#include "menuitem.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "screen.h"
-#include "screeni.h"
-#include "cscurses.h"
-#include "zstr.h"
-#include "cache.h"
-#ifdef WIN32_ICONV_SHIM
-#include "iconvshim.h"
-#endif
-#include "codesets.h"
-#include "charprops.h"
-#include "listui.h"
-#include "messages.h"
-#include "version.h"
-
-#endif
 
 #define LINESREQ 24
 #define COLSREQ  80
@@ -760,7 +729,7 @@ prompt_stdout (CString prompt)
 static RecordIndexEl *
 search_for_one_record (void)
 {
-	INDISEQ seq = invoke_search_menu();
+	Sequence *seq = invoke_search_menu();
 	if (!seq) return NULL;
 	if (!length_indiseq(seq)) {
 		remove_indiseq(seq);
@@ -895,11 +864,6 @@ void
 show_indi (UIWINDOW uiwin, RecordIndexEl *irec, int mode, LLRECT rect
 	, int * scroll, bool reuse)
 {
-#if !defined(DEADENDS)
-	CACHEEL icel;
-	icel = indi_to_cacheel(irec);
-	lock_cache(icel);
-#endif
 	if (mode=='g')
 		show_gedcom(uiwin, irec, GDVW_NORMAL, rect, scroll, reuse);
 	else if (mode=='x')
@@ -912,9 +876,6 @@ show_indi (UIWINDOW uiwin, RecordIndexEl *irec, int mode, LLRECT rect
 		show_descendants(uiwin, irec, rect, scroll, reuse);
 	else
 		show_indi_vitals(uiwin, irec, rect, scroll, reuse);
-#if !defined(DEADENDS)
-	unlock_cache(icel);
-#endif
 }
 /*=========================================
  * show_fam -- Show family
@@ -930,11 +891,6 @@ show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt
 	, int width, int * scroll, bool reuse)
 {
 	struct tag_llrect rect;
-#if !defined(DEADENDS)
-	CACHEEL fcel;
-	fcel = fam_to_cacheel(frec);
-	lock_cache(fcel);
-#endif
 	rect.top = row;
 	rect.bottom = row+hgt-1;
 	rect.left = 1;
@@ -947,9 +903,6 @@ show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt
 		show_gedcom(uiwin, frec, GDVW_TEXT, &rect, scroll, reuse);
 	else
 		show_fam_vitals(uiwin, frec, row, hgt, width, scroll, reuse);
-#if !defined(DEADENDS)
-	unlock_cache(fcel);
-#endif
 }
 /*=========================================
  * display_indi -- Paint indi on-screen
@@ -1122,7 +1075,7 @@ aux_browse (RecordIndexEl *rec, int mode, bool reuse)
  *  this curses implementation does not use them
  *=======================================*/
 int
-list_browse (INDISEQ seq, int top, int * cur, int mark)
+list_browse (Sequence *seq, int top, int * cur, int mark)
 {
 	if (cur_screen != LIST_SCREEN) paint_list_screen();
 	show_big_list(seq, top, *cur, mark);
@@ -1435,7 +1388,7 @@ choose_or_view_array (CString ttl, int no, String *pstrngs, bool selecting
  *  ttl:  [IN]  title
  *===========================================================*/
 int
-choose_one_from_indiseq (CString ttl, INDISEQ seq)
+choose_one_from_indiseq (CString ttl, Sequence *seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, false);
 }
@@ -1449,7 +1402,7 @@ choose_one_from_indiseq (CString ttl, INDISEQ seq)
  * returns index of where user choose select (or -1 if quit)
  *========================================================*/
 int
-choose_list_from_indiseq (CString ttl, INDISEQ seq)
+choose_list_from_indiseq (CString ttl, Sequence *seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, true);
 }
@@ -2021,7 +1974,7 @@ edit_place_table (void)
 static void
 edit_user_options (void)
 {
-	TABLE uopts = create_table_str();
+	TABLE uopts = createStringTable();
 	String param=0;
 	get_db_options(uopts);
 	param = valueof_str(uopts, "codeset");

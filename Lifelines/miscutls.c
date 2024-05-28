@@ -115,7 +115,7 @@ who_is_he_she (void)
 		msg_error(_("No one in database has key value %s."), key);
 		return;
 	}
-	if (!(indi = string_to_node(rawrec))) {
+	if (!(indi = stringToNodeTree(rawrec))) {
 		msg_error(_("No one in database has key value %s."), key);
 		stdfree(rawrec);
 		return;

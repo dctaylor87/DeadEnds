@@ -30,7 +30,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -45,16 +44,6 @@
 #include "sequence.h"
 #include "list.h"
 #include "browse.h"
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "vtable.h"
-
-#endif
 
 /*********************************************
  * global/exported variables
@@ -171,7 +160,6 @@ remove_browse_list (String name,
 	ENDLIST
 }
 
-#if defined(DEADENDS)
 /* stringToSequence -- return sequence of records matching a string.
    The search order is: named sequence, key, REFN, name */
 
@@ -189,7 +177,6 @@ Sequence *stringToSequence (CString name, Database *database)
 
   return seq;
 }
-#endif
 
 /*===========================================
  * find_named_seq -- Find named browse list.

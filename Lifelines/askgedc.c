@@ -71,7 +71,7 @@ select_gedcoms (const struct dirent *entry)
 	CString goodexts[] = { ".ged", ".gedcom" };
 	int i;
 	/* examine end of entry->d_name */
-	for (i=0; i<(int)ARRSIZE(goodexts); ++i) {
+	for (i=0; i<(int)ARRAYSIZE(goodexts); ++i) {
 		CString entext = entry->d_name + strlen(entry->d_name) - strlen(goodexts[i]);
 		/* is it what we want ? use platform correct comparison, from path.c */
 		if (path_match(goodexts[i], entext))
@@ -86,7 +86,7 @@ select_gedcoms (const struct dirent *entry)
 static void
 add_gedcom_props (TABLE fileprops)
 {
-	String tagsfound[ARRSIZE(f_tags)];
+	String tagsfound[ARRAYSIZE(f_tags)];
 	FILE *fp;
 	char str[MAXLINELEN];
 	int i;
@@ -113,14 +113,14 @@ add_gedcom_props (TABLE fileprops)
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */
-	for (i=0; i<(int)ARRSIZE(tagsfound); ++i)
+	for (i=0; i<(int)ARRAYSIZE(tagsfound); ++i)
 		tagsfound[i] = 0;
 
 	/* now read line by line looking for metainfo */
 	while (NULL != fgets(str, sizeof(str), fp) && str[strlen(str)-1]=='\n' && line<20) {
 		String p;
 		chomp(str); /* trim trailing CR or LF */
-		for (i=0; i<(int)ARRSIZE(f_tags); ++i) {
+		for (i=0; i<(int)ARRAYSIZE(f_tags); ++i) {
 			CString tag = f_tags[i];
 			if (tagsfound[i])
 				continue; /* already have this tag */
@@ -143,7 +143,7 @@ add_gedcom_props (TABLE fileprops)
 	fclose(fp);
 
 	/* add any metainfo we found to the property table */
-	for (i=0; i<(int)ARRSIZE(tagsfound); ++i) {
+	for (i=0; i<(int)ARRAYSIZE(tagsfound); ++i) {
 		if (tagsfound[i]) {
 			add_prop_dnum(fileprops, f_tags[i], tagsfound[i]);
 			strfree(&tagsfound[i]);

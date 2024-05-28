@@ -8,7 +8,6 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
@@ -17,13 +16,6 @@
 #include "recordindex.h"	/* RecordIndexEl */
 #include "rfmt.h"
 #include "ll-node.h"
-#else
-#include "standard.h"		/* STRING */
-#include "llstdlib.h"
-#include "gedcom.h"
-#include "../interp/interpi.h"	/* XXX */
-#include "../gedlib/leaksi.h"
-#endif
 
 #include "types.h"
 #include "python-to-c.h"
@@ -215,23 +207,8 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
       return NULL;
     }
 
-#if defined(DEADENDS)
   nparent (orig_node) = parent_node;
   set_temp_node (orig_node, is_temp_node (parent_node));
-#else
-  /* XXX the following lines bracketed by dolock_node_in_cache need to
-     be double and triple checked XXX */
-
-  dolock_node_in_cache (orig_node, false);
-  nparent (orig_node) = parent_node;
-  if (parent_node)
-    orig_node->n_cel = parent_node->n_cel;
-  else
-    orig_node->n_cel = NULL;	/* XXX double check this! XXX */
-
-  set_temp_node (orig_node, is_temp_node (parent_node));
-  dolock_node_in_cache (orig_node, true);
-#endif
 
   /* if both prev_node and parent_node are NULL, then there is nothing to do */
   if (! prev_node)
@@ -308,16 +285,7 @@ static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
   else
     nsibling (previous) = next; /* not the first child */
 
-#if defined(DEADENDS)
-  /* DeadEnds has no cache, so no need to lock it in the cache */
   nparent (node) = NULL;
-#else
-  /* unparent node, but ensure its locking is only releative to new parent */
-  dolock_node_in_cache (node, false);
-  nparent (node) = NULL;
-  dolock_node_in_cache (node, true);
-#endif
-
   nsibling (node) = NULL;
 
   /* whether it was permanent before or not, it is now temporary */

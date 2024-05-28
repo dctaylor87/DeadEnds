@@ -36,7 +36,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
@@ -55,24 +54,7 @@
 #include "liflines.h"
 #include "messages.h"
 #include "screen.h"
-#else
 
-#include "llstdlib.h"
-#include "liflines.h"
-#include "impfeed.h"
-#include "mystring.h"
-#include "lloptions.h"
-#include "date.h"
-#include "llinesi.h"
-#include "loadsave.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "feedback.h"
-#include "screen.h"
-#include "zstr.h"
-#include "messages.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/

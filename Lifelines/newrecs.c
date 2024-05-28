@@ -373,7 +373,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 /* Prepare to change database */
 
 	/* Move root1 data into root0 & save refns */
-	split_othr(root1, &refn1, &body);
+	splitOther(root1, &refn1, &body);
 	root0 = copy_node(root1);
 	join_othr(root0, NULL, body);
 	/* delete root0 tree & root1 node (root1 is solitary node) */
@@ -381,7 +381,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	free_nodes(root1); root1 = 0;
 	/* now copy root2 node into root1, then root2 tree under it */
 	root1 = copy_node(root2);
-	split_othr(root2, &refn2, &body);
+	splitOther(root2, &refn2, &body);
 	refnn = copy_nodes(refn2, true, true);
 	join_othr(root1, refn2, body);
 	/* now root2 is solitary node, delete it */

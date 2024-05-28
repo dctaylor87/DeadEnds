@@ -134,7 +134,7 @@ get_signame (int sig)
 {
   char *signame;
 
-  if ((sig >= 0) && (sig < (int)ARRSIZE(sig_msgs)))
+  if ((sig >= 0) && (sig < (int)ARRAYSIZE(sig_msgs)))
     signame = sig_msgs[sig];
   else
     signame = _(qSsigunk);

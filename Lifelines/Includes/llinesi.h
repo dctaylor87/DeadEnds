@@ -8,16 +8,6 @@
 #ifndef llinesi_h_included
 #define llinesi_h_included
 
-#if !defined(DEADENDS)
-#ifndef _GEDCOM_H
-#include "gedcom.h"
-#endif
-
-#ifndef _INDISEQ_H
-#include "indiseq.h"
-#endif
-#endif
-
 typedef struct tag_llrect {
 	int top;
 	int bottom;
@@ -48,16 +38,16 @@ void advanced_family_edit(GNode *);
 
 /* ask.c */
 RecordIndexEl *ask_for_any(CString ttl, ASK1Q ask1);
-INDISEQ ask_for_indiseq(CString ttl, char ctype, int *prc);
+Sequence *ask_for_indiseq(CString ttl, char ctype, int *prc);
 
 /* browse.c */
 RecordIndexEl *choose_any_event(void);
 RecordIndexEl *choose_any_other(void);
 RecordIndexEl *choose_any_source(void);
 int get_chist_len(void);
-INDISEQ get_chistory_list(void);
+Sequence *get_chistory_list(void);
 int get_vhist_len(void);
-INDISEQ get_vhistory_list(void);
+Sequence *get_vhistory_list(void);
 bool handle_fam_mode_cmds(int c, int * mode);
 bool handle_indi_mode_cmds(int c, int * mode);
 bool handle_menu_cmds(int c, bool * reuse);
@@ -78,16 +68,11 @@ bool choose_and_remove_spouse(RecordIndexEl *irec, RecordIndexEl *frec,
 bool choose_and_remove_any_record(RecordIndexEl *rec, CONFIRMQ confirmq);
 
 /* edit.c */
-#if defined(DEADENDS)
 bool edit_family(RecordIndexEl *frec1, bool rfmt);
 bool edit_indi(RecordIndexEl *irec1, bool rfmt);
-#else
-bool edit_family(RecordIndexEl *frec1, RFMT rfmt);
-bool edit_indi(RecordIndexEl *irec1, RFMT rfmt);
-#endif
 
 /* lbrowse.c */
-int browse_list(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
+int browse_list(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
 
 /* lines_usage.c */
 void print_lines_usage(CString exename);
@@ -110,17 +95,10 @@ void sighand_cmdline(int sig);
 RecordIndexEl *edit_add_event(void);
 RecordIndexEl *edit_add_other(void);
 RecordIndexEl *edit_add_source(void);
-#if defined(DEADENDS)
 bool edit_any_record(RecordIndexEl *rec, bool rfmt);
 bool edit_event(RecordIndexEl *rec, bool rfmt);
 bool edit_other(RecordIndexEl *rec, bool rfmt);
 bool edit_source(RecordIndexEl *rec, bool rfmt);
-#else
-bool edit_any_record(RecordIndexEl *rec, RFMT rfmt);
-bool edit_event(RecordIndexEl *rec, RFMT rfmt);
-bool edit_other(RecordIndexEl *rec, RFMT rfmt);
-bool edit_source(RecordIndexEl *rec, RFMT rfmt);
-#endif
 
 /* pedigree.c */
 	/* gedcom view mode */
@@ -145,11 +123,11 @@ void pedigree_increase_generations(int delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
-INDISEQ full_name_scan(CString sts);
-INDISEQ name_fragment_scan(CString sts);
-INDISEQ refn_scan(CString sts);
-INDISEQ scan_souce_by_author(CString sts);
-INDISEQ scan_souce_by_title(CString sts);
+Sequence *full_name_scan(CString sts);
+Sequence *name_fragment_scan(CString sts);
+Sequence *refn_scan(CString sts);
+Sequence *scan_souce_by_author(CString sts);
+Sequence *scan_souce_by_title(CString sts);
 
 /* screen.c */
 void clear_status_display(void);
@@ -165,8 +143,8 @@ bool reorder_child(RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt);
 bool swap_families(RecordIndexEl *);
 
 /* tandem.c */
-int browse_tandem(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
-int browse_2fam(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
+int browse_tandem(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
+int browse_2fam(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
 
 /* valgdcom.c */
 void addmissingkeys (int);

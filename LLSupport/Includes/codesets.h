@@ -11,10 +11,8 @@
 
 
 extern String int_codeset;     /* internal codeset */
-#if defined(DEADENDS)
 extern bool uu8;	       /* is int_codeset utf-8? */
 extern bool gui8;	       /* flag if display output encoding is UTF-8 */
-#endif
 
 extern String editor_codeset_out; /* output to editor */
 extern String editor_codeset_in;  /* input from editor */

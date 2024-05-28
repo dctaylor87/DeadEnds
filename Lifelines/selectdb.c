@@ -229,7 +229,7 @@ static void
 show_open_error (int dberr)
 {
 	char buffer[256];
-	describe_dberror(dberr, buffer, ARRSIZE(buffer));
+	describe_dberror(dberr, buffer, ARRAYSIZE(buffer));
 	llwprintf("%s", buffer);
 	llwprintf("\n");
 	sleep(5);

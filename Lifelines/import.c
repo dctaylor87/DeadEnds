@@ -139,7 +139,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	bool succeeded=false;
 	String str,unistr=0;
 	ZSTR zerr=0;
-	TABLE metadatatab = create_table_str();
+	TABLE metadatatab = createStringTable();
 	String gdcodeset=0;
 	int warnings=0;
 

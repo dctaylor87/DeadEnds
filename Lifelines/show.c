@@ -690,11 +690,11 @@ indi_to_ped_fix (GNode *indi, int len)
 	char tmp1[200]; /* holds birth, death, key string */
 
 	if (!indi) return (String) "------------";
-	bevt = event_to_date(BIRT(indi), true);
-	if (!bevt) bevt = event_to_date(BAPT(indi), true);
+	bevt = eventToDate(BIRT(indi), true);
+	if (!bevt) bevt = eventToDate(BAPT(indi), true);
 	if (!bevt) bevt = (String) "";
-	devt = event_to_date(DEAT(indi), true);
-	if (!devt) devt = event_to_date(BURI(indi), true);
+	devt = eventToDate(DEAT(indi), true);
+	if (!devt) devt = eventToDate(BURI(indi), true);
 	if (!devt) devt = (String) "";
 	if (keyflag) {
 		key = key_of_record(indi);
@@ -708,15 +708,15 @@ indi_to_ped_fix (GNode *indi, int len)
 	{
 		snprintf(tmp1, sizeof(tmp1), " (%s-%s)", bevt, devt);
 	}
-	tmp1[ARRSIZE(tmp1) - 1] = 0;
+	tmp1[ARRAYSIZE(tmp1) - 1] = 0;
 	
 	/* a long name may need to be truncated to fit on the screen */
-	len = min(len, ((int)ARRSIZE(scratch) - 1));
+	len = min(len, ((int)ARRAYSIZE(scratch) - 1));
 	tmp1_length = (int)strlen(tmp1);
 	name_length = len - tmp1_length - 1;
 	name_length = max(0, name_length);
 	name = indi_to_name(indi, name_length);
-	ASSERT(name_length + tmp1_length < (int)ARRSIZE(scratch));
+	ASSERT(name_length + tmp1_length < (int)ARRAYSIZE(scratch));
 	strcpy(scratch, name);
 	strcat(scratch, tmp1);
 	return scratch;
@@ -876,8 +876,8 @@ person_display (GNode *indi, GNode *fam, int len)
 	int keyspace = max_keywidth() + 4; 
 	int evlen, namelen, temp;
 	/* don't overflow scratch1, into which we catenate name & events */
-	if (len > (int)ARRSIZE(scratch1)-1)
-		len = ARRSIZE(scratch1)-1;
+	if (len > (int)ARRAYSIZE(scratch1)-1)
+		len = ARRAYSIZE(scratch1)-1;
 
 	/* keywidth for key, 2 for comma space, and split between name & events */
 	evlen = (len-2-keyspace)/2;
@@ -893,8 +893,8 @@ person_display (GNode *indi, GNode *fam, int len)
 		namelen -= (namelen - temp);
 	}
 
-	if (evlen > (int)ARRSIZE(scratch2)-1) /* don't overflow name buffer */
-		evlen = ARRSIZE(scratch2)-1;
+	if (evlen > (int)ARRAYSIZE(scratch2)-1) /* don't overflow name buffer */
+		evlen = ARRAYSIZE(scratch2)-1;
 	if (fam) {
 		family_events(scratch2, indi, fam, evlen);
 	} else {

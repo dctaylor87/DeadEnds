@@ -1,6 +1,6 @@
 /* these macros might ought to be moved into gedcom_macros.h */
 
-#define NEXT_FAMC(indi)	find_tag(indi, "FAMC")
+#define NEXT_FAMC(indi)	findTag(indi, "FAMC")
 
 /* FORSPOUSES_RECORD -- iterator over all FAMS nodes and all spouses
    of 'record'.  spouse is an addref'd RECORD and needs to be
@@ -25,7 +25,7 @@
 
 #define FORCHILDREN_RECORD(fam,child,database)	\
 	{\
-        GNode *__node = find_tag(nchild(nztop(fam)), "CHIL");	\
+        GNode *__node = findTag(nchild(nztop(fam)), "CHIL");	\
 	RecordIndexEl *child=0;\
 	String __key=0;\
 	while (__node) {\
@@ -49,7 +49,7 @@
 #define FORFAMS_RECORD(indi,fam) \
 	{\
 	RecordIndexEl *fam=0; \
-	GNode *__node = find_tag(nchild(nztop(indi)),"FAMS");	\
+	GNode *__node = findTag(nchild(nztop(indi)),"FAMS");	\
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "FAMS")) break;\

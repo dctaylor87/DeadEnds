@@ -11,8 +11,6 @@
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 
-#if defined(DEADENDS)
-
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -34,22 +32,6 @@
 #include "codesets.h"
 #include "refns.h"
 #include "ll-node.h"
-
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "feedback.h"
-#include "metadata.h"
-#include "date.h"
-#include "xlat.h"
-#include "cache.h"
-#include "messages.h"
-
-#endif
 
 /*********************************************
  * local function prototypes, alphabetical

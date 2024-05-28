@@ -80,7 +80,7 @@ typedef struct
 	int scantype;
 	CString statusmsg;
 	char pattern[64];
-	INDISEQ seq;
+	Sequence *seq;
 	String field; /* field to scan, eg "AUTH" for sources by author */
 	bool conts; /* include CONC & CONT children tags? */
 } SCANNER;
@@ -106,7 +106,7 @@ static bool ns_callback(CString key, CString name, bool newset, void *param);
 static bool rs_callback(CString key, CString refn, bool newset, void *param);
 static void scanner_add_result(SCANNER * scanner, CString key);
 static bool scanner_does_pattern_match(SCANNER *scanner, CString text);
-static INDISEQ scanner_free_and_return_seq(SCANNER * scanner);
+static Sequence *scanner_free_and_return_seq(SCANNER * scanner);
 static void scanner_init(SCANNER * scanner, int scantype, CString statusmsg);
 static void scanner_scan_titles(SCANNER * scanner);
 static void scanner_set_field(SCANNER * scanner, String field);
@@ -121,7 +121,7 @@ static bool scanner_set_pattern(SCANNER * scanner, String pattern);
  * name_fragment_scan -- Ask for pattern and search all persons by name
  *  sts: [IN]  status to show during scan
  *============================================*/
-INDISEQ
+Sequence *
 name_fragment_scan (CString sts)
 {
 	SCANNER scanner;
@@ -133,7 +133,7 @@ name_fragment_scan (CString sts)
  * full_name_scan -- Ask for pattern and search all persons by full name
  *  sts: [IN]  status to show during scan
  *====================================*/
-INDISEQ
+Sequence *
 full_name_scan (CString sts)
 {
 	SCANNER scanner;
@@ -145,7 +145,7 @@ full_name_scan (CString sts)
  * refn_scan -- Ask for pattern and search all refns
  *  sts: [IN]  status to show during scan
  *============================*/
-INDISEQ
+Sequence *
 refn_scan (CString sts)
 {
 	SCANNER scanner;
@@ -170,7 +170,7 @@ refn_scan (CString sts)
  * scan_souce_by_author -- Ask for pattern and search all sources by author
  *  sts: [IN]  status to show during scan
  *============================*/
-INDISEQ
+Sequence *
 scan_souce_by_author (CString sts)
 {
 	SCANNER scanner;
@@ -184,7 +184,7 @@ scan_souce_by_author (CString sts)
  * scan_souce_by_title -- Ask for pattern and search all sources by title
  *  sts: [IN]  status to show during scan
  *============================*/
-INDISEQ
+Sequence *
 scan_souce_by_title (CString sts)
 {
 	SCANNER scanner;
@@ -298,7 +298,7 @@ scanner_init (SCANNER * scanner, int scantype, CString statusmsg)
 /*==============================
  * free_scanner_and_return_seq -- Free scanner data, except return result sequence
  *============================*/
-static INDISEQ
+static Sequence *
 scanner_free_and_return_seq (SCANNER * scanner)
 {
 	strfree(&scanner->field);

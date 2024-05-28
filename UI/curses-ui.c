@@ -5,8 +5,6 @@
 #include <string.h>
 #include <errno.h>
 
-#if defined(DEADENDS)
-
 #include <stdint.h>
 
 #include "porting.h"
@@ -21,18 +19,6 @@
 //#include "screen.h"
 #include "messages.h"
 #include "curses-ui.h"		/* curses_outputv */
-
-#else
-
-#include "llstdlib.h"		/* __fatal */
-#include "standard.h"		/* ASSERT */
-#include "feedback.h"
-#include "gedcom.h"		/* RECORD, used by screen.h */
-#include "indiseq.h"		/* INDISEQ, used by screen.h */
-#include "screen.h"
-#include "messages.h"
-
-#endif
 
 #include "uiio.h"
 #include "uiioi.h"

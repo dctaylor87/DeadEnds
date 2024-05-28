@@ -173,7 +173,7 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
-	for (i=0; i<ARRSIZE(dirvars); ++i) {
+	for (i=0; i<ARRAYSIZE(dirvars); ++i) {
 		String str = getenv(dirvars[i]);
 		if (!str)
 			str = ".";
@@ -212,18 +212,15 @@ bool
 init_lifelines_postdb (void)
 {
 	String emsg;
-	TABLE dbopts = create_table_str();
+	TABLE dbopts = createStringTable();
 
-	tagtable = create_table_str(); /* values are same as keys */
-	placabbvs = create_table_str();
+	tagtable = createStringTable(); /* values are same as keys */
+	placabbvs = createStringTable();
 
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
 	set_db_options(dbopts);
 	release_table(dbopts);
-#if !defined(DEADENDS)
-	init_caches();
-#endif
 	init_browse_lists();
 #if !defined(DEADENDS)
 	if (!openxref(readonly))
@@ -304,7 +301,7 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 static void
 update_db_options (void)
 {
-	TABLE opttab = create_table_str();
+	TABLE opttab = createStringTable();
 	CString str=0;
 	get_db_options(opttab);
 

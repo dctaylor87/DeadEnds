@@ -185,8 +185,8 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	indi2 = copy_nodes(indi2, true, true);
 
 /* we split indi1 & indi2 and leave them split until near the end */
-	split_indi_old(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	split_indi_old(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
+	splitPerson(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	splitPerson(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
 	indi2 = copy_nodes(indi2, true, true);
 	sx2 = sexUnknown;
@@ -268,7 +268,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	this = fam12;
 	while (this) {
 		fam = key_to_fam(rmvat(nval(this)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = chil;
 		while (that) {
@@ -306,7 +306,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	this = famc1;
 	while (this) {
 		fam = key_to_fam(rmvat(nval(this)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = chil;
 		while (that) {
@@ -338,7 +338,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	this = fam12;
 	while (this) {
 		fam = key_to_fam(rmvat(nval(this)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		if (sx2 == sexMale)
 			head = that = husb;
@@ -374,7 +374,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	this = fams1;
 	while (this) {
 		fam = key_to_fam(rmvat(nval(this)));
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = (sx2 == sexMale) ? husb : wife;
 		while (that) {
@@ -406,7 +406,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	indi3 = copy_nodes(indi4, true, true);
 
-	split_indi_old(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
+	splitPerson(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
 	classify_nodes(&name2, &name3, &name24);
 	classify_nodes(&refn2, &refn3, &refn24);
 
@@ -441,8 +441,8 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 /* Note - we could probably just save indi4 and delete indi02 
 	- Perry, 2000/12/06 */
 
-	split_indi_old(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	split_indi_old(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
+	splitPerson(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
+	splitPerson(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	join_indi(indi4, name2, refn2, sex2, body2, famc2, fams2);
 	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
 	free_nodes(indi4);
@@ -492,8 +492,8 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	check_fam_lineage_links(fam2);
 
 /* Check restrictions on families */
-	split_fam(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
-	split_fam(fam2, &fref2, &husb2, &wife2, &chil2, &rest2);
+	splitFamily(fam1, &fref1, &husb1, &wife1, &chil1, &rest1);
+	splitFamily(fam2, &fref2, &husb2, &wife2, &chil2, &rest2);
 	if (traditional) {
 		bool ok = true;
 		if (husb1 && husb2 && nestr(nval(husb1), nval(husb2))) {
@@ -562,7 +562,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 		join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
 		return NULL;
 	}
-	split_fam(fam4, &fref4, &husb4, &wife4, &chil4, &rest4);
+	splitFamily(fam4, &fref4, &husb4, &wife4, &chil4, &rest4);
 
  /* Modify links between persons and families */
 #define CHUSB 1
@@ -612,7 +612,7 @@ merge_fam_links (GNode *fam1, GNode *fam2, GNode *list1, GNode *list2, int code)
 		while (curs2 && nestr(nval(curs1), nval(curs2)))
 			curs2 = nsibling(curs2);
 		indi = key_to_indi(rmvat(nval(curs1)));
-		split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+		splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 		prev = NULL;
 		if (code == CHUSB || code == CWIFE)
 			first = this = fams;
@@ -688,16 +688,16 @@ sort_children (GNode *chil1,
 	while (copy1 && copy2) {
 		if (int1 == 1) {
 			kid1 = key_to_indi(rmvat(nval(copy1)));
-			year1 = event_to_date(BIRT(kid1), true);
+			year1 = eventToDate(BIRT(kid1), true);
 			if (!year1)
-				year1 = event_to_date(BAPT(kid1), true);
+				year1 = eventToDate(BAPT(kid1), true);
 			int1 = year1 ? atoi(year1) : 0;
 		}
 		if (int2 == 1) {
 			kid2 = key_to_indi(rmvat(nval(copy2)));
-			year2 = event_to_date(BIRT(kid2), true);
+			year2 = eventToDate(BIRT(kid2), true);
 			if (!year2)
-				year2 = event_to_date(BAPT(kid2), true);
+				year2 = eventToDate(BAPT(kid2), true);
 			int2 = year2 ? atoi(year2) : 0;
 		}
 		if (int1 < int2) {
@@ -790,7 +790,7 @@ check_indi_lineage_links (GNode *indi)
 	ASSERT(is_key_in_use(ikey));
 
 /* Now validate lineage links of this person */
-	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 
 	/*
 	Make table listing all families this person is spouse in
@@ -909,7 +909,7 @@ check_fam_lineage_links (GNode *fam)
 	ASSERT(is_key_in_use(fkey));
 	
 /* Now validate lineage links of this family */
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 
 	/*
 	Make table listing all spouses in this family

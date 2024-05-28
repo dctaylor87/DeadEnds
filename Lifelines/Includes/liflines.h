@@ -9,21 +9,6 @@
 	  and they ought to be arranged in some way not related to curses impl.)
 */
 
-
-#if !defined(DEADENDS)
-#include "standard.h"
-#include "gedcom.h"
-
-#ifndef _INDISEQ_H
-#include "indiseq.h"
-#endif
-
-#ifndef INCLUDED_UIPROMPTS_H
-#include "uiprompts.h"
-#endif
-
-#endif
-
 /* Types */
 
 /* screen.c types */
@@ -44,13 +29,8 @@ extern void add_new_indi_to_db(RecordIndexEl *indi0);
 extern void add_new_fam_to_db(GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child);
 void add_child_to_fam(GNode *child, GNode *fam, int i);
 GNode *add_family_to_db(GNode *spouse1, GNode *spouse2, GNode *child);
-#if defined(DEADENDS)
 void add_spouse_to_fam(GNode *spouse, GNode *fam, SexType sex);
 int ask_child_order(GNode *fam, PROMPTQ promptq, bool rfmt);
-#else
-void add_spouse_to_fam(GNode *spouse, GNode *fam, int sex);
-int ask_child_order(GNode *fam, PROMPTQ promptq, RFMT rfmt);
-#endif
 String ask_for_indi_key(CString, ASK1Q ask1);
 RecordIndexEl *ask_for_indi(CString ttl, ASK1Q ask1);
 
@@ -59,11 +39,11 @@ RecordIndexEl *ask_for_fam(CString, CString);
 RecordIndexEl *ask_for_fam_by_key(CString fttl, CString pttl, CString sttl);
 FILE *ask_for_input_file (CString mode, CString ttl, String *pfname, String *pfullpath, String path, String ext);
 FILE *ask_for_output_file (CString mode, CString ttl, String *pfname, String *pfullpath, String path, String ext);
-INDISEQ ask_for_indi_list(CString, bool);
+Sequence *ask_for_indi_list(CString, bool);
 bool ask_for_int(CString, int *);
 RecordIndexEl *ask_for_record(CString, int);
 String ask_for_record_key(CString title, CString prompt);
-RecordIndexEl *choose_from_indiseq(INDISEQ, ASK1Q ask1, CString titl1, CString titln);
+RecordIndexEl *choose_from_indiseq(Sequence *, ASK1Q ask1, CString titl1, CString titln);
 
 /* askgedc.c */
 bool ask_for_gedcom(CString mode, CString ttl, String *pfname, String *pfullpath

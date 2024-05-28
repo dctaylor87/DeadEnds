@@ -10,20 +10,13 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
-#else
-#include "standard.h"		/* STRING */
-#include "llstdlib.h"		/* CALLBACK_FNC */
-#include "uiprompts.h"		/* DOASK1 */
-#include "gedcom.h"		/* RECORD */
-#include "../gedlib/leaksi.h"
-#endif
+
 #include "python-to-c.h"
 #include "types.h"
 
@@ -237,7 +230,6 @@ static PyObject *llpy_record_iter (PyObject *self)
   return (self);
 }
 
-#if defined(DEADENDS)
 static PyObject *llpy_record_iternext (PyObject *self)
 {
   LLINES_PY_RECORD_ITER *iter = (LLINES_PY_RECORD_ITER *)self;
@@ -382,123 +374,6 @@ static PyObject *llpy_record_iternext (PyObject *self)
       Py_UNREACHABLE ();
     }
 }
-#else
-static PyObject *llpy_record_iternext (PyObject *self)
-{
-  LLINES_PY_RECORD_ITER *iter = (LLINES_PY_RECORD_ITER *)self;
-  RecordIndexEl *record;
-
-  if (llpy_debug)
-    {
-      fprintf (stderr,
-	       "llpy_record_iternext entry: type %c current %d refcnt %ld type %s\n",
-	       iter->li_type, iter->li_current, Py_REFCNT (self),
-	       Py_TYPE(self)->tp_name);
-    }
-
-  if (iter->li_current == -1)
-    {
-      /* trying to use an iter that was previously exhausted, raise an
-	 exception */
-      PyErr_SetObject (PyExc_StopIteration, Py_None);
-      return NULL;
-    }
-  switch (iter->li_type)
-    {
-    case LLINES_TYPE_EVEN:
-    case LLINES_TYPE_FAM:
-    case LLINES_TYPE_INDI:
-    case LLINES_TYPE_OTHR:
-    case LLINES_TYPE_SOUR:
-      iter->li_current = xref_next (iter->li_type, iter->li_current);
-      break;
-    default:      
-      Py_UNREACHABLE ();	/* internal error */
-    }
-  if (iter->li_current == 0)
-    {
-      iter->li_current = -1;
-      return NULL;		/* iter is now exhausted */
-    }
-
-  record = keynum_to_record (iter->li_type, iter->li_current);
-
-  switch (iter->li_type)
-    {
-    case LLINES_TYPE_EVEN:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_event_type);
-	if (! obj)
-	  {
-	    release_record (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_EVEN;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_INDI:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
-	if (! obj)
-	  {
-	    release_record (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_INDI;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_FAM:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_family_type);
-	if (! obj)
-	  {
-	    release_record (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_FAM;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_SOUR:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_source_type);
-	if (! obj)
-	  {
-	    release_record (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_SOUR;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_OTHR:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_other_type);
-	if (! obj)
-	  {
-	    release_record (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_OTHR;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    default:
-      /* Something mighty weird is happening. Not only was there
-	 an internal error for us to be called with an unexpected
-	 type, but it was not caught by the previous switch
-	 statment.  */
-      Py_UNREACHABLE ();
-    }
-}
-#endif
 
 static void llpy_node_iter_dealloc (PyObject *self)
 {
@@ -551,7 +426,6 @@ static PyObject *llpy_node_iternext (PyObject *self)
   /* these are for debugging ref counts which DeadEnds currently lacks */
   GNode *old_cur_node = iter->ni_cur_node;
   GNode *old_top_node = iter->ni_top_node;
-
 #if 0
   /* if this is ever stored or returned, something is screwed up */
   int new_level = -2;

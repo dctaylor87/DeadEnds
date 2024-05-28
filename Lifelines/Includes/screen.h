@@ -159,7 +159,7 @@ void display_2indi(RecordIndexEl *irec1, RecordIndexEl *irec2, int mode);
 void display_fam(RecordIndexEl *fam, int mode, bool reuse);
 void display_indi(RecordIndexEl *indi, int mode, bool reuse);
 void display_screen(int);
-void dbprintf(String, ...) ATTRIBUTE_PRintF(1,2);
+void dbprintf(String, ...) ATTRIBUTE_PRINTF(1,2);
 void draw_win_box(WINDOW * win);
 llchtype get_gr_ttee(void);
 int get_main_screen_width(void);
@@ -170,7 +170,7 @@ int interact_2indi(void);
 int interact_fam(void);
 int interact_indi(void);
 int interact_popup(UIWINDOW uiwin, String str);
-int list_browse(INDISEQ seq, int top, int *cur, int mark);
+int list_browse(Sequence *seq, int top, int *cur, int mark);
 void lock_status_msg(bool lock);
 void main_menu(void);
 String message_string (void);
@@ -197,15 +197,12 @@ void wpos (int, int);
 
 /* show.c (curses specific) */
 extern int Scroll1;
-#if !defined(DEADENDS)
-void display_cache_stats(void);
-#endif
 void init_show_module(void);
 void show_ancestors (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT
 	, int * scroll, bool reuse);
 void show_aux(UIWINDOW uiwin, RecordIndexEl *rec, int mode, LLRECT
 	, int * scroll, bool reuse);
-void show_big_list(INDISEQ, int, int, int);
+void show_big_list(Sequence *, int, int, int);
 void show_childnumbers(void);
 void show_descendants(UIWINDOW uiwin, RecordIndexEl *rec, LLRECT
 	, int * scroll, bool reuse);

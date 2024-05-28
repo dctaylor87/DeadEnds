@@ -36,7 +36,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -81,24 +80,7 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "menuitem.h"
-#include "cache.h"
-#include "lloptions.h"
-#include "messages.h"
-
-#include "llinesi.h"
-#include "screen.h"
-
-#endif
 /*********************************************
  * global/exported variables
  *********************************************/
@@ -126,17 +108,17 @@ struct hist;
 static RecordIndexEl *add_new_rec_maybe_ref(RecordIndexEl *current, char ntype);
 static void ask_clear_history(struct hist * histp);
 static void autoadd_xref(RecordIndexEl *rec, GNode *newnode);
-static int browse_aux(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
-static int browse_indi(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
-static int browse_fam(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
-static int browse_indi_modes(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq
+static int browse_aux(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
+static int browse_indi(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
+static int browse_fam(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
+static int browse_indi_modes(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 	, int indimode);
-static int browse_pedigree(RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq);
+static int browse_pedigree(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
 static RecordIndexEl *disp_chistory_list(void);
 static RecordIndexEl *disp_vhistory_list(void);
 static int display_aux(RecordIndexEl *rec, int mode, bool reuse);
 static int get_hist_count(struct hist * histp);
-static INDISEQ get_history_list(struct hist * histp);
+static Sequence *get_history_list(struct hist * histp);
 static RecordIndexEl *goto_fam_child(RecordIndexEl *frec, int childno);
 static RecordIndexEl *goto_indi_child(RecordIndexEl *irec, int childno);
 static bool handle_aux_mode_cmds(int c, int * mode);
@@ -202,7 +184,7 @@ static struct hist chist; /* records changed */
  *  returns addref'd record
  *=======================================*/
 static void
-prompt_for_browse (RecordIndexEl ** prec, int * code, INDISEQ * pseq)
+prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
 {
 	int len, rc;
 	CString key, name;
@@ -248,7 +230,7 @@ void
 main_browse (RecordIndexEl *rec1, int code)
 {
 	RecordIndexEl *rec2=0;
-	INDISEQ seq = NULL;
+	Sequence *seq = NULL;
 
 	if (!rec1) {
 		prompt_for_browse(&rec1, &code, &seq);
@@ -407,7 +389,7 @@ setrecord (RecordIndexEl ** dest, RecordIndexEl ** src)
  *  pseq  [I/O]  current sequence in list browse
  *==================================================*/
 static int
-browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq, int indimode)
+browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq, int indimode)
 {
 	RecordIndexEl *current=0;
 	CString key, name;
@@ -415,7 +397,7 @@ browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq, 
 	bool reuse=false; /* flag to reuse same display strings */
 	int nkeyp, indimodep;
 	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
-	INDISEQ seq = NULL;
+	Sequence *seq = NULL;
 	int rtn=0; /* return code */
 
 	ASSERT(prec1);
@@ -440,7 +422,7 @@ browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq, 
 			show_reset_scroll();
 		}
 		history_record(current, &vhist);
-			/* display & get input, preserving INDI in cache */
+			/* display & get input */
 		display_indi(current, indimode, reuse);
 		c = interact_indi();
 		/* last keynum & mode, so can tell if changed */
@@ -797,7 +779,7 @@ display_aux (RecordIndexEl *rec, int mode, bool reuse)
  * Created: 2001/01/27, Perry Rapp
  *==================================================*/
 static int
-browse_aux (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+browse_aux (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	RecordIndexEl *current=0;
 	int i, c;
@@ -937,7 +919,7 @@ exitbrowse:
  * browse_indi -- Handle person browse operations.
  *==============================================*/
 static int
-browse_indi (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+browse_indi (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	return browse_indi_modes(prec1, prec2, pseq, 'n');
 }
@@ -955,7 +937,7 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 	String spstrings[MAX_SPOUSES];
 	int i;
 
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 	if (!husb && !wife) {
 		msg_error("%s", _(qShasnei));
 		return;
@@ -996,7 +978,7 @@ prompt_add_spouse_with_candidate (RecordIndexEl *fam, RecordIndexEl *candidate)
 	bool confirm;
 	char scratch[100];
 
-	split_fam(nztop(fam), &fref, &husb, &wife, &chil, &rest);
+	splitFamily(nztop(fam), &fref, &husb, &wife, &chil, &rest);
 	join_fam(nztop(fam), fref, husb, wife, chil, rest);
 	if (traditional) {
 		if (husb && wife) {
@@ -1064,7 +1046,7 @@ my_prompt_add_child (GNode *child, GNode *fam)
  * browse_fam -- Handle family browse selections.
  *=============================================*/
 static int
-browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	RecordIndexEl *current=0;
 	int i, c, rc;
@@ -1072,7 +1054,7 @@ browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
 	static int fammode='n';
 	int nkeyp, fammodep;
 	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
-	INDISEQ seq;
+	Sequence *seq;
 	CString key, name;
 	char c2;
 	int rtn=0; /* return code */
@@ -1474,7 +1456,7 @@ handle_aux_mode_cmds (int c, int * mode)
  * browse_pedigree -- Handle pedigree browse selections.
  *====================================================*/
 static int
-browse_pedigree (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+browse_pedigree (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	return browse_indi_modes(prec1, prec2, pseq, 'p');
 }
@@ -1484,7 +1466,7 @@ browse_pedigree (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
 RecordIndexEl *
 choose_any_source (void)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	RecordIndexEl *rec;
 	seq = getAllSources(currentDatabase);
 	if (!seq)
@@ -1502,7 +1484,7 @@ choose_any_source (void)
 RecordIndexEl *
 choose_any_event (void)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	RecordIndexEl *rec;
 	seq = getAllEvents(currentDatabase);
 	if (!seq)
@@ -1520,7 +1502,7 @@ choose_any_event (void)
 RecordIndexEl *
 choose_any_other (void)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	RecordIndexEl *rec;
 	seq = getAllOthers(currentDatabase);
 	if (!seq)
@@ -1870,7 +1852,7 @@ disp_chistory_list (void)
  * get_chistory_list -- return indiseq of change history
  *  returns NULL if no history
  *================================================*/
-INDISEQ
+Sequence *
 get_chistory_list (void)
 {
 	return get_history_list(&chist);
@@ -1879,7 +1861,7 @@ get_chistory_list (void)
  * get_vhistory_list -- Return indiseq of visit history
  *  returns NULL if no history
  *================================================*/
-INDISEQ
+Sequence *
 get_vhistory_list (void)
 {
 	return get_history_list(&vhist);
@@ -1893,7 +1875,7 @@ get_vhistory_list (void)
 static RecordIndexEl *
 do_disp_history_list (struct hist * histp)
 {
-	INDISEQ seq = get_history_list(histp);
+	Sequence *seq = get_history_list(histp);
 	RecordIndexEl *rec=0;
 
 	if (!seq) {
@@ -1907,10 +1889,10 @@ do_disp_history_list (struct hist * histp)
 /*==================================================
  * get_history_list -- return specified history list as indiseq
  *================================================*/
-static INDISEQ
+static Sequence *
 get_history_list (struct hist * histp)
 {
-	INDISEQ seq=0;
+	Sequence *seq=0;
 	int next;
 	if (!histp->size || histp->start==-1) {
 		return NULL;

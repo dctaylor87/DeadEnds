@@ -68,7 +68,7 @@ RecordIndexEl *
 choose_child (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RecordIndexEl *rec=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 
 	if (irec) seq = indi_to_children(nztop(irec));
 	if (!irec && frec) seq = fam_to_children(nztop(frec));
@@ -91,7 +91,7 @@ RecordIndexEl *
 choose_spouse (RecordIndexEl *irec, CString msg0, CString msgn)
 {
 	RecordIndexEl *rec=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 
 	if (!irec) return NULL;
 	if (!(seq = indi_to_spouses(nztop(irec)))) {
@@ -110,7 +110,7 @@ choose_spouse (RecordIndexEl *irec, CString msg0, CString msgn)
 RecordIndexEl *
 choose_source (RecordIndexEl *current, CString msg0, CString msgn)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	RecordIndexEl *rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_sources(nztop(current)))) {
@@ -130,7 +130,7 @@ choose_source (RecordIndexEl *current, CString msg0, CString msgn)
 RecordIndexEl *
 choose_note (RecordIndexEl *current, CString msg0, CString msgn)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	RecordIndexEl *rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_notes(nztop(current)))) {
@@ -151,7 +151,7 @@ choose_note (RecordIndexEl *current, CString msg0, CString msgn)
 RecordIndexEl *
 choose_pointer (RecordIndexEl *current, CString msg0, CString msgn)
 {
-	INDISEQ seq;
+	Sequence *seq;
 	RecordIndexEl *rec;
 	if (!current) return NULL;
 	if (!(seq = node_to_pointers(nztop(current)))) {
@@ -174,7 +174,7 @@ RecordIndexEl *
 choose_family (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
 {
 	RecordIndexEl *rec=0;
-	INDISEQ seq = indi_to_families(nztop(irec), fams);
+	Sequence *seq = indi_to_families(nztop(irec), fams);
 	if (!seq) {
 		if (msg0)
 			msg_error("%s", msg0);
@@ -196,7 +196,7 @@ RecordIndexEl *
 choose_father (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RecordIndexEl *rec=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 
 	if (irec) seq = indi_to_fathers(nztop(irec));
 	if (!irec && frec) seq = fam_to_fathers(nztop(frec));
@@ -220,7 +220,7 @@ RecordIndexEl *
 choose_mother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RecordIndexEl *rec=0;
-	INDISEQ seq=0;
+	Sequence *seq=0;
 
 	if (irec) seq = indi_to_mothers(nztop(irec));
 	if (!irec && frec) seq = fam_to_mothers(nztop(frec));

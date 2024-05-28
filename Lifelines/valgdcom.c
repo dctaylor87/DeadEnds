@@ -150,7 +150,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	defline = 0;
 	curlev = 0;
 	clear_structures();
-	convtab = create_table_int();
+	convtab = createIntegerTable();
 
 
 	rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
@@ -1105,20 +1105,20 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 		}
 		if (lev < 3 && tag && tag[0] && val && val[0]) { /* we don't care about anything beyond level 2 */
 			zs_clear(zpath);
-			for (i=1; i<lev && i<ARRSIZE(parents); ++i)
+			for (i=1; i<lev && i<ARRAYSIZE(parents); ++i)
 				append_path(zpath, '.', parents[i-1]);
 			append_path(zpath, '.', tag);
 			insert_table_str(metadatatab, zs_str(zpath), val);
 		}
-		if (lev>0 && lev-1<ARRSIZE(parents))
+		if (lev>0 && lev-1<ARRAYSIZE(parents))
 			strupdate(&parents[lev-1], tag);
 		/* clear any obsolete parents */
-		for (i=lev; i<ARRSIZE(parents); ++i) {
+		for (i=lev; i<ARRAYSIZE(parents); ++i) {
 			strupdate(&parents[i], 0);
 		}
 	}
 
-	for (i=0; i<ARRSIZE(parents); ++i) {
+	for (i=0; i<ARRAYSIZE(parents); ++i) {
 		strupdate(&parents[i], 0);
 	}
 	zs_free(&zpath);

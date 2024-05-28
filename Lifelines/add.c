@@ -201,7 +201,7 @@ add_new_indi_to_db (RecordIndexEl *indi0)
 	int32_t keynum=0;
 	GNode *indi = nztop(indi0);
 
-	split_indi_old(indi, &name, &refn, &sex, &body, &dumb, &dumb);
+	splitPerson(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	keynum = getixrefnum();
 	snprintf(key, sizeof(key), "I" FMT_INT32, keynum);
 	init_new_record(indi0, key);
@@ -233,7 +233,7 @@ add_indi_no_cache (GNode *indi)
 	// prevents us from writing the record out using the wrong key.
 	key = strsave(rmvat(nxref(indi)));
 
-	split_indi_old(indi, &name, &refn, &sex, &body, &famc, &fams);
+	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
 	for (node = refn; node; node = nsibling(node))
@@ -330,7 +330,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 	GNode *nfmc, *this, *prev;
 	int j;
 
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 	prev = NULL;
 	node = chil;
 	j = 0;
@@ -358,7 +358,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 
 /* Add FAMC node to child */
 
-	split_indi_old(child, &name, &refn, &sex, &body, &famc, &fams);
+	splitPerson(child, &name, &refn, &sex, &body, &famc, &fams);
 	nfmc = create_node(NULL, "FAMC", nxref(fam), child);
 	prev = NULL;
 	this = famc;
@@ -411,7 +411,7 @@ prompt_add_spouse (RecordIndexEl *sprec, RecordIndexEl *frec, bool conf)
 
 	if (traditional) {
 		GNode *husb, *wife, *chil, *rest, *fref;
-		split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		join_fam(fam, fref, husb, wife, chil, rest);
 		if (sex == sexMale && husb) {
 			msg_error("%s", _(qShashsb));
@@ -440,7 +440,7 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 {
 /* Add HUSB or WIFE node to family */
 	GNode *husb, *wife, *chil, *rest, *fams, *prev, *fref, *this, *new;
-	split_fam(fam, &fref, &husb, &wife, &chil, &rest);
+	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 	if (sex == sexMale)
 	{
 		prev = NULL;
@@ -524,7 +524,7 @@ add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child
 			nchild(spouse2) = new;
 	}
 	if (child) {
-		split_indi_old(child, &name, &refn, &sex, &body, &famc, &fams);
+		splitPerson(child, &name, &refn, &sex, &body, &famc, &fams);
 		new = create_node(NULL, "FAMC", xref, child);
 		prev = NULL;
 		this = famc;
@@ -712,7 +712,7 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 
 /* Write updated records to database */
 
-	split_fam(fam2, &refn, &husb, &wife, &chil, &body);
+	splitFamily(fam2, &refn, &husb, &wife, &chil, &body);
 	key = rmvat(nxref(fam2));
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);

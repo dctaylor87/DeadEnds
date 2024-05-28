@@ -70,15 +70,15 @@
 
 #define VIEWABLE 13
 
-extern INDISEQ current_seq;
+extern Sequence *current_seq;
 
-static void name_the_list(INDISEQ seq);
+static void name_the_list(Sequence *seq);
 
 /*=======================================
  * browse_list -- Handle list browse mode
  *=====================================*/
 int
-browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
+browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	int c, top, cur, mark, len, tmp, rc;
 	CString key, name;
@@ -307,7 +307,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, INDISEQ *pseq)
  * name_the_list -- Assign a name to sequence
  *=====================================*/
 static void
-name_the_list (INDISEQ seq)
+name_the_list (Sequence *seq)
 {
 	char name[MAXPATHLEN];
 	if (!ask_for_string(_(qSlstwht), _(qSasknam), name, sizeof(name))
@@ -316,6 +316,6 @@ name_the_list (INDISEQ seq)
 		return;
 	}
 	/* TODO: Should just let the browse list addref the indiseq */
-	add_browse_list(strsave(name), copy_indiseq(seq));
+	add_browse_list(strsave(name), copySequence(seq));
 	msg_info(_(qSlstnam), name);
 }

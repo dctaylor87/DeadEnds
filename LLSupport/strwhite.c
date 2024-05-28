@@ -29,7 +29,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 
 #include "porting.h"
@@ -38,67 +37,6 @@
 
 #include "de-strings.h"
 
-#else
-
-#include "llstdlib.h"
-
-#endif
-
-#if !defined(DEADENDS)		/* now part of Utils/standard.c */
-/*================================
- * trim -- Trim string if too long
- *  returns static buffer (or NULL)
- *==============================*/
-String
-trim (String str, int len)
-{
-	static char scratch[MAXLINELEN+1];
-	if (!str || strlen(str) > MAXLINELEN) return NULL;
-	if (len < 0) len = 0;
-	if (len > MAXLINELEN) len = MAXLINELEN;
-	strcpy(scratch, str);
-	scratch[len] = '\0';
-	return scratch;
-}
-/*=========================================
- * striptrail -- Strip trailing white space
- *  modifies argument (zeros out trailing whitespace)
- *=======================================*/
-void
-striptrail (String p)
-{
-	String q = p + strlen(p) - 1;
-	while (q >= p && iswhite((u_char)*q))
-		*q-- = '\0';
-}
-#endif
-
-#ifdef UNUSED_CODE
-/*=======================================
- * striplead -- Strip leading white space
- *  modifies argument (shifts up string towards
- *  beginning to eliminate any leading whitespace)
- * UNUSED CODE
- *=====================================*/
-void
-striplead (String p)
-{
-	int i = strlen(p);
-	String  e = p + i - 1;
-	String b = p;
-	String q = p;
-
-	while (iswhite((u_char)*q) && q <= e) {
-		++q;
-		--i; /* keep from copying past end of p */
-	}
-	if (q == p) return;
-
-	while (b <= e && --i >= 0)
-		*b++ = *q++;
-	*b++ = '\0';
-}
-#endif /* UNUSED_CODE */
 /*=========================================
  * skipws -- Advance pointer over whitespace
  *=======================================*/

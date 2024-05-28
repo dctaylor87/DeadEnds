@@ -101,9 +101,9 @@ static bool handle_popup_list_resize(listdisp * ld, int code);
 static void print_list_title(char * buffer, int len, const listdisp * ld, CString ttl);
 static void shw_array_of_strings(String *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
-static void shw_popup_list(INDISEQ seq, listdisp * ld);
-static void shw_recordlist_details(INDISEQ seq, listdisp * ld);
-static void shw_recordlist_list(INDISEQ seq, listdisp * ld);
+static void shw_popup_list(Sequence *seq, listdisp * ld);
+static void shw_recordlist_details(Sequence *seq, listdisp * ld);
+static void shw_recordlist_list(Sequence *seq, listdisp * ld);
 
 /*********************************************
  * local variables
@@ -230,7 +230,7 @@ resize_win: /* we come back here if we resize the window */
  * Localizes ttl
  *===========================================================*/
 int
-choose_one_or_list_from_indiseq (CString ttl, INDISEQ seq, bool multi)
+choose_one_or_list_from_indiseq (CString ttl, Sequence *seq, bool multi)
 {
 	WINDOW *win=0;
 	int row, done;
@@ -425,7 +425,7 @@ handle_list_cmds (listdisp * ld, int code)
  * shw_popup_list -- Draw list & details of popup list
  *===================================================*/
 static void
-shw_popup_list (INDISEQ seq, listdisp * ld)
+shw_popup_list (Sequence *seq, listdisp * ld)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	ASSERT(ld->listlen == length_indiseq(seq));
@@ -444,7 +444,7 @@ shw_popup_list (INDISEQ seq, listdisp * ld)
  * For either popup list or full-screen list (list browse)
  *===================================================*/
 static void
-shw_recordlist_details (INDISEQ seq, listdisp * ld)
+shw_recordlist_details (Sequence *seq, listdisp * ld)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	int i;
@@ -496,7 +496,7 @@ handle_popup_list_resize (listdisp * ld, int code)
  * For either popup list or full-screen list (list browse)
  *===================================================*/
 static void
-shw_recordlist_list (INDISEQ seq, listdisp * ld)
+shw_recordlist_list (Sequence *seq, listdisp * ld)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	int width = (ld->rectList.right - ld->rectList.left + 1) - 4;
@@ -754,7 +754,7 @@ display_string (UIWINDOW uiwin, LLRECT rect, String text)
  * show_big_list - Show name list in list screen
  *========================================*/
 void
-show_big_list (INDISEQ seq,
+show_big_list (Sequence *seq,
            int top,
            int cur,
            int mark)
