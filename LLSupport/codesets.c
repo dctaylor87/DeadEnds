@@ -137,9 +137,9 @@ init_codesets (void)
 	*/
 
 /* GuiCodesetOut */
-	e = getlloptstr("GuiCodesetOut", "");
+	e = getdeoptstr("GuiCodesetOut", "");
 	if (!e[0])
-		e = getlloptstr("GuiCodeset", "");
+		e = getdeoptstr("GuiCodeset", "");
 	if (!e[0]) {
 #ifdef WIN32
 		char temp[32];
@@ -157,9 +157,9 @@ init_codesets (void)
 	gui8 = is_codeset_utf8(gui_codeset_out);
 
 /* GuiCodesetIn */
-	e = getlloptstr("GuiCodesetIn", "");
+	e = getdeoptstr("GuiCodesetIn", "");
 	if (!e[0])
-		e = getlloptstr("GuiCodeset", "");
+		e = getdeoptstr("GuiCodeset", "");
 	if (!e[0]) {
 #ifdef WIN32
 		char temp[32];
@@ -194,18 +194,18 @@ set_codeset_pair (CString base, CString defval, String *pcsout, String *pcsin)
 
   /* append 'Out' and look for that option */
   strcpy (&tmp_str[len], "Out");
-  e = getlloptstr (tmp_str, "");
+  e = getdeoptstr (tmp_str, "");
   if (! e[0])
-    e = getlloptstr (base, "");
+    e = getdeoptstr (base, "");
   if (! e[0])
     e = defval;
   strupdate (pcsout, e);
 
   /* now, append 'In' and look for that option */
   strcpy (&tmp_str[len], "In");
-  e = getlloptstr (tmp_str, "");
+  e = getdeoptstr (tmp_str, "");
   if (! e[0])
-    e = getlloptstr (base, "");
+    e = getdeoptstr (base, "");
   if (! e[0])
     e = defval;
   strupdate (pcsin, e);

@@ -96,7 +96,7 @@ swap_children (RecordIndexEl *prnt, RecordIndexEl *frec)
 
 /* Identify family if need be */
 	if (nfam == 1) {
-		frec = key_to_frecord(rmvat(nval(FAMS(nztop(prnt)))));
+		frec = keyToFamilyRecord(rmvat(nval(FAMS(nztop(prnt)))), currentDatabase);
 		goto gotfam;
 	}
 	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), true)))
@@ -204,7 +204,7 @@ reorder_child (RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt)
 
 /* Identify family if need be */
 	if (nfam == 1) {
-		frec = key_to_frecord(rmvat(nval(FAMS(nztop(prnt)))));
+		frec = keyToFamilyRecord(rmvat(nval(FAMS(nztop(prnt)))), currentDatabase);
 		goto gotfam;
 	}
 	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), true))) 
@@ -268,7 +268,7 @@ child_index (GNode *child, GNode *fam)
 		++j;
 		node = nsibling(node);
 	}
-	join_fam(fam, fref, husb, wife, chil, rest);
+	joinFamily(fam, fref, husb, wife, chil, rest);
 	return child ? j : -1;
 }
 /*=============================================

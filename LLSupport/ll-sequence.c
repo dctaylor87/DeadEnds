@@ -1,3 +1,12 @@
+/* XXX the files ll-node-seq.c and ll-indiseq.c should be merged into
+   here.
+
+   The file ll-node-seq.c is a subset of ll-indiseq.c with three
+   non-static functions renamed.
+
+   ll-node-seq.c's claim to fame is that it compiles, while
+   ll-indiseq.c does not compile. XXX */
+
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif

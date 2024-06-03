@@ -187,7 +187,7 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 		setoptstr_fallback("LLEDITOR", str);
 	}
 	/* editor falls back to platform-specific default */
-	e = getlloptstr("LLEDITOR", NULL);
+	e = getdeoptstr("DEEDITOR", NULL);
 	/* configure tempfile & edit command */
 	editfile = environ_determine_tempfile();
 	if (!editfile) {
@@ -290,9 +290,9 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 	/* TODO: Isn't this superfluous, as it was called in update_db_options above ? */
 	transl_load_xlats();
 
-	strupdate(&illegal_char, getlloptstr("IllegalChar", 0));
+	strupdate(&illegal_char, getdeoptstr("IllegalChar", 0));
 
-	nodechk_enable(!!getlloptint("nodecheck", 0));
+	nodechk_enable(!!getdeoptint("nodecheck", 0));
 }
 /*==================================================
  * update_db_options -- 
@@ -347,7 +347,7 @@ pre_codesets_hook (void)
 #ifdef WIN32
 	/* On MS-Windows, attempt to set any requested non-standard codepage */
 	/* Do this now, before init_codesets below */
-	int i = getlloptint("ConsoleCodepage", 0);
+	int i = getdeoptint("ConsoleCodepage", 0);
 	if (i) {
 		w_set_oemout_codepage(i);
 		w_set_oemin_codepage(i);
@@ -362,7 +362,7 @@ static void
 post_codesets_hook (void)
 {
 	init_win32_gettext_shim();
-	init_win32_iconv_shim(getlloptstr("iconv.path",""));
+	init_win32_iconv_shim(getdeoptstr("iconv.path",""));
 }
 /*==================================================
  * load_configs -- Load global config file(s)
@@ -423,7 +423,7 @@ load_configs (String configfile, String * pmsg)
 	/* allow chaining to one more config file 
 	 * if one was defined for the database 
 	 */
-	str = getlloptstr("LLCONFIGFILE", NULL);
+	str = getdeoptstr("DECONFIGFILE", NULL);
 	if (str && str[0]) {
 		rtn = load_global_options(str, pmsg);
 		if (rtn == -1) return false;

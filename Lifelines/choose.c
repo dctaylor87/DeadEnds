@@ -70,8 +70,8 @@ choose_child (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
 
-	if (irec) seq = indi_to_children(nztop(irec));
-	if (!irec && frec) seq = fam_to_children(nztop(frec));
+	if (irec) seq = personToChildren(nztop(irec), currentDatabase);
+	if (!irec && frec) seq = familyToChildren(nztop(frec), currentDatabase);
 	if (!seq) {
 		msg_error("%s", msg0);
 		return NULL;
@@ -198,8 +198,8 @@ choose_father (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString m
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
 
-	if (irec) seq = indi_to_fathers(nztop(irec));
-	if (!irec && frec) seq = fam_to_fathers(nztop(frec));
+	if (irec) seq = personToFathers(nztop(irec), currentDatabase);
+	if (!irec && frec) seq = familyToFathers(nztop(frec), currentDatabase);
 	if (!seq) {
 		msg_error("%s", msg0);
 		return NULL;
@@ -222,8 +222,8 @@ choose_mother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString m
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
 
-	if (irec) seq = indi_to_mothers(nztop(irec));
-	if (!irec && frec) seq = fam_to_mothers(nztop(frec));
+	if (irec) seq = personToMothers(nztop(irec), currentDatabase);
+	if (!irec && frec) seq = familyToMothers(nztop(frec), currentDatabase);
 	if (!seq) {
 		msg_error("%s", msg0);
 		return NULL;

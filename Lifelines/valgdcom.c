@@ -144,7 +144,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 	num_errors = num_warns = 0;
 	f_logopen = false;
 	f_flog = NULL;
-	set_import_log(getlloptstr("ImportLog", "errs.log"));
+	set_import_log(getdeoptstr("ImportLog", "errs.log"));
 	openlog();
 
 	defline = 0;
@@ -179,7 +179,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		}
 		if (lev == 0) {
 			if (rec_type == INDI_REC) {
-				if (!named && getlloptint("RequireNames", 0)) {
+				if (!named && getdeoptint("RequireNames", 0)) {
 					handle_err(ifeed, qSnoname, defline);
 				}
 			}

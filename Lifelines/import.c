@@ -289,7 +289,7 @@ TODO: why were these here ?
 	node = convert_first_fp_to_node(fp, false, ttm, &msg, &emp);
 	while (node) {
 		if (!(conv = node_to_node(node, &type))) {
-			free_nodes(node);
+			freeGNodes(node);
 			node = next_fp_to_node(fp, false, ttm, &msg, &emp);
 			continue;
 		}
@@ -304,7 +304,7 @@ TODO: why were these here ?
 		restore_record(conv, type, num);
 		if (ifeed && ifeed->added_rec_fnc)
 			ifeed->added_rec_fnc(nxref(conv)[1], ntag(conv), num);
-		free_nodes(node);
+		freeGNodes(node);
 		node = next_fp_to_node(fp, false, ttm, &msg, &emp);
 	}
 	if (msg) {

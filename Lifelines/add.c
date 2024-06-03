@@ -124,7 +124,7 @@ add_indi_by_edit (bool rfmt)
 	prefix_file_for_edit(fp);
 
 	/* prefer useroption in this db */
-	if ((str = getlloptstr("INDIREC", NULL)))
+	if ((str = getdeoptstr("INDIREC", NULL)))
 		fprintf(fp, "%s\n", str);
 	else { /* default */
 		fprintf(fp, "0 INDI\n1 NAME Fname/Surname\n1 SEX MF\n");
@@ -185,7 +185,7 @@ add_indi_by_edit (bool rfmt)
 	/* add the new record to the database */
 	add_new_indi_to_db(indi0);
 
-	msg_status(_(qSgdpadd), indi_to_name(nztop(indi0), 35));
+	msg_status(_(qSgdpadd), personToName(nztop(indi0), 35));
 	return indi0;
 }
 /*==========================================================
@@ -212,7 +212,7 @@ add_new_indi_to_db (RecordIndexEl *indi0)
 		if (nval(node))
 			add_refn(nval(node), key);
 	}
-	join_indi(indi, name, refn, sex, body, NULL, NULL);
+	joinPerson(indi, name, refn, sex, body, NULL, NULL);
 	resolve_refn_links(indi);
 	indi_to_dbase(indi);
 }
@@ -238,7 +238,7 @@ add_indi_no_cache (GNode *indi)
 		add_name(nval(node), key);
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
-	join_indi(indi, name, refn, sex, body, famc, fams);
+	joinPerson(indi, name, refn, sex, body, famc, fams);
 	resolve_refn_links(indi);
 	str = node_to_string(indi);
 	store_record(key, str, strlen(str));
@@ -314,7 +314,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 /* Add FAMC node to child */
 
 	add_child_to_fam(child, fam, i);
-	msg_status(_(qSgdcadd), indi_to_name(child, 35));
+	msg_status(_(qSgdcadd), personToName(child, 35));
 	return fam;
 }
 
@@ -354,7 +354,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 		nsibling(prev) = new;
 	else
 		chil = new;
-	join_fam(fam, fref, husb, wife, chil, rest);
+	joinFamily(fam, fref, husb, wife, chil, rest);
 
 /* Add FAMC node to child */
 
@@ -370,7 +370,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 		famc = nfmc;
 	else
 		nsibling(prev) = nfmc;
-	join_indi(child, name, refn, sex, body, famc, fams);
+	joinPerson(child, name, refn, sex, body, famc, fams);
 
 /* Write updated records to database */
 
@@ -412,7 +412,7 @@ prompt_add_spouse (RecordIndexEl *sprec, RecordIndexEl *frec, bool conf)
 	if (traditional) {
 		GNode *husb, *wife, *chil, *rest, *fref;
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		if (sex == sexMale && husb) {
 			msg_error("%s", _(qShashsb));
 			return false;
@@ -427,7 +427,7 @@ prompt_add_spouse (RecordIndexEl *sprec, RecordIndexEl *frec, bool conf)
 		return false;
 
 	add_spouse_to_fam(spouse, fam, sex);
-	msg_status(_(qSgdsadd), indi_to_name(spouse, 35));
+	msg_status(_(qSgdsadd), personToName(spouse, 35));
 	return true;
 }
 /*===================================
@@ -467,7 +467,7 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 		else
 			wife = new;
 	}
-	join_fam(fam, fref, husb, wife, chil, rest);
+	joinFamily(fam, fref, husb, wife, chil, rest);
 
 	/* Add FAMS node to spouse */
 
@@ -536,7 +536,7 @@ add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child
 			nsibling(prev) = new;
 		else
 			famc = new;
-		join_indi(child, name, refn, sex, body, famc, fams);
+		joinPerson(child, name, refn, sex, body, famc, fams);
 	}
 }
 /*=========================================
@@ -627,13 +627,13 @@ editfam:
 	write_nodes(1, fp, ttmo, husb, true, true, true);
 	write_nodes(1, fp, ttmo, wife, true, true, true);
 	/* prefer user option in db */
-	if ((str = getlloptstr("FAMRECBODY", NULL)))
+	if ((str = getdeoptstr("FAMRECBODY", NULL)))
 		fprintf(fp, "%s\n", str);
 	else /* default */
 		fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
 	write_nodes(1, fp, ttmo, chil, true, true, true);
 	fclose(fp);
-	join_fam(fam1, NULL, husb, wife, chil, NULL);
+	joinFamily(fam1, NULL, husb, wife, chil, NULL);
 
 /* Have user edit family info */
 
@@ -656,7 +656,7 @@ editfam:
 				do_edit();
 				continue;
 			}
-			free_nodes(fam2);
+			freeGNodes(fam2);
 			fam2 = NULL;
 			break;
 		}
@@ -677,9 +677,9 @@ editfam:
 
 /* Confirm family add operation */
 
-	free_nodes(fam1);
+	freeGNodes(fam1);
 	if (!fam2 || !ask_yes_or_no(_(qScffadd))) {
-		free_nodes(fam2);
+		freeGNodes(fam2);
 		return NULL;
 	}
 
@@ -716,7 +716,7 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 	key = rmvat(nxref(fam2));
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
-	join_fam(fam2, refn, husb, wife, chil, body);
+	joinFamily(fam2, refn, husb, wife, chil, body);
 	resolve_refn_links(fam2);
 	resolve_refn_links(spouse1);
 	resolve_refn_links(spouse2);
@@ -772,11 +772,11 @@ add_family_to_db (GNode *spouse1, GNode *spouse2, GNode *child)
 	fprintf(fp, "1 MARR\n  2 DATE\n  2 PLAC\n  2 SOUR\n");
 	write_nodes(1, fp, tto, chil, true, true, true);
 	fclose(fp);
-	join_fam(fam1, NULL, husb, wife, chil, NULL);
+	joinFamily(fam1, NULL, husb, wife, chil, NULL);
 
 	fam2 = file_to_node(editfile, tti, &msg, &emp);
 
-	free_nodes(fam1);
+	freeGNodes(fam1);
 
 	add_new_fam_to_db(fam2, spouse1, spouse2, child);
 

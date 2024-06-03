@@ -55,7 +55,7 @@
 		if (!eqstr(ntag(__node), "FAMS")) break;\
 		__key = rmvat(nval(__node));\
 		__node = nsibling(__node);\
-	    if (!__key || !(fam=qkey_to_frecord(__key))) {\
+		if (!__key || !(fam=keyToFamilyRecord(__key)), database) {	\
 			continue;\
 		}\
 		{
@@ -90,6 +90,31 @@
 		{
 
 #define ENDFAMSPOUSES_RECORD \
+		}\
+		__node = nsibling(__node);\
+	}}
+
+/* FORFAMSPOUSES -- iterate over all spouses in one family (All
+   husbands and wives).  */
+
+#define FORFAMSPOUSES(fam,spouse,database)	\
+	{\
+	GNode *__node = nchild(fam);	\
+	GNode *spouse=0;\
+	String __key=0;\
+	while (__node) {\
+		if (!eqstr(ntag(__node), "HUSB") && !eqstr(ntag(__node), "WIFE")) {\
+			__node = nsibling(__node);\
+			continue;\
+		}\
+		__key = rmvat(nval(__node));\
+		if (!__key || !(spouse = keyToPerson(__key, database))) {	\
+			__node = nsibling(__node);\
+			continue;\
+		}\
+		{
+
+#define ENDFAMSPOUSES \
 		}\
 		__node = nsibling(__node);\
 	}}

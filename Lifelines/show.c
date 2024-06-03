@@ -220,7 +220,7 @@ disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
 	ZSTR zkey = zs_news(key_of_record(nztop(irec)));
 	/* ": " between prefix and name, and " ()" for key */
 	int avail = width - strlen(prefix)-zs_len(zkey)-5;
-	String name = indi_to_name(nztop(irec), avail);
+	String name = personToName(nztop(irec), avail);
 	zs_clear(zstr);
 	zs_setf(zstr, "%s: %s ", prefix, name);
 	avail = width - zs_len(zstr)-zs_len(zkey)-2;
@@ -230,7 +230,7 @@ disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
 	}
 /* TODO: add more names if room */
 /* TODO: first implement new function namelist to get us all names */
-	if(getlloptint("DisplayKeyTags", 0) > 0) {
+	if(getdeoptint("DisplayKeyTags", 0) > 0) {
 		zs_appf(zstr, "(i%s)", zs_str(zkey));
 	} else {
 		zs_appf(zstr, "(%s)", zs_str(zkey));
@@ -314,12 +314,12 @@ init_display_indi (RecordIndexEl *irec, int width)
 
 	disp_person_birthdeath(Sdeat, irec, f_death_tags, false);
 
-	fth = indi_to_fath(pers);
+	fth = personToFather(pers, currentDatabase);
 	s = person_display(fth, NULL, width-13);
 	if (s) llstrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
 	else llstrncpyf(Sfath, liwidth, uu8, "  %s:", _(qSdspl_fath));
 
-	mth = indi_to_moth(pers);
+	mth = personToMother(pers, currentDatabase);
 	s = person_display(mth, NULL, width-13);
 	if (s) llstrncpyf(Smoth, liwidth, uu8, "  %s: %s", _(qSdspl_moth), s);
 	else llstrncpyf(Smoth, liwidth, uu8, "  %s:", _(qSdspl_moth));
@@ -493,7 +493,7 @@ init_display_fam (RecordIndexEl *frec, int width)
 		if (husbstatus == -1)
 			zs_apps(Shusb, "??");
 	}
-	if(getlloptint("DisplayKeyTags", 0) > 0) {
+	if(getdeoptint("DisplayKeyTags", 0) > 0) {
 		zs_appf(Shusb, " (f%s)", zs_str(famkey));
 	} else {
 		zs_appf(Shusb, " (%s)", zs_str(famkey));
@@ -698,7 +698,7 @@ indi_to_ped_fix (GNode *indi, int len)
 	if (!devt) devt = (String) "";
 	if (keyflag) {
 		key = key_of_record(indi);
-		if(getlloptint("DisplayKeyTags", 0) > 0) {
+		if(getdeoptint("DisplayKeyTags", 0) > 0) {
 			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
 		} else {
 			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (%s)", bevt, devt, key);
@@ -715,7 +715,7 @@ indi_to_ped_fix (GNode *indi, int len)
 	tmp1_length = (int)strlen(tmp1);
 	name_length = len - tmp1_length - 1;
 	name_length = max(0, name_length);
-	name = indi_to_name(indi, name_length);
+	name = personToName(indi, name_length);
 	ASSERT(name_length + tmp1_length < (int)ARRAYSIZE(scratch));
 	strcpy(scratch, name);
 	strcat(scratch, tmp1);
@@ -782,7 +782,7 @@ family_events (String outstr, GNode *indi, GNode *fam, int len)
 	if (!opt_nocb) {
 		GNode *chld;
 		/* Look for birth or christening of first child */
-		if ((chld = fam_to_first_chil(fam))) {
+		if ((chld = familyToFirstChild(fam), currentDatabase)) {
 			evt = sh_indi_to_event_shrt(chld, "BIRT", _(qSdspa_chbr), mylen-2);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
@@ -886,7 +886,7 @@ person_display (GNode *indi, GNode *fam, int len)
 	if (!indi) return NULL;
 
 	/* test to see if name is short */
-	p = indi_to_name(indi, 100);
+	p = personToName(indi, 100);
 	if ((temp = strlen(p)) < evlen) {
 		/* name is short, give extra to events */
 		evlen += (namelen - temp);
@@ -905,13 +905,13 @@ person_display (GNode *indi, GNode *fam, int len)
 	if ((int)strlen(scratch2)<evlen)
 		namelen += evlen-(int)strlen(scratch2);
 	p = scratch1;
-	strcpy(p, indi_to_name(indi, namelen));
+	strcpy(p, personToName(indi, namelen));
 	p += strlen(p);
 	if (scratch2[0]) {
 		strcpy(p, scratch2);
 		p += strlen(p);
 	}
-	if(getlloptint("DisplayKeyTags", 0) > 0) {
+	if(getdeoptint("DisplayKeyTags", 0) > 0) {
 		snprintf(p, scratch1+len-p, " (i%s)", key_of_record(indi));
 
 	} else {

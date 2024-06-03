@@ -137,7 +137,7 @@ execute_script (CString report_name)
   PyObject *dict;
 #endif
 
-  path = getlloptstr ("LLPROGRAMS", ".");
+  path = getdeoptstr ("DEPROGRAMS", ".");
 #if defined(DEADENDS)
   report_fp = fopenPath (report_name, mode, path);
 #else

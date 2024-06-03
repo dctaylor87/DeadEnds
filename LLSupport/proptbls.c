@@ -20,7 +20,6 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "sys_inc.h"
@@ -140,7 +139,7 @@ HashTable **
 get_proparray_of_files_in_path (CString path, SELECT_FNC selectfnc, int * nfiles)
 {
 	/* get array of file property tables */
-	List *list = create_list();
+	List *list = createList(NULL, NULL, NULL, false);
 	add_path_files_to_proplist(path, selectfnc, list);
 	*nfiles = lengthList(list);
 	return convert_proplist_to_proparray(list);

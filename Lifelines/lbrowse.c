@@ -99,7 +99,9 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 		return  BROWSE_QUIT;
 	top = cur = 0;
 	mark =  -1;
+#if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* ensure we have names */
+#endif
 	current_seq = seq;
 
 	while (true) {

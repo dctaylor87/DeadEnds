@@ -117,7 +117,7 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 				do_edit();
 				continue;
 			}
-			free_nodes(indi2);
+			freeGNodes(indi2);
 			indi2 = NULL;
 			break;
 		}
@@ -140,7 +140,7 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 
 	if (!indi2) return false;
 	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(qScfpupt))) {
-		free_nodes(indi2);
+		freeGNodes(indi2);
 		return false;
 	}
 
@@ -150,7 +150,7 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 /* Note in change history */
 	history_record_change(irec1);
 	
-	msg_status(_(qSgdpmod), indi_to_name(indi1, 35));
+	msg_status(_(qSgdpmod), personToName(indi1, 35));
 	return true;
 }
 /*====================================
@@ -203,7 +203,7 @@ edit_family (RecordIndexEl *frec1, bool rfmt)
 				do_edit();
 				continue;
 			}
-			free_nodes(fam2);
+			freeGNodes(fam2);
 			fam2 = NULL;
 			break;
 		}
@@ -237,6 +237,6 @@ edit_family (RecordIndexEl *frec1, bool rfmt)
 
 end_edit_fam:
 	if (fam2)
-		free_nodes(fam2); 
+		freeGNodes(fam2); 
 	return changed;
 }

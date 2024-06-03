@@ -10,7 +10,7 @@
  lloptions.h - handling for (opaque) string & numeric options
 
   Options are fetched on-the-fly when requested
-   first from report properties (if getlloptstr_rpt or getoptint_rpt)
+   first from report properties (if getdeoptstr_rpt or getoptint_rpt)
    then from db properties
    then from global properties
    then from fallback properties
@@ -33,10 +33,10 @@ void unregister_notify(CALLBACK_FNC fncptr);
 
 /* routine use */
 /* TODO: fix const-correctness */
-String getlloptstr(CString optname, String defval);
-int getlloptint(CString optname, int defval);
-String getlloptstr_dbonly(CString optname, String defval);
-String getlloptstr_rpt(CString optname, String defval);
+String getdeoptstr(CString optname, String defval);
+int getdeoptint(CString optname, int defval);
+String getdeoptstr_dbonly(CString optname, String defval);
+String getdeoptstr_rpt(CString optname, String defval);
 
 extern bool is_dir_sep (char c);
 

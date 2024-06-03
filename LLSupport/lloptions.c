@@ -361,13 +361,13 @@ term_lloptions (void)
 	remove_listeners(&f_notifications);
 }
 /*===============================================
- * getlloptstr -- get an option (from db or from global)
+ * getdeoptstr -- get an option (from db or from global)
  * Example: 
- *  str = getlloptstr("HDR_SUBM", "1 SUBM");
+ *  str = getdeoptstr("HDR_SUBM", "1 SUBM");
  * returns string belonging to table
  *=============================================*/
 String
-getlloptstr (CString optname, String defval)
+getdeoptstr (CString optname, String defval)
 {
 	String str = 0;
 	if (!str && f_cmd)
@@ -383,29 +383,29 @@ getlloptstr (CString optname, String defval)
 	return str;
 }
 /*===============================================
- * getlloptstr_rpt -- get an option (checking report-local options first)
+ * getdeoptstr_rpt -- get an option (checking report-local options first)
  * Example: 
- *  str = getlloptstr_rpt("HDR_SUBM", "1 SUBM");
+ *  str = getdeoptstr_rpt("HDR_SUBM", "1 SUBM");
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 String
-getlloptstr_rpt (CString optname, String defval)
+getdeoptstr_rpt (CString optname, String defval)
 {
 	String str = 0;
 	if (!str && f_rpt)
 		str = searchStringTable(f_rpt, optname);
 	if (!str)
-		str = getlloptstr(optname, defval);
+		str = getdeoptstr(optname, defval);
 	return str;
 }
 /*===============================================
- * getlloptstr_dbonly -- get an option (but only look at db options)
+ * getdeoptstr_dbonly -- get an option (but only look at db options)
  * Example: 
- *  str = getlloptstr_dbonly("codeset", 0);
+ *  str = getdeoptstr_dbonly("codeset", 0);
  * Created: 2002/06/16, Perry Rapp
  *=============================================*/
 String
-getlloptstr_dbonly (CString optname, String defval)
+getdeoptstr_dbonly (CString optname, String defval)
 {
 	String str = 0;
 	if (f_db)
@@ -415,18 +415,18 @@ getlloptstr_dbonly (CString optname, String defval)
 	return str;
 }
 /*===============================================
- * getlloptint -- get a numerical option
+ * getdeoptint -- get a numerical option
  *  First tries user option table (looks up optname)
  *  Then tries config option table
  *  Finally defaults to defval
  * Example: 
-	if (getlloptint("FullReportCallStack", 0) > 0)
+	if (getdeoptint("FullReportCallStack", 0) > 0)
  * Created: 2001/11/22, Perry Rapp
  *=============================================*/
 int
-getlloptint (CString optname, int defval)
+getdeoptint (CString optname, int defval)
 {
-	String str = getlloptstr(optname, 0);
+	String str = getdeoptstr(optname, 0);
 	return str ? atoi(str) : defval;
 }
 /*===============================================

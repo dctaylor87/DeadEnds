@@ -404,7 +404,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
       return NULL;
     }
 
-  seq = fam_to_children (node);
+  seq = familyToChildren (node, database);
 
   if (! seq || (length_indiseq (seq) < 1))
       Py_RETURN_NONE;	/* no children to choose from */
@@ -430,7 +430,7 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
   Sequence *seq;
   LLINES_PY_RECORD *py_indi;
 
-  seq = fam_to_spouses (node);
+  seq = familyToSpouses (node, fam->llr_database);
   if (! seq || (length_indiseq (seq) < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 

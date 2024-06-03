@@ -53,7 +53,7 @@ int
 resolveRefnLinks (GNode *node, Database *database)
 {
   int unresolved = 0;
-  bool annotate_pointers = (getlloptint("AnnotatePointers", 0) > 0);
+  bool annotate_pointers = (getdeoptint("AnnotatePointers", 0) > 0);
   GNode *child=0;
   struct tag_node_iter nodeit;
 
@@ -214,8 +214,8 @@ indexByRefn (GNode *node, Database *database)
 void
 annotateWithSupplemental (GNode *node, bool rfmt, Database *database)
 {
-  bool expand_refns = (getlloptint("ExpandRefnsDuringEdit", 0) > 0);
-  bool annotate_pointers = (getlloptint("AnnotatePointers", 0) > 0);
+  bool expand_refns = (getdeoptint("ExpandRefnsDuringEdit", 0) > 0);
+  bool annotate_pointers = (getdeoptint("AnnotatePointers", 0) > 0);
   GNode *child=0;
   struct tag_node_iter nodeit;
 
@@ -393,6 +393,15 @@ refn_to_record (String ukey,    /* user refn key */
 	if (!num) return NULL;
 	return nztop(key_possible_to_record(keys[0], *keys[0]));
 #endif
+}
+
+/* getRefn -- searches the index for a mapping for refn, if found, returns it.
+   If not found, null is returned.  */
+
+CString
+getRefn (CString refn, Database *database)
+{
+  return searchRefnIndex (database->refnIndex, refn);
 }
 
 /* traverseRefns -- traverses all refns in the index calling func on

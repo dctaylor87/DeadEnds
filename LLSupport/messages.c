@@ -53,7 +53,7 @@ String empstr71 = SS "                                                          
 
 
 ZST qSiddbse      = N_("You must identify a database.");
-ZST qSidldir      = N_("Which file holds (or will hold) the DeadEnds database? (? to list, <return> to cancel.)");
+ZST qSidldir      = N_("Which file holds the DeadEnds database? (? to list, <return> to cancel.)");
 ZST qSidldrp      = N_("enter path: ");
 ZST qSnodbse      = N_("No DeadEnds database found.");
 ZST qScrdbse      = N_("Do you want to create a database at '%s'?");

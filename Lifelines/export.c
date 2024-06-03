@@ -109,14 +109,14 @@ archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
 	/* header date & time */
 	fprintf(fp, "1 DATE %s\n2 TIME %s\n", dat, tim);
 	/* header submitter entry */
-	str = getlloptstr("HDR_SUBM", "1 SUBM");
+	str = getdeoptstr("HDR_SUBM", "1 SUBM");
 	fprintf(fp, "%s\n", str);
 	/* header gedcom version info */
-	str = getlloptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
+	str = getdeoptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
 	fprintf(fp, "%s\n", str);
 	/* header character set info */
 	/* should be outcharset; that is what is being used */
-	str = getlloptstr("HDR_CHAR", 0);
+	str = getdeoptstr("HDR_CHAR", 0);
 	if (str) {
 		fprintf(fp, "%s\n", str);
 	} else {

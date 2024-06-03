@@ -85,7 +85,7 @@ key_util (void)
 {
 	RecordIndexEl *indi = ask_for_indi(_("Whose key value do you want?"), NOASK1);
 	if (!indi) return;
-	msg_info("%s - %s", rmvat(nxref(nztop(indi))), indi_to_name(nztop(indi), 70));
+	msg_info("%s - %s", rmvat(nxref(nztop(indi))), personToName(nztop(indi), 70));
 }
 
 #if !defined(DEADENDS)
@@ -120,7 +120,7 @@ who_is_he_she (void)
 		stdfree(rawrec);
 		return;
 	}
-	if (!(str = indi_to_name(indi, 60)) || *str == 0) {
+	if (!(str = personToName(indi, 60)) || *str == 0) {
 		msg_error(_("No one in database has key value %s."), key);
 		stdfree(rawrec);
 		return;

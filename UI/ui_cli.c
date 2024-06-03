@@ -288,7 +288,9 @@ choose_list_from_indiseq (CString ttl, Sequence *seq)
 int
 choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
 {
+#if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* we certainly need the names */
+#endif
 
 	/* TODO: imitate choose_from_list & delegate to array chooser */
 	return 0;

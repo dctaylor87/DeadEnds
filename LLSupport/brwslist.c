@@ -34,7 +34,6 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -88,7 +87,7 @@ static List *browse_lists=0;
 void
 init_browse_lists (void)
 {
-	browse_lists = create_list();
+  browse_lists = createList(NULL, NULL, NULL, false);
 }
 /*=====================================================
  *  term_browse_lists -- Termiante named browse lists

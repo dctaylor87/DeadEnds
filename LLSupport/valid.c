@@ -86,7 +86,7 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 		return false;
 	}
 	splitPerson(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
-	if (getlloptint("RequireNames", 0) && !name1) {
+	if (getdeoptint("RequireNames", 0) && !name1) {
 		*pmsg = _("This person record does not have a name line.");
 		goto bad2;
 	}

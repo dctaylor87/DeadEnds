@@ -24,7 +24,7 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
+//#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 #include "sys_inc.h"
@@ -147,7 +147,7 @@ create_null_xlat (bool adhoc)
 	xlat->steps = create_list2(LISTDOFREE);
 	xlat->valid = true;
 	if (!f_xlats) {
-		f_xlats = create_list();
+		f_xlats = createList(NULL, NULL, NULL, false);
 	}
 	enqueueList(f_xlats, xlat);
 	xlat->adhoc = adhoc;
@@ -371,7 +371,7 @@ get_conversion_dyntt (CString src, CString dest)
 	zs_appc(zttname, '_');
 	zs_apps(zttname, dest);
 	dyntt = (DYNTT)searchHashTable(f_dyntts, zs_str(zttname));
-	if (getlloptint("TTPATH.debug", 0)) {
+	if (getdeoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath get_conversion_dyntt:from <%s> to <%s>: %s"),
 			src, dest,
@@ -393,7 +393,7 @@ get_subcoding_dyntt (CString codeset, CString subcoding)
 	zs_apps(zttname, "__");
 	zs_apps(zttname, subcoding);
 	dyntt = (DYNTT)searchHashTable(f_dyntts, zs_str(zttname));
-	if (getlloptint("TTPATH.debug", 0)) {
+	if (getdeoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"),
 			codeset,subcoding,
@@ -459,7 +459,7 @@ xl_load_all_dyntts (CString ttpath)
 {
 	String dirs,p;
 	free_dyntts();
-	if (getlloptint("TTPATH.debug", 0)) {
+	if (getdeoptint("TTPATH.debug", 0)) {
 		if (!ttpath ||  !ttpath[0])
 			log_outf("ttpath.dbg", _("No TTPATH config variable"));
 		else
@@ -489,7 +489,7 @@ load_dynttlist_from_dir (CString dir)
 	struct dirent **programs;
 	int n = scandir(dir, &programs, select_tts, alphasort);
 	int i;
-	if (getlloptint("TTPATH.debug", 0)) {
+	if (getdeoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg", _("ttpath checking dir <%s>"), dir);
 	}
 	for (i=0; i<n; ++i) {
@@ -502,7 +502,7 @@ load_dynttlist_from_dir (CString dir)
 			UTF-8_ISO-8859-1 (type 1; code conversion)
 			UTF-8__HTML (type 2; subcoding)
 		*/
-		if (getlloptint("TTPATH.debug", 0)) {
+		if (getdeoptint("TTPATH.debug", 0)) {
 			log_outf("ttpath.dbg", _("ttpath file <%s> typed as " FMT_INT), ttfile, ntype);
 		}
 		if (ntype==1 || ntype==2) {
@@ -595,7 +595,7 @@ xl_free_adhoc_xlats (void)
 		return;
 	/* we don't have a way to delete items from a list,
 	so just copy the ones we want to a new list */
-	newlist = create_list();
+	newlist = createList(NULL, NULL, NULL, false);
 	FORLIST(f_xlats, el)
 		xlattemp = (XLAT)el;
 		if (xlattemp->adhoc) {

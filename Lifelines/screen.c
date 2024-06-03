@@ -433,9 +433,9 @@ repaint_main_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, 1, 2, title);
 	mvccwaddstr(win, 2, 4, _(qScright));
 #if defined(DEADENDS)
-	str = getlloptint("FullDbPath", 1) ? database->filePath : database->lastSegment;
+	str = getdeoptint("FullDbPath", 1) ? database->filePath : database->lastSegment;
 #else
-	str = getlloptint("FullDbPath", 1) ? readpath : readpath_file;
+	str = getdeoptint("FullDbPath", 1) ? readpath : readpath_file;
 #endif
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	row = 5;
@@ -1552,7 +1552,7 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(_("NLS (National Language Support) is compiled in.")));
 		zs_setf(zstr, "LocaleDir (default): %s", LOCALEDIR);
 		enqueue_list(list, strsave(zs_str(zstr)));
-		zs_setf(zstr,  "LocaleDir (override): %s", getlloptstr("LocaleDir", ""));
+		zs_setf(zstr,  "LocaleDir (override): %s", getdeoptstr("LocaleDir", ""));
 		enqueue_list(list, strsave(zs_str(zstr)));
 	} else {
 		enqueue_list(list, strsave(_("NLS (National Language Support) is not compiled in.")));
@@ -1627,7 +1627,7 @@ invoke_cset_display (void)
 		enqueue_list(list, strsave(zs_str(zstr)));
 	}
 
-	zs_setf(zstr, "TTPATH: %s", getlloptstr("TTPATH", "."));
+	zs_setf(zstr, "TTPATH: %s", getdeoptstr("TTPATH", "."));
 	enqueue_list(list, strsave(zs_str(zstr)));
 
 	if (charprops_is_loaded()) {
@@ -1773,7 +1773,7 @@ load_tt_action (void)
 	}
 
 	/* Ask whence to load it */
-	ttimportdir = getlloptstr("TTPATH", ".");
+	ttimportdir = getdeoptstr("TTPATH", ".");
 	fp = ask_for_input_file(LLREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
 	if (fp) {
 		fclose(fp);
@@ -1807,7 +1807,7 @@ save_tt_action (void)
 		return;
 	}
 	/* Ask whither to save it */
-	ttexportdir = getlloptstr("LLTTEXPORT", ".");
+	ttexportdir = getdeoptstr("LLTTEXPORT", ".");
 	fp = ask_for_output_file(LLWRITETEXT, _(qSmouttt), &fname, ttexportdir, ".tt");
 	if (fp) {
 		fclose(fp);
@@ -2038,7 +2038,7 @@ show_record (UIWINDOW uiwin, CString key, int mode, LLRECT rect
 			show_indi(uiwin, irec, mode, rect, scroll, reuse);
 		return irec != NULL;
 	} else if (key[0]=='F') {
-		RecordIndexEl *frec = key_to_frecord(key);
+		RecordIndexEl *frec = keyToFamilyRecord(key, currentDatabase);
 		if (frec)
 			show_fam(uiwin, frec, mode, row, hgt, width, scroll, reuse);
 		return frec != NULL;
@@ -2445,7 +2445,7 @@ void
 clear_hseg (WINDOW *win, int row, int x1, int x2)
 {
 	/* workaround for curses bug with spacs */
-	if (getlloptint("ForceScreenErase", 0) > 0) {
+	if (getdeoptint("ForceScreenErase", 0) > 0) {
 		/* fill virtual output with dots */
 		color_hseg(win, row, x1, x2, '_');
 		wnoutrefresh(win);
@@ -2916,7 +2916,7 @@ wipe_window_rect (UIWINDOW uiwin, LLRECT rect)
 {
 	WINDOW * win = uiw_win(uiwin);
 	/* workaround for curses bug with spaces */
-	if (getlloptint("ForceScreenErase", 0) > 0) {
+	if (getdeoptint("ForceScreenErase", 0) > 0) {
 		/*
 		To fix the dirty output on a redhat 6 system
 		(with ncurses-5.2-8), required the call to

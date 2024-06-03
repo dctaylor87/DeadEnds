@@ -190,7 +190,7 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 	(*count)++;
 
 	if (gen < maxgen) {
-		Sequence *childseq = indi_to_children(indi);
+		Sequence *childseq = personToChildren(indi, currentDatabse);
 		if (childseq) {
 			tn0=0;
 			for (i=0; i<length_indiseq(childseq); i++) {
@@ -386,7 +386,7 @@ add_dnodes (GNode *node, int gen, int indent, int maxgen, int * count, CANVASDAT
 		(*count)++;
 	ENDLIST
 	/* special handling for empty list, which didn't get its leader */
-	if (is_empty_list(list)) {
+	if (isEmptyList(list)) {
 		tn1 = alloc_displaynode();
 		tn = tn1;
 		tn1->str = strsave(line);
@@ -448,11 +448,11 @@ add_parents (GNode *indi, int gen, int maxgen, int * count)
 	(*count)++;
 	if (gen<maxgen) {
 		tn->firstchild = 
-			add_parents(indi_to_fath(indi), gen+1, maxgen, count);
+			add_parents(personToFather(indi, currentDatabase), gen+1, maxgen, count);
 		if (tn->key)
 			indi=keyToPerson(tn->key, currentDatabase);
 		tn->firstchild->nextsib = 
-			add_parents(indi_to_moth(indi), gen+1, maxgen, count);
+			add_parents(personToMother(indi, currentDatabase), gen+1, maxgen, count);
 	}
 	return tn;
 }
@@ -668,7 +668,7 @@ check_scroll_max( CANVASDATA canvas)
 static int
 get_indent (void)
 {
-	int indent = getlloptint("GedcomDisplayIndent", 6);
+	int indent = getdeoptint("GedcomDisplayIndent", 6);
 	if (indent<0 || indent>9) indent = 6;
 	return indent;
 }

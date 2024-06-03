@@ -119,7 +119,7 @@ ask_for_fam (CString pttl, CString sttl)
 			msg_error("%s", _(qSntchld));
 			return NULL;
 		}
-		frec = key_to_frecord(rmvat(nval(fam)));
+		frec = keyToFamilyRecord(rmvat(nval(fam)), currentDatabase);
 		return frec;
 	}
 	if (!FAMS(nztop(prn))) {

@@ -350,7 +350,7 @@ pick_create_new_family (RecordIndexEl *current, RecordIndexEl *save, String * ad
 		rec = add_family_by_edit(NULL, NULL, current, false);
 	} else if (save) {
 		char scratch[100];
-		String name = indi_to_name(nztop(save), 55);
+		String name = personToName(nztop(save), 55);
 		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
 			String key = rmvat(nxref(nztop(save)))+1;
@@ -959,7 +959,7 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 			break;
 		}
 	}
-	join_fam(fam, fref, husb, wife, chil, rest);
+	joinFamily(fam, fref, husb, wife, chil, rest);
 	i = choose_from_array(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
 	choose_and_remove_spouse(node_to_record(spnodes[i]), frec, true);
@@ -979,7 +979,7 @@ prompt_add_spouse_with_candidate (RecordIndexEl *fam, RecordIndexEl *candidate)
 	char scratch[100];
 
 	splitFamily(nztop(fam), &fref, &husb, &wife, &chil, &rest);
-	join_fam(nztop(fam), fref, husb, wife, chil, rest);
+	joinFamily(nztop(fam), fref, husb, wife, chil, rest);
 	if (traditional) {
 		if (husb && wife) {
 			msg_error("%s", _(qShasbth));
@@ -989,11 +989,11 @@ prompt_add_spouse_with_candidate (RecordIndexEl *fam, RecordIndexEl *candidate)
 	if (candidate) {
 		if (keyflag) {
 			snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSissnew),
-				 indi_to_name(nztop(candidate), 56),
+				 personToName(nztop(candidate), 56),
 				 rmvat(nxref(nztop(candidate)))+1);
 		} else {
 			snprintf(scratch, sizeof(scratch), "%s%s", _(qSissnew),
-				 indi_to_name(nztop(candidate), 56));
+				 personToName(nztop(candidate), 56));
 		}
 		if (!ask_yes_or_no(scratch)) {
 			candidate = NULL;
@@ -1017,18 +1017,18 @@ prompt_add_child_check_save (GNode *fam, GNode *save)
 
 	if (save) {
 		if (keyflag)
-			if(getlloptint("DisplayKeyTags", 0) > 0) {
+			if(getdeoptint("DisplayKeyTags", 0) > 0) {
 				snprintf(scratch, sizeof(scratch), "%s%s (i%s)", _(qSiscnew),
-				 	indi_to_name(save, 56),
+				 	personToName(save, 56),
 				 	rmvat(nxref(save))+1);
 			} else {
 				snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSiscnew),
-				 	indi_to_name(save, 56),
+				 	personToName(save, 56),
 				 	rmvat(nxref(save))+1);
 			}
 		else
 			snprintf(scratch, sizeof(scratch), "%s%s", _(qSiscnew),
-				 indi_to_name(save, 56));
+				 personToName(save, 56));
 		if (!ask_yes_or_no(scratch))
 			save = NULL;
 	}
@@ -1522,7 +1522,7 @@ static void
 init_hist_lists (void)
 {
 	/* V for visit history, planning to also have a change history */
-	int count = getlloptint("HistorySize", 20);
+	int count = getdeoptint("HistorySize", 20);
 	if (count<0 || count > 9999)
 		count = 20;
 	init_hist(&vhist, count);
@@ -1537,7 +1537,7 @@ init_hist_lists (void)
 static void
 load_hist_lists (void)
 {
-	if (getlloptint("SaveHistory", 0)) {
+	if (getdeoptint("SaveHistory", 0)) {
 		load_nkey_list("HISTV", &vhist);
 		load_nkey_list("HISTC", &chist);
 	}
@@ -1550,7 +1550,7 @@ load_hist_lists (void)
 static void
 save_hist_lists (void)
 {
-	if (!getlloptint("SaveHistory", 0)) return;
+	if (!getdeoptint("SaveHistory", 0)) return;
 	save_nkey_list("HISTV", &vhist);
 	save_nkey_list("HISTC", &chist);
 }
@@ -1753,7 +1753,7 @@ history_record (RecordIndexEl *rec, struct hist * histp)
 	NKEY nkey = nkey_zero();
 	int next, i;
 	int count = get_hist_count(histp);
-	int protect = getlloptint("HistoryBounceSuppress", 0);
+	int protect = getdeoptint("HistoryBounceSuppress", 0);
 	if (!histp->size) return;
 	if (histp->start==-1) {
 		histp->start = histp->past_end;

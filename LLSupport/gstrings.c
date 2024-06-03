@@ -38,7 +38,7 @@
 #include <stdint.h>
 
 #include "porting.h"
-#include "ll-porting.h"
+//#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 
@@ -156,7 +156,7 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 		p += strlen(p);
 	}
 	if (appkey && indi && displaykeys) {
-		if (getlloptint("DisplayKeyTags", 0) > 0) {
+		if (getdeoptint("DisplayKeyTags", 0) > 0) {
 			snprintf(p, linelen, " (i%s)", key_of_record(indi));
 		} else {
 			snprintf(p, linelen, " (%s)", key_of_record(indi));
@@ -166,7 +166,7 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 		p += strlen(p);
 	}
 	if (appkey && fam && displaykeys) {
-		if (getlloptint("DisplayKeyTags", 0) > 0) {
+		if (getdeoptint("DisplayKeyTags", 0) > 0) {
 			snprintf(p, linelen, " (f%s)", key_of_record(fam));
 		} else {
 			snprintf(p, linelen, " (%s)", key_of_record(fam));

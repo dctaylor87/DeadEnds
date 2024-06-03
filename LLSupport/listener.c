@@ -18,7 +18,6 @@
 #include <ansidecl.h>
 
 #include "porting.h"
-#include "ll-porting.h"
 #include "standard.h"
 #include "llnls.h"
 

@@ -103,7 +103,7 @@ edit_add_source (void)
 {
 	String str;
 
-	str = getlloptstr("SOURREC", _(qSdefsour));
+	str = getdeoptstr("SOURREC", _(qSdefsour));
 	return edit_add_record(str, _(qSrredit), _(qSrreditopt), 'S', _(qScfradd));
 }
 /*==============================================
@@ -114,7 +114,7 @@ edit_add_event (void)
 {
 	String str;
 
-	str = getlloptstr("EVENREC", _(qSdefeven));
+	str = getdeoptstr("EVENREC", _(qSdefeven));
 	return edit_add_record(str, _(qSeredit), _(qSereditopt), 'E', _(qScfeadd));
 }
 /*====================================================
@@ -125,7 +125,7 @@ edit_add_other (void)
 {
 	String str;
 
-	str = getlloptstr("OTHR", _(qSdefothr));
+	str = getdeoptstr("OTHR", _(qSdefothr));
 	return edit_add_record(str, _(qSxredit), _(qSxreditopt), 'X', _(qScfxadd));
 }
 /*================================================
@@ -188,7 +188,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 				do_edit();
 				continue;
 			}
-			free_nodes(node);
+			freeGNodes(node);
 			node = NULL; /* fail out */
 			break;
 		}
@@ -207,7 +207,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 		break;
 	}
 	if (!node || !ask_yes_or_no(cfrm)) {
-		if (node) free_nodes(node);
+		if (node) freeGNodes(node);
 		return NULL;
 	}
 	nxref(node) = strsave((String)(*getreffnc)());
@@ -344,7 +344,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 				do_edit();
 				continue;
 			}
-			free_nodes(root2);
+			freeGNodes(root2);
 			root2 = NULL;
 			break;
 		}
@@ -366,7 +366,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 /* If error or no change or user backs out return */
 	if (!root2) return false;
 	if (equal_tree(root1, root2) || !ask_yes_or_no(cfrm)) {
-		free_nodes(root2);
+		freeGNodes(root2);
 		return false;
 	}
 
@@ -375,15 +375,15 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	/* Move root1 data into root0 & save refns */
 	splitOther(root1, &refn1, &body);
 	root0 = copy_node(root1);
-	join_othr(root0, NULL, body);
+	joinOther(root0, NULL, body);
 	/* delete root0 tree & root1 node (root1 is solitary node) */
-	free_nodes(root0); root0 = 0;
-	free_nodes(root1); root1 = 0;
+	freeGNodes(root0); root0 = 0;
+	freeGNodes(root1); root1 = 0;
 	/* now copy root2 node into root1, then root2 tree under it */
 	root1 = copy_node(root2);
 	splitOther(root2, &refn2, &body);
 	refnn = copy_nodes(refn2, true, true);
-	join_othr(root1, refn2, body);
+	joinOther(root1, refn2, body);
 	/* now root2 is solitary node, delete it */
 	free_node(root2,"edit_record"); root2 = 0;
 
@@ -397,9 +397,9 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refnn; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
-	free_nodes(refn1);
-	free_nodes(refnn);
-	free_nodes(refn1n);
+	freeGNodes(refn1);
+	freeGNodes(refnn);
+	freeGNodes(refn1n);
 	msg_info("%s", gdmsg);
 	return true;
 }

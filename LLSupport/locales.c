@@ -378,7 +378,7 @@ customlocale (String prefix)
 #ifdef HAVE_SETLOCALE
 	/* did user set, eg, UiLocaleCollate option ? */
 	strcpy(option+prefixlen, "Collate");
-	str = getlloptstr(option, 0);
+	str = getdeoptstr(option, 0);
 	if (str) {
 		customized_loc = true;
 		str = llsetlocale(LC_COLLATE, str);
@@ -386,7 +386,7 @@ customlocale (String prefix)
 	if (!str) {
 		/* did user set, eg, UiLocale option ? */
 		option[prefixlen] = 0;
-		str = getlloptstr(option, 0);
+		str = getdeoptstr(option, 0);
 		if (str) {
 			customized_loc = true;
 			str = llsetlocale(LC_COLLATE, str);
@@ -400,14 +400,14 @@ customlocale (String prefix)
 #ifdef ENABLE_NLS
 	/* did user set, eg, UiLocaleMessages option ? */
 	strcpy(option+prefixlen, "Messages");
-	str = getlloptstr(option, 0);
+	str = getdeoptstr(option, 0);
 	if (str) {
 		customized_msgs = true;
 		str = setmsgs(str);
 	} else {
 		/* did user set, eg, UiLocale option ? */
 		option[prefixlen] = 0;
-		str = getlloptstr(option, 0);
+		str = getdeoptstr(option, 0);
 		if (str) {
 			customized_msgs = true;
 			str = setmsgs(str);

@@ -113,12 +113,12 @@ update_textdomain_localedir (CString domain, CString prefix)
 	newLocaleDir = gt_defLocaleDir;
 
 	/* Check for config setting for LocaleDir */
-	newLocaleDir = getlloptstr("LocaleDir", newLocaleDir);
+	newLocaleDir = getdeoptstr("LocaleDir", newLocaleDir);
 
 	/* Check for Ui or Rpt specific setting, eg, UiLocaleDir */
 	if (prefix && prefix[0]) {
 		snprintf(keyname, sizeof(keyname), "%sLocaleDir", prefix);
-		newLocaleDir = getlloptstr(keyname, newLocaleDir);
+		newLocaleDir = getdeoptstr(keyname, newLocaleDir);
 	}
 
 	if (newLocaleDir) {
@@ -161,7 +161,7 @@ init_win32_gettext_shim (void)
 #ifdef WIN32_INTL_SHIM
 	String e;
 	/* (re)load gettext dll if specified */
-	e = getlloptstr("gettext.path", "");
+	e = getdeoptstr("gettext.path", "");
 	if (e && *e)
 	{
 		if (intlshim_set_property("dll_path", e))
@@ -175,7 +175,7 @@ init_win32_gettext_shim (void)
 			textdomain(PACKAGE);
 		}
 		/* tell gettext where to find iconv */
-		e = getlloptstr("iconv.path", "");
+		e = getdeoptstr("iconv.path", "");
 		if (e && *e)
 			gt_set_property("iconv_path", e);
 	}

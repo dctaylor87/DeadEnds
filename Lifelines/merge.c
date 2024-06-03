@@ -210,7 +210,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	write_nodes(1, fp, ttmo, famc3, true, true, true);
 	write_nodes(1, fp, ttmo, fams3, true, true, true);
 	fclose(fp);
-	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
+	joinPerson(indi3, name3, refn3, sex3, body3, famc3, fams3);
 
 /*CONDITION 2 -- 3 (init combined) created and joined*/
 /* 
@@ -235,21 +235,21 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 				do_edit();
 				continue;
 			}
-			free_nodes(indi4);
+			freeGNodes(indi4);
 			indi4 = NULL;
 			break;
 		}
 		break;
 	}
-	free_nodes(indi3);
+	freeGNodes(indi3);
 
 /* Have user confirm changes */
 	if (!indi4 || (conf && !ask_yes_or_no(_(qScfpmrg)))) {
-		if (indi4) free_nodes(indi4);
-		join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
-		free_nodes(indi1);
-		join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
-		free_nodes(indi2);
+		if (indi4) freeGNodes(indi4);
+		joinPerson(indi1, name1, refn1, sex1, body1, famc1, fams1);
+		freeGNodes(indi1);
+		joinPerson(indi2, name2, refn2, sex2, body2, famc2, fams2);
+		freeGNodes(indi2);
 		/* originals (indi01 and indi02) have not been modified */
 		return NULL;
 	}
@@ -295,7 +295,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			}
 			that = nsibling(that);
 		}
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		fam_to_dbase(fam);
 		this = nsibling(this);
 	}
@@ -317,11 +317,11 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			prev = that;
 			that = nsibling(that);
 		}
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		fam_to_dbase(fam);
 		this = nsibling(this);
 	}
-	free_nodes(fam12);
+	freeGNodes(fam12);
 
 /*HERE*/
 /* Modify families that had persons as spouse */
@@ -348,7 +348,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			if (eqstr(nval(that), nxref(indi1))) {
 				next = nsibling(that);
 				nsibling(that) = NULL;
-				free_nodes(that);
+				freeGNodes(that);
 				if (!prev)
 					prev = head = next;
 				else
@@ -363,7 +363,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			husb = head;
 		else
 			wife = head;
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		fam_to_dbase(fam);
 		this = nsibling(this);
 	}
@@ -385,11 +385,11 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			prev = that;
 			that = nsibling(that);
 		}
-		join_fam(fam, fref, husb, wife, chil, rest);
+		joinFamily(fam, fref, husb, wife, chil, rest);
 		fam_to_dbase(fam);
 		this = nsibling(this);
 	}
-	free_nodes(fam12);
+	freeGNodes(fam12);
 
 /*
  name1 holds original names of #1/
@@ -420,10 +420,10 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refn3; node; node = nsibling(node))
 		if (nval(node)) add_refn(nval(node), key);
-	join_indi(indi3, name3, refn3, sex3, body3, famc3, fams3);
-	free_nodes(indi3);
-	free_nodes(name24);
-	free_nodes(refn24);
+	joinPerson(indi3, name3, refn3, sex3, body3, famc3, fams3);
+	freeGNodes(indi3);
+	freeGNodes(name24);
+	freeGNodes(refn24);
 
 /* done with changes, save new record to db */
 
@@ -432,10 +432,10 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 /* finally we're done with indi1 & indi2 */
 
-	join_indi(indi1, name1, refn1, sex1, body1, famc1, fams1);
-	free_nodes(indi1);
-	join_indi(indi2, name2, refn2, sex2, body2, famc2, fams2);
-	free_nodes(indi2);
+	joinPerson(indi1, name1, refn1, sex1, body1, famc1, fams1);
+	freeGNodes(indi1);
+	joinPerson(indi2, name2, refn2, sex2, body2, famc2, fams2);
+	freeGNodes(indi2);
 
 /* update indi02 to contain info from new merged record in indi4 */
 /* Note - we could probably just save indi4 and delete indi02 
@@ -443,9 +443,9 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	splitPerson(indi4, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	splitPerson(indi02, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
-	join_indi(indi4, name2, refn2, sex2, body2, famc2, fams2);
-	join_indi(indi02, name1, refn1, sex1, body1, famc1, fams1);
-	free_nodes(indi4);
+	joinPerson(indi4, name2, refn2, sex2, body2, famc2, fams2);
+	joinPerson(indi02, name1, refn1, sex1, body1, famc1, fams1);
+	freeGNodes(indi4);
 
 	remove_indi_by_root(indi01, currentDatabase);	/* this is the original indi1 */
 
@@ -505,8 +505,8 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 			ok = false;
 		}
 		if (!ok) {
-			join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
-			join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
+			joinFamily(fam1, fref1, husb1, wife1, chil1, rest1);
+			joinFamily(fam2, fref2, husb2, wife2, chil2, rest2);
 			return NULL;
 		}
 	}
@@ -528,7 +528,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	fclose(fp);
 
 /* Have user edit merged family */
-	join_fam(fam3, fref3, husb3, wife3, rest3, chil3);
+	joinFamily(fam3, fref3, husb3, wife3, rest3, chil3);
 	do_edit();
 	while (true) {
 		fam4 = file_to_node(editfile, ttmi, &msg, &emp);
@@ -546,20 +546,20 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 				do_edit();
 				continue;
 			}
-			free_nodes(fam4);
+			freeGNodes(fam4);
 			fam4 = NULL;
 			break;
 		}
 		break;
 	}
-	free_nodes(fam3);
+	freeGNodes(fam3);
 
 /* Have user confirm changes */
 
 	if (!fam4 || !ask_yes_or_no(_(qScffmrg))) {
-		if (fam4) free_nodes(fam4);
-		join_fam(fam1, fref1, husb1, wife1, chil1, rest1);
-		join_fam(fam2, fref2, husb2, wife2, chil2, rest2);
+		if (fam4) freeGNodes(fam4);
+		joinFamily(fam1, fref1, husb1, wife1, chil1, rest1);
+		joinFamily(fam2, fref2, husb2, wife2, chil2, rest2);
 		return NULL;
 	}
 	splitFamily(fam4, &fref4, &husb4, &wife4, &chil4, &rest4);
@@ -573,15 +573,15 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	merge_fam_links(fam1, fam2, chil1, chil2, CCHIL);
 
 /* Update database with second family; remove first */
-	join_fam(fam4, fref2, husb2, wife2, chil2, rest2);
-	free_nodes(fam4);
+	joinFamily(fam4, fref2, husb2, wife2, chil2, rest2);
+	freeGNodes(fam4);
 	nchild(fam1) = NULL;
 	remove_empty_fam(fam1, currentDatabase); /* TO DO - can this fail ? 2001/11/08, Perry */
-	free_nodes(husb1);
-	free_nodes(wife1);
-	free_nodes(chil1);
-	free_nodes(rest1);
-	join_fam(fam2, fref4, husb4, wife4, chil4, rest4);
+	freeGNodes(husb1);
+	freeGNodes(wife1);
+	freeGNodes(chil1);
+	freeGNodes(rest1);
+	joinFamily(fam2, fref4, husb4, wife4, chil4, rest4);
 	resolve_refn_links(fam2);
 	fam_to_dbase(fam2);
 
@@ -665,7 +665,7 @@ merge_fam_links (GNode *fam1, GNode *fam2, GNode *list1, GNode *list2, int code)
 			fams = first;
 		else
 			famc = first;
-		join_indi(indi, name, refn, sex, body, famc, fams);
+		joinPerson(indi, name, refn, sex, body, famc, fams);
 		indi_to_dbase(indi);
 		curs1 = nsibling(curs1);
 	}
@@ -755,7 +755,7 @@ remove_dupes (GNode *list1, GNode *list2)
 		if (curs2) {
 			next1 = nsibling(curs1);
 			nsibling(curs1) = NULL;
-			free_nodes(curs1);
+			freeGNodes(curs1);
 			if (!prev1)
 				copy1 = next1;
 			else
@@ -884,7 +884,7 @@ check_indi_lineage_links (GNode *indi)
 		}
 	}
 
-	join_indi(indi, name, refn, sex, body, famc, fams);
+	joinPerson(indi, name, refn, sex, body, famc, fams);
 	destroy_table(memtab);
 }
 /*=================================================
@@ -1013,5 +1013,5 @@ check_fam_lineage_links (GNode *fam)
 	}
 	
 	
-	join_fam(fam, fref, husb, wife, chil, rest);
+	joinFamily(fam, fref, husb, wife, chil, rest);
 }

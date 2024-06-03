@@ -242,7 +242,9 @@ choose_one_or_list_from_indiseq (CString ttl, Sequence *seq, bool multi)
 
 	ASSERT(seq);
 
+#if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* we certainly need the names */
+#endif
 	
 	memset(&ld, 0, sizeof(ld));
 	ld.listlen = length_indiseq(seq);
@@ -782,7 +784,9 @@ manufacture a listdisp here
 	int viewlines = 13;
 	bool scrollable = (viewlines < len);
 
+#if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* we certainly need the names */
+#endif
 	
 	for (i = LIST_LINES+2; i < LIST_LINES+2+viewlines; i++)
 		mvccwaddstr(win, i, 1, empstr51);
@@ -808,14 +812,14 @@ manufacture a listdisp here
 		scratch[0] =0;
 		if (name) {
 			SURCAPTYPE surcaptype = DOSURCAP;
-			if (!getlloptint("UppercaseSurnames", 1))
+			if (!getdeoptint("UppercaseSurnames", 1))
 				surcaptype = NOSURCAP;
 			/* NOTE: the 40 here is arbitrary */
-			name = manip_name(name, surcaptype, REGORDER, 40);
+			name = manipulateName(name, surcaptype, REGORDER, 40);
 			llstrapps(scratch, sizeof(scratch), uu8, name);
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
-		if(getlloptint("DisplayKeyTags", 0) > 0) {
+		if(getdeoptint("DisplayKeyTags", 0) > 0) {
 			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", key_of_record(recnode));
 		} else {
 			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(recnode));

@@ -134,7 +134,7 @@ static PyObject *llpy_name (PyObject *self, PyObject *args, PyObject *kw)
   if (! (node_name = NAME (nztop (indi->llr_record))))
     {
 #if !defined(DEADENDS)
-      if (getlloptint("RequireNames", 0))
+      if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("name: person does not have a name"));
 	  return NULL;
@@ -142,7 +142,7 @@ static PyObject *llpy_name (PyObject *self, PyObject *args, PyObject *kw)
 #endif
       Py_RETURN_NONE;
     }
-  name = manip_name(nval(node_name), caps ? DOSURCAP : NOSURCAP, REGORDER, MAX_NAME_LENGTH);
+  name = manipulateName(nval(node_name), caps ? DOSURCAP : NOSURCAP, REGORDER, MAX_NAME_LENGTH);
   return (Py_BuildValue ("s", name));
 }
 
@@ -176,7 +176,7 @@ static PyObject *llpy_fullname (PyObject *self, PyObject *args, PyObject *kw)
   if (! (node_name = NAME (nztop (indi->llr_record))) || ! nval(node_name))
     {
 #if !defined(DEADENDS)
-      if (getlloptint("RequireNames", 0))
+      if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("fullname: person does not have a name"));
 	  return NULL;
@@ -188,7 +188,7 @@ static PyObject *llpy_fullname (PyObject *self, PyObject *args, PyObject *kw)
   if (max_length == 0)
     max_length = MAX_NAME_LENGTH;
 
-  name = manip_name (nval (node_name), upcase ? DOSURCAP : NOSURCAP, keep_order, max_length);
+  name = manipulateName (nval (node_name), upcase ? DOSURCAP : NOSURCAP, keep_order, max_length);
   return (Py_BuildValue ("s", name));
 }
 
@@ -207,7 +207,7 @@ static PyObject *llpy_surname (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (! (node_name = NAME(node_name)) || ! nval(node_name))
     {
 #if !defined(DEADENDS)
-      if (getlloptint ("RequireNames", 0))
+      if (getdeoptint ("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("surname: person does not have a name"));
 	  return NULL;
@@ -232,7 +232,7 @@ static PyObject *llpy_givens (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (!(name = NAME(nztop (indi->llr_record))) || !nval(name))
     {
 #if !defined(DEADENDS)
-      if (getlloptint("RequireNames", 0))
+      if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("givens: person does not have a name"));
 	  return NULL;
@@ -261,7 +261,7 @@ static PyObject *llpy_trimname (PyObject *self, PyObject *args, PyObject *kw)
   if (!(indi = NAME(indi)) || ! nval(indi))
     {
 #if !defined(DEADENDS)
-      if (getlloptint("RequireNames", 0))
+      if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("trimname: person does not have a name"));
 	  return NULL;
@@ -269,7 +269,7 @@ static PyObject *llpy_trimname (PyObject *self, PyObject *args, PyObject *kw)
 #endif
       Py_RETURN_NONE;
     }
-  str = name_string (trimName (nval (indi), max_length));
+  str = nameString (trimName (nval (indi), max_length));
   if (! str)
     str = "";
 
@@ -614,7 +614,7 @@ static PyObject *llpy_title (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   GNode *indi_node = nztop (indi->llr_record);
-  GNode *title = find_tag (nchild (indi_node), "TITL");
+  GNode *title = findTag (nchild (indi_node), "TITL");
 
   if (! title)
     Py_RETURN_NONE;		/* no title found */
@@ -634,7 +634,7 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   if (!(name = NAME(nztop (indi->llr_record))) || !nval(name))
     {
 #if !defined(DEADENDS)
-      if (getlloptint("RequireNames", 0))
+      if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("soundex: person does not have a name"));
 	  return NULL;
@@ -740,7 +740,7 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
       return NULL;
     }
 
-  seq = indi_to_children (node);
+  seq = personToChildren (node, database);
 
   if (! seq || (length_indiseq (seq) < 1))
       Py_RETURN_NONE;	/* no children to choose from */

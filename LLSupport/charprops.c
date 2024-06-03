@@ -83,7 +83,7 @@ bool
 charprops_load_utf8 (void)
 {
 	FILE * fp=0;
-	CString ttpath = getlloptstr("TTPATH", ".");
+	CString ttpath = getdeoptstr("TTPATH", ".");
 	String upleft[MAXCASES], upright[MAXCASES], loleft[MAXCASES], loright[MAXCASES];
 	int upcount=0, locount=0;
 	int i;

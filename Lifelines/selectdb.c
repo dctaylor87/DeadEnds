@@ -103,7 +103,7 @@ static void show_open_error(int dberr);
 bool
 select_database (String * dbrequested, int alteration, String * perrmsg)
 {
-	String dbdir = getlloptstr("LLDATABASES", ".");
+	String dbdir = getdeoptstr("DEDATABASES", ".");
 	String dbused = NULL;
 	ASSERT(dbrequested);
 	ASSERT(*dbrequested);
@@ -194,7 +194,7 @@ open_or_create_database (int alteration, String *dbused)
 	/* First construct directory to use */
 	if (is_unadorned_directory(*dbused)) {
 		/* no dir specified, so use first from LLDATABASES */
-		String dbpath = getlloptstr("LLDATABASES", ".");
+		String dbpath = getdeoptstr("DEDATABASES", ".");
 		CString newdbdir = get_first_path_entry(dbpath);
 		if (newdbdir) {
 			/* newdbdir is static from get_first_path_entry */

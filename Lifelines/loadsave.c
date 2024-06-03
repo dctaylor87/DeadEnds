@@ -223,7 +223,7 @@ load_gedcom (bool picklist)
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 
-	srcdir = getlloptstr("InputPath", ".");
+	srcdir = getdeoptstr("InputPath", ".");
 	if (!ask_for_gedcom(LLREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
 		|| !(fp = fopen(fullpath, LLREADBINARY))) {
 		strfree(&fullpath);
@@ -281,7 +281,7 @@ save_gedcom (void)
 	struct tag_export_feedback efeed;
 	String srcdir=NULL, fname=0, fullpath=0;
 
-	srcdir = getlloptstr("LLARCHIVES", ".");
+	srcdir = getdeoptstr("DEARCHIVES", ".");
 	fp = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
 	if (!fp) {
 		strfree(&fname);
