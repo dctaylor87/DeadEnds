@@ -92,4 +92,6 @@ int yyparse(void);
 //void poutput(String);
 //void interp_main(void);
 
+extern void adjust_cols (String str);
+
 #endif // interp_h

@@ -57,6 +57,9 @@ GNode *keyToEvent(CString key, Database*); // Get an event record from the datab
 GNode *keyToOther(CString key, Database*); // Get an other record from the database.
 GNode *getRecord(CString key, Database*);  // Get an arbitraray record from the database.
 
+// oldIndexNames indexes all person names in a database.
+extern void oldIndexNames(Database* database);
+
 //  Get a person record from the database.
 extern RecordIndexEl *keyToPersonRecord(CString key, Database*);
 //  Get a family record from the database.

@@ -82,6 +82,8 @@ void showSequence(Sequence*);
 
 bool limitPersonNode(GNode *node, int level);
 
+extern void baseFree(void *word);
+
 //  FORSEQUENCE and ENDSEQUENCE iterate a Sequence.
 #define FORSEQUENCE(sequence, element, count) {\
 	SequenceEl* element;\
