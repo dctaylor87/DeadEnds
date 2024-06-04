@@ -18,8 +18,8 @@ repeat of what you already know.
 
 Some of the functions and methods mentioned herein are not available
 in DeadEnds.  This will eventually be fixed.  If you notice such a
-function or method and bring it to my attention, that will speed the
-process or getting it fixed.
+function or method and bring it to my attention, that will likely
+speed the process or getting it fixed.
 
 Additionally, there will eventually be functions available only in
 DeadEnds and not in LifeLines.
@@ -327,7 +327,6 @@ Returns the set of children of INDI.
 Selects and returns child of person through user interface.
 Returns @code{None} if INDI has no children or if the user cancels.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosespouse (void) @arrow{} INDI or @code{None}
 @findex choosespouse
@@ -335,7 +334,6 @@ Returns @code{None} if INDI has no children or if the user cancels.
 Selects and returns spouse of person through user interface.
 Returns @code{None} if INDI has no spouses or if the user cancels.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosefam (void)
 @findex choosefam
@@ -343,7 +341,6 @@ Returns @code{None} if INDI has no spouses or if the user cancels.
 Selects and returns a family that INDI is in.  Returns @code{None} if
 INDI is not in any families or if the user cancels.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 The following function is part of the module but is not an instance
 method:
@@ -495,16 +492,13 @@ Returns the set of spouses in the family.
 Figures out FAM's collection of children and asks the user to
 choose one.  Returns @code{None} if FAM has no children or if the user
 cancelled the operation.
-
-@b{Not currently available in DeadEnds.}
 @end deftypefun
+
 @deftypefun FAM choosespouse (void) @arrow{} INDI or @code{None}
 @findex choosespouse
 
 Selects and returns spouse of family through user interface.
 Returns @code{None} if FAM has no spouses or if the user cancels.
-
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 
 @subsection Database related
@@ -566,8 +560,8 @@ database in key order.
 @section Event Records
 
 When exchanging @acronym{GEDCOM} files with other researchers, please
-be aware that event records are a DeadEnds extension.  They are not
-part of standard @acronym{GEDCOM}.
+be aware that event records are a LifeLines / DeadEnds extension.
+They are not part of standard @acronym{GEDCOM}.
 
 The following function is an instance method.
 
@@ -1154,7 +1148,6 @@ The following functions are instance methods.
 
 Select child of individual or family through user interface.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosefam (void) @arrow{} FAM
 @findex choosefam
@@ -1162,7 +1155,6 @@ Select child of individual or family through user interface.
 Select, through user interface, one of the families individual is
 in as a spouse.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI choosespouse (void) @arrow{} INDI
 @findex choosespouse
@@ -1242,7 +1234,7 @@ has a function that returns an iterator for that type.
 N.B.: There are two types of events --
 @itemize
 @item
-RECORD EVENTs -- which are a DeadEnds extension.
+RECORD EVENTs -- which are a LifeLines / DeadEnds extension.
 @item
 NODE events -- such as births and marriages.
 @end itemize
@@ -1644,7 +1636,7 @@ surprise me.
 
 Feedback on success and/or failure building on MacOS and/or Windows
 would be appreciated.  Feedback on success and/or failure with using
-it on Windows or MacOS would also be appreciated.
+it on GNU/Linux, Windows, or MacOS would also be appreciated.
 
 @section Configuring
 
@@ -1699,7 +1691,7 @@ Three packages that I know that you need, whether with or without Python, are
 @section Building from a @code{Git} repository
 
 Before your first build, you will need to run, from the top of the
-tree, the following three commands (each with no arguments):
+Git source tree, the following three commands (each with no arguments):
 
 @code{autoheader}
 
@@ -2052,11 +2044,14 @@ I would like there to be at least four user interfaces:
 @section Multiple Databases
 
 Allowing multiple databases to be present in memory simultaneously is
-currently a work in progress for DeadEnds.
+currently a desired goal for DeadEnds.
 
 While supporting all library functionality in the script languages is
 an explicit goal, it is unclear if there is anyway for a script to
 safely delete a database.
+
+Need to keep accurate database reference counts to know when it is no
+longer in use.
 
 @section Additional Record Types
 
@@ -2078,6 +2073,14 @@ JSON in addition to @acronym{GEDCOM}.  Especially if there are any
 non-GEDCOM textual format.
 
 Both import and export support.
+
+@section Support for @acronym{GEDZIP} format
+
+@acronym{GEDZIP} is a @acronym{ZIP} file containing a @acronym{GEDCOM}
+file and a collection of related files (typically, multi media files
+referenced by the @code{OBJE} records within the @acronym{GEDCOM}
+file).  @acronym{GEDZIP} files are mentioned in recent @acronym{GEDCOM}
+specifications.
 
 @section Support for Export Restrictions
 
