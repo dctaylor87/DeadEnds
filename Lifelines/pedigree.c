@@ -190,7 +190,7 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 	(*count)++;
 
 	if (gen < maxgen) {
-		Sequence *childseq = personToChildren(indi, currentDatabse);
+		Sequence *childseq = personToChildren(indi, currentDatabase);
 		if (childseq) {
 			tn0=0;
 			for (i=0; i<length_indiseq(childseq); i++) {

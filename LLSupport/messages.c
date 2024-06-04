@@ -356,7 +356,7 @@ ZST qSsig11       = N_("SEGMENTATION ERROR");
 ZST qSsig12       = N_("SYSTEM CALL ERROR");
 ZST qSsig13       = N_("PIPE WRITE");
 ZST qSsig14       = N_("ALARM CLOCK");
-	/* system signal#15 name -- presumably user used UNIX kill command to stop lifelines */
+	/* system signal#15 name -- presumably user used UNIX kill command to stop DeadEnds */
 ZST qSsig15       = N_("TERMINATE FROM KILL");
 ZST qSsig16       = N_("USER SIGNAL 1");
 ZST qSsig17       = N_("USER SIGNAL 2");

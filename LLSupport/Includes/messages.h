@@ -33,9 +33,9 @@
 #define ZST String
 
 extern ZST qSiddbse;      /* "You must identify a database." */
-extern ZST qSidldir;      /* "What directory holds (or will hold) the LifeLines database? (? to list)" */
+extern ZST qSidldir;      /* "What directory holds the DeadEnds database? (? to list)" */
 extern ZST qSidldrp;      /* "enter path: " */
-extern ZST qSnodbse;      /* "No LifeLines database found." */
+extern ZST qSnodbse;      /* "No DeadEnds database found." */
 extern ZST qScrdbse;      /* "Do you want to create a database at '%s'?" */
 extern ZST qSbdlkar;      /* "Argument to lock (-l) must be y or n." */
 extern ZST qSnormls;      /* "Cannot remove last person from family." */
@@ -336,7 +336,7 @@ extern ZST qSsig11;       /* "SEGMENTATION ERROR" */
 extern ZST qSsig12;       /* "SYSTEM CALL ERROR" */
 extern ZST qSsig13;       /* "PIPE WRITE" */
 extern ZST qSsig14;       /* "ALARM CLOCK" */
-	/* system signal#15 name -- presumably user used UNIX kill command to stop lifelines */
+	/* system signal#15 name -- presumably user used UNIX kill command to stop DeadEnds */
 extern ZST qSsig15;       /* "TERMINATE FROM KILL" */
 extern ZST qSsig16;       /* "USER SIGNAL 1" */
 extern ZST qSsig17;       /* "USER SIGNAL 2" */
@@ -408,7 +408,8 @@ extern ZST qSdbrecords;   /* "Database records" */
 extern ZST qSdbrecstats;  /* FMT_INT "I, " FMT_INT "F, " FMT_INT "S," FMT_INT "E, " FMT_INT "X" */
 
 /* menus */
-extern ZST qSmtitle;      /* "LifeLines %s - Genealogical DB and Programming System" */
+
+extern ZST qSmtitle;      /* "DeadEnds %s - Genealogical DB and Programming System" */
 extern ZST qScright;      /* "Copyright(c) 1991 to 1996, by T. T. Wetmore IV" */
 extern ZST qSdbname;      /* "Current Database - %s" */
 extern ZST qSplschs;      /* "Please choose an operation:" */
@@ -420,12 +421,12 @@ extern ZST qSaskynyn;     /* "yYnN" */ /* valid chars for yes/no answer */
 extern ZST qSaskyY;       /* "yY" */ /* chars meaning yes answer */
 
 /* browse menu titles */
-extern ZST qSttlindibrw;  /* "LifeLines -- Person Browse Screen (* toggles menu)" */
-extern ZST qSttlfambrw;   /* "LifeLines -- Family Browse Screen (* toggles menu)" */
-extern ZST qSttl2perbrw;  /* "LifeLines -- Two Person Browse Screen (* toggles menu)" */
-extern ZST qSttl2fambrw;  /* "LifeLines -- Two Family Browse Screen (* toggles menu)" */
-extern ZST qSttlauxbrw;   /* "LifeLines -- Auxiliary Browse Screen (* toggles menu)" */
-extern ZST qSttllstbrw;   /* "LifeLines -- List Browse Screen (* toggles menu)" */
+extern ZST qSttlindibrw;  /* "DeadEnds -- Person Browse Screen (* toggles menu)" */
+extern ZST qSttlfambrw;   /* "DeadEnds -- Family Browse Screen (* toggles menu)" */
+extern ZST qSttl2perbrw;  /* "DeadEnds -- Two Person Browse Screen (* toggles menu)" */
+extern ZST qSttl2fambrw;  /* "DeadEnds -- Two Family Browse Screen (* toggles menu)" */
+extern ZST qSttlauxbrw;   /* "DeadEnds -- Auxiliary Browse Screen (* toggles menu)" */
+extern ZST qSttllstbrw;   /* "DeadEnds -- List Browse Screen (* toggles menu)" */
 
 /* list menu */
 
@@ -681,7 +682,7 @@ extern ZST qSmon_fr13B;   /* "jour_complementairs" */
 extern ZST qSgen_copyright; /* "Copyright (C) 1991-2019 Thomas T. Wetmore IV and contributors." */
 extern ZST qSgen_warranty;  /* "This is free software; see the source for copying conditions.  There is NO\n"
                                "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." */
-extern ZST qSgen_license;   /* "Lifelines is distributed under an X/MIT Open Source license.\n"
+extern ZST qSgen_license;   /* "DeadEnds is distributed under an X/MIT Open Source license.\n"
                                "\tSee file LICENSE in the program directory." */
 extern ZST qSgen_website;   /* "For more information, visit our web site at https://lifelines.github.io/lifelines/" */
 extern ZST qSgen_bugreport; /* "Please report bugs to https://github.com/lifelines/lifelines/issues" */

@@ -33,8 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
-
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -65,28 +63,6 @@
 #include "icvt.h"
 #include "init.h"
 
-#else
-
-#include "sys_inc.h"
-#include "llstdlib.h"
-#include "arch.h"
-#include "btree.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "lloptions.h"
-#include "codesets.h"
-#include "menuitem.h"
-#include "zstr.h"
-#include "icvt.h"
-#include "date.h"
-#include "mychar.h"
-#include "charprops.h"
-#include "xlat.h"
-#include "dbcontext.h"
-
-#endif
 /*********************************************
  * global/exported variables
  *********************************************/
@@ -134,8 +110,8 @@ bool
 init_lifelines_global (String configfile, String * pmsg, void (*notify)(String db, bool opening))
 {
 	String e;
-	String dirvars[] = { "LLPROGRAMS", "LLREPORTS", "LLARCHIVES"
-		, "LLDATABASES", };
+	String dirvars[] = { "DEPROGRAMS", "DEREPORTS", "DEARCHIVES"
+		, "DEDATABASES", };
 	int i;
 
 	check_installation_path();
@@ -181,10 +157,10 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 	}
 	/* also check environment variable for editor */
 	{
-		String str = getenv("LLEDITOR");
+		String str = getenv("DEEDITOR");
 		if (!str)
 			str = environ_determine_editor(PROGRAM_LIFELINES);
-		setoptstr_fallback("LLEDITOR", str);
+		setoptstr_fallback("DEEDITOR", str);
 	}
 	/* editor falls back to platform-specific default */
 	e = getdeoptstr("DEEDITOR", NULL);
@@ -378,7 +354,7 @@ load_configs (String configfile, String * pmsg)
 	/* TODO: Should read a system-wide config file */
 
 	if (!configfile)
-		configfile = getenv("LLCONFIGFILE");
+		configfile = getenv("DECONFIGFILE");
 
 	*pmsg = NULL;
 
@@ -403,20 +379,12 @@ load_configs (String configfile, String * pmsg)
 		/* TODO: Shouldn't Win32 use getenv("USERPROFILE") ? */
 		llstrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
 		/*llstrappc(cfg_name, sizeof(cfg_name), '/');*/
-#if defined(DEADENDS)
 		llstrapps(cfg_name, sizeof(cfg_name), 0, "/" DEADENDS_CONFIG_FILE);
-#else
-		llstrapps(cfg_name, sizeof(cfg_name), 0, "/" LINES_CONFIG_FILE);
-#endif
 
 		rtn = load_global_options(cfg_name, pmsg);
 		if (rtn == -1) return false;
 
-#if defined(DEADENDS)
 		rtn = load_global_options(DEADENDS_CONFIG_FILE, pmsg);
-#else
-		rtn = load_global_options(LINES_CONFIG_FILE, pmsg);
-#endif
 		if (rtn == -1) return false;
 	}
 

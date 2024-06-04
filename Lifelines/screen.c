@@ -22,7 +22,7 @@
    SOFTWARE.
 */
 /*=============================================================
- * screen.c -- Curses user interface to LifeLines
+ * screen.c -- Curses user interface to DeadEnds
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 
@@ -108,7 +108,7 @@ int MAINWIN_WIDTH=0;
  *********************************************/
 
 int ll_lines = -1; /* update to be number of lines in screen */
-int ll_cols = -1;	 /* number of columns in screen used by LifeLines */
+int ll_cols = -1;	 /* number of columns in screen used by DeadEnds */
 bool stdout_vis = false;
 int cur_screen = 0;
 UIWINDOW main_win = NULL;
@@ -346,7 +346,7 @@ resize_screen_impl (char * errmsg, int errsize)
 	/* check that terminal meet minimum requirements */
 	if (newcols < COLSREQ || newlines < LINESREQ) {
 		snprintf(errmsg, errsize
-			, _("The requested window size (" FMT_INT "," FMT_INT ") is too small for LifeLines (%d,%d).\n")
+			, _("The requested window size (" FMT_INT "," FMT_INT ") is too small for DeadEnds (%d,%d).\n")
 			, newcols, newlines, COLSREQ, LINESREQ);
 		return 0; /* fail */
 	}
@@ -1083,7 +1083,7 @@ list_browse (Sequence *seq, int top, int * cur, int mark)
 	return interact_choice_string(main_win, "jkeimrtbanx$^udUDq");
 }
 /*======================================
- * ask_for_db_filename -- Ask user for lifelines database directory
+ * ask_for_db_filename -- Ask user for DeadEnds database directory
  *  ttl:   [IN]  title of question (1rst line)
  *  prmpt: [IN]  prompt of question (2nd line)
  *====================================*/
@@ -1807,7 +1807,7 @@ save_tt_action (void)
 		return;
 	}
 	/* Ask whither to save it */
-	ttexportdir = getdeoptstr("LLTTEXPORT", ".");
+	ttexportdir = getdeoptstr("DETTEXPORT", ".");
 	fp = ask_for_output_file(LLWRITETEXT, _(qSmouttt), &fname, ttexportdir, ".tt");
 	if (fp) {
 		fclose(fp);
@@ -2059,7 +2059,7 @@ message_string (void)
 {
 	if (!cur_screen) return "";
 	if (cur_screen == MAIN_SCREEN)
-		return _("LifeLines -- Main Menu");
+		return _("DeadEnds -- Main Menu");
 	ASSERT(cur_screen >= 1);
 	ASSERT(cur_screen <= MAX_SCREEN);
 	return get_screen_title(cur_screen);

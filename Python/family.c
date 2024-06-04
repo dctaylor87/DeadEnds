@@ -13,7 +13,6 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
@@ -26,17 +25,7 @@
 #include "ll-node.h"
 #include "sequence.h"
 #include "ui.h"
-#else
-#include "standard.h"		/* STRING */
-#include "llstdlib.h"		/* CALLBACK_FNC */
-#include "lloptions.h"
 
-#include "gedcom.h"		/* RECORD */
-#include "indiseq.h"		/* INDISEQ */
-#include "liflines.h"		/* choose_from_indiseq */
-#include "messages.h"
-#include "../gedlib/leaksi.h"
-#endif
 #include "python-to-c.h"
 #include "types.h"
 #include "py-set.h"
@@ -56,10 +45,8 @@ static PyObject *llpy_firstchild (PyObject *self, PyObject *args);
 static PyObject *llpy_lastchild (PyObject *self, PyObject *args);
 static PyObject *llpy_children_f (PyObject *self, PyObject *args);
 static PyObject *llpy_spouses_f (PyObject *self, PyObject *args);
-#if !defined(DEADENDS)
 static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args);
 static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args);
-#endif
 
 static void llpy_family_dealloc (PyObject *self);
 
@@ -381,7 +368,6 @@ static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   return (output_set);
 }
 
-#if !defined(DEADENDS)		/* commented out until we have a user interface */
 /* llpy_choosechild (FAM) --> INDI
 
    Figures out FAM's set of children and asks the user to choose one.
@@ -406,11 +392,11 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
 
   seq = familyToChildren (node, database);
 
-  if (! seq || (length_indiseq (seq) < 1))
+  if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */
 
   record = choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei));
-  remove_indiseq (seq);
+  deleteSequence (seq);
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
   if (! indi)
@@ -431,11 +417,11 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
   LLINES_PY_RECORD *py_indi;
 
   seq = familyToSpouses (node, fam->llr_database);
-  if (! seq || (length_indiseq (seq) < 1))
+  if (! seq || (seq->block.length < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 
   record = choose_from_indiseq (seq, DOASK1, _(qSifonei), _(qSnotonei));
-  remove_indiseq (seq);
+  deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */
 
@@ -447,7 +433,6 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
   py_indi->llr_record = record;
   return ((PyObject *)py_indi);
 }
-#endif
 
 static void llpy_family_dealloc (PyObject *self)
 {
@@ -493,7 +478,6 @@ If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." }
    { "spouses",		llpy_spouses_f, METH_NOARGS,
      "(FAM).spouses(void) -> set of spouses in the family" },
 
-#if !defined(DEADENDS)
    { "choosechild",	llpy_choosechild_f, METH_NOARGS,
      "(FAM).choosechild(void) --> INDI.  Select and return child of family\n\
  through user interface. Returns None if family has no children." },
@@ -501,7 +485,6 @@ If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." }
    { "choosespouse",	llpy_choosespouse_f, METH_NOARGS,
      "(FAM).choosespouse(void) --> INDI.  Select and return spouse of family\n\
 through user interface.  Returns None if family has no spouses or user cancels." },
-#endif
 
    { "top_node", (PyCFunction)_llpy_top_node, METH_NOARGS,
      "top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },

@@ -33,20 +33,23 @@ void
 print_lines_usage (CString exename)
 {
 	if (0 == strcmp(exename, "llexec")) {
-		printf(_("%s invokes the Lifelines report execution program without GUI."), exename);
+		printf(_("%s invokes the DeadEnds report execution program without GUI."), exename);
 	} else {
-		printf(_("%s invokes the Lifelines GUI."), exename);
+		printf(_("%s invokes the DeadEnds GUI."), exename);
 	}
 	printf("\n\n");
-	printf(_("Lifelines is a program to manipulate genealogical information\n"
-		"in lineage-linked GEDCOM format. It has a curses interface and a\n"
-		"built-in interpreter for its own genealogical report language.\n\n"
-		"It has its own databases, and records are edited directly in GEDCOM\n"
-		"(with an editor of the user's choice). Records store\n"
-		"information about people, families, sources, events, and\n"
-		"other types of data (such as notes). Lifelines includes a\n"
-		"custom report language and comes with a collection of reports.")
-		);
+	printf(_("DeadEnds is a program to manipulate genealogical information\n"
+		 "in lineage-linked GEDCOM format.  It has a curses interface and two\n"
+		 "built-in interpreters, one for its own genealogical report language\n"
+		 "and one for Python.\n"
+		 "\n"
+		 "It reads GEDCOM files and keeps its database entirely in memory.\n"
+		 "Records are edited directly in GEDCOM (with an editor of the user's\n"
+		 "choice).  Records store information about people, families, sources,\n"
+		 "events, and other types of data (such as notes).  DeadEnds includes\n"
+		 "both a custom report language (and comes with a collection of already\n"
+		 "written reports) and an embedded Python interpreter.")
+	       );
 	printf("\n\n");
 	printf(_("Usage: %s [OPTIONS] [database]"), exename);
 	printf("\n\n");
@@ -60,7 +63,7 @@ print_lines_usage (CString exename)
 	printf("\n\t");
 	printf(_("-I[KEY=VALUE]"));
 	printf("\n\t\t");
-	printf(_("Specify a user property (e.g. -ILLEDITOR=gvim)"));
+	printf(_("Specify a user property (e.g. -IDEEDITOR=gvim)"));
 	printf("\n\t-a\n\t\t");
 	printf(_("log dynamic memory operation (for debugging)"));
 	printf("\n\t");
@@ -90,7 +93,7 @@ print_lines_usage (CString exename)
 	printf("\n\t");
 	printf(_("-x[REPORT]"));
 	printf("\n\t\t");
-	printf(_("execute a single lifelines report program directly"));
+	printf(_("execute a single DeadEnds report program directly"));
 	printf("\n\t-z\n\t\t");
 	printf(_("Use normal ASCII characters for drawing lines, instead of\n"
 		"\t\tspecial VT100 terminal characters"));
@@ -102,25 +105,14 @@ print_lines_usage (CString exename)
 	if (0 == strcmp(exename, "llexec")) {
 	    printf(_("%s myfamily -x eol"), exename);
 	    printf("\n\t\t");
-	    printf(_("Open the database 'myfamily' with Lifelines"));
+	    printf(_("Open the database 'myfamily' with DeadEnds"));
 	    printf("\n\t\t");
 	    printf(_("and run the eol.ll report"));
-	    printf("\n\t");
-	    printf(_("%s -f myfamily -x eol"), exename);
-	    printf("\n\t\t");
-	    printf(_("Unlock database 'myfamily', after a power failure left the"));
-	    printf("\n\t\t");
-	    printf(_("database locked and run 'eol.ll' report"));
 	    printf("\n\n");
 	} else {
 	    printf(_("%s myfamily"), exename);
 	    printf("\n\t\t");
-	    printf(_("Open database 'myfamily' with Lifelines"));
-	    printf("\n\t");
-	    printf(_("%s -f myfamily"), exename);
-	    printf("\n\t\t");
-	    printf(_("Unlock database 'myfamily', after a power failure left\n"
-		    "\t\tthe database locked"));
+	    printf(_("Open database 'myfamily' with DeadEnds"));
 	    printf("\n\n");
 	}
 	printf(_("REPORTING BUGS"));
@@ -136,6 +128,6 @@ print_lines_usage (CString exename)
         printf("%s", _(qSgen_license));
 	printf("\n\n");
 	printf(_("SEE ALSO"));
-	printf("\n\tllines(1), llexec(1), dbverify(1), btedit(1)");
+	printf("\n\tllines(1), llexec(1)");
 	printf("\n");
 }

@@ -22,7 +22,7 @@
    SOFTWARE.
 */
 /*=============================================================
- * main.c -- Main program of LifeLines
+ * main.c -- Main program of DeadEnds
  * Copyright(c) 1992-95 by T.T. Wetmore IV; all rights reserved
  * pre-SourceForge version information:
  *   2.3.4 - 24 Jun 93    2.3.5 - 07 Aug 93
@@ -126,7 +126,7 @@ static void print_usage(void);
  *********************************************/
 
 /*==================================
- * main -- Main routine of LifeLines
+ * main -- Main routine of DeadEnds
  *================================*/
 int
 main (int argc, char **argv)
@@ -291,8 +291,8 @@ prompt_for_db:
 		goto finish;
 	}
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crashlog = getdeoptstr("CrashLog_llines", NULL);
-	if (!crashlog) { crashlog = "CrashLog_llines.log"; }
+	crashlog = getdeoptstr("CrashLog_deadends", NULL);
+	if (!crashlog) { crashlog = "CrashLog_deadends.log"; }
 	crash_setcrashlog(crashlog);
 
 	/* do we need curses?  If we're running a script or the Python
@@ -371,7 +371,7 @@ prompt_for_db:
 		else
 			ok = true;
 #else
-		fprintf (stderr, "Sorry, but Python support is not available in this version of Lifelines\n");
+		fprintf (stderr, "Sorry, but Python support is not available in this version of DeadEnds\n");
 		ok=false;
 #endif
 	} else if (python_interactive) {
@@ -382,7 +382,7 @@ prompt_for_db:
 		else
 			ok=false;
 #else
-		fprintf (stderr, "Sorry, but Python support is not available in this version of Lifelines\n");
+		fprintf (stderr, "Sorry, but Python support is not available in this version of DeadEnds\n");
 		ok=false;
 #endif
 	} else {

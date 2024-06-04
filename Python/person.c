@@ -13,7 +13,6 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
@@ -27,17 +26,6 @@
 #include "py-messages.h"
 #include "sequence.h"
 #include "ui.h"
-#else
-#include "standard.h"		/* STRING */
-#include "llstdlib.h"		/* CALLBACK_FNC */
-#include "lloptions.h"
-
-#include "gedcom.h"		/* RECORD */
-#include "indiseq.h"		/* INDISEQ */
-#include "liflines.h"
-#include "messages.h"
-#include "../gedlib/leaksi.h"
-#endif
 
 #include "python-to-c.h"
 #include "llpy-externs.h"
@@ -77,11 +65,9 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args);
 static PyObject *llpy_nextindi (PyObject *self, PyObject *args);
 static PyObject *llpy_previndi (PyObject *self, PyObject *args);
 #endif
-#if !defined(DEADENDS)		/* need a user interface */
 static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args);
 static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args);
 static PyObject *llpy_choosefam (PyObject *self, PyObject *args);
-#endif
 
 static PyObject *llpy_spouses_i (PyObject *self, PyObject *args);
 static PyObject *llpy_spouseset (PyObject *self, PyObject *args, PyObject *kw);
@@ -718,7 +704,6 @@ static PyObject *llpy_previndi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 }
 #endif
 
-#if !defined(DEADENDS)		/* commented out until DeadEnds has a user interface */
 /* llpy_choosechild_i (INDI) --> INDI
 
    Figures out INDI's set of children and asks the user to choose one.
@@ -742,11 +727,11 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
 
   seq = personToChildren (node, database);
 
-  if (! seq || (length_indiseq (seq) < 1))
+  if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */
 
   record = choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei));
-  remove_indiseq (seq);
+  deleteSequence (seq);
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
   if (! indi)
@@ -772,12 +757,12 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
   Sequence *seq;
   LLINES_PY_RECORD *py_indi;
 
-  seq = indi_to_spouses (node);
-  if (! seq || (length_indiseq (seq) < 1))
+  seq = personToSpouses (node, database);
+  if (! seq || (seq->block.length < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 
   record = choose_from_indiseq (seq, DOASK1, _(qSifonei), _(qSnotonei));
-  remove_indiseq (seq);
+  deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */
 
@@ -802,12 +787,12 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   Sequence *seq;
   RecordIndexEl *record;
 
-  seq = indi_to_families (nztop (indi->llr_record), true);
-  if (! seq || length_indiseq (seq) < 1)
+  seq = personToFamilies (nztop (indi->llr_record), true, database);
+  if (! seq || seq->block.length < 1)
     Py_RETURN_NONE;		/* person is not in any families */
 
   record = choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei));
-  remove_indiseq (seq);
+  deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */
 
@@ -820,7 +805,6 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 
   return (PyObject *) fam;
 }
-#endif
 
 static PyObject *llpy_spouses_i (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
@@ -1312,7 +1296,6 @@ If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." }
    { "children",	(PyCFunction)llpy_children_i, METH_NOARGS,
      "children(void) --> SET.  Returns the set of children of INDI." },
 
-#if !defined(DEADENDS)
    /* User Interaction Functions */
 
    { "choosechild",	llpy_choosechild_i, METH_NOARGS,
@@ -1323,7 +1306,6 @@ through user interface.  Returns None if INDI has no children." },
 through user interface.  Returns None if individual has no spouses or user cancels." },
    { "choosefam",	llpy_choosefam, METH_NOARGS,
      "choosefam(void) -> FAM; Selects and returns a family that INDI is in." },
-#endif
 
    /* this was in set.c, but there is no documented way to add methods
       to a type after it has been created.  And, researching how

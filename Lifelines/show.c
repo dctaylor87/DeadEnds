@@ -782,7 +782,7 @@ family_events (String outstr, GNode *indi, GNode *fam, int len)
 	if (!opt_nocb) {
 		GNode *chld;
 		/* Look for birth or christening of first child */
-		if ((chld = familyToFirstChild(fam), currentDatabase)) {
+		if (chld = familyToFirstChild(fam, currentDatabase)) {
 			evt = sh_indi_to_event_shrt(chld, "BIRT", _(qSdspa_chbr), mylen-2);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;

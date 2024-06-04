@@ -112,7 +112,7 @@ static void platform_init(void);
  *********************************************/
 
 /*==================================
- * main -- Main routine of LifeLines
+ * main -- Main routine of DeadEnds
  *================================*/
 int
 main (int argc, char **argv)
@@ -325,7 +325,7 @@ prompt_for_db:
 		else
 			ok = true;
 #else
-		fprintf (stderr, "Sorry, but Python support is not available in this version of Lifelines\n");
+		fprintf (stderr, "Sorry, but Python support is not available in this version of DeadEnds\n");
 		ok=false;
 #endif
 	}
@@ -337,7 +337,7 @@ prompt_for_db:
 		else
 			ok=false;
 #else
-		fprintf (stderr, "Sorry, but Python support is not available in this version of Lifelines\n");
+		fprintf (stderr, "Sorry, but Python support is not available in this version of DeadEnds\n");
 		ok=false;
 #endif
 	}

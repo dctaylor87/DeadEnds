@@ -55,7 +55,7 @@
 		if (!eqstr(ntag(__node), "FAMS")) break;\
 		__key = rmvat(nval(__node));\
 		__node = nsibling(__node);\
-		if (!__key || !(fam=keyToFamilyRecord(__key)), database) {	\
+		if (!__key || !(fam=keyToFamilyRecord(__key, database))) { \
 			continue;\
 		}\
 		{
