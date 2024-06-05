@@ -47,6 +47,7 @@ ErrorLog* createErrorLog(void) {
 // createError creates an Error.
 Error* createError(ErrorType type, CString fileName, int lineNumber, String message) {
 	Error *error = (Error*) stdalloc(sizeof(Error));
+	memset(error, 0, sizeof(Error));
 	error->type = type;
 	error->severity = severeError;
 	error->fileName = fileName;  // Do not free.
