@@ -305,7 +305,7 @@ goto_indi_child (RecordIndexEl *irec, int childno)
     ENDCHILDREN
   ENDFAMS
   if (akey) {
-    answer = key_to_irecord(akey);
+    answer = keyToPersonRecord(akey, database);
     addref_record(answer);
   }
   return answer;
@@ -329,7 +329,7 @@ goto_fam_child (RecordIndexEl *frec, int childno)
       akey = key;
   ENDCHILDREN
   if (akey) {
-    answer = key_to_irecord(akey);
+    answer = keyToPersonRecord(akey, database);
     addref_record(answer);
   }
   return answer;
