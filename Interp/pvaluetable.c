@@ -37,6 +37,7 @@ PValueTable* createPValueTable(void) {
 // createPValueElement creates a PVaueTable element.
 static PValueElement* createPValueElement(String key, PValue* ppvalue) {
     PValueElement *element = (PValueElement*) stdalloc(sizeof(PValueElement));
+    memset(element, 0, sizeof(PValueElement));
     element->key = key;
     element->value = ppvalue;
     return element;

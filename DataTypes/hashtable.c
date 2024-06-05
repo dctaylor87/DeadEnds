@@ -26,6 +26,7 @@ static void* searchBucket(Bucket*, CString key, CString(*g)(void*), int(*c)(CStr
 HashTable* createHashTable(CString(*getKey)(void*), int(*compare)(CString, CString),
 						   void(*delete)(void*), int numBuckets) { PH;
 	HashTable *table = (HashTable*) malloc(sizeof(HashTable));
+	memset(table, 0, sizeof(HashTable));
 	table->compare = compare;
 	table->delete = delete;
 	table->getKey = getKey;
@@ -48,6 +49,7 @@ void deleteHashTable(HashTable *table) { //PH;
 // createBucket creates and returns an empty Bucket.
 Bucket *createBucket(void) { //PH;
 	Bucket *bucket = (Bucket*) malloc(sizeof(Bucket));
+	memset(bucket, 0, sizeof(Bucket));
 	initBlock(&(bucket->block));
 	return bucket;
 }

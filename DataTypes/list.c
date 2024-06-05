@@ -21,6 +21,7 @@ List* createList(CString(*getKey)(void*), int(*compare)(CString, CString),
 // initList initializes a List.
 void initList(List *list, CString(*getKey)(void*), int(*compare)(CString, CString),
 			  void (*delete)(void*), bool sorted) {
+	memset(list, 0, sizeof(List));
 	initBlock(&(list->block));
 	list->compare = compare;
 	list->delete = delete;

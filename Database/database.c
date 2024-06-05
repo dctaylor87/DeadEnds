@@ -29,6 +29,7 @@ static int keyLineNumber(Database*, CString key);
 // createDatabase creates a database.
 Database *createDatabase(CString filePath) {
 	Database *database = (Database*) stdalloc(sizeof(Database));
+	memset (database, 0, sizeof(Database));
 	database->filePath = strsave(filePath);
 	database->lastSegment = strsave(lastPathSegment(filePath));
 	database->personIndex = createRecordIndex();

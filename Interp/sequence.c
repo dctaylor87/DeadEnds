@@ -69,6 +69,7 @@ SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
 	SequenceEl* element = (SequenceEl*) malloc(sizeof(SequenceEl));
 	GNode* root = getRecord(key, database);
 	ASSERT(root);
+	memset(element, 0, sizeof(SequenceEl));
 	element->root = root;
 	if (recordType(root) == GRPerson) element->name = (NAME(root))->value;
 	element->value = value;
@@ -78,6 +79,7 @@ SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
 // createSequence creates a Sequence.
 Sequence* createSequence(Database* database) {
 	Sequence* sequence = (Sequence*) malloc(sizeof(Sequence));
+	memset(sequence, 0, sizeof(Sequence));
 	initBlock(&(sequence->block));
 	sequence->database  = database;
 	sequence->unique = false;

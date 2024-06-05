@@ -25,6 +25,7 @@ CString searchRefnIndex(RefnIndex* index, CString refn) {
 // createRefnIndexEl creates a new reference index entry.
 RefnIndexEl *createRefnIndexEl(CString refn, CString key) {
 	RefnIndexEl *el = (RefnIndexEl*) malloc(sizeof(RefnIndexEl));
+	memset(el, 0, sizeof(RefnIndexEl));
 	el->refn = refn;
 	el->key = key;
 	return el;

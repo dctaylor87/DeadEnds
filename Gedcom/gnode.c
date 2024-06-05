@@ -55,6 +55,7 @@ void freeGNode(GNode* node) {
 GNode* createGNode(String key, String tag, String value, GNode* parent) {
 	nodeAllocs++;
 	GNode* node = (GNode*) malloc(sizeof(GNode));;
+	memset(node, 0, sizeof(GNode));
 	node->key = strsave(key);
 	node->tag = getFromTagTable(tag);
 	node->value = strsave(value);

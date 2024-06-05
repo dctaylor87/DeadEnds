@@ -48,6 +48,7 @@ void addToRecordIndex(RecordIndex* index, String key, GNode* root, int lineNumbe
 	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(index, key);
 	if (element) return;
 	element = (RecordIndexEl*) malloc(sizeof(RecordIndexEl));
+	memset(element, 0, sizeof(RecordIndexEl));
 	element->root = root;
 	element->lineNumber = lineNumber;
 	addToHashTable(index, element, false);

@@ -28,6 +28,7 @@ void insertInIntegerTable(IntegerTable *table, CString key, int value) {
         return;
     }
     element = (IntegerElement*) malloc(sizeof(IntegerElement)); // Create new element.
+    memset(element, 0, sizeof(IntegerElement));
     element->key = key;
     element->value = value;
     addToHashTable(table, element, false);

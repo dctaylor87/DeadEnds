@@ -19,9 +19,11 @@ Block* createBlock(void) {
 
 // initBlock initializes an existing Block.
 void initBlock(Block* block) {
+	memset(block, 0, sizeof(Block));
 	block->length = 0;
 	block->maxLength = INITIAL_SIZE_LIST_DATA_BLOCK;
 	block->elements = (void*) malloc(INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
+	memset(block->elements, 0, INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
 }
 
 // deleteBlock deallocates the elements of a Block, but not the Block itself.

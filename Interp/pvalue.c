@@ -31,6 +31,7 @@ static bool isZero(PValue);
 // lists they in the heap.
 PValue *allocPValue(PVType type, VUnion value) {
 	PValue* ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
+	memset(ppvalue, 0, sizeof(ppvalue));
 	ppvalue->type = type;
 	ppvalue->value = value;
 	return ppvalue;

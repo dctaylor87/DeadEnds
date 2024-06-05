@@ -48,6 +48,7 @@ void addToStringTable(HashTable *table, CString key, CString value) {
 	StringElement *element = (StringElement*) searchHashTable(table, key);
 	if (element) removeFromHashTable(table, key); // If in table remove element before replacing.
 	element = (StringElement*) malloc(sizeof(StringElement));
+	memset(element, 0, sizeof(StringElement));
 	element->key = strsave(key);
 	element->value = value ? strsave(value) : null;
 	addToHashTable(table, element, false);
