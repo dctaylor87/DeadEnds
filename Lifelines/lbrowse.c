@@ -63,7 +63,7 @@
 #include "llpy-externs.h"
 
 /* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
+//#define database	currentDatabase
 
 #include "llinesi.h"
 #include "screen.h"
@@ -106,7 +106,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	while (true) {
 		element_indiseq(seq, cur, &key, &name);
-		rec = key_to_record(key);
+		rec = __llpy_key_to_record(key, NULL, seq->database);
 		switch (c = list_browse(seq, top, &cur, mark)) {
 		case 'j':        /* Move down line */
 		case CMD_KY_DN:
@@ -230,7 +230,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			}
 			cand2 = rec;
 			element_indiseq(seq, mark, &key, &name);
-			cand1 = key_to_record(key);
+			cand1 = __llpy_key_to_record(key, NULL, seq->database);
 			if (nztype(cand1)=='I' && nztype(cand2)=='I') {
 				current_seq = NULL;
 				*prec1 = cand1;
@@ -257,7 +257,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
 			if ((len = length_indiseq(seq)) == 1) {
-				*prec1 = key_to_irecord(key);
+				*prec1 = keyToPersonRecord(key, seq->database);
 				remove_indiseq(newseq);
 				current_seq = NULL;
 				return BROWSE_INDI;
