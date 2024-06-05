@@ -2033,7 +2033,7 @@ show_record (UIWINDOW uiwin, CString key, int mode, LLRECT rect
 	int hgt = rect->bottom - rect->top + 1;
 	int width = rect->right - rect->left + 1;
 	if (key[0]=='I') {
-		RecordIndexEl *irec = key_to_irecord(key);
+		RecordIndexEl *irec = keyToPersonRecord(key, currentDatabase);
 		if (irec)
 			show_indi(uiwin, irec, mode, rect, scroll, reuse);
 		return irec != NULL;
