@@ -7,7 +7,7 @@ typedef const char *	CNSTRING;
 
 #define BOOLEAN		_Bool
 #define SURCAPTYPE	_Bool
-#define NODE		GNode *
+//#define NODE		GNode *
 
 /* nxref, nflag, ncel are not used by Python code.  The fate of
    nrefcnt is yet to be determined -- it is used by Python code, but
@@ -49,21 +49,21 @@ typedef const char *	CNSTRING;
 
 #define release_record(record)		/* empty --= no current ref counts */
 
-#define FALSE		false	/* <stdbool.h> */
-#define TRUE		true	/* <stdbool.h> */
+//#define FALSE		false	/* <stdbool.h> */
+//#define TRUE		true	/* <stdbool.h> */
 
 #define INT		int	/* XXX */
 
-#define indi_to_fath(node)		personToFather(node, database)
-#define indi_to_moth(node)		personToMother(node, database)
-#define indi_to_next_sib_old(node)	personToNextSibling(node, database)
-#define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
-#define indi_to_famc(node)		personToFamilyAsChild(node, database)
+//#define indi_to_fath(node)		personToFather(node, database)
+//#define indi_to_moth(node)		personToMother(node, database)
+//#define indi_to_next_sib_old(node)	personToNextSibling(node, database)
+//#define indi_to_prev_sib_old(node)	personToPreviousSibling(node, database)
+//#define indi_to_famc(node)		personToFamilyAsChild(node, database)
 
 //#define getlloptstr(property, default)	(getenv(property) ? getenv(property) : default) /* XXX */
 
-#define event_to_date(node,shorten)	eventToDate(node,shorten)
-#define event_to_plac(node,shorten)	eventToPlace(node,shorten)
+//#define event_to_date(node,shorten)	eventToDate(node,shorten)
+//#define event_to_plac(node,shorten)	eventToPlace(node,shorten)
 #define givens(name)			getGivenNames(name)
 #define getasurname(name)		getSurname(name)
 #define getsxsurname(name)		getSurname(name)
@@ -75,16 +75,16 @@ typedef const char *	CNSTRING;
 #define name_string(str)		nameString(str)
 #define trim_name(name,len)		trimName(name,len)
 
-#define key_to_irecord(key)	keyToPersonRecord(key, database)
-#define key_to_frecord(key)	keyToFamilyRecord(key, database)
-#define key_to_srecord(key)	keyToSourceRecord(key, database)
-#define key_to_erecord(key)	keyToEventRecord(key, database)
-#define key_to_orecord(key)	keyToOtherRecord(key, database)
-#define qkey_to_irecord(key)	keyToPersonRecord(key, database)
-#define qkey_to_frecord(key)	keyToFamilyRecord(key, database)
-#define qkey_to_srecord(key)	keyToSourceRecord(key, database)
-#define qkey_to_erecord(key)	keyToEventRecord(key, database)
-#define qkey_to_orecord(key)	keyToOtherRecord(key, database)
+//#define key_to_irecord(key)	keyToPersonRecord(key, database)
+//#define key_to_frecord(key)	keyToFamilyRecord(key, database)
+//#define key_to_srecord(key)	keyToSourceRecord(key, database)
+//#define key_to_erecord(key)	keyToEventRecord(key, database)
+//#define key_to_orecord(key)	keyToOtherRecord(key, database)
+//#define qkey_to_irecord(key)	keyToPersonRecord(key, database)
+//#define qkey_to_frecord(key)	keyToFamilyRecord(key, database)
+//#define qkey_to_srecord(key)	keyToSourceRecord(key, database)
+//#define qkey_to_erecord(key)	keyToEventRecord(key, database)
+//#define qkey_to_orecord(key)	keyToOtherRecord(key, database)
 
 #define rmvat(key)		(key)
 
