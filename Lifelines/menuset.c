@@ -189,9 +189,11 @@ static CMDARRAY
 create_cmd_array (int alloc)
 {
 	CMDARRAY cmds = (CMDARRAY)stdalloc(sizeof(*cmds));
+	memset(cmds, 0, sizeof(*cmds));
 	cmds->alloc = alloc;
 	cmds->used = 0;
 	cmds->array = (CMDITEM)stdalloc(alloc * sizeof(cmds->array[0]));
+	memset(cmds->array, 0, alloc * sizeof(cmds->array[0]));
 	return cmds;
 }
 /*============================

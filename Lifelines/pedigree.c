@@ -152,6 +152,7 @@ static DISPNODE
 alloc_displaynode (void)
 {
 	DISPNODE tn = (DISPNODE)stdalloc(sizeof(*tn));
+	memset(tn, 0, sizeof(*tn));
 	tn->firstchild = NULL;
 	tn->nextsib = NULL;
 	tn->key = 0;

@@ -147,6 +147,7 @@ create_trantable (String *lefts, String *rights, int n, String name)
 	String left, right;
 	int i, c;
 	XNODE node;
+	memset(tt, 0, sizeof(*tt));
 	tt->name[0] = 0;
 	tt->total = n;
 	llstrncpy(tt->name, name, sizeof(tt->name), uu8);
@@ -181,6 +182,7 @@ static XNODE
 create_xnode (XNODE parent, int achar, String string)
 {
 	XNODE node = (XNODE) stdalloc(sizeof(*node));
+	memset(node, 0, sizeof(*node));
 	node->parent = parent;
 	node->sibling = NULL;
 	node->child = NULL;
