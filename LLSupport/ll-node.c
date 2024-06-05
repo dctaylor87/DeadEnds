@@ -221,7 +221,7 @@ next_spouse (GNode **node, RecordIndexEl **spouse, Database *database)
 	    if (eqstr(ntag(*node),"HUSB") || eqstr(ntag(*node),"WIFE")) {
 		key = rmvat(nval(*node));
 		if (!key) return -1;
-		*spouse = qkey_to_irecord(key);
+		*spouse = keyToPersonRecord(key, database);
 		if (!*spouse) return -1;
 		return 1;
 	    }
@@ -239,7 +239,7 @@ indi_to_prev_sib_impl (GNode *indi, Database *database)
 {
 	GNode *fam, *prev, *node;
 	if (!indi) return NULL;
-	if (!(fam = indi_to_famc(indi))) return NULL;
+	if (!(fam = personToFamilyAsChild(indi, database))) return NULL;
 	prev = NULL;
 	node = CHIL(fam);
 	/* loop thru all nodes following first child, keeping most recent CHIL */
@@ -269,7 +269,7 @@ indi_to_next_sib_impl (GNode *indi, Database *database)
 	GNode *fam, *node;
 	bool found;
 	if (!indi) return NULL;
-	if (!(fam = indi_to_famc(indi))) return NULL;
+	if (!(fam = personToFamilyAsChild(indi, database))) return NULL;
 	node = CHIL(fam);
 	found = false;  /* until we find indi */
 	while (node) {
@@ -467,7 +467,7 @@ copy_node_subtree (GNode *node)
 
 /*===============================================================
  * traverse_nodes -- Traverse nodes in tree while doing something
- * NODE node:    root of tree to traverse
+ * GNode *node:  root of tree to traverse
  * func:         function to call at each node (returns false to stop traversal)
  * param:        opaque pointer for client use, passed thru to callback
  *=============================================================*/
