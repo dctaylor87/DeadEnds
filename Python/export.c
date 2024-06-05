@@ -70,7 +70,7 @@ llpy_export (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 }
 
 /* this is the implementation of the commonality of llpy_export /
-   llpy_export_db -- basically everything aftger the argument
+   llpy_export_db -- basically everything after the argument
    parsing. */
 
 PyObject *
