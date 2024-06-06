@@ -89,7 +89,7 @@ expand_tree (GNode *root0)
 	GNode *expd;	/* expanded main record - copy - our retval */
 
 	root = root0;
-	expd = copy_nodes(root, true, true);
+	expd = copyNodes(root, true, true);
 	subs = create_list();
 	traverse_nodes(expd, advedit_expand_traverse, subs);
 

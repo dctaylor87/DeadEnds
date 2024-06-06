@@ -180,15 +180,15 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
     	 * of the originals.
 	 */
 	indi01 = indi1;	/* keep original indi1 for later delete */
-	indi1 = copy_nodes(indi1, true, true);
+	indi1 = copyNodes(indi1, true, true);
 	indi02 = indi2;	/* keep original indi2 for later update and return */
-	indi2 = copy_nodes(indi2, true, true);
+	indi2 = copyNodes(indi2, true, true);
 
 /* we split indi1 & indi2 and leave them split until near the end */
 	splitPerson(indi1, &name1, &refn1, &sex1, &body1, &famc1, &fams1);
 	splitPerson(indi2, &name2, &refn2, &sex2, &body2, &famc2, &fams2);
 	indi3 = indi2; 
-	indi2 = copy_nodes(indi2, true, true);
+	indi2 = copyNodes(indi2, true, true);
 	sx2 = sexUnknown;
 	if (fams1) sx2 = valueToSex(sex1);
 	if (fams2) sx2 = valueToSex(sex2);
@@ -404,7 +404,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
   we'll make a scratch copy (in indi3, which is not used now)
 */
 
-	indi3 = copy_nodes(indi4, true, true);
+	indi3 = copyNodes(indi4, true, true);
 
 	splitPerson(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
 	classify_nodes(&name2, &name3, &name24);
@@ -513,7 +513,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 
 /* Create merged file with both families together */
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	fam3 = copy_nodes(fam2, true, true);
+	fam3 = copyNodes(fam2, true, true);
 	fref3 = union_nodes(fref1, fref2, true, true);
 	husb3 = union_nodes(husb1, husb2, true, true);
 	wife3 = union_nodes(wife1, wife2, true, true);
@@ -682,7 +682,7 @@ sort_children (GNode *chil1,
 	int int1, int2;
 	/* copy1 contains all children in chil1 not in chil2 */
 	copy1 = remove_dupes(chil1, chil2);
-	copy2 = copy_nodes(chil2, true, true);
+	copy2 = copyNodes(chil2, true, true);
 	int1 = int2 = 1;
 	prev = chil3 = NULL;
 	while (copy1 && copy2) {
@@ -744,7 +744,7 @@ sort_children (GNode *chil1,
 static GNode *
 remove_dupes (GNode *list1, GNode *list2)
 {
-	GNode *copy1 = copy_nodes(list1, true, true);
+	GNode *copy1 = copyNodes(list1, true, true);
 	GNode *prev1, *next1, *curs1, *curs2;
 	prev1 = NULL;
 	curs1 = copy1;

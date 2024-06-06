@@ -79,8 +79,8 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 	freeGNodes(indi0);
 	/* Move indi2 data into indi1, also copy out lists of names & refns */
 	splitPerson(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
-	namen = copy_nodes(name2, true, true);
-	refnn = copy_nodes(refn2, true, true);
+	namen = copyNodes(name2, true, true);
+	refnn = copyNodes(refn2, true, true);
 	joinPerson(indi1, name2, refn2, sex, body, famc, fams);
 	free_node(indi2,"replace_indi");
 	nodechk(indi1, "replace_indi");
@@ -135,7 +135,7 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 	freeGNodes(fam0);
 	/* Move fam2 data into fam1, also copy out list of refns */
 	splitFamily(fam2, &refn2, &husb, &wife, &chil, &body);
-	refnn = copy_nodes(refn2, true, true);
+	refnn = copyNodes(refn2, true, true);
 	joinFamily(fam1, refn2, husb, wife, chil, body);
 	free_node(fam2,"replace_fam");
 

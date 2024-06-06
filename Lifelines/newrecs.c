@@ -382,7 +382,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	/* now copy root2 node into root1, then root2 tree under it */
 	root1 = copy_node(root2);
 	splitOther(root2, &refn2, &body);
-	refnn = copy_nodes(refn2, true, true);
+	refnn = copyNodes(refn2, true, true);
 	joinOther(root1, refn2, body);
 	/* now root2 is solitary node, delete it */
 	free_node(root2,"edit_record"); root2 = 0;

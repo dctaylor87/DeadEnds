@@ -462,7 +462,7 @@ show_node_rec (int levl,
 GNode *
 copy_node_subtree (GNode *node)
 {
-	return copy_nodes(node, true, false);
+	return copyNodes(node, true, false);
 }
 
 /*===============================================================
