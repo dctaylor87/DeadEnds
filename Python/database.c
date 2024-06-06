@@ -16,20 +16,12 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
-#else
-#include "standard.h"		/* STRING */
-#include "llstdlib.h"		/* CALLBACK_FNC */
-#include "lloptions.h"
-
-#include "gedcom.h"		/* RECORD */
-#endif
 
 #include "python-to-c.h"
 #include "types.h"

@@ -142,7 +142,7 @@ static PyObject *llpy_copy_node_tree (PyObject *self, PyObject *args ATTRIBUTE_U
 
   copy->lnn_type = node->lnn_type;
   copy->lnn_database = node->lnn_database;
-  copy->lnn_node = copy_nodes (node->lnn_node, true, true);
+  copy->lnn_node = copyNodes (node->lnn_node, true, true);
   nrefcnt_inc(copy->lnn_node);
   TRACK_NODE_REFCNT_INC(copy->lnn_node);
 

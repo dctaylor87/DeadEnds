@@ -155,7 +155,7 @@ static PyObject *llpy_nchildren (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   RecordIndexEl *fam_record = fam->llr_record;
-  int count = length_nodes (CHIL (nztop (fam_record)));
+  int count = gNodesLength (CHIL (nztop (fam_record)));
 
   return (Py_BuildValue ("i", count));
 }
@@ -302,7 +302,7 @@ static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
 static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  RECORD fam = ((LLINES_PY_RECORD *)self)->llr_record;
+  RecordIndexEl *fam = ((LLINES_PY_RECORD *)self)->llr_record;
   Database *database = ((LLINES_PY_RECORD *)self)->llr_database;
   PyObject *output_set = PySet_New (NULL);
 

@@ -201,7 +201,7 @@ static PyObject *llpy_surname (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 #endif
       Py_RETURN_NONE;
     }
-  name = getasurname(nval(node_name));
+  name = getSurname(nval(node_name));
   return (Py_BuildValue ("s", name));
 }
 
@@ -226,7 +226,7 @@ static PyObject *llpy_givens (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 #endif
       Py_RETURN_NONE;
     }
-  return (Py_BuildValue ("s", givens(nval(name))));
+  return (Py_BuildValue ("s", getGivenNames(nval(name))));
 }
 
 /* llpy_trimname (INDI, MAX_LENGTH) --> STRING
@@ -560,14 +560,7 @@ static PyObject *llpy_nfamilies (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   GNode *indi_node = nztop (indi->llr_record);
-#if defined(DEADENDS)
-  int count = 0;
-  for (GNode *node = indi_node->child; node; node = node->sibling)
-    if (eqstr (node->tag, "FAMS"))
-      count++;
-#else
-  int count = length_nodes (FAMS (indi_node));
-#endif
+  int count = gNodesLength (FAMS (indi_node));
   return (Py_BuildValue ("I", count));
 }
 
@@ -628,7 +621,7 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 #endif
       Py_RETURN_NONE;
     }
-  return Py_BuildValue ("s", soundex (getsxsurname (nval (name))));
+  return Py_BuildValue ("s", soundex (getSurname (nval (name))));
 }
 
 #if !defined(DEADENDS)		/* need a 'highest indi key' variable */
