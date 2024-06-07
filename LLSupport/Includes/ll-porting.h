@@ -19,7 +19,7 @@ typedef void *		VPTR;
 #define node_to_string(node)			gnodesToString(node)
 #define free_node(node,msg)			freeGNode(node)
 #define free_nodes(node)			freeGNodes(node)
-#define find_tag(node, tag)			findTag(node, tag)
+//#define find_tag(node, tag)			findTag(node, tag)
 
 #define ARRSIZE(array)		ARRAYSIZE(array)
 
@@ -120,7 +120,7 @@ typedef void *		VPTR;
 #define back_list(list, elt)		appendListElement(list, elt)
 #define destroy_list(list)		deleteList(list)
 #define is_empty_list(list)		isEmptyList(list)
-#define length_list(list)		lengthList(list)
+//#define length_list(list)		lengthList(list)
 #define pop_list(list)			getAndRemoveFirstListElement(list)
 #define push_list(list, vptr)		prependToList(list, vptr)
 
