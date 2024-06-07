@@ -99,6 +99,7 @@ extern CString version;		// standard.c
 
 // Debugging aids.
 //extern String lastPathSegment(String);
+extern FILE *debugFile;
 #define PH if(debugging && debugFile) fprintf(debugFile, "%s %s %d\n", __FUNCTION__,\
 	lastPathSegment(__FILE__), __LINE__);
 
