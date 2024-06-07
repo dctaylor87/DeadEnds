@@ -31,6 +31,17 @@ struct GNode {
 	uint8_t spare[3]; // reserved for future expansion
 };
 
+#define nchild(node)	((node)->child)
+#define nsibling(node)	((node)->sibling)
+#define nparent(node)	((node)->parent)
+#define nval(node)	((node)->value)
+#define ntag(node)	((node)->tag)
+#define nxref(node)	((node)->key)
+
+#define nrefcnt_inc(node)	((node)->refcount++)
+#define nrefcnt_dec(node)	((node)->refcount--)
+#define get_nrefcnt(node)	((node)->refcount)
+
 //String fileof = (String) "The file is as positioned at EOF.";
 //String reremp = (String) "Line %d: This line is empty; EOF?";
 //String rerlng = (String) "Line %d: This line is too long.";
