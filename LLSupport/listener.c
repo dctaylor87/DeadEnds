@@ -91,7 +91,7 @@ delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 			enqueueList(*notifiees, (Word)info);
 		}
 	}
-	destroy_empty_list(lold);
+	deleteList(lold);
 	if (isEmptyList(*notifiees)) {
 		remove_listeners(notifiees);
 	}

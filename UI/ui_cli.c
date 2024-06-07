@@ -249,7 +249,7 @@ choose_from_list (CString ttl, List *list)
 	String * array=0;
 	String choice=0;
 	int i=0, rtn=-1;
-	int len = length_list(list);
+	int len = lengthList(list);
 
 	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);

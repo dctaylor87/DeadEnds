@@ -1311,7 +1311,7 @@ choose_from_list (CString ttl, List *list)
 	String * array=0;
 	String choice=0;
 	int i=0, rtn=-1;
-	int len = length_list(list);
+	int len = lengthList(list);
 
 	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);
@@ -2045,7 +2045,7 @@ show_record (UIWINDOW uiwin, CString key, int mode, LLRECT rect
 
 	} else {
 		/* could be S,E,X -- show_aux handles all of these */
-		RecordIndexEl *rec = qkey_to_record(key);
+		RecordIndexEl *rec = __llpy_key_to_record (key, NULL, currentDatabase);
 		if (rec)
 			show_aux(uiwin, rec, mode, rect, scroll, reuse);
 		return rec != NULL;
@@ -2552,7 +2552,7 @@ curses_outputv (ARG_UNUSED(void *data),
 	/* update flag about whether we need to show msg list to user */
 	/* being careful in case we are currently *in* the msg list
 	show routine */
-	if (!viewing_msgs && (length_list(msg_list)>1 || lock_std_msg)) {
+	if (!viewing_msgs && (lengthList(msg_list)>1 || lock_std_msg)) {
 		msg_flag = true;
 	}
 	/* now put it to status area if appropriate */
@@ -2603,13 +2603,13 @@ void end_action (void)
 	check_stdout();
 	/* put up list of errors if appropriate */
 	if (msg_flag && msg_list) {
-		String * strngs = (String *)stdalloc(length_list(msg_list)*sizeof(String));
+		String * strngs = (String *)stdalloc(lengthList(msg_list)*sizeof(String));
 		int i=0;
 		FORLIST(msg_list, el)
 			strngs[i++] = el;
 		ENDLIST
 		viewing_msgs = true; /* suppress msg generation */
-		view_array(_(qSerrlist), length_list(msg_list), strngs);
+		view_array(_(qSerrlist), lengthList(msg_list), strngs);
 		viewing_msgs = false;
 		stdfree(strngs);
 		clear_msgs();

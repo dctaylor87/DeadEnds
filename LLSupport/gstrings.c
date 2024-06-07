@@ -92,7 +92,7 @@ get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *d
 	}
 	nchil = *pnum = 0;
 	if (!fam || !(chil = CHIL(fam))) return NULL;
-	nchil = length_nodes(chil);
+	nchil = gNodesLength(chil);
 	if (nchil == 0) return NULL;
 	if (nchil > (maxchil - 1)) {
 		if (maxchil) {

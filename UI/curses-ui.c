@@ -124,7 +124,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
   /* update flag about whether we need to show msg list to user */
   /* being careful in case we are currently *in* the msg list
      show routine */
-  if (!viewing_msgs && (length_list(msg_list)>1 || lock_std_msg)) {
+  if (!viewing_msgs && (lengthList(msg_list)>1 || lock_std_msg)) {
     msg_flag = true;
   }
   /* now put it to status area if appropriate */

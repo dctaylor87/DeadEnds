@@ -58,7 +58,7 @@ equal_tree (GNode *root1,
 	String str1, str2;
 	if (!root1 && !root2) return true;
 	if (!root1 || !root2) return false;
-	if (length_nodes(root1) != length_nodes(root2)) return false;
+	if (gNodesLength(root1) != gNodesLength(root2)) return false;
 	while (root1) {
 		if (nestr(ntag(root1), ntag(root2))) return false;
 		str1 = nval(root1);
@@ -101,8 +101,8 @@ iso_list (GNode *root1,
 	GNode *node1, *node2;
 	if (!root1 && !root2) return true;
 	if (!root1 || !root2) return false;
-	len1 = length_nodes(root1);
-	len2 = length_nodes(root2);
+	len1 = gNodesLength(root1);
+	len2 = gNodesLength(root2);
 	if (len1 != len2) return false;
 	if (len1 == 0) return true;
 	node1 = root1;
@@ -159,8 +159,8 @@ iso_nodes (GNode *root1,
 		return equal_node(root1, root2) && iso_nodes(nchild(root1),
 		    nchild(root2), 1, 1);
 
-	len1 = length_nodes(root1);
-	len2 = length_nodes(root2);
+	len1 = gNodesLength(root1);
+	len2 = gNodesLength(root2);
 	if (len1 != len2) return false;
 	if (len1 == 0) return true;
 

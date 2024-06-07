@@ -246,7 +246,7 @@ indi_to_prev_sib_impl (GNode *indi, Database *database)
 	while (node) {
 		if (eqstr(nxref(indi), nval(node))) {
 			if (!prev) return NULL;
-			return key_to_record(rmvat(nval(prev)));
+			return keyToPersonRecord(rmvat(nval(prev)), database);
 		}
 		if (eqstr(ntag(node),"CHIL"))
 			prev = node;
@@ -278,7 +278,7 @@ indi_to_next_sib_impl (GNode *indi, Database *database)
 				found = true;
 		} else {
 			if (eqstr(ntag(node),"CHIL"))
-				return key_to_record(rmvat(nval(node)));
+				return keyToPersonRecord(rmvat(nval(node)), database);
 		}
 		node = nsibling(node);
 	}
