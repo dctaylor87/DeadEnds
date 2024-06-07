@@ -66,7 +66,7 @@
 #include "llpy-externs.h"
 
 /* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
+//#define database	currentDatabase
 
 /*********************************************
  * local function prototypes
@@ -185,7 +185,7 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				*prec1 = key_to_record(key);
+				*prec1 = keyToPersonRecord(key, seq->database);
 				remove_indiseq(seq);
 				return BROWSE_INDI;
 			}
@@ -269,11 +269,11 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 				GNode *node1;
 				GNode *node2;
 
-				node1 = familyToHusband (current1->root, database);
-				node2 = familyToHusband (current2->root, database);
+				node1 = familyToHusband (current1->root, currentDatabase);
+				node2 = familyToHusband (current2->root, currentDatabase);
 
-				fam1 = _llpy_node_to_record (node1, database);
-				fam2 = _llpy_node_to_record (node2, database);
+				fam1 = _llpy_node_to_record (node1, currentDatabase);
+				fam2 = _llpy_node_to_record (node2, currentDatabase);
 
 				if (fam1 && fam2) {
 				  *prec1 = fam1;

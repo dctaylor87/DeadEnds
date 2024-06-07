@@ -69,7 +69,7 @@
 #include "ui.h"
 
 /* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
+//#define database	currentDatabase
 
 /*********************************************
  * external/imported variables
@@ -326,7 +326,7 @@ ask_for_indiseq (CString ttl, char ctype, int *prc)
 				continue; /* fallback to main question above */
 			*prc = RC_SELECT;
 		} else {
-			seq = str_to_indiseq(name, ctype);
+			seq = stringToSequence(name, currentDatabase);
 			if (seq) {
 				*prc = RC_SELECT;
 			} else {
@@ -482,7 +482,7 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 		badkeylist[0] = 0;
 	else {
 		CString skey = element_key_indiseq(seq, i);
-		rec = key_to_record(skey);
+		rec = __llpy_key_to_record (skey, NULL, seq->database);
 	}
 	listbadkeys = 0;
 	if(!rec) {
@@ -510,7 +510,8 @@ ask_for_record (CString idstr, int letr)
 		return NULL;
 	if (!answer[0]) return NULL;
 
-	rec = key_possible_to_record(answer, letr);
+	//rec = key_possible_to_record(answer, letr);
+	rec = __llpy_key_to_record (answer, NULL, currentDatabase);
 	if (!rec) {
 		Sequence *seq;
 		seq = refnToSequence(answer, currentDatabase);

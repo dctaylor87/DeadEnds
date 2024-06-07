@@ -689,7 +689,7 @@ editfam:
 	msg_info("%s", _(qSgdfadd));
 
 	key = rmvat(nxref(fam2));
-	return key_to_record(key);
+	return keytoFamilyRecord(key, currentDatabase);
 }
 /*==========================================================
  * add_new_fam_to_db -- Add newly created family to database

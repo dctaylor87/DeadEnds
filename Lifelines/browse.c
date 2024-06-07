@@ -79,7 +79,7 @@
 #include "llpy-externs.h"
 
 /* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
+//#define database	currentDatabase
 
 /*********************************************
  * global/exported variables
@@ -202,7 +202,7 @@ prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
 		if ((len = length_indiseq(*pseq)) < 1) return;
 		if (len == 1) {
 			element_indiseq(*pseq, 0, &key, &name);
-			*prec = qkey_to_record(key);
+			*prec = keyToPersonRecord(key, (*pseq)->database);
 			remove_indiseq(*pseq);
 			*pseq = NULL;
 			*code = BROWSE_UNK; /* not sure what we got above */
@@ -298,14 +298,14 @@ goto_indi_child (RecordIndexEl *irec, int childno)
   GNode *indi = nztop(irec);
   if (!irec)
     return NULL;
-  FORFAMS(indi, fam, num1, database)
-    FORCHILDREN(fam, chil, key, num2, database)
+  FORFAMS(indi, fam, num1, currentDatabase)
+    FORCHILDREN(fam, chil, key, num2, currentDatabase)
       if (num2 == childno) 
         akey = key;
     ENDCHILDREN
   ENDFAMS
   if (akey) {
-    answer = keyToPersonRecord(akey, database);
+    answer = keyToPersonRecord(akey, currentDatabase);
     addref_record(answer);
   }
   return answer;
@@ -324,12 +324,12 @@ goto_fam_child (RecordIndexEl *frec, int childno)
   GNode *fam = nztop(frec);
   if (!frec)
     return NULL;
-  FORCHILDREN(fam, chil, key, num, database)
+  FORCHILDREN(fam, chil, key, num, currentDatabase)
     if (num == childno) 
       akey = key;
   ENDCHILDREN
   if (akey) {
-    answer = keyToPersonRecord(akey, database);
+    answer = keyToPersonRecord(akey, currentDatabase);
     addref_record(answer);
   }
   return answer;
@@ -591,13 +591,13 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				indimode = 'i';
 			break;
 		case CMD_UPSIB:	/* Browse to older sib */
-			if ((tmp = indi_to_prev_sib(current, database)) != 0)
+			if ((tmp = indi_to_prev_sib(current, currentDatabase)) != 0)
 				setrecord(&current, &tmp);
 			else
 				msg_error("%s", _(qSnoosib));
 			break;
 		case CMD_DOWNSIB:	/* Browse to younger sib */
-			if ((tmp = indi_to_next_sib(current, database)) != 0)
+			if ((tmp = indi_to_next_sib(current, currentDatabase)) != 0)
 				setrecord(&current, &tmp);
 			else
 				msg_error("%s", _(qSnoysib));
@@ -628,7 +628,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				tmp = key_to_record(key);
+				tmp = keyToPersonRecord(key, seq->database);
 				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
@@ -944,13 +944,13 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 	}
 	i = 0;
 	for (node = husb; node; node = nsibling(node)) {
-		root = key_to_indi(rmvat(nval(node)));
+		root = keyToPerson(rmvat(nval(node)), currentDatabase);
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, true, true);
 		spnodes[i++] = root;
 	}
 	for (node = wife; node; node = nsibling(node)) {
-		root = key_to_indi(rmvat(nval(node)));
+		root = keyToPerson(rmvat(nval(node)), currentDatabase);
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, true, true);
 		spnodes[i++] = root;
@@ -962,7 +962,7 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 	joinFamily(fam, fref, husb, wife, chil, rest);
 	i = choose_from_array(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
-	choose_and_remove_spouse(node_to_record(spnodes[i]), frec, true);
+	choose_and_remove_spouse(__llpy_node_to_record(spnodes[i], currentDatabase), frec, true);
 }
 /*===============================================
  * prompt_add_spouse_with_candidate -- 
@@ -1225,7 +1225,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			if (!seq) break;
 			if (length_indiseq(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
-				tmp = key_to_record(key);
+				tmp = keyToPersonRecord(key, seq->database);
 				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
@@ -1898,7 +1898,7 @@ get_history_list (struct hist * histp)
 		return NULL;
 	}
 	/* add all items of history to seq */
-	seq = create_indiseq_null();
+	seq = createSequence(currentDatabase);
 	next = histp->start;
 	while (1) {
 		GNode *node=0;
