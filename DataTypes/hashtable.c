@@ -13,7 +13,7 @@
 bool debugging = true;
 bool debuggingHash = false;
 bool sortChecking = false;
-extern FILE* debugFile;
+//extern FILE* debugFile;
 
 static void* searchBucket(Bucket*, CString key, CString(*g)(void*), int(*c)(CString, CString), int* index);
 //static void* linearSearchBucket(Bucket*, CString key, CString(*g)(void*), int* index);
@@ -26,12 +26,19 @@ static void* searchBucket(Bucket*, CString key, CString(*g)(void*), int(*c)(CStr
 HashTable* createHashTable(CString(*getKey)(void*), int(*compare)(CString, CString),
 						   void(*delete)(void*), int numBuckets) { PH;
 	HashTable *table = (HashTable*) malloc(sizeof(HashTable));
+	if (! table)
+	  return NULL;
 	memset(table, 0, sizeof(HashTable));
 	table->compare = compare;
 	table->delete = delete;
 	table->getKey = getKey;
 	table->numBuckets = numBuckets;
 	table->buckets = (Bucket**) malloc(numBuckets*sizeof(Bucket));
+	if (! table->buckets)
+	{
+	  free (table);
+	  return NULL;
+	}
 	for (int i = 0; i < table->numBuckets; i++) table->buckets[i] = null;
 	table->refcount = 1;
 	return table;
@@ -49,6 +56,8 @@ void deleteHashTable(HashTable *table) { //PH;
 // createBucket creates and returns an empty Bucket.
 Bucket *createBucket(void) { //PH;
 	Bucket *bucket = (Bucket*) malloc(sizeof(Bucket));
+	if (! bucket)
+	  return NULL;
 	memset(bucket, 0, sizeof(Bucket));
 	initBlock(&(bucket->block));
 	return bucket;
