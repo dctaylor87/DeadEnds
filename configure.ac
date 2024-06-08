@@ -678,5 +678,6 @@ AC_CONFIG_FILES([Makefile \
         UI/Makefile \
         Utils/Makefile \
         Validate/Makefile \
+	Operations/Makefile \
         Tests/Makefile])
 AC_OUTPUT
