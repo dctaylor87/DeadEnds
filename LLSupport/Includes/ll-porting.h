@@ -114,7 +114,7 @@ typedef void *		VPTR;
 #define addref_table(table)			addrefHashTable(table)
 
 #define LIST		List *
-#define create_list()			createList(NULL, NULL, NULL, false)
+//#define create_list()			createList(NULL, NULL, NULL, false)
 #define enqueue_list			enqueueList
 
 #define back_list(list, elt)		appendListElement(list, elt)
