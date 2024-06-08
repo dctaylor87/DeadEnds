@@ -11,6 +11,8 @@ libllsupport_a_SOURCES = \
 	charmaps.c \
 	charprops.c \
 	codesets.c \
+	equaliso.c \
+	expandvars.c \
 	fpattern.c \
 	gstrings.c \
 	icvt.c \
@@ -18,6 +20,7 @@ libllsupport_a_SOURCES = \
 	ll-addoperations.c \
 	ll-database.c \
 	ll-node.c \
+	ll-node-seq.c \
 	ll-sequence.c \
 	ll-str.c \
 	ll-temp-nodes.c \
@@ -54,6 +57,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Interp/Includes \
 	-I$(top_srcdir)/Gedcom/Includes \
 	-I$(top_srcdir)/Database/Includes
+
+AM_CLFAGS = -fanalyzer
 
 # Locale information for gettext
 DEFS = -DDEADENDS -DLOCALEDIR=\"$(localedir)\" @DEFS@
