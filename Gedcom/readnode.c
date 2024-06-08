@@ -17,7 +17,7 @@
 #include "errors.h"
 
 extern bool importDebugging;
-extern FILE* debugFile;
+//extern FILE* debugFile;
 
 // Variables that maintain state between functions.
 String xfileName;

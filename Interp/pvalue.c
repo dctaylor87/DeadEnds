@@ -31,6 +31,8 @@ static bool isZero(PValue);
 // lists they must be in the heap.
 PValue *allocPValue(PVType type, VUnion value) {
 	PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
+	if (! ppvalue)
+	  return NULL;
 	memset(ppvalue, 0, sizeof(ppvalue));
 	ppvalue->type = type;
 	ppvalue->value = value;
@@ -56,6 +58,8 @@ void freePValue(PValue* ppvalue) {
 // copyPValue copies a PValue.
 PValue *copyPValue(PValue pvalue) {
 	PValue *ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
+	if (! ppvalue)
+	  return NULL;
 	memcpy(ppvalue, &pvalue, sizeof(PValue));
 	return ppvalue;
 }

@@ -22,7 +22,7 @@
 #include "rootlist.h"
 #include "writenode.h"
 
-extern FILE* debugFile;
+FILE* debugFile;
 extern bool importDebugging;
 bool indexNameDebugging = true;
 static int keyLineNumber(Database*, CString key);
@@ -30,6 +30,8 @@ static int keyLineNumber(Database*, CString key);
 // createDatabase creates a database.
 Database *createDatabase(CString filePath) {
 	Database *database = (Database*) stdalloc(sizeof(Database));
+	if (! database)
+	  return NULL;
 	memset (database, 0, sizeof(Database));
 	database->filePath = strsave(filePath);
 	database->lastSegment = strsave(lastPathSegment(filePath));
