@@ -153,7 +153,7 @@ static void
 append_to_msg_list (String msg)
 {
   if (!msg_list)
-    msg_list = create_list2(LISTDOFREE);
+    msg_list = createList (NULL, NULL, free, false);
   enqueue_list(msg_list, strsave(msg));
 }
 /* display_status -- put string in status line

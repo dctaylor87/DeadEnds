@@ -218,7 +218,11 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 static List *
 text_to_list (String text, int width, int whattofree)
 {
-	List *list = create_list2(whattofree);
+	List *list;
+	if (whattofree == LISTDOFREE)
+		list = createList (NULL, NULL, free, false);
+	else
+		list = createList (NULL, NULL, NULL, false);
 	append_to_text_list(list, text, width, true);
 	return list;
 }

@@ -486,7 +486,7 @@ static void
 add_uiwin (UIWINDOW uiwin)
 {
 	if (!list_uiwin)
-		list_uiwin = create_list3((ELEMENT_DESTRUCTOR)delete_uiwindow_impl);
+		list_uiwin = createList(NULL, NULL, delete_uiwindow_impl, false);
 	enqueue_list(list_uiwin, uiwin);
 }
 /*==========================================
@@ -1532,7 +1532,7 @@ invoke_del_menu (void)
 static void
 invoke_cset_display (void)
 {
-	List *list = create_list2(LISTDOFREE);
+	List *list = createList (NULL, NULL, free, false);
 	ZSTR zstr=zs_newn(80);
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
@@ -2580,7 +2580,7 @@ static void
 append_to_msg_list (String msg)
 {
 		if (!msg_list)
-			msg_list = create_list2(LISTDOFREE);
+			msg_list = createList (NULL, NULL, free, false);
 		enqueue_list(msg_list, strsave(msg));
 }
 #endif

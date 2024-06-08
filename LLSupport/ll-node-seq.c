@@ -86,11 +86,11 @@ append_all_tags(Sequence *seq, GNode *node, CString tagname,
  * Created: 2000/11/29, Perry Rapp
  *=====================================================*/
 Sequence *
-GNodeToSources (GNode *node)
+GNodeToSources (GNode *node, Database *database)
 {
 	Sequence *seq;
 	if (!node) return NULL;
-	seq = create_indiseq_ival();
+	seq = createSequence(database);
 	append_all_tags(seq, node, "SOUR", true, true);
 	if (!length_indiseq(seq))
 	{
@@ -106,13 +106,13 @@ GNodeToSources (GNode *node)
  * 2001/02/11, Perry Rapp
  *=====================================================*/
 Sequence *
-GNodeToNotes (GNode *node)
+GNodeToNotes (GNode *node, Database *database)
 {
 	Sequence *seq;
 	if (!node) return NULL;
-	seq = create_indiseq_ival();
+	seq = createSequence(database);
 	append_all_tags(seq, node, "NOTE", true, true);
-	if (!length_indiseq(seq))
+	if (! lengthSequence(seq))
 	{
 		deleteSequence(seq);
 		seq = NULL;
@@ -126,13 +126,13 @@ GNodeToNotes (GNode *node)
  * 2001/02/24, Perry Rapp
  *=====================================================*/
 Sequence *
-GNodeToPointers (GNode *node)
+GNodeToPointers (GNode *node, Database *database)
 {
 	Sequence *seq;
 	if (!node) return NULL;
-	seq = create_indiseq_ival();
+	seq = createSequence(database);
 	append_all_tags(seq, node, NULL, true, false);
-	if (!length_indiseq(seq))
+	if (! lengthSequence(seq))
 	{
 		deleteSequence(seq);
 		seq = NULL;

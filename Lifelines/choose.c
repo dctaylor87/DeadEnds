@@ -113,7 +113,7 @@ choose_source (RecordIndexEl *current, CString msg0, CString msgn)
 	Sequence *seq;
 	RecordIndexEl *rec;
 	if (!current) return NULL;
-	if (!(seq = node_to_sources(nztop(current)))) {
+	if (!(seq = GNodeToSources(nztop(current), currentDatabase))) {
 		msg_error("%s", msg0);
 		return NULL;
 	}
@@ -133,7 +133,7 @@ choose_note (RecordIndexEl *current, CString msg0, CString msgn)
 	Sequence *seq;
 	RecordIndexEl *rec;
 	if (!current) return NULL;
-	if (!(seq = node_to_notes(nztop(current)))) {
+	if (!(seq = GNodeToNotes(nztop(current), currentDatabase))) {
 		msg_error("%s", msg0);
 		return NULL;
 	}
@@ -154,7 +154,7 @@ choose_pointer (RecordIndexEl *current, CString msg0, CString msgn)
 	Sequence *seq;
 	RecordIndexEl *rec;
 	if (!current) return NULL;
-	if (!(seq = node_to_pointers(nztop(current)))) {
+	if (!(seq = GNodeToPointers(nztop(current), currentDatabase))) {
 		msg_error("%s", msg0);
 		return NULL;
 	}

@@ -198,7 +198,7 @@ main (int argc, char **argv)
 #endif
 		case 'x': /* execute program */
 			if (!exprogs) {
-				exprogs = create_list2(LISTDOFREE);
+				exprogs = createList (NULL, NULL, free, false);
 			}
 			push_list(exprogs, strdup(optarg ? optarg : ""));
 			break;

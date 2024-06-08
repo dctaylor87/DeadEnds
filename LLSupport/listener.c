@@ -53,7 +53,7 @@ add_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 	info->fnc = fncptr;
 	info->uparm = uparm;
 	if (!*notifiees)
-		*notifiees = create_list2(LISTDOFREE);
+		*notifiees = createList (NULL, NULL, free, false);
 	enqueueList(*notifiees, (Word)info);
 }
 /*===============================================
@@ -80,7 +80,7 @@ delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 	if (!*notifiees || isEmptyList(*notifiees))
 		return;
 	lold = *notifiees;
-	*notifiees = create_list2(LISTDOFREE);
+	*notifiees = createList (NULL, NULL, free, false);
 	while (!isEmptyList(lold)) {
 		struct callback_info * info = (struct callback_info *)removeFirstListElement(lold);
 		if (!found && info->fnc == fncptr && info->uparm == uparm) {

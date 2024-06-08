@@ -90,7 +90,7 @@ expand_tree (GNode *root0)
 
 	root = root0;
 	expd = copyNodes(root, true, true);
-	subs = create_list();
+	subs = createList (NULL, NULL, NULL, false);
 	traverse_nodes(expd, advedit_expand_traverse, subs);
 
    /* expand the list of records into the copied record */
