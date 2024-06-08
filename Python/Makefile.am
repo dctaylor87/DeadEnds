@@ -57,6 +57,6 @@ AM_CPPFLAGS=-I$(top_builddir) \
 	-I$(top_srcdir)/Utils/Includes \
 	$(PYTHON_CPPFLAGS)
 
-AM_CFLAGS= $(PYTHON_CFLAGS) -Wno-cast-function-type
+AM_CFLAGS= $(PYTHON_CFLAGS) -Wno-cast-function-type -fanalyzer
 
 EXTRA_DIST =

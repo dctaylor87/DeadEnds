@@ -25,4 +25,4 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
 	-I$(top_srcdir)/Utils/Includes
 
-AM_CLFAGS =
+AM_CFLAGS = -fanalyzer

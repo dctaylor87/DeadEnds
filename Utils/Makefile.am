@@ -15,3 +15,5 @@ libutils_a_SOURCES = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes
+
+AM_CLFAGS = -fanalyzer

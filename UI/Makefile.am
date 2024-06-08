@@ -29,3 +29,5 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes
 
 DEFS = -DDEADENDS @DEFS@
+
+AM_CLFAGS = -fanalyzer

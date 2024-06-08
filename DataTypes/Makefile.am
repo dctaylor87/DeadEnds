@@ -19,3 +19,5 @@ libdatatypes_a_SOURCES = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Utils/Includes
+
+AM_CFLAGS = -fanalyzer

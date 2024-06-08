@@ -50,7 +50,7 @@ AM_CPPFLAGS = \
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 
 #AM_CFLAGS = -Wno-unused-function
-AM_CFLAGS = $(PYTHON_CFLAGS)
+AM_CFLAGS = $(PYTHON_CFLAGS) -fanalyzer
 
 # these dependencies are so that building just the tests plus whatever
 # they depend upon will work.  It will only try to build the library

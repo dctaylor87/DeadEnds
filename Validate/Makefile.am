@@ -21,4 +21,4 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Utils/Includes
 
 #AM_CFLAGS = -Wno-unused-function -Wno-unused-but-set-variable
-AM_CFLAGS =
+#AM_CFLAGS = -fanalyzer

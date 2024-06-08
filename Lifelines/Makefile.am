@@ -67,6 +67,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Database/Includes \
 	$(PYTHON_CPPFLAGS)
 
+AM_CLFAGS = -fanalyzer
+
 # Locale information for gettext
 DEFS = -DDEADENDS -DLOCALEDIR=\"$(localedir)\" @DEFS@
 

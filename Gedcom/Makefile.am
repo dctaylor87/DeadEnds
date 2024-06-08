@@ -24,5 +24,5 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Database/Includes
 
-#AM_CLFAGS = -Wno-unused-but-set-variable
-AM_CLFAGS =
+#AM_CFLAGS = -Wno-unused-but-set-variable
+AM_CFLAGS = -fanalyzer
