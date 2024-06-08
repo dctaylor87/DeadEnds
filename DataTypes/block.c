@@ -13,7 +13,14 @@ static bool blockDebugging = false;
 // createBlock creates an empty Block.
 Block* createBlock(void) {
 	Block* block = (Block*) malloc(sizeof(Block));
+	if (! block)
+	  return NULL;
 	initBlock(block);
+	if (! block->elements)
+	  {
+	    free (block);
+	    return NULL;
+	  }
 	return block;
 }
 
@@ -23,6 +30,8 @@ void initBlock(Block* block) {
 	block->length = 0;
 	block->maxLength = INITIAL_SIZE_LIST_DATA_BLOCK;
 	block->elements = (void*) malloc(INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
+	if (! block->elements)
+	  return;
 	memset(block->elements, 0, INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
 }
 

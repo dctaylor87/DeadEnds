@@ -75,6 +75,8 @@ static PNode* allocPNode(int type) {
     if (debugging) {
         printf("allocPNode(%d) %s, %d\n", type, currentProgramFileName, currentProgramLineNumber);
     }
+    if (! node)
+      return NULL;
     // make sure all fields we don't explicitly initialize are zero
     bzero ((void *)node, sizeof (*node));
 

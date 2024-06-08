@@ -22,6 +22,8 @@ extern String xvalue;
 NodeListElement* createNodeListElement(GNode* node, int level, int lineNo, Error* error) {
 	ASSERT(node || error && (!node || !error));
 	NodeListElement *element = (NodeListElement*) malloc(sizeof(NodeListElement));
+	if (! element)
+	  return NULL;
 	memset(element, 0, sizeof(NodeListElement));
 	element->node = node;
 	element->level = level;

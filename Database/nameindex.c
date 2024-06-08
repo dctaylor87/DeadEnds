@@ -97,6 +97,8 @@ static int compareSetKeys(CString a, CString b) {
 // createNameElement creates and returns a NameElement.
 static NameElement* createNameElement(CString nameKey, String recordKey) {
 	NameElement* element = (NameElement*) stdalloc(sizeof(NameElement));
+	if (! element)
+	  return NULL;
 	memset (element, 0, sizeof(NameElement));
 	element->nameKey = strsave(nameKey);  // MNOTE: nameKey is in data space.
 	element->recordKeys = createSet(getSetKey, compareSetKeys, null);

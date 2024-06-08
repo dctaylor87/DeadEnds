@@ -69,6 +69,8 @@ SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
 	SequenceEl* element = (SequenceEl*) malloc(sizeof(SequenceEl));
 	GNode* root = getRecord(key, database);
 	ASSERT(root);
+	if (! element)
+	  return NULL;
 	memset(element, 0, sizeof(SequenceEl));
 	element->root = root;
 	if (recordType(root) == GRPerson) element->name = (NAME(root))->value;

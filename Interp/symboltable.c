@@ -33,6 +33,8 @@ static CString getKey(void *symbol) {
 // createSymbol creates a Symbol.
 static Symbol *createSymbol(CString iden, PValue *ppvalue) {
 	Symbol* symbol = (Symbol*) malloc(sizeof(Symbol));
+	if (! symbol)
+	  return NULL;
 	memset(symbol, 0, sizeof(Symbol));
 	symbol->ident = iden;
 	symbol->value = ppvalue;

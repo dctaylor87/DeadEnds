@@ -49,6 +49,8 @@ void initializeInterpreter(Database* database) {
 // createContext creates a Context from a SymbolTable and Database.
 Context* createContext(SymbolTable *symbolTable, Database *database) {
 	Context* context = (Context*) malloc(sizeof(Context));
+	if (! context)
+	  return NULL;
 	memset(context, 0, sizeof(Context));
 	context->symbolTable = symbolTable;
 	context->database = database;
