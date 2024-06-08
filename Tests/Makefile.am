@@ -13,7 +13,7 @@ bin_PROGRAMS = test #hashtabletest stringtabletest testset
 
 #stringtabletest_SOURCES = teststringtable.c
 
-test_SOURCES = test.c testqedcomstrings.c testsequence.c
+test_SOURCES = test.c testsequence.c testgedcomstrings.c testwritedatabase.c
 
 #testset_SOURCES = testset.c
 
@@ -29,6 +29,7 @@ LDADD = ../Python/libpyllines.a \
 	../Interp/libinterp.a ../Parser/libparser.a \
 	../Database/libdatabase.a ../Gedcom/libgedcom.a \
 	../Validate/libvalidate.a \
+	../Operations/liboperations.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 LIBS =  $(PYTHON_LIBS)
