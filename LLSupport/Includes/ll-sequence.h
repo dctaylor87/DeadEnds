@@ -5,9 +5,9 @@ extern Sequence *getAllEvents (Database *database);
 extern Sequence *getAllOthers (Database *database);
 extern Sequence *getAllRefns (Database *database);
 
-extern Sequence *GNodeToSources (GNode *node);
-extern Sequence *GNodeToNotes (GNode *node);
-extern Sequence *GNodeToPointers (GNode *node);
+extern Sequence *GNodeToSources (GNode *node, Database *database);
+extern Sequence *GNodeToNotes (GNode *node, Database *database);
+extern Sequence *GNodeToPointers (GNode *node, Database *database);
 
 extern CString element_key_indiseq (Sequence *seq, int index);
 extern CString element_skey (SequenceEl *el);
