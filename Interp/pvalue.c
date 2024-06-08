@@ -28,9 +28,9 @@ static char *ptypes[] = {
 static bool isZero(PValue);
 
 // allocPValue allocates a PValue. PValues are usually value types, but when stored in tables or
-// lists they in the heap.
+// lists they must be in the heap.
 PValue *allocPValue(PVType type, VUnion value) {
-	PValue* ppvalue = (PValue*) stdalloc(sizeof(ppvalue));
+	PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
 	memset(ppvalue, 0, sizeof(ppvalue));
 	ppvalue->type = type;
 	ppvalue->value = value;

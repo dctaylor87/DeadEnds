@@ -42,6 +42,7 @@ extern Database *currentDatabase;
 
 Database *createDatabase(CString fileName); // Create an empty database.
 void deleteDatabase(Database*); // Delete a database.
+void writeDatabase(String fileName, Database*);
 
 void indexNames(Database*);      // Index person names after reading the Gedcom file.
 int numberPersons(Database*);    // Return the number of persons in the database.
@@ -77,5 +78,8 @@ void showPersonIndex(Database*); // Show the person index. Debugging.
 void showFamilyIndex(Database*); // Show the family index. Debugging.
 
 extern int getCount(void);
+
+String generateFamilyKey(Database*);
+String generatePersonKey(Database*);
 
 #endif // database_h
