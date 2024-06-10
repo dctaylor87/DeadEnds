@@ -34,7 +34,7 @@ typedef void *		VPTR;
 #define INDISEQ		Sequence *
 //#define ISize(seq)	((seq)->size)
 #define ISize(seq)	((seq)->block.length)
-#define length_indiseq(seq)	ISize(seq)
+//#define length_indiseq(seq)	ISize(seq)
 #define IData(seq)	((SequenceEl **)((seq)->block.elements))
 
 #define remove_indiseq(seq)	deleteSequence(seq)

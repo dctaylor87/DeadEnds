@@ -247,7 +247,7 @@ choose_one_or_list_from_indiseq (CString ttl, Sequence *seq, bool multi)
 #endif
 	
 	memset(&ld, 0, sizeof(ld));
-	ld.listlen = length_indiseq(seq);
+	ld.listlen = lengthSequence(seq);
 	ld.mode = 'n';
 
 	/* TO DO: connect this to menuitem system */
@@ -264,7 +264,7 @@ resize_win: /* we come back here if we resize the window */
 	win = uiw_win(ld.uiwin);
 	if (first) {
 		elemwidth = ld.rectDetails.right - ld.rectDetails.left + 1;
-		if (length_indiseq(seq)<50)
+		if (lengthSequence(seq)<50)
 			preprint_indiseq(seq, elemwidth, true);
 		first=false;
 	}
@@ -296,7 +296,7 @@ resize_win: /* we come back here if we resize the window */
 				if (!multi)
 					break;
 				removeFromSequenceByIndex (seq, ld.cur);
-				if (!(ld.listlen = length_indiseq(seq))) {
+				if (!(ld.listlen = lengthSequence(seq))) {
 					done=true;
 					ld.cur = -1;
 				}
@@ -430,7 +430,7 @@ static void
 shw_popup_list (Sequence *seq, listdisp * ld)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
-	ASSERT(ld->listlen == length_indiseq(seq));
+	ASSERT(ld->listlen == lengthSequence(seq));
 	if (ld->details) {
 		int row = ld->rectDetails.top-1;
 		clear_hseg(win, row, ld->rectDetails.left, ld->rectDetails.right);
@@ -776,7 +776,7 @@ manufacture a listdisp here
 	static String empstr51 = (String) "                                                   ";
 	UIWINDOW uiwin = main_win;
 	WINDOW *win = uiw_win(uiwin);
-	int i, j, row, len = length_indiseq(seq);
+	int i, j, row, len = lengthSequence(seq);
 	CString key, name;
 	GNode *recnode=0;
 	char scratch[200];

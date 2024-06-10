@@ -209,7 +209,7 @@ invoke_fullscan_menu (void)
 			break;
 		}
 		if (seq) {
-			if (length_indiseq(seq) > 0) {
+			if (lengthSequence(seq) > 0) {
 				done=true;
 			} else {
 				remove_indiseq(seq);
@@ -278,7 +278,7 @@ invoke_search_source_menu (void)
 			break;
 		}
 		if (seq) {
-			if (length_indiseq(seq) > 0) {
+			if (lengthSequence(seq) > 0) {
 				done=true;
 			} else {
 				remove_indiseq(seq);

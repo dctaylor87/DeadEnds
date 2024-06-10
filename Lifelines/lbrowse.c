@@ -95,7 +95,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	seq = *pseq;
 	*pseq = 0;
 	current_seq = NULL;
-	if ((len = length_indiseq(seq)) <= 0)
+	if ((len = lengthSequence(seq)) <= 0)
 		return  BROWSE_QUIT;
 	top = cur = 0;
 	mark =  -1;
@@ -188,7 +188,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			break;
 		case 'e':        /* Edit current person */
 			edit_any_record(rec, false);
-			if ((len = length_indiseq(seq)) <= 0) {
+			if ((len = lengthSequence(seq)) <= 0) {
 				remove_browse_list(lname, seq);
 				current_seq = NULL;
 				lname = NULL;
@@ -256,7 +256,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			}
 			current_seq = seq = newseq;
 			element_indiseq(seq, 0, &key, &name);
-			if ((len = length_indiseq(seq)) == 1) {
+			if ((len = lengthSequence(seq)) == 1) {
 				*prec1 = keyToPersonRecord(key, seq->database);
 				remove_indiseq(newseq);
 				current_seq = NULL;
@@ -281,7 +281,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			namesort_indiseq(seq);
 			cur = top = 0;
 			mark = -1;
-			len = length_indiseq(seq);
+			len = lengthSequence(seq);
 			remove_indiseq(newseq);
 			message("%s", _(qSlstnew));
 			break;

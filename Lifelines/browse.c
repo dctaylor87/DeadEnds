@@ -199,7 +199,7 @@ prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
 		/* ctype of 'B' means any type but check persons first */
 		*pseq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 		if (!*pseq) return;
-		if ((len = length_indiseq(*pseq)) < 1) return;
+		if ((len = lengthSequence(*pseq)) < 1) return;
 		if (len == 1) {
 			element_indiseq(*pseq, 0, &key, &name);
 			*prec = keyToPersonRecord(key, (*pseq)->database);
@@ -238,7 +238,7 @@ main_browse (RecordIndexEl *rec1, int code)
 
 	if (!rec1) {
 		if (!seq) return;
-		if (!length_indiseq(seq)) {
+		if (!lengthSequence(seq)) {
 			remove_indiseq(seq);
 			return;
 		}
@@ -306,7 +306,7 @@ goto_indi_child (RecordIndexEl *irec, int childno)
   ENDFAMS
   if (akey) {
     answer = keyToPersonRecord(akey, currentDatabase);
-    addref_record(answer);
+    addrefRecord(answer);
   }
   return answer;
 }
@@ -330,7 +330,7 @@ goto_fam_child (RecordIndexEl *frec, int childno)
   ENDCHILDREN
   if (akey) {
     answer = keyToPersonRecord(akey, currentDatabase);
-    addref_record(answer);
+    addrefRecord(answer);
   }
   return answer;
 }
@@ -373,7 +373,7 @@ setrecord (RecordIndexEl ** dest, RecordIndexEl ** src)
 {
 	ASSERT(dest);
 	if (*dest) {
-		release_record(*dest);
+		releaseRecord(*dest);
 	}
 	if (src) {
 		*dest = *src;
@@ -626,7 +626,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_BROWSE: 	/* Browse new list of persons */
 			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 			if (!seq) break;
-			if (length_indiseq(seq) == 1) {
+			if (lengthSequence(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				tmp = keyToPersonRecord(key, seq->database);
 				setrecord(&current, &tmp);
@@ -1223,7 +1223,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 		case CMD_BROWSE: 	/* Browse to new list of persons */
 			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 			if (!seq) break;
-			if (length_indiseq(seq) == 1) {
+			if (lengthSequence(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				tmp = keyToPersonRecord(key, seq->database);
 				setrecord(&current, &tmp);

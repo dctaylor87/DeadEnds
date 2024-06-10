@@ -163,7 +163,7 @@ remove_child (GNode *indi, GNode *fam, Database *database)
 	GNode *node, *last;
 
 /* Make sure child is in family and remove his/her CHIL line */
-	if (!(node = find_node(fam, "CHIL", nxref(indi), &last))) {
+	if (!(node = findNode(fam, "CHIL", nxref(indi), &last))) {
 		return false;
 	}
 	if (last)
@@ -173,7 +173,7 @@ remove_child (GNode *indi, GNode *fam, Database *database)
 	free_node(node,"remove_child CHIL");
 
 /* Remove FAMC line from child */
-	node = find_node(indi, "FAMC", nxref(fam), &last);
+	node = findNode(indi, "FAMC", nxref(fam), &last);
 	if (last)
 		nsibling(last) = nsibling(node);
 	else
@@ -196,9 +196,9 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
 	GNode *node=0, *last=0;
 
 /* Remove (one) reference from family */
-	node = find_node(fam, "HUSB", nxref(indi), &last);
+	node = findNode(fam, "HUSB", nxref(indi), &last);
 	if (!node) {
-		node = find_node(fam, "WIFE", nxref(indi), &last);
+		node = findNode(fam, "WIFE", nxref(indi), &last);
 	}
 	if (!node)
 		return false;
@@ -211,7 +211,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
 	node = NULL;
 
 /* Remove (one) FAMS line from spouse */
-	node = find_node(indi, "FAMS", nxref(fam), &last);
+	node = findNode(indi, "FAMS", nxref(fam), &last);
 	ASSERT(node);
 	ASSERT(last);
 	nsibling(last) = nsibling(node);

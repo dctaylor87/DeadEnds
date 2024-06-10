@@ -34,7 +34,7 @@ static void llpy_source_dealloc (PyObject *self)
       fprintf (stderr, "llpy_source_dealloc entry: self %p refcnt %ld\n",
 	       (void *)self, Py_REFCNT (self));
     }
-  release_record (sour->llr_record);
+  releaseRecord (sour->llr_record);
   sour->llr_record = 0;
   sour->llr_type = 0;
   Py_TYPE(self)->tp_free (self);

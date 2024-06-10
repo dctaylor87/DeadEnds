@@ -315,7 +315,7 @@ static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
       {
 	PySet_Clear (output_set);
 	Py_DECREF (output_set);
-	release_record (child);
+	releaseRecord (child);
 	return NULL;
       }
     py_record->llr_record = child;
@@ -351,7 +351,7 @@ static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
       {
 	PySet_Clear (output_set);
 	Py_DECREF (output_set);
-	release_record (spouse);
+	releaseRecord (spouse);
 	return NULL;
       }
     py_record->llr_record = spouse;
@@ -443,7 +443,7 @@ static void llpy_family_dealloc (PyObject *self)
       fprintf (stderr, "llpy_family_dealloc entry: self %p\n refcnt %ld",
 	       (void *)self, Py_REFCNT (self));
     }
-  release_record (fam->llr_record);
+  releaseRecord (fam->llr_record);
   fam->llr_record = 0;
   fam->llr_database = 0;
   fam->llr_type = 0;

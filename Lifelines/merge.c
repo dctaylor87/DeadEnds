@@ -196,12 +196,12 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 /*CONDITION: 1s, 2s - build first version of merged person */
 
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
-	name3 = union_nodes(name1, name2, true, true);
-	refn3 = union_nodes(refn1, refn2, true, true);
-	sex3  = union_nodes(sex1,  sex2,  true, true);
-	body3 = union_nodes(body1, body2, true, true);
-	famc3 = union_nodes(famc1, famc2, true, true);
-	fams3 = union_nodes(fams1, fams2, true, true);
+	name3 = unionNodes(name1, name2, true, true);
+	refn3 = unionNodes(refn1, refn2, true, true);
+	sex3  = unionNodes(sex1,  sex2,  true, true);
+	body3 = unionNodes(body1, body2, true, true);
+	famc3 = unionNodes(famc1, famc2, true, true);
+	fams3 = unionNodes(fams1, fams2, true, true);
 	write_nodes(0, fp, ttmo, indi3, true, true, true);
 	write_nodes(1, fp, ttmo, name3, true, true, true);
 	write_nodes(1, fp, ttmo, refn3, true, true, true);
@@ -290,7 +290,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 		that = chil;
 		while (keep && that) {
 			if (eqstr(nval(that), nxref(indi2))) {
-				nchild(that) = union_nodes(nchild(that),
+				nchild(that) = unionNodes(nchild(that),
 					keep, true, false);
 			}
 			that = nsibling(that);
@@ -514,10 +514,10 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 /* Create merged file with both families together */
 	ASSERT(fp = fopen(editfile, LLWRITETEXT));
 	fam3 = copyNodes(fam2, true, true);
-	fref3 = union_nodes(fref1, fref2, true, true);
-	husb3 = union_nodes(husb1, husb2, true, true);
-	wife3 = union_nodes(wife1, wife2, true, true);
-	rest3 = union_nodes(rest1, rest2, true, true);
+	fref3 = unionNodes(fref1, fref2, true, true);
+	husb3 = unionNodes(husb1, husb2, true, true);
+	wife3 = unionNodes(wife1, wife2, true, true);
+	rest3 = unionNodes(rest1, rest2, true, true);
 	chil3 = sort_children(chil1, chil2);
 	write_nodes(0, fp, ttmo, fam3, true, true, true);
 	write_nodes(1, fp, ttmo, fref3, true, true, true);
@@ -642,7 +642,7 @@ merge_fam_links (GNode *fam1, GNode *fam2, GNode *list1, GNode *list2, int code)
 			while (keep && this) {
 				if (eqstr(nval(this), nxref(fam2))) {
 					nchild(this) =
-					    union_nodes(nchild(this), keep,
+					    unionNodes(nchild(this), keep,
 					    true, false);
 /*HERE*/
 				}
@@ -803,7 +803,7 @@ check_indi_lineage_links (GNode *indi)
 			snprintf(msg, sizeof(msg), _("Bad spouse tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
-		increment_table_int(memtab, famkey);
+		incrIntegerTable(memtab, famkey);
 	}
 
 	/*
@@ -850,7 +850,7 @@ check_indi_lineage_links (GNode *indi)
 			snprintf(msg, sizeof(msg), _("Bad child tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
-		increment_table_int(memtab, famkey);
+		incrIntegerTable(memtab, famkey);
 	}
 
 	/*
@@ -922,7 +922,7 @@ check_fam_lineage_links (GNode *fam)
 			snprintf(msg, sizeof(msg), _("Bad HUSB tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
-		increment_table_int(memtab, indikey);
+		incrIntegerTable(memtab, indikey);
 	}
 	for (curs = wife; curs; curs = nsibling(curs)) {
 		indikey = rmvat(nval(curs));
@@ -931,7 +931,7 @@ check_fam_lineage_links (GNode *fam)
 			snprintf(msg, sizeof(msg), _("Bad HUSB tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
-		increment_table_int(memtab, indikey);
+		incrIntegerTable(memtab, indikey);
 	}
 
 	/*
@@ -978,7 +978,7 @@ check_fam_lineage_links (GNode *fam)
 			snprintf(msg, sizeof(msg), _("Bad child tag: %s"), ntag(curs));
 			FATAL2(msg);
 		}
-		increment_table_int(memtab, indikey);
+		incrIntegerTable(memtab, indikey);
 	}
 
 	/*

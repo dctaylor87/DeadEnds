@@ -58,7 +58,7 @@ String capitalize(String);
 
 // User interface to the standard functions.
 //--------------------------------------------------------------------------------------------------
-void *__alloc(size_t, String, int);
+char *__alloc(size_t, String, int);
 void __free(void* ptr, String, int);
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
@@ -85,7 +85,7 @@ void __logAllocations(bool);  // Turn allocation logging on and off.
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 
 void __fatal(String, int); // standard.c
-//void __assert(bool, String, int);  // standard.c
+//void __assert(bool, String, int); // standard.c
 
 extern CString version;		// standard.c
 

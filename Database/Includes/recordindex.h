@@ -20,6 +20,7 @@ typedef struct RecordIndexEl RecordIndexEl;
 typedef struct RecordIndexEl {
 	GNode *root;
 	int lineNumber;
+	int refcount;	// Number of references to the element
 }  RecordIndexEl;
 
 // A RecordIndex is a HashTable of RecordIndexEls.
@@ -34,5 +35,7 @@ void showRecordIndex(RecordIndex*);
 
 extern int getRecordInsertCount(void); // Return the record insert count.  For debugging.
 extern void newShowRecordIndex(RecordIndex* index);
+extern void addrefRecord (RecordIndexEl *element);
+extern void releaseRecord (RecordIndexEl *element);
 
 #endif // recordindex_h

@@ -1219,7 +1219,7 @@ static void llpy_individual_dealloc (PyObject *self)
       fprintf (stderr, "llpy_individual_dealloc entry: self %p refcnt %ld\n",
 	       (void *)self, Py_REFCNT (self));
     }
-  release_record (indi->llr_record);
+  releaseRecord (indi->llr_record);
   indi->llr_record = 0;
   indi->llr_type = 0;
   Py_TYPE(self)->tp_free (self);

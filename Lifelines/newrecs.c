@@ -374,13 +374,13 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 
 	/* Move root1 data into root0 & save refns */
 	splitOther(root1, &refn1, &body);
-	root0 = copy_node(root1);
+	root0 = copyNode(root1);
 	joinOther(root0, NULL, body);
 	/* delete root0 tree & root1 node (root1 is solitary node) */
 	freeGNodes(root0); root0 = 0;
 	freeGNodes(root1); root1 = 0;
 	/* now copy root2 node into root1, then root2 tree under it */
-	root1 = copy_node(root2);
+	root1 = copyNode(root2);
 	splitOther(root2, &refn2, &body);
 	refnn = copyNodes(refn2, true, true);
 	joinOther(root1, refn2, body);

@@ -194,7 +194,7 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 		Sequence *childseq = personToChildren(indi, currentDatabase);
 		if (childseq) {
 			tn0=0;
-			for (i=0; i<length_indiseq(childseq); i++) {
+			for (i=0; i<lengthSequence(childseq); i++) {
 				GNode *child;
 				CString childkey, childname;
 				element_indiseq(childseq, i, &childkey, &childname);

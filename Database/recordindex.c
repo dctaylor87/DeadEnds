@@ -81,3 +81,28 @@ void newShowRecordIndex(RecordIndex* index) {
 		printf("Key %s\n", el->root->key);
 	ENDHASHTABLE
 }
+
+// addrefRecord -- increment reference count of a RecordIndexEl.
+
+void
+addrefRecord (RecordIndexEl *element)
+{
+  if (! element)
+    return;
+
+  element->refcount++;
+}
+
+// releaseRecord -- decrement reference count of a RecordIndexEl.
+// If it reaches zero, we do NOT free it.
+// If it is zero before we decrement, we ABORT.
+
+void
+releaseRecord (RecordIndexEl *element)
+{
+  if (! element)
+    return;
+
+  ASSERT(element->refcount);
+  element->refcount--;
+}

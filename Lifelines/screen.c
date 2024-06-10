@@ -731,7 +731,7 @@ search_for_one_record (void)
 {
 	Sequence *seq = invoke_search_menu();
 	if (!seq) return NULL;
-	if (!length_indiseq(seq)) {
+	if (!lengthSequence(seq)) {
 		remove_indiseq(seq);
 		return NULL;
 	}

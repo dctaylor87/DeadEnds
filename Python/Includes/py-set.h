@@ -62,7 +62,7 @@
 
 #define ENDFAMS_RECORD \
 		}\
-		release_record(fam); \
+		releaseRecord(fam); \
 	}}
 
 
@@ -70,7 +70,7 @@
    husbands and wives).
 
    NOTE: spouse record has been addref'd.  If you don't store it, you
-   need to call release_record on it.*/
+   need to call releaseRecord on it.*/
 
 #define FORFAMSPOUSES_RECORD(fam,spouse, database)	\
 	{\

@@ -20,7 +20,7 @@ extern void event_to_date_place (GNode *node, String * date, String * plac);
 extern GNode *copy_node_subtree (GNode *node);
 extern bool traverse_nodes (GNode *node, bool (*func)(GNode *, Word), Word param);
 //extern int num_spouses_of_indi (GNode *indi); /* gnode.h */
-extern GNode *find_node (GNode *prnt, String tag, String val, GNode **plast); /* gnode.c */
+//extern GNode *find_node (GNode *prnt, String tag, String val, GNode **plast); /* gnode.c */
 //extern void check_node_leaks (void);
 extern void term_node_allocator (void);
 

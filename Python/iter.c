@@ -301,7 +301,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_event_type);
 	if (! obj)
 	  {
-	    release_record (record);
+	    releaseRecord (record);
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_EVEN;
@@ -315,7 +315,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
 	if (! obj)
 	  {
-	    release_record (record);
+	    releaseRecord (record);
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_INDI;
@@ -329,7 +329,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_family_type);
 	if (! obj)
 	  {
-	    release_record (record);
+	    releaseRecord (record);
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_FAM;
@@ -343,7 +343,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_source_type);
 	if (! obj)
 	  {
-	    release_record (record);
+	    releaseRecord (record);
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_SOUR;
@@ -357,7 +357,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_other_type);
 	if (! obj)
 	  {
-	    release_record (record);
+	    releaseRecord (record);
 	    return NULL;
 	  }
 	obj->llr_type = LLINES_TYPE_OTHR;

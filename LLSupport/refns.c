@@ -277,7 +277,7 @@ annotate_node (GNode *node, bool expand_refns,
 	}
 
 	/* release the (temporary) record created in key_possible_to_record() */
-	release_record(rec);
+	releaseRecord(rec);
 }
 
 /* symbolic_link -- See if value is symbolic link

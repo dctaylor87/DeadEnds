@@ -183,7 +183,7 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 		case CMD_BROWSE: 	/* browse to new person list */
 			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
 			if (!seq) break;
-			if (length_indiseq(seq) == 1) {
+			if (lengthSequence(seq) == 1) {
 				element_indiseq(seq, 0, &key, &name);
 				*prec1 = keyToPersonRecord(key, seq->database);
 				remove_indiseq(seq);

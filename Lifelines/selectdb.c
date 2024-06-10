@@ -128,7 +128,11 @@ select_database (String * dbrequested, int alteration, String * perrmsg)
 					_("Choose database to open")
 					, dbdesclist);
 				if (i >= 0) {
+#if defined(DEADENDS)
+					*dbrequested = strsave(getFromList(dblist, i+1));
+#else
 					*dbrequested = strsave(get_list_element(dblist, i+1, NULL));
+#endif
 				}
 				release_dblist(dblist);
 				release_dblist(dbdesclist);

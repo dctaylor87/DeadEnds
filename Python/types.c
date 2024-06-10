@@ -200,7 +200,7 @@ static void llpy_record_dealloc (PyObject *self)
       fprintf (stderr, "llpy_record_dealloc entry: self %p\n refcnt %ld",
 	       (void *)self, Py_REFCNT (self));
     }
-  release_record (fam->llr_record);
+  releaseRecord (fam->llr_record);
   fam->llr_record = 0;
   fam->llr_type = 0;
   Py_TYPE(self)->tp_free (self);

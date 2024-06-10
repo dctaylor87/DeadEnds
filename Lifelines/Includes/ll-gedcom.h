@@ -19,5 +19,5 @@
 
 #define ENDFAMS \
 		}\
-		release_record(frec); \
+		releaseRecord(frec); \
 	}}

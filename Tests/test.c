@@ -27,7 +27,7 @@
 #include "validate.h"
 #include "utils.h"
 
-FILE* debugFile = null;
+//FILE* debugFile = null;
 bool useDebugFile = true;
 
 extern FunctionTable *procedureTable;

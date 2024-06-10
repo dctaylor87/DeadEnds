@@ -109,7 +109,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 		  if (! new_indi)
 		    {
 		      /* should not happen -- out of memory? */
-		      release_record (sibling);
+		      releaseRecord (sibling);
 
 		      Py_DECREF (iterator);
 		      PySet_Clear (output);

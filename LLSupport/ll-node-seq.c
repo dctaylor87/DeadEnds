@@ -92,7 +92,7 @@ GNodeToSources (GNode *node, Database *database)
 	if (!node) return NULL;
 	seq = createSequence(database);
 	append_all_tags(seq, node, "SOUR", true, true);
-	if (!length_indiseq(seq))
+	if (!lengthSequence(seq))
 	{
 		deleteSequence(seq);
 		seq = NULL;

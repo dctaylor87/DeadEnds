@@ -139,7 +139,7 @@ add_indi_by_edit (bool rfmt)
 	while (true) {
 		int cnt;
 		if (indi0) {
-			release_record(indi0);
+			releaseRecord(indi0);
 			indi0=0;
 		}
 		indi0 = file_to_record(editfile, ttmi, &msg, &emp);
@@ -159,7 +159,7 @@ add_indi_by_edit (bool rfmt)
 				do_edit();
 				continue;
 			}
-			release_record(indi0);
+			releaseRecord(indi0);
 			indi0 = NULL;
 			break;
 		}
@@ -178,7 +178,7 @@ add_indi_by_edit (bool rfmt)
 		break;
 	}
 	if (!indi0 || !ask_yes_or_no(_(qScfpadd))) {
-		if (indi0) release_record(indi0);
+		if (indi0) releaseRecord(indi0);
 		return NULL;
 	}
 	
@@ -289,7 +289,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 	if (!child) {
 		RecordIndexEl *rec = ask_for_indi(_(qSidchld), DOASK1);
 		child = nztop(rec);
-		release_record(rec);
+		releaseRecord(rec);
 	}
 	if (!child) return NULL;
 
@@ -304,7 +304,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 	if (!fam) {
 		RecordIndexEl *rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
 		fam = nztop(rec);
-		release_record(rec);
+		releaseRecord(rec);
 	}
 	if (!fam) return NULL;
 

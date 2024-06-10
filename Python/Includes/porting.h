@@ -47,7 +47,7 @@
 #define DOASK1		1
 #define NOASK1		0
 
-#define release_record(record)		/* empty --= no current ref counts */
+//#define release_record(record)		/* empty --= no current ref counts */
 
 //#define FALSE		false	/* <stdbool.h> */
 //#define TRUE		true	/* <stdbool.h> */

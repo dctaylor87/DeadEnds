@@ -434,7 +434,7 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
 	RecordIndexEl *indi = ask_for_indi(ttl, ask1);
 	if (!indi) return NULL;
 	GNode *node = nztop(indi);
-	release_record(indi);
+	releaseRecord(indi);
 	return rmvat(nxref(node));
 }
 /*===============================================================
@@ -448,7 +448,7 @@ static int
 choose_one_from_indiseq_if_needed (Sequence *seq, ASK1Q ask1, CString titl1
 	, CString titln)
 {
-	if (length_indiseq(seq) > 1)
+	if (lengthSequence(seq) > 1)
 		return choose_one_from_indiseq(titln, seq);
 	else if (ask1==DOASK1 && titl1)
 		return choose_one_from_indiseq(titl1, seq);
@@ -473,6 +473,14 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
 	listbadkeys = 1;
+#if defined(DEADENDS)
+	CString skey;
+
+	if (! elementFromSequence (seq, i, &skey, NULL))
+	  return NULL;
+
+	rec = __llpy_key_to_record (skey, NULL, seq->database);
+#else
 	/* which typed value indiseq is this ? */
 	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
 	{
@@ -484,6 +492,7 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 		CString skey = element_key_indiseq(seq, i);
 		rec = __llpy_key_to_record (skey, NULL, seq->database);
 	}
+#endif
 	listbadkeys = 0;
 	if(!rec) {
 		char buf[132];
