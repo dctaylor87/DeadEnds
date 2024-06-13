@@ -5,7 +5,7 @@ typedef void *		VPTR;
 
 #define STRING		String
 
-#define key_of_record(node)	nxref(node) /* XXX revisit when REFNs are supported XXX */
+//#define key_of_record(node)	nxref(node) /* XXX revisit when REFNs are supported XXX */
 
 //#define store_record(key, rec, len)			storeRecord(
 //#define choose_from_indiseq(seq, ask1, titl1, titln)	chooseFromSequence(seq, ask1, titl1, titln)

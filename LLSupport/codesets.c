@@ -43,6 +43,9 @@
 #include "zstr.h"
 #include "strcvt.h"
 #include "norm_charmap.h"
+#include "locales.h"
+#include "hashtable.h"
+#include "lloptions.h"
 
 #ifdef HAVE_LANGINFO_H
 # include <langinfo.h>

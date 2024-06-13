@@ -153,7 +153,7 @@ addRefn (CString refn, CString key, Database *database)
       return false;
     }
   /* it does not already exist */
-  insertInRefnIndex (database->refnIndex, refn, key);
+  addToRefnIndex (database->refnIndex, refn, key);
   return true;
 }
 
@@ -202,7 +202,7 @@ indexByRefn (GNode *node, Database *database)
 	      success = false;	/* it's not us */
 	  }
 	else
-	  insertInRefnIndex (database->refnIndex, new_node->value, key);
+	  addToRefnIndex (database->refnIndex, new_node->value, key);
       }
   return success;
 }

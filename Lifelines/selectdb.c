@@ -29,7 +29,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -57,29 +56,10 @@
 #include "screen.h"
 #include "de-strings.h"
 #include "ui.h"
-#else
-
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include "btree.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "liflines.h"
-#include "arch.h"
+#include "locales.h"
+#include "hashtable.h"
 #include "lloptions.h"
-#include "interp.h"
-#include "messages.h"
 
-#include "llinesi.h"
-#include "indiseq.h"
-#include "feedback.h"
-#include "ui.h"
-
-#endif
 /*********************************************
  * local function prototypes
  *********************************************/

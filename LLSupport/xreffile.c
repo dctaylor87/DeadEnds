@@ -36,7 +36,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -53,18 +52,6 @@
 #include "readwrite.h"
 #include "translat.h"
 #include "de-strings.h"
-#else
-
-#include "sys_inc.h"
-#include "llstdlib.h"
-#include "btree.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "table.h"
-#include "translat.h"
-
-extern BTREE BTR;
-#endif
 
 /*===================================================================
  * First five words in xrefs file are number of INDI, FAM, EVEN, SOUR
@@ -507,14 +494,14 @@ add_xref_to_set_impl (int32_t keynum, DELETESET set, DUPS dups)
 		char msg[128];
 		snprintf(msg, sizeof(msg)
 			, _("Corrupt DELETESET %c"), set->ctype);
-		FATAL2(msg);
+		fatal(msg);
 	}
 #else
 	if (keynum <= 0 || !xreffp || (set->n) < 1) {
 		char msg[128];
 		snprintf(msg, sizeof(msg)
 			, _("Corrupt DELETESET %c"), set->ctype);
-		FATAL2(msg);
+		fatal(msg);
 	}
 #endif
 	/* special case simplification if deleting last record */
@@ -543,7 +530,7 @@ add_xref_to_set_impl (int32_t keynum, DELETESET set, DUPS dups)
 		snprintf(msg, sizeof(msg)
 			, _("Tried to add already-deleted record (" FMT_INT32 ") to xref (%c)!")
 			, keynum, set->ctype);
-		FATAL2(msg); /* deleting a deleted record! */
+		fatal(msg); /* deleting a deleted record! */
 	}
 	/* key replaces xrefs[lo] - push lo+ up */
 	for (i=set->n-1; i>=lo; --i)
@@ -588,7 +575,7 @@ addxref_impl (CString key, DUPS dups)
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
 		snprintf(msg, sizeof(msg), "Bad key passed to addxref_impl: %s", key);
-		FATAL2(msg);
+		fatal(msg);
 	}
 	switch(ktype) {
 	case 'I': return addixref_impl(keynum, dups);
@@ -719,7 +706,7 @@ is_key_in_use (CString key)
 	if (!parse_key(key, &ktype, &keynum)) {
 		char msg[512];
 		snprintf(msg, sizeof(msg), "Bad key passed to is_key_in_use: %s", key);
-		FATAL2(msg);
+		fatal(msg);
 	}
 
 	set = get_deleteset_from_type(ktype);

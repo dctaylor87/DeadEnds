@@ -15,7 +15,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -38,18 +37,6 @@
 #include "lloptions.h"
 #include "de-strings.h"
 #include "messages.h"
-#else
-
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include "llstdlib.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "lloptions.h"
-#include "messages.h"
-
-#endif
 
 //#if !defined(NUMBER_CONFIG_BUCKETS)
 //#define NUMBER_CONFIG_BUCKETS	5

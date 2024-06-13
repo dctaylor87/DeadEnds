@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#if defined(DEADENDS)
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "llnls.h"
@@ -22,11 +21,7 @@
 #include "recordindex.h"
 #include "locales.h"
 #include "lloptions.h"
-#else
-#include "standard.h"		/* STRING */
-#include "llstdlib.h"		/* CALLBACK_FNC (needed by gedcom.h) */
-#include "lloptions.h"
-#endif
+
 #include "python-to-c.h"
 #include "llpy-externs.h"
 

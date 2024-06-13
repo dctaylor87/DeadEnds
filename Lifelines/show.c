@@ -65,6 +65,8 @@
 #include "xreffile.h"
 #include "de-strings.h"
 #include "ll-node.h"
+#include "locales.h"
+#include "lloptions.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -217,7 +219,7 @@ static void
 disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
 {
 /* TODO: width handling is wrong, it should not be byte based */
-	ZSTR zkey = zs_news(key_of_record(nztop(irec)));
+	ZSTR zkey = zs_news(nxref(nztop(irec)));
 	/* ": " between prefix and name, and " ()" for key */
 	int avail = width - strlen(prefix)-zs_len(zkey)-5;
 	String name = personToName(nztop(irec), avail);
@@ -446,7 +448,7 @@ init_display_fam (RecordIndexEl *frec, int width)
 	GNode *fam=nztop(frec);
 	GNode *husb=0, *wife=0;
 	String s=0;
-	ZSTR famkey = zs_news(key_of_record(fam));
+	ZSTR famkey = zs_news(nxref(fam));
 	int nch, nm, wtemp;
 	String father = _(qSdspl_fath);
 	String mother = _(qSdspl_moth);
@@ -697,7 +699,7 @@ indi_to_ped_fix (GNode *indi, int len)
 	if (!devt) devt = eventToDate(BURI(indi), true);
 	if (!devt) devt = (String) "";
 	if (keyflag) {
-		key = key_of_record(indi);
+		key = nxref(indi);
 		if(getdeoptint("DisplayKeyTags", 0) > 0) {
 			snprintf(tmp1, sizeof(tmp1), " [%s-%s] (i%s)", bevt, devt, key);
 		} else {
@@ -912,10 +914,10 @@ person_display (GNode *indi, GNode *fam, int len)
 		p += strlen(p);
 	}
 	if(getdeoptint("DisplayKeyTags", 0) > 0) {
-		snprintf(p, scratch1+len-p, " (i%s)", key_of_record(indi));
+		snprintf(p, scratch1+len-p, " (i%s)", nxref(indi));
 
 	} else {
-		snprintf(p, scratch1+len-p, " (%s)", key_of_record(indi));
+		snprintf(p, scratch1+len-p, " (%s)", nxref(indi));
 	}
 	return scratch1;
 }
@@ -1048,5 +1050,5 @@ sh_indi_to_event_shrt (GNode *node, String tag, String head, int len)
 static String
 sh_fam_to_event_shrt (GNode *node, String tag, String head, int len)
 {
-	return fam_to_event(node, tag, head, len, true);
+	return familyToEvent(node, tag, head, len, true);
 }

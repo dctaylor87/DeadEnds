@@ -52,6 +52,7 @@
 #include "liflines.h"
 #include "choose.h"
 #include "ui.h"
+#include "ll-sequence.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

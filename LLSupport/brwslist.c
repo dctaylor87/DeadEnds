@@ -262,7 +262,7 @@ rename_from_browse_lists (String key)
 	FORLIST(browse_lists, e)
 		blel = (BLEL) e;
 		seq = blel->bl_seq;
-		renameElementInSequenceSequence(seq, key);
+		renameElementInSequence(seq, key);
 	ENDLIST
 }
 

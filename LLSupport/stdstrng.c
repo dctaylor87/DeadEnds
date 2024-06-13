@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 
@@ -41,17 +40,6 @@
 #include "llnls.h"
 
 #include "de-strings.h"
-#else
-
-#include "llstdlib.h"
-/* llstdlib.h pulls in standard.h, config.h, sys_inc.h */
-#include "arch.h" /* vsnprintf */
-#include "mystring.h"
-#include "mychar.h"
-
-/* global variables defined here */
-bool opt_mychar = false; /* Custom character set handling (bypass libc) */
-#endif
 
 /*********************************************
  * local variables

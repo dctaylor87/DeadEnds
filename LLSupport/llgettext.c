@@ -30,6 +30,7 @@
 #include "hashtable.h"
 #include "stringtable.h"
 #include "de-strings.h"
+#include "lloptions.h"
 
 #if !defined(NUMBER_LOCALE_BUCKETS)
 #define NUMBER_LOCALE_BUCKETS	5

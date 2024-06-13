@@ -13,7 +13,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -34,18 +33,8 @@
 #include "charmaps.h"
 #include "de-strings.h"
 #include "strcvt.h"
-#else
-
-#include "llstdlib.h" /* includes standard.h, sys_inc.h, llnls.h, config.h */
-#include "charprops.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "gedcomi.h"
+#include "locales.h"
 #include "lloptions.h"
-#include "mychar.h"
-#include "zstr.h"
-
-#endif
 
 /* 763 upper case letters, and 754 lower case letters, 2003-11-13 */
 #define MAXCASES 1024

@@ -62,6 +62,7 @@
 #include "options.h"
 #include "icvt.h"
 #include "init.h"
+#include "lloptions.h"
 
 /*********************************************
  * global/exported variables

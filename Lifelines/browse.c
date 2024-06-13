@@ -75,6 +75,8 @@
 #include "ll-sequence.h"
 #include "ll-node.h"
 #include "ui.h"
+#include "locales.h"
+#include "lloptions.h"
 
 #include "llpy-externs.h"
 
@@ -962,7 +964,7 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 	joinFamily(fam, fref, husb, wife, chil, rest);
 	i = choose_from_array(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
-	choose_and_remove_spouse(__llpy_node_to_record(spnodes[i], currentDatabase), frec, true);
+	choose_and_remove_spouse(_llpy_node_to_record(spnodes[i], currentDatabase), frec, true);
 }
 /*===============================================
  * prompt_add_spouse_with_candidate -- 

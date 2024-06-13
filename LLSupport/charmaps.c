@@ -14,7 +14,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -36,21 +35,6 @@
 #include "xlat.h"
 #include "charmaps.h"
 #include "de-strings.h"
-
-#else
-
-#include "sys_inc.h"
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "lloptions.h"
-#include "zstr.h"
-#include "messages.h"
-#endif
 
 /*********************************************
  * global/exported variables

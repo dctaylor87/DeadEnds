@@ -22,8 +22,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
-
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -51,22 +49,6 @@
 #include "llpy-externs.h"	/* XXX need to move __llpy_key_to_record elsewhere XXX */
 #include "ll-node.h"
 #include "de-strings.h"
-
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "gedcomi.h"
-#include "feedback.h"
-#include "metadata.h"
-#include "lloptions.h"
-#include "date.h"
-#include "messages.h"
-#include "leaksi.h"
-
-#endif
 
 /*********************************************
  * global/exported variables

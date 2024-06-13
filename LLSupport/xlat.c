@@ -18,7 +18,6 @@
 #include <dirent.h>
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -43,21 +42,8 @@
 #include "strcvt.h"
 #include "icvt.h"
 #include "charmaps.h"
-
-#else
-
-#include "llstdlib.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "zstr.h"
-#include "icvt.h"
-#include "gedcomi.h"
-#include "xlat.h" 
-#include "arch.h"
+#include "locales.h"
 #include "lloptions.h"
-#include "log.h"
-#include "vtable.h"
-#endif
 
 /*********************************************
  * local types

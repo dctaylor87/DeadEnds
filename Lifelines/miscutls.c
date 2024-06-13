@@ -33,7 +33,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -60,22 +59,6 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
-
-#include "llstdlib.h"
-#include "table.h"
-#include "translat.h"
-#include "gedcom.h"
-#include "indiseq.h"
-#include "liflines.h"
-#include "feedback.h"
-#include "interp.h"
-#include "zstr.h"
-#include "llinesi.h"
-#include "btree.h"
-#include "messages.h"
-
-#endif
 
 /*======================================
  * key_util -- Return person's key value

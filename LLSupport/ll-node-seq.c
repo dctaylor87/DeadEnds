@@ -15,6 +15,7 @@
 #include "gnode.h"
 #include "zstr.h"
 #include "de-strings.h"
+#include "ll-sequence.h"
 
 /* local function prototypes */
 

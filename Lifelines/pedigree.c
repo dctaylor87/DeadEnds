@@ -20,7 +20,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <stdint.h>
 
 #include "porting.h"
@@ -42,21 +41,13 @@
 #include "codesets.h"
 #include "gstrings.h"
 #include "de-strings.h"
+#include "locales.h"
+#include "hashtable.h"
+#include "lloptions.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "llstdlib.h"
-#include "liflines.h"
-#include "mystring.h"
-#include "lloptions.h"
-
-#include "llinesi.h"
-#include "gedcom.h"
-#include "indiseq.h"
-
-#endif
 /*********************************************
  * global/exported variables
  *********************************************/

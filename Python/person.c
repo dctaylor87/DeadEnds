@@ -32,6 +32,8 @@
 #include "types.h"
 #include "person.h"
 #include "py-set.h"
+#include "locales.h"
+#include "lloptions.h"
 
 #define MAX_NAME_LENGTH	68 /* see comment in llrpt_fullname (interp/builtin.c) */
 

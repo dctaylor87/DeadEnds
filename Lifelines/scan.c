@@ -31,7 +31,6 @@
 #include "config.h"
 #endif
 
-#if defined(DEADENDS)
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -56,19 +55,7 @@
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
-#else
 
-#include "sys_inc.h"
-#include <stdarg.h>
-#include "llstdlib.h"
-#include "table.h"
-#include "indiseq.h"
-#include "feedback.h"
-#include "liflines.h"
-#include "fpattern.h"
-#include "messages.h"
-
-#endif
 #include "llinesi.h"
 
 /*********************************************

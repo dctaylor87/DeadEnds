@@ -81,6 +81,7 @@
 #include "locales.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "lloptions.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

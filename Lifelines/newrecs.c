@@ -63,6 +63,8 @@
 #include "ll-addoperations.h"
 #include "splitjoin.h"
 #include "refns.h"
+#include "locales.h"
+#include "lloptions.h"
 
 #include "llpy-externs.h"
 

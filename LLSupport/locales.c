@@ -41,9 +41,10 @@
 #include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
-#include "locales.h"
 #include "listener.h"
 #include "de-strings.h"
+#include "hashtable.h"
+#include "lloptions.h"
 
 /*********************************************
  * local function prototypes

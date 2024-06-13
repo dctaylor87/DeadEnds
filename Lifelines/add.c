@@ -80,6 +80,8 @@
 #include "xreffile.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "locales.h"
+#include "lloptions.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -689,7 +691,7 @@ editfam:
 	msg_info("%s", _(qSgdfadd));
 
 	key = rmvat(nxref(fam2));
-	return keytoFamilyRecord(key, currentDatabase);
+	return keyToFamilyRecord(key, currentDatabase);
 }
 /*==========================================================
  * add_new_fam_to_db -- Add newly created family to database

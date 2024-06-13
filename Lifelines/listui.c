@@ -59,6 +59,8 @@
 #include "codesets.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "locales.h"
+#include "lloptions.h"
 
 static int LISTWIN_WIDTH=0;
 
@@ -820,9 +822,9 @@ manufacture a listdisp here
 			llstrapps(scratch, sizeof(scratch), uu8, " ");
 		}
 		if(getdeoptint("DisplayKeyTags", 0) > 0) {
-			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", key_of_record(recnode));
+			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", nxref(recnode));
 		} else {
-			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", key_of_record(recnode));
+			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", nxref(recnode));
 		}
 		mvccwaddstr(win, row, 4, scratch);
 		row++;

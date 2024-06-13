@@ -34,7 +34,7 @@ static void llpy_other_dealloc (PyObject *self)
       fprintf (stderr, "llpy_other_dealloc entry: self %p refcnt %ld\n",
 	       (void *)self, Py_REFCNT (self));
     }
-  release_record (othr->llr_record);
+  releaseRecord (othr->llr_record);
   othr->llr_record = 0;
   othr->llr_database = 0;
   othr->llr_type = 0;
@@ -49,7 +49,7 @@ static void llpy_event_dealloc (PyObject *self)
       fprintf (stderr, "llpy_event_dealloc entry: self %p refcnt %ld\n",
 	       (void *)self, Py_REFCNT (self));
     }
-  release_record (even->llr_record);
+  releaseRecord (even->llr_record);
   even->llr_record = 0;
   even->llr_database = 0;
   even->llr_type = 0;

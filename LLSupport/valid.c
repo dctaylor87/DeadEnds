@@ -54,6 +54,8 @@
 #include "editing.h"
 #include "messages.h"
 #include "refns.h"
+#include "locales.h"
+#include "lloptions.h"
 
 /*===================================
  * valid_indi_tree -- Validate person tree

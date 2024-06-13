@@ -57,6 +57,8 @@
 #include "splitjoin.h"
 #include "ll-node.h"
 #include "gstrings.h"
+#include "locales.h"
+#include "lloptions.h"
 
 /*********************************************
  * local variables
@@ -157,9 +159,9 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 	}
 	if (appkey && indi && displaykeys) {
 		if (getdeoptint("DisplayKeyTags", 0) > 0) {
-			snprintf(p, linelen, " (i%s)", key_of_record(indi));
+			snprintf(p, linelen, " (i%s)", nxref(indi));
 		} else {
-			snprintf(p, linelen, " (%s)", key_of_record(indi));
+			snprintf(p, linelen, " (%s)", nxref(indi));
 		}
 		linelen -= strlen(p);
 		ASSERT(linelen > 0);
@@ -167,9 +169,9 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 	}
 	if (appkey && fam && displaykeys) {
 		if (getdeoptint("DisplayKeyTags", 0) > 0) {
-			snprintf(p, linelen, " (f%s)", key_of_record(fam));
+			snprintf(p, linelen, " (f%s)", nxref(fam));
 		} else {
-			snprintf(p, linelen, " (%s)", key_of_record(fam));
+			snprintf(p, linelen, " (%s)", nxref(fam));
 		}
 		linelen -= strlen(p);
 		ASSERT(linelen > 0);
