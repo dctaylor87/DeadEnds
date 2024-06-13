@@ -165,11 +165,17 @@ int chartype(int c) {
 
 // __fatal -- Fatal error routine
 //--------------------------------------------------------------------------------------------------
-void __fatal (String file, int line)
+void __fatal (CString file, int line, CString msg, CString function)
 // String file -- Name of file calling __fatal.
 // int line -- Line number of file calling __fatal.
 {
-	printf("FATAL: %s: line %d\n", file, line);
+	printf ("FATAL ERROR!\n");
+	if (msg)
+		printf("%s, file: %s: line: %d, function: %s\n",
+		       msg, file, line, function);
+	else
+		printf("file: %s: line: %d, function: %s\n",
+		       file, line, function);
 	//close_lifelines();
 	//endwin();
 	abort();
