@@ -41,6 +41,7 @@ typedef struct HashTable {
 HashTable* createHashTable(CString(*g)(void*), int(*c)(CString, CString), void(*d)(void*), int numBuckets);
 void deleteHashTable(HashTable*);
 bool isInHashTable(HashTable*, CString key);
+void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex);
 void* searchHashTable(HashTable*, CString key);
 void* searchHashTableWithElement(HashTable* table, void* element);
 

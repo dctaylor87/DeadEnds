@@ -93,9 +93,9 @@ int getHash(CString key, int maxHash) { //PH;
 	return (int) hash;
 }
 
-// detailSearch is a static function at the bottom of HashTable's search stack.
+// detailSearchHashTable is a static function at the bottom of HashTable's search stack.
 // NOTE: It may be better to return the Bucket rather than the hash.
-static void* detailSearch(HashTable* table, CString key, int* phash, int* pindex) { //PH;
+void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex) { //PH;
 	int hash = getHash(key, table->numBuckets);
 	if (phash) *phash = hash;
 	Bucket* bucket = table->buckets[hash];
@@ -103,20 +103,20 @@ static void* detailSearch(HashTable* table, CString key, int* phash, int* pindex
 		if (pindex) *pindex = 0;
 		return null;
 	}
-	//printf("detailSearch calling searchBucket: hash %d; length %d, key: %s\n", hash, lengthBucket(bucket), key); // DEBUG
+	//printf("detailSearchHashTable calling searchBucket: hash %d; length %d, key: %s\n", hash, lengthBucket(bucket), key); // DEBUG
 	return searchBucket(bucket, key, table->getKey, table->compare, pindex); // Bucket exists.
 }
 
 // searchHashTable searches a HashTable for the element with given key. It returns the element
 // if found or null otherwise.
 void* searchHashTable(HashTable* table, CString key) { //PH;
-	return detailSearch(table, key, null, null);
+	return detailSearchHashTable(table, key, null, null);
 }
 
 // searchHashTableWithElement searches a HashTable for the element with the same key as the given
 // element.
 void* searchHashTableWithElement(HashTable* table, void* element) {
-	return detailSearch(table, table->getKey(element), null, null);
+	return detailSearchHashTable(table, table->getKey(element), null, null);
 }
 
 // searchBucket searches a Bucket for an element by key. Depending on Bucket size either linear or
@@ -134,7 +134,7 @@ void* searchBucket(Bucket* bucket, CString key, CString(*getKey)(void*),
 
 // isInHashTable returns whether an element with the given key is in the HashTable.
 bool isInHashTable(HashTable* table, CString key) {
-	return detailSearch(table, key, null, null) != null;
+	return detailSearchHashTable(table, key, null, null) != null;
 }
 
 // addToHashTable adds a new element to a HashTable.
@@ -143,7 +143,7 @@ void addToHashTable(HashTable* table, void* element, bool replace) { //PH;
 	CString key = table->getKey(element);
 	int hash, index;
 	Bucket* bucket = null;
-	bool found = detailSearch(table, key, &hash, &index);
+	bool found = detailSearchHashTable(table, key, &hash, &index);
 	if (found && replace) { // Replace existing element.
 		bucket = table->buckets[hash];
 		setBlockElement(&(bucket->block), element, table->delete, index);
