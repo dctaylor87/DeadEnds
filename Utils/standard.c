@@ -25,6 +25,7 @@
 #endif
 
 #include "standard.h"
+#include "path.h"
 
 #define ALLOCLOGFILE "./alloc.log"
 
@@ -36,12 +37,10 @@ static long bytesFreed = 0;
 
 CString version = "deadends.1.0.0";
 
-// logAllocations -- Turn allocation logging on or off. For developer use debugging memory issues.
-//--------------------------------------------------------------------------------------------------
-void __logAllocations(bool onOrOff)
-{
-    static bool firstOn = true;  // The first the log is opened it is opened for writing.
-    if (onOrOff) {  // Turn on logging.
+// logAllocations turns allocation logging on or off; for debugging heap memory.
+void __logAllocations(bool onOrOff) {
+    static bool firstOn = true;  // Open for writing on first call.
+    if (onOrOff) {
         if (firstOn) {
             bytesAllocated = 0;
             bytesFreed = 0;
@@ -54,7 +53,7 @@ void __logAllocations(bool onOrOff)
             if (!allocLogFile) fatal("Can't open log file");
         }
         loggingAllocs = true;
-    } else {  // Turn off logging.
+    } else {
         if (allocLogFile) {
             fprintf(allocLogFile, "Bytes allocated: %ld\n", bytesAllocated);
             fprintf(allocLogFile, "Bytes freed:     %ld\n", bytesFreed);
@@ -65,54 +64,31 @@ void __logAllocations(bool onOrOff)
     }
 }
 
-// __alloc allocates memory; used by stdalloc
-char *__alloc (size_t len, String file, int line) {
-	char *p;
+// __alloc allocates memory; called by stdalloc.
+char* __alloc(size_t len, String file, int line) {
+	char* p;
 	if (len == 0) return null;
 	ASSERT(p = malloc(len));
-	/*
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
 		bytesAllocated += malloc_size(p);
 		fprintf(allocLogFile, "A  %s\t%d\t%zu\t%zu\t%p\n",
-			lastSegment(file), line, len, malloc_size(p), (void *) p);
+			lastPathSegment(file), line, len, malloc_size(p), (void *) p);
 	}
 #endif
-	*/
 	return p;
 }
 
-//  __free -- Deallocate memory - used by sdtfree
-//--------------------------------------------------------------------------------------------------
-void __free (void* ptr, String file, int line)
-// void* ptr -- Memory to deallocate back to the heap.
-// String file  -- Name of the file deallocating the memory.
-// int line -- Line number in the file where deallocating.
-{
-  /*
+//  __free deallocates memory; called by sdtfree.
+void __free (void* ptr, String file, int line) {
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
 		fprintf(allocLogFile, "F  %s\t%d\t%zu\t%p\n",
-			lastSegment(file), line, malloc_size(ptr), ptr);
+			lastPathSegment(file), line, malloc_size(ptr), ptr);
 		bytesFreed += malloc_size(ptr);
 	}
 #endif
-  */
 	free(ptr);
-}
-
-// alloc_out -- Write a message on the allocation log.
-//--------------------------------------------------------------------------------------------------
-void alloc_out(String str)
-// String str -- Message to write on the allocation log.
-{
-	if (!loggingAllocs) return;
-    // Open the allocation log if it isn't. It will remain open for the duration, I think.
-	if (!logopen) {
-		allocLogFile = fopen("alloc.log", "w");
-		logopen = true;
-	}
-	fprintf(allocLogFile, "%s\n", str);
 }
 
 // strsave returns a copy of a String on the heap.
@@ -176,8 +152,6 @@ void __fatal (CString file, int line, CString msg, CString function)
 	else
 		printf("file: %s: line: %d, function: %s\n",
 		       file, line, function);
-	//close_lifelines();
-	//endwin();
 	abort();
 }
 
