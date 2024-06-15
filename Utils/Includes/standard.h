@@ -76,15 +76,15 @@ void __logAllocations(bool);  // Turn allocation logging on and off.
 #define logAllocations(b)
 #endif
 
-#define fatal(s)      __fatal(__FILE__, __LINE__)
-#define FATAL()       __fatal(__FILE__, __LINE__)
-#define ASSERT(b)     if(!(b)) __fatal(__FILE__, __LINE__)
+#define fatal(msg)    __fatal(__FILE__, __LINE__, msg, __PRETTY_FUNCTION__)
+#define FATAL()       __fatal(__FILE__, __LINE__, NULL, __PRETTY_FUNCTION__)
+#define ASSERT(expr)  do { if(!(expr)) __fatal(__FILE__, __LINE__, "ASSERT FAILED: " #expr, __PRETTY_FUNCTION__); } while (0)
 #define eqstr(s,t)    (!strcmp((s),(t)))
 #define nestr(s,t)    (strcmp((s),(t)))
 
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 
-void __fatal(String, int); // standard.c
+void __fatal(CString, int, CString, CString); // standard.c
 //void __assert(bool, String, int); // standard.c
 
 extern CString version;		// standard.c
