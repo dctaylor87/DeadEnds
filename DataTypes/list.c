@@ -14,6 +14,8 @@
 List* createList(CString(*getKey)(void*), int(*compare)(CString, CString),
 				 void(*delete)(void*), bool sorted) {
 	List *list = (List *) malloc(sizeof(List));
+	if (! list)
+	  return NULL;
 	initList(list, getKey, compare, delete, sorted);
 	return list;
 }

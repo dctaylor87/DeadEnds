@@ -269,6 +269,8 @@ GNode* copyNodes(GNode* node, bool kids, bool sibs) {
 	if (!node) return null;
 	GNode* kin;
 	GNode* new = copyNode(node);
+	if (! new)
+	  return NULL;
 	if (kids && node->child) {
 		kin = copyNodes(node->child, true, true);
 		new->child = kin;
