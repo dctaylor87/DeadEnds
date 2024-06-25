@@ -136,15 +136,20 @@ bool isListSorted(List* list) {
 // sortList sorts a list using the list's compare function.
 void sortList(List* list) {
 	if (list->isSorted) return;
+	if (! list->sorted && ! list->compare)
+	  return;
 	sortBlock(&(list->block), list->getKey, list->compare);
 	list->isSorted = true;
+	list->sorted = true;
 }
 
 // searchList searches a List for a given Key. If sorted is true the List must be sorted.
-void* searchList(List* list, CString key, int* index, bool sorted) {
-	if (sorted)
+void* searchList(List* list, CString key, int* index) {
+	if (list->sorted) {
+		if (! list->isSorted)
+			sortList(list);
 		return searchSortedBlock(&(list->block), key, list->getKey, list->compare, index);
-	else
+	} else
 		return searchBlock(&(list->block), key, list->getKey, index);
 }
 
