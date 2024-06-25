@@ -626,7 +626,6 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   return Py_BuildValue ("s", soundex (getSurname (nval (name))));
 }
 
-#if !defined(DEADENDS)		/* need a 'highest indi key' variable */
 /* llpy_nextindi (INDI) --> INDI
 
    Returns the next INDI in the database (in key order).  */
@@ -634,9 +633,11 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
-  int key_val = nzkeynum(indi->llr_record);
+  CString key = nzkey (indi->llr_record);
+  Database *database = indi->llr_database;
+  RecordIndexEl *new;
 
-  if (key_val == 0)
+  if (! key)
     {
       /* unexpected internal error occurred -- raise an exception */
       PyErr_SetString(PyExc_SystemError, "nextindi: unable to determine RECORD's key");
@@ -650,9 +651,9 @@ static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
      But, still...  Also, shouldn't the key value be *UNSIGNED*?  Keys
      are never negative.  Zero is reserved for *NOT FOUND / DOES NOT
      EXIST*.  XXX */
-  key_val = (long)xref_nexti ((int)key_val);
+  new = getNextPersonRecord (key, database);
 
-  if (key_val == 0)
+  if (! new)
     Py_RETURN_NONE;		/* no more -- we have reached the end */
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
@@ -660,9 +661,13 @@ static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
     return NULL;
 
   indi->llr_type = LLINES_TYPE_INDI;
-  indi->llr_record = keynum_to_irecord (key_val);
+  indi->llr_record = new;
+  indi->llr_database = database;
+
   return (PyObject *)indi;
 }
+
+#if !defined(DEADENDS)		/* need a 'highest indi key' variable */
 
 /* llpy_previndi (INDI) --> INDI
 
@@ -1281,9 +1286,9 @@ same order and format as found in the first '1 NAME' line of the record." },
 If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." },
    { "soundex",		(PyCFunction)llpy_soundex, METH_NOARGS,
      "soundex(void) -> STRING: SOUNDEX code of INDI" },
-#if !defined(DEADENDS)
    { "nextindi",	(PyCFunction)llpy_nextindi, METH_NOARGS,
      "nextindi(void) -> INDI: Returns next INDI (in database order)." },
+#if !defined(DEADENDS)
    { "previndi",	(PyCFunction)llpy_previndi, METH_NOARGS,
      "previndi(void) -> INDI: Returns previous INDI (in database order)." },
 #endif
