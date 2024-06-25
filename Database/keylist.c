@@ -20,11 +20,17 @@ static int keyCompare(Word a, Word b)
 	String keyb = (String) b;
 	// (This duplicates code from sequence.c. Should be cleaned up.)
 	ASSERT(strlen(keya) > 2 && strlen(keyb) > 2);
+	// If keys have different lengths, shorter one sorts first.
 	if (strlen(keya) != strlen(keyb)) return (int) (strlen(a) - strlen(b));
+#if 0
 	for (int i = 0; i < (int)strlen(keya); i++) {
 		if (keya[i] != keyb[i]) return keya[i] - keyb[i];
 	}
 	return 0;
+#else
+	// Same length, straight strcmp will work just fine.
+	return strcmp (keya, keyb);
+#endif
 }
 
 //  keyGet is the get key function for Lists whose elements are Gedcom record keys.
