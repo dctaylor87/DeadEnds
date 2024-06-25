@@ -160,12 +160,6 @@ ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int b
 }
 
 int
-ask_for_char (CString ttl, CString prmpt, CString ptrn)
-{
-	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
-}
-
-int
 ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 {
 	int rv;
@@ -174,40 +168,6 @@ ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 	output(prmpt);
 	rv = interact(ptrn);
 	return rv;
-}
-
-bool
-ask_yes_or_no (CString ttl)
-{
-	int c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
-	return yes_no_value(c);
-}
-
-bool
-ask_yes_or_no_msg (CString msg, CString ttl)
-{
-	int c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
-	return yes_no_value(c);
-}
-
-bool
-ask_for_db_filename (CString ttl, CString prmpt, ATTRIBUTE_UNUSED CString basedir, String buffer, int buflen)
-{
-	return ask_for_string(ttl, prmpt, buffer, buflen);
-}
-
-bool
-ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen)
-{
-	/* curses version doesn't differentiate input from output prompts */
-	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
-}
-
-bool
-ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen)
-{
-	/* curses version doesn't differentiate input from output prompts */
-	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
 }
 
 bool
@@ -244,48 +204,6 @@ view_array (CString ttl, int no, String *pstrngs)
 }
 
 int
-choose_from_list (CString ttl, List *list)
-{
-	String * array=0;
-	String choice=0;
-	int i=0, rtn=-1;
-	int len = lengthList(list);
-
-	if (len < 1) return -1;
-	if (!ttl) ttl=_(qSdefttl);
-
-	array = (String *) stdalloc(len*sizeof(String));
-	i = 0;
-#if defined(DEADENDS)
-	FORLIST(list, el)
-	  choice = (String)el;
-	ASSERT(choice);
-	array[i] = strsave(choice);
-	++i;
-	ENDLIST
-#else
-	FORXLIST(list, el)
-		choice = (String)el;
-		ASSERT(choice);
-		array[i] = strsave(choice);
-		++i;
-	ENDXLIST
-#endif
-	rtn = choose_from_array(ttl, len, array);
-
-	for (i=0; i<len; ++i)
-		strfree(&array[i]);
-	stdfree(array);
-	return rtn;
-}
-
-int
-choose_list_from_indiseq (CString ttl, Sequence *seq)
-{
-	return choose_one_or_list_from_indiseq(ttl, seq, true);
-}
-
-int
 choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
 {
 #if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
@@ -294,12 +212,6 @@ choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, AT
 
 	/* TODO: imitate choose_from_list & delegate to array chooser */
 	return 0;
-}
-
-int
-choose_one_from_indiseq (CString ttl, Sequence *seq)
-{
-	return choose_one_or_list_from_indiseq(ttl, seq, false);
 }
 
 static int
@@ -369,16 +281,6 @@ choose_or_view_array (CString ttl, int no, String *pstrngs, bool selectable)
 /*=============================================================
  * Misc Routines
  *===========================================================*/
-
-bool
-yes_no_value (int c)
-{
-	String ptr;
-	for (ptr = _(qSaskyY); *ptr; ptr++) {
-		if (c == *ptr) return true;
-	}
-	return false;
-}
 
 int
 prompt_stdout (CString prompt)

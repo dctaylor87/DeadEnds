@@ -1083,6 +1083,8 @@ list_browse (Sequence *seq, int top, int * cur, int mark)
 	display_screen(LIST_SCREEN);
 	return interact_choice_string(main_win, "jkeimrtbanx$^udUDq");
 }
+
+#if !defined(DEADENDS)
 /*======================================
  * ask_for_db_filename -- Ask user for DeadEnds database directory
  *  ttl:   [IN]  title of question (1rst line)
@@ -1094,6 +1096,7 @@ ask_for_db_filename (CString ttl, CString prmpt, ATTRIBUTE_UNUSED CString basedi
 	/* This could have a list of existing ones like askprogram.c */
 	return ask_for_string(ttl, prmpt, buffer, buflen);
 }
+
 /*======================================
  * ask_for_output_filename -- Ask user for filename to which to write
  *  returns static buffer
@@ -1122,6 +1125,8 @@ ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer,
 	/* curses version doesn't differentiate input from output prompts */
 	return ask_for_filename_impl(ttl, path, prmpt, buffer, buflen);
 }
+#endif
+
 /*======================================
  * ask_for_input_filename_impl -- Ask user for a filename
  *  (in curses version, we don't differentiate input from output prompts)
@@ -1205,6 +1210,8 @@ ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int b
 	deactivate_uiwin_and_touch_all();
 	return rtn;
 }
+
+#if !defined(DEADENDS)
 /*========================================
  * yes_no_value -- Convert character to true if y(es)
  *======================================*/
@@ -1217,6 +1224,7 @@ yes_no_value (int c)
 	}
 	return false;
 }
+
 /*========================================
  * ask_yes_or_no -- Ask yes or no question
  *  ttl:  [IN]  title to display
@@ -1227,6 +1235,7 @@ ask_yes_or_no (CString ttl)
 	int c = ask_for_char(ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
 }
+
 /*=========================================================
  * ask_yes_or_no_msg -- Ask yes or no question with message
  *  msg:   [IN]  top line displayed
@@ -1238,6 +1247,7 @@ ask_yes_or_no_msg (CString msg, CString ttl)
 	int c = ask_for_char_msg(msg, ttl, _(qSaskynq), _(qSaskynyn));
 	return yes_no_value(c);
 }
+
 /*=======================================
  * ask_for_char -- Ask user for character
  *  ttl:   [IN]  1nd line displayed
@@ -1249,6 +1259,8 @@ ask_for_char (CString ttl, CString prmpt, CString ptrn)
 {
 	return ask_for_char_msg(NULL, ttl, prmpt, ptrn);
 }
+#endif
+
 /*===========================================
  * ask_for_char_msg -- Ask user for character
  *  msg:   [IN]  top line displayed (optional)
@@ -1300,6 +1312,8 @@ display_list (CString ttl, List *list)
 	/* TODO: Need to set some flag to suppress i & <enter> */
 	return choose_from_list(ttl, list);
 }
+
+#if !defined(DEADENDS)
 /*============================================
  * choose_from_list -- Choose from string list
  *  ttl:    [IN] title for display
@@ -1333,6 +1347,8 @@ choose_from_list (CString ttl, List *list)
 	stdfree(array);
 	return rtn;
 }
+#endif
+
 /*============================================
  * choose_from_array_x -- Choose from string list
  *  ttl:      [IN]  title for choice display
@@ -1382,6 +1398,8 @@ choose_or_view_array (CString ttl, int no, String *pstrngs, bool selecting
 	refresh_main();
 	return rv;
 }
+
+#if !defined(DEADENDS)
 /*=============================================================
  * choose_one_from_indiseq --
  * Choose a single person from indiseq
@@ -1407,6 +1425,8 @@ choose_list_from_indiseq (CString ttl, Sequence *seq)
 {
 	return choose_one_or_list_from_indiseq(ttl, seq, true);
 }
+#endif
+
 /*==============================
  * draw_tt_win -- Draw menu for edit translations
  *============================*/
