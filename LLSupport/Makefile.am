@@ -44,6 +44,7 @@ libllsupport_a_SOURCES = \
 	valid.c \
 	write.c \
 	xlat.c \
+	xref.c \
 	xreffile.c
 
 AM_CPPFLAGS = \
