@@ -13,7 +13,12 @@ bin_PROGRAMS = test #hashtabletest stringtabletest testset
 
 #stringtabletest_SOURCES = teststringtable.c
 
-test_SOURCES = test.c testsequence.c testgedcomstrings.c testwritedatabase.c
+test_SOURCES = \
+	test.c \
+	testsequence.c \
+	testgedcomstrings.c \
+	testwritedatabase.c \
+	importone.c
 
 #testset_SOURCES = testset.c
 
