@@ -4,7 +4,7 @@
 //  functiontable.c -- The DeadEnds function and procedure table datatype.
 //
 //  Created by Thomas Wetmore on 9 April 2023.
-//  Last changed on 3 March 2024.
+//  Last changed on 4 March 2024.
 #include <stdint.h>
 
 #include "refnindex.h"

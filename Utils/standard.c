@@ -108,7 +108,6 @@ String strnsave(CString string, int length) {
 
 // strconcat catenates two Strings and return the value on the heap.
 String strconcat(String s1, String s2) {
-
 	if (!s1) return strsave(s2);
 	if (!s2) return strsave(s1);
 	size_t len = strlen(s1) + strlen(s2);
@@ -155,7 +154,8 @@ void __fatal (CString file, int line, CString msg, CString function)
 	abort();
 }
 
-#if 0	/* this has a different signature than what the standard specifies */
+#if 0	/* this has a different signature than what the standard
+	   specifies and is never called! */
 // __assert -- Make an assertion.
 //--------------------------------------------------------------------------------------------------
 void __assert (bool exp, String file, int line)

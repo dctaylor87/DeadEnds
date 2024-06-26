@@ -1,4 +1,4 @@
-//  DeadEnds
+// DeadEnds
 //
 // validate.c has the functions that validate Gedcom records.
 //
@@ -62,7 +62,7 @@ bool validateEventIndex(Database* database, ErrorLog* errorLog) {
 		GNode* event = ((RecordIndexEl*) element)->root;
 		if (!validateEvent(event, database, errorLog)) isOkay = false;
 	ENDHASHTABLE
-	  return isOkay;
+	return isOkay;
 }
 
 // validateOtherIndex validates the records in a Database's other index.
@@ -72,7 +72,7 @@ bool validateOtherIndex(Database* database, ErrorLog* errorLog) {
 		GNode* other = ((RecordIndexEl*) element)->root;
 		if (!validateOther(other, database, errorLog)) isOkay = false;
 	ENDHASHTABLE
-	  return isOkay;
+	return isOkay;
 }
 
 //extern String nameString(CString);

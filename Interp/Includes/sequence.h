@@ -34,36 +34,36 @@ typedef struct Sequence {
 	Database *database;
 } Sequence;
 
-SequenceEl *createSequenceEl(Database*, CString key, void* value);
+SequenceEl* createSequenceEl(Database*, CString key, void* value);
 
-Sequence *createSequence(Database*);
+Sequence* createSequence(Database*);
 void deleteSequence(Sequence*);
-Sequence *copySequence(Sequence*);
+Sequence* copySequence(Sequence*);
 int lengthSequence(Sequence*);
 void emptySequence(Sequence*);
 
 void appendToSequence(Sequence*, CString key, void*);
-void appendSequenceToSequence(Sequence* destination, Sequence* source);
+void appendSequenceToSequence(Sequence* dst, Sequence* src);
 bool isInSequence(Sequence*, CString key);
 bool removeFromSequence(Sequence*, CString key);
 bool removeFromSequenceByIndex (Sequence *sequence, int index);
-void nameSortSequence(Sequence*); //  Sort by name.
-void keySortSequence(Sequence*); //  Sort by key.
-void valueSortSequence(Sequence*); //  Sort a sequence by value (not properly implemented).
-Sequence *uniqueSequence(Sequence*);  //Return sequence uniqueued from another.
-void uniqueSequenceInPlace(Sequence *sequence);  // Remove duplicate elements from a sequence.
+void nameSortSequence(Sequence*);
+void keySortSequence(Sequence*);
+void valueSortSequence(Sequence*);
+Sequence *uniqueSequence(Sequence*);
+void uniqueSequenceInPlace(Sequence *sequence);
 
-Sequence* personToChildren(GNode *person, Database*);
-Sequence* personToFathers(GNode *person, Database*);
-Sequence* personToMothers(GNode *person, Database*);
-Sequence* familyToChildren(GNode *family, Database*);
-Sequence* familyToFathers(GNode *family, Database*);
-Sequence* familyToMothers(GNode *family, Database*);
-Sequence* personToSpouses(GNode *person, Database*);
-Sequence* personToFamilies(GNode *person, bool, Database*);
+Sequence* personToChildren(GNode* person, Database*);
+Sequence* personToFathers(GNode* person, Database*);
+Sequence* personToMothers(GNode* person, Database*);
+Sequence* familyToChildren(GNode* family, Database*);
+Sequence* familyToFathers(GNode* family, Database*);
+Sequence* familyToMothers(GNode* family, Database*);
+Sequence* personToSpouses(GNode* person, Database*);
+Sequence* personToFamilies(GNode* person, bool, Database*);
 Sequence* nameToSequence(CString name, Database*);
 Sequence* keyToSequence(CString key, Database* database);
-Sequence* refnToSequence (CString value, Database *database);
+Sequence* refnToSequence (CString value, Database* database);
 Sequence* stringToSequence(CString name, Database* database);
 
 Sequence* unionSequence(Sequence*, Sequence*);

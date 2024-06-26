@@ -425,7 +425,7 @@ GNode* normalizeRecord(GNode* root) {
 	return null;
 }
 
-// normalizePerson puts person GNode tree into standard format.
+// normalizePerson puts a person GNode tree into standard format.
 GNode* normalizePerson(GNode *indi) {
 	GNode *names, *refns, *sex, *body, *famcs, *famss;
 	splitPerson(indi , &names, &refns, &sex, &body, &famcs, &famss);

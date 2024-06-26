@@ -20,30 +20,24 @@ int searchIntegerTable(IntegerTable *table, CString key) {
     return element ? element->value : __INT_MAX__;
 }
 
-// insertInIntegerTable -- Insert a string key and integer value to an integer table.
+// insertInIntegerTable inserts a string key with integer value into an integer table.
 void insertInIntegerTable(IntegerTable *table, CString key, int value) {
     IntegerElement* element = (IntegerElement*) searchHashTable(table, key);
     if (element) { // If there change value.
         element->value = value;
         return;
     }
-    element = (IntegerElement*) malloc(sizeof(IntegerElement)); // Create new element.
+    element = (IntegerElement*) malloc(sizeof(IntegerElement));
     memset(element, 0, sizeof(IntegerElement));
     element->key = key;
     element->value = value;
     addToHashTable(table, element, false);
 }
 
-// incrIntegerTable -- retrieve key and increment its value.
-void incrIntegerTable (IntegerTable *table, CString key)
+// incrIntegerTable -- increments the value of an element in the IntegerTable
+void incrIntegerTable (IntegerTable* table, CString key)
 {
-  IntegerElement *element = (IntegerElement *) searchHashTable (table, key);
-  int value;
-
-  if (element)
-    value = element->value + 1;
-  else
-    value = 1;
- 
-  insertInIntegerTable (table, key, value);
+	IntegerElement* element = searchHashTable(table, key);
+	if (element) (element->value)++;
+	else insertInIntegerTable(table, key, 1);
 }

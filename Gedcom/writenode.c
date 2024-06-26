@@ -1,5 +1,5 @@
-//
 // DeadEnds
+//
 // writenode.c has the functions that write GNodes and GNode trees and forests to Strings and
 // FILEs.
 //

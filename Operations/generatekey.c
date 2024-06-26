@@ -2,7 +2,7 @@
 //
 // generatekey.c has the functions to generate random keys.
 //
-// Created by Thomas Wetmore on 7 June 2024.
+// Created by Thomas Wetmore on 1 June 2024.
 // Last changed on 15 June 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */

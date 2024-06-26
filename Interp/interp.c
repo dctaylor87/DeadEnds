@@ -513,7 +513,7 @@ InterpType interp_fornodes(PNode* node, Context* context, PValue *pval) {
 // Usage: forindi(INDI_V, INT_V) {...}; Fields: personIden, countIden, loopState.
 InterpType interpForindi (PNode* pnode, Context* context, PValue* pvalue) {
 	RootList *rootList = context->database->personRoots;
-	sortList(rootList);  // Sort by key.
+	sortList(rootList); // Sort by key.
 	int numPersons = lengthList(rootList);
 	for (int i = 0; i < numPersons; i++) {
 		String key = rootList->getKey(getListElement(rootList, i));

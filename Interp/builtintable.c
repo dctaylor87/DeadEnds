@@ -1,4 +1,4 @@
-//  DeadEnds
+// DeadEnds
 //
 // builtintable.c holds the three built-in functions that provide the table data type for the
 // DeadEnds script language. It is implemented using PValueTable.
@@ -38,7 +38,6 @@ PValue __insert (PNode *node, Context *context, bool *eflg) {
         scriptError(node, "the first argument to insert must be an identifier");
         return nullPValue;
     }
-
     PValue pvalue = evaluate(arg, context, eflg); // Table.
     if (*eflg || pvalue.type != PVTable) {
         *eflg = true;

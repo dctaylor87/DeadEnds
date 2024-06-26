@@ -18,7 +18,6 @@ extern bool validateSourceIndex(Database*, ErrorLog*);
 extern bool validateEventIndex(Database*, ErrorLog*);
 extern bool validateOtherIndex(Database*, ErrorLog*);
 extern int personLineNumber(GNode*, Database*);
-extern bool validateIndex(RecordIndex *index);
 extern int familyLineNumber(GNode*, Database*);
 
 #endif // validate_h

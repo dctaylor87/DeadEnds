@@ -265,6 +265,7 @@ PValue __not (PNode *node, Context *context, bool *errflg) {
 	if (*errflg || value.type != PVBool) return nullPValue;
 	return value.value.uBool ? falsePValue : truePValue;
 }
+
 // evalBinary evaluates and returns the arguments of a binary expression.
 static void evalBinary(PNode* pnode, Context* context, PValue* val1, PValue* val2, bool* eflag) {
     extern bool numericPValue(PValue pvalue);
@@ -272,10 +273,8 @@ static void evalBinary(PNode* pnode, Context* context, PValue* val1, PValue* val
     if (!arg1) { *eflag = true; return; }
     PNode* arg2 = arg1->next;
     if (!arg2) { *eflag = true; return; }
-
     PValue pval1 = evaluate(arg1, context, eflag); // Eval args.
     PValue pval2 = evaluate(arg2, context, eflag);
-
     if (pval1.type != pval2.type || !numericPValue(pval1)) { // Must be numeric with same type.
         *eflag = true;
         return;

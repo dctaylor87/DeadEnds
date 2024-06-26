@@ -38,15 +38,15 @@ typedef struct Error {
 
 // User interface.
 #define ErrorLog List
-extern ErrorLog *createErrorLog(void);
-extern void deleteErrorLog(ErrorLog*);
-extern Error *createError(ErrorType type, CString fileName, int lineNumber, String message);
+ErrorLog *createErrorLog(void);
+void deleteErrorLog(ErrorLog*);
+Error *createError(ErrorType type, CString fileName, int lineNumber, String message);
 extern void setSeverityError(Error *error, ErrorSeverity severity);
-extern void deleteError(Error*);
-extern void addErrorToLog(ErrorLog*, Error*);
+void deleteError(Error*);
+void addErrorToLog(ErrorLog*, Error*);
 extern void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType,
 			     CString fileName, int lineNumber, String message);
-extern void showErrorLog(ErrorLog*);
-extern void showError(Error*);
+void showErrorLog(ErrorLog*);
+void showError(Error*);
 
 #endif // errors_h

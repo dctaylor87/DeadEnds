@@ -1,4 +1,4 @@
-//  DeadEnds
+// DeadEnds
 //
 // integertable.h
 //

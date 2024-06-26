@@ -745,7 +745,6 @@ static void writeLimitedPerson (GNode* person) {
 	traverseNodes(person, 0, limitPersonNode);
 }
 
-
 // writeLimitedFamily is used when
 static void writeLimitedFamily (GNode *family) {
 	printf("writeLimitedFamily: %s\n", family->key);

@@ -70,13 +70,11 @@ bool evaluateConditional(PNode* pnode, Context* context, bool* errflg) {
         expr = iden;
         iden = null;
     }
-
     if (iden && iden->type != PNIdent) { // iden must be an identifier.
         *errflg = true;
         scriptError(pnode, "The first argument in a conditional expression must be an identifier.");
         return false;
     }
-
     PValue value = evaluate(expr, context, errflg); // Evaluate the expression.
     if (*errflg) {
         scriptError(pnode, "There was an error evaluating the conditional expression.");
@@ -122,6 +120,7 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
         deleteHashTable(newtab);
         return nullPValue;
     }
+    //  Iterpret the function's body.
     PValue value;
     InterpType irc = interpret((PNode*) func->funcBody, context, &value);
     deleteHashTable(newtab);

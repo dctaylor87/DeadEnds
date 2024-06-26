@@ -1,4 +1,4 @@
-//  DeadEnds
+// DeadEnds
 //
 // valfamily.c has the functions that validate family records.
 //

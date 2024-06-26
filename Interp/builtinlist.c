@@ -1,4 +1,4 @@
-//  DeadEnds
+// DeadEnds
 //
 // builtinlist.c has the functions that implement the list datatype built-ins. They use the List
 // datatype. The elements of the lists are program values.

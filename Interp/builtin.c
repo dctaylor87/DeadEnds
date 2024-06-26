@@ -1,4 +1,4 @@
-//  DeadEnds
+// DeadEnds
 //
 // builtin.c contains many of the built-in functions of the DeadEnds script language.
 //
@@ -786,7 +786,7 @@ PValue __freerecord (PNode* pnode, Context* context, bool* errflg) {
 
 // __reference checks if a String is has the format of a record key.
 // usage: reference(STRING) -> BOOLEAN
-PValue __reference (PNode *pnode, Context *context, bool *errflg) {
+PValue __reference (PNode* pnode, Context* context, bool* errflg) {
 	String key = evaluateString(pnode->arguments, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The argument to reference must be formatted as a record key.");
