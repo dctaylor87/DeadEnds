@@ -101,13 +101,13 @@
 	{\
 	GNode *__node = nchild(fam);	\
 	GNode *spouse=0;\
-	String __key=0;\
+	CString __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "HUSB") && !eqstr(ntag(__node), "WIFE")) {\
 			__node = nsibling(__node);\
 			continue;\
 		}\
-		__key = rmvat(nval(__node));\
+		__key = nval(__node);\
 		if (!__key || !(spouse = keyToPerson(__key, database))) {	\
 			__node = nsibling(__node);\
 			continue;\

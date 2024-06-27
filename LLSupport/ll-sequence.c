@@ -23,6 +23,7 @@
 #include "sequence.h"
 
 #include "ll-sequence.h"
+#include "py-set.h"
 
 /* XXX Questions:
    When the caller is done with the sequence, what is currently done?
@@ -101,5 +102,29 @@ getAllRefns (Database *database)
       seq = 0;
     }
 
+  return seq;
+}
+
+/* familyToSpouses -- Create sequence of spouses of family */
+
+Sequence *
+familyToSpouses (GNode *fam, Database *database)
+{
+  Sequence *seq=0;
+  int len = 0;
+
+  if (!fam)
+    return NULL;
+  seq = createSequence (database);
+
+  FORFAMSPOUSES(fam, spouse, database)
+    len++;
+    appendToSequence(seq, __key, spouse);
+  ENDFAMSPOUSES
+
+  if (! len) {
+    deleteSequence(seq);
+    seq=NULL;
+  }
   return seq;
 }
