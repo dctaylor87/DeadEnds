@@ -472,7 +472,6 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
-	listbadkeys = 1;
 #if defined(DEADENDS)
 	CString skey;
 
@@ -480,7 +479,14 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 	  return NULL;
 
 	rec = __llpy_key_to_record (skey, NULL, seq->database);
+
+	if(!rec) {
+		char buf[132];
+		llstrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
+		msg_error("%s", buf);
+	}
 #else
+	listbadkeys = 1;
 	/* which typed value indiseq is this ? */
 	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
 	{
@@ -492,7 +498,6 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 		CString skey = element_key_indiseq(seq, i);
 		rec = __llpy_key_to_record (skey, NULL, seq->database);
 	}
-#endif
 	listbadkeys = 0;
 	if(!rec) {
 		char buf[132];
@@ -502,6 +507,7 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 			llstrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
 		msg_error("%s", buf);
 	}
+#endif
 	return rec;
 }
 /*===============================================
