@@ -410,6 +410,7 @@ Returns the first individual in the database (in key order).
 Returns @code{None} if there are no INDIs in the database.
 
 In the future this MIGHT become a database instance function.
+
 @b{Not currently available in DeadEnds.}
 @end defun
 @defun lastindi (void) @arrow{} INDI or @code{None}
@@ -419,6 +420,7 @@ Returns the last individual in the database (in key order).
 Returns @code{None} if there are no INDIs in the database.
 
 In the future this MIGHT become a database instance function.
+
 @b{Not currently available in DeadEnds.}
 @end defun
 @defun individuals (void) @arrow{} Iterator
