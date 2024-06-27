@@ -23,6 +23,11 @@ typedef struct tag_array_details {
 } *ARRAY_DETAILS;
 typedef void (*DETAILFNC)(ARRAY_DETAILS, void *);
 
+/* whether to prompt for new child if none existing */
+typedef int PROMPTQ;
+#define ALWAYS_PROMPT 0
+#define PROMPT_IF_CHILDREN 1
+
 /* Function Prototypes */
 /* add.c */
 extern void add_new_indi_to_db(RecordIndexEl *indi0);

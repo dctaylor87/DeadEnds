@@ -15,6 +15,11 @@ typedef struct tag_llrect {
 	int right;
 } *LLRECT;
 
+/* ask to ensure user got to see the indi */
+typedef int CONFIRMQ;
+#define DOCONFIRM 1
+#define NOCONFIRM 0
+
 struct tag_import_feedback;
 #ifndef IMPORT_FEEDBACK_type_defined
 typedef struct tag_import_feedback *IMPORT_FEEDBACK;
