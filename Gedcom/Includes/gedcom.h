@@ -180,7 +180,7 @@ int compareRecordKeys(CString, CString);  // gedcom.c
     prependToList(stack, node);\
     while (!isEmptyList(stack)) {\
 		protection++;\
-		if (protection > 50000) break;\
+		if (protection > 500000) break;\
         node = getAndRemoveFirstListElement(stack);\
         {
 

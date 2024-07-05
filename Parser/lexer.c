@@ -1,11 +1,10 @@
-//
 //  DeadEnds
 //
-//  lexer.c -- Lexer for the DeadEnds programming language.
+// lexer.c has the lexer functions for the DeadEnds script programs.
 //
-//  Created by Thomas Wetmore on 27 December 2022.
-//  Last changed on 3 June 2023.
-//
+// Created by Thomas Wetmore on 27 December 2022.
+// Last changed on 26 June 2024.
+
 #include <stdint.h>
 
 #include "refnindex.h"
@@ -30,19 +29,15 @@ static bool debugging = false;
 //int currentProgramLineNumber;  // Current line number in current file.
 //CString currentProgramFileName;
 
-// yylex -- Interface to the yacc-generated parser. Returns an integer as the token type,
-//   and in some cases sets yylval as the token value.
-//--------------------------------------------------------------------------------------------------
-int yylex(void)
-{
+// yylex is the interface to the yacc-generated parser. Returns an integer as the token type,
+// and in some cases sets yylval as the token value.
+int yylex(void) {
     return getToken();
 }
 
-//  getToken -- return the next token. This calls the real lexer, allowing debugging and other
-//   instrumentation to be added here.
-//--------------------------------------------------------------------------------------------------
-static int getToken(void)
-{
+// getToken returns the next token; it calls the real lexer, allowing any instrumentation to be
+// added here.
+static int getToken(void) {
     int tokenType = getTokenLow();
     if (debugging) {
         if (tokenType < 128) {
@@ -60,16 +55,14 @@ static int getToken(void)
     return tokenType;
 }
 
-//  getTokenLow -- This is the real lexer.
-//--------------------------------------------------------------------------------------------------
-static int getTokenLow(void)
-{
+// getTokenLow is the real lexer.
+static int getTokenLow(void) {
     int retval;
-    CharType t;  // Type of current character.
-    int c;  // Current character.
-    static char tokbuf[512];  // Buffer where tokens accumulate.
+    CharType t; // Type of current character.
+    int c; // Current character.
+    static char tokbuf[512]; // Buffer where tokens accumulate.
 
-    char *p = tokbuf;  // Pointer to current point in tokbuf.
+    char* p = tokbuf; // Pointer to current point in tokbuf.
     // Get by white space, including comments.
     while (true) {
         while ((t = characterType(c = inchar())) == White)
@@ -193,31 +186,25 @@ static int getTokenLow(void)
     return c;
 }
 
-// inchar -- Get the next character from the Lexer.
-//--------------------------------------------------------------------------------------------------
-static int inchar(void)
-{
+// inchar gets the next character from the Lexer.
+static int inchar(void) {
     int c = getc(currentProgramFile);
     if (c == '\n') currentProgramLineNumber++;
     if (debugging) printf("+: '%c'\n", c);
     return c == EOF ? 0 : c;
 }
 
-// unreadchar -- Return a character to the lexer.
-//--------------------------------------------------------------------------------------------------
-static void unreadchar(int c)
-{
+// unreadchar returns a character to the lexer.
+static void unreadchar(int c) {
     if (c == 0) return;
     if (debugging) printf("-: '%c'\n", c);
     ungetc(c, currentProgramFile);
     if (c == '\n') currentProgramLineNumber--;
 }
 
-// rwordtable -- Reserved word table.
-// KEEP THESE IN ALPHABETICAL ORDER FOR BINARY SEARCH.
-//--------------------------------------------------------------------------------------------------
+// rwordtable is the reserved word table; keep in alphabetical order.
 static struct {
-    char *rword;
+    char* rword;
     int val;
 } rwordtable[] = {
     { "break",    BREAK },
@@ -250,10 +237,8 @@ static struct {
 
 static const int nrwords = ARRAYSIZE(rwordtable);
 
-// reserved -- See if a string is a reserved word.
-//--------------------------------------------------------------------------------------------------
-static bool reserved (String word, int *pval)
-{
+// reserved checks if a String is a reserved word.
+static bool reserved (String word, int* pval) {
     for (int i = 0; i < nrwords; i++) {
         if (eqstr(word, rwordtable[i].rword)) {
             *pval = rwordtable[i].val;

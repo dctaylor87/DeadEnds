@@ -16,6 +16,7 @@
 
 #include "standard.h"
 #include "refnindex.h"
+#include "file.h"
 #include "import.h"
 #include "gnode.h"
 #include "stringtable.h"
@@ -37,7 +38,7 @@ bool importDebugging = true;
 
 // toString returns the GNode in a GNodeListElement as a string; for debugging.
 static String toString(void* element) {
-	GNode* gnode = ((GNodeListElement*) element)->node;
+	GNode* gnode = ((GNodeListEl*) element)->node;
 	return gnodeToString(gnode, 0);
 }
 
@@ -57,26 +58,17 @@ List* importFromFiles(String filePaths[], int count, ErrorLog* errorLog) {
 // the function returns null, and ErrorLog holds the Errors.
 Database *importFromFile(CString filePath, ErrorLog* errorLog) {
 	if (importDebugging) printf("IMPORT FROM FILE: start: %s\n", filePath);
-	if (access(filePath, F_OK)) {
-		if (errno == ENOENT) {
-			addErrorToLog(errorLog, createError(systemError, filePath, 0, "File does not exist."));
-			return null;
-		}
-	}
-	char pathBuffer[PATH_MAX];
-	String realPath = realpath(filePath, pathBuffer);
-	if (realPath) filePath = strsave(pathBuffer);
-	String lastSegment = lastPathSegment(filePath);
-	FILE* file = fopen(filePath, "r");
+	// Open the Gedcom file.
+	File* file = createFile(filePath, "r");
 	if (!file) {
-		addErrorToLog(errorLog, createError(systemError, lastSegment, 0, "Could not open Gedcom file."));
+		addErrorToLog(errorLog, createError(systemError, filePath, 0, "Could not open file."));
 		return null;
 	}
 
 	return importFromFileFP (file, filePath, errorLog);
 }
 
-Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
+Database *importFromFileFP (File *file, CString filePath, ErrorLog *errorLog)
 {
 	String lastSegment = lastPathSegment(filePath); // MNOTE: strsave not needed.
 
@@ -99,7 +91,7 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 	}
 	// Convert the NodeList of GNodes and Errors into a GNodeList of GNode trees.
 	if (importDebugging) fprintf(debugFile, "importFromFile: calling getNodeTreesFromNodeList\n");
-	GNodeList* listOfTrees = getNodeTreesFromNodeList(listOfNodes, errorLog);
+	GNodeList* listOfTrees = getNodeTreesFromNodeList(listOfNodes, file->name, errorLog);
 	if (importDebugging) fprintf(debugFile, "importFromFile: back from getNodeTreesFromNodeList\n");
 	if (importDebugging) {
 		fprintf(debugFile, "importFromFile: listOfGTrees contains\n");
@@ -113,8 +105,8 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 #endif
 	Database* database = createDatabase(filePath); // Create database and add records to it.
 	FORLIST(listOfTrees, element)
-		GNodeListElement* e = (GNodeListElement*) element;
-		storeRecord(database, normalizeRecord(e->node), e->lineNo, errorLog);
+		GNodeListEl* e = (GNodeListEl*) element;
+		storeRecord(database, normalizeRecord(e->node), e->line, errorLog);
 	ENDLIST
 	printf("And now it is time to sort those RootList\n");
 	sortList(database->personRoots);
@@ -124,7 +116,7 @@ Database *importFromFileFP (FILE *file, CString filePath, ErrorLog *errorLog)
 
 	if (debugging) {
 		printf("There were %d gnode tree records extracted from the file.\n", lengthList(listOfTrees));
-		printf("There were %d errors importing file %s.\n", lengthList(errorLog), lastSegment);
+		printf("There were %d errors importing file %s.\n", lengthList(errorLog), file->name);
 		showErrorLog(errorLog);
 	}
 	if (lengthList(errorLog) > 0) {

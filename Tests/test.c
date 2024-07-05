@@ -20,6 +20,7 @@
 #include "database.h"
 #include "list.h"
 
+#include "file.h"
 #include "import.h"
 #include "validate.h"
 #include "path.h"

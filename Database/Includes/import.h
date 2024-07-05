@@ -18,6 +18,6 @@
 
 List *importFromFiles(String fileNames[], int count, ErrorLog*);
 extern Database *importFromFile(CString fileName, ErrorLog *errorLog);
-extern Database *importFromFileFP(FILE* file, CString fileName, ErrorLog *errorLog);
+extern Database *importFromFileFP(File* file, CString fileName, ErrorLog *errorLog);
 
 #endif // import_h

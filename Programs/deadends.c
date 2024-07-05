@@ -31,6 +31,7 @@
 #include "refnindex.h"
 #include "gnode.h"
 #include "database.h"
+#include "file.h"
 #include "import.h"
 
 #include "llpy-externs.h"

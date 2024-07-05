@@ -19,7 +19,7 @@ typedef struct RecordIndexEl RecordIndexEl;
 // the line number where the record was defined. The element's key is the key of the root node.
 typedef struct RecordIndexEl {
 	GNode *root;
-	int lineNumber;
+	int line;
 	int refcount;	// Number of references to the element
 }  RecordIndexEl;
 

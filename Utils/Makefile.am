@@ -10,7 +10,8 @@ libutils_a_SOURCES = \
 	standard.c \
 	unicode.c \
 	path.c \
-	utils.c
+	utils.c \
+	file.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/Utils/Includes \
