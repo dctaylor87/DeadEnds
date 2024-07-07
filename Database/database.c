@@ -35,14 +35,11 @@ Database *createDatabase(CString filePath) {
 	memset (database, 0, sizeof(Database));
 	database->filePath = strsave(filePath);
 	database->lastSegment = strsave(lastPathSegment(filePath));
-	database->recordIndex = null; // For now.
+	database->recordIndex = null;
 	database->personIndex = null;
 	database->familyIndex = null;
-	//database->sourceIndex = createRecordIndex();
-	//database->eventIndex = createRecordIndex();
-	//database->otherIndex = createRecordIndex();
-	database->nameIndex = createNameIndex(); // null?
-	database->refnIndex = createRefnIndex(); // null?
+	database->nameIndex = null;
+	database->refnIndex = null;
 	database->personRoots = createRootList(); // null?
 	database->familyRoots = createRootList(); // null?
 	return database;
@@ -51,8 +48,8 @@ Database *createDatabase(CString filePath) {
 //  deleteDatabase deletes a database.
 void deleteDatabase(Database* database) {
 	deleteRecordIndex(database->recordIndex);
-	//deleteRecordIndex(database->personIndex);
-	//deleteRecordIndex(database->familyIndex);
+	deleteRecordIndex(database->personIndex);
+	deleteRecordIndex(database->familyIndex);
 	//deleteRecordIndex(database->sourceIndex);
 	//deleteRecordIndex(database->eventIndex);
 	//deleteRecordIndex(database->otherIndex);
@@ -274,25 +271,24 @@ void oldIndexNames(Database* database) {
 
 // indexNames indexes all person names in a database. NEW VERSION HASN'T BEEN TESTED.
 void indexNames(Database* database) {
-	if (indexNameDebugging) fprintf(debugFile, "Start indexNames\n");
-	static int count = 0;
-	NEWFORHASHTABLE(database->recordIndex, element)
-		RecordIndexEl* entry = element;
-		GNode* root = entry->root;
+	//if (indexNameDebugging) fprintf(debugFile, "Start indexNames\n");
+	int numNamesEncountered = 0;
+	NameIndex* nameIndex = createNameIndex();
+	FORHASHTABLE(database->personIndex, element)
+		RecordIndexEl* el = element;
+		GNode* root = el->root;
 		String recordKey = root->key;
-		if (indexNameDebugging) fprintf(debugFile, "indexNames: recordKey: %s\n", recordKey);
 		for (GNode* name = NAME(root); name && eqstr(name->tag, "NAME"); name = name->sibling) {
 			if (name->value) {
-				if (indexNameDebugging) fprintf(debugFile, "indexNames: name->value: %s\n", name->value);
+				numNamesEncountered++;
 				String nameKey = nameToNameKey(name->value);
-				if (indexNameDebugging) fprintf(debugFile, "indexNames: nameKey: %s\n", nameKey);
-				insertInNameIndex(database->nameIndex, nameKey, recordKey);
-				count++;
+				insertInNameIndex(nameIndex, nameKey, recordKey);
 			}
 		}
-	NEWENDHASHTABLE
-	if (indexNameDebugging) showNameIndex(database->nameIndex);
-	if (indexNameDebugging) printf("The number of names indexed was %d\n", count);
+	ENDHASHTABLE
+	database->nameIndex = nameIndex;
+	//if (indexNameDebugging) showNameIndex(database->nameIndex);
+	if (indexNameDebugging) printf("the number of names encountered is %d.\n", numNamesEncountered);
 }
 
 // keyLineNumber checks if a record with a key is in the database; if so it returns the line
@@ -334,4 +330,22 @@ String generateFamilyKey(Database* database) {
 // generatePersonKey generates a new person key.
 String generatePersonKey(Database* database) {
 	return "@Ixxxxxxx@";
+}
+
+// summarizeDatabase write a short text summary of a Database to standard output. Debug.
+void summarizeDatabase(Database* database) {
+	if (!database) {
+		printf("No database to summarize.\n");
+		return;
+	}
+	printf("summary of database: %s.\n", database->filePath);
+	if (database->personIndex) printf("Person index: %d\n", sizeHashTable(database->personIndex));
+	if (database->familyIndex) printf("Family index: %d\n", sizeHashTable(database->familyIndex));
+	if (database->recordIndex) printf("Record index: %d\n", sizeHashTable(database->recordIndex));
+	if (database->nameIndex) {
+		int numNames, numRecords;
+		getNameIndexStats(database->nameIndex, &numNames, &numRecords);
+		printf("Name index: %d, %d\n", numNames, numRecords);
+
+	}
 }

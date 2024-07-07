@@ -3,7 +3,7 @@
 // importone.c has a test program for importing a single Gedcom file into a Database.
 //
 // Created by Thomas Wetmore on 21 June 2024.
-// Last changed on 5 July 2024.
+// Last changed on 7 July 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -28,8 +28,10 @@
 #include "stringset.h"
 #include "gnodelist.h"
 #include "path.h"
+#include "utils.h"
 
 static bool importDebugging = true;
+static bool timing = true;
 
 void checkKeysAndReferences(GNodeList*, String name, ErrorLog*);
 Database* gedcomFileToDatabase(String, ErrorLog*);
@@ -47,6 +49,7 @@ int importTest(void) {
 		printf("Import cancelled because of errors:\n");
 		showErrorLog(errorLog);
 	}
+	summarizeDatabase(database);
 	return 0;
 }
 
@@ -54,42 +57,40 @@ int importTest(void) {
 
 // gedcomFileToDatabase returns the Database of a single Gedcom file. Returns null if no Database
 // is created; the errorLog holds any errors encountered while processing the file.
-Database* gedcomFileToDatabase(String filePath, ErrorLog* errorLog) {
+Database* gedcomFileToDatabase(String path, ErrorLog* log) {
+	if (timing) printf("Start of gedcomFileToDatabase: %s.\n", getMillisecondsString());
 	// Open Gedcom file.
-	File* file = createFile(filePath, "r");
+	File* file = createFile(path, "r");
 	if (!file) {
-		addErrorToLog(errorLog, createError(systemError, filePath, 0, "Could not open file."));
+		addErrorToLog(log, createError(systemError, path, 0, "Could not open file."));
 		return null;
 	}
-	// Get list of GNodes from file.
-	GNodeList* listOfNodes = getNodeListFromFile(file, errorLog);
-	if (!listOfNodes) return null;
-	if (importDebugging) printf("listOfNodes contains %d nodes.\n", lengthList(listOfNodes));
-	if (lengthList(errorLog)) {
-		deleteNodeList(listOfNodes, true);
-		return null;
-	}
-	// Get list of all GNode trees.
-	GNodeList* listOfTrees = getNodeTreesFromNodeList(listOfNodes, file->name, errorLog);
-	deleteNodeList(listOfNodes, false);
+	// Get list of GNode roots from file.
+	GNodeList* listOfTrees = getGNodeTreesFromFile(file, log);
+	deleteFile(file);
+	if (timing) printf("Got listOfTrees: %s.\n", getMillisecondsString());
 	if (importDebugging) printf("listOfTrees contains %d records.\n", lengthList(listOfTrees));
-	if (lengthList(errorLog)) {
-		deleteNodeList(listOfTrees, true);
+	if (lengthList(log)) {
+		deleteGNodeList(listOfTrees, true);
 		return null;
 	}
 	// Check all keys and the references to them.
-	checkKeysAndReferences(listOfTrees, file->name, errorLog);
-	if (lengthList(errorLog)) {
-		deleteNodeList(listOfTrees, true);
+	checkKeysAndReferences(listOfTrees, file->name, log);
+	if (timing) printf("Checked keys: %s.\n", getMillisecondsString());
+	if (lengthList(log)) {
+		deleteGNodeList(listOfTrees, true);
 		return null;
 	}
-	// Create the person and family indexes.
+	// Create the indexes.
 	RecordIndex* personIndex = createRecordIndex();
 	RecordIndex* familyIndex = createRecordIndex();
+	RecordIndex* recordIndex = createRecordIndex();
 	int otherRecords = 0;
 	FORLIST(listOfTrees, element)
 		GNodeListEl* el = (GNodeListEl*) element;
 		GNode* root = el->node;
+		if (root->key)
+			addToRecordIndex(recordIndex, root->key, root, el->line);
 		if (recordType(root) == GRPerson)
 			addToRecordIndex(personIndex, root->key, root, el->line);
 		else if (recordType(root) == GRFamily)
@@ -97,62 +98,58 @@ Database* gedcomFileToDatabase(String filePath, ErrorLog* errorLog) {
 		else
 			otherRecords++;
 	ENDLIST
+	if (timing) printf("Created the three indexes: %s.\n", getMillisecondsString());
 	if (importDebugging) {
 		printf("The person index holds %d records.\n", sizeHashTable(personIndex));
 		printf("The family index holds %d records.\n", sizeHashTable(familyIndex));
+		printf("The record index holds %d records.\n", sizeHashTable(recordIndex));
 		printf("There are %d other records.\n", otherRecords);
 	}
-	// Create a RecordIndex with all keyed records.
-	RecordIndex* recordIndex = createRecordIndex();
-	int numAddedToIndex = 0;
-	FORLIST(listOfTrees, element)
-		GNodeListEl* el = (GNodeListEl*) element;
-		GNode* root = el->node;
-		if (root->key) {
-			numAddedToIndex++;
-			addToRecordIndex(recordIndex, root->key, root, el->line);
-		}
-	ENDLIST
-	if (importDebugging) printf("Number added to index is %d.\n", numAddedToIndex);
-	// Create Database with first three indexes.
-	Database* database = createDatabase(filePath);
+	// Create Database with the three indexes.
+	Database* database = createDatabase(path);
 	database->recordIndex = recordIndex;
 	database->personIndex = personIndex;
 	database->familyIndex = familyIndex;
-	// Validate persons.
-	validatePersons(database, errorLog);
-	validateFamilies(database, errorLog);
-
-
-
-
+	// Validate persons and families.
+	validatePersons(database, log);
+	if (timing) printf("Validated persons: %s.\n", getMillisecondsString());
+	validateFamilies(database, log);
+	if (timing) printf("Validated families: %s.\n", getMillisecondsString());
+	validateReferences(database, log);
+	if (lengthList(log)) {
+		deleteDatabase(database);
+		return null;
+	}
+	// Create name index.
+	indexNames(database);
+	if (timing) printf("Indexed names: %s.\n", getMillisecondsString());
+	// Create the REFN index and validate it.
+	validateReferences(database, log);
+	if (timing) printf("Indexed REFNs: %s.\n", getMillisecondsString());
+	if (timing) printf("End of gedcomFileToDatabase: %s.\n", getMillisecondsString());
+	if (lengthList(log)) {
+		deleteDatabase(database);
+		return null;
+	}
 	return database;
 }
-//
-//	Database* database = createDatabase(filePath); // Create database and add records to it.
-//	FORLIST(listOfTrees, element)
-//		GNodeListElement* e = (GNodeListElement*) element;
-//		storeRecord(database, normalizeRecord(e->node), e->lineNo, errorLog);
-//	ENDLIST
-//	printf("And now it is time to sort those RootList\n");
-//	sortList(database->personRoots);
-//	printf("Persons have been sorted\n");
-//	sortList(database->familyRoots);
-//	printf("Families have been sorted\n");
-//	return listOfTrees;
-//}
 
-// checkKeysAndReferences checks keys and their references. Creates a table of all keys and checks
-// for duplicates. Makes sure all keys found as values refer to records.
-void checkKeysAndReferences(GNodeList* records, String name, ErrorLog* errorLog) {
+// checkKeysAndReferences checks record keys and their references. Creates a table of all keys
+// and checks for duplicates. CHecks that all keys found as values refer to records.
+void checkKeysAndReferences(GNodeList* records, String name, ErrorLog* log) {
 	StringSet* keySet = createStringSet();
 	FORLIST(records, element)
 		GNodeListEl* el = (GNodeListEl*) element;
 		GNode* root = el->node;
 		String key = root->key;
-		if (!key) continue;
+		if (!key) {
+			RecordType rtype = recordType(root);
+			if (rtype == GRHeader || rtype == GRTrailer) continue;
+			addErrorToLog(log, createError(gedcomError, name, el->line, "record missing a key"));
+			continue;
+		}
 		if (isInSet(keySet, key)) {
-			addErrorToLog(errorLog, createError(gedcomError, name, el->line, "duplicate key"));
+			addErrorToLog(log, createError(gedcomError, name, el->line, "duplicate key"));
 			continue;
 		}
 		addToSet(keySet, key);
@@ -176,14 +173,14 @@ void checkKeysAndReferences(GNodeList* records, String name, ErrorLog* errorLog)
 								name,
 								el->line + countNodesBefore(node),
 								"invalid key value");
-					addErrorToLog(errorLog, error);
+					addErrorToLog(log, error);
 					printf("Didn't find key: %s\n", node->value);
 				}
 		ENDTRAVERSE
 	ENDLIST
 	if (importDebugging) {
 		printf("The length of the key set is %d.\n", lengthSet(keySet));
-		printf("The length of the error log is %d.\n", lengthList(errorLog));
+		printf("The length of the error log is %d.\n", lengthList(log));
 		printf("The number of references to keys is %d.\n", numReferences);
 		printf("The number of records visited is %d.\n", recordsVisited);
 		printf("The number of nodes traversed is %d.\n", nodesTraversed);

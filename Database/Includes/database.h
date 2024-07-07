@@ -77,6 +77,7 @@ bool storeRecord(Database*, GNode*, int lineno, ErrorLog*); // Add a record to t
 void showTableSizes(Database*);  // Show the sizes of the database tables. Debugging.
 void showPersonIndex(Database*); // Show the person index. Debugging.
 void showFamilyIndex(Database*); // Show the family index. Debugging.
+void summarizeDatabase(Database*);
 
 extern int getCount(void);
 

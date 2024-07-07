@@ -3,7 +3,7 @@
 //  errors.c has code for handling DeadEnds errors.
 //
 //  Created by Thomas Wetmore on 4 July 2023.
-//  Last changed on 22 June 2024.
+//  Last changed on 5 July 2024.
 
 #include "errors.h"
 #include "list.h"
@@ -74,12 +74,6 @@ void deleteError (Error* error) {
 void addErrorToLog (ErrorLog* errorLog, Error* error) {
 	if (!error) return;
 	appendToList(errorLog, error);
-}
-
-// oldAddErrorToLog adds an Error to an ErrorLog. An earlier version.
-void oldAddErrorToLog(ErrorLog* errorLog, ErrorType errorType, CString fileName, int lineNumber,
-	String message) {
-	appendToList(errorLog, createError(errorType, fileName, lineNumber, message));
 }
 
 // showError shows an Error on standard output.

@@ -75,7 +75,7 @@ Database *importFromFileFP (File *file, CString filePath, ErrorLog *errorLog)
 	if (importDebugging)
 		fprintf(debugFile, "importFromFile: calling getNodeListFromFile(%s,...\n", filePath);
 	int numErrors = 0;
-	GNodeList* listOfNodes = getNodeListFromFile(file, errorLog); // Get all lines as GNodes.
+	GNodeList* listOfNodes = getGNodeListFromFile(file, errorLog); // Get all lines as GNodes.
 	if (!listOfNodes) return null;
 
 #if defined(DEADENDS)

@@ -1,11 +1,10 @@
-// DeadEnds Project
+// DeadEnds
 //
-// refnindex.c -- Handle user reference indexing.
-//
-// Gedcom records can have 1 REFN nodes whose values give records unique identifiers.
+// refnindex.c has the functions that implement the reference index. Gedcom records can have
+// 1 REFN nodes whose values give records unique identifiers.
 //
 // Created by Thomas Wetmore on 16 December 2023.
-// Last changed on 16 May 2024.
+// Last changed on 7 July 2024.
 
 #include <stdint.h>
 
@@ -63,8 +62,8 @@ void deleteRefnIndex(RefnIndex *index) {
 	deleteHashTable(index);
 }
 
-// addToRefnIndex adds a new RefnIndexEl in a RefnIndex. Returns true on success; returns false
-// if the REFN value was already in the table.
+// addToRefnIndex adds a new RefnIndexEl to a RefnIndex. Returns true on success; returns false
+// if the REFN value is already in the table.
 bool addToRefnIndex(RefnIndex *index, String refn, String key) {
 	RefnIndexEl* element = createRefnIndexEl(strsave(refn), strsave(key));
 	bool added = addToHashTableIfNew(index, element);
