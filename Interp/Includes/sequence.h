@@ -78,7 +78,7 @@ Sequence* siblingSequence(Sequence*, bool close);
 bool elementFromSequence(Sequence* seq, int index, CString* key, CString* name);
 void renameElementInSequence(Sequence* seq, CString key);
 void sequenceToGedcom(Sequence*, FILE*);
-void showSequence(Sequence*);
+void showSequence(Sequence*, String title);
 
 bool limitPersonNode(GNode *node, int level);
 

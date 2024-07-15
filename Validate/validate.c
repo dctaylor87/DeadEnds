@@ -3,7 +3,7 @@
 // validate.c has the functions that validate Gedcom records.
 //
 // Created by Thomas Wetmore on 12 April 2023.
-// Last changed on 6 July 2024.
+// Last changed on 9 July 2024.
 
 #include <stdint.h>
 
@@ -26,7 +26,7 @@ static bool validateRefns(Database *database, ErrorLog*);
 
 int numValidations = 0; // DEBUG.
 
-// validateDatabase validates a Database.
+// validateDatabase validates a Database. DEPRECATED.
 bool validateDatabase(Database* database, ErrorLog* errorLog) {
 	ASSERT(database);
 	bool isOkay = true;
