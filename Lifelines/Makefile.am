@@ -29,16 +29,20 @@ llines_LDADD = ../Python/libpyllines.a \
 	../LLSupport/libllsupport.a \
 	../Interp/libinterp.a ../Parser/libparser.a \
 	../UI/libui.a \
-	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Operations/liboperations.a \
+	../Database/libdatabase.a \
 	../Validate/libvalidate.a \
+	../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 llexec_LDADD = ../Python/libpyllines.a \
 	../LLSupport/libllsupport.a \
 	../Interp/libinterp.a ../Parser/libparser.a \
 	../UI/libuicli.a \
-	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Operations/liboperations.a \
+	../Database/libdatabase.a \
 	../Validate/libvalidate.a \
+	../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 LIBS =	$(PYTHON_LIBS) @LIBINTL@ @LIBICONV@ @LIBS@
