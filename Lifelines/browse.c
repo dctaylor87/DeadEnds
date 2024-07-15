@@ -2088,7 +2088,11 @@ autoadd_xref (RecordIndexEl *rec, GNode *newnode)
 		nsibling(prev) = xref;
 	}
 
+#if defined(DEADENDS)
+	normalizeRecord(rec->root);
+#else
 	normalize_rec(rec);
+#endif
 	
 	unknown_node_to_dbase(node);
 }

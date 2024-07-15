@@ -131,7 +131,7 @@ typedef void *		VPTR;
 #define num_othrs()			numberOthers(database)
 
 #define node_to_key(node)	(rmvat(nxref(node)))
-#define normalize_rec(rec)	normalizeNodeTree(rec->root)
+//#define normalize_rec(rec)	normalizeNodeTree(rec->root)
 
 #define HINT_PARAM_UNUSED		ATTRIBUTE_UNUSED
 #define HINT_PRINTF(fmt, args)		ATTRIBUTE_PRINTF(fmt, args)
