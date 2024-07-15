@@ -12,12 +12,15 @@ deadends_SOURCES = deadends.c de-scripts.c
 # Parser has to go before Interp
 # Database has to go before GEDCOM
 # Utils has to go before DataTypes due to searchIntegerTable,insertInIntegerTable
-# 
-# 
+#
+#
 LDADD = ../Python/libpyllines.a ../LLSupport/libllsupport.a \
 	../Interp/libinterp.a ../Parser/libparser.a \
 	../UI/libuicli.a \
-	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Operations/liboperations.a \
+	../Database/libdatabase.a \
+	../Validate/libvalidate.a \
+	../Gedcom/libgedcom.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 
 #	../Utils/libutils.a ../DataTypes/libdatatypes.a
