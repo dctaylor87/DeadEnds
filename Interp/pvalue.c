@@ -33,7 +33,7 @@ PValue *allocPValue(PVType type, VUnion value) {
 	PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
 	if (! ppvalue)
 	  return NULL;
-	memset(ppvalue, 0, sizeof(ppvalue));
+	memset(ppvalue, 0, sizeof(PValue));
 	ppvalue->type = type;
 	ppvalue->value = value;
 	return ppvalue;
