@@ -32,8 +32,9 @@ test_SOURCES = \
 # 
 LDADD = ../Python/libpyllines.a \
 	../Interp/libinterp.a ../Parser/libparser.a \
-	../Database/libdatabase.a ../Gedcom/libgedcom.a \
+	../Database/libdatabase.a \
 	../Validate/libvalidate.a \
+	../Gedcom/libgedcom.a \
 	../Operations/liboperations.a \
 	../DataTypes/libdatatypes.a ../Utils/libutils.a
 

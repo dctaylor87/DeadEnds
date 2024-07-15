@@ -4,7 +4,7 @@
 // import.h -- Header file for the Gedcom import process.
 //
 // Created by Thomas Wetmore on 13 November 2022.
-// Last changed on 30 March 2024.
+// Last changed on 8 July 2024.
 //
 
 #ifndef import_h
@@ -15,9 +15,10 @@
 #include "errors.h"
 #include "database.h"
 #include "list.h"
+//#include "file.h"
 
 List *importFromFiles(String fileNames[], int count, ErrorLog*);
-extern Database *importFromFile(CString fileName, ErrorLog *errorLog);
-extern Database *importFromFileFP(File* file, CString fileName, ErrorLog *errorLog);
+Database* gedcomFileToDatabase(CString, ErrorLog*);
+extern Database *importFromFileFP(File* file, CString path, ErrorLog *log);
 
 #endif // import_h
