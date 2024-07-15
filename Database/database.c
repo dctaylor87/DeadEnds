@@ -112,7 +112,7 @@ bool isEmptyDatabase(Database* database) {
 	return numberPersons(database) + numberFamilies(database) == 0;
 }
 
-static GNode* keyToRecordOfType(String key, Database* database, RecordType recType) {
+static GNode* keyToRecordOfType(CString key, Database* database, RecordType recType) {
 	RecordIndexEl* el = (RecordIndexEl*) searchHashTable(database->recordIndex, key);
 	if (el == null) return null;
 	GNode* node = el->root;
