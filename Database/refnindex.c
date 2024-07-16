@@ -64,7 +64,7 @@ void deleteRefnIndex(RefnIndex *index) {
 
 // addToRefnIndex adds a new RefnIndexEl to a RefnIndex. Returns true on success; returns false
 // if the REFN value is already in the table.
-bool addToRefnIndex(RefnIndex *index, String refn, String key) {
+bool addToRefnIndex(RefnIndex *index, CString refn, CString key) {
 	RefnIndexEl* element = createRefnIndexEl(strsave(refn), strsave(key));
 	bool added = addToHashTableIfNew(index, element);
 	if (added) return true;

@@ -24,7 +24,7 @@ typedef HashTable RefnIndex;
 RefnIndexEl *createRefnIndexEl(CString refn, CString key);
 RefnIndex *createRefnIndex(void);
 void deleteRefnIndex(RefnIndex*);
-bool addToRefnIndex(RefnIndex*, String refn, String key);
+bool addToRefnIndex(RefnIndex*, CString refn, CString key);
 CString searchRefnIndex(RefnIndex*, CString refn);
 void showRefnIndex(RefnIndex*);
 
