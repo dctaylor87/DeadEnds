@@ -12,7 +12,7 @@
 #define MAXPATHBUFFER 1024
 
 // filePath finds a file in a sequence of paths.
-static String filePath (CString fileName, CString searchPath) {
+static CString filePath (CString fileName, CString searchPath) {
 	if (!fileName || *fileName == 0) return null;
 	if (!searchPath || *searchPath == 0) return fileName;
 	if (*fileName == '/' || *fileName == '.') return fileName; // Bug: . could be part of name.
