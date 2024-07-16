@@ -49,7 +49,7 @@ void deleteNameIndex(NameIndex *nameIndex) {
 }
 
 // insertInNameIndex adds a (name key, person key) relationship to a NameIndex.
-void insertInNameIndex(NameIndex* index, String nameKey, String recordKey) {
+void insertInNameIndex(NameIndex* index, CString nameKey, String recordKey) {
 	//printf("insertInNameIndex: nameKey, personKey: %s, %s\n", nameKey, personKey); // DEBUG
 	NameIndexEl* element = (NameIndexEl*) searchHashTable(index, nameKey);
 	if (!element) {
@@ -60,6 +60,24 @@ void insertInNameIndex(NameIndex* index, String nameKey, String recordKey) {
 	if (!isInSet(recordKeys, recordKey)) {
 		addToSet(recordKeys, recordKey);
 	}
+}
+
+// removeFromNameIndex removes a key from a name entry.
+// returns true if found (and removed); returns false if not present.
+bool removeFromNameIndex (NameIndex *index, CString nameKey, CString recordKey)
+{
+  NameIndexEl *element = (NameIndexEl *) searchHashTable (index, nameKey);
+
+  if (! element)
+    return false;		// should not happen
+
+  Set *recordKeys = element->recordKeys;
+  if (! isInSet (recordKeys, recordKey))
+    return false;		// should not happen
+
+  removeFromSet (recordKeys, recordKey);
+
+  return true;
 }
 
 // searchNameIndex searches NameIndex for a name and returns the record keys that have the name.
