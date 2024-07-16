@@ -9,7 +9,7 @@
 #include "file.h"
 
 // createFile creates a File structure.
-File* createFile(String path, String mode) {
+File* createFile(CString path, CString mode) {
 	if (!path || !mode) return null;
 	FILE* fp = fopen(path, mode);
 	String name = lastPathSegment(path);

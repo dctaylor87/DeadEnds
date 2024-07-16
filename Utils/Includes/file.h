@@ -17,7 +17,7 @@ typedef struct File {
 	String name;
 } File;
 
-File* createFile(String path, String mode);
+File* createFile(CString path, CString mode);
 void deleteFile(File*);
 
 #endif // file_h
