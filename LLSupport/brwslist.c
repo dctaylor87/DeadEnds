@@ -159,6 +159,7 @@ remove_browse_list (String name,
 	ENDLIST
 }
 
+#if !defined(DEADENDS)		/* DeadEnds now has this in Interp/sequence.c */
 /* stringToSequence -- return sequence of records matching a string.
    The search order is: named sequence, key, REFN, name */
 
@@ -168,7 +169,7 @@ Sequence *stringToSequence (CString name, Database *database)
 
   seq = find_named_seq (name);
   if (! seq)
-    seq = key_to_indiseq (name, database);
+    seq = keyToSequence (name, database);
   if (! seq)
     seq = refnToSequence (name, database);
   if (! seq)
@@ -176,6 +177,7 @@ Sequence *stringToSequence (CString name, Database *database)
 
   return seq;
 }
+#endif
 
 /*===========================================
  * find_named_seq -- Find named browse list.
