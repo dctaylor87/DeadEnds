@@ -7,9 +7,9 @@ bin_PROGRAMS = llines llexec
 # what goes into lines?
 # export.c import.c
 
-llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
+llines_SOURCES = add.c advedit.c askgedc.c askprogram.c \
 	browse.c brwsmenu.c \
-	choose.c cscurses.c delete.c dynmenu.c \
+	cscurses.c delete.c dynmenu.c \
 	edit.c interact.c \
 	lbrowse.c lines_usage.c listui.c \
 	main.c menuset.c merge.c miscutls.c \
@@ -19,7 +19,7 @@ llines_SOURCES = add.c advedit.c ask.c askgedc.c askprogram.c \
 	signals.c version.c
 
 # what goes into llexec ?
-llexec_SOURCES = ask.c choose.c lines_usage.c llexec.c \
+llexec_SOURCES = lines_usage.c llexec.c \
 	selectdb.c miscutls.c llexec.h \
 	signals.c version.c
 
@@ -74,7 +74,7 @@ AM_CPPFLAGS = \
 AM_CLFAGS = -fanalyzer
 
 # Locale information for gettext
-DEFS = -DDEADENDS -DLOCALEDIR=\"$(localedir)\" @DEFS@
+DEFS = -DDEADENDS -DLOCALEDIR=\"$(localedir)\" -DSYS_CONF_DIR=\"$(sysconfdir)\" @DEFS@
 
 EXTRA_DIST = llinesi.h screeni.h
 

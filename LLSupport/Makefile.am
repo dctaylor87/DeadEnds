@@ -7,9 +7,11 @@ noinst_LIBRARIES = libllsupport.a
 
 libllsupport_a_SOURCES = \
 	appendstr.c \
+	ask.c \
 	brwslist.c \
 	charmaps.c \
 	charprops.c \
+	choose.c \
 	codesets.c \
 	equaliso.c \
 	expandvars.c \
@@ -52,6 +54,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/LLSupport/Includes \
 	-I$(top_srcdir)/Lifelines/Includes \
 	-I$(top_srcdir)/Python/Includes \
+	-I$(top_srcdir)/UI/Includes \
 	-I$(top_srcdir)/Utils/Includes \
 	-I$(top_srcdir)/DataTypes/Includes \
 	-I$(top_srcdir)/Parser/Includes \
