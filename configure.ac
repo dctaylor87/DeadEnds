@@ -621,7 +621,7 @@ fi
 PYTHON_LIBS=`echo $PYTHON_LIBS | sed -e 's/-Xlinker -export-dynamic//'`
 
 if test "${have_libpython}" != "no"; then
-  LIBPYLLINES="../Python/libpyllines.a"
+  LIBPYLLINES="../DeadEndsLib/Python/libpyllines.a"
   PYTHON_DIR="python"
 else
   LIBPYLLINES=""
@@ -665,19 +665,20 @@ dnl Generate Makefiles
 dnl **************************************************************
 
 AC_CONFIG_FILES([Makefile \
-        Database/Makefile \
+	DeadEndsLib/Makefile \
+        DeadEndsLib/Database/Makefile \
+        DeadEndsLib/Gedcom/Makefile \
+        DeadEndsLib/Interp/Makefile \
+        DeadEndsLib/LLSupport/Makefile \
+        DeadEndsLib/Parser/Makefile \
+        DeadEndsLib/Python/Makefile \
+        DeadEndsLib/DataTypes/Makefile \
+        DeadEndsLib/UI/Makefile \
+        DeadEndsLib/Utils/Makefile \
+        DeadEndsLib/Validate/Makefile \
+	DeadEndsLib/Operations/Makefile \
         Docs/Manual/Makefile \
-        Gedcom/Makefile \
-        Interp/Makefile \
         Lifelines/Makefile \
-        LLSupport/Makefile \
-        Parser/Makefile \
         Programs/Makefile \
-        Python/Makefile \
-        DataTypes/Makefile \
-        UI/Makefile \
-        Utils/Makefile \
-        Validate/Makefile \
-	Operations/Makefile \
         Tests/Makefile])
 AC_OUTPUT
