@@ -1,0 +1,23 @@
+# Process this file with automake to produce Makefile.in
+# (configure will process the resulting Makefile.in to produce Makefile)
+
+# Makefile for the DeadEnds DataTypes library
+
+noinst_LIBRARIES = libdatatypes.a
+
+libdatatypes_a_SOURCES = \
+	block.c \
+	list.c \
+	hashtable.c \
+	sort.c \
+	set.c \
+	stringset.c \
+	stringtable.c \
+	integertable.c \
+	zstr.c
+
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Utils/Includes
+
+AM_CFLAGS = -fanalyzer

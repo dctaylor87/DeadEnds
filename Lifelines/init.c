@@ -215,7 +215,9 @@ init_lifelines_postdb (void)
 void
 close_lifelines (void)
 {
+#if !defined(DEADENDS)
 	lldb_close(&def_lldb); /* make sure database closed */
+#endif
 	term_browse_lists();
 	term_refnrec();
 	term_namerec();
@@ -257,8 +259,10 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 		return;
 	/* deal with db-specific options */
 	/* includes setting int_codeset */
+#if !defined(DEADENDS)
 	if (def_lldb)
 		update_db_options();
+#endif
 	/* in case user changed any codesets */
 	init_codesets();
 	/* in case user changed locale (need int_codeset already set) */

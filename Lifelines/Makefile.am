@@ -25,25 +25,25 @@ llexec_SOURCES = lines_usage.c llexec.c \
 
 PYTHON_LIBS = @PYTHON_LIBS@
 
-llines_LDADD = ../Python/libpyllines.a \
-	../LLSupport/libllsupport.a \
-	../Interp/libinterp.a ../Parser/libparser.a \
-	../UI/libui.a \
-	../Operations/liboperations.a \
-	../Database/libdatabase.a \
-	../Validate/libvalidate.a \
-	../Gedcom/libgedcom.a \
-	../DataTypes/libdatatypes.a ../Utils/libutils.a
+llines_LDADD = ../DeadEndsLib/Python/libpyllines.a \
+	../DeadEndsLib/LLSupport/libllsupport.a \
+	../DeadEndsLib/Interp/libinterp.a ../DeadEndsLib/Parser/libparser.a \
+	../DeadEndsLib/UI/libui.a \
+	../DeadEndsLib/Operations/liboperations.a \
+	../DeadEndsLib/Database/libdatabase.a \
+	../DeadEndsLib/Validate/libvalidate.a \
+	../DeadEndsLib/Gedcom/libgedcom.a \
+	../DeadEndsLib/DataTypes/libdatatypes.a ../DeadEndsLib/Utils/libutils.a
 
-llexec_LDADD = ../Python/libpyllines.a \
-	../LLSupport/libllsupport.a \
-	../Interp/libinterp.a ../Parser/libparser.a \
-	../UI/libuicli.a \
-	../Operations/liboperations.a \
-	../Database/libdatabase.a \
-	../Validate/libvalidate.a \
-	../Gedcom/libgedcom.a \
-	../DataTypes/libdatatypes.a ../Utils/libutils.a
+llexec_LDADD = ../DeadEndsLib/Python/libpyllines.a \
+	../DeadEndsLib/LLSupport/libllsupport.a \
+	../DeadEndsLib/Interp/libinterp.a ../DeadEndsLib/Parser/libparser.a \
+	../DeadEndsLib/UI/libuicli.a \
+	../DeadEndsLib/Operations/liboperations.a \
+	../DeadEndsLib/Database/libdatabase.a \
+	../DeadEndsLib/Validate/libvalidate.a \
+	../DeadEndsLib/Gedcom/libgedcom.a \
+	../DeadEndsLib/DataTypes/libdatatypes.a ../DeadEndsLib/Utils/libutils.a
 
 LIBS =	$(PYTHON_LIBS) @LIBINTL@ @LIBICONV@ @LIBS@
 
@@ -60,15 +60,15 @@ PYTHON_CFLAGS = @PYTHON_CFLAGS@
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
 	-I$(top_srcdir)/Lifelines/Includes \
-	-I$(top_srcdir)/LLSupport/Includes \
-	-I$(top_srcdir)/Python/Includes \
-	-I$(top_srcdir)/UI/Includes \
-	-I$(top_srcdir)/Utils/Includes \
-	-I$(top_srcdir)/DataTypes/Includes \
-	-I$(top_srcdir)/Parser/Includes \
-	-I$(top_srcdir)/Interp/Includes \
-	-I$(top_srcdir)/Gedcom/Includes \
-	-I$(top_srcdir)/Database/Includes \
+	-I$(top_srcdir)/DeadEndsLib/LLSupport/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Python/Includes \
+	-I$(top_srcdir)/DeadEndsLib/UI/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
+	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	$(PYTHON_CPPFLAGS)
 
 AM_CLFAGS = -fanalyzer
@@ -80,20 +80,20 @@ EXTRA_DIST = llinesi.h screeni.h
 
 # these dependencies are so that building parts will work
 
-../Interp/libinterp.a:
-	$(MAKE) -C ../Interp libinterp.a
+../DeadEndsLib/Interp/libinterp.a:
+	$(MAKE) -C ../DeadEndsLib/Interp libinterp.a
 
-../Parser/libparser.a:
-	$(MAKE) -C ../Parser libparser.a
+../DeadEndsLib/Parser/libparser.a:
+	$(MAKE) -C ../DeadEndsLib/Parser libparser.a
 
-../Database/libdatabase.a:
-	$(MAKE) -C ../Database libdatabase.a
+../DeadEndsLib/Database/libdatabase.a:
+	$(MAKE) -C ../DeadEndsLib/Database libdatabase.a
 
-../Gedcom/libgedcom.a:
-	$(MAKE) -C ../Gedcom libgedcom.a
+../DeadEndsLib/Gedcom/libgedcom.a:
+	$(MAKE) -C ../DeadEndsLib/Gedcom libgedcom.a
 
-../DataTypes/libdatatypes.a:
-	$(MAKE) -C ../DataTypes libdatatypes.a
+../DeadEndsLib/DataTypes/libdatatypes.a:
+	$(MAKE) -C ../DeadEndsLib/DataTypes libdatatypes.a
 
-../Utils/libutils.a:
-	$(MAKE) -C ../Utils libutils.a
+../DeadEndsLib/Utils/libutils.a:
+	$(MAKE) -C ../DeadEndsLib/Utils libutils.a
