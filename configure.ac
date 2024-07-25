@@ -678,7 +678,9 @@ AC_CONFIG_FILES([Makefile \
         DeadEndsLib/Validate/Makefile \
 	DeadEndsLib/Operations/Makefile \
         Docs/Manual/Makefile \
+	PatchSex/Makeile \
+	RandomizeKeys/Makefile \
+	TestProgram/Makefile \
         Lifelines/Makefile \
-        Programs/Makefile \
-        Tests/Makefile])
+        Programs/Makefile])
 AC_OUTPUT
