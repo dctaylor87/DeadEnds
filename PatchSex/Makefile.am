@@ -1,3 +1,5 @@
+bin_PROGRAMS = patchsex
+
 patchsex_SOURCES = patchsex.c
 
 AM_CPPFLAGS = \

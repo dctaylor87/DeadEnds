@@ -1,3 +1,5 @@
+bin_PROGRAMS = randomizekeys
+
 randomizekeys_SOURCES = randomizekeys.c
 
 AM_CPPFLAGS = \

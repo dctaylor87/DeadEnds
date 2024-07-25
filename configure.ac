@@ -678,7 +678,7 @@ AC_CONFIG_FILES([Makefile \
         DeadEndsLib/Validate/Makefile \
 	DeadEndsLib/Operations/Makefile \
         Docs/Manual/Makefile \
-	PatchSex/Makeile \
+	PatchSex/Makefile \
 	RandomizeKeys/Makefile \
 	TestProgram/Makefile \
         Lifelines/Makefile \

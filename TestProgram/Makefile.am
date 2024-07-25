@@ -1,3 +1,5 @@
+bin_PROGRAMS = testprogram
+
 testprogram_SOURCES = test.c testsequence.c testgedcomstrings.c testwritedatabase.c importone.c
 
 AM_CPPFLAGS = \
