@@ -5,12 +5,14 @@
 // Created by Thomas Wetmore on 14 July 2024.
 // Last changed on 21 July 2024.
 
+#include <stdint.h>
+
 #include "randomizekeys.h"
 #include "stringtable.h"
 #include "writenode.h"
 #include "file.h"
 
-FILE* debugFile = null; // Need to get rid of this.
+//FILE* debugFile = null; // Need to get rid of this.
 static void goAway(ErrorLog*);
 
 // main is the main program of the randomize keys batch program.

@@ -14,6 +14,7 @@
 #include "parse.h"
 #include "pnode.h"
 #include "interp.h" // yylex prototype	
+#include "parse.h"
 
 static int getToken(void);    // Instrumentable lexing function.
 static int getTokenLow(void); // The lexing function.
@@ -188,8 +189,8 @@ static int getTokenLow(void) {
 
 // inchar gets the next character from the Lexer.
 static int inchar(void) {
-    int c = getc(currentProgramFile);
-    if (c == '\n') currentProgramLineNumber++;
+    int c = getc(currentFile);
+    if (c == '\n') currentLine++;
     if (debugging) printf("+: '%c'\n", c);
     return c == EOF ? 0 : c;
 }
@@ -198,8 +199,8 @@ static int inchar(void) {
 static void unreadchar(int c) {
     if (c == 0) return;
     if (debugging) printf("-: '%c'\n", c);
-    ungetc(c, currentProgramFile);
-    if (c == '\n') currentProgramLineNumber--;
+    ungetc(c, currentFile);
+    if (c == '\n') currentLine--;
 }
 
 // rwordtable is the reserved word table; keep in alphabetical order.

@@ -152,8 +152,8 @@ void parseAndRunProgramTest(Database *database, int testNumber) {
 	parseProgram("scriptlist", "/Users/ttw4/Desktop/DeadEnds/Reports/");
 	printf("Finished parsing: %2.3f\n", getMilliseconds());
 
-	currentProgramFileName = "internal";
-	currentProgramLineNumber = 1;
+	currentFileName = "internal";
+	currentLine = 1;
 	PNode *pnode = procCallPNode("main", null); // PNode to call main proc.
 	SymbolTable *symbolTable = createSymbolTable();
 	Context *context = createContext(symbolTable, database);

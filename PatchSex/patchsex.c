@@ -6,6 +6,8 @@
 // Created by Thomas Wetmore on 10 July 2024.
 // Last changed on 23 July 2024.
 
+#include <stdint.h>
+
 #include "patchsex.h"
 #include "splitjoin.h"
 #include "utils.h"
