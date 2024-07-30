@@ -101,8 +101,8 @@ execute_script (CString report_name, Database *database)
   parseProgram (report_name, DEADENDS_search_path);
 
   //  Create a PNProcCall node to call the main procedure with
-  currentProgramFileName = report_name;
-  currentProgramLineNumber = 1;
+  currentFileName = report_name;
+  currentLine = 1;
   PNode *pnode = procCallPNode("main", null);
 
   //  Call the main procedure.

@@ -1,0 +1,6 @@
+proc main()
+{
+	forindi(root, i) {
+		d(i) nl()
+	}
+}

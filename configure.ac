@@ -680,6 +680,7 @@ AC_CONFIG_FILES([Makefile \
         Docs/Manual/Makefile \
 	PatchSex/Makefile \
 	RandomizeKeys/Makefile \
+	RunScript/Makefile \
 	TestProgram/Makefile \
         Lifelines/Makefile \
         Programs/Makefile])
