@@ -16,6 +16,7 @@ libgedcom_a_SOURCES = \
 	place.c \
 	readnode.c \
 	splitjoin.c \
+	temp-nodes.c \
 	writenode.c
 
 AM_CPPFLAGS = \

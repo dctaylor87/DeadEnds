@@ -37,6 +37,9 @@ struct GNode {
 #define nval(node)	((node)->value)
 #define ntag(node)	((node)->tag)
 #define nxref(node)	((node)->key)
+#define nflag(node)	(node)->flags
+
+#define ND_TEMP		0x1	/* node is a temp node, not part of a record */
 
 #define nrefcnt_inc(node)	((node)->refcount++)
 #define nrefcnt_dec(node)	((node)->refcount--)
@@ -95,5 +98,11 @@ int numNodeFrees(void);
 
 // import.c
 extern GNode *normalizeNodeTree (GNode*);
+
+// temp-nodes.c
+extern GNode *createTempGNode (String xref, String tag, String val, GNode *prnt);
+extern void freeTempGNodeTree (GNode *node);
+extern bool isTempGNode (GNode *node);
+extern void setTempGNode (GNode *node, bool temp);
 
 #endif // node_h

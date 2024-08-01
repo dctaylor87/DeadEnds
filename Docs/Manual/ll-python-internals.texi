@@ -294,11 +294,11 @@ RECORD.
 
 @subsection Temporary GNodes
 
-Temporary nodes are created by @code{create_temp_node}.  They are
-freed by @code{free_temp_node_tree}.  The { temp | non-temp } status
-can be tested by calling @code{is_temp_node}.  And the { temp |
-non-temp } status can be { set | cleared } by calling
-@code{set_temp_node}.
+Temporary nodes are created by @code{createTempGNode}.  They are
+freed by @code{freeTempGNodeTree}.  The @{ temp | non-temp @} status
+can be tested by calling @code{isTempGNode}.  And the @{ temp |
+non-temp @} status can be @{ set | cleared @} by calling
+@code{setTempGNode}.
 
 Temporary nodes, when created, are marked with flag @code{ND_TEMP}.
 
@@ -352,6 +352,21 @@ Defined in @file{gnode.h}
 NOTE: This is "parent" in the tree sense, @b{NOT} the genealogical sense.
 @end defmac
 
+@defmac nval (GNode* node)
+Given a GNode @code{node}, return its value.
+Defined in @file{gnode.h}
+@end defmac
+
+@defmac ntag (GNode* node)
+Given a GNode @code{node}, return its tag.
+Defined in @file{gnode.h}
+@end defmac
+
+@defmac nxref (GNode* node)
+Given a GNode @code{node}, return its xref.
+Defined in @file{gnode.h}
+@end defmac
+
 @deftypefun GNode* findTag (GNode *node, CString str) @arrow{}
 Given a GNode *@code{node}, check its tag and that of each of its
 siblings until either the tag @code{str} is found or we run out of
@@ -377,7 +392,7 @@ Creates a new node with the specified @code{xref}, @code{tag},
 Defined in @file{gnode.c}, declared in @file{gnode.h}.
 @end deftypefun
 
-@deftypefun GNode* create_temp_node (String xref, String tag, String value, GNode* parent)
+@deftypefun GNode* createTempGNode (String xref, String tag, String value, GNode* parent)
 Creates a new node with the specified @code{xref}, @code{tag},
 @code{value}, and @code{parent}.  Sets the @code{ND_TEMP} bit in the
 flags, and returns the new node.
@@ -395,14 +410,14 @@ Frees @code{node}, all of its descendants, all of its siblings, and
 all of their descendants.  Does @b{NOT} check reference counts.
 @end deftypefun
 
-@deftypefun bool is_temp_node (GNode* node)
+@deftypefun bool isTempGNode (GNode* node)
 Tests the @code{ND_TEMP} bit of @code{node}'s flags.  If set, it
 return true, otherwise it returns false.
 @end deftypefun
 
-@deftypefun void set_temp_node (GNode* node, bool temp)
+@deftypefun void setTempGNode (GNode* node, bool temp)
 If @code{temp} is true, sets @code{node}'s @code{ND_TEMP} flag.
-Otherwise clear the flag.
+Otherwise clears the flag.
 @end deftypefun
 
 @deftypefun INT length_nodes (GNode* node)
@@ -1016,7 +1031,7 @@ the iterator was created.
 Types can be approached from two perspectives -- the C perspective and
 the Python perspective.
 
-For a C perspective, there are four types defined by the Python
+For a C perspective, there are five types defined by the Python
 extension:
 
 @itemize @bullet
@@ -1082,6 +1097,13 @@ This records how far we are from the top node of the tree being
 iterated over.  For whole tree iteration it is part of the return
 value.  Before we start it will be 0.  After exhaustion it will be -1.
 @end itemize
+
+@item LLINES_PY_DATABASE
+@tindex LLINES_PY_DATABASE
+
+This is used for database types.  Currently there is only one database
+instance -- the current database.  This exists for the future when
+there are multiple databases.
 
 @end itemize
 

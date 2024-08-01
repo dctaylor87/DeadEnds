@@ -21,9 +21,8 @@
 #include "gnode.h"
 #include "recordindex.h"
 #include "hashtable.h"
-#include "ll-node.h"
 
-/* create_temp_node -- Create NODE for temporary use
+/* createTempGNode -- Create GNode for temporary use
    (not to be connected to a record)
    [All arguments are duplicated, so caller doesn't have to]
    String xref  [in] xref
@@ -33,40 +32,41 @@
    Created: 2003-02-01 (Perry Rapp) */
 
 GNode *
-create_temp_node (String xref, String tag, String val, GNode *prnt)
+createTempGNode (String xref, String tag, String val, GNode *prnt)
 {
 	GNode *node = createGNode(xref, tag, val, prnt);
 	nflag(node) = ND_TEMP;
 	return node;
 }
-/* free_temp_node_tree -- Free a node created by create_temp_node
+
+/* freeTempGNodeTree -- Free a node created by createTempGNode
    If the reference count is non-zero, we do not delete it nor its
    children -- siblings are still fair game, though.
    Created: 2003-02-01 (Perry Rapp).  Modified: David Taylor.  */
 
 void
-free_temp_node_tree (GNode *node)
+freeTempGNodeTree (GNode *node)
 {
 	GNode *n2;
 	if (get_nrefcnt (node) == 0) {
 		if ((n2 = nchild(node))) {
-			free_temp_node_tree(n2);
+			freeTempGNodeTree(n2);
 			nchild(node) = 0;
 		}
 	}
 	if ((n2 = nsibling(node))) {
-		free_temp_node_tree(n2);
+		freeTempGNodeTree(n2);
 		nsibling(node) = 0;
 	}
 	if (get_nrefcnt (node) == 0) {
 		freeGNode(node);
 	}
 }
-/* is_temp_node -- Return whether node is a temp
+/* isTempGNode -- Return whether node is a temp
    Created: 2003-02-04 (Perry Rapp) */
 
 bool
-is_temp_node (GNode *node)
+isTempGNode (GNode *node)
 {
 	return !!(nflag(node) & ND_TEMP);
 }
@@ -77,7 +77,7 @@ is_temp_node (GNode *node)
 static void
 set_temp_node_helper (GNode *node, bool temp)
 {
-  if (is_temp_node (node) ^ temp)
+  if (isTempGNode (node) ^ temp)
     nflag (node) ^= ND_TEMP;
   if (nchild (node))
     set_temp_node_helper (nchild (node), temp);
@@ -85,13 +85,13 @@ set_temp_node_helper (GNode *node, bool temp)
     set_temp_node_helper (nsibling (node), temp);
 }
 
-/* set_temp_node -- make node temp (or not)
+/* setTempGNode -- make node temp (or not)
    Created: 2003-02-04 (Perry Rapp) */
 
 void
-set_temp_node (GNode *node, bool temp)
+setTempGNode (GNode *node, bool temp)
 {
-	if (is_temp_node(node) ^ temp)
+	if (isTempGNode(node) ^ temp)
 		nflag(node) ^= ND_TEMP;
 	if (nchild (node))
 	  set_temp_node_helper (nchild (node), temp);

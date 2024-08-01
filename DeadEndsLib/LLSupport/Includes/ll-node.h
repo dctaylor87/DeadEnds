@@ -1,8 +1,4 @@
 //extern void change_node_tag (GNode *node, String newtag);
-extern GNode *create_temp_node (String xref, String tag, String val, GNode *prnt);
-extern void free_temp_node_tree (GNode *node);
-extern bool is_temp_node (GNode *node);
-extern void set_temp_node (GNode *node, bool temp);
 extern int tree_strlen (int levl, GNode *node);
 extern void unknown_node_to_dbase (GNode *node); /* XXX */
 extern int next_spouse (GNode **node, RecordIndexEl **spouse, Database *database);
@@ -23,7 +19,3 @@ extern bool traverse_nodes (GNode *node, bool (*func)(GNode *, Word), Word param
 //extern GNode *find_node (GNode *prnt, String tag, String val, GNode **plast); /* gnode.c */
 //extern void check_node_leaks (void);
 extern void term_node_allocator (void);
-
-#define nflag(node)	(node)->flags
-
-#define ND_TEMP		0x1	/* node is a temp node, not part of a record */

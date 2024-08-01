@@ -208,7 +208,7 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
     }
 
   nparent (orig_node) = parent_node;
-  set_temp_node (orig_node, is_temp_node (parent_node));
+  setTempGNode (orig_node, isTempGNode (parent_node));
 
   /* if both prev_node and parent_node are NULL, then there is nothing to do */
   if (! prev_node)
@@ -241,7 +241,7 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
   /* parent_node might be a permanent node or a temporary node -- set
      ND_TEMP flag of orig_node (and children) to match that of
      parent_node */
-  set_temp_node (orig_node, is_temp_node (parent_node));
+  setTempGNode (orig_node, isTempGNode (parent_node));
 
   return (self);
 }
@@ -289,7 +289,7 @@ static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
   nsibling (node) = NULL;
 
   /* whether it was permanent before or not, it is now temporary */
-  set_temp_node (node, true);
+  setTempGNode (node, true);
 
   return (self);
 }
@@ -311,7 +311,7 @@ static PyObject *llpy_create_node (PyObject *self ATTRIBUTE_UNUSED, PyObject *ar
   if (! PyArg_ParseTupleAndKeywords (args, kw, "s|z", keywords, &tag, &value))
     return NULL;
 
-  node = create_temp_node (xref, tag, value, parent);
+  node = createTempGNode (xref, tag, value, parent);
   if (! (py_node = PyObject_New(LLINES_PY_NODE, &llines_node_type)))
     return NULL;
 
