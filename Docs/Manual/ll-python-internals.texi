@@ -1,8 +1,8 @@
 \input texinfo
 @setfilename python-internals
+@titlepage
 @settitle DeadEnds Python Extension Internals Manual
 @setchapternewpage odd
-@titlepage
 @titlefont{DeadEnds Python Extension Internals}
 @author David Cole Taylor
 @today{}
@@ -20,9 +20,13 @@ This document concerns itself with the needs of those that wish to
 modify DeadEnds -- whether to extend the Python embedding or fix a
 bug in it -- or to modify the core of DeadEnds.
 
-If your goal is to use the Python embedding, please consult the
+The focus is on understanding the Python embedding and the DeadEnds
+code that it is embedded in well enough to modify the embedding,
+whether to extend it or to fix bugs in it.
+
+If your goal is to USE the Python embedding, then please consult the
 document ``DeadEnds Python Extension''.  If your goal is to use the
-DeadEnds Report Writing language, please consult the document
+DeadEnds Report Writing language, then please consult the document
 ``DeadEnds Programming Subsystem and Report Generator''.
 
 Much of the Python internals knowledge needed is covered by the
@@ -64,54 +68,81 @@ the Python specific portions of DeadEnds, the bulk of this document
 concerns the code of DeadEnds and should be of value to those
 modifying the core of DeadEnds.
 
-If is my hope that this document will grow over time.  Feedback,
-additions, and corrections are both welcomed and encouraged.
+Due to its origin, there are portions of this document that still use
+LifeLines terminology or that have a LifeLines perspective.  If you
+notice them, please feel free to point them out.
 
-Feedback can be given directly, via GitHub, or (if they do not
-object), the the llines mailing list.
+It is my hope that this document will grow and improve over time.
+Feedback, additions, and corrections are both welcomed and encouraged.
+
+Feedback can be given directly to me, via GitHub, or (if they do not
+object), the the LINES-L mailing list.
 @section Layout
 
-There are a number of subsystems each in its own subdirectory:
+There are a number of subsystems each in its own subdirectory.  Here
+is a description of the subdirectories.
 
-@itemize
-@item @code{DataTypes}
+@subsection Libraries
+
+@itemize @bullet
+@item @code{DeadEndsLib/DataTypes}
 
 Implementations of the various datatypes that are part of the DeadEnds
 system.
 
-@item @code{Database}
+@item @code{DeadEndsLib/Database}
 
 The code for the database itself.
 
-@item @code{Docs}
-
-Various documentation files about DeadEnds.  Look in a subdirectory
-matching a top level directory for markdown information about what is
-implemented in that top level directory.
-
-In Manual you will find some Texinfo documentation such as this document.
-@item @code{Gedcom}
+@item @code{DeadEndsLib/Gedcom}
 
 Most of the code for doing GEDCOM related things to the database lives
 here.
 
-@item @code{Gedfiles}
-
-GEDCOM files that are used (by the programs in Tests) in testing the
-DeadEnds code.
-
-@item @code{Interp}
+@item @code{DeadEndsLib/Interp}
 
 The code that implements the user callable functions of the DeadEnds
 Report writing language.
 
-@item @code{LLSupport}
+@item @code{DeadEndsLib/LLSupport}
 
 Code to support the use of the LifeLines curses interface with
 DeadEnds.  Much of this code was taken from various LifeLines
 directories, such as @file{src/gedlib} and @file{src/stdlib} and then
 modified for DeadEnds.  Some is original to DeadEnds.
 
+@item @code{DeadEndsLib/Parser}
+
+The code that implements the lexing and the parsing of the DeadEnds
+Report writing language.
+
+@item @code{DeadEndsLib/Python}
+
+Support for the Python embedding.
+
+@item @code{DeadEndsLib/UI}
+
+User interface, obviously.  Less obviously, the code here is used by
+@command{llexec} and not by @command{llines}.  Some of the routines
+here are mere stubs of their more fleshed out cousins that live in
+@code{liflines}.  Stubs that should be, in my opinion, fleshed out.
+
+@item @code{DeadEndsLib/Utils}
+
+Not a subsystem, as such, but rather a collection of routines that are
+meant to be generically useful across subsystems.  Some of the
+routines are implementations of functionality that is available on
+many systems, but not everywhere.
+
+@item @code{DeadEndsLib/Validate}
+
+Code for validating a GEDCOM file that is being imported.
+
+@end itemize
+
+@subsection Programs
+
+@itemize @bullet
 @item @code{Lifelines}
 
 The code that deals with the screen (via @code{ncurses}), the various
@@ -120,54 +151,46 @@ better location to live.  Most of this code was taken from the
 @file{src/liflines} directory of LifeLines and then modified to build
 and work with DeadEnds.  Some is original to DeadEnds.
 
-@item @code{Parser}
-
-The code that implements the lexing and the parsing of the DeadEnds
-Report writing language.
-
 @item @code{Programs}
 
-Various programs that link with the DeadEnds code.  You can find the
+Various programs that link with the DeadEnds code.  You can find a
 DeadEnds version of @command{llexec} in this directory.
-@item @code{Python}
 
-Support for the Python embedding.
-
-@item @code{Reports}
-@item @code{TeX}
-@item @code{Tests}
+@item @code{TestProgram}
 
 Programs for testing DeadEnds.
 
-@item @code{Utils}
+@end itemize
 
-Not a subsystem, as such, but rather a collection of routines that are
-meant to be generically useful across subsystems.  Some of the
-routines are implementations of functionality that is available on
-many systems, but not everywhere.
+@subsection Miscellaneous
+@itemize @bullet
+@item @code{Docs}
 
-@item @code{Validate}
+Various documentation files about DeadEnds.  Look in a subdirectory
+matching a top level directory for markdown information about what is
+implemented in that top level directory.
 
-Code for validating a GEDCOM file that is being imported.
+In Manual you will find some Texinfo documentation such as this document.
+
+@item @code{Gedfiles}
+
+GEDCOM files that are used (by the programs in TestProgram) in testing
+the DeadEnds code.
+
+@item @code{Reports}
+@item @code{TeX}
 
 @item @code{build}
 
 Files used by the build system tools to aid in the use of
 @command{autoconf}, @command{automake}, and @command{autoheader}.
 
-@item @code{ui}
-
-User interface, obviously.  Less obviously, the code here is used by
-@command{llexec} and not by @command{llines}.  Some of the routines
-here are mere stubs of their more fleshed out cousins that live in
-@code{liflines}.  Stubs that should be, in my opinion, fleshed out.
-
 @end itemize
 
 @section Python Files
 
 For the Python embedding, the emphasis is on RECORDs, not GNodes.  The
-header files live in @file{Python/Includes}.
+header files live in @file{DeadEndsLib/Python/Includes}.
 
 @itemize @bullet
 
@@ -306,20 +329,25 @@ These entries are found in the @code{Gedcom} directory.
 
 @subsection Tree Related GNode Functions and Macros
 
+The following are defined in the @file{DeadEndsLib/Gedcom} directory.
+
 @defmac nchild (GNode *node) @arrow{} GNode*
 Given a GNode @code{node}, return its first child.
+Defined in @file{gnode.h}
 
 NOTE: This is "child" in the tree sense, @b{NOT} the genealogical sense.
 @end defmac
 
 @defmac nsibling (GNode *node) @arrow{} GNode*
 Given a GNode @code{node}, return its first sibling.
+Defined in @file{gnode.h}
 
 NOTE: This is "sibling" in the tree sense, @b{NOT} the genealogical sense.
 @end defmac
 
 @defmac nparent (GNode *node) @arrow{} GNode*
 Given a GNode @code{node}, return its parent.
+Defined in @file{gnode.h}
 
 NOTE: This is "parent" in the tree sense, @b{NOT} the genealogical sense.
 @end defmac
@@ -329,35 +357,37 @@ Given a GNode *@code{node}, check its tag and that of each of its
 siblings until either the tag @code{str} is found or we run out of
 siblings.  If we find it, we return a pointer to the node, otherwise
 we return NULL.
+Defined in @file{gnode.c}, declared in @file{gnode.h}.
 @end deftypefun
 
-@deftypefun GNode* copy_nodes (GNode *node, bool kids, bool sibs)
+@deftypefun GNode* copyNodes (GNode *node, bool kids, bool sibs)
 A copy of @code{node} is made and returned.  If @code{kids} is true,
 then the copy has copies of the children as well.  If @code{sibs} is
 true, then the copy has copies of the siblings as well.
+Defined in @file{gnode.c}, declared in @file{gnode.h}.
 @end deftypefun
 
 @deftypefun GNode* copy_node_subtree (GNode *node)
 Returns a copy of the tree rooted at @code{node}.
 @end deftypefun
 
-@deftypefun GNode* create_node (String xref, String tag, String value, GNode* parent)
+@deftypefun GNode* createGNode (String xref, String tag, String value, GNode* parent)
 Creates a new node with the specified @code{xref}, @code{tag},
 @code{value}, and @code{parent}.  Returns the new node.
-
+Defined in @file{gnode.c}, declared in @file{gnode.h}.
 @end deftypefun
 
 @deftypefun GNode* create_temp_node (String xref, String tag, String value, GNode* parent)
 Creates a new node with the specified @code{xref}, @code{tag},
 @code{value}, and @code{parent}.  Sets the @code{ND_TEMP} bit in the
 flags, and returns the new node.
-
 @end deftypefun
 
-@deftypefun bool equal_tree (GNode* root1, GNode* root2)
+@deftypefun bool equalTree (GNode* root1, GNode* root2)
 Compares the tags and values of each node of the trees rooted at
 @code{root1} and @code{root2}.  Returns true if they are all equal,
 false otherwise.
+Defined in @file{nodeutls.c}, declared in @file{nodeutils.h}.
 @end deftypefun
 
 @deftypefun void free_nodes (GNode* node)
@@ -386,19 +416,21 @@ lines.  Might make other changes to @code{str}.
 
 @subsection GEDCOM GNode Functions
 
-@deftypefun GNode* fam_to_first_chil (GNode* node) @arrow{} top GNode* of first child
+These functions live in the @file{DeadEndsLib/Gedcom} directory.
+
+@deftypefun GNode* familyToFirstChild (GNode* node, Database* database) @arrow{} top GNode* of first child
 
 Given a GNode* @code{node} for a family, returns the top GNode* of the first child.
 If there are no children, NULL is returned.
 
-Defined in @file{gedlib/node.c}, declared in @file{hdrs/gecom.h}.
+Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
-@deftypefun GNode* fam_to_last_chil (GNode* node) @arrow{} top GNode* of last child
+@deftypefun GNode* familyToLastChild (GNode* node, Database* database) @arrow{} top GNode* of last child
 Given a GNode @code{node} for a family, returns the top GNode* of the last child.
 If there are no children, NULL is returned.
 
-Defined in @file{gedlib/node.c}, declared in @file{hdrs/gecom.h}.
+Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
 @defmac FAMS (GNode* indi) @arrow{} GNode*
@@ -406,14 +438,14 @@ Given an individual @code{indi}, return the tree pointed to by the
 first @code{FAMS} GNode.  Returns NULL if there are none.
 @end defmac
 
-@deftypefun GNode* indi_to_famc (GNode* indi) @arrow{} GNode*
+@deftypefun GNode* personToFamilyAsChild (GNode* indi, Database* database) @arrow{} GNode*
 Returns the top GNode* of the tree pointed to by the first @code{FAMC}
 node of @code{indi}.
 
-Defined in @file{gedlib/node.c}, declared in @file{hdrs/gecom.h}.
+Defined in @file{lineage.c}, declared in @file{gnode.h}.
 @end deftypefun
 
-@deftypefun GNode* indi_to_fath (GNode* indi) @arrow{} GNode*
+@deftypefun GNode* personToFather (GNode* indi, Database* database) @arrow{} GNode*
 Returns the father of @code{indi}.
 
 More precisely, returns the top-node of the first @code{HUSB} node of
@@ -422,10 +454,10 @@ individual.
 
 Assumes that @code{indi} is the top-node of an INDI RECORD.
 
-Defined in @file{gedlib/node.c}, declared in @file{hdrs/gecom.h}.
+Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
-@deftypefun GNode* indi_to_moth (GNode*) @arrow{} GNode*
+@deftypefun GNode* personToMother (GNode* indi, Database* database) @arrow{} GNode*
 Returns the mother of @code{indi}.
 
 More precisely, returns the top-node of the first @code{WIFE} node of
@@ -434,7 +466,7 @@ individual.
 
 Assumes that @code{indi} is the top-node of an INDI RECORD.
 
-Defined in @file{gedlib/node.c}, declared in @file{hdrs/gecom.h}.
+Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
 @deftypefun GNode* indi_to_next_sib_old (GNode*)
@@ -443,10 +475,14 @@ Defined in @file{gedlib/node.c}, declared in @file{hdrs/gecom.h}.
 @deftypefun GNode* indi_to_prev_sib_old (GNode*)
 @end deftypefun
 
-@deftypefun GNode* qkey_to_fam (CString key)
+@subsection Database Functions
+
+These functions live in the @file{DeadEndsLib/Database} directory.
+
+@deftypefun GNode* keyToFamily (CString key, Database* database)
 @end deftypefun
 
-@deftypefun GNode* qkey_to_indi (CString key)
+@deftypefun GNode* keyToPerson (CString key, Database* database)
 @end deftypefun
 
 @deftypefun void replace_indi (GNode* cur_indi, GNode* new_indi)
@@ -676,23 +712,23 @@ When set, the current database was opened in read-only mode and changes are not 
 
 @section Keys and Keynums
 
-@deftypefun RECORD qkey_to_irecord (CString key)
-@deftypefunx RECORD qkey_to_frecord (CString key)
-@deftypefunx RECORD qkey_to_srecord (CString key)
-@deftypefunx RECORD qkey_to_erecord (CString key)
-@deftypefunx RECORD qkey_to_orecord (CString key)
-Looks for a RECORD of the given type having the specified key.
+The following functions are defined in directory @file{DeadEndsLib/Database}.
+
+@deftypefun RecordIndexEl* keyToPersonRecord (CString key, Database* database)
+@deftypefunx RecordIndexEl* keyToFamilyRecord (CString key, Database* database)
+@deftypefunx RecordIndexEl* keyToSourceRecord (CString key, Database* database)
+@deftypefunx RecordIndexEl* keyToEventRecord (CString key, Database* database)
+@deftypefunx RecordIndexEl* keyToOtherRecord (CString key, Database* database)
+Looks for a RecordIndexEl* of the given type having the specified key.
 On success, returns an addref'd record.  On failure, returns NULL.
+Defined in @file{database.c}, declared in @file{database.h}.
 @end deftypefun
 
-@deftypefun RECORD keynum_to_frecord (int keynum)
-@deftypefunx RECORD keynum_to_irecord (int keynum)
-@deftypefunx RECORD keynum_to_record (char ntype, int keynum)
-Looks for a RECORD of the specified type having the specifed keynum.
+@deftypefun RecordIndexEl* keynum_to_frecord (int keynum)
+@deftypefunx RecordIndexEl* keynum_to_irecord (int keynum)
+@deftypefunx RecordIndexEl* keynum_to_record (char ntype, int keynum)
+Looks for a RecordIndexEl* of the specified type having the specifed keynum.
 If found, returns the RECORD.  Otherwise returns NULL.
-@end deftypefun
-
-@deftypefun RECORD key_to_irecord (CString)
 @end deftypefun
 
 @section Date, Place, and Event Functions

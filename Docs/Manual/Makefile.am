@@ -28,7 +28,8 @@ MANUALS_static = index.html \
 
 # Install static files and generated manuals, but only when docs are built
 if BUILD_DOCS
-doc_DATA = $(MANUALS_static) $(MANUALS)
+#doc_DATA = $(MANUALS_static) $(MANUALS)
+doc_DATA = $(MANUALS)
 else
 doc_DATA =
 endif
