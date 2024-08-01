@@ -89,7 +89,7 @@ PNode* string_node(String);
 int yylex(void);
 int yyparse(void);
 
-//void poutput(String);
+void poutput(String);
 //void interp_main(void);
 
 extern void adjust_cols (String str);

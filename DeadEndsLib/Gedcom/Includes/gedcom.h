@@ -27,7 +27,7 @@ typedef enum RecordType {
 } RecordType;
 
 String sexTypeToString(SexType);
-SexType sexTypeFromStribg(String);
+SexType sexTypeFromString(CString);
 bool validSexString(String);
 
 RecordType recordType(GNode *root);  // Return the type of a Gedcom record tree.

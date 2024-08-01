@@ -43,7 +43,7 @@ String sexTypeToString(SexType sex) {
 }
 
 //
-SexType sexTypeFromString(String s) {
+SexType sexTypeFromString(CString s) {
 	if (eqstr("M", s)) return sexMale;
 	if (eqstr("F", s)) return sexFemale;
 	if (eqstr("U", s)) return sexUnknown;

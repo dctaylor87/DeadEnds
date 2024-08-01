@@ -10,6 +10,8 @@
 
 void initRecordKeyGenerator(void);
 String generateRecordKey(RecordType);
-
+extern bool keyInPreviousFiles(CString key);
+extern bool keyInCurrentFile(CString key);
+extern void processKey(String key, bool defining);
 
 #endif /* generatekey_h */

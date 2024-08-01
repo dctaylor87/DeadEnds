@@ -13,6 +13,9 @@
 
 extern void validatePersons(Database*, ErrorLog*);
 extern void validateFamilies(Database*, ErrorLog*);
+extern bool validateSourceIndex(Database* database, ErrorLog* errorLog);
+extern bool validateEventIndex(Database* database, ErrorLog* errorLog);
+extern bool validateOtherIndex(Database* database, ErrorLog* errorLog);
 extern void validateReferences(Database*, ErrorLog*);
 extern int rootLine(GNode*, Database*);
 

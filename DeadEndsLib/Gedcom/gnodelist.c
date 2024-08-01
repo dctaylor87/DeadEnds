@@ -28,7 +28,7 @@ GNodeListEl* createGNodeListEl(GNode* gnode, int level, int line) {
 }
 
 // getKey is the getKey function for NodeLists. Only useful for elements with level 0 GNodes.
-static String getKey(void* element) {
+static CString getKey(void* element) {
 	return ((GNodeListEl*) element)->node->key;
 }
 

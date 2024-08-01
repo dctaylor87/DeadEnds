@@ -9,6 +9,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "gnode.h"
 #include "refnindex.h"
 #include "nameindex.h"
 #include "name.h"

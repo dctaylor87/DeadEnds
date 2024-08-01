@@ -55,7 +55,7 @@ void addToRecordIndex(RecordIndex* index, String key, GNode* root, int lineNumbe
 }
 
 // searchRecordIndex searches a RecordIndex by key and returns the associated GNode tree.
-GNode* searchRecordIndex(RecordIndex *index, String key) {
+GNode* searchRecordIndex(RecordIndex *index, CString key) {
 	RecordIndexEl* element = searchHashTable(index, key);
 	return element == null ? null : element->root;
 }

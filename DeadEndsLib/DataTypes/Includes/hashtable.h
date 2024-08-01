@@ -58,6 +58,8 @@ int iterateHashTableWithPredicate(HashTable*, bool(*)(void*));
 extern void addrefHashTable (HashTable *table); // increment ref. count of table
 extern void releaseHashTable (HashTable *table); // decrement ref. count of table, free if zero
 
+extern Bucket *createBucket (void);
+extern lengthBucket (Bucket* bucket);
 void appendToBucket(Bucket*, void* element);
 void removeElement(HashTable*, void* element);
 

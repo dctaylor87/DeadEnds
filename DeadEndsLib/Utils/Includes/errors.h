@@ -31,9 +31,9 @@ typedef enum ErrorSeverity {
 typedef struct Error {
 	ErrorType type;
 	ErrorSeverity severity;
-	String fileName;
+	CString fileName;
 	int lineNumber;
-	String message;
+	CString message;
 } Error;
 
 // User interface.

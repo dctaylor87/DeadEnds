@@ -31,7 +31,7 @@ String nameToNameKey(CString name);  // Convert a partial or full Gedcom name to
 int compareNames(CString name1, CString name2); // Compare two Gedcom names.
 String* personKeysFromName(CString name, Database*, int* pcount /*[, bool exact]*/);
 String nameString(CString name);  // Remove slashes from a name.
-String trimName (String name, int len);  // Trim name to specific length.
+CString trimName (CString name, int len);  // Trim name to specific length.
 bool nameToList(String name, List*, int *len, int *sind);
 extern bool exactMatch(CString partial, CString complete);
 

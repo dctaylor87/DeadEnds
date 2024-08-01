@@ -13,6 +13,7 @@
 #include "gedcom.h"
 #include "stringtable.h"
 #include "stringset.h"
+#include "generatekey.h"
 
 static String generate(char type);
 
@@ -80,10 +81,10 @@ Set* inCurrentFile;
 StringTable* newKeys;
 
 bool keySeenBefore(String key) { return true; }
-bool keyInPreviousFiles(String key) {
+bool keyInPreviousFiles(CString key) {
 	return isInSet(inPreviousFiles, key);
 }
-bool keyInCurrentFile(String key) {
+bool keyInCurrentFile(CString key) {
 	return isInSet(inCurrentFile, key);
 }
 

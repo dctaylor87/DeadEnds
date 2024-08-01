@@ -30,7 +30,7 @@ typedef HashTable RecordIndex;
 RecordIndex *createRecordIndex(void);
 void deleteRecordIndex(RecordIndex*);
 void addToRecordIndex(RecordIndex*, String, GNode*, int lineNo);
-GNode* searchRecordIndex(RecordIndex*, String);
+GNode* searchRecordIndex(RecordIndex*, CString);
 void showRecordIndex(RecordIndex*);
 
 extern int getRecordInsertCount(void); // Return the record insert count.  For debugging.

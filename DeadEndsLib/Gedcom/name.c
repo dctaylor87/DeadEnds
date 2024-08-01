@@ -10,9 +10,9 @@
 #include <stdint.h>
 
 #include "standard.h"
+#include "gnode.h"
 #include "name.h"
 #include "refnindex.h"
-#include "gnode.h"
 #include "nameindex.h"
 #include "database.h"
 
@@ -303,7 +303,7 @@ static CString nextPiece (CString in) {
 // trimName trims a Gedcom name to be less or equal to a given length but not shorter than
 // the first initial and surname.
 #define MAXPARTS 100
-String trimName(String name, int len) {
+CString trimName(CString name, int len) {
     String parts[MAXPARTS];
     int i, sdex = -1, nparts;
     nameToParts(name, parts);
