@@ -85,56 +85,56 @@ is a description of the subdirectories.
 @subsection Libraries
 
 @itemize @bullet
-@item @code{DeadEndsLib/DataTypes}
+@item @file{DeadEndsLib/DataTypes}
 
 Implementations of the various datatypes that are part of the DeadEnds
 system.
 
-@item @code{DeadEndsLib/Database}
+@item @file{DeadEndsLib/Database}
 
 The code for the database itself.
 
-@item @code{DeadEndsLib/Gedcom}
+@item @file{DeadEndsLib/Gedcom}
 
 Most of the code for doing GEDCOM related things to the database lives
 here.
 
-@item @code{DeadEndsLib/Interp}
+@item @file{DeadEndsLib/Interp}
 
 The code that implements the user callable functions of the DeadEnds
 Report writing language.
 
-@item @code{DeadEndsLib/LLSupport}
+@item @file{DeadEndsLib/LLSupport}
 
 Code to support the use of the LifeLines curses interface with
 DeadEnds.  Much of this code was taken from various LifeLines
 directories, such as @file{src/gedlib} and @file{src/stdlib} and then
 modified for DeadEnds.  Some is original to DeadEnds.
 
-@item @code{DeadEndsLib/Parser}
+@item @file{DeadEndsLib/Parser}
 
 The code that implements the lexing and the parsing of the DeadEnds
 Report writing language.
 
-@item @code{DeadEndsLib/Python}
+@item @file{DeadEndsLib/Python}
 
 Support for the Python embedding.
 
-@item @code{DeadEndsLib/UI}
+@item @file{DeadEndsLib/UI}
 
 User interface, obviously.  Less obviously, the code here is used by
 @command{llexec} and not by @command{llines}.  Some of the routines
 here are mere stubs of their more fleshed out cousins that live in
 @code{liflines}.  Stubs that should be, in my opinion, fleshed out.
 
-@item @code{DeadEndsLib/Utils}
+@item @file{DeadEndsLib/Utils}
 
 Not a subsystem, as such, but rather a collection of routines that are
 meant to be generically useful across subsystems.  Some of the
 routines are implementations of functionality that is available on
 many systems, but not everywhere.
 
-@item @code{DeadEndsLib/Validate}
+@item @file{DeadEndsLib/Validate}
 
 Code for validating a GEDCOM file that is being imported.
 
@@ -143,7 +143,7 @@ Code for validating a GEDCOM file that is being imported.
 @subsection Programs
 
 @itemize @bullet
-@item @code{Lifelines}
+@item @file{Lifelines}
 
 The code that deals with the screen (via @code{ncurses}), the various
 menus, the user interaction, and various routines that do not have a
@@ -151,12 +151,12 @@ better location to live.  Most of this code was taken from the
 @file{src/liflines} directory of LifeLines and then modified to build
 and work with DeadEnds.  Some is original to DeadEnds.
 
-@item @code{Programs}
+@item @file{Programs}
 
 Various programs that link with the DeadEnds code.  You can find a
 DeadEnds version of @command{llexec} in this directory.
 
-@item @code{TestProgram}
+@item @file{TestProgram}
 
 Programs for testing DeadEnds.
 
@@ -164,7 +164,7 @@ Programs for testing DeadEnds.
 
 @subsection Miscellaneous
 @itemize @bullet
-@item @code{Docs}
+@item @file{Docs}
 
 Various documentation files about DeadEnds.  Look in a subdirectory
 matching a top level directory for markdown information about what is
@@ -172,15 +172,15 @@ implemented in that top level directory.
 
 In Manual you will find some Texinfo documentation such as this document.
 
-@item @code{Gedfiles}
+@item @file{Gedfiles}
 
 GEDCOM files that are used (by the programs in TestProgram) in testing
 the DeadEnds code.
 
-@item @code{Reports}
-@item @code{TeX}
+@item @file{Reports}
+@item @file{TeX}
 
-@item @code{build}
+@item @file{build}
 
 Files used by the build system tools to aid in the use of
 @command{autoconf}, @command{automake}, and @command{autoheader}.
@@ -189,7 +189,7 @@ Files used by the build system tools to aid in the use of
 
 @section Python Files
 
-For the Python embedding, the emphasis is on RECORDs, not GNodes.  The
+For the Python embedding, the emphasis is on records, not nodes.  The
 header files live in @file{DeadEndsLib/Python/Includes}.
 
 @itemize @bullet
@@ -412,7 +412,7 @@ all of their descendants.  Does @b{NOT} check reference counts.
 
 @deftypefun bool isTempGNode (GNode* node)
 Tests the @code{ND_TEMP} bit of @code{node}'s flags.  If set, it
-return true, otherwise it returns false.
+returns true, otherwise it returns false.
 @end deftypefun
 
 @deftypefun void setTempGNode (GNode* node, bool temp)
@@ -824,8 +824,11 @@ error messages, some are menu choices, and others are words and
 phrases, such as ``born'', ``died'', and ``married'' that are used in
 various contexts.
 
-All of the ``messages'' (there are over 600 of them) found in
-@file{LLSupport/messages.c}, such as:
+There are over 600 ``messages''.  They are defined in
+@file{messages.c} and declared in @file{messages.h}.  Both are found
+in the @file{DeadEndsLib/LLSupport} tree.
+
+All of the ``messages'', such as:
 
 @defvr Message qSaskstr
 @end defvr
@@ -870,7 +873,7 @@ Wrapper around @code{ask_for_int}.
 
 @chapter DeadEnds Program
 
-These entries are found in the @code{src/liflines} directory.
+These entries are found in the @file{Lifelines} directory.
 
 @section User Interaction
 @deftypefun RECORD ask_for_fam (String pttl, String sttl)
@@ -909,7 +912,7 @@ and @code{titln} is the title if sequence has multiple elements.
 
 @chapter Utils Subsystem
 
-These entries are found in the @code{Utils} directory.
+These entries are found in the @file{DeadEndsLib/Utils} directory.
 
 @deftypefun String get_lifelines_version (INT maxlen)
 Returns DeadEnds version string using a static buffer.  Truncates
@@ -929,7 +932,7 @@ other than read-only and @code{name} is not absolute nor
 
 @chapter Python Subsystem
 
-These entries are found in the @code{Python} directory.
+These entries are found in the @file{DeadEndsLib/Python} directory.
 
 @section Initialization Functions
 
