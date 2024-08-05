@@ -84,6 +84,8 @@ is a description of the subdirectories.
 
 @subsection Libraries
 
+The library directories are found in the @file{DeadEndsLib} directory.
+
 @itemize @bullet
 @item @file{DeadEndsLib/DataTypes}
 
@@ -156,6 +158,16 @@ and work with DeadEnds.  Some is original to DeadEnds.
 Various programs that link with the DeadEnds code.  You can find a
 DeadEnds version of @command{llexec} in this directory.
 
+@item @file{PatchSex}
+
+Small program for examining a GEDCOM database and patching the
+@code{SEX} lines.
+
+@item @file{RandomizeKeys}
+
+Small program for reading a GEDCOM database and writing it back out
+with new random keys.
+
 @item @file{TestProgram}
 
 Programs for testing DeadEnds.
@@ -167,8 +179,8 @@ Programs for testing DeadEnds.
 @item @file{Docs}
 
 Various documentation files about DeadEnds.  Look in a subdirectory
-matching a top level directory for markdown information about what is
-implemented in that top level directory.
+matching a top level directory or a DeadEndsLib directory for markdown
+information about what is implemented in that directory.
 
 In Manual you will find some Texinfo documentation such as this document.
 
@@ -177,7 +189,11 @@ In Manual you will find some Texinfo documentation such as this document.
 GEDCOM files that are used (by the programs in TestProgram) in testing
 the DeadEnds code.
 
-@item @file{Reports}
+@item @file{Scripts}
+
+DeadEnds script language programs.  In LifeLines this was called @file{reports}
+Currently this is populated with some test scripts rather than user reports.
+
 @item @file{TeX}
 
 @item @file{build}
@@ -219,22 +235,22 @@ Event (GNode, not RECORD) and date specific routines are found here.
 
 @item @file{family.c}, @file{family.h}
 
-Most everythiing that deals with FAM RECORDs.
+Most everythiing that deals with FAM records.
 
 @item @file{iter.c}, @file{iter.h}
 
-Iterators for individual, family, source, event, and other RECORDs are
+Iterators for individual, family, source, event, and other records are
 found here.
 
 @item @file{nodes.c}
 
 @item @file{other.c}
 
-Allocation, deallocation, and iteration of OTHR RECORDs.
+Allocation, deallocation, and iteration of OTHR records.
 
 @item @file{person.c}, @file{person.h}
 
-Most everything that deals with INDI RECORDs.  Might ought to be
+Most everything that deals with INDI records.  Might ought to be
 renamed to individual.[ch].
 
 @item @file{python-to-c.c}, @file{python-to-c.h}
@@ -244,7 +260,7 @@ variables that don't really fit anywhere else.
 
 @item @file{records.c}
 
-Functions which are RECORD type agnostic, for example the functions
+Functions which are record type agnostic, for example the functions
 @code{key_to_record} and @code{keynum_to_record} are found here.
 
 @item @file{run.c}
@@ -258,7 +274,7 @@ Non-instance functions that take or return sets.
 
 @item @file{source.c}
 
-Allocation, deallocation, and iteration of SOUR RECORDs.
+Allocation, deallocation, and iteration of SOUR records.
 
 @item @file{types.c}, @file{types.h}
 
@@ -271,26 +287,26 @@ found in here.
 
 @end itemize
 
-@section GNodes and RECORDs
+@section Nodes and Records
 
-The DeadEnds Report Writing language primarily deals with GNodeS.  By
-contrast, the Python Extension primarily deals with RECORDS.
+The DeadEnds Report Writing language primarily deals with nodes.  By
+contrast, the Python Extension primarily deals with records.
 
-Both GNodes and RECORDs are refernce counted.  When creating a
-reference to either a GNode or a RECORD it is important to ensure that
-its reference count is incremented.  And when destroying a reference,
-that it is decremented.
+Both nodes and records are refernce counted.  When creating a
+reference to either a GNode or a RecordIndexEl it is important to
+ensure that its reference count is incremented.  And when destroying a
+reference, that it is decremented.
 
 NOTE: The GNode reference counts @b{DO NOT} include references from
 other GNodes, such as the parent, sibling, and child links.  Nor the
-link from a RECORD to its top GNode.  The reference counts @b{DO} count
+link from a record to its top GNode.  The reference counts @b{DO} count
 the number of @code{PVALUE}s and @code{PyObject}s that point to the
 GNode.
 
 Additionally, GNodes have a flags element.  Currently, only one flag
-bit is defined -- whether the GNode is a temporary GNode or not.  A
-tempoary GNode is a GNode that is not part of the GNode tree of any
-RECORD.
+bit is currently defined -- whether the GNode is a temporary GNode or
+not.  A tempoary GNode is a GNode that is not part of the GNode tree
+of any record.
 
 @subsection Temporary GNodes
 
@@ -312,7 +328,7 @@ that change is not propagated down the tree.  It should be.  This is a
 
 When the reference count for a temporary node reaches zero, it, its
 children, and their siblings are all freed -- without checking their
-reference counts.  Oopps.  Another @b{BUG}.
+reference counts.  Oops.  Another @b{BUG}.
 
 @section Application Programmer Interfaces
 
@@ -329,7 +345,8 @@ These entries are found in the @code{Gedcom} directory.
 
 @subsection Tree Related GNode Functions and Macros
 
-The following are defined in the @file{DeadEndsLib/Gedcom} directory.
+The following functions and macros are defined in the
+@file{DeadEndsLib/Gedcom} directory.
 
 @defmac nchild (GNode *node) @arrow{} GNode*
 Given a GNode @code{node}, return its first child.
@@ -420,16 +437,19 @@ If @code{temp} is true, sets @code{node}'s @code{ND_TEMP} flag.
 Otherwise clears the flag.
 @end deftypefun
 
-@deftypefun INT length_nodes (GNode* node)
+@deftypefun int gNodesLength (GNode* node)
 Returns the length of the sibling chain of @code{node}.
 @end deftypefun
 
-@deftypefun GNode* string_to_node (String str)
+@deftypefun GNode* stringToGNodeTree (String str, ErrorLog *errorLog)
 Reads tree from @code{str}.  Modifies @code{str} -- adds NULs between
 lines.  Might make other changes to @code{str}.
+
+Definition found in #file{readnode.c}, declaration in
+@file{readnode.h}.  Both are, currently, commented out.
 @end deftypefun
 
-@subsection GEDCOM GNode Functions
+@subsection GEDCOM GNode Functions And Macros
 
 These functions live in the @file{DeadEndsLib/Gedcom} directory.
 
@@ -467,7 +487,7 @@ More precisely, returns the top-node of the first @code{HUSB} node of
 the family represented by the first @code{FAMC} node of this
 individual.
 
-Assumes that @code{indi} is the top-node of an INDI RECORD.
+Assumes that @code{indi} is the top-node of an INDI record.
 
 Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
@@ -479,15 +499,23 @@ More precisely, returns the top-node of the first @code{WIFE} node of
 the family represented by the first @code{FAMC} node of this
 individual.
 
-Assumes that @code{indi} is the top-node of an INDI RECORD.
+Assumes that @code{indi} is the top-node of an INDI record.
 
 Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
-@deftypefun GNode* indi_to_next_sib_old (GNode*)
+@deftypefun GNode* personToExtSibling (GNode*)
+Returns the next sibling of a person.  This is the next @code{CHIL} in
+the first @code{FAMC} of the person.
+
+Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
-@deftypefun GNode* indi_to_prev_sib_old (GNode*)
+@deftypefun GNode* personToPreviousSibling (GNode*)
+Returns the previous sibling of a person.  This is the previous
+@code{CHIL} in the first @code{FAMC} of the person.
+
+Defined in @file{lineage.c}, declared in @file{lineage.h}.
 @end deftypefun
 
 @subsection Database Functions
@@ -495,9 +523,15 @@ Defined in @file{lineage.c}, declared in @file{lineage.h}.
 These functions live in the @file{DeadEndsLib/Database} directory.
 
 @deftypefun GNode* keyToFamily (CString key, Database* database)
+Returns the @code{FAM} record having key @code{key} from
+@code{database}.  If not found, NULL is returned.
+Defined in @file{database.c}, declared in @file{database.h}.
 @end deftypefun
 
 @deftypefun GNode* keyToPerson (CString key, Database* database)
+Returns the @code{INDI} record having key @code{key} from
+@code{database}.  If not found, NULL is returned.
+Defined in @file{database.c}, declared in @file{database.h}.
 @end deftypefun
 
 @deftypefun void replace_indi (GNode* cur_indi, GNode* new_indi)
@@ -507,7 +541,7 @@ version, @code{new_indi}.  Replaces all chilkdren nodes of
 @code{new_indi} (calls @code{free_node} on it).
 @end deftypefun
 
-@deftypefun INT resolve_refn_links (GNode* node)
+@deftypefun int resolve_refn_links (GNode* node)
 Checks and attempts to resolve all links in the node tree having
 @code{node} as its parent.  This convets something like
 @code{"<1850.Census>"} to something like @code{"@@S25@@"}.  Returns
@@ -522,15 +556,15 @@ message indicating what problem was found.  Otherwise, true is
 returned.
 @end deftypefun
 
-@deftypefun INT val_to_sex (GNode* node)
+@deftypefun int val_to_sex (GNode* node)
 Converts @code{node}'s SEX value to one of the three integer constants
 @code{SEX_UNKNOWN}, @code{SEX_MALE}, or @code{SEX_FEMALE}.  Assumes
 @code{node}'s tag is @code{SEX}.
 @end deftypefun
 
-@subsection INDISEQ GNode Functions
+@subsection Sequence GNode Functions
 
-@deftypefun INDISEQ fam_to_children (GNode* fam)
+@deftypefun Sequence* familyToChildren (GNode* fam, Database* database)
 Create a sequence of @code{fam}'s children.
 @end deftypefun
 
@@ -538,24 +572,22 @@ Create a sequence of @code{fam}'s children.
 Creates a sequence of spouses of @code{fam}.
 @end deftypefun
 
-@deftypefun INDISEQ indi_to_children (GNode* indi)
-Creates a sequence of @code{indi}'s children.  Filters out duplicates.
+@deftypefun Sequence* personToChildren (GNode* indi, Database* database)
+Creates a sequence of @code{indi}'s children.
 @end deftypefun
 
-@deftypefun INDISEQ indi_to_families (GNode* indi, bool fams)
+@deftypefun Sequence* personToFamilies (GNode* indi, bool fams, Database* database)
 Creates a sequence of @code{indi}'s families.  Values will be input
-person keynum (this is the ISPRN_FAMSEQ style).  If @code{fams} is
-true, find spousal families, else find parental families.
+person key.  If @code{fams} is true, find spousal families, else find
+parental families.
 @end deftypefun
 
-@deftypefun INDISEQ indi_to_spouses (GNode* indi)
+@deftypefun Sequence* personToSpouses (GNode* indi, Database* database)
 Creates a sequence of @code{indi}'s spouses.  Values will be family
-keynums.  This sequence will be ISPRN_SPOUSESEQ style (whatever that
-is), meaning that marriage dates are included with names in print
-strings.
+keys.
 @end deftypefun
 
-@deftypefun void remove_indiseq (INDISEQ seq)
+@deftypefun void deleteSequence (Sequence* seq)
 Frees @code{seq} and all the memory used by it.
 @end deftypefun
 
@@ -582,46 +614,47 @@ node tree itself.  Nor does it reflect references from records.  It
 (@code{PVALUE}'s) and reference from within Python (from within
 @code{PyObject}'s).
 
-@defmac nrefcnt (node) @arrow{} INT
+@defmac get_nrefcnt (node) @arrow{} int
 Given a GNode* @code{node}, returns the reference count of the GNode.
-
-There is not, as of this writing, a function for incrementing nor a
-function for decrementing the reference count of a GNode (though
-perhaps there should be).
-
-To increment the reference count of a GNode @code{node}, use either
-@code{nrefcnt(node)++} or @code{++nrefcnt(node)}.  And to decrement
-the reference count use either @code{nrefcnt(node)--} or
-@code{--nrefcnt(node)}.
 @end defmac
 
-@section GNode to RECORD traversal
-@deftypefun RECORD node_to_record (GNode* node) @arrow{} RECORD
+@defmac nrefcnt_inc (node) @arrow{} int
+Given a GNode* @code{node}, increments the reference count and returns
+the new reference count of the GNode.
+@end defmac
+
+@defmac nrefcnt_dec (node) @arrow{} int
+Given a GNode* @code{node}, decrements the reference count and returns
+the new reference count of the GNode.
+@end defmac
+
+@section GNode to Record traversal
+@deftypefun RecordIndexEl* node_to_record (GNode* node) @arrow{} RECORD
 
 Returns the RECORD that contains GNode @code{node}.
 @end deftypefun
 
 @section RECORD Functions 
-@subsection Information about a RECORD
-@deftypefun GNode* nztop (RECORD record)
+@subsection Information about a Record
+@deftypefun GNode* nztop (RecordIndexEl *record)
 Returns the top node of @code{record}.
 @end deftypefun
 
-@deftypefun CString nzkey (RECORD record)
+@deftypefun CString nzkey (RecordIndexEl *record)
 Returns @code{record}'s key.
 @end deftypefun
 
-@deftypefun INT nzkeynum (RECORD record)
+@deftypefun int nzkeynum (RecordIndexEl *record)
 Returns @code{record}'s keynum.
 @end deftypefun
 
-@deftypefun char nztype (RECORD record)
+@deftypefun char nztype (RecordIndexEl *record)
 Returns @code{record}'s type.
 @end deftypefun
 
 @subsection Raw RECORDS
 
-@deftypefun String retrieve_raw_record (CString key, INT *plen)
+@deftypefun String retrieve_raw_record (CString key, int *plen)
 Retrieve RECORD string from database.  Returns the raw record as a
 string.  @code{key} is the key of the desired record.  And @code{plen}
 is used to return the length of the record that is being returned.
@@ -629,12 +662,14 @@ is used to return the length of the record that is being returned.
 
 @subsection RECORD Reference Counts
 
-@deftypefun void release_record (RECORD record)
-Decrement reference count of @code{record} and freee the RECORD if the
+@deftypefun void release_record (RecordIndexEl *record)
+Decrement reference count of @code{record} and free the record if the
 reference count reaches zero.
 @end deftypefun
 
 @section NAME Related
+
+These functions live in the @file{DeadEndsLib/Gedcom} directory.
 
 @deftypefun CString getsxsurname (CString)
 Returns surname for use by soundex routines.  Uses a static buffer.
@@ -650,33 +685,36 @@ Returns a surname.  Uses a static buffer.
 Returns the given names of @code{name}.  Uses a static buffer.
 @end deftypefun
 
-@deftypefun CString trad_soundex (CString)
+@deftypefun CString soundex (CString)
 Computes and returns the traditional soundex for the given surname.
+Defined in @file{name.c}, declared in @file{name.h}.
 @end deftypefun
 
-@deftypefun String manip_name (String name, SURCAPTYPE captype, SURORDER surorder, INT len)
+@deftypefun String manipulateName (String name, bool caps, bool preserve_order, int len)
 Manipulates the @code{name} according to the arguments.
 
-Argument @code{captype} says whether to return the surname in all caps
-or as found in @code{name}.
+Argument @code{caps} says whether to return the surname in all caps (if @code{true})
+or as found in @code{name} (if @code{false}).
 
-Argument @code{surorder} says whether the preserve the order in
-@code{name} or to reorder as surname comma rest-of-name.
+Argument @code{preservce_order} says whether the preserve the order in
+@code{name} (if @code{true}) or to reorder as surname comma
+rest-of-name (if @code{false}).
 
 Argument @code{len} says the maximum length for the returned result.
 Regardless of the value of @code{len}, the surname will not be
 truncated and at least the first initial will be included in the result.
 @end deftypefun
 
-@deftypefun String trim_name (String name, INT len)
+@deftypefun String trimName (String name, int len)
 Trim GEDCOM name, @code{name} to less than or equal to given length,
 @code{len}, but no shorter than first initial and surname.
+Defined in @file{name.c}, declared in @file{name.h}.
 @end deftypefun
 
 @section DataBase Functions and Variables
 
 @subsection Database Traversal Functions
-@deftypefun INT xref_@{next|prev@}@{i|f|s|e|x@} (INT keynum) @arrow{} INT
+@deftypefun int xref_@{next|prev@}@{i|f|s|e|x@} (int keynum) @arrow{} int
 @findex xref_nexti
 @findex xref_nextf
 @findex xref_nexts
@@ -688,14 +726,14 @@ Trim GEDCOM name, @code{name} to less than or equal to given length,
 @findex xref_preve
 @findex xref_prevx
 Given @{ an individual | a family | a source | an event | an other @}
-RECORD's keynum, return the keynum of the @{ next | previous @}
-@{ individual | family | source | event | other @} RECORD in keynum order.
+record's keynum, return the keynum of the @{ next | previous @}
+@{ individual | family | source | event | other @} record in keynum order.
 
 Keynums are never negative.  Zero is reserved for NOT FOUND / DOES NOT
 EXIST.
 @end deftypefun
 
-@deftypefun INT xref_@{next|prev@} (char ntype, int keynum) @arrow{} INT
+@deftypefun int xref_@{next|prev@} (char ntype, int keynum) @arrow{} int
 @findex xref_next
 @findex xref_prev
 @code{ntype} is one of @code{'I'}, @code{'F'}, @code{'S'}, @code{'E'},
@@ -703,7 +741,7 @@ or @code{'X'}.  This just calls the appropriate xref_@{next|prev@}@{i|f|s|e|x@}
 function and returns the result.
 @end deftypefun
 
-@deftypefun INT xref_@{first|last@}@{i|f|s|e|x@} (void) @arrow{} INT
+@deftypefun int xref_@{first|last@}@{i|f|s|e|x@} (void) @arrow{} int
 @findex xref_firsti
 @findex xref_firstf
 @findex xref_firsts
@@ -743,12 +781,12 @@ Defined in @file{database.c}, declared in @file{database.h}.
 @deftypefunx RecordIndexEl* keynum_to_irecord (int keynum)
 @deftypefunx RecordIndexEl* keynum_to_record (char ntype, int keynum)
 Looks for a RecordIndexEl* of the specified type having the specifed keynum.
-If found, returns the RECORD.  Otherwise returns NULL.
+If found, returns the record.  Otherwise returns NULL.
 @end deftypefun
 
 @section Date, Place, and Event Functions
 
-@deftypefun INT date_get_year (GDATEVAL gdv)
+@deftypefun int date_get_year (GDATEVAL gdv)
 @end deftypefun
 
 @deftypefun String date_get_year_string (GDATEVAL gdv)
@@ -792,7 +830,7 @@ value from @code{placabbr} table.
 
 @subsection DeadEnds Options
 
-@deftypefun INT getlloptint (CString optname, INT defval) @arrow{} INT
+@deftypefun int getlloptint (CString optname, int defval) @arrow{} int
 Looks up the integer option @code{optname}.  If found, its value is
 returned, otherwise @code{defval} is returned.
 @end deftypefun
@@ -844,7 +882,11 @@ have variable names that start with @code{qS}.
 @subsection Miscellaneous Variables
 
 @deftypevar bool uu8
-Flag indicating if internal codeset is UTF-8 or not.
+Flag indicating whether internal codeset is UTF-8 or not.
+
+While LifeLines was internationalized, DeadEnds has not yet been
+internationalized.  So, currently, this variable is meaningless.  But,
+it might be meaningful in the future.
 @end deftypevar
 
 @chapter Interpreter Subsystem
@@ -854,81 +896,49 @@ These entries are found in the @code{Interp} directory.
 @section User Interface Wrappers
 The functions in this section are used by the reporting writing
 functions to wrap the user interaction so as to be able to give a more
-accurate timing of how long a script takes to run.  There is still
-some ``computation'' within the wrapper, but it is reduced.
+accurate timing of how long a script takes to run.  The wrapper
+computes the time waiting for a response from the user, but otherwise
+does nothing but call the wrapped function.
+
+@defun rptui_init(void) @arrow{} void
+Initializes for the collection of timing information.
+@end defun
+
+@defun rptui_elapsed(void) @arrow{} int
+Returns the timing information.
+@end defun
+
+Each of the following functions wraps a function with the same name
+and signature but without the @code{rptui_} prefix.
 
 @defun rptui_ask_for_fam (String s1, String s2) @arrow{} RECORD
-Wrapper around @code{ask_for_fam}.
 @end defun
-
 @defun rptui_ask_for_indi (String ttl, ASK1Q ask1) @arrow{} RECORD
-Wrapper around @code{ask_for_indi}.
 @end defun
-
-@defun rptui_ask_for_int (String ttl, INT *prtn) @arrow{} bool
-Wrapper around @code{ask_for_int}.
+@defun rptui_ask_for_int (String ttl, int *prtn) @arrow{} bool
+@end defun
+@defun rptui_ask_for_indi_list (String ttl, bool reask) @arrow{} INDISEQ
+@end defun
+@defun rptui_ask_for_indi (String ttl, ASK1Q ask1) @arrow{} RECORD
+@end defun
+@defun rptui_ask_for_indi_key (String ttl, ASK1Q ask1) @arrow{} String
+@end defun
+@defun rptui_ask_for_int (String, int *) @arrow{} bool 
+@end defun
+@defun rptui_ask_for_output_file (String mode, String ttl, String *pfname, String *pfullpath, String path, String ext) @arrow{} FILE*
+@end defun
+@defun rptui_ask_for_program (String mode, String ttl, String *pfname, String *pfullpath, String path, String ext, bool picklist) @arrow{} bool
+@end defun
+@defun rptui_choose_from_array (String ttl, int no, String *pstrngs) @arrow{} int
+@end defun
+@defun rptui_prompt_stdout (String prompt) @arrow{} int
+@end defun
+@defun rptui_view_array (String ttl, int no, String *pstrngs) @arrow{} void
 @end defun
 
 @section Miscellaneous Interpreter Functions
 
-@chapter DeadEnds Program
-
-These entries are found in the @file{Lifelines} directory.
-
-@section User Interaction
-@deftypefun RECORD ask_for_fam (String pttl, String sttl)
-Ask user to identify family by spouses.  String @code{pttl} is a
-prompt to identify a spouse in the family.  String @code{sttl} is a
-prompt to identify a child in the family.
-@end deftypefun
-
-@deftypefun RECORD ask_for_indi (String ttl, ASK1Q ask1)
-Ask user to identify sequence and select a person.  String @code{ttl}
-is a title for the question.  And @code{ask1q} says whether to present
-the list if only one individual matches.
-@end deftypefun
-
-@deftypefun bool ask_for_int (String ttl, INT *prtn)
-Ask user to provide an integer.  @code{ttl} is the title prompt.
-Value is returned in @code{prtn}.  Return value is true if a value is
-returned.  And false if the user canceled the operation.
-@end deftypefun
-
-@deftypefun bool ask_for_string (CString ttl, CString prompt, String buffer, INT buflen)
-Ask the user for a string.  The title of the question (first line) is
-@code{ttl} and the prompt of the question (second line) is
-@code{prompt}.  The response is placed in @code{buffer} and, if
-necessary, truncated to @code{buflen}.  The return value indicates
-whether the user provided an answer (true) or canceled (false).
-@end deftypefun
-
-@deftypefun RECORD choose_from_indiseq (INDISEQ seq, ASK1Q ask1, String titl1, String titln)
-Format sequence and have user choose from it (any type).  This handles
-bad pointers.  Here, @code{seq} is the sequence from which to choose,
-@code{ask1} is whether to prompt if only one element is in the
-sequence, @code{titl1} is the title if sequence only has one element,
-and @code{titln} is the title if sequence has multiple elements.
-@end deftypefun
-
-@chapter Utils Subsystem
-
-These entries are found in the @file{DeadEndsLib/Utils} directory.
-
-@deftypefun String get_lifelines_version (INT maxlen)
-Returns DeadEnds version string using a static buffer.  Truncates
-result to smaller of buffer size or @code{maxlen}.
-@end deftypefun
-
-@deftypefun FILE* fopenpath (CString name, String mode, String path, String ext, INT utf8, String *pfname)
-Search the directories in @code{path} for @code{name}, using extension
-@code{ext} if necessary.  The file is opened with mode @code{mode}.
-The pathname opened is returned in @code{pfname}.
-
-@b{WARNING}: If the file is not found and iis being opened in a mode
-other than read-only and @code{name} is not absolute nor
-@code{./something}, then it will be created in the first directory of
-@code{path} with @code{ext} appended.
-@end deftypefun
+Nothing here yet.
 
 @chapter Python Subsystem
 
@@ -950,7 +960,7 @@ These functions have one caller -- @code{PyInit_llines} -- found in
 file @file{Python/python-to-c.c}.
 @end deftypefun
 
-@section Dellocation Functions
+@section Deallocation Functions
 @deftypefun void llpy_event_dealloc (PyObject *self)
 Deallocates the iterator created by @code{llpy_events}.
 @end deftypefun
@@ -1217,6 +1227,151 @@ Definition of Python type @code{llines.Record}.
 @deftypevar PyTypeObject llines_source_type
 Definition of Python type @code{llines.Source}.
 @end deftypevar
+
+@chapter Utils Subsystem
+
+These entries are found in the @file{DeadEndsLib/Utils} directory.
+
+@deftypefun String get_lifelines_version (int maxlen)
+Returns DeadEnds version string using a static buffer.  Truncates
+result to smaller of buffer size or @code{maxlen}.
+@end deftypefun
+
+@deftypefun FILE* fopenpath (CString name, String mode, String path, String ext, int utf8, String *pfname)
+Search the directories in @code{path} for @code{name}, using extension
+@code{ext} if necessary.  The file is opened with mode @code{mode}.
+The pathname opened is returned in @code{pfname}.
+
+@b{WARNING}: If the file is not found and iis being opened in a mode
+other than read-only and @code{name} is not absolute nor
+@code{./something}, then it will be created in the first directory of
+@code{path} with @code{ext} appended.
+@end deftypefun
+
+@chapter DeadEnds Program
+
+These entries are found in the @file{Lifelines} directory.
+
+@section User Interaction
+@deftypefun RecordIndexEl* ask_for_fam (String pttl, String sttl)
+Ask user to identify family by spouses.  String @code{pttl} is a
+prompt to identify a spouse in the family.  String @code{sttl} is a
+prompt to identify a child in the family.
+@end deftypefun
+
+@deftypefun RecordIndexEl* ask_for_indi (String ttl, ASK1Q ask1)
+Ask user to identify sequence and select a person.  String @code{ttl}
+is a title for the question.  And @code{ask1q} says whether to present
+the list if only one individual matches.
+@end deftypefun
+
+@deftypefun bool ask_for_int (String ttl, int *prtn)
+Ask user to provide an integer.  @code{ttl} is the title prompt.
+Value is returned in @code{prtn}.  Return value is true if a value is
+returned.  And false if the user canceled the operation.
+@end deftypefun
+
+@deftypefun bool ask_for_string (CString ttl, CString prompt, String buffer, int buflen)
+Ask the user for a string.  The title of the question (first line) is
+@code{ttl} and the prompt of the question (second line) is
+@code{prompt}.  The response is placed in @code{buffer} and, if
+necessary, truncated to @code{buflen}.  The return value indicates
+whether the user provided an answer (true) or canceled (false).
+@end deftypefun
+
+@deftypefun RecordIndexEl* choose_from_indiseq (INDISEQ seq, ASK1Q ask1, String titl1, String titln)
+Format sequence and have user choose from it (any type).  This handles
+bad pointers.  Here, @code{seq} is the sequence from which to choose,
+@code{ask1} is whether to prompt if only one element is in the
+sequence, @code{titl1} is the title if sequence only has one element,
+and @code{titln} is the title if sequence has multiple elements.
+@end deftypefun
+
+@defun ask_for_indi_list (String ttl, bool reask) @arrow{} INDISEQ
+@end defun
+@defun ask_for_indi_key (String ttl, ASK1Q ask1) @arrow{} String
+@end defun
+@defun ask_for_output_file (String mode, String ttl, String *pfname, String *pfullpath, String path, String ext) @arrow{} FILE*
+@end defun
+@defun ask_for_program (String mode, String ttl, String *pfname, String *pfullpath, String path, String ext, bool picklist) @arrow{} bool
+@end defun
+@defun choose_from_array (String ttl, int no, String *pstrngs) @arrow{} int
+@end defun
+@defun prompt_stdout (String prompt) @arrow{} int
+@end defun
+@defun view_array (String ttl, int no, String *pstrngs) @arrow{} void
+@end defun
+
+@chapter Build System
+
+@section Building From A Git Checkout
+If you checkout a Git repository, you will initially be missing
+several things.
+
+First, you will notice that @code{configure.ac} is present in the
+top-level directory, but there is no @command{configure} present in
+the tree.  Run @command{autoconf} in the top level directory, with no
+arguments, to generate the @command{configure} command.
+
+Unless you edit @code{configue.ac} or one of the files in
+@file{build}, this is a one-time thing.  In a release tar ball, it
+will have been done for you.
+
+Next, when building, many of the C files include @file{config.h}.
+Which is generated, by @command{configure}, from a template
+@file{config.h.in}.  The template is generated by
+@command{autoheader}.  Like @command{autoconf}, it is run in the
+top-level directory with no arguments.
+
+And like the creation of @command{configure}, unless you edit
+@code{configue.ac} or one of the files in @file{build}, this is a
+one-time thing.  In a release tar ball, it will have been done for
+you.
+
+Lastly, you need to generate the @file{Makefile.in} files.  Which will
+be used by @command{configure} to generate the @file{Makefile} files.
+To generate the @file{Makefile}s, you run @command{automake}, in the
+top level directory, with no arguments (sound familiar?).
+
+If you add or delete files from the build or want to change
+compilation options, do it in @file{Makefile.am}, not
+@file{Makefile.in} or your changes will be lost the next time that you
+run @command{automake}.
+
+At this point, you have the files that are absent from a Git
+repository but present in a release tar ball.
+
+@section Building From a Release tar ball
+
+If you received a release tar ball, then untar it somewhere.
+
+Make a directory where you want to have the build files.  While
+building within the source tree is supported, it is @b{strongly}
+discouraged.
+
+If you are unfamiliar with @command{configure}, or just want to see
+what @command{configure} options are specific to the DeadEnds
+particular instance of @command{configure}, invoke it with
+@code{--help}.
+
+A DeadEnds specific @command{configure} option is @code{--with-python}
+which specifies whether to include Python 3 support.  Its default
+value is @code{auto}.
+
+A very common option is @code{--prefix}, which has a default value of
+@file{/usr/local}.
+
+So, do something like:
+
+@command{mkdir} @i{some-directory}
+
+@command{cd} @i{some-directory}
+
+@i{/path/to/source/tree}@command{/configure} @i{options-you-want-to-give-to-configure}
+
+@command{make}
+
+@command{make install}
 
 @unnumbered Function, Variable, and Type Index
 @printindex fn
