@@ -652,14 +652,6 @@ Returns @code{record}'s keynum.
 Returns @code{record}'s type.
 @end deftypefun
 
-@subsection Raw RECORDS
-
-@deftypefun String retrieve_raw_record (CString key, int *plen)
-Retrieve RECORD string from database.  Returns the raw record as a
-string.  @code{key} is the key of the desired record.  And @code{plen}
-is used to return the length of the record that is being returned.
-@end deftypefun
-
 @subsection RECORD Reference Counts
 
 @deftypefun void release_record (RecordIndexEl *record)
