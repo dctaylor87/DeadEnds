@@ -22,7 +22,6 @@
 #include "rootlist.h"
 #include "writenode.h"
 
-FILE* debugFile;
 extern bool importDebugging;
 bool indexNameDebugging = false;
 

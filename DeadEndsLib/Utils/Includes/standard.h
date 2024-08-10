@@ -3,7 +3,7 @@
 // standard.h -- Useful things.
 //
 // Created by Thomas Wetmore on 1 November 2022.
-// Last changed on 13 June 2024.
+// Last changed on 10 August 2024.
 
 #ifndef standard_h
 #define standard_h
@@ -97,9 +97,7 @@ extern CString version;		// standard.c
 #define null ((void*) 0)
 
 // Debugging aids.
-//extern String lastPathSegment(String);
-extern FILE *debugFile;
-#define PH if(debugging && debugFile) fprintf(debugFile, "%s %s %d\n", __FUNCTION__,\
+#define PH if(debugging) fprintf(stderr, "%s %s %d\n", __FUNCTION__,\
 	lastPathSegment(__FILE__), __LINE__);
 
 #endif // standard_h
