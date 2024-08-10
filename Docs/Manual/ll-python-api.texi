@@ -12,6 +12,9 @@
 @contents
 
 @chapter Overview
+
+@section Audience
+
 This manual started life as the LifeLines Python Extension
 Reference Manual.  If you are familiar with it, most of this will be a
 repeat of what you already know.
@@ -19,7 +22,7 @@ repeat of what you already know.
 Some of the functions and methods mentioned herein are not available
 in DeadEnds.  This will eventually be fixed.  If you notice such a
 function or method and bring it to my attention, that will likely
-speed the process or getting it fixed.
+speed the process of getting it fixed.
 
 Additionally, there will eventually be functions available only in
 DeadEnds and not in LifeLines.
@@ -43,6 +46,8 @@ This document concerns itself with the @b{use} of the Python DeadEnds
 module, called llines.  If you wish to @b{modify} the C code that
 implements it, please consult the document ``DeadEnds Python Internals''.
 
+@section Function Names And Arguments
+
 If you are already familiar with the DeadEnds Report Writing
 language, you will have an easier time learning the Python Extension
 Language as there is a fair bit of similarity in the function names
@@ -63,8 +68,9 @@ If the function operates on an instance of a particular DeadEnds
 The variables, if any, to be set are not passed to the function.
 
 @item
-All arguments have keyword names and as a result they can be given by
-name or by position.  And -- where reasonable -- they are optional.
+All arguments have keyword names and as a result they can be given
+either by name or by position.  And -- where reasonable -- they are
+optional.
 @end itemize
 
 Example: if '@code{fam}' is a variable whose value is a family in the
@@ -114,6 +120,32 @@ example, choosespouse is an instance method for individual records, so
 it is listed in the ``Individual Records'' section of the ``RECORDS''
 chapter.  But, it asks the user to choose the spouse, so it is in the
 ``User Interaction Functions'' chapter as well.
+
+@section Modules
+
+In Python everything is in a module.  In this extension, all the
+functions and variables are in module @code{llines}.
+
+Thus one of the first executable lines of any script file will
+typically be:
+
+@example
+@code{import llines}
+@end example
+
+If you are running the Python interpreter interactively, you will
+probably also want to type the line:
+
+@example
+@code{import readline}
+@end example
+
+as that will enable command history and editing.
+
+Consideration was given to using some other module name, such as
+@code{deadends} or @code{DeadEnds}.  But, @code{llines} was picked for
+LifeLines and when porting to DeadEnds it seemed silly to be
+gratuitously incompatible.  So, I kept the same module name.
 
 @chapter RECORDS
 @section Individual Records

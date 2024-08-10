@@ -839,8 +839,9 @@ Remove @code{@@}'s from both ends of @code{str}.  Returns a static
 buffer.
 @end deftypefun
 
-@deftypefun String name_string (String name)
+@deftypefun String nameString (CString name)
 Removes slashes from a GEDCOM name.  Returns a static buffer.
+Defined in @file{name.c}, declared in @file{name.h}.
 @end deftypefun
 
 @section Variables and Constants
