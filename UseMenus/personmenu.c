@@ -5,6 +5,8 @@
 //  Created by Thomas Wetmore on 8/5/24.
 //
 
+#include <stdint.h>
+
 #include "personmenu.h"
 
 static int indiBrowse(GNode*);

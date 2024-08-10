@@ -6,6 +6,8 @@
 // Last changed on 8 August 2024.
 
 #include <stdio.h>
+#include <stdint.h>
+
 #include "menu.h"
 #include "list.h"
 #include "database.h"

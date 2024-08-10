@@ -26,7 +26,7 @@ LDADD = \
 	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
-	../DeadEndsLib/Validate/llibvalidate.a \
+	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a \
 	../DeadEndsLib/Utils/libutils.a

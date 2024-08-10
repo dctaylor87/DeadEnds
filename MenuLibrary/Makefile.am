@@ -10,6 +10,6 @@ libmenulib_a_SOURCES = \
 	menu.c
 
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/DeadEnds/MenuLibrary/Includes \
-	-I$(top_srcdir)/DeadEnds/DeadEndsLib/Utils/Includes \
-	-I$(top_srcdir)/DeadEnds/DeadEndsLib/DataTypes/Includes
+	-I$(top_srcdir)/MenuLibrary/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
+	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes
