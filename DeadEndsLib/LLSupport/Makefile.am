@@ -25,7 +25,6 @@ libllsupport_a_SOURCES = \
 	ll-node-seq.c \
 	ll-sequence.c \
 	ll-str.c \
-	ll-temp-nodes.c \
 	llgettext.c \
 	lloptions.c \
 	locales.c \

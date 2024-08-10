@@ -11,9 +11,9 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-#include "porting.h"
+//#include "porting.h"
 #include "standard.h"
-#include "llnls.h"
+//#include "llnls.h"
 
 #include "zstr.h"
 #include "list.h"
