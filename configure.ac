@@ -683,5 +683,7 @@ AC_CONFIG_FILES([Makefile \
 	RunScript/Makefile \
 	TestProgram/Makefile \
         Lifelines/Makefile \
-        Programs/Makefile])
+        Programs/Makefile \
+	MenuLibrary/Makefile \
+	UseMenus/Makefile])
 AC_OUTPUT
