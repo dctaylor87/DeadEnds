@@ -67,6 +67,7 @@
 #include "de-strings.h"
 #include "llpy-externs.h"
 #include "ui.h"
+#include "ask.h"
 
 /* everything in this file assumes we are dealing with the current database */
 //#define database	currentDatabase
@@ -291,8 +292,8 @@ ask_for_output_file (CString mode,
                      CString ttl,
                      String *pfname,
                      String *pfullpath,
-                     String path,
-                     String ext)
+                     CString path,
+                     CString ext)
 {
 	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, OUTPUT);
 }
