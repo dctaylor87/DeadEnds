@@ -27,20 +27,23 @@
 #include "types.h"
 #include "database.h"
 
-#if !defined(DEADENDS)		/* XXX maybe someday... XXX */
 /* forward references */
 
 /* return the first individual in the database (in keynum order) */
-static PyObject *llpy_firstindi (PyObject *self, PyObject *args);
+static PyObject *llpy_firstindi_db (PyObject *self, PyObject *args);
 
+#if !defined(DEADENDS)		/* XXX maybe someday... XXX */
 /* return the last individual in the database (in keynum order) */
 static PyObject *llpy_lastindi (PyObject *self, PyObject *args);
+#endif
 
 /* return the first family in the database (in keynum order) */
-static PyObject *llpy_firstfam (PyObject *self, PyObject *args);
+static PyObject *llpy_firstfam_db (PyObject *self, PyObject *args);
 
+#if !defined(DEADENDS)		/* XXX maybe someday... XXX */
 /* return the last family in the database (in keynum order) */
 static PyObject *llpy_lastfam (PyObject *self, PyObject *args);
+#endif
 
 /* these are database instance method iterators, for database function
    iterators, see iter.c */
@@ -55,12 +58,19 @@ static PyObject *llpy_others_db (PyObject *self, PyObject *args);
 
    Returns the first INDI in the database in key order.  */
 
-static PyObject *llpy_firstindi (PyObject *Py_UNUSED(self), PyObject *args ATTRIBUTE_UNUSED)
+static PyObject *llpy_firstindi_db (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  int keynum = xref_firsti();
+  Database *database = ((LLINES_PY_DATABASE *)self)->lld_database;
+  RecordIndexEl *new;
   LLINES_PY_RECORD *rec;
 
-  if (keynum == 0)
+  if (! database)
+    {
+      PyErr_SetString (PyExc_SystemError, "firstindi: database object has NULL database");
+      return NULL;
+    }
+  new = getFirstPersonRecord (database);
+  if (! new)
     Py_RETURN_NONE;		/* no individuals in the database */
 
   rec = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
@@ -68,10 +78,13 @@ static PyObject *llpy_firstindi (PyObject *Py_UNUSED(self), PyObject *args ATTRI
     return NULL;
 
   rec->llr_type = LLINES_TYPE_INDI;
-  rec->llr_record = keynum_to_irecord (keynum);
+  rec->llr_record = new;
+  rec->llr_database = database;
+
   return (PyObject *)rec;
 }
 
+#if !defined(DEADENDS)
 /* llpy_lastindi (void) --> INDI
 
    Returns the last INDI in the database in key order.  */
@@ -92,17 +105,26 @@ static PyObject *llpy_lastindi (PyObject *Py_UNUSED(self), PyObject *args ATTRIB
   rec->llr_record = keynum_to_irecord (keynum);
   return (PyObject *)rec;
 }
+#endif
 
 /* llpy_firstfam (void) --> FAM
 
    Returns the first FAM in the database in key order.  */
 
-static PyObject *llpy_firstfam (PyObject *Py_UNUSED(self), PyObject *args ATTRIBUTE_UNUSED)
+static PyObject *llpy_firstfam_db (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  int keynum = xref_firstf();
+  Database *database = ((LLINES_PY_DATABASE *)self)->lld_database;
+  RecordIndexEl *new;
   LLINES_PY_RECORD *rec;
 
-  if (keynum == 0)
+  if (! database)
+    {
+      PyErr_SetString (PyExc_SystemError, "firstfam: database object has NULL database");
+      return NULL;
+    }
+
+  new = getFirstFamilyRecord (database);
+  if (! new)
     Py_RETURN_NONE;		/* no families in the database */
 
   rec = PyObject_New (LLINES_PY_RECORD, &llines_family_type);
@@ -110,10 +132,13 @@ static PyObject *llpy_firstfam (PyObject *Py_UNUSED(self), PyObject *args ATTRIB
     return NULL;
 
   rec->llr_type = LLINES_TYPE_FAM;
-  rec->llr_record = keynum_to_frecord (keynum);
+  rec->llr_record = new;
+  rec->llr_database = database;
+
   return (PyObject *)rec;
 }
 
+#if !defined(DEADENDS)
 /* llpy_lastfam (void) --> FAM
 
    Returns the last FAM in the database in key order.  */
@@ -305,6 +330,10 @@ static struct PyMethodDef Lifelines_Database_Methods[] =
    { "export",		(PyCFunction)llpy_export_db, METH_VARARGS | METH_KEYWORDS,
      "export(file, [version], [submitter]) --> None or error" },
 
+   { "firstindi",	(PyCFunction)llpy_firstindi_db, METH_NOARGS,
+     "firstindi(void) -> INDI: first individual in database (in key order)" },
+   { "firstfam",	(PyCFunction)llpy_firstfam_db, METH_NOARGS,
+     "firstfam(void) -> FAM: first family in database (in key order)" },
    { NULL, 0, 0, NULL }		/* sentinel */
   };
 

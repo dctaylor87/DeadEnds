@@ -132,7 +132,7 @@ static PyObject *llpy_key_to_record (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   record = __llpy_key_to_record (key, &int_type, database);
 
   if (! record)
-    Py_RETURN_NONE;		/* that keynum has no record */
+    Py_RETURN_NONE;		/* that key has no record */
 
   switch (int_type)
     {

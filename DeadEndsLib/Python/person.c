@@ -63,8 +63,8 @@ static PyObject *llpy_title (PyObject *self, PyObject *args);
 
 static PyObject *llpy_soundex (PyObject *self, PyObject *args);
 
-#if !defined(DEADENDS)		/* need a 'highest indi key' variable */
 static PyObject *llpy_nextindi (PyObject *self, PyObject *args);
+#if !defined(DEADENDS)		/* need a 'highest indi key' variable */
 static PyObject *llpy_previndi (PyObject *self, PyObject *args);
 #endif
 static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args);

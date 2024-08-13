@@ -9,9 +9,12 @@
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
+#include <sys/param.h>		/* MAXPATHLEN */
 
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
+#include "sequence.h"
+
 #include "llnls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
@@ -21,12 +24,12 @@
 #include "python-to-c.h"
 #include "types.h"
 
-#if !defined(DEADENDS)
+//#if !defined(DEADENDS)
 static PyObject *llpy_getindi (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_getfam (PyObject *self, PyObject *args);
 static PyObject *llpy_getint (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_getstr (PyObject *self, PyObject *args, PyObject *kw);
-static PyObject *llpy_menuchoose (PyObject *self, PyObject *args, PyObject *kw);
+//static PyObject *llpy_menuchoose (PyObject *self, PyObject *args, PyObject *kw);
 
 /* llpy_getindi (PROMPT) --> INDI: identify person through user interface */
 
@@ -120,6 +123,7 @@ static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
   abort ();			/* XXX */
 }
 
+#if 0
 /* llpy_menuchoose (choices, [prompt]) --> INT; Select from a collection of choices. */
 
 static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
@@ -128,10 +132,11 @@ static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
   abort ();
 }
 #endif
+//#endif
 
 static struct PyMethodDef Lifelines_User_Functions[] =
   {
-#if !defined(DEADENDS)
+//#if !defined(DEADENDS)
    { "getindi",		(PyCFunction)llpy_getindi, METH_VARARGS | METH_KEYWORDS,
      "getindi([prompt]) --> INDI; Identify person through user interface." },
    { "getfam",		(PyCFunction)llpy_getfam, METH_NOARGS,
@@ -144,7 +149,7 @@ static struct PyMethodDef Lifelines_User_Functions[] =
    { "menuchoose",	(PyCFunction)llpy_menuchoose, METH_VARARGS | METH_KEYWORDS,
      "menuchoose(choices,[prompt]) --> INTEGER; Select from a collection of choices." },
 #endif
-#endif
+//#endif
    { NULL, 0, 0, NULL }		/* sentinel */
   };
 
