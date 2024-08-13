@@ -43,7 +43,7 @@ RecordIndexEl *ask_for_indi(CString ttl, ASK1Q ask1);
 RecordIndexEl *ask_for_fam(CString, CString);
 RecordIndexEl *ask_for_fam_by_key(CString fttl, CString pttl, CString sttl);
 FILE *ask_for_input_file (CString mode, CString ttl, String *pfname, String *pfullpath, String path, String ext);
-FILE *ask_for_output_file (CString mode, CString ttl, String *pfname, String *pfullpath, String path, String ext);
+FILE *ask_for_output_file (CString mode, CString ttl, String *pfname, String *pfullpath, CString path, CString ext);
 Sequence *ask_for_indi_list(CString, bool);
 bool ask_for_int(CString, int *);
 RecordIndexEl *ask_for_record(CString, int);

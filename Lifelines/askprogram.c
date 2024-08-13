@@ -219,8 +219,8 @@ ask_for_program (CString mode,
                  CString ttl,
                  String *pfname,
                  String *pfullpath,
-                 String path,
-                 String ext,
+                 CString path,
+                 CString ext,
                  bool picklist)
 {
 	int choice;
