@@ -34,6 +34,7 @@ libllsupport_a_SOURCES = \
 	refns.c \
 	remove.c \
 	replace.c \
+	rptui.c \
 	sprintpic.c \
 	stdstrng.c \
 	strapp.c \
