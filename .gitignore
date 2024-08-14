@@ -1,8 +1,11 @@
 *.o
 *.a
 **/.DS_Store
+Makefile.in
 output.txt
 y.tab.c
-Tests/*test
-Makefile.in
-Tests/testset
+PatchSex/patchsex
+RandomizeKeys/randomizekeys
+RunScript/runscript
+TestProgram/testprogram
+UseMenus/usemenus
