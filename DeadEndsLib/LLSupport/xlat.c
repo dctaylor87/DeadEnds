@@ -357,6 +357,7 @@ get_conversion_dyntt (CString src, CString dest)
 	zs_appc(zttname, '_');
 	zs_apps(zttname, dest);
 	dyntt = (DYNTT)searchHashTable(f_dyntts, zs_str(zttname));
+#if !defined(DEADENDS)
 	if (getdeoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath get_conversion_dyntt:from <%s> to <%s>: %s"),
@@ -364,6 +365,7 @@ get_conversion_dyntt (CString src, CString dest)
 			dyntt ? _("succeeded") : _("failed")
 			);
 	}
+#endif
 	zs_free(&zttname);
 	return dyntt;
 }
@@ -379,6 +381,7 @@ get_subcoding_dyntt (CString codeset, CString subcoding)
 	zs_apps(zttname, "__");
 	zs_apps(zttname, subcoding);
 	dyntt = (DYNTT)searchHashTable(f_dyntts, zs_str(zttname));
+#if !defined(DEADENDS)
 	if (getdeoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg",
 			_("ttpath get_subcoding_dyntt from <%s> to subcode <%s>: %s"),
@@ -386,6 +389,7 @@ get_subcoding_dyntt (CString codeset, CString subcoding)
 			dyntt ? _("succeeded") : _("failed")
 			);
 	}
+#endif
 	zs_free(&zttname);
 	return dyntt;
 }
@@ -445,12 +449,14 @@ xl_load_all_dyntts (CString ttpath)
 {
 	String dirs,p;
 	free_dyntts();
+#if !defined(DEADENDS)
 	if (getdeoptint("TTPATH.debug", 0)) {
 		if (!ttpath ||  !ttpath[0])
 			log_outf("ttpath.dbg", _("No TTPATH config variable"));
 		else
 			log_outf("ttpath.dbg", "ttpath: %s", ttpath);
 	}
+#endif
 	if (!ttpath ||  !ttpath[0])
 		return;
 	f_dyntts = createHashTable(NULL, NULL, NULL, num_dyntts_buckets);
@@ -475,9 +481,11 @@ load_dynttlist_from_dir (CString dir)
 	struct dirent **programs;
 	int n = scandir(dir, &programs, select_tts, alphasort);
 	int i;
+#if !defined(DEADENDS)
 	if (getdeoptint("TTPATH.debug", 0)) {
 		log_outf("ttpath.dbg", _("ttpath checking dir <%s>"), dir);
 	}
+#endif
 	for (i=0; i<n; ++i) {
 		CString ttfile = programs[i]->d_name;
 		/* filename without extension */
@@ -488,9 +496,11 @@ load_dynttlist_from_dir (CString dir)
 			UTF-8_ISO-8859-1 (type 1; code conversion)
 			UTF-8__HTML (type 2; subcoding)
 		*/
+#if !defined(DEADENDS)
 		if (getdeoptint("TTPATH.debug", 0)) {
 			log_outf("ttpath.dbg", _("ttpath file <%s> typed as " FMT_INT), ttfile, ntype);
 		}
+#endif
 		if (ntype==1 || ntype==2) {
 			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);
 			if (!searchHashTable(f_dyntts, zs_str(zfile_u))) {
