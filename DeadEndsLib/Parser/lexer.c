@@ -190,7 +190,7 @@ static int getTokenLow(void) {
 // inchar gets the next character from the Lexer.
 static int inchar(void) {
     int c = getc(currentFile);
-    if (c == '\n') currentLine++;
+    if (c == '\n') curLine++;
     if (debugging) printf("+: '%c'\n", c);
     return c == EOF ? 0 : c;
 }
@@ -200,7 +200,7 @@ static void unreadchar(int c) {
     if (c == 0) return;
     if (debugging) printf("-: '%c'\n", c);
     ungetc(c, currentFile);
-    if (c == '\n') currentLine--;
+    if (c == '\n') curLine--;
 }
 
 // rwordtable is the reserved word table; keep in alphabetical order.

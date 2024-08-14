@@ -13,8 +13,8 @@
 #include "standard.h"  // String.
 
 void parseProgram(CString fileName, CString searchPath);// Parse fileName found in searchPath.
-extern CString currentFileName;  // Name of file being parsed.
-extern int currentLine;   // Current line number in file being parsed.
+extern CString curFileName;  // Name of file being parsed.
+extern int curLine;   // Current line number in file being parsed.
 extern FILE *currentFile;
 
 #endif // parse_h

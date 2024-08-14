@@ -73,7 +73,7 @@ static void setParents(PNode* list, PNode* parent); // Set the parents of a PNod
 static PNode* allocPNode(int type) {
     PNode* node = (PNode*) stdalloc(sizeof(*node));
     if (debugging) {
-        printf("allocPNode(%d) %s, %d\n", type, currentFileName, currentLine);
+        printf("allocPNode(%d) %s, %d\n", type, curFileName, curLine);
     }
     if (! node)
       return NULL;
@@ -81,8 +81,8 @@ static PNode* allocPNode(int type) {
     bzero ((void *)node, sizeof (*node));
 
     node->type = type;
-    node->fileName = strsave(currentFileName); // TODO: MEMORY!!!!!!!!!
-    node->lineNumber = currentLine; // Overwritten by the yacc m production?
+    node->fileName = strsave(curFileName); // TODO: MEMORY!!!!!!!!!
+    node->lineNumber = curLine; // Overwritten by the yacc m production?
     return node;
 }
 
