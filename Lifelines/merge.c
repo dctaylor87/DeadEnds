@@ -419,7 +419,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	for (node = refn2; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refn3; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi3, name3, refn3, sex3, body3, famc3, fams3);
 	freeGNodes(indi3);
 	freeGNodes(name24);

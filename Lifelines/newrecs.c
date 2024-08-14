@@ -216,7 +216,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	key = rmvat(nxref(node));
 	for (refn = nchild(node); refn; refn = nsibling(refn)) {
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
-			add_refn(nval(refn), key);
+			addRefn(nval(refn), key, database);
 	}
 	(*todbasefnc)(node, database);
 	return __llpy_key_to_record (key, NULL, currentDatabase);
@@ -398,7 +398,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refnn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+		if (nval(node)) addRefn(nval(node), key, database);
 	freeGNodes(refn1);
 	freeGNodes(refnn);
 	freeGNodes(refn1n);

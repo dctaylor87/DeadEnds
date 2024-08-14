@@ -182,8 +182,8 @@ ask_for_file_worker (CString mode,
                      CString ttl,
                      String *pfname,
                      String *pfullpath,
-                     String path,
-                     String ext,
+                     CString path,
+                     CString ext,
                      DIRECTION direction)
 {
 	FILE *fp;

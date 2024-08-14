@@ -96,14 +96,14 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 	classify_nodes(&name1, &namen, &name1n);
 	classify_nodes(&refn1, &refnn, &refn1n);
 	for (node = name1; node; node = nsibling(node))
-		remove_name(nval(node), key);
+		removeFromNameIndex(database->nameIndex, nval(node), key);
 	for (node = namen; node; node = nsibling(node))
-		add_name(nval(node), key);
+		insertInNameIndex(database->nameIndex, nval(node), key);
 	rename_from_browse_lists(key);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) removeRefn(nval(node), key, database);
 	for (node = refnn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key, database);
+		if (nval(node)) addRefn(nval(node), key, database);
 
 /* now cleanup (indi1 tree is now composed of indi2 data) */
 	freeGNodes(name1);

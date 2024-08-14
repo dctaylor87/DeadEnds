@@ -59,7 +59,6 @@
  *********************************************/
 
 static GNode *remove_any_xrefs_node_list(String xref, GNode *list);
-static void remove_name_list(GNode *name, CString key);
 static void remove_refn_list(GNode *refn, CString key, Database *database);
 
 /*================================================================
@@ -110,7 +109,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 
 
 /* Remove any name and refn entries */
-	remove_name_list(name, key);
+	removeNamesOfPersonFromIndex (database->nameIndex, indi);
 	remove_refn_list(refn, key, database);
 
 /* Reassemble & delete the in-memory record we're holding (indi) */
@@ -322,6 +321,8 @@ remove_any_xrefs_node_list (String xref, GNode *list)
 	}
 	return rtn;
 }
+
+#if !defined(DEADENDS)
 /*=========================================
  * remove_name_list -- Remove all names in passed list
  *  key is key of record to which name chain belongs
@@ -335,6 +336,8 @@ remove_name_list (GNode *name, CString key)
 		remove_name(nval(node), key);
 	}
 }
+#endif
+
 /*=========================================
  * remove_refn_list -- Remove all refns in passed list
  *  key is key of record to which refn chain belongs

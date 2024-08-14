@@ -212,7 +212,7 @@ add_new_indi_to_db (RecordIndexEl *indi0)
 	}
 	for (node = refn; node; node = nsibling(node)) {
 		if (nval(node))
-			add_refn(nval(node), key);
+			addRefn(nval(node), key, database);
 	}
 	joinPerson(indi, name, refn, sex, body, NULL, NULL);
 	resolve_refn_links(indi);
@@ -239,7 +239,7 @@ add_indi_no_cache (GNode *indi)
 	for (node = name; node; node = nsibling(node))
 		add_name(nval(node), key);
 	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi, name, refn, sex, body, famc, fams);
 	resolve_refn_links(indi);
 	str = node_to_string(indi);
@@ -717,7 +717,7 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 	splitFamily(fam2, &refn, &husb, &wife, &chil, &body);
 	key = rmvat(nxref(fam2));
 	for (node = refn; node; node = nsibling(node))
-		if (nval(node)) add_refn(nval(node), key);
+		if (nval(node)) addRefn(nval(node), key, database);
 	joinFamily(fam2, refn, husb, wife, chil, body);
 	resolve_refn_links(fam2);
 	resolve_refn_links(spouse1);
