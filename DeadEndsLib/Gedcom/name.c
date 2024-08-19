@@ -213,8 +213,7 @@ String* personKeysFromName(CString name, Database* database, int* pcount)
 	FORLIST(list, recordKey)
 		GNode* person = keyToPerson((String) recordKey, database);
 		for (GNode* node = NAME(person); node && eqstr(node->tag, "NAME"); node = node->sibling) {
-			if (!exactMatch(name, node->value)) continue;
-			//printf("EXACT MATCH SAYS THESE ARE THE SAME: %s and %s\n", name, node->value);
+			if (!exactMatch(name, node->value)) continue; // exactMatch doesn't mean 'exact.'
 			appendToBlock(&recordKeys, recordKey);
 			count++;
 			break;

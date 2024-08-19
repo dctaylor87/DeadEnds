@@ -88,3 +88,8 @@ static Menu* createLoadDatabaseMenu(void) {
 static Menu* createNameMenu(Database* database, String name) {
 	return null;
 }
+
+// usage prints the RunScript usage message.
+static void usage(void) {
+	fprintf(stderr, "usage: usemenus [-g gedcomfile]\n");
+}

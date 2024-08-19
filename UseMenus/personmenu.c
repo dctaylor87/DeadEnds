@@ -3,7 +3,23 @@
 //  UseMenus
 //
 //  Created by Thomas Wetmore on 5 August 2024.
-// Last changed on 10 August 2024
+// Last changed on 10 August 2024.
+
+/*
+ At this level what do we want the personMenu to do?
+ 1. Show basics of a person.
+ 2. Present a menu of things a user can do.
+    e. Edit the person.
+    f. Go to father of person, remaining in person menu mode.
+    m. Go to mother of person, ditto.
+    s. Go to spouse of person, ditto. What do we do when there are multiple spouses?
+
+ What does an interaction look like:
+    1. Show brief data about a person,
+    2. Show the person menu.
+    3. Get a response, which may involve asking a follow on question and getting another answer.
+
+ */
 
 #include <stdint.h>
 
@@ -12,6 +28,8 @@
 static int indiBrowse(GNode*);
 static GNode* editIndi(GNode*);
 static void message(String);
+
+static void showPersonBrief(GNode*);
 
 // personMenu is the active menu when viewing a person.
 BrowseReturn personMenu(Database* database, GNode** pindi1, GNode** pindi2, GNode** pfam1, GNode** pfam2, Sequence* pseq) {
@@ -27,6 +45,7 @@ BrowseReturn personMenu(Database* database, GNode** pindi1, GNode** pindi2, GNod
 	addstrings[1] =  "Create a family with this person as a spouse/parent.";
 	if (!person) return browseQuit;
 	while (true) {
+		showPersonBrief(person);
 		c = indiBrowse(person);
 		if (c != 'a') save = null;
 		switch (c) {
@@ -134,7 +153,7 @@ BrowseReturn personMenu(Database* database, GNode** pindi1, GNode** pindi2, GNod
 //			*pfam1 = node;
 //			return BROWSE_FAM;
 			break;
-		case 't':	/* Switch to tandem browsing */
+		case 't':// Switch to tandem browsing.
 			printf("Switch to tandom browsing -- not implemented.\n");
 //			node = ask_for_indi(idp2br, FALSE, FALSE);
 //			if (node) {
@@ -143,7 +162,7 @@ BrowseReturn personMenu(Database* database, GNode** pindi1, GNode** pindi2, GNod
 //				return browseTandem;
 //			}
 			break;
-		case 'x': 	/* Swap families of current person */
+		case 'x': // Swap families of current person.
 			printf("Swap families of current person -- not implememented.\n");
 			//swap_families(indi);
 			break;
@@ -180,4 +199,11 @@ static GNode* editIndi(GNode* indi) {
 
 static void message(String msg) {
 	fprintf(stderr, "%s\n", msg);
+}
+
+static void showPersonBrief(GNode* root) {
+	GNode* node = NAME(root);
+	String name = (node && node->value) ?  nameString(node->value) : "error: no name";
+	printf("%s\n", name);
+
 }
