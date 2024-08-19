@@ -72,6 +72,7 @@
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
+#include "ask.h"
 #include "messages.h"
 #include "splitjoin.h"
 #include "codesets.h"
@@ -156,7 +157,7 @@ add_indi_by_edit (bool rfmt)
 		cnt = resolve_refn_links(indi);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_indi_tree(indi, &msg, NULL)) {
+		if (!valid_indi_tree(indi, &msg, NULL, currentDatabase)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -208,7 +209,7 @@ add_new_indi_to_db (RecordIndexEl *indi0)
 	snprintf(key, sizeof(key), "I" FMT_INT32, keynum);
 	init_new_record(indi0, key);
 	for (node = name; node; node = nsibling(node)) {
-		add_name(nval(node), key);
+		insertNameInIndex (currentDatabase->nameIndex, nval(node), key);
 	}
 	for (node = refn; node; node = nsibling(node)) {
 		if (nval(node))
@@ -237,7 +238,7 @@ add_indi_no_cache (GNode *indi)
 
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 	for (node = name; node; node = nsibling(node))
-		add_name(nval(node), key);
+		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi, name, refn, sex, body, famc, fams);
@@ -653,7 +654,7 @@ editfam:
 		cnt = resolve_refn_links(fam2);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_fam_tree(fam2, &msg, fam1)) {
+		if (!valid_fam_tree(fam2, &msg, fam1, currentDatabase)) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;

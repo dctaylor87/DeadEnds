@@ -82,19 +82,23 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 	namen = copyNodes(name2, true, true);
 	refnn = copyNodes(refn2, true, true);
 	joinPerson(indi1, name2, refn2, sex, body, famc, fams);
-	free_node(indi2,"replace_indi");
+	freeGNode(indi2);
+#if !defined(DEADENDS)
 	nodechk(indi1, "replace_indi");
+#endif
 
 	/* Write data to database */
 
+#if !defined(DEADENDS)
 	indi_to_dbase(indi1);
+#endif
 	key = rmvat(nxref(indi1));
 	/* update name & refn info */
 	/* classify does a diff on its first two arguments, repopulating all three
 	arguments -- first is left-only, second is right-only, third is shared */
 	/* Note: classify eliminates duplicates */
-	classify_nodes(&name1, &namen, &name1n);
-	classify_nodes(&refn1, &refnn, &refn1n);
+	classifyNodes(&name1, &namen, &name1n);
+	classifyNodes(&refn1, &refnn, &refn1n);
 	for (node = name1; node; node = nsibling(node))
 		removeFromNameIndex(database->nameIndex, nval(node), key);
 	for (node = namen; node; node = nsibling(node))
@@ -137,15 +141,16 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 	splitFamily(fam2, &refn2, &husb, &wife, &chil, &body);
 	refnn = copyNodes(refn2, true, true);
 	joinFamily(fam1, refn2, husb, wife, chil, body);
-	free_node(fam2,"replace_fam");
+	freeGNode(fam2);
 
 	/* Write data to database */
 	
-
+#if !defined(DEADENDS)
 	fam_to_dbase(fam1);
+#endif
 	key = rmvat(nxref(fam1));
 	/* remove deleted refns & add new ones */
-	classify_nodes(&refn1, &refnn, &refn1n);
+	classifyNodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) removeRefn(nval(node), key, database);
 	for (node = refnn; node; node = nsibling(node))

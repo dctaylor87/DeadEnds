@@ -230,7 +230,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			} 
 			break;
 		}
-		if (!valid_indi_tree(indi4, &msg, indi3)) {
+		if (!valid_indi_tree(indi4, &msg, indi3, currentDatabase)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -256,7 +256,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 /* Modify families that have persons as children */
 
-	classify_nodes(&famc1, &famc2, &fam12);
+	classifyNodes(&famc1, &famc2, &fam12);
 
 /*
  process fam12 - the list of FAMC in both original nodes
@@ -326,7 +326,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 /*HERE*/
 /* Modify families that had persons as spouse */
 
-	classify_nodes(&fams1, &fams2, &fam12);
+	classifyNodes(&fams1, &fams2, &fam12);
 
 /*
  process fam12 - the list of FAMS in both original nodes
@@ -407,14 +407,14 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	indi3 = copyNodes(indi4, true, true);
 
 	splitPerson(indi3, &name3, &refn3, &sex3, &body3, &famc3, &fams3);
-	classify_nodes(&name2, &name3, &name24);
-	classify_nodes(&refn2, &refn3, &refn24);
+	classifyNodes(&name2, &name3, &name24);
+	classifyNodes(&refn2, &refn3, &refn24);
 
 	key = rmvat(nxref(indi4));
 	for (node = name2; node; node = nsibling(node))
-		remove_name(nval(node), key);
+		removeFromNameIndex (currentDatabase->nameIndex, nval(node), key); 
 	for (node = name3; node; node = nsibling(node))
-		add_name(nval(node), key);
+		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
 	rename_from_browse_lists(key);
 	for (node = refn2; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);
@@ -541,7 +541,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 		}
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_fam_tree(fam4, &msg, fam3)) {
+		if (!valid_fam_tree(fam4, &msg, fam3, currentDatabase)) {
 			if (ask_yes_or_no_msg(_(qSbadata), _(qSiredit))) {
 				do_edit();
 				continue;

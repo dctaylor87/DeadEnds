@@ -35,6 +35,7 @@
 #include "codesets.h"
 #include "pvalue.h"
 #include "de-strings.h"
+#include "errlog.h"
 
 /*********************************************
  * local types

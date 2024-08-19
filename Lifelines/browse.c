@@ -2092,9 +2092,9 @@ autoadd_xref (RecordIndexEl *rec, GNode *newnode)
 	normalizeRecord(rec->root);
 #else
 	normalize_rec(rec);
-#endif
-	
+
 	unknown_node_to_dbase(node);
+#endif
 }
 
 #if !defined(DEADENDS)

@@ -19,6 +19,8 @@
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
+#include "uiprompts.h"
+#include "rptui.h"
 #include "py-messages.h"
 
 #include "python-to-c.h"

@@ -1190,7 +1190,7 @@ static PyObject *llpy_sync_indi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 
   cnt = resolve_refn_links (new_tree);
 
-  if (! valid_indi_tree (new_tree, &msg, old_tree))
+  if (! valid_indi_tree (new_tree, &msg, old_tree, py_record->llr_database))
     {
       PyErr_SetString (PyExc_SystemError, msg);
       stdfree (&rawrec);

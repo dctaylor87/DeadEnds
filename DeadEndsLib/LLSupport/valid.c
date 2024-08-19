@@ -66,7 +66,7 @@
  * Should be replaced by valid_indi(RECORD,...) ?
  *=================================*/
 bool
-valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
+valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig, Database *database)
 {
 	GNode *refn;
 	GNode *name1, *refn1, *sex1, *body1, *famc1, *fams1, *node;
@@ -120,6 +120,22 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 		*pmsg = _(qSbadparsex);
 		goto bad1;
 	}
+#if defined(DEADENDS)
+	/* if there is more than one record with the REFN, then the
+	   database is broken -- while a record can have an arbitrary
+	   number of REFNs, each REFN *MUST* be unique. */
+	if (database) {
+	  /* we can only check REFNs if we have a database */
+	  for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
+	    ukey = nval(refn);
+	    CString key = getRefn (ukey, database);
+	    if (! key || ! orig || nestr(key, rmvat(nxref(indi1)))) {
+	      *pmsg = _(qSbadirefn);
+	      goto bad1;
+	    }
+	  }
+	}
+#else
 	/* if there are more than one refn should check each */
 	for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
 		ukey = nval(refn);
@@ -130,6 +146,7 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig)
 			goto bad1;
 		}
 	}
+#endif
 	if (orig)
 		joinPerson(orig, name0, refn0, sex0, body0, famc0, fams0);
 	joinPerson(indi1, name1, refn1, sex1, body1, famc1, fams1);
@@ -149,7 +166,7 @@ bad2:
  * Should be replaced by valid_fam(RECORD,...) ?
  *=============================*/
 bool
-valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0)
+valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0, Database *database)
 {
 	GNode *refn0, *husb0, *wife0, *chil0, *body0;
 	GNode *refn1, *husb1, *wife1, *chil1, *body1;
@@ -220,14 +237,14 @@ valid_name (String name)
  *  orig:   [IN]  node to match (may be null)
  *====================================*/
 bool
-valid_node_type (GNode *node, char ntype, String *pmsg, GNode *node0)
+valid_node_type (GNode *node, char ntype, String *pmsg, GNode *node0, Database *database)
 {
 	switch(ntype) {
-	case 'I': return valid_indi_tree(node, pmsg, node0);
-	case 'F': return valid_fam_tree(node, pmsg, node0);
-	case 'S': return valid_sour_tree(node, pmsg, node0);
-	case 'E': return valid_even_tree(node, pmsg, node0);
-	default: return valid_othr_tree(node, pmsg, node0);
+	case 'I': return valid_indi_tree(node, pmsg, node0, database);
+	case 'F': return valid_fam_tree(node, pmsg, node0, database);
+	case 'S': return valid_sour_tree(node, pmsg, node0, database);
+	case 'E': return valid_even_tree(node, pmsg, node0, database);
+	default: return valid_othr_tree(node, pmsg, node0, database);
 	}
 }
 /*======================================
@@ -237,7 +254,7 @@ valid_node_type (GNode *node, char ntype, String *pmsg, GNode *node0)
  *  orig:  [IN]  SOUR node to match 
  *====================================*/
 bool
-valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
+valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Database *database)
 {
 	*pmsg = NULL;
 	if (!node) {
@@ -265,7 +282,7 @@ valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
  *  orig:  [IN]  EVEN node to match
  *====================================*/
 bool
-valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
+valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Database *database)
 {
 	*pmsg = NULL;
 	if (!node) {
@@ -293,7 +310,7 @@ valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
  *  orig:  [IN]  OTHR node to match
  *====================================*/
 bool
-valid_othr_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig)
+valid_othr_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Database *database)
 {
 	*pmsg = NULL;
 	if (!node) {

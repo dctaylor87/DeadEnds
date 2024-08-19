@@ -185,7 +185,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 		cnt = resolve_refn_links(node);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_node_type(node, ntype, &msg, NULL)) {
+		if (!valid_node_type(node, ntype, &msg, NULL, currentDatabase)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
@@ -394,7 +394,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	(*todbase)(root1, database);
 	key = rmvat(nxref(root1));
 	/* remove deleted refns & add new ones */
-	classify_nodes(&refn1, &refnn, &refn1n);
+	classifyNodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) remove_refn(nval(node), key);
 	for (node = refnn; node; node = nsibling(node))

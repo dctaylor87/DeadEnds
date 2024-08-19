@@ -74,6 +74,7 @@
 #include "lloptions.h"
 #include "interp.h"
 #include "signals.h"
+#include "errlog.h"
 
 /* for parser debugging */
 extern int yydebug;

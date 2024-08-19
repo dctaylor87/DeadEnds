@@ -68,3 +68,16 @@ String lastPathSegment (CString path) {
 	}
 	return q;
 }
+
+/* pathMatch -- are paths the same?
+   Handles WIN32 filename case insensitivity.  */
+
+bool
+pathMatch (CString path1, CString path2)
+{
+#ifdef WIN32
+	return !stricmp(path1, path2);
+#else
+	return !strcmp(path1, path2);
+#endif
+}

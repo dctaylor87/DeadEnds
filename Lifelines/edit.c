@@ -91,7 +91,9 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 	indi1 = nztop(irec1);
 
 /* Prepare file for user to edit */
+#if !defined(DEADENDS)
 	nodechk(indi1, "edit_indi");
+#endif
 	write_indi_to_file_for_edit(indi1, editfile, rfmt, currentDatabase);
 
 /* Have user edit file */
@@ -111,7 +113,7 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 		}
 		cnt = resolve_refn_links(indi2);
 		/* validate for showstopper errors */
-		if (!valid_indi_tree(indi2, &msg, indi1)) {
+		if (!valid_indi_tree(indi2, &msg, indi1, currentDatabase)) {
 			/* if fail a showstopper error, must reedit or abort */
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -198,7 +200,7 @@ edit_family (RecordIndexEl *frec1, bool rfmt)
 		cnt = resolve_refn_links(fam2);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_fam_tree(fam2, &msg, fam1)) {
+		if (!valid_fam_tree(fam2, &msg, fam1, currentDatabase)) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;

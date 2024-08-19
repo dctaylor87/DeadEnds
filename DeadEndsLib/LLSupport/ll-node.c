@@ -173,6 +173,8 @@ node_strlen (int levl,       /* level */
 	if (nval(node)) len += strlen(nval(node)) + 1;
 	return len + 1;
 }
+
+#if !defined(DEADENDS)
 /*==========================================
  * unknown_node_to_dbase -- Store node of unknown type
  *  in database
@@ -184,6 +186,7 @@ unknown_node_to_dbase (GNode *node)
 	/* skip tag validation */
 	node_to_dbase(node, NULL);
 }
+#endif
 
 /*===============================================
  * next_spouse -- Return next spouse of family

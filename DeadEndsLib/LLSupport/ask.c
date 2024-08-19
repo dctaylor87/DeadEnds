@@ -276,8 +276,8 @@ ask_for_input_file (CString mode,
                     CString ttl,
                     String *pfname,
                     String *pfullpath,
-                    String path,
-                    String ext)
+                    CString path,
+                    CString ext)
 {
 	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, INPUT);
 }

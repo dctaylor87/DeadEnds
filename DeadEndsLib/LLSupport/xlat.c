@@ -44,6 +44,7 @@
 #include "charmaps.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "path.h"		/* pathMatch */
 
 /*********************************************
  * local types
@@ -572,7 +573,7 @@ select_tts (const struct dirent *entry)
 	entext = entry->d_name + tlen - (sizeof(f_ttext)-1);
 
 	/* is it what we want ? use platform correct comparison, from path.c */
-	if (!path_match(f_ttext, entext))
+	if (! pathMatch(f_ttext, entext))
 		return 0;
 
 	return 1;
@@ -597,11 +598,7 @@ xl_free_adhoc_xlats (void)
 		if (xlattemp->adhoc) {
 			free_xlat(xlattemp);
 		} else {
-#if defined(DEADENDS)
 			appendToList(newlist, xlattemp);
-#else
-			back_list(newlist, xlattemp);
-#endif
 		}
 	ENDLIST
 	deleteList(f_xlats);

@@ -89,8 +89,9 @@ The library directories are found in the @file{DeadEndsLib} directory.
 @itemize @bullet
 @item @file{DeadEndsLib/DataTypes}
 
-Implementations of the various datatypes that are part of the DeadEnds
-system.
+Implementations of most of the various datatypes that are part of the
+DeadEnds system.  A notable exception is the @code{Sequence} type
+which is found in @file{DeadEndsLib/Interp}.
 
 @item @file{DeadEndsLib/Database}
 
@@ -103,13 +104,17 @@ here.
 
 @item @file{DeadEndsLib/Interp}
 
-The code that implements the user callable functions of the DeadEnds
-Report writing language.
+The code that implements the user callable builtin functions of the
+DeadEnds Report writing language.  If you are looking for the
+implementation of a builtin DeadEnds Script function, the file
+@file{builtin.c} is the place to start.  The dispatch table is found
+in @file{functable.c}.  Declarations of the builtin functions can be
+found in @file{builtintable.h}.
 
 @item @file{DeadEndsLib/LLSupport}
 
-Code to support the use of the LifeLines curses interface with
-DeadEnds.  Much of this code was taken from various LifeLines
+Code to support the LifeLines @command{llines} and @command{llexec}
+commands.  Much of this code was taken from various LifeLines
 directories, such as @file{src/gedlib} and @file{src/stdlib} and then
 modified for DeadEnds.  Some is original to DeadEnds.
 
@@ -147,16 +152,22 @@ Code for validating a GEDCOM file that is being imported.
 @itemize @bullet
 @item @file{Lifelines}
 
-The code that deals with the screen (via @code{ncurses}), the various
-menus, the user interaction, and various routines that do not have a
-better location to live.  Most of this code was taken from the
+The code for the commands @command{llines} and @command{llexec} lives
+here.  The code that deals with the screen (via @code{ncurses}), the
+various menus, the user interaction, and various routines that do not
+have a better location to live.  Most of this code was taken from the
 @file{src/liflines} directory of LifeLines and then modified to build
 and work with DeadEnds.  Some is original to DeadEnds.
 
+Some of the user interaction code lives instead in
+@file{DeadEndsLib/UI} or @file{DeadEndsLib/LLSupport}.  The division
+of code between these three directories needs work and could be
+considered a work in progress.
 @item @file{Programs}
 
 Various programs that link with the DeadEnds code.  You can find a
-DeadEnds version of @command{llexec} in this directory.
+DeadEnds version of @command{llexec} in this directory called
+@command{deadends}.
 
 @item @file{PatchSex}
 

@@ -87,10 +87,8 @@ remove_indi_by_root (GNode *indi, Database *database)
 		husb = remove_any_xrefs_node_list(nxref(indi), husb);
 		wife = remove_any_xrefs_node_list(nxref(indi), wife);
 		joinFamily(fam, fref, husb, wife, chil, rest);
-		if (husb || wife || chil)
-			fam_to_dbase(fam);
-		else
-		  remove_empty_fam(fam, database);
+		if (! husb && ! wife && ! chil)
+			remove_empty_fam (fam, database);
 	}
 
 /* Remove person from families he/she is in as a child */
@@ -101,10 +99,8 @@ remove_indi_by_root (GNode *indi, Database *database)
 		/* remove all occurrences of this person as child */
 		chil = remove_any_xrefs_node_list(nxref(indi), chil);
 		joinFamily(fam, fref, husb, wife, chil, rest);
-		if (husb || wife || chil)
-			fam_to_dbase(fam);
-		else
-			remove_empty_fam(fam, database);
+		if (! husb && ! wife && ! chil)
+			remove_empty_fam (fam, database);
 	}
 
 
@@ -169,7 +165,7 @@ remove_child (GNode *indi, GNode *fam, Database *database)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(fam) = nsibling(node);
-	free_node(node,"remove_child CHIL");
+	freeGNode(node);
 
 /* Remove FAMC line from child */
 	node = findNode(indi, "FAMC", nxref(fam), &last);
@@ -177,7 +173,7 @@ remove_child (GNode *indi, GNode *fam, Database *database)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(indi) = nsibling(node);
-	free_node(node,"remove_child FAMC");
+	freeGNode(node);
 
 	/* Update database with changed records */
 	if (num_fam_xrefs(fam) == 0)
@@ -206,7 +202,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
 		nsibling(last) = nsibling(node);
 	else
 		nchild(fam) = nsibling(node);
-	free_node(node,"remove_spouse");
+	freeGNode(node);
 	node = NULL;
 
 /* Remove (one) FAMS line from spouse */
@@ -214,7 +210,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
 	ASSERT(node);
 	ASSERT(last);
 	nsibling(last) = nsibling(node);
-	free_node(node,"remove_spouse FAMS");
+	freeGNode(node);
 	node = NULL;
 
 	if (num_fam_xrefs(fam) == 0)
@@ -267,8 +263,10 @@ remove_any_record (RecordIndexEl *record, Database *database)
 /* Remove any refn entries */
 	remove_refn_list(refn, key, database);
 
+#if !defined(DEADENDS)
 /* Remove from on-disk database */
 	del_in_dbase(key);
+#endif
 
 /* Reassemble & delete the in-memory record we're holding (root) */
 	joinOther(root, refn, rest);

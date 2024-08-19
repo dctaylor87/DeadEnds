@@ -14,6 +14,7 @@ libllsupport_a_SOURCES = \
 	choose.c \
 	codesets.c \
 	equaliso.c \
+	errlog.c \
 	expandvars.c \
 	fpattern.c \
 	gstrings.c \

@@ -35,6 +35,7 @@
 #include "locales.h"
 #include "hashtable.h"
 #include "lloptions.h"
+#include "errlog.h"
 
 /*********************************************
  * global/exported variables

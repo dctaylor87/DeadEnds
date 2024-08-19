@@ -74,6 +74,7 @@
 #include "locales.h"
 #include "database.h"
 //#include "readindex.h"
+#include "interp.h"		/* interpret, programRunning */
 #include "charprops.h"
 #include "llgettext.h"
 #include "llpy-externs.h"
@@ -125,8 +126,6 @@ static UIWINDOW extra_menu_win=NULL;
  *********************************************/
 
 extern int alldone;
-extern bool progrunning;
-
 
 /*********************************************
  * local function prototypes
@@ -3023,7 +3022,7 @@ get_gr_ttee (void)
 void
 clear_status_display (void)
 {
-	if (progrunning) return;
+	if (programRunning) return;
 	if (lock_std_msg) return;
 	if (status_showing[0]) {
 		status_showing[0] = 0;

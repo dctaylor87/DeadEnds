@@ -93,5 +93,6 @@ void poutput(String);
 //void interp_main(void);
 
 extern void adjust_cols (String str);
+extern bool programRunning;
 
 #endif // interp_h

@@ -16,5 +16,6 @@
 FILE *fopenPath(CString fileName, CString mode, CString searchPath);
 CString resolveFile(CString name, CString path);
 String lastPathSegment(CString fileName);
+bool pathMatch (CString path1, CString path2);
 
 #endif // path_h

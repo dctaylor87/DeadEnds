@@ -31,7 +31,7 @@ static int compare(CString a, CString b) {
 
 // delete frees an Error from an ErrorLog.
 static void delete(Word error) {
-	String message = ((Error*) error)->message;
+	CString message = ((Error*) error)->message;
 	if (message) stdfree(message);
 	stdfree(error);
 	return;
