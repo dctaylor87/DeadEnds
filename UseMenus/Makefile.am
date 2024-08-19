@@ -29,4 +29,6 @@ LDADD = \
 	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a \
+	../DeadEndsLib/Database/libdatabase.a \
+	../DeadEndsLib/Gedcom/libgedcom.a \
 	../DeadEndsLib/Utils/libutils.a
