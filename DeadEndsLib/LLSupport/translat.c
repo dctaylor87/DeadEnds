@@ -354,7 +354,7 @@ local_init (void)
 	inited=true;
 }
 
-#if !defined(DEADENDS)
+//#if !defined(DEADENDS)
 /*==========================================================
  * transl_load_xlats -- Load translations for all regular codesets
  *  (internal, GUI, ...)
@@ -390,6 +390,7 @@ transl_load_xlats (void)
 		working; this is kind of confusing and ought to be cleaned
 		up */
 		xl_set_uparam(conv->xlat, 0);
+#if !defined(DEADENDS)
 		if (BTR) {
 			TRANTABLE tt=0;
 			if (init_map_from_rec(conv->key, i, &tt) && tt) {
@@ -397,9 +398,10 @@ transl_load_xlats (void)
 			}
 			xl_set_uparam(conv->xlat, i+1);
 		}
+#endif
 	}
 }
-#endif
+//#endif
 
 /*==========================================================
  * is_legacy_first -- Should this legacy come before rest of translation ?

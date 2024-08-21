@@ -25,13 +25,18 @@ static void append_all_tags(Sequence *seq, GNode *node, CString tagname,
 /* append_all_tags -- append all tags of a specified tagname
    to Sequence (optionally recursive).  */
 
+/* XXX this needs work -- not sure how val is intended to be used.  XXX */
 static void
 append_all_tags(Sequence *seq, GNode *node, CString tagname,
 		bool recurse, bool nonptrs)
 {
   if (!tagname || (ntag(node) && eqstr(ntag(node), tagname))) {
-    String key;
+    CString key;
+#if defined(DEADENDS)
+    CString val = 0;
+#else
     int val=0;
+#endif
 
     key = nval(node);
     if (key && key[0]) {
@@ -41,14 +46,22 @@ append_all_tags(Sequence *seq, GNode *node, CString tagname,
 
       strupdate(&skey, rmvat(key));
       if (skey) {
+#if defined(DEADENDS)
+	val = skey;
+#else
 	val = atoi(skey+1);
+#endif
       } else {
 	if (nonptrs) {
 	  ZSTR zstr = zs_newn(keylen+100);
 	  GNode *chil;
 
+#if defined(DEADENDS)
+	  val = NULL;
+#else
 	  /* include non-pointers, but mark invalid with val==-1 */
 	  val = -1;
+#endif
 	  zs_sets(zstr, key);
 	  /* collect any CONC or CONT children */
 	  for (chil = nchild(node); chil; chil=nsibling(chil)) {
@@ -72,7 +85,11 @@ append_all_tags(Sequence *seq, GNode *node, CString tagname,
 	}
       }
       if (include) {
+#if defined(DEADENDS)
+	appendToSequence (seq, skey, val);
+#else
 	append_indiseq_ival(seq, skey, NULL, val, false, true);
+#endif
       }
     }
   }

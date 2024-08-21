@@ -50,6 +50,9 @@
 #if !defined(NUMBER_PREDEF_BUCKETS)
 #define NUMBER_PREDEF_BUCKETS	5
 #endif
+#if !defined(NUMBER_OPTION_BUCKETS)
+#define NUMBER_OPTION_BUCKETS	53
+#endif
 
 //int num_config_buckets = NUMBER_CONFIG_BUCKETS;
 int num_fallback_buckets = NUMBER_FALLBACK_BUCKETS;
@@ -293,7 +296,6 @@ set_cmd_options (HashTable *opts)
 	send_notifications();
 }
 
-#if !defined(DEADENDS)
 /*=================================
  * set_db_options -- Store db options from caller
  * Created: 2002/06/16, Perry Rapp
@@ -307,6 +309,7 @@ set_db_options (HashTable *opts)
 	addrefHashTable(f_db);
 	send_notifications();
 }
+
 /*=================================
  * get_db_options -- Copy db options to caller's table
  * Created: 2002/06/16, Perry Rapp
@@ -315,10 +318,9 @@ void
 get_db_options (HashTable *opts)
 {
 	if (!f_db)
-		f_db = createStringTable();
+		f_db = createStringTable(NUMBER_OPTION_BUCKETS);
 	copy_table(f_db, opts);
 }
-#endif
 
 /*==========================================
  * free_optable -- free a table if it exists

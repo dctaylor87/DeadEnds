@@ -175,13 +175,15 @@ charprops_free_all (void)
 	loaded_codepage = 0;
 }
 
-#if !defined(DEADENDS)
 /*==========================================
  * charprops_load -- Load case tables for a single codepage
  *========================================*/
 bool
 charprops_load (const char * codepage)
 {
+#if defined(DEADENDS)
+	return false;		/* XXX for now, we always fail XXX */
+#else
 	XLAT tt8=0, ttback = 0;
 	int ch;
 	char src[2];
@@ -258,8 +260,8 @@ charprops_load (const char * codepage)
 
 	strupdate(&charset_name, codepage);
 	return true;
-}
 #endif
+}
 
 /*==========================================
  * charprops_toupperz -- Return uppercase version of string
