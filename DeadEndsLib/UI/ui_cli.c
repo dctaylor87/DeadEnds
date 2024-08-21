@@ -49,7 +49,10 @@
 /*********************************************
  * external variables (no header)
  *********************************************/
-extern int screen_width;
+
+/* XXX default value -- for now; need to ask OS for value; might also
+   want to change if user resizes the window.  XXX */
+int screen_width = 80;
 
 /*********************************************
  * local function prototypes
