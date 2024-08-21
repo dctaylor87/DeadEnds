@@ -209,7 +209,7 @@ add_new_indi_to_db (RecordIndexEl *indi0)
 	snprintf(key, sizeof(key), "I" FMT_INT32, keynum);
 	init_new_record(indi0, key);
 	for (node = name; node; node = nsibling(node)) {
-		insertNameInIndex (currentDatabase->nameIndex, nval(node), key);
+		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
 	}
 	for (node = refn; node; node = nsibling(node)) {
 		if (nval(node))
