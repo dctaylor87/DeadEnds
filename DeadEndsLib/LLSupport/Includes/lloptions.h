@@ -21,11 +21,11 @@
 
 /* initialization & termination */
 void free_optable(HashTable **ptab);
-//void get_db_options(HashTable *opts); /* free with FREEBOTH */
+void get_db_options(HashTable *opts); /* free with FREEBOTH */
 int load_global_options(String configfile, String * pmsg);
 void register_notify(CALLBACK_FNC fncptr);
 void set_cmd_options(HashTable *opts);
-//void set_db_options(HashTable *opts);
+void set_db_options(HashTable *opts);
 void setoptstr_fallback(String optname, String newval);
 void term_lloptions(void);
 void unregister_notify(CALLBACK_FNC fncptr);

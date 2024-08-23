@@ -64,6 +64,18 @@
 #include "init.h"
 #include "lloptions.h"
 
+/* local defines -- overrides allowed, should be prime  */
+
+#if !defined(NUMBER_OPTION_BUCKETS)
+#define NUMBER_OPTION_BUCKETS	17
+#endif
+#if !defined(NUMBER_TAG_BUCKETS)
+#define NUMBER_TAG_BUCKETS	53
+#endif
+#if !defined(NUMBER_PLACABBV_BUCKETS)
+#define NUMBER_PLACABBV_BUCKETS	23
+#endif
+
 /*********************************************
  * global/exported variables
  *********************************************/
@@ -150,7 +162,7 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 
 	/* check if any directories not specified, and try environment
 	variables, and default to "." */
-	for (i=0; i<ARRAYSIZE(dirvars); ++i) {
+	for (i = 0; i < (int)ARRAYSIZE(dirvars); ++i) {
 		String str = getenv(dirvars[i]);
 		if (!str)
 			str = ".";
@@ -159,8 +171,19 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 	/* also check environment variable for editor */
 	{
 		String str = getenv("DEEDITOR");
+#if defined(DEADENDS)
+		if (! str)
+		  str = getenv ("VISUAL");
+
+		if (! str)
+		  str = getenv ("EDITOR");
+
+		if (! str)
+		  str = "vi";
+#else
 		if (!str)
 			str = environ_determine_editor(PROGRAM_LIFELINES);
+#endif
 		setoptstr_fallback("DEEDITOR", str);
 	}
 	/* editor falls back to platform-specific default */
@@ -189,15 +212,15 @@ bool
 init_lifelines_postdb (void)
 {
 	String emsg;
-	TABLE dbopts = createStringTable();
+	StringTable *dbopts = createStringTable(NUMBER_OPTION_BUCKETS);
 
-	tagtable = createStringTable(); /* values are same as keys */
-	placabbvs = createStringTable();
+	tagtable = createStringTable(NUMBER_TAG_BUCKETS); /* values are same as keys */
+	placabbvs = createStringTable(NUMBER_PLACABBV_BUCKETS);
 
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
 	set_db_options(dbopts);
-	release_table(dbopts);
+	releaseHashTable(dbopts);
 	init_browse_lists();
 #if !defined(DEADENDS)
 	if (!openxref(readonly))
@@ -219,8 +242,10 @@ close_lifelines (void)
 	lldb_close(&def_lldb); /* make sure database closed */
 #endif
 	term_browse_lists();
+#if !defined(DEADENDS)
 	term_refnrec();
 	term_namerec();
+#endif
 	if (editfile) {
 		unlink(editfile);
 		stdfree(editfile);
@@ -231,7 +256,9 @@ close_lifelines (void)
 		editstr=NULL;
 	}
 	term_lloptions();
+#if !defined(DEADENDS)
 	term_date();
+#endif
 	llgettext_term();
 	term_codesets();
 	strfree(&int_codeset);
@@ -273,7 +300,9 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 
 	strupdate(&illegal_char, getdeoptstr("IllegalChar", 0));
 
+#if !defined(DEADENDS)		/* XXX if we ever support nodechk we can revisit this XXX */
 	nodechk_enable(!!getdeoptint("nodecheck", 0));
+#endif
 }
 /*==================================================
  * update_db_options -- 
@@ -282,11 +311,11 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 static void
 update_db_options (void)
 {
-	TABLE opttab = createStringTable();
+	TABLE opttab = createStringTable(NUMBER_OPTION_BUCKETS);
 	CString str=0;
 	get_db_options(opttab);
 
-	str = valueof_str(opttab, "codeset");
+	str = searchStringTable (opttab, "codeset");
 	if (!str || !str[0]) {
 		/*
 		no specified database/internal codeset
@@ -316,7 +345,7 @@ update_db_options (void)
 		}
 	}
 
-	destroy_table(opttab);
+	deleteHashTable(opttab);
 }
 /*==================================================
  * pre_codesets_hook -- code to run just before initializing codesets

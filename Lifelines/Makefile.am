@@ -7,21 +7,30 @@ bin_PROGRAMS = llines llexec
 # what goes into lines?
 # export.c import.c
 
+common_SOURCES = \
+	environ.c \
+	init.c \
+	lines_usage.c \
+	miscutls.c \
+	selectdb.c \
+	signals.c \
+	version.c
+
 llines_SOURCES = add.c advedit.c askgedc.c askprogram.c \
 	browse.c brwsmenu.c \
 	cscurses.c delete.c dynmenu.c \
 	edit.c interact.c \
-	lbrowse.c lines_usage.c listui.c \
-	main.c menuset.c merge.c miscutls.c \
+	lbrowse.c listui.c \
+	main.c menuset.c merge.c \
 	newrecs.c pedigree.c \
-	scan.c screen.c searchui.c selectdb.c show.c swap.c \
+	scan.c screen.c searchui.c show.c swap.c \
 	tandem.c \
-	signals.c version.c
+	$(common_SOURCES)
 
 # what goes into llexec ?
-llexec_SOURCES = lines_usage.c llexec.c \
-	selectdb.c miscutls.c llexec.h \
-	signals.c version.c
+llexec_SOURCES = llexec.c \
+	llexec.h \
+	$(common_SOURCES)
 
 PYTHON_LIBS = @PYTHON_LIBS@
 
