@@ -572,6 +572,7 @@ Returns the first family in the database (in key order).
 Returns @code{None} if there are no FAMs in the database.
 
 In the future this MIGHT become a database instance function.
+
 @b{Not currently available in DeadEnds.}
 @end defun
 @defun lastfam (void) @arrow{} FAM or @code{None}
@@ -581,6 +582,7 @@ Returns the last family in the database (in key order).
 Returns @code{None} if there are no FAMs in the database.
 
 In the future this MIGHT become a database instance function.
+
 @b{Not currently available in DeadEnds.}
 @end defun
 
@@ -1205,7 +1207,6 @@ The following functions are not instance methods.
 Identify individual through user interface.
 Returns INDI (or @code{None} if user cancels).
 
-@b{Not currently available in DeadEnds.}
 @end defun
 @defun getindiset ([prompt]) @arrow{} SET
 @findex getindiset
@@ -1222,14 +1223,12 @@ XXX not yet implemented XXX
 Identify family through user interface.
 Returns family (or @code{None} if user cancels).
 
-@b{Not currently available in DeadEnds.}
 @end defun
 @defun getint ([prompt]) @arrow{} INTEGER
 @findex getint
 
 Get integer through user interface.
 
-@b{Not currently available in DeadEnds.}
 @end defun
 @defun getstr ([prompt]) @arrow{} STRING
 @findex getstr
