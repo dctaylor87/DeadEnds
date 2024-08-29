@@ -45,8 +45,15 @@ static String getFromTagTable(String tag) {
 
 // freeGNode frees a GNode.
 void freeGNode(GNode* node) {
-	if (node->key) stdfree(node->key);
-	if (node->value) stdfree(node->value);
+	ASSERT (get_nrefcnt(node) == 0);
+	if (node->key) {
+		stdfree(node->key);
+		node->key = 0;	/* paranoia */
+	}
+	if (node->value) {
+		stdfree(node->value);
+		node->value = 0; /* paranoia */
+	}
 	nodeFrees++;
 	stdfree(node);
 }
