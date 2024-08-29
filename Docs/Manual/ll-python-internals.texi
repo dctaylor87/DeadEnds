@@ -132,7 +132,7 @@ Support for the Python embedding.
 User interface, obviously.  Less obviously, the code here is used by
 @command{llexec} and not by @command{llines}.  Some of the routines
 here are mere stubs of their more fleshed out cousins that live in
-@code{liflines}.  Stubs that should be, in my opinion, fleshed out.
+@code{LifeLines}.  Stubs that should be, in my opinion, fleshed out.
 
 @item @file{DeadEndsLib/Utils}
 
@@ -303,7 +303,7 @@ found in here.
 The DeadEnds Report Writing language primarily deals with nodes.  By
 contrast, the Python Extension primarily deals with records.
 
-Both nodes and records are refernce counted.  When creating a
+Both nodes and records are reference counted.  When creating a
 reference to either a GNode or a RecordIndexEl it is important to
 ensure that its reference count is incremented.  And when destroying a
 reference, that it is decremented.
@@ -314,10 +314,10 @@ link from a record to its top GNode.  The reference counts @b{DO} count
 the number of @code{PVALUE}s and @code{PyObject}s that point to the
 GNode.
 
-Additionally, GNodes have a flags element.  Currently, only one flag
-bit is currently defined -- whether the GNode is a temporary GNode or
-not.  A tempoary GNode is a GNode that is not part of the GNode tree
-of any record.
+Additionally, GNodes have a flags element.  Only one flag bit is
+currently defined -- whether the GNode is a temporary GNode or not.  A
+temporary GNode is a GNode that is not part of the GNode tree of any
+record.
 
 @subsection Temporary GNodes
 
