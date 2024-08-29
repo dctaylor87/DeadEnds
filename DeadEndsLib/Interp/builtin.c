@@ -756,6 +756,11 @@ PValue __deletenode (PNode *node, Context *context, bool *eflg)
 		parent->child = next;
 	else
 		prev->sibling = next;
+
+	nparent(this) = NULL;
+	nsibling(this) = NULL;
+	setTempGNode(this, true);
+
 	return nullPValue;
 }
 
