@@ -1301,7 +1301,7 @@ If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." }
    { "choosechild",	llpy_choosechild_i, METH_NOARGS,
      "choosechild(void) -> INDI; Selects and returns child of person\n\
 through user interface.  Returns None if INDI has no children." },
-   { "choosepouse",	llpy_choosespouse_i, METH_NOARGS,
+   { "choosespouse",	llpy_choosespouse_i, METH_NOARGS,
      "choosespouse(void) --> INDI.  Select and return a spouse of individual\n\
 through user interface.  Returns None if individual has no spouses or user cancels." },
    { "choosefam",	llpy_choosefam, METH_NOARGS,
