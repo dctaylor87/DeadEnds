@@ -89,7 +89,7 @@ zalloc (ZSTR zstr, unsigned int newmax)
 	int len = zs_len(zstr);
 	while (zstr->max < newmax)
 		zstr->max = zstr->max << 1;
-	ptr = (char *)malloc(zstr->max);
+	ptr = (char *)stdalloc(zstr->max);
 	/* use memcpy not strcpy in case has embedded nulls */
 	memcpy(ptr, zstr->str, len+1);
 	free(zstr->str);
@@ -118,11 +118,11 @@ zs_new (void)
 ZSTR
 zs_newn (unsigned int min)
 {
-	ZSTR zstr = (ZSTR)malloc(sizeof(*zstr));
+	ZSTR zstr = (ZSTR)stdalloc(sizeof(*zstr));
 	unsigned int bksiz = (min<2048)?(min<64?32:128):(min<16384?2048:16384);
 	while (bksiz < min)
 		bksiz = bksiz << 1;
-	zstr->str = (char *)malloc(bksiz);
+	zstr->str = (char *)stdalloc(bksiz);
 	zstr->str[0] = 0;
 	zstr->end = zstr->str;
 	zstr->max = bksiz;
