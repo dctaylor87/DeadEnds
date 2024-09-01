@@ -54,6 +54,7 @@ void showHashTable(HashTable*, void(*show)(void*));
 /*static*/ int getHash(CString, int);
 void removeFromHashTable(HashTable*, CString key);
 int iterateHashTableWithPredicate(HashTable*, bool(*)(void*));
+int iterateHashTableWithPredicate2(HashTable*, void *, bool(*)(void*, void*));
 
 extern void addrefHashTable (HashTable *table); // increment ref. count of table
 extern void releaseHashTable (HashTable *table); // decrement ref. count of table, free if zero

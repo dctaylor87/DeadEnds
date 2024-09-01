@@ -265,6 +265,24 @@ int iterateHashTableWithPredicate(HashTable* table, bool (*predicate)(void*)) { 
 	return count;
 }
 
+// iterateHashTableWithPredicate2 is like
+// iterateHashTableWithPredicate except that the predicate takes an
+// extra argument -- to avoid the need for extra variables.
+int iterateHashTableWithPredicate2 (HashTable* table, void *predicateArg,
+				    bool (*predicate)(void *elt, void *extra))
+{
+  int bucketIndex;
+  int elementIndex;
+  int count = 0;
+  void* element = firstInHashTable(table, &bucketIndex, &elementIndex);
+  while (element) {
+    if ((*predicate)(element, predicateArg))
+      count++;
+    element = nextInHashTable(table, &bucketIndex, &elementIndex);
+  }
+  return count;
+}
+
 // showHashTable shows the contents of a hash table, including bucket and element indexes.
 // show is a function to show an element. For debugging.
 void showHashTable(HashTable* table, void (*show)(void*)) {
