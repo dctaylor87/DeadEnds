@@ -122,7 +122,7 @@ convert_proplist_to_proparray (List *list)
 {
 	HashTable ** props;
 	int i;
-	props = (HashTable **)malloc((lengthList(list)+1)*sizeof(props[0]));
+	props = (HashTable **)stdalloc((lengthList(list)+1)*sizeof(props[0]));
 	i = 0;
 	FORLIST(list, el)
 		props[i++] = (HashTable *)el;
