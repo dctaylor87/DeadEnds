@@ -48,7 +48,7 @@ void deleteBlock(Block *block, void(*delete)(void*)) {
 // growBlock increases the size of a block when it reaches its current maximum.
 static void growBlock(Block *block) {
 	int newLength = block->maxLength = (3*block->maxLength)/2;
-	void *newElements = malloc(newLength*sizeof(void*));
+	void *newElements = stdalloc(newLength*sizeof(void*));
 	memcpy(newElements, block->elements, (block->length)*sizeof(void*));
 	free(block->elements);
 	block->elements = newElements;

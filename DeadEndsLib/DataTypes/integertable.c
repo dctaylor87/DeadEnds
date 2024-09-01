@@ -27,7 +27,7 @@ void insertInIntegerTable(IntegerTable *table, CString key, int value) {
         element->value = value;
         return;
     }
-    element = (IntegerElement*) malloc(sizeof(IntegerElement));
+    element = (IntegerElement*) stdalloc(sizeof(IntegerElement));
     memset(element, 0, sizeof(IntegerElement));
     element->key = key;
     element->value = value;

@@ -52,7 +52,7 @@ void addToFunctionTable(FunctionTable* table, String name, PNode* pnode) {
 		printf("Multiply defined function or procedure named %s; new copied over old.\n", name);
 		// MNOTE: The function name and root nodes are not saved as they are in the heap.
 	}
-	element = (FunctionElement*) malloc(sizeof(FunctionElement)); // Create element.
+	element = (FunctionElement*) stdalloc(sizeof(FunctionElement)); // Create element.
 	memset(element, 0, sizeof(FunctionElement));
 	element->name = name;
 	element->function = pnode;

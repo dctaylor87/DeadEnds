@@ -9,6 +9,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "standard.h"
 #include "refnindex.h"
 #include "recordindex.h"
 #include "list.h"
@@ -47,7 +48,7 @@ void deleteRecordIndex(RecordIndex *index) {
 void addToRecordIndex(RecordIndex* index, String key, GNode* root, int lineNumber) {
 	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(index, key);
 	if (element) return;
-	element = (RecordIndexEl*) malloc(sizeof(RecordIndexEl));
+	element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
 	memset(element, 0, sizeof(RecordIndexEl));
 	element->root = root;
 	element->line = lineNumber;

@@ -52,7 +52,7 @@ SymbolTable* createSymbolTable(void) {
 void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
 	SymbolTable* table = symtab;
 	if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) table = globalTable;
-	PValue* ppvalue = (PValue*) malloc(sizeof(PValue)); // Heapify.
+	PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue)); // Heapify.
 	memcpy(ppvalue, &pvalue, sizeof(PValue));
 	if (pvalue.type == PVString)
 		ppvalue->value.uString = strsave(pvalue.value.uString); // TODO: Required?
