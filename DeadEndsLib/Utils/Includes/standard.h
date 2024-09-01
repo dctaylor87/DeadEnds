@@ -57,7 +57,7 @@ String capitalize(String);
 
 // User interface to the standard functions.
 //--------------------------------------------------------------------------------------------------
-char* __alloc(size_t, String, int) __attribute__ ((malloc)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8)));
+char* __alloc(size_t, String, int) __attribute__ ((malloc)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute ((returns_nonnull));
 void __free(void* ptr, String, int);
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
