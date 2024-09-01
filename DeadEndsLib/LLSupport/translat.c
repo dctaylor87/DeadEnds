@@ -87,7 +87,9 @@ enum { ZON_X, ZON_INT, ZON_GUI, ZON_EDI, ZON_RPT, ZON_GED, NUM_ZONES };
 static void clear_legacy_tt(int trnum);
 static void clear_predefined_list(void);
 static struct conversion_s * getconvert(int trnum);
+#if !defined(DEADENDS)
 static bool is_legacy_first(int trnum);
+#endif
 static void local_init(void);
 
 
@@ -159,6 +161,7 @@ static bool inited=false;
  * body of module
  *********************************************/
 
+#if !defined(DEADENDS)
 /*===================================================
  * translate_catn -- Translate & concatenate string
  *
@@ -179,6 +182,8 @@ translate_catn (XLAT ttm, String * pdest, CString src, int * len)
 	*len -= added;
 	*pdest += added;
 }
+#endif
+
 /*===================================================
  * translate_string_to_zstring -- Translate string via TRANTABLE
  *  xlat: [IN]  translation to apply
@@ -215,6 +220,8 @@ translate_string (XLAT ttm, CString in, String out, int maxlen)
 	llstrsets(out, maxlen, uu8, zs_str(zstr));
 	zs_free(&zstr);
 }
+
+#if !defined(DEADENDS)
 /*==========================================================
  * translate_write -- Translate and output lines in a buffer
  *  tt:   [in] translation table (may be NULL)
@@ -284,6 +291,7 @@ translate_write(XLAT ttm, String in, int *lenp, FILE *ofp, bool last)
 	*lenp = 0;
 	return(true);
 }
+
 /*==========================================================
  * get_xlat_to_int -- Get translation to internal codeset
  *  returns NULL if fails
@@ -306,6 +314,8 @@ transl_get_xlat (CString src, CString dest)
 	bool adhoc = true;
 	return xl_get_xlat(src, dest, adhoc);
 }
+#endif
+
 /*==========================================================
  * transl_load_all_tts -- Load internal list of available translation
  *  tables (based on *.tt files in TTPATH)
@@ -403,6 +413,7 @@ transl_load_xlats (void)
 }
 //#endif
 
+#if !defined(DEADENDS)
 /*==========================================================
  * is_legacy_first -- Should this legacy come before rest of translation ?
  * This is to make legacy tts run in internal codeset
@@ -413,6 +424,8 @@ is_legacy_first (int trnum)
 {
 	return (getconvert(trnum)->src_codeset == &int_codeset);
 }
+#endif
+
 /*==========================================================
  * clear_predefined_list -- Free cached regular conversions
  * Created: 2002/11/28 (Perry Rapp)
@@ -539,6 +552,8 @@ transl_get_legacy_tt (int trnum)
 	getconvert(trnum); /* check validity of trnum */
 	return legacytts[trnum].tt;
 }
+
+#if !defined(DEADENDS)
 /*==========================================================
  * transl_has_legacy_tt -- Is there a legacy (in-database)
  *  translation table for this entry ?
@@ -554,6 +569,8 @@ transl_set_legacy_tt (int trnum, TRANTABLE tt)
 	leg->tt = tt;
 	leg->first = is_legacy_first(trnum);
 }
+#endif
+
 /*==========================================================
  * clear_legacy_tt -- Remove this legacy tt if loaded
  * Created: 2002/12/13 (Perry Rapp)
@@ -569,6 +586,8 @@ clear_legacy_tt (int trnum)
 		leg->tt = 0;
 	}
 }
+
+#if !defined(DEADENDS)
 /*==========================================================
  * transl_free_predefined_xlats -- Free all our predefined
  *  translations; this is called when a database is closed
@@ -579,6 +598,7 @@ transl_free_predefined_xlats (void)
 {
 	clear_predefined_list();
 }
+
 /*==========================================================
  * transl_is_xlat_valid -- Does it do the job ?
  * Created: 2002/12/15 (Perry Rapp)
@@ -588,6 +608,7 @@ transl_is_xlat_valid (XLAT xlat)
 {
 	return xl_is_xlat_valid(xlat);
 }
+
 /*==========================================================
  * transl_get_map_name -- get name of translation
  * eg, "Editor to Internal"
@@ -600,6 +621,7 @@ transl_get_map_name (int trnum)
 	ASSERT(trnum<NUM_TT_MAPS);
 	return _(getconvert(trnum)->name);
 }
+
 /*==========================================================
  * transl_release_xlat -- Client finished with this
  * Created: 2002/12/15 (Perry Rapp)
@@ -609,4 +631,4 @@ transl_release_xlat (XLAT xlat)
 {
 	xl_release_xlat(xlat);
 }
-
+#endif
