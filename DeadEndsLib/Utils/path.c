@@ -81,3 +81,83 @@ pathMatch (CString path1, CString path2)
 	return !strcmp(path1, path2);
 #endif
 }
+
+/* pathConcatAllocate -- add file & directory together into newly alloc'd
+   string & return.
+
+   dir:  [IN]  directory (may be NULL)
+   file: [IN]  file (may be NULL)   */
+
+String
+pathConcatAllocate (CString dir, CString file)
+{
+  int len = (dir ? strlen(dir) : 0) + (file ? strlen(file) : 0) +2;
+  String buffer = stdalloc(len);
+  int myutf8=0; /* buffer is big enough, so won't matter */
+  return pathConcat (dir, file, myutf8, buffer, len);
+}
+
+/* pathConcat -- add file & directory together
+   handles trailing / in dir and/or leading / in file
+   returns no trailing / if file is NULL.
+
+   dir:  [IN]  directory (may be NULL)
+   file: [IN]  file (may be NULL)  */
+
+String
+pathConcat (CString dir, CString file, int utf8, String buffer, int buflen)
+{
+  ASSERT(buflen);
+  buffer[0] = 0;
+  if (dir && dir[0]) {
+    destrapps(buffer, buflen, utf8, dir);
+    if (isDirSep(buffer[strlen(buffer)-1])) {
+      /* dir ends in sep */
+      if (!file || !file[0]) {
+	/* dir but no file, we don't include trailing slash */
+	buffer[strlen(buffer)-1] = 0;
+      } else {
+	if (isDirSep(file[0])) {
+	  /* file starts in sep */
+	  destrapps(buffer, buflen, utf8, &file[1]);
+	} else {
+	  /* file doesn't start in sep */
+	  destrapps(buffer, buflen, utf8, file);
+	}
+      }
+    } else {
+      /* dir doesn't end in sep */
+      if (!file || !file[0]) {
+	/* dir but no file, we don't include trailing slash */
+      } else {
+	if (isDirSep(file[0])) {
+	  /* file starts in sep */
+	  destrapps(buffer, buflen, utf8, file);
+	} else {
+	  /* file doesn't start in sep */
+	  destrapps(buffer, buflen, utf8, DESTRDIRSEPARATOR);
+	  destrapps(buffer, buflen, utf8, file);
+	}
+      }
+    }
+  } else {
+    /* no dir, include file exactly as it is */
+    if (file && file[0])
+      destrapps(buffer, buflen, utf8, file);
+  }
+
+  return buffer;
+}
+
+/* isDirSep -- Is directory separator character ?
+   handles WIN32 characters.  */
+
+bool
+isDirSep (char c)
+{
+#ifdef WIN32
+	return c=U21=DECHRDIRSEPARATOR || c=='/';
+#else
+	return c==DECHRDIRSEPARATOR;
+#endif
+}

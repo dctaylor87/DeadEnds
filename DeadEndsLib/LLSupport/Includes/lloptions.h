@@ -38,6 +38,4 @@ int getdeoptint(CString optname, int defval);
 String getdeoptstr_dbonly(CString optname, String defval);
 String getdeoptstr_rpt(CString optname, String defval);
 
-extern bool is_dir_sep (char c);
-
 #endif /* OPTIONS_H_INCLUDED */
