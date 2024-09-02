@@ -1,42 +1,6 @@
 /* readwrite.h -- These are all read/write related.  In LifeLines
    these are found in hdrs/standard.h */
 
-#if defined WIN32 && !defined __CYGWIN__
-
-#define LLREADTEXT "rt"
-#define LLREADBINARY "rb"
-#define LLREADBINARYUPDATE "r+b"
-#define LLWRITETEXT "wt"
-#define LLWRITEBINARY "wb"
-#define LLAPPENDTEXT "at"
-
-#define LLFILERANDOM "R"
-#define LLFILETEMP "T"
-
-#define LLSTRPATHSEPARATOR ";"
-#define LLSTRDIRSEPARATOR "\\"
-#define LLCHRPATHSEPARATOR ';'
-#define LLCHRDIRSEPARATOR '\\'
-
-#else
-
-#define LLREADTEXT "r"
-#define LLREADBINARY "r"
-#define LLREADBINARYUPDATE "r+"
-#define LLWRITETEXT "w"
-#define LLWRITEBINARY "w"
-#define LLAPPENDTEXT "a"
-
-#define LLFILERANDOM ""
-#define LLFILETEMP ""
-
-#define LLSTRPATHSEPARATOR ":"
-#define LLSTRDIRSEPARATOR "/"
-#define LLCHRPATHSEPARATOR ':'
-#define LLCHRDIRSEPARATOR '/'
-
-#endif
-
 /* integer printf format definitions */
 
 #define FMT_INTPTR	"%" PRIdPTR
