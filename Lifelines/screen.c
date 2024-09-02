@@ -426,7 +426,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	if (width > ll_cols-4)
 		width = ll_cols-4;
 #if defined(DEADENDS)
-	llstrncpyf(title, width, uu8, _(qSmtitle), get_deadends_version(ll_cols-4));
+	destrncpyf(title, width, uu8, _(qSmtitle), get_deadends_version(ll_cols-4));
 #else
 	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
 #endif
@@ -834,11 +834,11 @@ update_browse_menu (int screen)
 			char prompt[128];
 			check_menu(dynmenu);
 			/* display prompt immediately above menu */
-			llstrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
+			destrncpy(prompt, _(qSplschs), sizeof(prompt), uu8);
 			dynmenu->cur_x = strlen(_(qSplschs))+3;
 			dynmenu->cur_y = dynmenu->top - 1;
-			llstrapps(prompt, sizeof(prompt), uu8, "             ");
-			llstrappf(prompt, sizeof(prompt), uu8, _("(pg " FMT_INT "/" FMT_INT ")")
+			destrapps(prompt, sizeof(prompt), uu8, "             ");
+			destrappf(prompt, sizeof(prompt), uu8, _("(pg " FMT_INT "/" FMT_INT ")")
 				, dynmenu->page+1, dynmenu->pages);
 			/* display line across */
 			show_horz_line(uiwin, dynmenu->top-2, 0, width);
@@ -1144,8 +1144,8 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
 	if (len > uiw_cols(ask_msg_win)-2)
 		len = uiw_cols(ask_msg_win)-2;
 	curpath[0] = 0;
-	llstrapps(curpath, len, uu8, _(qSiddefpath));
-	llstrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
+	destrapps(curpath, len, uu8, _(qSiddefpath));
+	destrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
 
 	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
@@ -1794,7 +1794,7 @@ load_tt_action (void)
 
 	/* Ask whence to load it */
 	ttimportdir = getdeoptstr("TTPATH", ".");
-	fp = ask_for_input_file(LLREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
+	fp = ask_for_input_file(DEREADTEXT, _(qSmintt), &fname, ttimportdir, ".tt");
 	if (fp) {
 		fclose(fp);
 		/* Load it */
@@ -1828,7 +1828,7 @@ save_tt_action (void)
 	}
 	/* Ask whither to save it */
 	ttexportdir = getdeoptstr("DETTEXPORT", ".");
-	fp = ask_for_output_file(LLWRITETEXT, _(qSmouttt), &fname, ttexportdir, ".tt");
+	fp = ask_for_output_file(DEWRITETEXT, _(qSmouttt), &fname, ttexportdir, ".tt");
 	if (fp) {
 		fclose(fp);
 		/* Save it */
@@ -2323,7 +2323,7 @@ mvwaddstr_lim (WINDOW *wp, int x, int y, char *cp, int maxlen)
 	else {
 		if (maxlen > (int)sizeof(buffer)-1)
 			maxlen = sizeof(buffer)-1;
-		llstrncpy(buffer, cp, maxlen-1, uu8);
+		destrncpy(buffer, cp, maxlen-1, uu8);
 		strcat(buffer, "*");
 		mvccwaddstr(wp, x, y, buffer);
 	}
@@ -2499,7 +2499,7 @@ display_status (String text)
   WINDOW *win = uiw_win(uiwin);
   int row;
   /* first store it */
-  llstrncpy(status_showing, text, sizeof(status_showing), uu8);
+  destrncpy(status_showing, text, sizeof(status_showing), uu8);
   if ((int)strlen(text)>ll_cols-6) {
     status_showing[ll_cols-8] = 0;
     strcat(status_showing, "...");
@@ -2552,7 +2552,7 @@ curses_outputv (ARG_UNUSED(void *data),
 			break;
 	}
 	/* now make string to show/put on msg list */
-	llstrncpyvf(ptr, sizeof(buffer)-1, uu8, fmt, args);
+	destrncpyvf(ptr, sizeof(buffer)-1, uu8, fmt, args);
 	/* first handle transitory/status messages */
 	if (level==MSG_STATUS) {
 		if (lock_std_msg)

@@ -162,7 +162,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	}
 
 /* Create template for user to edit */
-	if (!(fp = fopen(editfile, LLWRITETEXT))) {
+	if (!(fp = fopen(editfile, DEWRITETEXT))) {
 		msg_error(_(qSnofopn), editfile);
 		return false;
 	}
@@ -277,7 +277,7 @@ write_node_to_editfile (GNode *node)
 	FILE *fp;
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	prefix_file_for_edit(fp);
 
 	write_nodes(0, fp, ttmo, node,  true, true, true);

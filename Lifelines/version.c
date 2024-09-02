@@ -57,7 +57,7 @@ get_deadends_version (int maxlen)
         int len=sizeof(version);
         if (len>maxlen)
                 len=maxlen;
-        llstrncpyf(version, len, 0, "%s %s", LIFELINES_VERSION, LIFELINES_VERSION_EXTRA);
+        destrncpyf(version, len, 0, "%s %s", LIFELINES_VERSION, LIFELINES_VERSION_EXTRA);
         return version;
 }
 

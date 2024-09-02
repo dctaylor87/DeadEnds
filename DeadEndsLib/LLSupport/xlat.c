@@ -506,7 +506,7 @@ load_dynttlist_from_dir (CString dir)
 			ZSTR zfile_u = ll_toupperz(zs_str(zfile),0);
 			if (!searchHashTable(f_dyntts, zs_str(zfile_u))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
-				String path = concat_path_alloc(dir, ttfile);
+				String path = pathConcatAllocate(dir, ttfile);
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
 				insert_table_obj(f_dyntts, zs_str(zfile_u), dyntt);

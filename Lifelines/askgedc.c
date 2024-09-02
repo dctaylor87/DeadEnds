@@ -39,6 +39,7 @@
 #include "readwrite.h"
 #include "proptbls.h"
 #include "de-strings.h"
+#include "path.h"
 
 /*********************************************
  * local function prototypes
@@ -96,7 +97,7 @@ add_gedcom_props (TABLE fileprops)
 	/* first get full path & open file */
 	String fname = valueof_str(fileprops, "filename");
 	String dir = valueof_str(fileprops, "dir");
-	String filepath = concat_path_alloc(dir, fname);
+	String filepath = pathConcatAllocate(dir, fname);
 
 	if (!stat(filepath, &sbuf)) {
 		if (sbuf.st_size > 9999999)
@@ -109,7 +110,7 @@ add_gedcom_props (TABLE fileprops)
 		add_prop_dnum(fileprops, "bytes", str);
 	}
 
-	if (NULL == (fp = fopen(filepath, LLREADTEXT)))
+	if (NULL == (fp = fopen(filepath, DEREADTEXT)))
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */
@@ -235,7 +236,7 @@ ask_for_gedcom (CString mode,
 		TABLE props = fileprops[choice-1];
 		String fname = valueof_str(props, "filename");
 		String dir = valueof_str(props, "dir");
-		String filepath = concat_path_alloc(dir, fname);
+		String filepath = pathConcatAllocate(dir, fname);
 		if (pfname)
 			*pfname = strsave(fname);
 		*pfullpath = filepath;

@@ -145,7 +145,7 @@ errlog_out (CString title, CString msg, CString file, int line)
 
   /* send to error log if one is specified */
   if (f_crashfile[0]) {
-    FILE * fp = fopen(f_crashfile, LLAPPENDTEXT);
+    FILE * fp = fopen(f_crashfile, DEAPPENDTEXT);
     if (fp) {
       char creation[DATE_STR_LEN];
       get_current_lldate(creation);
@@ -177,7 +177,7 @@ crash_setcrashlog (String crashlog)
 {
   if (!crashlog)
     crashlog = "";
-  llstrncpy(f_crashfile, crashlog, sizeof(f_crashfile), uu8);
+  destrncpy(f_crashfile, crashlog, sizeof(f_crashfile), uu8);
 }
 
 /* crash_setdb -- record current database in case of a crash
@@ -187,7 +187,7 @@ crash_setdb (String dbname)
 {
   if (!dbname)
     dbname = "";
-  llstrncpy(f_currentdb, dbname, sizeof(f_currentdb), 0);
+  destrncpy(f_currentdb, dbname, sizeof(f_currentdb), 0);
 }
 
 /* get_current_lldate -- fill in ISO style string for current time.  */

@@ -404,16 +404,16 @@ load_configs (String configfile, String * pmsg)
 		   the standard places */
 
 		/* look for global config file */
-		llstrncpy(cfg_name, global_conf_path, sizeof(cfg_name), 0);
-		llstrapps(cfg_name, sizeof(cfg_name), 0, "/lifelines.conf");
+		destrncpy(cfg_name, global_conf_path, sizeof(cfg_name), 0);
+		destrapps(cfg_name, sizeof(cfg_name), 0, "/lifelines.conf");
 		rtn = load_global_options(cfg_name, pmsg);
 		if (rtn == -1) return false;
 
 		/* look for one in user's home directory */
 		/* TODO: Shouldn't Win32 use getenv("USERPROFILE") ? */
-		llstrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
-		/*llstrappc(cfg_name, sizeof(cfg_name), '/');*/
-		llstrapps(cfg_name, sizeof(cfg_name), 0, "/" DEADENDS_CONFIG_FILE);
+		destrncpy(cfg_name, getenv("HOME") , sizeof(cfg_name), 0);
+		/*destrappc(cfg_name, sizeof(cfg_name), '/');*/
+		destrapps(cfg_name, sizeof(cfg_name), 0, "/" DEADENDS_CONFIG_FILE);
 
 		rtn = load_global_options(cfg_name, pmsg);
 		if (rtn == -1) return false;

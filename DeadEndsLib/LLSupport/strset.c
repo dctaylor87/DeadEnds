@@ -20,54 +20,53 @@
 
 #include "standard.h"
 #include "llnls.h"
-#include "sys_inc.h"
 
 #include "de-strings.h"
 
 /*==================================
- * llstrset -- llstrncpy adopted to strset/strapp API
+ * destrset -- destrncpy adopted to strset/strapp API
  * handles UTF-8
  *================================*/
 char *
-llstrsets (char *dest, size_t limit, int utf8, const char *src)
+destrsets (char *dest, size_t limit, int utf8, const char *src)
 {
-	return llstrncpy(dest, src, limit, utf8);
+	return destrncpy(dest, src, limit, utf8);
 }
 /*==================================
- * llstrsetc -- llstrset with a character argument
+ * destrsetc -- destrset with a character argument
  *================================*/
 char *
-llstrsetc (char *dest, size_t limit, char ch)
+destrsetc (char *dest, size_t limit, char ch)
 {
 	int utf8 = 0;
 	char src[2];
 	src[0] = ch;
 	src[1] = 0;
-	return llstrsets(dest, limit, utf8, src);
+	return destrsets(dest, limit, utf8, src);
 }
 /*==================================
- * llstrsetf -- snprintf style assignment to string,
+ * destrsetf -- snprintf style assignment to string,
  * subject to length limit (including current contents)
  * handles UTF-8
  *================================*/
 char *
-llstrsetf (char * dest, int limit, int utf8, const char * fmt, ...)
+destrsetf (char * dest, int limit, int utf8, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	llstrsetvf(dest, limit, utf8, fmt, args);
+	destrsetvf(dest, limit, utf8, fmt, args);
 	va_end(args);
 	return dest;
 }
 /*==================================
- * llstrsetvf -- vsnprintf style assignment to string,
+ * destrsetvf -- vsnprintf style assignment to string,
  * subject to length limit (including current contents)
  * handles UTF-8
  *================================*/
 char *
-llstrsetvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
+destrsetvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
 {
-	return llstrncpyvf(dest, limit, utf8, fmt, args);
+	return destrncpyvf(dest, limit, utf8, fmt, args);
 }
 
 

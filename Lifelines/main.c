@@ -441,7 +441,7 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 			if (!namelen)
 				return;
 			namebuff = (char *)stdalloc(namelen+1);
-			llstrncpy(namebuff, optarg, namelen+1, 0);
+			destrncpy(namebuff, optarg, namelen+1, 0);
 			*optname = namebuff;
 			valbuff = strdup(ptr+1);
 			*optval = valbuff;

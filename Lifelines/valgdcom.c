@@ -965,7 +965,7 @@ openlog (void)
 	if (!f_logpath[0])
 		return false;
 
-	f_flog = fopen(f_logpath, LLWRITETEXT);
+	f_flog = fopen(f_logpath, DEWRITETEXT);
 	f_logopen = (f_flog != 0);
 	return f_logopen;
 }
@@ -1045,7 +1045,7 @@ set_import_log (String logpath)
 {
 	if (!logpath)
 		logpath = "";
-	llstrncpy(f_logpath, logpath, sizeof(f_logpath), uu8);
+	destrncpy(f_logpath, logpath, sizeof(f_logpath), uu8);
 }
 /*============================================================
  * scan_header -- Scan header of GEDCOM record

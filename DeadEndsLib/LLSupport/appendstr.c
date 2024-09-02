@@ -20,7 +20,6 @@
 
 #include "standard.h"
 #include "llnls.h"
-#include "sys_inc.h"
 
 #include "de-strings.h"
 
@@ -41,7 +40,7 @@ appendstr (String * pdest, int * len, int utf8, CString src)
 	*pdest[0]=0; /* so client doesn't have to initialize */
 	if (*len<=1) { *len=0; return; }
 
-	llstrncpy(*pdest, src, *len, utf8);
+	destrncpy(*pdest, src, *len, utf8);
 	amount = strlen(*pdest);
 	*pdest += amount;
 	*len -= amount;

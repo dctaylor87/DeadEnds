@@ -35,6 +35,7 @@
 #include "strcvt.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "path.h"
 
 /* 763 upper case letters, and 754 lower case letters, 2003-11-13 */
 #define MAXCASES 1024
@@ -81,8 +82,8 @@ charprops_load_utf8 (void)
 	if (loaded_utf8) return true;
 	
 	loaded_utf8 = -1;
-	concat_path(ttpath, "UnicodeDataExcerpt.txt", uu8, filepath, sizeof(filepath));
-	fp = fopen(filepath, LLREADTEXT);
+	pathConcat(ttpath, "UnicodeDataExcerpt.txt", uu8, filepath, sizeof(filepath));
+	fp = fopen(filepath, DEREADTEXT);
 	if (!fp)
 		return false;
 	while (fgets(line, sizeof(line), fp)) {

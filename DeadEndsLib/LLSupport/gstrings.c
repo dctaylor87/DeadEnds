@@ -208,23 +208,23 @@ sour_to_list_string (GNode *sour, int len, String delim)
 	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
-	llstrcatn(&p, "(S", &mylen);
-	llstrcatn(&p, rmvat(nxref(sour))+1, &mylen);
-	llstrcatn(&p, ") ", &mylen);
+	destrcatn(&p, "(S", &mylen);
+	destrcatn(&p, rmvat(nxref(sour))+1, &mylen);
+	destrcatn(&p, ") ", &mylen);
 	name = node_to_tag(sour, "REFN", len);
 	if (name)
-		llstrcatn(&p, name, &mylen);
+		destrcatn(&p, name, &mylen);
 	name = node_to_tag(sour, "TITL", len);
 	if (name && mylen > 20)
 	{
-		llstrcatn(&p, delim, &mylen);
-		llstrcatn(&p, name, &mylen);
+		destrcatn(&p, delim, &mylen);
+		destrcatn(&p, name, &mylen);
 	}
 	name = node_to_tag(sour, "AUTH", len);
 	if (name && mylen > 20)
 	{
-		llstrcatn(&p, delim, &mylen);
-		llstrcatn(&p, name, &mylen);
+		destrcatn(&p, delim, &mylen);
+		destrcatn(&p, name, &mylen);
 	}
 	limit_width(scratch, len, uu8);
 	return strsave(scratch);
@@ -242,17 +242,17 @@ even_to_list_string (GNode *even, int len, ATTRIBUTE_UNUSED String delim)
 	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
-	llstrcatn(&p, "(E", &mylen);
-	llstrcatn(&p, rmvat(nxref(even))+1, &mylen);
-	llstrcatn(&p, ") ", &mylen);
+	destrcatn(&p, "(E", &mylen);
+	destrcatn(&p, rmvat(nxref(even))+1, &mylen);
+	destrcatn(&p, ") ", &mylen);
 	name = node_to_tag(even, "NAME", len);
 	if (name)
-		llstrcatn(&p, name, &mylen);
+		destrcatn(&p, name, &mylen);
         name = node_to_tag(even, "REFN", len);
         if (name) {
-		llstrcatn(&p, " (", &mylen);
-                llstrcatn(&p, name, &mylen);
-		llstrcatn(&p, ")", &mylen);
+		destrcatn(&p, " (", &mylen);
+                destrcatn(&p, name, &mylen);
+		destrcatn(&p, ")", &mylen);
 	}
 	limit_width(scratch, len, uu8);
 	return strsave(scratch);
@@ -275,13 +275,13 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
-	llstrcatn(&p, "(F", &mylen);
-	llstrcatn(&p, rmvat(nxref(fam))+1, &mylen);
-	llstrcatn(&p, ")", &mylen);
+	destrcatn(&p, "(F", &mylen);
+	destrcatn(&p, rmvat(nxref(fam))+1, &mylen);
+	destrcatn(&p, ")", &mylen);
 	name = node_to_tag(fam, "REFN", len);
 	if (name) {
-		llstrcatn(&p, " ", &mylen);
-		llstrcatn(&p, name, &mylen);
+		destrcatn(&p, " ", &mylen);
+		destrcatn(&p, name, &mylen);
 	}
 	splitFamily(fam, &refn, &husb, &wife, &chil, &rest);
 	for (node=husb; node; node=nsibling(node))
@@ -291,21 +291,21 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 	for (node=chil; node; node=nsibling(node))
 		children++;
 	snprintf(counts, sizeof(counts), FMT_INT "h," FMT_INT "w," FMT_INT "ch", husbands, wives, children);
-	llstrcatn(&p, " ", &mylen);
-	llstrcatn(&p, counts, &mylen);
+	destrcatn(&p, " ", &mylen);
+	destrcatn(&p, counts, &mylen);
 	if (husbands) {
 		node = keyToPerson(rmvat(nval(husb)), database);
 		if (node) {
-			llstrcatn(&p, delim, &mylen);
+			destrcatn(&p, delim, &mylen);
 			if (wives)
 				templen = (mylen-4)/2;
 			else
 				templen = mylen;
 			tempname = personToName(node, templen);
 			limit_width(tempname, templen, uu8);
-			llstrcatn(&p, tempname, &mylen);
+			destrcatn(&p, tempname, &mylen);
 			if (wives)
-				llstrcatn(&p, " m. ", &mylen);
+				destrcatn(&p, " m. ", &mylen);
 		}
 	}
 	if (wives) {
@@ -314,7 +314,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 			if (!templen)
 				templen = mylen;
 			/* othewise we set templen above */
-			llstrcatn(&p, personToName(node, templen), &mylen);
+			destrcatn(&p, personToName(node, templen), &mylen);
 		}
 	}
 	joinFamily(fam, refn, husb, wife, chil, rest);
@@ -336,16 +336,16 @@ other_to_list_string(GNode *node, int len, ATTRIBUTE_UNUSED String delim)
 	if (mylen>(int)sizeof(scratch))
 		mylen=sizeof(scratch);
 	p[0]=0;
-	llstrcatn(&p, "(X", &mylen);
-	llstrcatn(&p, rmvat(nxref(node))+1, &mylen);
-	llstrcatn(&p, ") (", &mylen);
-	llstrcatn(&p, ntag(node), &mylen);
-	llstrcatn(&p, ") ", &mylen);
+	destrcatn(&p, "(X", &mylen);
+	destrcatn(&p, rmvat(nxref(node))+1, &mylen);
+	destrcatn(&p, ") (", &mylen);
+	destrcatn(&p, ntag(node), &mylen);
+	destrcatn(&p, ") ", &mylen);
 	name = node_to_tag(node, "REFN", mylen);
 	if (name)
-		llstrcatn(&p, name, &mylen);
+		destrcatn(&p, name, &mylen);
 	if (nval(node)) {
-		llstrcatn(&p, nval(node), &mylen);
+		destrcatn(&p, nval(node), &mylen);
 	}
 	/* append any CONC/CONT nodes that fit */
 	child = nchild(node);
@@ -354,8 +354,8 @@ other_to_list_string(GNode *node, int len, ATTRIBUTE_UNUSED String delim)
 			|| !strcmp(ntag(child), "CONT")) {
 			/* skip empty CONC/CONT nodes */
 			if (nval(child)) {
-				llstrcatn(&p, " ", &mylen);
-				llstrcatn(&p, nval(child), &mylen);
+				destrcatn(&p, " ", &mylen);
+				destrcatn(&p, nval(child), &mylen);
 			}
 		} else {
 			break;

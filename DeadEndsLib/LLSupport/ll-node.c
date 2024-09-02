@@ -291,7 +291,7 @@ String node_to_tag (GNode *node, String tag, int len)
 	refn = nval(node);
 	if (len > (int)sizeof(scratch)-1)
 		len = sizeof(scratch)-1;
-	llstrsets(scratch, len, uu8, refn);
+	destrsets(scratch, len, uu8, refn);
 	return scratch;
 }
 /*==============================================
@@ -400,9 +400,9 @@ event_to_string (GNode *node, RFMT rfmt)
 	if (rfmt && rfmt->combopic && date && date[0] && plac && plac[0]) {
 		sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic, date, plac);
 	} else if (date && date[0]) {
-		llstrncpy(scratch1, date, sizeof(scratch1), uu8);
+		destrncpy(scratch1, date, sizeof(scratch1), uu8);
 	} else if (plac && plac[0]) {
-		llstrncpy(scratch1, plac, sizeof(scratch1), uu8);
+		destrncpy(scratch1, plac, sizeof(scratch1), uu8);
 	} else {
 		return NULL;
 	}

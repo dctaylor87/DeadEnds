@@ -217,7 +217,7 @@ translate_string (XLAT ttm, CString in, String out, int maxlen)
 		return;
 	}
 	zstr = translate_string_to_zstring(ttm, in);
-	llstrsets(out, maxlen, uu8, zs_str(zstr));
+	destrsets(out, maxlen, uu8, zs_str(zstr));
 	zs_free(&zstr);
 }
 

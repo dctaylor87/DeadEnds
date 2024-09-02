@@ -147,7 +147,7 @@ archive (BTREE btree, BLOCK block, void * param)
 	struct tag_trav_parm * travparm = (struct tag_trav_parm *)param;
 
 	snprintf(scratch, sizeof(scratch), "%s/%s", bbasedir(btree), fkey2path(ixself(block)));
-	fo = fopen(scratch, LLREADBINARY);
+	fo = fopen(scratch, DEREADBINARY);
 	ASSERT(fo);
 	n = nkeys(block);
 	for (i = 0; i < n; i++) {

@@ -119,7 +119,7 @@ execute_script (CString report_name)
 #if defined(DEADENDS)
   String mode = "r";
 #else
-  String mode = LLREADTEXT;	/* "r" on POSIX, on M$ systems this is "rt" */
+  String mode = DEREADTEXT;	/* "r" on POSIX, on M$ systems this is "rt" */
   String ext = ".py";
   int utf8 = uu8;
   String report_pathname;

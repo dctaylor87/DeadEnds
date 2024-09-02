@@ -562,14 +562,14 @@ print_list_title (char * buffer, int len, const listdisp * ld, CString ttl)
 	ptr[0] = 0;
 	if ((int)strlen(ttl)>len-1) {
 		len -= 4;
-		llstrcatn(&ptr, ttl, &len);
+		destrcatn(&ptr, ttl, &len);
 		len += 4;
-		llstrcatn(&ptr, "...", &len);
+		destrcatn(&ptr, "...", &len);
 	} else {
-		llstrcatn(&ptr, ttl, &len);
+		destrcatn(&ptr, ttl, &len);
 	}
 	len += strlen(suffix)+1; /* we reserved this room above */
-	llstrcatn(&ptr, suffix, &len);
+	destrcatn(&ptr, suffix, &len);
 }
 /*================================================================
  * shw_array_of_strings -- Show string list in list interact window
@@ -595,7 +595,7 @@ shw_array_of_strings (String *strings, listdisp * ld, DETAILFNC detfnc
 	lines = rows + (ld->details ? ld->details+2 : 0);
 	for (i = 0; i<lines; ++i) {
 		row = i+2;
-		llstrncpy(buffer, empstr120, width-1, uu8);
+		destrncpy(buffer, empstr120, width-1, uu8);
 		mvccwaddstr(win, row, 1, buffer);
 	}
 	row = 2;
@@ -611,7 +611,7 @@ shw_array_of_strings (String *strings, listdisp * ld, DETAILFNC detfnc
 		/* for short lists, we show leading numbers */
 		if (ld->listlen<10) {
 			char numstr[12]="";
-			llstrncpyf(numstr, sizeof(numstr), uu8, FMT_INT ": ", i+1);
+			destrncpyf(numstr, sizeof(numstr), uu8, FMT_INT ": ", i+1);
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 			mvccwaddstr(win, row, 4, numstr);
 			nlen = strlen(numstr);
@@ -619,7 +619,7 @@ shw_array_of_strings (String *strings, listdisp * ld, DETAILFNC detfnc
 			if (i == ld->cur) mvwaddch(win, row, 3, '>');
 		}
 		temp = width-6-nlen;
-		llstrncpy(buffer, strings[i], temp, uu8);
+		destrncpy(buffer, strings[i], temp, uu8);
 		if ((int)strlen(buffer) > temp-2) {
 			strcpy(&buffer[temp-3], "...");
 		}
@@ -634,7 +634,7 @@ shw_array_of_strings (String *strings, listdisp * ld, DETAILFNC detfnc
 		for (i=0; i<ld->details; ++i) {
 			/* TODO: scroll */
 			if (!ptr[0]) break;
-			llstrncpy(buffer, ptr, width-5, uu8);
+			destrncpy(buffer, ptr, width-5, uu8);
 			mvccwaddstr(win, row++, 4, buffer);
 			ptr += strlen(buffer);
 		}
@@ -818,13 +818,13 @@ manufacture a listdisp here
 				surcaptype = NOSURCAP;
 			/* NOTE: the 40 here is arbitrary */
 			name = manipulateName(name, surcaptype, REGORDER, 40);
-			llstrapps(scratch, sizeof(scratch), uu8, name);
-			llstrapps(scratch, sizeof(scratch), uu8, " ");
+			destrapps(scratch, sizeof(scratch), uu8, name);
+			destrapps(scratch, sizeof(scratch), uu8, " ");
 		}
 		if(getdeoptint("DisplayKeyTags", 0) > 0) {
-			llstrappf(scratch, sizeof(scratch), uu8, "(i%s)", nxref(recnode));
+			destrappf(scratch, sizeof(scratch), uu8, "(i%s)", nxref(recnode));
 		} else {
-			llstrappf(scratch, sizeof(scratch), uu8, "(%s)", nxref(recnode));
+			destrappf(scratch, sizeof(scratch), uu8, "(%s)", nxref(recnode));
 		}
 		mvccwaddstr(win, row, 4, scratch);
 		row++;

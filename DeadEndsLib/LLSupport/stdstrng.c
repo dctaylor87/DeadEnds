@@ -211,11 +211,11 @@ eqstr_ex (CString s1, CString s2)
 	}
 }
 /*==================================
- * llstrncpy -- strncpy that always zero-terminates
+ * destrncpy -- strncpy that always zero-terminates
  * handles UTF-8
  *================================*/
 char *
-llstrncpy (char *dest, const char *src, size_t n, int utf8)
+destrncpy (char *dest, const char *src, size_t n, int utf8)
 {
 	/* must have valid strings, and copying at least one byte */
 	if (!dest || n<1) return dest;
@@ -249,26 +249,26 @@ llvsnprintf (char *dest, size_t len, int utf8, const char * fmt, va_list args)
 	return rtn;
 }
 /*==================================
- * llstrncpyf -- snprintf replacement
+ * destrncpyf -- snprintf replacement
  * handles UTF-8
  * Created: 2002/06/16, Perry Rapp
  *================================*/
 char *
-llstrncpyf (char *dest, size_t n, int utf8, const char * fmt, ...)
+destrncpyf (char *dest, size_t n, int utf8, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	llstrncpyvf(dest, n, utf8, fmt, args);
+	destrncpyvf(dest, n, utf8, fmt, args);
 	va_end(args);
 	return dest;
 }
 /*==================================
- * llstrncpyvf -- vsnprintf replacement
+ * destrncpyvf -- vsnprintf replacement
  * handles UTF-8
  * Created: 2002/06/16, Perry Rapp
  *================================*/
 char *
-llstrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args)
+destrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args)
 {
 	if (n<1) return dest;
 	dest[0] = 0;

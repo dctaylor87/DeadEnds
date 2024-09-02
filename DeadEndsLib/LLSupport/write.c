@@ -93,7 +93,7 @@ node_to_file (int levl,       /* top level */
               TRANTABLE tt)   /* char map */
 {
 	FILE *fp;
-	if (!(fp = fopen(fname, LLWRITETEXT))) {
+	if (!(fp = fopen(fname, DEWRITETEXT))) {
 		llwprintf("Could not open file: `%s'\n", fname);
 		return false;
 	}
@@ -279,7 +279,7 @@ write_indi_to_file (GNode *indi, CString file)
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	GNode *name, *refn, *sex, *body, *famc, *fams;
 
-	ASSERT(fp = fopen(file, LLWRITETEXT));
+	ASSERT(fp = fopen(file, DEWRITETEXT));
 	prefix_file(fp, ttmo);
 
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
@@ -341,7 +341,7 @@ write_fam_to_file (GNode *fam, CString file)
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	GNode *refn, *husb, *wife, *chil, *body;
 
-	ASSERT(fp = fopen(file, LLWRITETEXT));
+	ASSERT(fp = fopen(file, DEWRITETEXT));
 	prefix_file(fp, ttmo);
 
 	splitFamily(fam, &refn, &husb, &wife, &chil, &body);

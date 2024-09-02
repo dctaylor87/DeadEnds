@@ -134,7 +134,7 @@ create_trantable (String *lefts, String *rights, int n, String name)
 	memset(tt, 0, sizeof(*tt));
 	tt->name[0] = 0;
 	tt->total = n;
-	llstrncpy(tt->name, name, sizeof(tt->name), uu8);
+	destrncpy(tt->name, name, sizeof(tt->name), uu8);
 	for (i = 0; i < 256; i++)
 		tt->start[i] = NULL;
 	/* if empty, n==0, this is valid */
@@ -323,7 +323,7 @@ init_map_from_file (CString file, CString mapname, TRANTABLE * ptt, ZSTR zerr)
 
 	*ptt = 0;
 
-	if ((fp = fopen(file, LLREADTEXT)) == NULL) return true;
+	if ((fp = fopen(file, DEREADTEXT)) == NULL) return true;
 	ASSERT(fstat(fileno(fp), &buf) == 0);
 	if (buf.st_size == 0) {
 		fclose(fp);
@@ -543,7 +543,7 @@ init_map_from_str (String str, CString mapname, TRANTABLE * ptt, ZSTR zerr)
 		rights[n++] = strsave(scratch);
 	}
 	if (!name[0])
-		llstrncpy(name, mapname, sizeof(name), uu8);
+		destrncpy(name, mapname, sizeof(name), uu8);
 	*ptt = create_trantable(lefts, rights, n, name);
 end:
 	for (i = 0; i < n; i++)		/* don't free rights */

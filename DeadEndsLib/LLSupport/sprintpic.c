@@ -51,7 +51,7 @@ printpic_arg (String *b, int max, int utf8, CString arg, int arglen)
 	if (!arglen) return true;
 	if (arglen > max) {
 		/* can't fit it all */
-		llstrncpy(*b, arg, max+1, utf8); 
+		destrncpy(*b, arg, max+1, utf8); 
 		b[max] = 0;
 		return false;
 	} else {

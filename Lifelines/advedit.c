@@ -131,7 +131,7 @@ advanced_person_edit (GNode *root0)
 		  ntag(root0),nval(root0));
 #endif
 	expd = expand_tree(root0);
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	write_nodes(0, fp, NULL, expd, true, true, true);
 	fclose(fp);
 	do_edit();
@@ -151,7 +151,7 @@ advanced_family_edit (GNode *root0)
 		  ntag(root0),nval(root0));
 #endif
 	expd = expand_tree(root0);
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	write_nodes(0, fp, NULL, expd, true, true, true);
 	fclose(fp);
 	do_edit();

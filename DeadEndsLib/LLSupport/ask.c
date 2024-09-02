@@ -239,7 +239,7 @@ ask_for_file_try:
 			ext = NULL;	/* the file name has the extension already */
 		} else {
 			/* add extension and go back and retry */
-			llstrapps(fname, sizeof(fname), uu8, ext);
+			destrapps(fname, sizeof(fname), uu8, ext);
 			ext = NULL; /* only append extension once! */
 			goto ask_for_file_try;
 		}
@@ -259,10 +259,10 @@ make_fname_prompt (String fnamebuf, int len, String ext)
 {
 	if (ISNULL(ext)) {
 		ext = NULL;	/* a null extension is the same as no extension */
-		llstrncpyf(fnamebuf, len, uu8, "%s: ", _(qSwhtfname));
+		destrncpyf(fnamebuf, len, uu8, "%s: ", _(qSwhtfname));
 	}
 	else {
-		llstrncpyf(fnamebuf, len, uu8, _(qSwhtfnameext), ext);
+		destrncpyf(fnamebuf, len, uu8, _(qSwhtfnameext), ext);
 	}
 }
 /*======================================
@@ -483,7 +483,7 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 
 	if(!rec) {
 		char buf[132];
-		llstrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
+		destrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
 		msg_error("%s", buf);
 	}
 #else
@@ -503,9 +503,9 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 	if(!rec) {
 		char buf[132];
 		if (badkeylist[0])
-			llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
+			destrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
 		else
-			llstrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
+			destrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
 		msg_error("%s", buf);
 	}
 #endif

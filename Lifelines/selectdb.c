@@ -59,6 +59,7 @@
 #include "locales.h"
 #include "hashtable.h"
 #include "lloptions.h"
+#include "path.h"
 
 /*********************************************
  * local function prototypes
@@ -183,13 +184,13 @@ open_or_create_database (int alteration, String *dbused)
 		if (newdbdir) {
 			/* newdbdir is static from get_first_path_entry */
 			newdbdir = strdup(newdbdir);
-			concat_path(newdbdir, *dbused, uu8, dbdir, sizeof(dbdir));
+			pathConcat(newdbdir, *dbused, uu8, dbdir, sizeof(dbdir));
 			stdfree((String)newdbdir);
 		} else {
-			llstrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
+			destrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
 		}
 	} else {
-		llstrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
+		destrncpy(dbdir, *dbused, sizeof(dbdir), uu8);
 	}
 	expand_special_fname_chars(dbdir, sizeof(dbdir), uu8);
 	strupdate(dbused, dbdir);

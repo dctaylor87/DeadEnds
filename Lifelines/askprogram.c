@@ -42,6 +42,7 @@
 #include "proptbls.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "path.h"
 
 /*********************************************
  * local function prototypes
@@ -103,10 +104,10 @@ add_program_props (TABLE fileprops)
 	/* first get full path & open file */
 	String fname = valueof_str(fileprops, "filename");
 	String dir = valueof_str(fileprops, "dir");
-	String filepath = concat_path_alloc(dir, fname);
+	String filepath = pathConcatAllocate(dir, fname);
 	char enc_cmd[] = "char_encoding(\"";
 
-	if (NULL == (fp = fopen(filepath, LLREADTEXT)))
+	if (NULL == (fp = fopen(filepath, DEREADTEXT)))
 		goto end_add_program_props;
 
 	/* initialize array where we record metainfo we want */
@@ -126,7 +127,7 @@ add_program_props (TABLE fileprops)
 				++end;
 			if (*end && end>start) {
 				charset=stdalloc(strlen(str));
-				llstrncpy(charset, start, end-start, 0);
+				destrncpy(charset, start, end-start, 0);
 			}
 		}
 		if (!endcomment) {
@@ -253,7 +254,7 @@ ask_for_program (CString mode,
 		TABLE props = fileprops[choice-1];
 		String fname = valueof_str(props, "filename");
 		String dir = valueof_str(props, "dir");
-		String filepath = concat_path_alloc(dir, fname);
+		String filepath = pathConcatAllocate(dir, fname);
 		*pfname = strsave(fname);
 		*pfullpath = filepath;
 	}
@@ -307,10 +308,10 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 		detail[0]=0;
 		if (name) {
 			value = valueof_str(props, name);
-			llstrapps(detail, maxlen, uu8, name);
-			llstrapps(detail, maxlen, uu8, ": ");
+			destrapps(detail, maxlen, uu8, name);
+			destrapps(detail, maxlen, uu8, ": ");
 			if (value) {
-				llstrapps(detail, maxlen, uu8, value);
+				destrapps(detail, maxlen, uu8, value);
 			}
 		}
 	}

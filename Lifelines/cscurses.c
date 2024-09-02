@@ -208,7 +208,7 @@ wgetccnstr (WINDOW *wp, char *cp, int n)
 	int rtn = wgetnstr(wp, (char *)cp, n);
 	zstr = zs_news(cp);
 	disp_to_int(zstr);
-	llstrsets(cp, n, uu8, zs_str(zstr));
+	destrsets(cp, n, uu8, zs_str(zstr));
 	zs_free(&zstr);
 	return rtn;
 }

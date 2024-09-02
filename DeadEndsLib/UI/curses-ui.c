@@ -104,7 +104,7 @@ curses_outputv (ARG_UNUSED(void *data), ARG_UNUSED(char **err_msg),
     break;
   }
   /* now make string to show/put on msg list */
-  llstrncpyvf(ptr, sizeof(buffer)-1, uu8, fmt, args);
+  destrncpyvf(ptr, sizeof(buffer)-1, uu8, fmt, args);
   /* first handle transitory/status messages */
   if (level==MSG_STATUS) {
     if (lock_std_msg)
@@ -167,7 +167,7 @@ display_status (String text)
   WINDOW *win = uiw_win(uiwin);
   int row;
   /* first store it */
-  llstrncpy(status_showing, text, sizeof(status_showing), uu8);
+  destrncpy(status_showing, text, sizeof(status_showing), uu8);
   if ((int)strlen(text)>ll_cols-6) {
     status_showing[ll_cols-8] = 0;
     strcat(status_showing, "...");

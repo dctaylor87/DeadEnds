@@ -195,7 +195,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 /*CONDITION: 1s, 2s - build first version of merged person */
 
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	name3 = unionNodes(name1, name2, true, true);
 	refn3 = unionNodes(refn1, refn2, true, true);
 	sex3  = unionNodes(sex1,  sex2,  true, true);
@@ -512,7 +512,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	}
 
 /* Create merged file with both families together */
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	fam3 = copyNodes(fam2, true, true);
 	fref3 = unionNodes(fref1, fref2, true, true);
 	husb3 = unionNodes(husb1, husb2, true, true);

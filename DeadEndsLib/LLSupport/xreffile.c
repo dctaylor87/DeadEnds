@@ -186,7 +186,7 @@ initxref (void)
 	initdsets();
 	ASSERT(!xreffp);
 	snprintf(scratch, sizeof(scratch), "%s/xrefs", BTR->b_basedir);
-	ASSERT(xreffp = fopen(scratch, LLWRITEBINARY));
+	ASSERT(xreffp = fopen(scratch, DEWRITEBINARY));
 	for (j = 0; j < 10; j++) {
 		ASSERT(fwrite(&i, sizeof(int32_t), 1, xreffp) == 1);
 	}
@@ -207,7 +207,7 @@ openxref (bool readonly)
 	ASSERT(!xreffp);
 	snprintf(scratch, sizeof(scratch), "%s/xrefs", BTR->b_basedir);
 	xrefReadonly = readonly;
-	fmode = xrefReadonly ? LLREADBINARY : LLREADBINARYUPDATE;
+	fmode = xrefReadonly ? DEREADBINARY : DEREADBINARYUPDATE;
 	if (!(xreffp = fopen(scratch, fmode))) {
 		return false;
 	}

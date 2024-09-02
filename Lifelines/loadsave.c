@@ -120,7 +120,7 @@ update_rec_count (int pass, char ctype, String tag, int count)
 	}
 	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
 	if (row == 5 && tag && tag[0])
-		llstrappf(msg, sizeof(msg), uu8, " (%s)", tag);
+		destrappf(msg, sizeof(msg), uu8, " (%s)", tag);
 	row += offset;
 	clear_stdout_hseg(row, 1, 70); /* TODO: how wide should this be ? */
 	wfield(row, 1, msg);
@@ -225,8 +225,8 @@ load_gedcom (bool picklist)
 	time_t beginui = get_uitime();
 
 	srcdir = getdeoptstr("InputPath", ".");
-	if (!ask_for_gedcom(LLREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
-		|| !(fp = fopen(fullpath, LLREADBINARY))) {
+	if (!ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
+		|| !(fp = fopen(fullpath, DEREADBINARY))) {
 		strfree(&fullpath);
 		return;
 	}
@@ -283,7 +283,7 @@ save_gedcom (void)
 	String srcdir=NULL, fname=0, fullpath=0;
 
 	srcdir = getdeoptstr("DEARCHIVES", ".");
-	fp = ask_for_output_file(LLWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
+	fp = ask_for_output_file(DEWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
 	if (!fp) {
 		strfree(&fname);
 		msg_error("%s", _("The database was not saved."));

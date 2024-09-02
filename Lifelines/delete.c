@@ -104,15 +104,15 @@ choose_and_remove_family (void)
 
 	/* build confirm string */
 	n = ISize(spseq);
-	llstrsetf(spouses, sizeof(spouses), uu8
+	destrsetf(spouses, sizeof(spouses), uu8
 		, _pl(FMT_INT " spouse", FMT_INT " spouses", n), n);
 	n = ISize(chseq);
-	llstrsetf(children, sizeof(children), uu8
+	destrsetf(children, sizeof(children), uu8
 		, _pl(FMT_INT " child", FMT_INT " children", n), n);
-	llstrsetf(members, sizeof(members), uu8
+	destrsetf(members, sizeof(members), uu8
 		, _(qScffdeld), fam_to_key(fam), spouses, children);
-	llstrapps(confirm, sizeof(confirm), uu8, _(qScffdel));
-	llstrapps(confirm, sizeof(confirm), uu8, members);
+	destrapps(confirm, sizeof(confirm), uu8, _(qScffdel));
+	destrapps(confirm, sizeof(confirm), uu8, members);
 
 	if (ask_yes_or_no(confirm)) {
 

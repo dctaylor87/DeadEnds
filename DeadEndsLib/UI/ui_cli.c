@@ -182,8 +182,8 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
 	if (len > screen_width-2)
 		len = screen_width-2;
 	curpath[0] = 0;
-	llstrapps(curpath, len, uu8, _(qSiddefpath));
-	llstrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
+	destrapps(curpath, len, uu8, _(qSiddefpath));
+	destrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
 
 	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }

@@ -21,18 +21,17 @@
 
 #include "standard.h"
 #include "llnls.h"
-#include "sys_inc.h"
 
 #include "de-strings.h"
 
 /*==================================
- * llstrapp -- llstrncat except limit includes existing string
+ * destrapp -- destrncat except limit includes existing string
  *  ie, strncat except it always terminates, it handles UTF-8,
  *  and the limit is inclusive of existing contents
  * handles UTF-8
  *================================*/
 char *
-llstrapps (char *dest, size_t limit, int utf8, const char *src)
+destrapps (char *dest, size_t limit, int utf8, const char *src)
 {
 	size_t len;
 	int n;
@@ -43,49 +42,49 @@ llstrapps (char *dest, size_t limit, int utf8, const char *src)
 	if (n < 2) /* must fit trailing zero */
 		return dest;
 
-	llstrncpy(dest+len, src, n, utf8);
+	destrncpy(dest+len, src, n, utf8);
 	return dest;
 }
 /*==================================
- * llstrappc -- llstrapp with a character argument
+ * destrappc -- destrapp with a character argument
  *================================*/
 char *
-llstrappc (char *dest, size_t limit, char ch)
+destrappc (char *dest, size_t limit, char ch)
 {
 	int utf8 = 0;
 	char src[2];
 	src[0] = ch;
 	src[1] = 0;
-	return llstrapps(dest, limit, utf8, src);
+	return destrapps(dest, limit, utf8, src);
 }
 /*==================================
- * llstrappf -- snprintf style append to string,
+ * destrappf -- snprintf style append to string,
  * subject to length limit (including current contents)
  * handles UTF-8
  *================================*/
 char *
-llstrappf (char * dest, int limit, int utf8, const char * fmt, ...)
+destrappf (char * dest, int limit, int utf8, const char * fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	llstrappvf(dest, limit, utf8, fmt, args);
+	destrappvf(dest, limit, utf8, fmt, args);
 	va_end(args);
 	return dest;
 }
 /*==================================
- * llstrappvf -- vsnprintf style append to string,
+ * destrappvf -- vsnprintf style append to string,
  * subject to length limit (including current contents)
  * handles UTF-8
  *================================*/
 char *
-llstrappvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
+destrappvf (char * dest, int limit, int utf8, const char * fmt, va_list args)
 {
 	size_t len = strlen(dest);
 	size_t n = limit-len;
 	if (n < 2) /* must fit trailing zero */
 		return dest;
 
-	return llstrncpyvf(dest+len, n, utf8, fmt, args);
+	return destrncpyvf(dest+len, n, utf8, fmt, args);
 }
 
 

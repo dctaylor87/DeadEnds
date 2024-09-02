@@ -250,7 +250,7 @@ append_to_text_list (List *list, String text, int width, bool newline)
 	curptr = current;
 	curlen = width;
 	if (temp) {
-		llstrcatn(&curptr, temp, &curlen);
+		destrcatn(&curptr, temp, &curlen);
 	}
 	while (1) {
 		len = strlen(ptr);
@@ -265,7 +265,7 @@ append_to_text_list (List *list, String text, int width, bool newline)
 		if (len > curlen)
 			len = curlen;
 		temp = curptr;
-		llstrcatn(&curptr, ptr, &curlen);
+		destrcatn(&curptr, ptr, &curlen);
 		ptr += (curptr - temp);
 		if (!curlen) {
 			/* filled up an item */
@@ -305,12 +305,12 @@ add_dnodes (GNode *node, int gen, int indent, int maxgen, int * count, CANVASDAT
 	mylen = sizeof(line);
 
 	if (nxref(node)) {
-		llstrcatn(&ptr, nxref(node), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
+		destrcatn(&ptr, nxref(node), &mylen);
+		destrcatn(&ptr, " ", &mylen);
 	}
 	if (ntag(node)) {
-		llstrcatn(&ptr, ntag(node), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
+		destrcatn(&ptr, ntag(node), &mylen);
+		destrcatn(&ptr, " ", &mylen);
 	}
 	leader = ptr-line;
 	width -= leader;
@@ -359,7 +359,7 @@ add_dnodes (GNode *node, int gen, int indent, int maxgen, int * count, CANVASDAT
 			int i;
 			tn = tn1;
 			/* ptr & mylen still point after leader */
-			llstrcatn(&ptr, el, &mylen);
+			destrcatn(&ptr, el, &mylen);
 			/* put original line */
 			tn1->str = strsave(line);
 			/* now build leader we will keep reusing */
@@ -367,7 +367,7 @@ add_dnodes (GNode *node, int gen, int indent, int maxgen, int * count, CANVASDAT
 				line[i] = '.';
 			line[leader-1] = ' ';
 		} else {
-			llstrcatn(&ptr, el, &mylen);
+			destrcatn(&ptr, el, &mylen);
 			tn1->str = strsave(line);
 		}
 		/* now we keep resetting ptr & mylen to after blank leader */
@@ -485,10 +485,10 @@ print_to_screen (int gen, int indent, int * row, LINEPRINT_FNC fnc
 			overflow=1;
 		strcpy(ptr, "");
 		for (i=0; i<gen*indent; i++)
-			llstrcatn(&ptr, " ", &mylen);
+			destrcatn(&ptr, " ", &mylen);
 		/* call thru fnc pointer to make string */
 		line = (*fnc)(mylen, lpf_param);
-		llstrcatn(&ptr, line, &mylen);
+		destrcatn(&ptr, line, &mylen);
 		/* tell canvas to put line out */
 		(*canvas->line)(canvas, drow, canvas->rect->left, buffer, overflow);
 	}
@@ -530,23 +530,23 @@ node_lineprint (int width, void * param)
 	if (mylen>width)
 		mylen=width;
 	if (nxref(node)) {
-		llstrcatn(&ptr, nxref(node), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
+		destrcatn(&ptr, nxref(node), &mylen);
+		destrcatn(&ptr, " ", &mylen);
 	}
 	if (ntag(node)) {
-		llstrcatn(&ptr, ntag(node), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
+		destrcatn(&ptr, ntag(node), &mylen);
+		destrcatn(&ptr, " ", &mylen);
 	}
 	if (nval(node)) {
-		llstrcatn(&ptr, nval(node), &mylen);
-		llstrcatn(&ptr, " ", &mylen);
+		destrcatn(&ptr, nval(node), &mylen);
+		destrcatn(&ptr, " ", &mylen);
 	}
 	if (npp->gdvw == GDVW_EXPANDED && nval(node)) {
 		String key = rmvat(nval(node)), str;
 		if (key) {
 			str = generic_to_list_string(NULL, key, mylen, ",", false, true, currentDatabase);
-			llstrcatn(&ptr, " : ", &mylen);
-			llstrcatn(&ptr, str, &mylen);
+			destrcatn(&ptr, " : ", &mylen);
+			destrcatn(&ptr, str, &mylen);
 		}
 	}
 	return line;

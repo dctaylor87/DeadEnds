@@ -353,10 +353,10 @@ pick_create_new_family (RecordIndexEl *current, RecordIndexEl *save, String * ad
 	} else if (save) {
 		char scratch[100];
 		String name = personToName(nztop(save), 55);
-		llstrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
+		destrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
 			String key = rmvat(nxref(nztop(save)))+1;
-			llstrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
+			destrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
 		}
 		if (ask_yes_or_no(scratch))
 			rec = add_family_by_edit(current, save, NULL, false);
@@ -1701,7 +1701,7 @@ save_nkey_list (CString key, struct hist * histp)
 
 	unlink(editfile);
 
-	fp = fopen(editfile, LLWRITETEXT);
+	fp = fopen(editfile, DEWRITETEXT);
 	if (!fp) return;
 
 	/* write count first -- twice just to take up 8 bytes same as records */

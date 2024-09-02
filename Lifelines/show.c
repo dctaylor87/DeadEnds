@@ -318,13 +318,13 @@ init_display_indi (RecordIndexEl *irec, int width)
 
 	fth = personToFather(pers, currentDatabase);
 	s = person_display(fth, NULL, width-13);
-	if (s) llstrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
-	else llstrncpyf(Sfath, liwidth, uu8, "  %s:", _(qSdspl_fath));
+	if (s) destrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
+	else destrncpyf(Sfath, liwidth, uu8, "  %s:", _(qSdspl_fath));
 
 	mth = personToMother(pers, currentDatabase);
 	s = person_display(mth, NULL, width-13);
-	if (s) llstrncpyf(Smoth, liwidth, uu8, "  %s: %s", _(qSdspl_moth), s);
-	else llstrncpyf(Smoth, liwidth, uu8, "  %s:", _(qSdspl_moth));
+	if (s) destrncpyf(Smoth, liwidth, uu8, "  %s: %s", _(qSdspl_moth), s);
+	else destrncpyf(Smoth, liwidth, uu8, "  %s:", _(qSdspl_moth));
 
 	Solen = 0;
 	nsp = nch = 0;
@@ -402,7 +402,7 @@ show_indi_vitals (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
 	listbadkeys = 0;
 	if(badkeylist[0]) {
 		char buf[132];
-		llstrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
+		destrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
 		msg_error("%s", buf);
 	}
 }
@@ -416,11 +416,11 @@ add_spouse_line (ATTRIBUTE_UNUSED int num, GNode *indi, GNode *fam, int width)
 	int mylen=liwidth;
 	if (Solen >= MAXOTHERS) return;
 	if (mylen>width) mylen=width;
-	llstrcatn(&ptr, " ", &mylen);
-	llstrcatn(&ptr, _(qSdspl_spouse), &mylen);
-	llstrcatn(&ptr, ": ", &mylen);
+	destrcatn(&ptr, " ", &mylen);
+	destrcatn(&ptr, _(qSdspl_spouse), &mylen);
+	destrcatn(&ptr, ": ", &mylen);
 	line = person_display(indi, fam, mylen-1);
-	llstrcatn(&ptr, line, &mylen);
+	destrcatn(&ptr, line, &mylen);
 	++Solen;
 }
 /*===========================================
@@ -434,9 +434,9 @@ add_child_line (int num, GNode *node, int width)
 	if (Solen >= MAXOTHERS) return;
 	line = person_display(node, NULL, width-15);
 	if (number_child_enable)
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
+		destrncpyf(Sothers[Solen], liwidth, uu8, "  " FMT_INT_2 "%s: %s", num, child, line);
 	else
-		llstrncpyf(Sothers[Solen], liwidth, uu8, "  "           "%s: %s",      child, line);
+		destrncpyf(Sothers[Solen], liwidth, uu8, "  "           "%s: %s",      child, line);
 	Sothers[Solen++][width-2] = 0;
 }
 /*==============================================
@@ -521,8 +521,8 @@ init_display_fam (RecordIndexEl *frec, int width)
 	s = sh_indi_to_event_long(fam, "MARR", _(qSdspl_mar), width-3);
 	if (!s) s = sh_indi_to_event_long(fam, "MARC", _(qSdspl_marc), width-3);
 	if (!s) s = sh_indi_to_event_long(fam, "ENGA", _(qSdspl_eng), width-3);
-	if (s) llstrncpyf(Smarr, liwidth, uu8, "%s", s);
-	else llstrncpyf(Smarr, liwidth, uu8, "%s", _(qSdspl_mar));
+	if (s) destrncpyf(Smarr, liwidth, uu8, "%s", s);
+	else destrncpyf(Smarr, liwidth, uu8, "%s", _(qSdspl_mar));
 
 	/* append divorce to marriage line, if room */
 	/* (Might be nicer to make it a separate, following line */
@@ -530,7 +530,7 @@ init_display_fam (RecordIndexEl *frec, int width)
 	if (wtemp > 10) {
 		s = sh_indi_to_event_long(fam, "DIV", _(qSdspa_div), wtemp);
 		if (s)
-			llstrncpyf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), uu8, ", %s", s);
+			destrncpyf(Smarr+strlen(Smarr), liwidth-strlen(Smarr), uu8, ", %s", s);
 	}
 
 	Solen = 0;
@@ -737,8 +737,8 @@ indi_to_ped_fix (GNode *indi, int len)
 static bool
 append_event (String * pstr, String evt, int * plen, int minlen)
 {
-	llstrcatn(pstr, ", ", plen);
-	llstrcatn(pstr, evt, plen);
+	destrcatn(pstr, ", ", plen);
+	destrcatn(pstr, evt, plen);
 	return *plen >= minlen;
 }
 /*=============================================
@@ -830,16 +830,16 @@ indi_events (String outstr, GNode *indi, int len)
 	if (!evt)
 		evt = sh_indi_to_event_shrt(indi, "CHR", _(qSdspa_chr), width);
 	if (evt) {
-		llstrcatn(&p, ", ", &mylen);
-		llstrcatn(&p, evt, &mylen);
+		destrcatn(&p, ", ", &mylen);
+		destrcatn(&p, evt, &mylen);
 	}
 	if (p == outstr)
 		width = len;
 	evt = sh_indi_to_event_shrt(indi, "DEAT", _(qSdspa_dea), width);
 	if (!evt) evt = sh_indi_to_event_shrt(indi, "BURI", _(qSdspa_bur), width);
 	if (evt) {
-		llstrcatn(&p, ", ", &mylen);
-		llstrcatn(&p, evt, &mylen);
+		destrcatn(&p, ", ", &mylen);
+		destrcatn(&p, evt, &mylen);
 	}
 }
 /*==========================================================
@@ -1000,7 +1000,7 @@ put_out_line (UIWINDOW uiwin, int y, int x, String string, int maxcol, int flag)
 	/* TODO: Should convert to output codeset now, before limiting text */
 
 	/* copy into local buffer (here we enforce maxcol) */
-	llstrncpy(buffer, string, buflen, uu8);
+	destrncpy(buffer, string, buflen, uu8);
 	if (flag) {
 		/* put ++ against right, padding if needed */
 		int i = strlen(buffer);

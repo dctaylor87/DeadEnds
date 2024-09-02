@@ -37,6 +37,7 @@
 #include "lloptions.h"
 #include "de-strings.h"
 #include "messages.h"
+#include "path.h"
 
 //#if !defined(NUMBER_CONFIG_BUCKETS)
 //#define NUMBER_CONFIG_BUCKETS	5
@@ -167,7 +168,7 @@ dir_from_file (String file)
 	String thisdir = strdup(file);
 	String ptr;
 	for (ptr=thisdir+strlen(thisdir)-1; ptr>thisdir; --ptr) {
-		if (is_dir_sep(*ptr))
+		if (isDirSep(*ptr))
 			break;
 	}
 	*ptr = 0;
@@ -187,7 +188,7 @@ load_config_file (String file, String * pmsg, String *chain)
 	bool failed, noesc;
 	char buffer[MAXLINELEN],valbuf[MAXLINELEN];
 	int len;
-	fp = fopen(file, LLREADTEXT);
+	fp = fopen(file, DEREADTEXT);
 	if (!fp) {
 		free(thisdir);
 		return 0; /* 0 for not found */
@@ -228,7 +229,7 @@ load_config_file (String file, String * pmsg, String *chain)
 		the output (valbuf) is no longer than the input (ptr)
 		*/
 		if (noesc)
-			llstrncpy(valbuf, ptr, sizeof(valbuf), uu8);
+			destrncpy(valbuf, ptr, sizeof(valbuf), uu8);
 		else
 			copy_process(valbuf, ptr);
 		expand_variables(valbuf, sizeof(valbuf));
@@ -458,27 +459,4 @@ static void
 send_notifications (void)
 {
 	notify_listeners(&f_notifications);
-}
-
-/* is_dir_sep -- Is the character a directory separator character?
-   handle WIN32 characters */
-
-#if defined(WIN32) && ! defined(__CYGWIN__)
-
-#define LLCHRDIRSEPARATOR '\\'
-
-#else
-
-#define LLCHRDIRSEPARATOR '/'
-
-#endif
-
-bool
-is_dir_sep (char c)
-{
-#ifdef WIN32
-	return c==LLCHRDIRSEPARATOR || c=='/';
-#else
-	return c==LLCHRDIRSEPARATOR;
-#endif
 }

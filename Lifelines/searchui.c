@@ -142,22 +142,22 @@ repaint_search_menu (UIWINDOW uiwin)
 	mvccwaddstr(win, row++, 2, title);
 	n = get_vhist_len();
 	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer), uu8
+		destrncpyf(buffer, sizeof(buffer), uu8
 			, _pl("v  Review visit history (" FMT_INT " record)"
 			, "v  Review visit history (" FMT_INT " records)"
 			, n), n);
 	} else {
-		llstrncpy(buffer, _("(visit history is empty)"), sizeof(buffer), uu8);
+		destrncpy(buffer, _("(visit history is empty)"), sizeof(buffer), uu8);
 	}
 	mvccwaddstr(win, row++, 4, buffer);
 	n = get_chist_len();
 	if (n>0) {
-		llstrncpyf(buffer, sizeof(buffer), uu8
+		destrncpyf(buffer, sizeof(buffer), uu8
 			, _pl("c  Review change history (" FMT_INT " record)"
 			, "c  Review change history (" FMT_INT " records)"
 			, n), n);
 	} else {
-		llstrncpy(buffer, _("(change history is empty)")
+		destrncpy(buffer, _("(change history is empty)")
 			, sizeof(buffer), uu8);
 	}
 	mvccwaddstr(win, row++, 4, buffer);

@@ -122,7 +122,7 @@ add_indi_by_edit (bool rfmt)
 
 /* Create person template for user to edit */
 
-	if (!(fp = fopen(editfile, LLWRITETEXT)))
+	if (!(fp = fopen(editfile, DEWRITETEXT)))
 		return NULL;
 	prefix_file_for_edit(fp);
 
@@ -170,7 +170,7 @@ add_indi_by_edit (bool rfmt)
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
 			char msgb[120];
-			llstrncpyf(msgb, sizeof(msgb), uu8
+			destrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSireditopt))) {
 				write_indi_to_file_for_edit(indi, editfile, rfmt, currentDatabase);
@@ -623,7 +623,7 @@ editfam:
 
 /* Prepare file for user to edit */
 
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	prefix_file_for_edit(fp);
 
 	write_nodes(0, fp, ttmo, fam1, true, true, true);
@@ -667,7 +667,7 @@ editfam:
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
 			char msgb[120];
-			llstrncpyf(msgb, sizeof(msgb), uu8
+			destrncpyf(msgb, sizeof(msgb), uu8
 				, get_unresolved_ref_error_string(cnt), cnt);
 			if (ask_yes_or_no_msg(msgb, _(qSfreditopt))) {
 				write_fam_to_file_for_edit(fam2, editfile, rfmt, currentDatabase);
@@ -768,7 +768,7 @@ add_family_to_db (GNode *spouse1, GNode *spouse2, GNode *child)
 
 /* Create file */
 
-	ASSERT(fp = fopen(editfile, LLWRITETEXT));
+	ASSERT(fp = fopen(editfile, DEWRITETEXT));
 	write_nodes(0, fp, tto, fam1, true, true, true);
 	write_nodes(1, fp, tto, husb, true, true, true);
 	write_nodes(1, fp, tto, wife, true, true, true);
