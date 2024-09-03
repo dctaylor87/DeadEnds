@@ -25,6 +25,8 @@
 #include "ll-node.h"
 #include "sequence.h"
 #include "ui.h"
+#include "xref.h"
+#include "ll-sequence.h"
 
 #include "python-to-c.h"
 #include "types.h"

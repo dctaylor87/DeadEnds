@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include "standard.h"
+#include "de-strings.h"
 #include "path.h"
 
 #define MAXPATHBUFFER 1024

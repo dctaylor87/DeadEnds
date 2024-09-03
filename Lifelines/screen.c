@@ -83,6 +83,7 @@
 #include "de-strings.h"
 #include "ui.h"
 #include "lloptions.h"
+#include "version.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

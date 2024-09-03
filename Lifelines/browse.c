@@ -77,6 +77,7 @@
 #include "ui.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "ask.h"
 
 #include "llpy-externs.h"
 

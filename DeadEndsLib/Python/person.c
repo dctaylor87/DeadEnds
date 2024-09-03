@@ -26,6 +26,7 @@
 #include "py-messages.h"
 #include "sequence.h"
 #include "ui.h"
+#include "xref.h"
 
 #include "python-to-c.h"
 #include "llpy-externs.h"

@@ -75,6 +75,7 @@
 #include "interp.h"
 #include "signals.h"
 #include "errlog.h"
+#include "version.h"
 
 /* for parser debugging */
 extern int yydebug;
