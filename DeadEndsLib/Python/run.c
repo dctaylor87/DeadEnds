@@ -14,7 +14,7 @@
 
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
-#include "llnls.h"
+#include "denls.h"
 #include "path.h"		/* fopenPath */
 #include "refnindex.h"
 #include "gnode.h"

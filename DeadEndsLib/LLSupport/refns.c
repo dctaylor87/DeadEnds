@@ -9,7 +9,7 @@
 
 #include "porting.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "hashtable.h"
 #include "refnindex.h"

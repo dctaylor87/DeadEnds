@@ -32,7 +32,7 @@
 #include <ansidecl.h>
 
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "de-strings.h"
 

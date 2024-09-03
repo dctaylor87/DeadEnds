@@ -36,7 +36,7 @@
 
 #include "porting.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "codesets.h"
 #include "de-strings.h"

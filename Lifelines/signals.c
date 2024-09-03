@@ -42,7 +42,7 @@
 #include "ll-porting.h"
 #include "sys_inc.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "zstr.h"
 #include "list.h"

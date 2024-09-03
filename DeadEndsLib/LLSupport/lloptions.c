@@ -20,7 +20,7 @@
 
 #include "porting.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #ifdef HAVE_LOCALE_H
 #include <locale.h>

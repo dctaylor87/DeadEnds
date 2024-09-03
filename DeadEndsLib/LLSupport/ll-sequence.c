@@ -14,7 +14,7 @@
 #include <ansidecl.h>
 #include <stdint.h>
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "gnode.h"
 #include "recordindex.h"

@@ -25,7 +25,7 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "refnindex.h"
 #include "gnode.h"

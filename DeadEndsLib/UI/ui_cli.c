@@ -37,7 +37,7 @@
 #include <stdint.h>
 
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 #include "sequence.h"
 #include "feedback.h"
 #include "readwrite.h"

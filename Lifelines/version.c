@@ -41,7 +41,7 @@
 
 #include "sys_inc.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 #include "version.h"
 #include "messages.h"
 #include "de-strings.h"

@@ -43,7 +43,7 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "llgettext.h"
 #include "locales.h"

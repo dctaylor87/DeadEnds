@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 #include "sequence.h"
 #include "ui.h"
 #include "messages.h"

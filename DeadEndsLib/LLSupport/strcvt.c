@@ -41,7 +41,7 @@
 #include "porting.h"
 #include "standard.h"
 #include "sys_inc.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "zstr.h"
 #include "icvt.h"

@@ -38,7 +38,7 @@
 #include <ansidecl.h>
 
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 
 #include "norm_charmap.h"
 

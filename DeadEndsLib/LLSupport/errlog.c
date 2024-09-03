@@ -34,7 +34,7 @@
 #include <time.h>
 
 #include "standard.h"
-#include "llnls.h"
+#include "denls.h"
 #include "sys_inc.h"
 
 //#include "liflines.h"
