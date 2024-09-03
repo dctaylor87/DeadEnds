@@ -6,7 +6,6 @@
 noinst_LIBRARIES = libllsupport.a
 
 libllsupport_a_SOURCES = \
-	appendstr.c \
 	ask.c \
 	brwslist.c \
 	charmaps.c \
@@ -16,7 +15,6 @@ libllsupport_a_SOURCES = \
 	equaliso.c \
 	errlog.c \
 	expandvars.c \
-	fpattern.c \
 	gstrings.c \
 	icvt.c \
 	listener.c \
@@ -37,18 +35,22 @@ libllsupport_a_SOURCES = \
 	replace.c \
 	rptui.c \
 	sprintpic.c \
-	stdstrng.c \
-	strapp.c \
 	strcvt.c \
-	strset.c \
-	strutf8.c \
-	strwhite.c \
 	translat.c \
 	valid.c \
 	write.c \
 	xlat.c \
 	xref.c \
 	xreffile.c
+
+#	appendstr.c \
+#	fpattern.c \
+#	stdstrng.c \
+#	strapp.c \
+#	strset.c \
+#	strutf8.c \
+#	strwhite.c \
+#
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \

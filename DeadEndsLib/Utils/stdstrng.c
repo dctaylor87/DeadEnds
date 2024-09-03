@@ -137,9 +137,6 @@ islinebreak (int c)
 bool
 isletter (int c)
 {
-#if !defined(DEADENDS)
-	if (opt_mychar) return mych_isalpha(c);
-#endif
 #ifndef OS_NOCTYPE
 	return isalpha(c);
 #else
@@ -160,9 +157,6 @@ isasciiletter (int c)
 int
 ll_toupper (int c)
 {
-#if !defined(DEADENDS)
-	if (opt_mychar) return mych_toupper(c);
-#endif
 #ifndef OS_NOCTYPE
 	/* use run-time library */
 	if (islower(c)) return toupper(c);
@@ -178,9 +172,6 @@ ll_toupper (int c)
 int
 ll_tolower (int c)
 {
-#if !defined(DEADENDS)
-	if (opt_mychar) return mych_tolower(c);
-#endif
 #ifndef OS_NOCTYPE
 	/* use run-time library */
 	if (isupper(c)) return tolower(c);

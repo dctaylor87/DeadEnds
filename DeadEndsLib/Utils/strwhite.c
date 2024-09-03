@@ -46,19 +46,6 @@ skipws (String * ptr)
 		++(*ptr);
 }
 
-#if !defined(DEADENDS)		/* now part of Utils/standard.c */
-/*=========================================
- * allwhite -- Check if string is all white
- *=======================================*/
-bool
-allwhite (String p)
-{
-	while (*p)
-		if (!iswhite((u_char)*p++)) return false;
-	return true;
-}
-#endif
-
 /*============================================
  * chomp -- remove any trailing carriage return/linefeed
  * Created: 2002/01/03 (Perry Rapp)
