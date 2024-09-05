@@ -43,15 +43,6 @@ libllsupport_a_SOURCES = \
 	xref.c \
 	xreffile.c
 
-#	appendstr.c \
-#	fpattern.c \
-#	stdstrng.c \
-#	strapp.c \
-#	strset.c \
-#	strutf8.c \
-#	strwhite.c \
-#
-
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
 	-I$(top_srcdir)/DeadEndsLib/LLSupport/Includes \
