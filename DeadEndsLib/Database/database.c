@@ -239,9 +239,9 @@ void summarizeDatabase(Database* database) {
 		return;
 	}
 	printf("Summary of database: %s.\n", database->filePath);
-	if (database->personIndex) printf("\tPerson index: %d records\n", sizeHashTable(database->personIndex));
-	if (database->familyIndex) printf("\tFamily index: %d records\n", sizeHashTable(database->familyIndex));
-	if (database->recordIndex) printf("\tRecord index: %d records\n", sizeHashTable(database->recordIndex));
+	if (database->personIndex) printf("\tPerson index: %d records.\n", sizeHashTable(database->personIndex));
+	if (database->familyIndex) printf("\tFamily index: %d records.\n", sizeHashTable(database->familyIndex));
+	if (database->recordIndex) printf("\tRecord index: %d records.\n", sizeHashTable(database->recordIndex));
 	if (database->nameIndex) {
 		int numNames, numRecords;
 		getNameIndexStats(database->nameIndex, &numNames, &numRecords);

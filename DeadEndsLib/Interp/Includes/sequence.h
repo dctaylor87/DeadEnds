@@ -35,7 +35,6 @@ typedef struct Sequence {
 } Sequence;
 
 SequenceEl* createSequenceEl(Database*, CString key, void* value);
-
 Sequence* createSequence(Database*);
 void deleteSequence(Sequence*);
 Sequence* copySequence(Sequence*);
@@ -49,7 +48,7 @@ bool removeFromSequence(Sequence*, CString key);
 bool removeFromSequenceByIndex (Sequence *sequence, int index);
 void nameSortSequence(Sequence*);
 void keySortSequence(Sequence*);
-void valueSortSequence(Sequence*);
+//void valueSortSequence(Sequence*);
 Sequence *uniqueSequence(Sequence*);
 void uniqueSequenceInPlace(Sequence *sequence);
 
@@ -75,8 +74,8 @@ Sequence* spouseSequence(Sequence*);
 Sequence* ancestorSequence(Sequence*, bool close);
 Sequence* descendentSequence(Sequence*, bool close);
 Sequence* siblingSequence(Sequence*, bool close);
-bool elementFromSequence(Sequence* seq, int index, CString* key, CString* name);
-void renameElementInSequence(Sequence* seq, CString key);
+bool elementFromSequence(Sequence* sequence, int index, CString* key, CString* name);
+void renameElementInSequence(Sequence* sequence, CString key);
 void sequenceToGedcom(Sequence*, FILE*);
 void showSequence(Sequence*, String title);
 

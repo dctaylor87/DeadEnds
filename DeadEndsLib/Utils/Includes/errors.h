@@ -44,8 +44,6 @@ Error *createError(ErrorType type, CString fileName, int lineNumber, String mess
 extern void setSeverityError(Error *error, ErrorSeverity severity);
 void deleteError(Error*);
 void addErrorToLog(ErrorLog*, Error*);
-extern void oldAddErrorToLog(ErrorLog *errorLog, ErrorType errorType,
-			     CString fileName, int lineNumber, String message);
 void showErrorLog(ErrorLog*);
 void showError(Error*);
 

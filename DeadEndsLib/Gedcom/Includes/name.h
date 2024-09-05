@@ -15,8 +15,6 @@ typedef struct Database Database;
 // Some functions use static dataspace to construct names. MAXNAMELEN is the maximum length.
 #define MAXNAMELEN 512
 
-// Prototypes of functions defined in names.c.
-//--------------------------------------------------------------------------------------------------
 extern String upsurname(CString name); // Make a Gedcom name have an all uppercase surname.
 // User interface to name functions.
 String manipulateName(CString, bool caps, bool reg, int maxlen); // Manipulate a name.

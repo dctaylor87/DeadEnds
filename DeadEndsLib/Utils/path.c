@@ -18,7 +18,7 @@ CString resolveFile(CString name, CString path) {
 	if (!path || *path == 0) return name;
 	if (*name == '/' || *name == '.') return name; // Bug: . could be part of name.
 	if (strlen(name) + strlen(path) >= MAXPATHBUFFER) return null;
-	unsigned char buf1[MAXPATHBUFFER];
+	unsigned char buf1[strlen(path) + 2];
 	strcpy((String) buf1, path);
 	String p = (String) buf1; // Convert :'s to 0's.
 	int c;
@@ -28,7 +28,7 @@ CString resolveFile(CString name, CString path) {
 	}
 	*(++p) = 0; // Extra 0.
 	p = (String) buf1;
-	unsigned char buf2[MAXPATHBUFFER]; // Full file names.
+	unsigned char buf2[strlen(path) + strlen(name) + 2]; // Full file names.
 	String q;
 	while (*p) {
 		q = (String) buf2;

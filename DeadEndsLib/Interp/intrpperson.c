@@ -367,7 +367,7 @@ extern int rootNameCompare(void* a, void* b);
 extern String rootNameGet(void* a);
 extern void checkPersonRoots(RootList*);
 
-PValue __firstindi (PNode* pnode, Context* context, bool* eflg) {
+PValue __firstindi(PNode* pnode, Context* context, bool* eflg) {
 	List *personRoots = context->database->personRoots;
 	if (!personRoots || lengthList(personRoots) == 0) {
 		*eflg = true;

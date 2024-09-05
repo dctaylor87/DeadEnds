@@ -1,10 +1,9 @@
 // DeadEnds
 //
-// readnode.c has the functions that read GNodes (Gedcom nodes) and GNode trees from files
-// and strings.
+// readnode.c has the functions that read GNodes and GNode trees from files and Strings.
 //
 // Created by Thomas Wetmore on 17 December 2022.
-// Last changed on 10 August 2024.
+// Last changed on 3 September 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -28,8 +27,8 @@ String xtag;
 String xvalue;
 static bool ateof = false;
 
-// extractFields processes a String with a Gedcom line into its fields. Important: pkey, ptag and
-// pvalue point into the original String.
+// extractFields processes a String with a Gedcom line into its fields.
+// MNOTE: pkey, ptag and pvalue point into the original String.
 static ReadReturn extractFields(String p, int* plevel, String* pkey, String *ptag,
 						String* pvalue, String* errorString) {
 	*pvalue = "";
@@ -105,7 +104,6 @@ ReadReturn fileToLine(FILE* fp, int* pline, int* plevel, String* pkey, String* p
 	}
 	return extractFields(p, plevel, pkey, ptag, pvalue, err);
 }
-
 
 // stringToLine gets the next Gedcom line as fields from a String with one or more Gedcom lines.
 // Reads to the next newline, if any, and processes that part of the String. Returns updated

@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "standard.h"
 
-String format_date (CString str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx);
+String formatDate (CString str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx);
 void extractDate(CString, int*, int*, int*, int*, String*);
 extern String get_date(void);
 

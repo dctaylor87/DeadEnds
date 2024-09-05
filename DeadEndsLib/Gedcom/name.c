@@ -193,21 +193,24 @@ static void squeeze(CString in, String out) {
     }
 }
 
-// personKeysFromName finds all persons with a name that matches a given name; returns an
-// array of Strings with the record keys; pcount set to number of Strings.
-String* personKeysFromName(CString name, Database* database, int* pcount)
-{
+// personKeysFromName finds all persons with a name that matches a given name pattern; returns
+// an array of Strings with the record keys; pcount set to number of Strings. The strings are
+// the elements in a static block. See MNOTE below.
+// MNOTE: This function uses a static Block to hold record keys. It is reused on every call.
+// MNOTE: Caller must save the returned Strings if they are to persist.
+String* personKeysFromName(CString name, Database* database, int* pcount) {
     static bool first = true;
-	static Block recordKeys; // Dangerous state variable.
+	static Block recordKeys; // See MNOTE above.
     if (first) {
 		initBlock(&recordKeys);
         first = false;
     }
 	if (pcount) *pcount = 0;
-    Set *keySet = searchNameIndex(database->nameIndex, name); // Keys of persons who match.
+	// Get Set of person keys with names that match the pattern.
+    Set *keySet = searchNameIndex(database->nameIndex, name);
     if (!keySet || lengthSet(keySet) == 0) return null;
+	// Copy person keys with matching names to a Block.
     emptyBlock(&recordKeys, null);
-
 	int count = 0;
 	List* list = listOfSet(keySet);
 	FORLIST(list, recordKey)
@@ -333,8 +336,7 @@ CString trimName(CString name, int len) {
 }
 
 // nameToParts converts a Gedcom name to its parts; keep slashes.
-static void nameToParts(CString name, String* parts)
-{
+static void nameToParts(CString name, String* parts) {
     static char scratch[MAXNAMELEN+1];
     String p = scratch;
     int c, i = 0;

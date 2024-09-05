@@ -50,7 +50,7 @@
 #endif
 
 FILE *fopenPath(CString fileName, CString mode, CString searchPath);
-CString resolveFile(CString name, CString path);
+CString resolveFile(CString fileName, CString searchPath);
 String lastPathSegment(CString fileName);
 bool pathMatch (CString path1, CString path2);
 String pathConcatAllocate (CString dir, CString file);

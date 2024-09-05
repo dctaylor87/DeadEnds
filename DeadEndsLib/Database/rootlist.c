@@ -10,8 +10,6 @@
 #include "rootlist.h"
 #include "gnode.h"
 
-static bool compareDebugging = true;
-
 // getKey is the get key function for RootLists.
 static CString getKey(void* element) {
 	return ((GNode*) element)->key;
