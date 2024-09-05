@@ -177,7 +177,7 @@ main (int argc, char *argv[])
   if (! currentDatabase)
     {
       fprintf (stderr, "%s: import failed\n", ProgName);
-      /* XXX figure out how to print 'error_log' XXX */
+      showErrorLog (&error_log);
       exit (1);
     }
 
