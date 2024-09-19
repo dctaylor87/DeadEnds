@@ -39,6 +39,7 @@ typedef struct Database {
 #if 0
     CString backupPath;	// path of the most recent backup, if any
 #endif
+	uint8_t longestKeySeen; // Length of longest key added to database.
 } Database;
 
 extern Database *currentDatabase;
