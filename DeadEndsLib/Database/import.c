@@ -69,19 +69,38 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 	RecordIndex* personIndex = createRecordIndex();
 	RecordIndex* familyIndex = createRecordIndex();
 	RecordIndex* recordIndex = createRecordIndex();
+	RecordIndex* sourceIndex = createRecordIndex();
+	RecordIndex* eventIndex = createRecordIndex();
+	RecordIndex* otherIndex = createRecordIndex();
 	RootList* personRoots = createRootList();
 	RootList* familyRoots = createRootList();
 	FORLIST(rootList, element)
 		GNodeListEl* el = (GNodeListEl*) element;
 		GNode* root = el->node;
 		if (root->key) addToRecordIndex(recordIndex, root->key, root, el->line);
-		if (recordType(root) == GRPerson) {
+		switch (recordType (root))
+		  {
+		  case GRPerson:
 			addToRecordIndex(personIndex, root->key, root, el->line);
 			insertInRootList(personRoots, root);
-		} else if (recordType(root) == GRFamily) {
+			break;
+		  case GRFamily:
 			addToRecordIndex(familyIndex, root->key, root, el->line);
 			insertInRootList(familyRoots, root);
-		}
+			break;
+		  case GRSource:
+			addToRecordIndex (sourceIndex, root->key, root, el->line);
+			break;
+		  case GREvent:
+			addToRecordIndex (eventIndex, root->key, root, el->line);
+			break;
+		  case GROther:
+			addToRecordIndex (otherIndex, root->key, root, el->line);
+			break;
+		  case GRHeader:
+			break;
+		  default:
+		  }
 	ENDLIST
 	deleteGNodeList(rootList, false);
 	// Create the Database and add the indexes.
@@ -89,6 +108,9 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 	database->recordIndex = recordIndex;
 	database->personIndex = personIndex;
 	database->familyIndex = familyIndex;
+	database->sourceIndex = sourceIndex;
+	database->eventIndex = eventIndex;
+	database->otherIndex = otherIndex;
 	database->personRoots = personRoots;
 	database->familyRoots = familyRoots;
 	if (importDebugging) summarizeDatabase(database);

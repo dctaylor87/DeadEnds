@@ -36,6 +36,9 @@ Database *createDatabase(CString filePath) {
 	database->recordIndex = null;
 	database->personIndex = null;
 	database->familyIndex = null;
+	database->sourceIndex = null;
+	database->eventIndex = null;
+	database->otherIndex = null;
 	database->nameIndex = null;
 	database->refnIndex = null;
 	database->personRoots = createRootList(); // null?
@@ -48,6 +51,9 @@ void deleteDatabase(Database* database) {
 	if (database->recordIndex) deleteRecordIndex(database->recordIndex);
 	if (database->personIndex) deleteRecordIndex(database->personIndex);
 	if (database->familyIndex) deleteRecordIndex(database->familyIndex);
+	if (database->sourceIndex) deleteRecordIndex(database->sourceIndex);
+	if (database->eventIndex) deleteRecordIndex(database->eventIndex);
+	if (database->otherIndex) deleteRecordIndex(database->otherIndex);
 	if (database->nameIndex) deleteNameIndex(database->nameIndex);
 	if (database->refnIndex) deleteRefnIndex(database->refnIndex);
 	if (database->personRoots) deleteList(database->personRoots);
@@ -67,6 +73,15 @@ void writeDatabase(String fileName, Database* database) {
 	FORLIST(database->familyRoots, element)
 		writeGNodeRecord(file, (GNode*) element, false);
 	ENDLIST
+	FORHASHTABLE(database->sourceIndex, element)
+		writeGNodeRecord(file, (GNode*) element, false);
+	ENDHASHTABLE
+	FORHASHTABLE(database->eventIndex, element)
+		writeGNodeRecord(file, (GNode*) element, false);
+	ENDHASHTABLE
+	FORHASHTABLE(database->otherIndex, element)
+		writeGNodeRecord(file, (GNode*) element, false);
+	ENDHASHTABLE
 	fclose(file);
 }
 
