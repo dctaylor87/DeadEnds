@@ -479,11 +479,7 @@ num_spouses_of_indi (GNode *indi)
 {
 	int nsp;
 	if (!indi) return 0;
-#if defined(DEADENDS)
 	FORSPOUSES(indi, spouse, fam, nsp, database) ENDSPOUSES
-#else
-	FORSPOUSES(indi, spouse, fam, nsp) ENDSPOUSES
-#endif
 	return nsp;  /* don't include self*/
 }
 #endif
