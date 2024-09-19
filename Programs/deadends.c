@@ -77,7 +77,7 @@ main (int argc, char *argv[])
   int opt;
   int longindex = 0;
   char *cmd_line_db;
-  FILE *db_file;
+  File *db_file;
   ErrorLog error_log;
   const char *env;
 
@@ -165,7 +165,7 @@ main (int argc, char *argv[])
 
   /* XXX insert code to open cmd_line_db XXX */
 
-  db_file = fopenPath (cmd_line_db, "r", GEDCOM_search_path);
+  db_file = openFile (cmd_line_db, "r");
   if (! db_file)
     {
       fprintf (stderr, "%s: fopenPath failed to open '%s': %s\n",
