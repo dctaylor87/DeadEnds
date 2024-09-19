@@ -73,7 +73,7 @@ extern ZST qSidcbrs;      /* "Please choose the child to browse to." */
 extern ZST qSid1cbr;      /* "Please choose the first child to browse to." */
 extern ZST qSid2cbr;      /* "Please choose the second child to browse to." */
 extern ZST qSidfbrs;      /* "Please choose the family to browse to." */
-extern ZST qSidfamk;      /* "Enter Family Number to Browse to" */
+extern ZST qSidfamk;      /* "Enter Family Key to Browse to" */
 extern ZST qSid1fbr;      /* "Please choose the first family to browse to." */
 extern ZST qSid2fbr;      /* "Please choose the second family to browse to." */
 extern ZST qSidhbrs;      /* "Please choose the father/husband to browse to." */
