@@ -193,13 +193,13 @@ invoke_fullscan_menu (void)
 
 		switch (code) {
 		case 'f':
-			seq = full_name_scan(_(qSsts_sca_ful));
+			seq = full_name_scan(_(qSsts_sca_ful), currentDatabase);
 			break;
 		case 'n':
-			seq = name_fragment_scan(_(qSsts_sca_fra));
+			seq = name_fragment_scan(_(qSsts_sca_fra), currentDatabase);
 			break;
 		case 'r':
-			seq = refn_scan(_(qSsts_sca_ref));
+			seq = refn_scan(_(qSsts_sca_ref), currentDatabase);
 			break;
 		case 's':
 			seq = invoke_search_source_menu();
@@ -268,10 +268,10 @@ invoke_search_source_menu (void)
 
 		switch (code) {
 		case 'a':
-			seq = scan_souce_by_author(_(qSsts_sca_src));
+			seq = scan_souce_by_author(_(qSsts_sca_src), currentDatabase);
 			break;
 		case 't':
-			seq = scan_souce_by_title(_(qSsts_sca_src));
+			seq = scan_souce_by_title(_(qSsts_sca_src), currentDatabase);
 			break;
 		case 'q': 
 			done=true;
