@@ -659,9 +659,9 @@ Returns @code{record}'s key.
 Returns @code{record}'s keynum.
 @end deftypefun
 
-@deftypefun char nztype (RecordIndexEl *record)
+@defmac RecordType nztype (RecordIndexEl *record)
 Returns @code{record}'s type.
-@end deftypefun
+@end defmac
 
 @subsection RECORD Reference Counts
 
