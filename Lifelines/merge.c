@@ -787,7 +787,7 @@ check_indi_lineage_links (GNode *indi)
 	CString ikey = nxref(indi);
 
 	/* sanity check record is not deleted */
-	ASSERT(is_key_in_use(ikey));
+	ASSERT(isKeyInUse(ikey));
 
 /* Now validate lineage links of this person */
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
@@ -906,7 +906,7 @@ check_fam_lineage_links (GNode *fam)
 	CString fkey = nxref(fam);
 
 	/* sanity check record is not deleted */
-	ASSERT(is_key_in_use(fkey));
+	ASSERT(isKeyInUse(fkey));
 	
 /* Now validate lineage links of this family */
 	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);

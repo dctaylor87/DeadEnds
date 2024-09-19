@@ -50,11 +50,12 @@
 #include "fpattern.h"
 #include "messages.h"
 #include "xreffile.h"
+#include "xref.h"
 #include "refns.h"
 #include "de-strings.h"
 
 /* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
+//#define database	currentDatabase
 
 #include "llinesi.h"
 
@@ -86,15 +87,15 @@ static int SCAN_SRC_TITL=4;
  * local function prototypes
  *********************************************/
 
-static void do_fields_scan(SCANNER * scanner, RecordIndexEl *rec);
-static void do_name_scan(SCANNER * scanner, String prompt);
-static void do_sources_scan(SCANNER * scanner, CString prompt);
-static bool ns_callback(CString key, CString name, bool newset, void *param);
-static bool rs_callback(CString key, CString refn, bool newset, void *param);
+static void do_fields_scan(SCANNER * scanner, RecordIndexEl *rec, Database *database);
+static void do_name_scan(SCANNER * scanner, String prompt, Database *database);
+static void do_sources_scan(SCANNER * scanner, CString prompt, Database *database);
+static bool ns_callback(CString key, CString name, void *param, Database *database);
+static bool rs_callback(CString key, CString refn, void *param, Database *database);
 static void scanner_add_result(SCANNER * scanner, CString key);
 static bool scanner_does_pattern_match(SCANNER *scanner, CString text);
 static Sequence *scanner_free_and_return_seq(SCANNER * scanner);
-static void scanner_init(SCANNER * scanner, int scantype, CString statusmsg);
+static void scanner_init(SCANNER * scanner, int scantype, CString statusmsg, Database *database);
 static void scanner_scan_titles(SCANNER * scanner);
 static void scanner_set_field(SCANNER * scanner, String field);
 static bool scanner_set_pattern(SCANNER * scanner, String pattern);
@@ -105,38 +106,38 @@ static bool scanner_set_pattern(SCANNER * scanner, String pattern);
  *********************************************/
 
 /*==============================================
- * name_fragment_scan -- Ask for pattern and search all persons by name
+ * nameFragmentScan -- Ask for pattern and search all persons by name
  *  sts: [IN]  status to show during scan
  *============================================*/
 Sequence *
-name_fragment_scan (CString sts)
+nameFragmentScan (CString sts, Database *database)
 {
 	SCANNER scanner;
-	scanner_init(&scanner, SCAN_NAME_FRAG, sts);
-	do_name_scan(&scanner, _("Enter pattern to match against single surname or given name."));
+	scanner_init(&scanner, SCAN_NAME_FRAG, sts, database);
+	do_name_scan(&scanner, _("Enter pattern to match against single surname or given name."), database);
 	return scanner_free_and_return_seq(&scanner);
 }
 /*======================================
- * full_name_scan -- Ask for pattern and search all persons by full name
+ * fullNameScan -- Ask for pattern and search all persons by full name
  *  sts: [IN]  status to show during scan
  *====================================*/
 Sequence *
-full_name_scan (CString sts)
+fullNameScan (CString sts, Database *database)
 {
 	SCANNER scanner;
-	scanner_init(&scanner, SCAN_NAME_FULL, sts);
-	do_name_scan(&scanner, _("Enter pattern to match against full name."));
+	scanner_init(&scanner, SCAN_NAME_FULL, sts, database);
+	do_name_scan(&scanner, _("Enter pattern to match against full name."), database);
 	return scanner_free_and_return_seq(&scanner);
 }
 /*==============================
- * refn_scan -- Ask for pattern and search all refns
+ * refnScan -- Ask for pattern and search all refns
  *  sts: [IN]  status to show during scan
  *============================*/
 Sequence *
-refn_scan (CString sts)
+refnScan (CString sts, Database *database)
 {
 	SCANNER scanner;
-	scanner_init(&scanner, SCAN_REFN, sts);
+	scanner_init(&scanner, SCAN_REFN, sts, database);
 
 	while (1) {
 		char request[MAXPATHLEN];
@@ -154,30 +155,30 @@ refn_scan (CString sts)
 	return scanner_free_and_return_seq(&scanner);
 }
 /*==============================
- * scan_souce_by_author -- Ask for pattern and search all sources by author
+ * scanSourceByAuthor -- Ask for pattern and search all sources by author
  *  sts: [IN]  status to show during scan
  *============================*/
 Sequence *
-scan_souce_by_author (CString sts)
+scanSourceByAuthor (CString sts, Database *database)
 {
 	SCANNER scanner;
-	scanner_init(&scanner, SCAN_SRC_AUTH, sts);
+	scanner_init(&scanner, SCAN_SRC_AUTH, sts, database);
 	scanner_set_field(&scanner, "AUTH");
-	do_sources_scan(&scanner, _("Enter pattern to match against author."));
+	do_sources_scan(&scanner, _("Enter pattern to match against author."), database);
 	return scanner_free_and_return_seq(&scanner);
 
 }
 /*==============================
- * scan_souce_by_title -- Ask for pattern and search all sources by title
+ * scanSourceByTitle -- Ask for pattern and search all sources by title
  *  sts: [IN]  status to show during scan
  *============================*/
 Sequence *
-scan_souce_by_title (CString sts)
+scanSourceByTitle (CString sts, Database *database)
 {
 	SCANNER scanner;
-	scanner_init(&scanner, SCAN_SRC_TITL, sts);
+	scanner_init(&scanner, SCAN_SRC_TITL, sts, database);
 	scanner_scan_titles(&scanner);
-	do_sources_scan(&scanner, _("Enter pattern to match against title."));
+	do_sources_scan(&scanner, _("Enter pattern to match against title."), database);
 	return scanner_free_and_return_seq(&scanner);
 }
 /*==============================
@@ -186,7 +187,7 @@ scan_souce_by_title (CString sts)
  *  prompt:    [IN]  appropriate prompt to ask for pattern
  *============================*/
 static void
-do_name_scan (SCANNER * scanner, String prompt)
+do_name_scan (SCANNER * scanner, String prompt, Database *database)
 {
 	while (1) {
 		char request[MAXPATHLEN];
@@ -206,10 +207,11 @@ do_name_scan (SCANNER * scanner, String prompt)
  *  prompt:    [IN]  appropriate prompt to ask for pattern
  *============================*/
 static void
-do_sources_scan (SCANNER * scanner, CString prompt)
+do_sources_scan (SCANNER * scanner, CString prompt, Database *database)
 {
+#if !defined(DEADENDS)
 	int keynum = 0;
-
+#endif
 	while (1) {
 		char request[MAXPATHLEN];
 		bool rtn = ask_for_string(prompt, _("pattern: "),
@@ -222,14 +224,21 @@ do_sources_scan (SCANNER * scanner, CString prompt)
 	/* msg_status takes String arg, should take CString - const declaration error */
 	msg_status("%s", (String)scanner->statusmsg);
 
+#if defined(DEADENDS)
+	for (RecordIndexEl *rec = getFirstSourceRecord (database);
+	     rec;
+	     rec = getNextSourceRecord (rec->root->key, database))
+	  do_fields_scan (scanner, rec, database);
+#else
 	while (1) {
 		RecordIndexEl *rec = 0;
 		keynum = xref_nexts(keynum);
 		if (!keynum)
 			break;
 		rec = keynum_to_srecord(keynum);
-		do_fields_scan(scanner, rec);
+		do_fields_scan(scanner, rec, database);
 	}
+#endif
 }
 /*==============================
  * do_fields_scan -- traverse top nodes looking for desired field value
@@ -237,7 +246,7 @@ do_sources_scan (SCANNER * scanner, CString prompt)
  *  rec:       [IN]  record to search
  *============================*/
 static void
-do_fields_scan (SCANNER * scanner, RecordIndexEl *rec)
+do_fields_scan (SCANNER * scanner, RecordIndexEl *rec, Database *database)
 {
 	/* NB: Only scanning top-level nodes right now */
 	GNode *node = nztop(rec);
@@ -273,7 +282,7 @@ do_fields_scan (SCANNER * scanner, RecordIndexEl *rec)
  * init_scan_pattern -- Initialize scan pattern fields
  *============================*/
 static void
-scanner_init (SCANNER * scanner, int scantype, CString statusmsg)
+scanner_init (SCANNER * scanner, int scantype, CString statusmsg, Database *database)
 {
 	scanner->scantype = scantype;
 	scanner->seq = create_indiseq_null();
@@ -354,7 +363,7 @@ scanner_add_result (SCANNER * scanner, CString key)
  * ns_callback -- callback for name traversal
  *=========================================*/
 static bool
-ns_callback (CString key, CString name, ATTRIBUTE_UNUSED bool newset, void *param)
+ns_callback (CString key, CString name, void *param, Database *database)
 {
 	int len, ind;
 	String piece;
@@ -384,7 +393,7 @@ ns_callback (CString key, CString name, ATTRIBUTE_UNUSED bool newset, void *para
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static bool
-rs_callback (CString key, CString refn, ATTRIBUTE_UNUSED bool newset, void *param)
+rs_callback (CString key, CString refn, void *param, Database *database)
 {
 	SCANNER * scanner = (SCANNER *)param;
 	ASSERT(scanner->scantype == SCAN_REFN);

@@ -128,11 +128,11 @@ void pedigree_increase_generations(int delta);
 void pedigree_toggle_mode(void);
 
 /* scan.c */
-Sequence *full_name_scan(CString sts);
-Sequence *name_fragment_scan(CString sts);
-Sequence *refn_scan(CString sts);
-Sequence *scan_souce_by_author(CString sts);
-Sequence *scan_souce_by_title(CString sts);
+Sequence *fullNameScan(CString sts, Database*);
+Sequence *nameFragmentScan(CString sts, Database*);
+Sequence *refnScan(CString sts, Database*);
+Sequence *scanSourceByAuthor(CString sts, Database*);
+Sequence *scanSourceByTitle(CString sts, Database*);
 
 /* screen.c */
 void clear_status_display(void);
