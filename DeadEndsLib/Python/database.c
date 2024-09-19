@@ -266,12 +266,8 @@ PyObject *_llpy_create_record_iterator (Database *database, int record_type)
 
   iter->li_type = record_type;
   iter->li_database = database;
-#if defined(DEADENDS)
   iter->li_bucket_ndx = -1;
   iter->li_element_ndx = -1;
-#else
-  iter->li_current = 0;
-#endif
   return (PyObject *)iter;
 }
 

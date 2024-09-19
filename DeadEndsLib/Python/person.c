@@ -879,7 +879,6 @@ static int add_spouses (PyObject *item, PyObject *output_set)
 {
   RecordIndexEl *record = ((LLINES_PY_RECORD *)item)->llr_record;
 
-#if defined(DEADENDS)
   Database *database = ((LLINES_PY_RECORD *)item)->llr_database;
   RecordIndexEl *spouse_r;
   GNode *indi = nztop (record);
@@ -899,22 +898,6 @@ static int add_spouses (PyObject *item, PyObject *output_set)
       return (-2);
 
   ENDSPOUSES
-#else
-  RecordIndexEl *spouse;
-  FORSPOUSES_RECORD(record,spouse)
-
-    LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
-    if (! new_indi)
-      return (-1);
-
-    new_indi->llr_type = LLINES_TYPE_INDI;
-    new_indi->llr_record = spouse;
-
-    if (PySet_Add (output_set, (PyObject *)new_indi) < 0)
-      return (-2);
-
-  ENDSPOUSES_RECORD
-#endif
   return (0);
 }
 

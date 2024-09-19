@@ -473,7 +473,6 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 
 	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
-#if defined(DEADENDS)
 	CString skey;
 
 	if (! elementFromSequence (seq, i, &skey, NULL))
@@ -486,29 +485,6 @@ choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 		destrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
 		msg_error("%s", buf);
 	}
-#else
-	listbadkeys = 1;
-	/* which typed value indiseq is this ? */
-	if (!indiseq_is_valtype_ival(seq) && !indiseq_is_valtype_null(seq))
-	{
-		/* int debug=1; */ /* Can this happen ? */
-	}
-	if (-1 == get_indiseq_ival(seq, i)) /* invalid pointer */
-		badkeylist[0] = 0;
-	else {
-		CString skey = element_key_indiseq(seq, i);
-		rec = __llpy_key_to_record (skey, NULL, seq->database);
-	}
-	listbadkeys = 0;
-	if(!rec) {
-		char buf[132];
-		if (badkeylist[0])
-			destrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
-		else
-			destrncpyf(buf, sizeof(buf), uu8, "%s", _(qSbadkeyptr));
-		msg_error("%s", buf);
-	}
-#endif
 	return rec;
 }
 /*===============================================

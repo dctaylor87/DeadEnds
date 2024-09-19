@@ -320,13 +320,9 @@ get_db_options (HashTable *opts)
 {
 	if (!f_db)
 		f_db = createStringTable(NUMBER_OPTION_BUCKETS);
-#if defined(DEADENDS)
 	FORHASHTABLE(opts, element)
 	  addToHashTable (f_db, element, true);
 	ENDHASHTABLE
-#else
-	copy_table(f_db, opts);
-#endif
 }
 
 /*==========================================

@@ -171,7 +171,6 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 	/* also check environment variable for editor */
 	{
 		String str = getenv("DEEDITOR");
-#if defined(DEADENDS)
 		if (! str)
 		  str = getenv ("VISUAL");
 
@@ -180,10 +179,6 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 
 		if (! str)
 		  str = "vi";
-#else
-		if (!str)
-			str = environ_determine_editor(PROGRAM_LIFELINES);
-#endif
 		setoptstr_fallback("DEEDITOR", str);
 	}
 	/* editor falls back to platform-specific default */

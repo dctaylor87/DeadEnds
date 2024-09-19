@@ -426,18 +426,10 @@ repaint_main_menu (UIWINDOW uiwin)
 	show_horz_line(uiwin, ll_lines-3, 0, ll_cols);
 	if (width > ll_cols-4)
 		width = ll_cols-4;
-#if defined(DEADENDS)
 	destrncpyf(title, width, uu8, _(qSmtitle), get_deadends_version(ll_cols-4));
-#else
-	llstrncpyf(title, width, uu8, _(qSmtitle), get_lifelines_version(ll_cols-4));
-#endif
 	mvccwaddstr(win, 1, 2, title);
 	mvccwaddstr(win, 2, 4, _(qScright));
-#if defined(DEADENDS)
 	str = getdeoptint("FullDbPath", 1) ? database->filePath : database->lastSegment;
-#else
-	str = getdeoptint("FullDbPath", 1) ? readpath : readpath_file;
-#endif
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */
@@ -2992,11 +2984,7 @@ platform_postcurses_init (void)
 #ifdef WIN32
 	char buffer[80];
 	String title = _(qSmtitle);
-#if defined(DEADENDS)
 	snprintf(buffer, sizeof(buffer), title, get_deadends_version(sizeof(buffer)-1-strlen(title)));
-#else
-	snprintf(buffer, sizeof(buffer), title, get_lifelines_version(sizeof(buffer)-1-strlen(title)));
-#endif
 	wtitle(buffer);
 #endif
 }

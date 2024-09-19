@@ -100,21 +100,12 @@ choose_from_list (CString ttl, List *list)
 
 	array = (String *) stdalloc(len*sizeof(String));
 	i = 0;
-#if defined(DEADENDS)
 	FORLIST(list, el)
 	  choice = (String)el;
 	ASSERT(choice);
 	array[i] = strsave(choice);
 	++i;
 	ENDLIST
-#else
-	FORXLIST(list, el)
-		choice = (String)el;
-		ASSERT(choice);
-		array[i] = strsave(choice);
-		++i;
-	ENDXLIST
-#endif
 	rtn = choose_from_array(ttl, len, array);
 
 	for (i=0; i<len; ++i)
