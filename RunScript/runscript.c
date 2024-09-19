@@ -21,7 +21,7 @@
 // Local functions.
 static void usage(void);
 static void getArguments(int, char**, CString*, CString*);
-static void getEnvironment(String*, String*);
+static void getEnvironment(CString*, CString*);
 //static void getDatabase(void);
 static void runScript(Database*, String);
 
@@ -30,9 +30,9 @@ int main(int argc, char* argv[]) {
 	// Get the files.
 	fprintf(stderr, "%s: RunScript started.\n", getMillisecondsString());
 	CString gedcomFile = null;
-	String scriptFile = null;
-	String gedcomPath = null;
-	String scriptPath = null;
+	CString scriptFile = null;
+	CString gedcomPath = null;
+	CString scriptPath = null;
 	getArguments(argc, argv, &gedcomFile, &scriptFile);
 	getEnvironment(&gedcomPath, &scriptPath);
 	// Build the Database from the Gedcom file.
@@ -75,7 +75,7 @@ void getArguments(int argc, char* argv[], CString* gedcom, CString* script) {
 }
 
 // getEnvironment looks for DE_GEDCOM_PATH or DE_SCRIPTS_PATH in the environment.
-static void getEnvironment(String* gedcom, String* script) {
+static void getEnvironment(CString* gedcom, CString* script) {
 	*gedcom = getenv("DE_GEDCOM_PATH");
 	*script = getenv("DE_SCRIPTS_PATH");
 	if (!*gedcom) *gedcom = ".";

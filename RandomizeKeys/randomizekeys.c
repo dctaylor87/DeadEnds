@@ -9,8 +9,8 @@
 
 #include "randomizekeys.h"
 
-static void getArguments(int, char**, String*);
-static void getEnvironment(String*);
+static void getArguments(int, char**, CString*);
+static void getEnvironment(CString*);
 static void usage(void);
 static void goAway(ErrorLog*);
 
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 }
 
 // getFileArguments gets the file names from the command line. They are mandatory.
-static void getArguments(int argc, char* argv[], String* gedcomFile) {
+static void getArguments(int argc, char* argv[], CString* gedcomFile) {
 	int ch;
 	while ((ch = getopt(argc, argv, "g:")) != -1) {
 		switch(ch) {
@@ -106,7 +106,7 @@ static void getArguments(int argc, char* argv[], String* gedcomFile) {
 }
 
 // getEnvironment checks for the DE_GEDCOM_PATH env variable.
-static void getEnvironment(String* gedcomPath) {
+static void getEnvironment(CString* gedcomPath) {
 	*gedcomPath = getenv("DE_GEDCOM_PATH");
 	if (!*gedcomPath) *gedcomPath = ".";
 }
