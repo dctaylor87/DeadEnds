@@ -489,21 +489,12 @@ static bool
 add_xref_to_set_impl (int32_t keynum, DELETESET set, DUPS dups)
 {
 	int32_t lo, i;
-#if defined(DEADENDS)
 	if (keynum <= 0 || (set->n) < 1) {
 		char msg[128];
 		snprintf(msg, sizeof(msg)
 			, _("Corrupt DELETESET %c"), set->ctype);
 		fatal(msg);
 	}
-#else
-	if (keynum <= 0 || !xreffp || (set->n) < 1) {
-		char msg[128];
-		snprintf(msg, sizeof(msg)
-			, _("Corrupt DELETESET %c"), set->ctype);
-		fatal(msg);
-	}
-#endif
 	/* special case simplification if deleting last record */
 	if (keynum+1 == set->recs[0]) {
 		/*

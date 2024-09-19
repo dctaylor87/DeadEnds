@@ -60,7 +60,7 @@ EXTRA_llines_DEPENDENCIES = $(LIBPYLLINES)
 EXTRA_llexec_DEPENDENCIES = $(LIBPYLLINES)
 
 # $(top_builddir)        for config.h
-# $(top_srcdir)/src/hdrs for headers
+# $(top_srcdir)/...      for headers
 
 # Flags needed to compile Python code
 PYTHON_CPPFLAGS = @PYTHON_CPPFLAGS@

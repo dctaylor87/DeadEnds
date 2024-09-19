@@ -200,7 +200,7 @@ main (int argc, char **argv)
 	while ((c = getopt(argc, argv, "adkntu:x:o:zC:I:p:Pvh?")) != -1) {
 		switch (c) {
 		case 'a':	/* debug allocation */
-		  logAllocations(true);
+			logAllocations(true);
 			break;
 		case 'd':	/* debug = no signal catchers */
 			debugmode = true;

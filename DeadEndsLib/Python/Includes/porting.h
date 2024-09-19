@@ -16,7 +16,7 @@
 
 #define nztop(record)	((record)->root)
 #define nzkey(record)	((record)->root->key)
-#define nztype(record)	((record)->root->key[0])
+#define nztype(record)	recordType((record)->root)
 
 #define DOSURCAP	true
 #define NOSURCAP	false
@@ -71,7 +71,7 @@
 //#define copy_nodes(node, children, siblings)	copyNodes(node, children, siblings)
 
 /* we drop efmt -- era format */
-#define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) format_date(str,dfmt,mfmt,yfmt,sfmt,cmplx)
+#define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) formatDate(str,dfmt,mfmt,yfmt,sfmt,cmplx)
 
 //#endif
 
