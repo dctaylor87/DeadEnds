@@ -88,7 +88,7 @@ static RecordIndexEl *edit_add_record(String recstr, String redt, String redtopt
 	, char ntype, String cfrm);
 static bool edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 			   String redtopt,
-			   bool (*val)(GNode *, String *, GNode *), String cfrm,
+			   bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
 			   bool (*todbase)(GNode *, Database *),
 			   String gdmsg, bool rfmt);
 
@@ -258,12 +258,12 @@ bool
 edit_any_record (RecordIndexEl *rec, bool rfmt)
 {
 	ASSERT(rec);
-	switch (nztype(rec)) {
-	case 'I': return edit_indi(rec, rfmt);
-	case 'F': return edit_family(rec, rfmt);
-	case 'S': return edit_source(rec, rfmt);
-	case 'E': return edit_event(rec, rfmt);
-	case 'X': return edit_other(rec, rfmt);
+	switch (recordType(rec->root)) {
+	case GRPerson: return edit_indi(rec, rfmt);
+	case GRFamily: return edit_family(rec, rfmt);
+	case GRSource: return edit_source(rec, rfmt);
+	case GREvent: return edit_event(rec, rfmt);
+	case GROther: return edit_other(rec, rfmt);
 	default: ASSERT(0); return false;
 	}
 }
@@ -300,7 +300,7 @@ write_node_to_editfile (GNode *node)
 static bool
 edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	    String redtopt,
-	    bool (*val)(GNode *, String *, GNode *), String cfrm,
+	    bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
 	    bool (*todbase)(GNode *, Database *),
 	    String gdmsg, bool rfmt)
 {
@@ -341,7 +341,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 		cnt = resolve_refn_links(root2);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!(*val)(root2, &msg, root1)) {
+		if (!(*val)(root2, &msg, root1, database)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;

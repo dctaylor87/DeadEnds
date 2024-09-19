@@ -95,10 +95,10 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(nztype(*prec1)=='I');
+	ASSERT(recordType((*prec1)->root)==GRPerson);
 	ASSERT(prec2);
 	ASSERT(*prec2);
-	ASSERT(nztype(*prec2)=='I');
+	ASSERT(recordType((*prec2)->root)==GRPerson);
 	ASSERT(!*pseq);
 	current1 = *prec1;
 	current2 = *prec2;
@@ -217,10 +217,10 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(nztype(*prec1)=='F');
+	ASSERT(recordType((*prec1)->root)==GRFamily);
 	ASSERT(prec2);
 	ASSERT(*prec2);
-	ASSERT(nztype(*prec2)=='F');
+	ASSERT(recordType((*prec2)->root)==GRPerson);
 	ASSERT(!*pseq);
 	current1 = *prec1;
 	current2 = *prec2;

@@ -396,21 +396,21 @@ generic_to_list_string (GNode *node, String key, int len, String delim,
 	if (!key && node)
 		key = rmvat(nxref(node));
 	if (node) {
-		switch (key[0])
+		switch (recordType (node))
 		{
-		case 'I':
+		case GRPerson:
 			str = indi_to_list_string(node, NULL, len, rfmt, appkey);
 			break;
-		case 'S':
+		case GRSource:
 			str = sour_to_list_string(node, len, delim);
 			break;
-		case 'F':
+		case GRFamily:
 			str = fam_to_list_string(node, len, delim, database);
 			break;
-		case 'E':
+		case GREvent:
 			str = even_to_list_string(node, len, delim);
 			break;
-		case 'X':
+		case GROther:
 			str = other_to_list_string(node, len, delim);
 			break;
 		}

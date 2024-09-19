@@ -68,7 +68,8 @@
 #include "splitjoin.h"
 #include "codesets.h"
 #include "options.h"
-#include "xreffile.h"
+//#include "xreffile.h"
+#include "xref.h"
 #include "gstrings.h"
 #include "de-strings.h"
 #include "ll-gedcom.h"
@@ -273,11 +274,11 @@ main_browse (RecordIndexEl *rec1, int code)
 			code = browse_aux(&rec1, &rec2, &seq); break;
 		case BROWSE_UNK:
 			ASSERT(rec1);
-			switch(nztype(rec1)) {
-			case 'I': code=BROWSE_INDI; break;
-			case 'F': code=BROWSE_FAM; break;
-			case 'S': code=BROWSE_SOUR; break;
-			case 'E': code=BROWSE_EVEN; break;
+			switch(recordType(rec1->root)) {
+			case GRPerson: code=BROWSE_INDI; break;
+			case GRFamily: code=BROWSE_FAM; break;
+			case GRSource: code=BROWSE_SOUR; break;
+			case GREvent: code=BROWSE_EVEN; break;
 			default: code=BROWSE_AUX; break;
 			}
 		}
@@ -398,14 +399,15 @@ browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 	CString key, name;
 	int i, c, rc;
 	bool reuse=false; /* flag to reuse same display strings */
-	int nkeyp, indimodep;
+	int indimodep;
+	CString nkeyp;
 	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
 	Sequence *seq = NULL;
 	int rtn=0; /* return code */
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(nztype(*prec1)=='I');
+	ASSERT(recordType((*prec1)->root)==GRPerson);
 	ASSERT(!*prec2);
 	ASSERT(!*pseq);
 
@@ -420,7 +422,7 @@ browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 
 	while (true) {
 		setrecord(&tmp, NULL);
-		if (nzkeynum(current) != nkeyp 
+		if (nestr (nzkey(current), nkeyp)
 			|| indimode != indimodep) {
 			show_reset_scroll();
 		}
@@ -429,7 +431,7 @@ browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 		display_indi(current, indimode, reuse);
 		c = interact_indi();
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = nzkeynum(current);
+		nkeyp = nzkey(current);
 		indimodep = indimode;
 reprocess_indi_cmd: /* so one command can forward to another */
 		reuse = false; /* don't reuse display unless specifically set */
@@ -518,7 +520,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
 			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
-				if (nztype(tmp) != 'I') {
+				if (recordType(tmp->root) != GRPerson) {
 					setrecord(prec1, &tmp);
 					rtn = BROWSE_UNK;
 					goto exitbrowse;
@@ -635,7 +637,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
-				if (nztype(current) != 'I') {
+				if (recordType(current->root) != GRPerson) {
 					setrecord(prec1, &current);
 					rtn = BROWSE_UNK;
 					goto exitbrowse;
@@ -715,24 +717,20 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_NEXT:	/* Go to next indi in db */
 			{
-				i = xref_nexti(nkeyp);
-				if (i) {
-					tmp = keynum_to_irecord(i);
-					setrecord(&current, &tmp);
-				} else {
-					msg_error("%s", _(qSnopers));
-				}
+				tmp = getNextPersonRecord (nkeyp, currentDatabase);
+				if (tmp)
+					setrecord (&current, &tmp);
+				else
+					msg_error ("%s", _(qSnopers));
 			}
 			break;
 		case CMD_PREV:	/* Go to prev indi in db */
 			{
-				i = xref_previ(nkeyp);
-				if (i) {
-					tmp = keynum_to_irecord(i);
-					setrecord(&current, &tmp);
-				} else {
-					msg_error("%s", _(qSnopers));
-				}
+			  tmp = getPreviousPersonRecord (nkeyp, currentDatabase);
+				if (tmp)
+					setrecord (&current, &tmp);
+				else
+					msg_error ("%s", _(qSnopers));
 			}
 			break;
 		case CMD_SOURCES:	/* Browse to sources */
@@ -787,8 +785,9 @@ browse_aux (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	RecordIndexEl *current=0;
 	int i, c;
 	bool reuse=false; /* flag to reuse same display strings */
-	int nkeyp=0, auxmode=0, auxmodep=0;
-	char ntype=0, ntypep=0;
+	int auxmode=0, auxmodep=0;
+	CString nkeyp=0;
+	RecordType ntype=GRUnknown, ntypep=GRUnknown;
 	RecordIndexEl *tmp=0;
 	char c2;
 	int rtn=0; /* return code */
@@ -812,17 +811,17 @@ browse_aux (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	auxmodep = auxmode;
 
 	while (true) {
-		if (nzkeynum(current) != nkeyp
-			|| nztype(current) != ntypep
+		if (nestr(nzkey(current), nkeyp)
+			|| recordType(current->root) != ntypep
 			|| auxmode != auxmodep) {
 			show_reset_scroll();
 		}
-		ntype = nztype(current);
+		ntype = recordType(current->root);
 		history_record(current, &vhist);
 		c = display_aux(current, auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = nzkeynum(current);
-		ntypep = nztype(current);
+		nkeyp = nzkey(current);
+		ntypep = recordType(current->root);
 		auxmodep = auxmode;
 reprocess_aux_cmd:
 		reuse = false; /* don't reuse display unless specifically set */
@@ -841,9 +840,11 @@ reprocess_aux_cmd:
 		{
 		case CMD_EDIT:
 			switch(ntype) {
-			case 'S': edit_source(current, false); break;
-			case 'E': edit_event(current, false); break;
-			case 'X': edit_other(current, false); break;
+			case GRSource: edit_source(current, false); break;
+			case GREvent: edit_event(current, false); break;
+			case GROther: edit_other(current, false); break;
+			default:
+				break;
 			}
 			break;
 		case CMD_ADD_SOUR: /* add source */
@@ -889,24 +890,18 @@ reprocess_aux_cmd:
 			break;
 		case CMD_NEXT:	/* Go to next in db */
 			{
-				i = xref_next(ntype, nkeyp);
-				if (i) {
-					tmp = keynum_to_record(ntype, i);
-					setrecord(&current, &tmp);
-				} else {
-					msg_error("%s", _(qSnorec));
-				}
+				if (! nkeyp)
+					tmp = getFirstRecord (ntype, currentDatabase);
+				else
+					tmp = getNextRecord (ntype, nkeyp, currentDatabase);
 				break;
 			}
 		case CMD_PREV:	/* Go to prev in db */
 			{
-				i = xref_prev(ntype, nkeyp);
-				if (i) {
-					tmp = keynum_to_record(ntype, i);
-					setrecord(&current, &tmp);
-				} else {
-					msg_error("%s", _(qSnorec));
-				}
+				if (! nkeyp)
+					tmp = getLastRecord (ntype, currentDatabase);
+				else
+					tmp = getPreviousRecord (ntype, nkeyp, currentDatabase);
 				break;
 			}
 		case CMD_QUIT:
@@ -1055,7 +1050,8 @@ browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	int i, c, rc;
 	bool reuse=false; /* flag to reuse same display strings */
 	static int fammode='n';
-	int nkeyp, fammodep;
+	int fammodep;
+	CString nkeyp;
 	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
 	Sequence *seq;
 	CString key, name;
@@ -1064,7 +1060,7 @@ browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(nztype(*prec1)=='F');
+	ASSERT(recordType((*prec1)->root)==GRFamily);
 	ASSERT(!*prec2);
 	ASSERT(!*pseq);
 
@@ -1079,7 +1075,7 @@ browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	while (true) {
 		setrecord(&tmp, NULL);
-		if (nzkeynum(current) != nkeyp
+		if (nestr (nzkey(current), nkeyp)
 			|| fammode != fammodep) {
 			show_reset_scroll();
 		}
@@ -1087,7 +1083,7 @@ browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 		display_fam(current, fammode, reuse);
 		c = interact_fam();
 		/* last keynum & mode, so can tell if changed */
-		nkeyp = nzkeynum(current);
+		nkeyp = nzkey(current);
 		fammodep = fammode;
 reprocess_fam_cmd: /* so one command can forward to another */
 		reuse = false; /* don't reuse display unless specifically set */
@@ -1113,12 +1109,17 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			advanced_family_edit(nztop(current));
 			break;
 		case CMD_BROWSE_FAM:
-			if (ask_for_int(_(qSidfamk), &i) && (i>0)) {
-				if ((tmp = qkeynum_to_frecord(i)))
-					setrecord(&current, &tmp);
+		{
+			char buffer[100];
+			if (ask_for_string (_(qSidfamk), _(qSaskstr),  buffer, sizeof (buffer)))
+			{
+				tmp = keyToFamilyRecord (buffer, currentDatabase);
+				if (tmp)
+					setrecord (&current, &tmp);
 				else
-					msg_error("%s", _(qSnofam));
+					msg_error ("%s", _(qSnofam));
 			}
+		}
 			break;
 		case CMD_EDIT:	/* Edit family's record */
 			edit_family(current, false);
@@ -1232,7 +1233,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
-				if (nztype(current) != 'F') {
+				if (recordType(current->root) != GRFamily) {
 					setrecord(prec1, &current);
 					rtn = BROWSE_UNK;
 					goto exitbrowse;
@@ -1292,23 +1293,20 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			break;
 		case CMD_NEXT:	/* Go to next fam in db */
 			{
-				i = xref_nextf(nkeyp);
-				if (i && (tmp = qkeynum_to_frecord(i))) {
-					setrecord(&current, &tmp);
-				} else {
-					msg_error("%s", _(qSnofam));
-				}
+				tmp = getNextFamilyRecord (nkeyp, currentDatabase);
+				if (tmp)
+					setrecord (&current, &tmp);
+				else
+					msg_error ("%s", _(qSnofam));
 				break;
 			}
 		case CMD_PREV:	/* Go to prev fam in db */
 			{
-				i = xref_prevf(nkeyp);
-				if (i) {
-					tmp = keynum_to_frecord(i);
-					setrecord(&current, &tmp);
-				} else {
-					msg_error("%s", _(qSnofam));
-				}
+			  tmp = getPreviousFamilyRecord (nkeyp, currentDatabase);
+				if (tmp)
+					setrecord (&current, &tmp);
+				else
+					msg_error ("%s", _(qSnofam));
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
@@ -2089,13 +2087,7 @@ autoadd_xref (RecordIndexEl *rec, GNode *newnode)
 		nsibling(prev) = xref;
 	}
 
-#if defined(DEADENDS)
 	normalizeRecord(rec->root);
-#else
-	normalize_rec(rec);
-
-	unknown_node_to_dbase(node);
-#endif
 }
 
 #if !defined(DEADENDS)

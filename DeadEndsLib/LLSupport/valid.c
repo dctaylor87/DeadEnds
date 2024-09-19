@@ -120,7 +120,6 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig, Database *database)
 		*pmsg = _(qSbadparsex);
 		goto bad1;
 	}
-#if defined(DEADENDS)
 	/* if there is more than one record with the REFN, then the
 	   database is broken -- while a record can have an arbitrary
 	   number of REFNs, each REFN *MUST* be unique. */
@@ -135,18 +134,6 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig, Database *database)
 	    }
 	  }
 	}
-#else
-	/* if there are more than one refn should check each */
-	for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
-		ukey = nval(refn);
-		get_refns(ukey, &num, &keys, 'I');
-		if (num > 1 || (num == 1 && (!orig ||
-			nestr(keys[0], rmvat(nxref(indi1)))))) {
-			*pmsg = _(qSbadirefn);
-			goto bad1;
-		}
-	}
-#endif
 	if (orig)
 		joinPerson(orig, name0, refn0, sex0, body0, famc0, fams0);
 	joinPerson(indi1, name1, refn1, sex1, body1, famc1, fams1);

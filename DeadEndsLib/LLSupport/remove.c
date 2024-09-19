@@ -245,11 +245,11 @@ remove_any_record (RecordIndexEl *record, Database *database)
 	ASSERT(record);
 
 	/* indi & family records take special handling, for lineage-linking */
-	if (nztype(record) == 'I') {
+	if (recordType(record->root) == GRPerson) {
 		remove_indi_by_root(nztop(record), database);
 		return true;
 	}
-	if (nztype(record) == 'F') {
+	if (recordType(record->root) == GRFamily) {
 		return remove_fam_record(record);
 	}
 
