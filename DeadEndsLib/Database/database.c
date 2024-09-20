@@ -22,7 +22,6 @@
 #include "rootlist.h"
 #include "writenode.h"
 
-extern bool importDebugging;
 bool indexNameDebugging = false;
 
 // createDatabase creates a database.

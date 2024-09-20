@@ -363,9 +363,6 @@ PValue __indi(PNode* pnode, Context* context, bool* errflg) {
 
 // firstindi returns the first person in the database.
 // usage: firstindi() -> INDI
-extern int rootNameCompare(void* a, void* b);
-extern String rootNameGet(void* a);
-extern void checkPersonRoots(RootList*);
 
 PValue __firstindi(PNode* pnode, Context* context, bool* eflg) {
 	List *personRoots = context->database->personRoots;

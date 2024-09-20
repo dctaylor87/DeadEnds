@@ -28,7 +28,6 @@ static bool debugging = false;
 
 extern FunctionTable *procedureTable;  // User-defined procedures.
 extern FunctionTable *functionTable;   // User-defined functions.
-extern SymbolTable *globalTable;       // Global symbol table.
 extern String pnodeTypes[];
 
 bool programParsing = false;

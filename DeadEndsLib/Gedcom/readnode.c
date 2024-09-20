@@ -16,8 +16,6 @@
 #include "errors.h"
 #include "file.h"
 
-extern bool importDebugging;
-
 // Variables that maintain state between functions.
 String xfileName;
 int xfileLine = 0;

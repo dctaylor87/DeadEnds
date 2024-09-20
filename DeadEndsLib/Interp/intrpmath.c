@@ -268,7 +268,6 @@ PValue __not (PNode *node, Context *context, bool *errflg) {
 
 // evalBinary evaluates and returns the arguments of a binary expression.
 static void evalBinary(PNode* pnode, Context* context, PValue* val1, PValue* val2, bool* eflag) {
-    extern bool numericPValue(PValue pvalue);
     PNode* arg1 = pnode->arguments; // Get args as PNodes.
     if (!arg1) { *eflag = true; return; }
     PNode* arg2 = arg1->next;
