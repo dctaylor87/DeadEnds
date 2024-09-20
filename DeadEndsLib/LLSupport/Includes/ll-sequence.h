@@ -1,3 +1,4 @@
+
 extern Sequence *getAllPersons (Database *database);
 extern Sequence *getAllFamilies (Database *database);
 extern Sequence *getAllSources (Database *database);
@@ -16,3 +17,6 @@ extern Sequence *familyToSpouses (GNode *fam, Database *database);
 
 /* for now, but might become static */
 extern Sequence *getAllRecordIndex (Database *database, RecordIndex *index);
+
+#define element_skey(el)	((el)->root->key)
+#define element_name(el)	((el)->name)
