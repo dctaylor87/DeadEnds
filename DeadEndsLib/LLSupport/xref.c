@@ -56,6 +56,24 @@ RecordIndexEl *getFirstOtherRecord (Database *database)
   return firstInHashTable (database->otherIndex, &bucket_index, &element_index);
 }
 
+RecordIndexEl *getFirstRecord (RecordType type, Database *database)
+{
+  switch (type)
+    {
+    case GRPerson:
+      return getFirstPersonRecord (database);
+    case GRFamily:
+      return getFirstFamilyRecord (database);
+    case GRSource:
+      return getFirstSourceRecord (database);
+    case GREvent:
+      return getFirstEventRecord (database);
+    case GROther:
+      return getFirstOtherRecord (database);
+    default:
+      return NULL;
+    }
+}
 
 RecordIndexEl *getNextPersonRecord (CString key, Database *database)
 {
@@ -80,6 +98,25 @@ RecordIndexEl *getNextEventRecord (CString key, Database *database)
 RecordIndexEl *getNextOtherRecord (CString key, Database *database)
 {
   return genericGetNextRecord (key, database->otherIndex);
+}
+
+RecordIndexEl *getNextRecord (RecordType type, CString key, Database *database)
+{
+  switch (type)
+    {
+    case GRPerson:
+      return getNextPersonRecord (key, database);
+    case GRFamily:
+      return getNextFamilyRecord (key, database);
+    case GRSource:
+      return getNextSourceRecord (key, database);
+    case GREvent:
+      return getNextEventRecord (key, database);
+    case GROther:
+      return getNextOtherRecord (key, database);
+    default:
+      return NULL;
+    }
 }
 
 static RecordIndexEl *genericGetNextRecord (CString key, RecordIndex *index)
