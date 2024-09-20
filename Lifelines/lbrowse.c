@@ -59,6 +59,7 @@
 #include "gnode.h"
 #include "database.h"
 #include "recordindex.h"
+#include "ll-sequence.h"
 #include "browse.h"
 #include "llpy-externs.h"
 
@@ -273,11 +274,11 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 				message("%s", _(qSlstnad));
 				break;
 			}
-			FORINDISEQ(newseq, el, i)
+			FORSEQUENCE(newseq, el, i)
 				skey = element_skey(el);
 				snam = element_name(el);
 				append_indiseq_null(seq, strsave(skey), snam, false, true);
-			ENDINDISEQ
+			ENDSEQUENCE
 			namesort_indiseq(seq);
 			cur = top = 0;
 			mark = -1;

@@ -85,7 +85,8 @@ static bool handle_tandem_scroll_cmds(int c);
 int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	RecordIndexEl *current1, *current2;
-	int nkey1p, nkey2p, modep;
+	CString nkey1p, nkey2p;
+	int modep;
 	RecordIndexEl *tmp=0;
 	CString key, name;
 	Sequence *seq;
@@ -108,21 +109,21 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 	*pseq = 0;
 
 	show_reset_scroll();
-	nkey1p = 0; /* force redraw */
-	nkey2p = 0;
+	nkey1p = NULL; /* force redraw */
+	nkey2p = NULL;
 	modep = mode;
 
 	while (true) {
-		if (nzkeynum(current1) != nkey1p
-			|| nzkeynum(current2) != nkey2p
+		if (nestr (nzkey(current1), nkey1p)
+		    || nestr(nzkey(current2), nkey2p)
 			|| mode != modep) {
 			show_reset_scroll();
 		}
 		display_2indi(current1, current2, mode);
 		c = interact_2indi();
 		/* last keynum & mode, so can tell if changed */
-		nkey1p = nzkeynum(current1);
-		nkey2p = nzkeynum(current2);
+		nkey1p = nzkey(current1);
+		nkey2p = nzkey(current2);
 		modep = mode;
 		if (handle_menu_cmds(c, &reuse))
 			continue;
@@ -210,7 +211,8 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 {
 	RecordIndexEl *current1, *current2;
 	RecordIndexEl *tmp, *tmp2;
-	int nkey1p, nkey2p, modep;
+	CString nkey1p, nkey2p;
+	int modep;
 	int c;
 	bool reuse=false;
 	static int mode = 'n';
@@ -230,21 +232,21 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	*pseq = 0;
 
 	show_reset_scroll();
-	nkey1p = 0; /* force redraw */
-	nkey2p = 0;
+	nkey1p = NULL; /* force redraw */
+	nkey2p = NULL;
 	modep = mode;
 
 	while (true) {
-		if (nzkeynum(current1) != nkey1p
-			|| nzkeynum(current2) != nkey2p
+		if (nestr (nzkey(current1), nkey1p)
+		    || nestr (nzkey(current2), nkey2p)
 			|| mode != modep) {
 			show_reset_scroll();
 		}
 		display_2fam(current1, current2, mode);
 		c = interact_2fam();
 		/* last keynum & mode, so can tell if changed */
-		nkey1p = nzkeynum(current1);
-		nkey2p = nzkeynum(current2);
+		nkey1p = nzkey(current1);
+		nkey2p = nzkey(current2);
 		modep = mode;
 		if (handle_menu_cmds(c, &reuse))
 			continue;

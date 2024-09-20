@@ -66,6 +66,7 @@
 #include "codesets.h"
 #include "remove.h"
 #include "de-strings.h"
+#include "ll-sequence.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -122,15 +123,15 @@ choose_and_remove_family (void)
 		}
 		else {
 			/* the last remove command will delete the family */
-			FORINDISEQ(spseq, el, num)
+			FORSEQUENCE(spseq, el, num)
 				indi = key_to_indi(element_skey(el));
 				remove_spouse(indi, fam, currentDatabase);
-			ENDINDISEQ
+			ENDSEQUENCE
 
-			FORINDISEQ(chseq, el, num)
+			FORSEQUENCE(chseq, el, num)
 				indi = key_to_indi(element_skey(el));
 				remove_child(indi, fam, currentDatabase);
-			ENDINDISEQ
+			ENDSEQUENCE
 		}
 	}
 	
