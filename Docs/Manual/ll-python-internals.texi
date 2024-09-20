@@ -655,10 +655,6 @@ Returns the top node of @code{record}.
 Returns @code{record}'s key.
 @end deftypefun
 
-@deftypefun int nzkeynum (RecordIndexEl *record)
-Returns @code{record}'s keynum.
-@end deftypefun
-
 @defmac RecordType nztype (RecordIndexEl *record)
 Returns @code{record}'s type.
 @end defmac
