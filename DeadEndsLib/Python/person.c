@@ -65,9 +65,7 @@ static PyObject *llpy_title (PyObject *self, PyObject *args);
 static PyObject *llpy_soundex (PyObject *self, PyObject *args);
 
 static PyObject *llpy_nextindi (PyObject *self, PyObject *args);
-#if !defined(DEADENDS)		/* need a 'highest indi key' variable */
 static PyObject *llpy_previndi (PyObject *self, PyObject *args);
-#endif
 static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args);
 static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args);
 static PyObject *llpy_choosefam (PyObject *self, PyObject *args);
@@ -668,8 +666,6 @@ static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   return (PyObject *)indi;
 }
 
-#if !defined(DEADENDS)		/* need a 'highest indi key' variable */
-
 /* llpy_previndi (INDI) --> INDI
 
    Returns the previous INDI in the database (in key order).  */
@@ -677,33 +673,26 @@ static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_previndi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
-  int key_val = nzkeynum (indi->llr_record);
+  int key = nzkey (indi->llr_record);
+  Database *database = indi->llr_database;
+  RecordIndexEl *new;
 
-  if (key_val == 0)
+  if (! key)
     {
       /* unexpected internal error occurred -- raise an exception */
       PyErr_SetString(PyExc_SystemError, "previndi: unable to determine RECORD's key");
       return NULL;
     }
-  /* XXX xref_{next|prev}{i,f,s,e,x,} ultimately casts its argument to
-     an INT32, so even if you are on a system where INT is INT64
-     (e.g., x86_64), you are limited to INT_MAX keys -- despite the
-     manual's assertion that keys can be as large as 9,999,999,999.
-     Of course, iterating through that many keys would be painful...
-     But, still...  Also, shouldn't the key value be *UNSIGNED*?  Keys
-     are never negative.  Zero is reserved for *NOT FOUND / DOES NOT
-     EXIST*.  XXX */
-  key_val = (long)xref_previ ((int)key_val);
-
-  if (key_val == 0)
-    Py_RETURN_NONE;		/* no more -- we have reached the end */
+  new = getPreviousPersonRecord (key, indi->llr_database);
+  if (! new)
+    Py_RETURN_NONE;		/* no more -- we have reached the beginning */
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
   indi->llr_type = LLINES_TYPE_INDI;
-  indi->llr_record = keynum_to_irecord (key_val);
+  indi->llr_database = database;
+  indi->llr_record = new;
   return (PyObject *)indi;
 }
-#endif
 
 /* llpy_choosechild_i (INDI) --> INDI
 
@@ -1272,10 +1261,8 @@ If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." }
      "soundex(void) -> STRING: SOUNDEX code of INDI" },
    { "nextindi",	(PyCFunction)llpy_nextindi, METH_NOARGS,
      "nextindi(void) -> INDI: Returns next INDI (in database order)." },
-#if !defined(DEADENDS)
    { "previndi",	(PyCFunction)llpy_previndi, METH_NOARGS,
      "previndi(void) -> INDI: Returns previous INDI (in database order)." },
-#endif
 
    { "children",	(PyCFunction)llpy_children_i, METH_NOARGS,
      "children(void) --> SET.  Returns the set of children of INDI." },

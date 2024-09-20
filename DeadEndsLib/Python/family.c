@@ -40,9 +40,7 @@ static PyObject *llpy_husband (PyObject *self, PyObject *args);
 static PyObject *llpy_wife (PyObject *self, PyObject *args);
 static PyObject *llpy_nchildren (PyObject *self, PyObject *args);
 static PyObject *llpy_nextfam (PyObject *self, PyObject *args);
-#if !defined(DEADENDS)
 static PyObject *llpy_prevfam (PyObject *self, PyObject *args);
-#endif
 static PyObject *llpy_firstchild (PyObject *self, PyObject *args);
 static PyObject *llpy_lastchild (PyObject *self, PyObject *args);
 static PyObject *llpy_children_f (PyObject *self, PyObject *args);
@@ -273,7 +271,6 @@ static PyObject *llpy_nextfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   return (PyObject *)fam;
 }
 
-#if !defined(DEADENDS)
 /* llpy_prevfam (FAM) --> FAM
 
    Returns the previous family (in key order) in the database.  */
@@ -281,25 +278,26 @@ static PyObject *llpy_nextfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  int key_val = nzkeynum(fam->llr_record);
+  CString key = nzkey(fam->llr_record);
+  Database *database = fam->llr_database;
+  RecordIndexEl *new;
 
-  if (key_val == 0)
+  if (! key)
     {
       /* unexpected internal error occurred -- raise an exception */
       PyErr_SetString(PyExc_SystemError, "prevfam: unable to determine RECORDs key");
       return NULL;
     }
-  key_val = (long)xref_prevf ((int)key_val);
-
-  if (key_val == 0)
-    Py_RETURN_NONE;		/* no more -- we have reached the end */
+  new = getPreviousFamilyRecord (key, fam->llr_database);
+  if (! new)
+    Py_RETURN_NONE;		/* no more -- we have reached the beginning */
 
   fam = PyObject_New (LLINES_PY_RECORD, &llines_family_type);
   fam->llr_type = LLINES_TYPE_FAM;
-  fam->llr_record = keynum_to_frecord (key_val);
+  fam->llr_database = database;
+  fam->llr_record = new;
   return (PyObject *)fam;
 }
-#endif
 
 /* llpy_children_f (FAM) --> set of INDI
 
@@ -474,10 +472,8 @@ static struct PyMethodDef Lifelines_Family_Methods[] =
 If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." },
    { "nextfam",		llpy_nextfam, METH_NOARGS,
      "(FAM).nextfam(void) -> FAM: next family in database after FAM (in key order)" },
-#if !defined(DEADENDS)
    { "prevfam",		llpy_prevfam, METH_NOARGS,
      "(FAM).prevfam(void) -> FAM: previous family in database before FAM (in key order)" },
-#endif
    { "children",	llpy_children_f, METH_NOARGS,
      "(FAM).children(void) -> set of children in the family" },
    { "spouses",		llpy_spouses_f, METH_NOARGS,
