@@ -76,9 +76,6 @@
  * external/imported variables
  *********************************************/
 
-extern int listbadkeys;
-extern char badkeylist[];
-
 /*********************************************
  * local function prototypes
  *********************************************/
