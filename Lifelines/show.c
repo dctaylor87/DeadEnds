@@ -82,8 +82,6 @@ int Scroll1=0;
  *********************************************/
 
 extern bool opt_nocb;	/* TRUE to suppress display of cb. data */
-extern int listbadkeys;
-extern char badkeylist[];
 
 /*********************************************
  * local types
@@ -363,8 +361,6 @@ show_indi_vitals (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
 	int width = rect->right - rect->left + 1;
 	int hgt = rect->bottom - rect->top + 1;
 
-	badkeylist[0] = '\0';
-	listbadkeys = 1;
 	if (hgt<=0) return;
 	if (!reuse)
 		init_display_indi(irec, width);
@@ -398,12 +394,6 @@ show_indi_vitals (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
 		if (*scroll && (i == *scroll))
 			overflow = 1;
 		put_out_line(uiwin, localrow+5+i, rect->left, Sothers[i], rect->right, overflow);
-	}
-	listbadkeys = 0;
-	if(badkeylist[0]) {
-		char buf[132];
-		destrncpyf(buf, sizeof(buf), uu8, "%s: %.40s", _(qSmisskeys), badkeylist);
-		msg_error("%s", buf);
 	}
 }
 /*=============================================
@@ -566,8 +556,6 @@ show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
 	rect.left = 1;
 	rect.right = width-2;
 
-	badkeylist[0] = '\0';
-	listbadkeys = 1;
 	if (!reuse)
 		init_display_fam(frec, width);
 	wipe_window_rect(uiwin, &rect);
@@ -597,11 +585,6 @@ show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
 		if (*scroll && (i == *scroll))
 			overflow = 1;
 		put_out_line(uiwin, localrow+7+i, 1, Sothers[i]+1, maxcol, overflow);
-	}
-	listbadkeys = 0;
-	if(badkeylist[0]) {
-		snprintf(buf, sizeof(buf), "WARNING: missing keys: %.40s", badkeylist);
-		msg_error("%s", buf);
 	}
 }
 /*================================================
