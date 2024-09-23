@@ -19,7 +19,6 @@ libllsupport_a_SOURCES = \
 	icvt.c \
 	listener.c \
 	ll-addoperations.c \
-	ll-database.c \
 	ll-node.c \
 	ll-node-seq.c \
 	ll-sequence.c \
@@ -34,7 +33,6 @@ libllsupport_a_SOURCES = \
 	remove.c \
 	replace.c \
 	rptui.c \
-	sprintpic.c \
 	strcvt.c \
 	translat.c \
 	valid.c \
