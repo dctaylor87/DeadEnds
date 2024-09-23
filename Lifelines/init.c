@@ -259,17 +259,7 @@ close_lifelines (void)
 	strfree(&int_codeset);
 	xlat_shutdown();
 }
-/*===================================================
- * is_codeset_utf8 -- Is this the name of UTF-8 ?
- *=================================================*/
-bool
-is_codeset_utf8 (CString codename)
-{
-	if (!codename || !codename[0]) return false;
-	if (eqstr("UTF-8", codename)||eqstr("utf-8", codename)||eqstr("65001", codename))
-		return true;
-	return false;
-}
+
 /*===================================================
  * update_useropts -- Set any global variables
  * dependent on user options
