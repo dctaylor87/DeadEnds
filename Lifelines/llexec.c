@@ -1,9 +1,29 @@
 /* 
-   Copyright (c) 2000-2007 Perry Rapp
+   Original Copyright (c) 1991-1999 Thomas T. Wetmore IV
+   Some changes Copyright (c) 2000-2007 Perry Rapp
+   For more recent changes, consult source control commit logs.
+
    "The MIT license"
-   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+   Permission is hereby granted, free of charge, to any person
+   obtaining a copy of this software and associated documentation
+   files (the "Software"), to deal in the Software without
+   restriction, including without limitation the rights to use, copy,
+   modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be
+   included in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
 */
 /*=============================================================
  * llexec.c -- Frontend code for lifelines report generator
@@ -12,10 +32,6 @@
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
-#endif
-
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
 #endif
 
 #include <ansidecl.h>
@@ -40,9 +56,7 @@
 #include "database.h"		/* currentDatabase */
 #include "uiprompts.h"
 #include "feedback.h"
-//#include "ui.h"
 #include "llinesi.h"
-//#include "version.h"
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
@@ -72,7 +86,6 @@ extern int yydebug;
 #if defined(HAVE_PYTHON)
 #include "llpy-externs.h"
 #endif
-//#include "uiio.h"
 
 #if !defined(NUMBER_EXARGS_BUCKETS)
 #define NUMBER_EXARGS_BUCKETS	17
@@ -95,18 +108,17 @@ bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 String  ext_codeset = 0;       /* default codeset from locale */
-//int screen_width = 20; /* TODO */
 
 /*********************************************
  * local function prototypes
  *********************************************/
 
 /* alphabetical */
-static void print_usage(void);
 static void load_usage(void);
 static void main_db_notify(String db, bool opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void platform_init(void);
+static void print_usage(void);
 
 /*********************************************
  * local function definitions
@@ -239,8 +251,8 @@ main (int argc, char **argv)
 			break;
 		case 'h': /* show usage */
 		case '?': /* show usage */
-			showversion = true;
 			showusage = true;
+			showversion = true;
 			goto usage;
 			break;
 		}

@@ -31,7 +31,6 @@
  *   3.0.3 - 02 Jul 96
  *===========================================================*/
 
-
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
@@ -99,7 +98,6 @@ int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
  * required global variables
  *********************************************/
 
-
 static String usage_summary = "";      /* usage string */
 bool debugmode = false;     /* no signal handling, so we can get coredump */
 bool opt_nocb  = false;     /* no cb. data is displayed if TRUE */
@@ -145,7 +143,6 @@ main (int argc, char **argv)
 	String progout=NULL;
 	bool graphical=true;
 	String configfile=0;
-
 	String crashlog=NULL;
 	int i=0;
 	bool have_python_scripts = false;
