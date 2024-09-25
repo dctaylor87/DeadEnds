@@ -51,7 +51,8 @@
 #include "splitjoin.h"
 #include "rfmt.h"
 #include "xlat.h"
-#include "editing.h"
+#include "nodeutils.h"
+#include "editing.h"		/* NAMESEP */
 #include "messages.h"
 #include "refns.h"
 #include "locales.h"
@@ -102,15 +103,15 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig, Database *database)
 	if (orig)
 		splitPerson(orig, &name0, &refn0, &sex0, &body0, &famc0,
 		    &fams0);
-	if (orig && !iso_nodes(indi1, orig, false, false)) {
+	if (orig && !isoGNodes(indi1, orig, false, false)) {
 		*pmsg = _(qSbadind); 
 		goto bad1;
 	}
-	if (!iso_nodes(famc1, famc0, false, true)) {
+	if (!isoGNodes(famc1, famc0, false, true)) {
 		*pmsg = _(qSbadfmc);
 		goto bad1;
 	}
-	if (!iso_nodes(fams1, fams0, false, true)) {
+	if (!isoGNodes(fams1, fams0, false, true)) {
 		*pmsg = _(qSbadfms); 
 		goto bad1;
 	}
@@ -176,19 +177,19 @@ valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0, Database *database)
 		splitFamily(fam0, &refn0, &husb0, &wife0, &chil0, &body0);
 	splitFamily(fam1, &refn1, &husb1, &wife1, &chil1, &body1);
 	
-	if (fam0 && !iso_nodes(fam1, fam0, false, true)) {
+	if (fam0 && !isoGNodes(fam1, fam0, false, true)) {
 		*pmsg = _(qSbadfam); 
 		goto bad3;
 	}
-	if (!iso_nodes(husb1, husb0, false, true)) {
+	if (!isoGNodes(husb1, husb0, false, true)) {
 		*pmsg = _(qSbadhsb);
 		goto bad3;
 	}
-	if (!iso_nodes(wife1, wife0, false, true)) {
+	if (!isoGNodes(wife1, wife0, false, true)) {
 		*pmsg = _(qSbadwif);
 		goto bad3;
 	}
-	if (!iso_nodes(chil1, chil0, false, true)) {
+	if (!isoGNodes(chil1, chil0, false, true)) {
 		*pmsg = _(qSbadchl);
 		goto bad3;
 	}
