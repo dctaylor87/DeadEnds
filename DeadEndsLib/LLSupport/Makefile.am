@@ -12,7 +12,6 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	choose.c \
 	codesets.c \
-	equaliso.c \
 	errlog.c \
 	expandvars.c \
 	gstrings.c \
@@ -24,6 +23,7 @@ libllsupport_a_SOURCES = \
 	ll-sequence.c \
 	ll-str.c \
 	llgettext.c \
+	list.c \
 	lloptions.c \
 	locales.c \
 	messages.c \
