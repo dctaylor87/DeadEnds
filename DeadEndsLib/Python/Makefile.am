@@ -15,6 +15,7 @@ libpyllines_a_SOURCES = \
 	export.c \
 	family.c family.h \
 	iter.c \
+	list.c \
 	nodes.c \
 	other.c \
 	person.c person.h \
