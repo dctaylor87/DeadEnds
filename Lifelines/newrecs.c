@@ -55,7 +55,6 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
-#include "editing.h"
 #include "nodeutils.h"
 //#include "readindex.h"
 #include "database.h"
@@ -367,7 +366,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 
 /* If error or no change or user backs out return */
 	if (!root2) return false;
-	if (equal_tree(root1, root2) || !ask_yes_or_no(cfrm)) {
+	if (equalTree(root1, root2) || !ask_yes_or_no(cfrm)) {
 		freeGNodes(root2);
 		return false;
 	}

@@ -25,6 +25,7 @@
 #include "name.h"
 #include "py-messages.h"
 #include "sequence.h"
+#include "nodeutils.h"
 #include "ui.h"
 #include "xref.h"
 
@@ -1173,7 +1174,7 @@ static PyObject *llpy_sync_indi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
     {
       /* XXX unresolvable refn links -- existing code does nothing XXX */
     }
-  if (equal_tree (old_tree, new_tree))
+  if (equalTree (old_tree, new_tree))
     {
       /* no modifications -- return success */
       stdfree (&rawrec);

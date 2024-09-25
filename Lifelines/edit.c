@@ -59,7 +59,6 @@
 #include "messages.h"
 #include "choose.h"
 #include "readwrite.h"
-#include "equaliso.h"
 #include "lineage.h"
 #include "gnode.h"
 #include "replace.h"
@@ -141,7 +140,7 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 /* Editing done; see if database changes */
 
 	if (!indi2) return false;
-	if (equal_tree(indi1, indi2) || !ask_yes_or_no(_(qScfpupt))) {
+	if (equalTree(indi1, indi2) || !ask_yes_or_no(_(qScfpupt))) {
 		freeGNodes(indi2);
 		return false;
 	}
@@ -227,7 +226,7 @@ edit_family (RecordIndexEl *frec1, bool rfmt)
 /* If error or user backs out return */
 
 	if (!fam2) return false;
-	if (equal_tree(fam1, fam2) || !ask_yes_or_no(_(qScffupt)))
+	if (equalTree(fam1, fam2) || !ask_yes_or_no(_(qScffupt)))
 		goto end_edit_fam;
 
 /* Move new data (in fam2 children) into existing fam1 tree */
