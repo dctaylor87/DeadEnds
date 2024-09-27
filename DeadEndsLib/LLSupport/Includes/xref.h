@@ -10,11 +10,17 @@ extern RecordIndexEl *getNextSourceRecord (CString key, Database *database);
 extern RecordIndexEl *getNextEventRecord (CString key, Database *database);
 extern RecordIndexEl *getNextOtherRecord (CString key, Database *database);
 
+extern RecordIndexEl *getLastPersonRecord (Database *database);
+extern RecordIndexEl *getLastFamilyRecord (Database *database);
+//extern RecordIndexEl *getLastSourceRecord (Database *database);
+//extern RecordIndexEl *getLastEventRecord (Database *database);
+//extern RecordIndexEl *getLastOtherRecord (Database *database);
+
 extern RecordIndexEl *getPreviousPersonRecord (CString key, Database *database);
 extern RecordIndexEl *getPreviousFamilyRecord (CString key, Database *database);
-extern RecordIndexEl *getPreviousSourceRecord (CString key, Database *database);
-extern RecordIndexEl *getPreviousEventRecord (CString key, Database *database);
-extern RecordIndexEl *getPreviousOtherRecord (CString key, Database *database);
+//extern RecordIndexEl *getPreviousSourceRecord (CString key, Database *database);
+//extern RecordIndexEl *getPreviousEventRecord (CString key, Database *database);
+//extern RecordIndexEl *getPreviousOtherRecord (CString key, Database *database);
 
 extern CString getNewPersonKey (Database *database);
 extern CString getNewFamilyKey (Database *database);
