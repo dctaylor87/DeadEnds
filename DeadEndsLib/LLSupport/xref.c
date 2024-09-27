@@ -16,20 +16,26 @@
 
 static RecordIndexEl *genericGetNextRecord (CString key, RecordIndex *index);
 
+static RecordIndexEl *
+getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList);
+
+static RecordIndexEl *
+getLastRecord_PF (RecordIndex *recordIndex, RootList *rootList);
+
+static RecordIndexEl *
+getNextRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList);
+
+static RecordIndexEl *
+getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList);
+
 RecordIndexEl *getFirstPersonRecord (Database *database)
 {
-  int bucket_index;
-  int element_index;
-
-  return firstInHashTable (database->personIndex, &bucket_index, &element_index);
+  return getFirstRecord_PF (database->personIndex, database->personRoots);
 }
 
 RecordIndexEl *getFirstFamilyRecord (Database *database)
 {
-  int bucket_index;
-  int element_index;
-
-  return firstInHashTable (database->familyIndex, &bucket_index, &element_index);
+  return getFirstRecord_PF (database->familyIndex, database->familyRoots);
 }
 
 RecordIndexEl *getFirstSourceRecord (Database *database)
@@ -77,12 +83,12 @@ RecordIndexEl *getFirstRecord (RecordType type, Database *database)
 
 RecordIndexEl *getNextPersonRecord (CString key, Database *database)
 {
-  return genericGetNextRecord (key, database->personIndex);
+  return getNextRecord_PF (key, database->personIndex, database->personRoots);
 }
 
 RecordIndexEl *getNextFamilyRecord (CString key, Database *database)
 {
-  return genericGetNextRecord (key, database->familyIndex);
+  return getNextRecord_PF (key, database->familyIndex, database->familyRoots);
 }
 
 RecordIndexEl *getNextSourceRecord (CString key, Database *database)
@@ -137,6 +143,134 @@ static RecordIndexEl *genericGetNextRecord (CString key, RecordIndex *index)
      means exhausted -- have gone through all the elements, no more to
      be returned. */
   return nextInHashTable (index, &bucket_index, &element_index);
+}
+
+/* get first record for Persons and Families */
+
+static RecordIndexEl *
+getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList)
+{
+  if (! recordIndex || ! rootList)
+    return NULL;
+
+  if (lengthList(rootList) == 0)
+    return NULL;		/* list empty */
+
+  sortList (rootList);
+  GNode *new = getListElement (rootList, 0);
+
+  /* sadly, we need the record,, not the root node, so we are not done. */
+  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
+  if (! record)
+    {
+      /* XXX report error -- database corrupt -- record in RootList
+       but not in RecordIndex XXX*/
+      return NULL;
+    }
+  return (record);
+}
+
+RecordIndexEl *getLastPersonRecord (Database *database)
+{
+  return getLastRecord_PF (database->personIndex, database->personRoots);
+}
+
+RecordIndexEl *getLastFamilyRecord (Database *database)
+{
+  return getLastRecord_PF (database->familyIndex, database->familyRoots);
+}
+
+/* get last record for Persons and Families */
+
+static RecordIndexEl *
+getLastRecord_PF (RecordIndex *recordIndex, RootList *rootList)
+{
+  if (! recordIndex || ! rootList)
+    return NULL;
+
+  if (lengthList(rootList) == 0)
+    return NULL;		/* list empty */
+
+  sortList (rootList);
+  GNode *new = getListElement (rootList, lengthList(rootList) - 1);
+
+  /* sadly, we need the record,, not the root node, so we are not done. */
+  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
+  if (! record)
+    {
+      /* XXX report error -- database corrupt -- record in RootList
+       but not in RecordIndex XXX*/
+      return NULL;
+    }
+  return (record);
+}
+
+/* get next record for Persons and Families */
+
+static RecordIndexEl *
+getNextRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
+{
+  sortList (rootList);
+
+  int index;
+  GNode *current = findInList (rootList, key, &index);
+  if ((! current) || (index < 0) || (index >= lengthList(rootList)))
+    {
+      /* XXX report error somehow XXX */
+      return NULL;
+    }
+  if (index == lengthList (rootList))
+    return NULL;		/* at end of list, exhausted, no more */
+  GNode *new = getListElement (rootList, index + 1);
+
+  /* sadly, we need the record, not the root node, so we are not done. */
+  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
+  if (! record)
+    {
+      /* XXX report error -- database corrupt -- record in RootList
+	 but not in RecordIndex XXX */
+      return NULL;
+    }
+  return (record);
+}
+
+RecordIndexEl *getPreviousPersonRecord (CString key, Database *database)
+{
+  return getPreviousRecord_PF (key, database->personIndex, database->personRoots);
+}
+
+RecordIndexEl *getPreviousFamilyRecord (CString key, Database *database)
+{
+  return getPreviousRecord_PF (key, database->familyIndex, database->familyRoots);
+}
+
+/* get previous record for Persons and Families */
+
+static RecordIndexEl *
+getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
+{
+  sortList (rootList);
+
+  int index;
+  GNode *current = findInList (rootList, key, &index);
+  if ((! current) || (index < 0) || (index >= lengthList(rootList)))
+    {
+      /* XXX report error somehow XXX */
+      return NULL;
+    }
+  if (index == 0)
+    return NULL;		/* at end of list, exhausted, no more */
+  GNode *new = getListElement (rootList, index - 1);
+
+  /* sadly, we need the record, not the root node, so we are not done. */
+  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
+  if (! record)
+    {
+      /* XXX report error -- database corrupt -- record in RootList
+	 but not in RecordIndex XXX */
+      return NULL;
+    }
+  return (record);
 }
 
 bool isKeyInUse (CString key, Database *database)
