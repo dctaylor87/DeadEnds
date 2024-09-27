@@ -90,10 +90,6 @@ static PyObject *llpy_childset (PyObject *self, PyObject *args, PyObject *kw);
 /* helper routine for llpy_descendantset, llpy_childset, and llpy_children_i */
 static int add_children (PyObject *obj, PyObject *working_set, PyObject *output_set);
 
-#if !defined(DEADENDS)
-static PyObject *llpy_sync_indi (PyObject *self, PyObject *args);
-#endif
-
 static void llpy_individual_dealloc (PyObject *self);
 
 /* NOTE on the function header comments that follow:
@@ -1127,71 +1123,6 @@ static int add_children (PyObject *obj, PyObject *working_set, PyObject *output_
   return (0);
 }
 
-#if !defined(DEADENDS)		/* For DeadEnds, sync does not make sense */
-static PyObject *llpy_sync_indi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
-{
-  LLINES_PY_RECORD *py_record = (LLINES_PY_RECORD *) self;
-  RecordIndexEl *record = py_record->llr_record;
-  CString key = nzkey (record);
-  String rawrec = 0;
-  String msg = 0;
-  int on_disk = 1;
-  int len;
-  int cnt;
-  GNode *old_tree = 0;
-  GNode *new_tree = 0;
-
-  if (! key)
-    {
-      PyErr_SetString (PyExc_SystemError, "sync: unable to determine record's key");
-      return NULL;
-    }
-  new_tree = nztop (record);
-  if (! new_tree)
-    {
-      PyErr_SetString (PyExc_SystemError, "sync: unable to find top of record");
-      return NULL;
-    }
-  new_tree = copy_node_subtree (new_tree);
-
-  rawrec = retrieve_raw_record (key, &len);
-  if (! rawrec)
-    on_disk = 0;
-  else
-    {
-      ASSERT (old_tree = stringToNodeTree (rawrec));
-    }
-
-  cnt = resolve_refn_links (new_tree);
-
-  if (! valid_indi_tree (new_tree, &msg, old_tree, py_record->llr_database))
-    {
-      PyErr_SetString (PyExc_SystemError, msg);
-      stdfree (&rawrec);
-      return NULL;
-    }
-  if (cnt > 0)
-    {
-      /* XXX unresolvable refn links -- existing code does nothing XXX */
-    }
-  if (equalTree (old_tree, new_tree))
-    {
-      /* no modifications -- return success */
-      stdfree (&rawrec);
-      Py_RETURN_TRUE;
-    }
-
-  if (on_disk)
-    replace_indi (old_tree, new_tree);
-#if 0				/* XXX */
-  else
-    add_new_indi_to_db (record);
-#endif
-  stdfree (&rawrec);
-  Py_RETURN_TRUE;
-}
-#endif
-
 static void llpy_individual_dealloc (PyObject *self)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
@@ -1291,12 +1222,6 @@ through user interface.  Returns None if individual has no spouses or user cance
 
    { "top_node", (PyCFunction)_llpy_top_node, METH_NOARGS,
      "top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
-
-#if !defined(DEADENDS)
-   { "sync", (PyCFunction)llpy_sync_indi, METH_NOARGS,
-     "sync(void) --> BOOLEAN.  Writes modified INDI to database.\n\n\
-Returns success or failure." },
-#endif
 
    { NULL, 0, 0, NULL }		/* sentinel */
   };
