@@ -23,7 +23,6 @@ libllsupport_a_SOURCES = \
 	ll-sequence.c \
 	ll-str.c \
 	llgettext.c \
-	list.c \
 	lloptions.c \
 	locales.c \
 	messages.c \
