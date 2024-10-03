@@ -515,7 +515,7 @@ InterpType interpForindi (PNode* pnode, Context* context, PValue* pvalue) {
 	sortList(rootList); // Sort by key.
 	int numPersons = lengthList(rootList);
 	for (int i = 0; i < numPersons; i++) {
-		String key = rootList->getKey(getListElement(rootList, i));
+		CString key = rootList->getKey(getListElement(rootList, i));
 		GNode* person = keyToPerson(key, context->database);
 		if (person) {
 			assignValueToSymbol(context->symbolTable, pnode->personIden, PVALUE(PVPerson, uGNode, person));
