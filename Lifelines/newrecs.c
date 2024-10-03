@@ -50,7 +50,7 @@
 #include "rfmt.h"
 #include "sequence.h"
 #include "xlat.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "errors.h"
 #include "liflines.h"
@@ -64,6 +64,7 @@
 #include "refns.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "editing.h"
 
 #include "llpy-externs.h"
 

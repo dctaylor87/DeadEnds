@@ -46,7 +46,7 @@
 
 #include "rfmt.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
@@ -97,7 +97,7 @@ typedef struct listdisp_s
 
 /* alphabetical */
 static void activate_popup_list_uiwin (listdisp * ld);
-static void display_string(UIWINDOW uiwin, LLRECT rect, String text);
+static void display_string(UIWINDOW uiwin, LLRECT rect, CString text);
 static int handle_list_cmds(listdisp * ld, int code);
 static bool handle_popup_list_resize(listdisp * ld, int code);
 static void print_list_title(char * buffer, int len, const listdisp * ld, CString ttl);
@@ -733,7 +733,7 @@ activate_popup_list_uiwin (listdisp * ld)
  *  handle embedded carriage returns
  *===================================================*/
 static void
-display_string (UIWINDOW uiwin, LLRECT rect, String text)
+display_string (UIWINDOW uiwin, LLRECT rect, CString text)
 {
 	int max = rect->right - rect->left + 2;
 	String str = stdalloc(max), p2;

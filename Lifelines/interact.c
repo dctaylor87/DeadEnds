@@ -44,7 +44,7 @@
 #include "rfmt.h"
 #include "refnindex.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"

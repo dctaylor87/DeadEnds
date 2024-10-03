@@ -55,12 +55,11 @@
 
 #include "rfmt.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "choose.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
-#include "ask.h"
 #include "gedcom.h"
 #include "messages.h"
 #include "codesets.h"

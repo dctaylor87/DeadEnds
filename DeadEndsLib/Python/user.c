@@ -19,9 +19,10 @@
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"	/* RecordIndexEl */
-#include "uiprompts.h"
+#include "ask.h"
 #include "rptui.h"
 #include "py-messages.h"
+#include "feedback.h"
 
 #include "python-to-c.h"
 #include "types.h"
@@ -124,15 +125,48 @@ static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
   abort ();			/* XXX */
 }
 
-#if 0
 /* llpy_menuchoose (choices, [prompt]) --> INT; Select from a collection of choices. */
 
 static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
   static char *keywords[] = { "choices", "prompt", NULL };
-  abort ();
+  PyObject *choices;
+  char *prompt = _("Please choose from the following list.");
+  char *c_string;
+  int len;
+  String *strings;
+  int ndx;
+  int answer;
+
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "O|s", keywords, &choices, &prompt))
+      return NULL;
+
+  if (! PyList_Check (choices))
+    {
+      PyErr_SetString (PyExc_TypeError, _("menuchoose: CHOICES must be a list"));
+      return NULL;
+    }
+  len = PyList_Size (choices);
+  if (len <= 0)
+    {
+      PyErr_SetString (PyExc_IndexError, _("menuchoose: CHOICES must have a size > 0"));
+      return NULL;
+    }
+  strings = (char **)stdalloc (len * sizeof (String));
+  PyObject *tuple = PyTuple_New (1);
+  for (ndx = 0; ndx < len; ndx++)
+    {
+      PyObject *item = PyList_GetItem(choices, ndx);
+      if (! item)
+	return NULL;
+      PyTuple_SetItem (tuple, 0, item);
+      PyArg_ParseTuple (tuple, "s", &c_string);
+      strings[ndx] = c_string;
+    }
+  answer = rptui_choose_from_array (prompt, len, strings);
+  stdfree (strings);
+  return Py_BuildValue ("i", answer);
 }
-#endif
 
 static struct PyMethodDef Lifelines_User_Functions[] =
   {
@@ -144,10 +178,8 @@ static struct PyMethodDef Lifelines_User_Functions[] =
      "getint([prompt]) --> INT; Get integer through user interface." },
    { "getstr",		(PyCFunction)llpy_getstr, METH_VARARGS | METH_KEYWORDS,
      "getstr([prompt]) --> STRING; Get string through user interface." },
-#if 0
    { "menuchoose",	(PyCFunction)llpy_menuchoose, METH_VARARGS | METH_KEYWORDS,
      "menuchoose(choices,[prompt]) --> INTEGER; Select from a collection of choices." },
-#endif
    { NULL, 0, 0, NULL }		/* sentinel */
   };
 

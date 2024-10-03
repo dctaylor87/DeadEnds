@@ -51,7 +51,7 @@
 #include "rfmt.h"
 #include "sequence.h"
 #include "xlat.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
 #include "errors.h"
@@ -64,6 +64,7 @@
 #include "replace.h"
 #include "editing.h"
 #include "refns.h"
+#include "nodeutils.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase

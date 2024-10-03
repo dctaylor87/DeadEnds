@@ -55,7 +55,7 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "choose.h"
 #include "feedback.h"
 #include "lineage.h"
@@ -78,7 +78,6 @@
 #include "ui.h"
 #include "locales.h"
 #include "lloptions.h"
-#include "ask.h"
 
 #include "llpy-externs.h"
 
@@ -162,6 +161,11 @@ static void term_hist(struct hist * histp);
 	-1 <= start < size
 	0 <= past_end < size
 	(NB: CMD_HISTORY_FWD will go ahead to unused entries.)
+
+	XXX NOTE: The database is not currently stored alongside the
+	key.  Just the key.  This means that if the database changes,
+	all entries are instantly invalid.  Currently, this is not
+	noticed.  This needs to be fixed.  XXX
 */
 struct hist {
 	int start;
@@ -1758,7 +1762,11 @@ history_record (RecordIndexEl *rec, struct hist * histp)
 	if (!histp->size) return;
 	if (histp->start==-1) {
 		histp->start = histp->past_end;
+#if defined(DEADENDS)
+		histp->list[histp->start] = nzkey(rec);
+#else
 		node_to_nkey(nztop(rec), &histp->list[histp->start]);
+#endif
 		histp->past_end = (histp->start+1) % histp->size;
 		return;
 	}
@@ -1766,7 +1774,11 @@ history_record (RecordIndexEl *rec, struct hist * histp)
 	copy new node into nkey variable so we can check
 	if this is the same as our most recent (histp->list[last])
 	*/
+#if defined(DEADENDS)
+	nkey = nzkey(rec);
+#else
 	node_to_nkey(nztop(rec), &nkey);
+#endif
 	if (protect<1 || protect>99)
 		protect=1;
 	if (protect>count)
@@ -1806,7 +1818,11 @@ history_back (struct hist * histp)
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
 		if (--last < 0) last += histp->size;
+#if defined(DEADENDS)
+		rec = keyToRecord (histp->list[last], currentDatabase);
+#else
 		nkey_to_record(&histp->list[last], &rec);
+#endif
 		if (rec) {
 			histp->past_end = (last+1) % histp->size;
 			return rec;
@@ -1826,7 +1842,11 @@ history_fwd (struct hist * histp)
 	if (!histp->size || histp->past_end == histp->start)
 		return NULL; /* at end of full history */
 	next = histp->past_end;
+#if defined(DEADENDS)
+	rec = keyToRecord (histp->list[next], currentDatabase);
+#else
 	nkey_to_record(&histp->list[next], &rec);
+#endif
 	return rec;
 }
 /*==================================================
@@ -1903,7 +1923,11 @@ get_history_list (struct hist * histp)
 	next = histp->start;
 	while (1) {
 		GNode *node=0;
+#if defined(DEADENDS)
+		node = getRecord (histp->list[next], currentDatabase);
+#else
 		nkey_to_node(&histp->list[next], &node);
+#endif
 		if (node) {
 			String key = node_to_key(node);
 			append_indiseq_null(seq, key, NULL, true, false);
@@ -2090,7 +2114,7 @@ autoadd_xref (RecordIndexEl *rec, GNode *newnode)
 	normalizeRecord(rec->root);
 }
 
-#if !defined(DEADENDS)
+//#if !defined(DEADENDS)
 /*==================================================
  * get_vhist_len -- how many records currently in visit history list ?
  * Created: 2002/06/23, Perry Rapp
@@ -2110,7 +2134,7 @@ get_chist_len (void)
 {
 	return get_hist_count(&chist);
 }
-#endif
+//#endif
 
 /*==================================================
  * init_browse_module -- Do any initialization

@@ -28,6 +28,7 @@
 #include "nodeutils.h"
 #include "ui.h"
 #include "xref.h"
+#include "ask.h"
 
 #include "python-to-c.h"
 #include "llpy-externs.h"
@@ -670,7 +671,7 @@ static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_previndi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
-  int key = nzkey (indi->llr_record);
+  CString key = nzkey (indi->llr_record);
   Database *database = indi->llr_database;
   RecordIndexEl *new;
 
@@ -818,6 +819,11 @@ static PyObject *llpy_spouseset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args
   if (! PyArg_ParseTupleAndKeywords (args, kw, "O", keywords, &input_set))
     return NULL;
 
+  if (! PyAnySet_Check (input_set))
+    {
+      PyErr_SetString (PyExc_TypeError, "spouseset: SET argument is not a set");
+      return NULL;
+    }
   output_set = PySet_New (NULL);
   if (! output_set)
     return NULL;
@@ -903,6 +909,11 @@ static PyObject *llpy_descendantset (PyObject *self ATTRIBUTE_UNUSED, PyObject *
   if (! PyArg_ParseTupleAndKeywords (args, kw, "O", keywords, &input_set))
     return NULL;
 
+  if (! PyAnySet_Check (input_set))
+    {
+      PyErr_SetString (PyExc_TypeError, "descendantset: SET argument is not a set");
+      return NULL;
+    }
   output_set = PySet_New (NULL);
   if (! output_set)
     return NULL;
@@ -1015,6 +1026,11 @@ static PyObject *llpy_childset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args,
   if (! PyArg_ParseTupleAndKeywords (args, kw, "O", keywords, &input_set))
     return NULL;
 
+  if (! PyAnySet_Check (input_set))
+    {
+      PyErr_SetString (PyExc_TypeError, "childset: SET argument is not a set");
+      return NULL;
+    }
   output_set = PySet_New (NULL);
   if (! output_set)
     return NULL;

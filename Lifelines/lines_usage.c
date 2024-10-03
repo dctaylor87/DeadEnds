@@ -17,9 +17,10 @@
 #include "denls.h"
 
 #include "rfmt.h"
-#include "uiprompts.h"
-#include "refnindex.h"
+#include "recordindex.h"
 #include "sequence.h"
+#include "ask.h"
+#include "refnindex.h"
 
 #include "llinesi.h"
 #include "messages.h"

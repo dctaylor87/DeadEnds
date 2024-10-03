@@ -55,7 +55,7 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
 #include "errors.h"
@@ -75,6 +75,7 @@
 #include "signals.h"
 #include "errlog.h"
 #include "version.h"
+#include "init.h"
 
 /* for parser debugging */
 extern int yydebug;

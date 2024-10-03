@@ -43,7 +43,7 @@
 #include "rfmt.h"
 #include "refnindex.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "errors.h"
 #include "liflines.h"
@@ -374,7 +374,12 @@ ns_callback (CString key, CString name, void *param, Database *database)
 		}
 	} else {
 		/* SCAN_NAME_FRAG */
+#if defined(DEADENDS)
+		List *list = createList (null, null, null, false);
+		nameToList (name, list, &len, &ind);
+#else
 		List *list = name_to_list(name, &len, &ind);
+#endif
 		FORLIST(list, el)
 			piece = (String)el;
 			if (scanner_does_pattern_match(scanner, piece)) {

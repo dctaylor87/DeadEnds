@@ -32,7 +32,7 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"

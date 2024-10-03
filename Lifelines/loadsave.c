@@ -48,7 +48,7 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
 #include "liflines.h"

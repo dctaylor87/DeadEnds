@@ -51,7 +51,7 @@
 #include "rfmt.h"
 #include "editing.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "choose.h"
 #include "feedback.h"
 #include "errors.h"
@@ -59,6 +59,7 @@
 #include "messages.h"
 #include "splitjoin.h"
 #include "remove.h"
+#include "lineage.h"
 #include "ll-addoperations.h"
 
 /* everything in this file assumes we are dealing with the current database */
@@ -88,7 +89,7 @@ swap_children (RecordIndexEl *prnt, RecordIndexEl *frec)
 	if (frec) goto gotfam;
 	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
 	if (!prnt) return false;
-	nfam = num_families(nztop(prnt));
+	nfam = numberOfFamilies(nztop(prnt));
 	if (nfam <= 0) {
 		msg_error("%s", _(qSntchld));
 		return false;
@@ -196,7 +197,7 @@ reorder_child (RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt)
 	if (frec) goto gotfam;
 	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
 	if (!prnt) return false;
-	nfam = num_families(nztop(prnt));
+	nfam = numberOfFamilies(nztop(prnt));
 	if (nfam <= 0) {
 		msg_error("%s", _(qSntchld));
 		return false;
@@ -293,7 +294,7 @@ swap_families (RecordIndexEl *irec)
 		msg_error("%s", _(qSntprnt));
 		return false;
 	}
-	nfam = num_families(indi);
+	nfam = numberOfFamilies(indi);
 	if (nfam < 2) {
 		msg_error("%s", _(qSless2f));
 		return false;

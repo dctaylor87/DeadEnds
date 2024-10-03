@@ -56,7 +56,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "choose.h"
 #include "llinesi.h"
 #include "errors.h"

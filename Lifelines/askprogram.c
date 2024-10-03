@@ -34,7 +34,7 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "stringtable.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"

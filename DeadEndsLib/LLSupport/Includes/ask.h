@@ -1,3 +1,8 @@
+/* ask if only one match */
+typedef int ASK1Q;
+#define DOASK1 1
+#define NOASK1 0
+
 extern RecordIndexEl *ask_for_fam (CString pttl, CString sttl);
 extern RecordIndexEl *ask_for_fam_by_key(CString fttl, CString pttl, CString sttl);
 extern RecordIndexEl *ask_for_indi (CString ttl, ASK1Q ask1);
@@ -16,3 +21,5 @@ extern FILE *ask_for_output_file (CString mode,
 				  String *pfullpath,
 				  CString path,
 				  CString ext);
+extern RecordIndexEl *
+choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln);

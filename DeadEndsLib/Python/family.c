@@ -27,6 +27,7 @@
 #include "ui.h"
 #include "xref.h"
 #include "ll-sequence.h"
+#include "ask.h"
 
 #include "python-to-c.h"
 #include "types.h"

@@ -57,7 +57,7 @@
 #include "hashtable.h"
 #include "integertable.h"
 #include "xlat.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "feedback.h"

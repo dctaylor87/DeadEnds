@@ -48,7 +48,7 @@
 #include "list.h"
 #include "translat.h"
 #include "interp.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "liflines.h"
 #include "feedback.h"
 #include "messages.h"

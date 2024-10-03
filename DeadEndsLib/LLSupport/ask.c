@@ -52,7 +52,7 @@
 #include "refnindex.h"
 #include "recordindex.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "choose.h"
 #include "feedback.h"
 #include "rfmt.h"
@@ -67,7 +67,6 @@
 #include "de-strings.h"
 #include "llpy-externs.h"
 #include "ui.h"
-#include "ask.h"
 
 /* everything in this file assumes we are dealing with the current database */
 //#define database	currentDatabase
@@ -81,7 +80,7 @@
  *********************************************/
 
 static RecordIndexEl *ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, int *prc);
-static void make_fname_prompt(String fnamebuf, int len, String ext);
+static void make_fname_prompt(String fnamebuf, int len, CString ext);
 
 /*=====================================================
  * ask_for_fam_by_key -- Ask user to identify family by 
@@ -252,7 +251,7 @@ ask_for_file_try:
  * Created: 2001/12/24, Perry Rapp
  *====================================*/
 static void
-make_fname_prompt (String fnamebuf, int len, String ext)
+make_fname_prompt (String fnamebuf, int len, CString ext)
 {
 	if (ISNULL(ext)) {
 		ext = NULL;	/* a null extension is the same as no extension */

@@ -49,7 +49,7 @@
 #include "rfmt.h"
 #include "refnindex.h"
 #include "sequence.h"
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "errors.h"
 #include "liflines.h"

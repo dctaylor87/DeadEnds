@@ -54,7 +54,7 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
-#include "uiprompts.h"
+#include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
 #include "errors.h"
