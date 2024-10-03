@@ -389,7 +389,7 @@ String
 generic_to_list_string (GNode *node, String key, int len, String delim,
 			bool rfmt, bool appkey, Database *database)
 {
-	String str;
+	String str = 0;
 	str=NULL; /* set to appropriate format */
 	if (!node && key)
 		node = keyToPerson (key, database);
@@ -412,6 +412,8 @@ generic_to_list_string (GNode *node, String key, int len, String delim,
 			break;
 		case GROther:
 			str = other_to_list_string(node, len, delim);
+			break;
+		default:	/* cannot happen */
 			break;
 		}
 	}
