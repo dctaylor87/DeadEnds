@@ -28,6 +28,8 @@ getNextRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList);
 static RecordIndexEl *
 getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList);
 
+static RecordIndexEl *genericLastRecord (RecordIndex *index);
+
 RecordIndexEl *getFirstPersonRecord (Database *database)
 {
   return getFirstRecord_PF (database->personIndex, database->personRoots);
@@ -169,7 +171,6 @@ getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList)
     }
   return (record);
 }
-
 RecordIndexEl *getLastPersonRecord (Database *database)
 {
   return getLastRecord_PF (database->personIndex, database->personRoots);
@@ -203,6 +204,33 @@ getLastRecord_PF (RecordIndex *recordIndex, RootList *rootList)
       return NULL;
     }
   return (record);
+}
+
+RecordIndexEl *getLastRecord (RecordType type, Database *database)
+{
+  switch (type)
+    {
+    case GRPerson:
+      return getLastRecord_PF(database->personIndex, database->personRoots);
+    case GRFamily:
+      return getLastRecord_PF(database->familyIndex, database->familyRoots);
+    case GRSource:
+      return genericLastRecord (database->sourceIndex);
+    case GREvent:
+      return genericLastRecord (database->eventIndex);
+    case GROther:
+      return genericLastRecord (database->otherIndex);
+
+    default:			/* should never happen */
+      return NULL;
+    }
+}
+
+static RecordIndexEl *genericLastRecord (RecordIndex *index)
+{
+  int bucketIndex = 0;
+  int elementIndex = 0;
+  return (RecordIndexEl *)lastInHashTable (index, &bucketIndex, &elementIndex);
 }
 
 /* get next record for Persons and Families */
@@ -271,6 +299,15 @@ getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
       return NULL;
     }
   return (record);
+}
+
+static RecordIndexEl *
+genericPreviousRecord (CString key, RecordIndex *recordIndex)
+{
+  int bucketIndex;
+  int elementIndex;
+
+  RecordIndexEl *record = detailSearchHashTable (recordIndex, key, &bucketIndex, &elementIndex);
 }
 
 bool isKeyInUse (CString key, Database *database)

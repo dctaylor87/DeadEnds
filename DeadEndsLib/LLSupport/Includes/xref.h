@@ -30,6 +30,7 @@ extern CString getNewOtherKey (Database *database);
 
 extern RecordIndexEl *getFirstRecord (RecordType type, Database *database);
 extern RecordIndexEl *getLastRecord (RecordType type, Database *database);
+
 extern RecordIndexEl *getNextRecord (RecordType type, CString key, Database *database);
 extern RecordIndexEl *getPreviousRecord (RecordType type, CString key, Database *database);
 
