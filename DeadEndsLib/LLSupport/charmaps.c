@@ -696,6 +696,8 @@ custom_translate (CString str, TRANTABLE tt)
 	}
 	return zout;
 }
+
+#if !defined(DEADENDS)
 /*===================================================
  * custom_sort -- Compare two strings with custom sort
  * returns false if no custom sort table
@@ -771,6 +773,8 @@ custom_sort (const char *str1, const char *str2, int * rtn)
 		}
 	}
 }
+#endif
+
 /*===================================================
  * get_trantable_desc -- Get description of trantable
  * Created: 2002/11/26 (Perry Rapp)
