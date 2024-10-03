@@ -192,7 +192,9 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 	editfile = strsave(editfile );
 	editstr = (String) stdalloc(strlen(e) + strlen(editfile) + 2);
 	snprintf(editstr, strlen(e) + strlen(editfile) + 2, "%s %s", e, editfile);
+#if !defined(DEADENDS)		/* usersort is not used by DEADENDS */
 	set_usersort(custom_sort);
+#endif
 	suppress_reload = false;
 	update_useropts(0);
 
