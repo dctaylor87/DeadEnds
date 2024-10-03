@@ -241,11 +241,8 @@ annotate_node (GNode *node, bool expand_refns,
 	key = value_to_xref(nval(node));
 	if (!key) return;
 	
-#if 0
 	rec = key_possible_to_record(key, *key);
-#else
 	rec = __llpy_key_to_record (key, NULL, database);
-#endif
 	if (!rec) return;
 	
 	if (expand_refns) {
@@ -378,21 +375,11 @@ refn_to_record (String ukey,    /* user refn key */
                 int letr,       /* type of record */
 		Database *database)
 {
-#if 1
   CString key = getRefn (ukey, database);
   if (! key)
     return NULL;
 
   return nztop (__llpy_key_to_record (key, NULL, database));
-#else
-	String *keys;
-	int num;
-
-	if (!ukey || *ukey == 0) return NULL;
-	get_refns(ukey, &num, &keys, letr);
-	if (!num) return NULL;
-	return nztop(key_possible_to_record(keys[0], *keys[0]));
-#endif
 }
 
 /* getRefn -- searches the index for a mapping for refn, if found, returns it.
