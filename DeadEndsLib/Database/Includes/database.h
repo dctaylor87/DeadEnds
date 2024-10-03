@@ -55,6 +55,7 @@ int numberSources(Database*);    // Return the number of sources in the database
 int numberEvents(Database*);     // Return the number of events in the database.
 int numberOthers(Database*);     // Return the number of other records in the database.
 bool isEmptyDatabase(Database*);  // Return true if the database has not persons or families.
+RecordIndexEl *keyToRecord (CString key, Database *); // Return a key's record
 GNode *keyToPerson(CString key, Database*); // Get a person record the database.
 GNode *keyToFamily(CString key, Database*); // Get a family record from the database.
 GNode *keyToSource(CString key, Database*); // Get a source record from the database.

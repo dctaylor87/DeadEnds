@@ -133,6 +133,11 @@ static GNode* keyToRecordOfType(CString key, Database* database, RecordType recT
 	return node;
 }
 
+// keyToRecord returns the RecordIndexEl with the given key
+RecordIndexEl *keyToRecord (CString key, Database *database) {
+	return ((RecordIndexEl *) searchHashTable (database->recordIndex, key));
+}
+  
 // keyToPerson gets a person record from a database.
 GNode* keyToPerson(CString key, Database* database) {
 	return keyToRecordOfType(key, database, GRPerson);
