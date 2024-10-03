@@ -48,6 +48,8 @@ void addToHashTable(HashTable*, void*, bool);
 bool addToHashTableIfNew(HashTable*, void*);
 void *firstInHashTable(HashTable*, int*, int*);
 void* nextInHashTable(HashTable*, int*, int*);
+void *lastInHashTable(HashTable*, int*, int*);
+void* previousInHashTable(HashTable*, int*, int*);
 
 int sizeHashTable(HashTable*);
 void showHashTable(HashTable*, void(*show)(void*));

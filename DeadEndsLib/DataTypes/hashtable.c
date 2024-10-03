@@ -254,6 +254,48 @@ void* nextInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { /
 	return null; // No more elements.
 }
 
+// lastInHashTable returns the last element in a hash table; it works
+// with previousInHashTable to iterate the table, returning each
+// element in turn. The (in, out) variables keep track of the
+// iteration state. The caller must provide the locations of two
+// integer varibalbes to hold the state.
+
+void* lastInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
+	for (int i = table->numBuckets - 1; i >= 0; i--) {
+		Bucket* bucket = table->buckets[i];
+
+		if (bucket == null) continue;
+		*bucketIndex = i;
+
+		Block *block = &(bucket->block);
+		*elementIndex = block->length - 1;
+
+		return block->elements[block->length - 1];
+	}
+	return null;
+}
+
+// previousInHashTable returns the next element in the hash table, using the (in,out) state
+// variables to keep track of the state of the iteration.
+void* previousInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
+	Bucket* bucket = table->buckets[*bucketIndex];
+	Block* block = &(bucket->block);
+	if (*elementIndex > 0) {
+		*elementIndex -= 1;
+		return block->elements[*elementIndex];
+	}
+	// Reached start of current Bucket; find previous;
+	for (int i = *bucketIndex - 1; i >= 0; i--) {
+		bucket = table->buckets[i];
+		if (bucket == null) continue;  // 'Empty' bucket.
+		*bucketIndex = i;
+		*elementIndex = block->length - 1;
+		block = &(bucket->block);
+		return block->elements[block->length - 1];
+	}
+	return null; // No more elements.
+}
+
 // iterateHashTable iterates a hash table and performs a function on each element; elements
 // are visited in hash key order.
 void iterateHashTable(HashTable* table, void (*function)(void*)) {//PH;
