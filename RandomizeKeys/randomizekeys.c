@@ -19,7 +19,7 @@ static bool debugging = true;
 // main is the main program of the randomize keys batch program.
 int main(int argc, char** argv) {
 	CString gedcomFile = null;
-	String searchPath = null;
+	CString searchPath = null;
 	printf("%s: RandomizeKeys begin.\n", getMillisecondsString());
 	getArguments(argc, argv, &gedcomFile);
 	getEnvironment(&searchPath);
