@@ -23,8 +23,8 @@
 #define REGORDER	true
 #define SURFIRST	false
 
-#define DOASK1		1
-#define NOASK1		0
+//#define DOASK1		1
+//#define NOASK1		0
 
 //#define release_record(record)		/* empty --= no current ref counts */
 
