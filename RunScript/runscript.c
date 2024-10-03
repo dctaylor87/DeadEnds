@@ -23,7 +23,7 @@ static void usage(void);
 static void getArguments(int, char**, CString*, CString*);
 static void getEnvironment(CString*, CString*);
 //static void getDatabase(void);
-static void runScript(Database*, String);
+static void runScript(Database*, CString);
 
 // main is the main program of the RunScript program.
 int main(int argc, char* argv[]) {
@@ -86,7 +86,7 @@ static void getEnvironment(CString* gedcom, CString* script) {
 // be a proc named "main" in the global procedureTable. runScript creates a PNode to call that
 // proc, then creates the Context to call it in, and then calls it. The Context consists of the
 // Database and the main proc's SymbolTable.
-void runScript(Database* database, String fileName) {
+static void runScript(Database* database, CString fileName) {
 	// Create a PNode to call the main proc.
 	curFileName = "internal";
 	curLine = 1;
