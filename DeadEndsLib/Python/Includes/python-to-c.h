@@ -25,6 +25,7 @@ extern void llpy_nodes_init (void);
 extern void llpy_records_init (void);
 extern void llpy_event_init (void);
 extern void llpy_export_init (void);
+extern void llpy_list_init (void);
 
 /* XXX TODO: make this a bitmask XXX */
 extern int llpy_debug;
