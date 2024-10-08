@@ -22,10 +22,11 @@ repeat of what you already know.
 Some of the functions and methods mentioned herein are not available
 in DeadEnds.  This will eventually be fixed.  If you notice such a
 function or method and bring it to my attention, that will likely
-speed the process of getting it fixed.
+speed the process of getting it fixed.  I believe that all of the
+documented but unimplemented functions are so marked.
 
-Additionally, there will eventually be functions available only in
-DeadEnds and not in LifeLines.
+Additionally, there will are functions available only in DeadEnds and
+not in LifeLines.
 
 There are, at least, two potential audiences for information about the
 DeadEnds Python extension --
@@ -48,10 +49,10 @@ implements it, please consult the document ``DeadEnds Python Internals''.
 
 @section Function Names And Arguments
 
-If you are already familiar with the DeadEnds Report Writing
-language, you will have an easier time learning the Python Extension
-Language as there is a fair bit of similarity in the function names
-and their behavior.
+If you are already familiar with the DeadEnds Report Writing language
+or the LifeLines Report Writing language, you will have an easier time
+learning the Python Extension Language as there is a fair bit of
+similarity in the function names and their behavior.
 
 Many of the function names are the same and take the same arguments in
 the same order as those in the DeadEnds Report Writing language.
@@ -81,10 +82,12 @@ database, and you want the husband of the family, you might write:
 
 If '@code{fam}' has no husband recorded, then @code{husband()} will return @code{None}.
 
-After executing the above, @code{husb} is either '@code{None}' or an INDI record.
+After executing the above, @code{husb} is either '@code{None}' or the
+@code{INDI} record pointed to by the @code{HUSB} line in the
+@code{FAM} record.
 
-If @code{husb} is an individual (i.e., not @code{None}), then you could get @code{husb}'s
-name by typing:
+If @code{husb} is an individual (i.e., not @code{None}), then you
+could get @code{husb}'s name by typing:
 @findex name
 
     @code{husb.name()}
@@ -97,20 +100,25 @@ or
 
     @code{husb.name(True)}
 
-The first returns @code{husb}'s name as a string using the default
-capitalization for the last name.  The second, returns it using the
-capitalization as found in the database, and the third puts it in all
-capital letters.
+The @code{caps} parameter to the method @code{husb} is optional.
+Thus, the first returns @code{husb}'s name as a string using the
+default capitalization for the last name.  The second, specifies the
+@code{caps} parameter by name, and returns the surname using the
+capitalization as found in the database, and the third specifies the
+@code{caps} parameter by position and puts the surname in all capital
+letters.
 
 This is because '@code{name}' is a instance method for Individual
-Records.  It takes one argument -- @code{caps} -- which is optional.
+Records.  It takes one argument, @code{caps}, which is optional.
 You can let its value default (first example), give it explicitly by
 name (second example), or give it explicitly by position (third
 example).
 
-In the function write ups that follow, the arguments are shown in
-positional order.  The names shown are the keyword names.  And if an
-argument is shown in []'s, then it is optional.
+In the instance and non-instance instance write ups that follow, the
+function arguments are shown in positional order.  The names shown are
+the keyword names.  And if an argument is shown in []'s, then it is
+optional.  For optional parameters, the write up will tell what the
+default value is.
 
 If the function is an instance method, the instance ``type'' is shown
 before the function name.
@@ -134,7 +142,7 @@ typically be:
 @end example
 
 If you are running the Python interpreter interactively, you will
-probably also want to type the line:
+probably also want to additionally type the line:
 
 @example
 @code{import readline}
@@ -142,10 +150,14 @@ probably also want to type the line:
 
 as that will enable command history and editing.
 
-Consideration was given to using some other module name, such as
-@code{deadends} or @code{DeadEnds}.  But, @code{llines} was picked for
-LifeLines and when porting to DeadEnds it seemed silly to be
-gratuitously incompatible.  So, I kept the same module name.
+Consideration was given to using some other module name for the
+DeadEnds embedding, such as @code{deadends} or @code{DeadEnds}.  But,
+@code{llines} was picked for LifeLines and when porting to DeadEnds it
+seemed silly to be gratuitously incompatible.  So, I kept the same
+module name.
+
+If it becomes clear that backwards compatibility is not an issue, then
+the name could change.  For now, it is @code{llines}.
 
 @chapter RECORDS
 @section Individual Records
@@ -197,8 +209,9 @@ found, @code{None} is returned.
 @deftypefun INDI trimname (max_length) @arrow{} STRING or @code{None}
 @findex trimname
 
-XXX should this be optional?  If yes, what should be the default
-max_length?
+XXX Should this be optional?  If yes, what should be the default
+max_length?  Also, need to read the code and document HOW the name is
+trimmed. XXX
 
 @end deftypefun
 @deftypefun INDI title (void) @arrow{} STRING or @code{None}
@@ -261,7 +274,7 @@ himself, herself, itself
 Reflective
 @end multitable
 
-QUESTION: Should we allow / implement the it/its/itself column as a
+QUESTION: Should we allow / implement an it/its/itself column as a
 possible return value?  If yes, when should we return one of those
 pronouns?  My inclination is to go with tradition and return the
 masculine if the gender is unknown.  Neuter / None / error all feel
@@ -324,9 +337,10 @@ the role.
 @deftypefun INDI nspouses (void) @arrow{} INTEGER
 @findex nspouses
 
-Returns the number of spouses of INDI.  If INDI is in a family where
-the spouse is unknown, then number of spouses and number families will
-be different.
+Returns the number of known spouses of INDI.  If INDI is in a family
+where the spouse is unknown, then number of spouses and number
+families will be different.  If INDI has multiple families with the
+same spouse, they will be counted multiple times.
 
 @end deftypefun
 @deftypefun INDI nfamilies (void) @arrow{} INTEGER
@@ -389,21 +403,28 @@ The following functions are instance methods.
 
 Returns the sex of INDI ("M", "F", or "U")
 
-XXX Currently does not distinguish between a value of "U"
-(unknown) and no sex specified -- perhaps it should? XXX
+XXX Currently the function does not distinguish between a value of "U"
+(unknown) and no sex specified -- perhaps it should?  Perhaps it
+should return 'None' for the latter case?  Or the empty string?
+Additionally, GEDCOM v7 allows a fourth value "X" and it can be
+omitted altogether. XXX
 
 @end deftypefun
 @deftypefun INDI male (void) @arrow{} BOOLEAN
 @findex male
 
-Returns @code{True} if male, @code{False} otherwise.
+Returns @code{True} if known to be male, @code{False} otherwise.
 
 @end deftypefun
 @deftypefun INDI female (void) @arrow{} BOOLEAN
 @findex female
 
-Returns @code{True} if female, @code{False} otherwise.
+Returns @code{True} if known to be female, @code{False} otherwise.
 @end deftypefun
+
+Because it is permissible for the @code{SEX} tag to be omitted or to
+have a value of ``U'' or ``X'', it is possible for @code{male} and
+@code{female} to both return False.
 
 @subsection Database related
 The following functions are instance methods.
@@ -421,7 +442,6 @@ stripped.
 Returns the next INDI in the database (in key order).  Returns
 @code{None} when the end is reached.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun INDI previndi (void) @arrow{} INDI or @code{None}
 @findex previndi
@@ -429,7 +449,6 @@ Returns the next INDI in the database (in key order).  Returns
 Returns the previous INDI in the database (in key order).  Returns
 @code{None} when the beginning is reached.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 
 The following functions are part of the module but are not instance
@@ -443,7 +462,6 @@ Returns @code{None} if there are no INDIs in the database.
 
 In the future this MIGHT become a database instance function.
 
-@b{Not currently available in DeadEnds.}
 @end defun
 @defun lastindi (void) @arrow{} INDI or @code{None}
 @findex lastindi
@@ -453,7 +471,6 @@ Returns @code{None} if there are no INDIs in the database.
 
 In the future this MIGHT become a database instance function.
 
-@b{Not currently available in DeadEnds.}
 @end defun
 @defun individuals (void) @arrow{} Iterator
 @findex individuals
@@ -552,7 +569,6 @@ stripped.
 Returns the next family (in key order) in the database.  Returns
 @code{None} if the end has been reached.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 @deftypefun FAM prevfam (void) @arrow{} FAM or @code{None}
 @findex prevfam
@@ -560,7 +576,6 @@ Returns the next family (in key order) in the database.  Returns
 Returns the previous family (in key order) in the database.
 Returns @code{None} if the beginning has been reached.
 
-@b{Not currently available in DeadEnds.}
 @end deftypefun
 The following functions are part of the module but are not instance
 methods:
@@ -573,7 +588,6 @@ Returns @code{None} if there are no FAMs in the database.
 
 In the future this MIGHT become a database instance function.
 
-@b{Not currently available in DeadEnds.}
 @end defun
 @defun lastfam (void) @arrow{} FAM or @code{None}
 @findex lastfam
@@ -583,7 +597,6 @@ Returns @code{None} if there are no FAMs in the database.
 
 In the future this MIGHT become a database instance function.
 
-@b{Not currently available in DeadEnds.}
 @end defun
 
 @defun families (void) @arrow{} Iterator
@@ -947,7 +960,7 @@ Number with space before single digit months.
 @item 1
 Number with leading zero before single digit months.
 @item 2
-Number with no space for zero before single digit months.
+Number with no space or zero before single digit months.
 @item 3
 Upper case abbreviation (eg.g. JAN, FEB) (localized).
 @item 4
@@ -1286,6 +1299,23 @@ would assign the variable @code{person} each individual in the
 database, in turn, and then call @code{do_something_with} with
 @code{person} as its argument.
 
+NOTE: If during the iteration you are adding records to or deleting
+records from the database, then there is the potential that records
+will be skipped or processed multiple times.
+
+In such an eventuality, you might want to iterate twice -- first to
+collect the records and then to process them.  That is, something
+like:
+
+@example
+list_of_persons = llines.individuals()
+
+for person in list_of_persons:
+  do_something_with(person)
+@end example
+
+would first create a list of persons and then iterate through it.
+
 There are two sets of RECORD iterators.  Method iterators and Function
 iterators.
 
@@ -1331,7 +1361,7 @@ NODEs that are not associated with any RECORD.
 To get an iterator for a NODE, call the instance function @code{nodeiter}.
 Its signature is:
 
-@deftypefun NODE noteiter (type, [tag]) @arrow{} Iterator
+@deftypefun NODE nodeiter (type, [tag]) @arrow{} Iterator
 Here @code{type} is one of @code{ITER_CHILDREN} or
 @code{ITER_TRAVERSE} and @code{tag} is a tag to search for.
 @xref{nodeiter} for details.
@@ -1381,6 +1411,16 @@ The functions
 @findex not
  @code{eq},
 @findex eq
+ @code{ge}
+@findex ge
+ @code{gt}
+@findex gt
+ @code{le}
+@findex le
+ @code{lt}
+@findex lt
+ @code{ne}
+@findex ne
 will not be implemented.
 
 @item List Functions
