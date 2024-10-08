@@ -241,7 +241,6 @@ annotate_node (GNode *node, bool expand_refns,
 	key = value_to_xref(nval(node));
 	if (!key) return;
 	
-	rec = key_possible_to_record(key, *key);
 	rec = __llpy_key_to_record (key, NULL, database);
 	if (!rec) return;
 	

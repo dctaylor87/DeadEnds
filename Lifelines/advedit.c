@@ -100,7 +100,7 @@ expand_tree (GNode *root0)
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
 		key = rmvat(nval(node));
-		if ((sub = nztop(key_possible_to_record(key, *key)))) {
+		if ((sub = nztop (__llpy_key_to_record (key, NULL, database)))) {
 			copy = copy_node_subtree(sub);
 			nxref(node)    = nxref(copy);
 			ntag(node)     = ntag(copy);
