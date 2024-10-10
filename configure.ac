@@ -685,5 +685,6 @@ AC_CONFIG_FILES([Makefile \
         Lifelines/Makefile \
         Programs/Makefile \
 	MenuLibrary/Makefile \
+	Partition/Makefile \
 	UseMenus/Makefile])
 AC_OUTPUT

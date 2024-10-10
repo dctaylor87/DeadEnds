@@ -6,7 +6,7 @@
 // use to keep the elements in a Bucket sorted.
 //
 // Created by Thomas Wetmore 29 November 2022.
-// Last changed on 5 July 2024.
+// Last changed on 7 October 2024.
 
 #ifndef hashtable_h
 #define hashtable_h
@@ -45,7 +45,7 @@ void* searchHashTable(HashTable*, CString key);
 void* searchHashTableWithElement(HashTable* table, void* element);
 
 void addToHashTable(HashTable*, void*, bool);
-bool addToHashTableIfNew(HashTable*, void*);
+bool addToHashTableIfNew(HashTable*, void*); // WARNING: NOT IMPLEMENTED YET.
 void *firstInHashTable(HashTable*, int*, int*);
 void* nextInHashTable(HashTable*, int*, int*);
 void *lastInHashTable(HashTable*, int*, int*);

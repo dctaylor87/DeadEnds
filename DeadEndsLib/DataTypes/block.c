@@ -97,6 +97,10 @@ void* findInBlock(Block* block, CString key, CString(*getKey)(void*), int* index
 // binary search.
 void* findInSortedBlock(Block* block, CString key, CString(*getKey)(void*),
 						int(*compare)(CString, CString), int* index) {
+	if (block->length == 0) {
+		if (index) *index = 0;
+		return null;
+	}
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);
 }
 

@@ -3,7 +3,7 @@
 // standard.h -- Useful things.
 //
 // Created by Thomas Wetmore on 1 November 2022.
-// Last changed on 10 August 2024.
+// Last changed on 3 October 2024.
 
 #ifndef standard_h
 #define standard_h
@@ -21,7 +21,7 @@ typedef const char* CString;
 #include <unistd.h>
 #include "path.h"
 
-#define DEBUGALLOCS // EMPTY
+//#define DEBUGALLOCS // EMPTY
 #define MAXSTRINGSIZE 512
 
 // CharacterType -- Characters are partitioned into different types.
@@ -57,34 +57,33 @@ String capitalize(String);
 
 // User interface to the standard functions.
 //--------------------------------------------------------------------------------------------------
-char* __alloc(size_t, String, int) __attribute__ ((malloc)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute ((returns_nonnull));
-void __free(void* ptr, String, int);
+void* _alloc(size_t, String, int) __attribute__ ((malloc)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute ((returns_nonnull));
+void _free(void* ptr, String, int);
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
 void __logAllocations(bool);  // Turn allocation logging on and off.
 
 // Turn on alloc and free debugging.
-#ifdef DEBUGALLOCS
-#define stdalloc(l)   __alloc(l, __FILE__, __LINE__)
-#define stdfree(p)    __free(p, __FILE__, __LINE__)
-#define logAllocations(b) __logAllocations((b))
-// Otherwise stdalloc and stdfree use malloc and free directly.
-#else
-#define stdalloc(l) malloc((l))
-#define stdfree(p) free((p))
-#define logAllocations(b)
+#ifdef DEBUGALLOCS // Debugging allocs and free.
+	#define stdalloc(l)   _alloc(l, __FILE__, __LINE__)
+	#define stdfree(p)    _free(p, __FILE__, __LINE__)
+	#define logAllocations(b) _logAllocations((b))
+#else // Not debugging allocs and frees.
+	#define stdalloc(l) malloc((l))
+	#define stdfree(p) free((p))
+	#define logAllocations(b)
 #endif
 
-#define fatal(msg)    __fatal(__FILE__, __LINE__, msg, __PRETTY_FUNCTION__)
-#define FATAL()       __fatal(__FILE__, __LINE__, NULL, __PRETTY_FUNCTION__)
-#define ASSERT(expr)  do { if(!(expr)) __fatal(__FILE__, __LINE__, "ASSERT FAILED: " #expr, __PRETTY_FUNCTION__); } while (0)
+#define fatal(msg)    _fatal(__FILE__, __LINE__, msg, __PRETTY_FUNCTION__)
+#define FATAL()       _fatal(__FILE__, __LINE__, NULL, __PRETTY_FUNCTION__)
+#define ASSERT(expr)  do { if(!(expr)) _fatal(__FILE__, __LINE__, "ASSERT FAILED: " #expr, __PRETTY_FUNCTION__); } while (0)
 #define eqstr(s,t)    (!strcmp((s),(t)))
 #define nestr(s,t)    (strcmp((s),(t)))
 
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 
-void __fatal(CString, int, CString, CString); // standard.c
-//void __assert(bool, String, int); // standard.c
+void _fatal(CString, int, CString, CString); // standard.c
+void _assert(bool, String, int); // standard.c
 
 extern CString version;		// standard.c
 

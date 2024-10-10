@@ -10,7 +10,7 @@
 // If DE_GEDCOM_PATH and/or DE_SCRIPTS_PATH are defined, they may be used to find the files.
 //
 // Created by Thomas Wetmore on 21 July 2024
-// Last changed on 16 August 2024.
+// Last changed on 3 October 2024.
 
 #include <stdint.h>
 

@@ -28,7 +28,7 @@ void insertInNameIndex(NameIndex*, CString nameKey, String personKey);
 void removeFromNameIndex (NameIndex *index, CString namekey, CString recordKey);
 extern void removeNamesOfPersonFromIndex (NameIndex* index, GNode* person);
 void showNameIndex(NameIndex*);
-Set *searchNameIndex(NameIndex*, CString);
+Set* searchNameIndex(NameIndex*, CString);
 void getNameIndexStats(NameIndex*, int*, int*);
 
 #endif // nameindex_h
