@@ -7,9 +7,6 @@ bin_PROGRAMS = partition
 partition_SOURCES = main.c connect.c
 
 partition_LDADD = \
-	../DeadEndsLib/Interp/libinterp.a \
-	../DeadEndsLib/Parser/libparser.a \
-	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
@@ -22,9 +19,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Operations/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Validate/Includes
+	-I$(top_srcdir)/DeadEndsLib/Validate/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Operations/Includes
 
