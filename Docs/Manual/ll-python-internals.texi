@@ -134,10 +134,16 @@ User interface, obviously.  Less obviously, the code here is used by
 here are mere stubs of their more fleshed out cousins that live in
 @code{LifeLines}.  Stubs that should be, in my opinion, fleshed out.
 
+The long term goal is for the bulk of the code to be user interface
+independent and instead provide an abstraction layer between the
+various user interfaces -- so that most code does not need to know nor
+care whether the user interface is curses, textual, graphical, or
+something else.
+
 @item @file{DeadEndsLib/Utils}
 
 Not a subsystem, as such, but rather a collection of routines that are
-meant to be generically useful across subsystems.  Some of the
+meant to be generically useful across different subsystems.  Some of the
 routines are implementations of functionality that is available on
 many systems, but not everywhere.
 
@@ -157,18 +163,22 @@ here.  The code that deals with the screen (via @code{ncurses}), the
 various menus, the user interaction, and various routines that do not
 have a better location to live.  Most of this code was taken from the
 @file{src/liflines} directory of LifeLines and then modified to build
-and work with DeadEnds.  Some is original to DeadEnds.
+and work with DeadEnds.  Some comes from other directories and some is
+original to DeadEnds.
 
 Some of the user interaction code lives instead in
 @file{DeadEndsLib/UI} or @file{DeadEndsLib/LLSupport}.  The division
-of code between these three directories needs work and could be
-considered a work in progress.
+of code between these three directories needs work and should probably
+be considered a work in progress.
 @item @file{Programs}
 
 Various programs that link with the DeadEnds code.  You can find a
 DeadEnds version of @command{llexec} in this directory called
 @command{deadends}.
 
+@item @file{Partition}
+
+A small program for finding the disjoint partitions within a database.
 @item @file{PatchSex}
 
 Small program for examining a GEDCOM database and patching the
@@ -206,7 +216,8 @@ DeadEnds script language programs.  In LifeLines this was called @file{reports}
 Currently this is populated with some test scripts rather than user reports.
 
 @item @file{TeX}
-
+An attempt, so far fairly unsuccessful to TeXify the markdown files
+found in @file{Docs}.
 @item @file{build}
 
 Files used by the build system tools to aid in the use of
@@ -255,9 +266,14 @@ found here.
 
 @item @file{nodes.c}
 
+Node specific code.  Code for obtaining the values of various fields
+as seen in the textual database, such as the level, the xref, the tag,
+and the value.  Also code for traversing the in memory tree, copying a
+subset of the tree, or iterating over part of the tree.
+
 @item @file{other.c}
 
-Allocation, deallocation, and iteration of OTHR records.
+Allocation of , deallocation of, and iteration over OTHR records.
 
 @item @file{person.c}, @file{person.h}
 
@@ -271,8 +287,8 @@ variables that don't really fit anywhere else.
 
 @item @file{records.c}
 
-Functions which are record type agnostic, for example the functions
-@code{key_to_record} and @code{keynum_to_record} are found here.
+Functions which are record type agnostic, for example the function
+@code{key_to_record} is found here.
 
 @item @file{run.c}
 
@@ -329,11 +345,11 @@ non-temp @} status can be @{ set | cleared @} by calling
 
 Temporary nodes, when created, are marked with flag @code{ND_TEMP}.
 
-When one node is made the { parent | child } of another node, the {
-temp | non-temp } status of the parent is @b{NOT} propagated to the
+When one node is made the @{ parent | child @} of another node, the @{
+temp | non-temp @} status of the parent is @b{NOT} propagated to the
 new child(ren).  It should be.  This is a @b{BUG}.
 
-When the reference count of a node is { incremented | decremented },
+When the reference count of a node is @{ incremented | decremented @},
 that change is not propagated down the tree.  It should be.  This is a
 @b{BUG}.
 
@@ -695,7 +711,7 @@ Manipulates the @code{name} according to the arguments.
 Argument @code{caps} says whether to return the surname in all caps (if @code{true})
 or as found in @code{name} (if @code{false}).
 
-Argument @code{preservce_order} says whether the preserve the order in
+Argument @code{preserve_order} says whether the preserve the order in
 @code{name} (if @code{true}) or to reorder as surname comma
 rest-of-name (if @code{false}).
 

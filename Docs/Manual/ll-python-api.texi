@@ -1695,9 +1695,9 @@ Report reference count activity.
 
 @section MacOS and Windows
 
-While DeadEnds runs on GNU/Linux, MacOS, and Windows, and Python also
-runs on all three, I have only built and tested DeadEnds with Python
-on GNU/Linux.
+DeadEnds is known to build and run on both GNU/Linux and MacOS, and
+might run on Windows.  Python also runs on all three.  That said, I
+have only built and tested DeadEnds with Python on GNU/Linux.
 
 It should (famous last words), build and work on both Windows and
 MacOS.  But, neither has been tested.  Feedback would be appreciated.
@@ -1707,11 +1707,13 @@ tested, then it does not work''.  So, while I am not aware of any
 problems with building and using it on Windows or MacOS, neither would
 surprise me.
 
-Feedback on success and/or failure building on MacOS and/or Windows
-would be appreciated.  Feedback on success and/or failure with using
-it on GNU/Linux, Windows, or MacOS would also be appreciated.
-
+Feedback on success and/or failure building it or using it on any of
+the aforementioned platforms would be appreciated.
 @section Configuring
+
+If you wish to use the Python embedding, you will need to have the
+Python3 interpreter installed.  And during the configure and build you
+will also need to have the Python3 dev packages installed.
 
 The top-level @code{configure.ac} has the option
 @option{--with-python} As with most @code{--with} options, there are
@@ -1758,10 +1760,11 @@ If you wish to build DeadEnds with Python, you will need to have the
 encounter other dependencies beyond those required to build DeadEnds
 without Python, I would appreciate hearing about them.
 
-Three packages that I know that you need, whether with or without Python, are
-@code{autoconf}, @code{automake}, and @code{autoheader}.
-
 @section Building from a @code{Git} repository
+
+When building from a @code{Git} repository, three packages that I know
+that you will need, whether you are building with or without the Python
+embedding are @code{autoconf}, @code{automake}, and @code{autoheader}.
 
 Before your first build, you will need to run, from the top of the
 Git source tree, the following three commands (each with no arguments):
@@ -1786,11 +1789,11 @@ accepts a lot of options.  If you are unfamiliar with
 @code{configure}, then I recommend giving it the @option{--help}
 option.
 
-While @code{configure} supports building in the source tree, I
+While @code{configure} supports building in the source tree, I strongly
 recommend building in a separate tree as it helps keep the source tree
 clean.  I also recommend the option @option{--with-docs} to enable the
 building of the documentation. 
-
+ 
 @chapter Invoking The Python Extension
 
 QUESTIONS: Should the Python interpreter be shutdown and restarted
@@ -1951,7 +1954,7 @@ Iterators?  Anything else?
 @section Database Related
 
 Unless explicitly stated otherwise, none of the following change which
-database is the @b{current} database.  Unless stated otherwise,
+database is the @b{current} database.  And unless stated otherwise,
 functions described that do not take a database argument act upon data
 within the current database.
 
@@ -1975,9 +1978,13 @@ Similar questions for PVALUEs and the existing report writing
 language.
 
 Two possible answers, neither completely satisfactory, are to either
-not support closing / deleteing / removing a database OR placing the
+not support closing / deleting / removing a database OR placing the
 burden upon the script writer -- if such such a PValue / PyObject is
 referenced it might cause the program to crash and burn.
+
+Another possible answer is to treat it like a file system.  Keep a
+count of the PyObjects and PVALUEs that reference it, directly or
+indirectly, and refuse the operation if the database is referenced.
 
 To support removing a database from memory I believe that we would
 need reference counts, but I'm not sure if they would be sufficient.
@@ -2155,13 +2162,15 @@ referenced by the @code{OBJE} records within the @acronym{GEDCOM}
 file).  @acronym{GEDZIP} files are mentioned in recent @acronym{GEDCOM}
 specifications.
 
+It is my expectation that support for @acronym{GEDZIP} will become
+increasingly important and that support will be added at some point. 
 @section Support for Export Restrictions
 
 Not sure if the @acronym{GEDCOM} @code{RESN} tag is adequate here.
 
 Some way to select when exporting data whether to export everything,
-all the @acronym{GEDCOM} conforming (i.e., no extensions) data, or a
-subset based on RECORD, EVENT, and/or NODE markers such as the
+all the @acronym{GEDCOM} conforming (i.e., no extensions) data, and/or a
+subset based on RECORD, EVENT, or NODE markers such as the
 @code{RESN} tag.
 
 Possibly excluding living individuals.  Or excluding selected
