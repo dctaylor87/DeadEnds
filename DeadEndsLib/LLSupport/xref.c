@@ -171,6 +171,7 @@ getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList)
     }
   return (record);
 }
+
 RecordIndexEl *getLastPersonRecord (Database *database)
 {
   return getLastRecord_PF (database->personIndex, database->personRoots);
@@ -179,6 +180,21 @@ RecordIndexEl *getLastPersonRecord (Database *database)
 RecordIndexEl *getLastFamilyRecord (Database *database)
 {
   return getLastRecord_PF (database->familyIndex, database->familyRoots);
+}
+
+RecordIndexEl *getLastSourceRecord (Database *database)
+{
+  return genericLastRecord (database->sourceIndex);
+}
+
+RecordIndexEl *getLastEventRecord (Database *database)
+{
+  return genericLastRecord (database->eventIndex);
+}
+
+RecordIndexEl *getLastOtherRecord (Database *database)
+{
+  return genericLastRecord (database->otherIndex);
 }
 
 /* get last record for Persons and Families */
@@ -307,7 +323,52 @@ genericPreviousRecord (CString key, RecordIndex *recordIndex)
   int bucketIndex;
   int elementIndex;
 
+  if (! key)
+    return lastInHashTable (recordIndex, &bucketIndex, &elementIndex);
+
   RecordIndexEl *record = detailSearchHashTable (recordIndex, key, &bucketIndex, &elementIndex);
+  if (! record)
+    return NULL;		/* bad input */
+
+  return previousInHashTable (recordIndex, &bucketIndex, &elementIndex);
+}
+
+RecordIndexEl *
+getPreviousSourceRecord (CString key, Database *database)
+{
+  return genericPreviousRecord (key, database->sourceIndex);
+}
+
+RecordIndexEl *
+getPreviousEventRecord (CString key, Database *database)
+{
+  return genericPreviousRecord (key, database->eventIndex);
+}
+
+RecordIndexEl *
+getPreviousOtherRecord (CString key, Database *database)
+{
+  return genericPreviousRecord (key, database->otherIndex);
+}
+
+RecordIndexEl *
+getPreviousRecord (RecordType type, CString key, Database *database)
+{
+  switch (type)
+    {
+    case GRPerson:
+      return getPreviousPersonRecord (key, database);
+    case GRFamily:
+      return getPreviousFamilyRecord (key, database);
+    case GRSource:
+      return getPreviousSourceRecord (key, database);
+    case GREvent:
+      return getPreviousEventRecord (key, database);
+    case GROther:
+      return getPreviousOtherRecord (key, database);
+    default:
+      return NULL;		/* bad call */
+    }
 }
 
 bool isKeyInUse (CString key, Database *database)
