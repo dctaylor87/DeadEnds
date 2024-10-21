@@ -723,7 +723,7 @@ xlat_get_description (XLAT xlat)
     if (xstep->iconv_src) {
       /* an iconv step */
       len = 2 + 6 + strlen (xstep->iconv_src) + 1 + strlen (xstep->iconv_dest) + 1 + 1;
-      part = (char *)malloc (len);
+      part = (char *)stdalloc (len);
       next = part;
       if (str)
 	next = stpcpy (part, ", ");
@@ -735,7 +735,7 @@ xlat_get_description (XLAT xlat)
     } else if (xstep->dyntt) {
       String dyn = tt_get_name (xstep->dyntt->tt);
       len = 2 + 3 + strlen(dyn) + 1 + 1;
-      part = (char *)malloc (len);
+      part = (char *)stdalloc (len);
       next = part;
       if (str)
 	next = stpcpy (part, ", ");
@@ -747,7 +747,7 @@ xlat_get_description (XLAT xlat)
   /* TRANSLATORS: steps in a chain of codeset conversions, eg, Editor-to-Internal */
   snprintf(stepcount, sizeof(stepcount), _pl("%d step", "%d steps", count), count);
   len = strlen (stepcount) + 2 + (next - part) + 1;
-  rtn = (char *) malloc (len);
+  rtn = (char *) stdalloc (len);
   next = stpcpy (rtn, stepcount);
   next = stpcpy (next, ": ");
   next = stpcpy (next, str);

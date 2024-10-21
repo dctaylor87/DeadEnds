@@ -23,7 +23,7 @@ CString searchRefnIndex(RefnIndex* index, CString refn) {
 
 // createRefnIndexEl creates a new reference index entry.
 RefnIndexEl *createRefnIndexEl(CString refn, CString key) {
-	RefnIndexEl *el = (RefnIndexEl*) malloc(sizeof(RefnIndexEl));
+	RefnIndexEl *el = (RefnIndexEl*) stdalloc(sizeof(RefnIndexEl));
 	if (! el)
 	  return NULL;
 	memset(el, 0, sizeof(RefnIndexEl));
@@ -49,7 +49,7 @@ static CString getKey(void* a) {
 
 // delete frees a RefnIndexEl.
 static void delete(void* element) {
-	free(element);
+	stdfree(element);
 }
 
 // createRefnIndex creates a RefnIndex.

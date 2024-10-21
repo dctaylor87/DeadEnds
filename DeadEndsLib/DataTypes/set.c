@@ -13,7 +13,7 @@
 
 // createSet creates a Set; the getKey and compare functions are required; delete is optional.
 Set* createSet(CString(*getKey)(void*), int(*compare)(CString, CString), void(*delete)(void*)) {
-	Set* set = (Set*) malloc(sizeof(Set));
+	Set* set = (Set*) stdalloc(sizeof(Set));
 	if (! set)
 	  return NULL;
 	memset(set, 0, sizeof(Set));

@@ -74,7 +74,7 @@ String gnodesToString(GNode* gnode) {
 // gnodeToString returns a GNode as a String without newline.
 String gnodeToString(GNode* gnode, int level) {
     int length = nodeStringLength(level, gnode);
-    String string = (String) malloc(length);
+    String string = (String) stdalloc(length);
     swriteGNode(level, gnode, string);
     string[strlen(string) - 1] = 0;
     return string;

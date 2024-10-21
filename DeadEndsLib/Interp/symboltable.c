@@ -22,7 +22,7 @@ static int compare(CString a, CString b) {
 // delete deletes a Symbol.
 static void delete(void* a) {
 	Symbol* symbol = (Symbol*) a;
-	free(symbol->value);
+	stdfree(symbol->value);
 }
 
 // getKey returns the Symbol's identifier.
@@ -32,7 +32,7 @@ static CString getKey(void *symbol) {
 
 // createSymbol creates a Symbol.
 static Symbol *createSymbol(CString iden, PValue *ppvalue) {
-	Symbol* symbol = (Symbol*) malloc(sizeof(Symbol));
+	Symbol* symbol = (Symbol*) stdalloc(sizeof(Symbol));
 	if (! symbol)
 	  return NULL;
 	memset(symbol, 0, sizeof(Symbol));

@@ -63,7 +63,7 @@ void freeGNode(GNode* node) {
 // from the tag table. This is the only time that memory for these fields is handled.
 GNode* createGNode(String key, String tag, String value, GNode* parent) {
 	nodeAllocs++;
-	GNode* node = (GNode*) malloc(sizeof(GNode));;
+	GNode* node = (GNode*) stdalloc(sizeof(GNode));;
 	if (! node)
 	  return NULL;
 	memset(node, 0, sizeof(GNode));

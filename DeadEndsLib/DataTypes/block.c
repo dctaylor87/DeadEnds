@@ -12,13 +12,13 @@ static bool blockDebugging = false;
 
 // createBlock creates an empty Block.
 Block* createBlock(void) {
-	Block* block = (Block*) malloc(sizeof(Block));
+	Block* block = (Block*) stdalloc(sizeof(Block));
 	if (! block)
 	  return NULL;
 	initBlock(block);
 	if (! block->elements)
 	  {
-	    free (block);
+	    stdfree (block);
 	    return NULL;
 	  }
 	return block;
@@ -29,7 +29,7 @@ void initBlock(Block* block) {
 	memset(block, 0, sizeof(Block));
 	block->length = 0;
 	block->maxLength = INITIAL_SIZE_LIST_DATA_BLOCK;
-	block->elements = (void*) malloc(INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
+	block->elements = (void*) stdalloc(INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
 	if (! block->elements)
 	  return;
 	memset(block->elements, 0, INITIAL_SIZE_LIST_DATA_BLOCK*sizeof(void*));
@@ -42,7 +42,7 @@ void deleteBlock(Block *block, void(*delete)(void*)) {
 			delete((block->elements)[i]);
 		}
 	}
-	free(block->elements);
+	stdfree(block->elements);
 }
 
 // growBlock increases the size of a block when it reaches its current maximum.
@@ -50,7 +50,7 @@ static void growBlock(Block *block) {
 	int newLength = block->maxLength = (3*block->maxLength)/2;
 	void *newElements = stdalloc(newLength*sizeof(void*));
 	memcpy(newElements, block->elements, (block->length)*sizeof(void*));
-	free(block->elements);
+	stdfree(block->elements);
 	block->elements = newElements;
 }
 

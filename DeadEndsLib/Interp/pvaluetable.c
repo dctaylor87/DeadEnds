@@ -22,10 +22,10 @@ static int compare(CString a, CString b) { return strcmp(a, b); }
 // MNOTE: This has to be done carefully.
 static void delete(void* a) {
     PValueElement *element = (PValueElement*) a;
-    free(element->key);
+    stdfree(element->key);
     PValue* pvalue = element->value;
-    if (pvalue->type == PVString) free(pvalue->value.uString);
-    free(pvalue);
+    if (pvalue->type == PVString) stdfree(pvalue->value.uString);
+    stdfree(pvalue);
 }
 
 // createPValueTable creates and returns a PValueTable.

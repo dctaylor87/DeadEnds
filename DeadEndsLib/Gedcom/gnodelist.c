@@ -16,7 +16,7 @@
 // line is its line number from the Gedcom file. level is needed because GNodes don't hold their
 // levels.
 GNodeListEl* createGNodeListEl(GNode* gnode, int level, int line) {
-	GNodeListEl *element = (GNodeListEl*) malloc(sizeof(GNodeListEl));
+	GNodeListEl *element = (GNodeListEl*) stdalloc(sizeof(GNodeListEl));
 	if (! element)
 	  return NULL;
 	memset(element, 0, sizeof(GNodeListEl));

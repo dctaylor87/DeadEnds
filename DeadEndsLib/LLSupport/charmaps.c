@@ -799,7 +799,7 @@ get_trantable_desc (TRANTABLE tt)
 
   snprintf (end, len - (end - buffer), " [" FMT_INT "]", tt->total);
   
-  char *retbuf = (char *)malloc (strlen(buffer) + 1);
+  char *retbuf = (char *)stdalloc (strlen(buffer) + 1);
   if (! retbuf)
     return NULL;
 

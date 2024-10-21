@@ -92,7 +92,7 @@ zalloc (ZSTR zstr, unsigned int newmax)
 	ptr = (char *)stdalloc(zstr->max);
 	/* use memcpy not strcpy in case has embedded nulls */
 	memcpy(ptr, zstr->str, len+1);
-	free(zstr->str);
+	stdfree(zstr->str);
 	zstr->str = ptr;
 	zstr->end = zstr->str + len;
 	DBGCHK(zstr);
@@ -186,8 +186,8 @@ zs_free (ZSTR * pzstr)
 	ZSTR zstr = *pzstr;
 	if  (!zstr) return;
 	DBGCHK(zstr);
-	free(zstr->str);
-	free(zstr);
+	stdfree(zstr->str);
+	stdfree(zstr);
 	*pzstr = NULL;
 }
 /* return current string */
@@ -373,8 +373,8 @@ zs_move (ZSTR zstr, ZSTR * pzsrc)
 	DBGCHK(zstr);
 	ASSERT(pzsrc);
 	ASSERT(*pzsrc);
-	free(zstr->str);
+	stdfree(zstr->str);
 	memcpy(zstr, (*pzsrc), sizeof(*zstr));
-	free(*pzsrc);
+	stdfree(*pzsrc);
 	*pzsrc = 0;
 }

@@ -19,7 +19,7 @@ static void* searchBucket(Bucket*, CString key, CString(*g)(void*), int(*c)(CStr
 // an element, and delete is an optional function that frees an element.
 HashTable* createHashTable(CString(*getKey)(void*), int(*compare)(CString, CString),
 						   void(*delete)(void*), int numBuckets) {
-	HashTable *table = (HashTable*) malloc(sizeof(HashTable));
+	HashTable *table = (HashTable*) stdalloc(sizeof(HashTable));
 	if (! table)
 	  return NULL;
 	memset(table, 0, sizeof(HashTable));
@@ -27,10 +27,10 @@ HashTable* createHashTable(CString(*getKey)(void*), int(*compare)(CString, CStri
 	table->delete = delete;
 	table->getKey = getKey;
 	table->numBuckets = numBuckets;
-	table->buckets = (Bucket**) malloc(numBuckets*sizeof(Bucket));
+	table->buckets = (Bucket**) stdalloc(numBuckets*sizeof(Bucket));
 	if (! table->buckets)
 	{
-	  free (table);
+	  stdfree (table);
 	  return NULL;
 	}
 	for (int i = 0; i < table->numBuckets; i++) table->buckets[i] = null;
@@ -46,7 +46,7 @@ static void deleteBucket(Bucket* bucket, void(*delete)(void*)) { //PH;
 			delete(block->elements[j]);
 		}
 	}
-	free(bucket);
+	stdfree(bucket);
 }
 
 // deleteHashTable deletes a HashTable. If there is a delete function it is called on the elements.
@@ -56,12 +56,12 @@ void deleteHashTable(HashTable *table) { //PH;
 		if (table->buckets[i] == null) continue;
 		deleteBucket(table->buckets[i], table->delete);
 	}
-	free(table);
+	stdfree(table);
 }
 
 // createBucket creates and returns an empty Bucket.
 Bucket *createBucket(void) { //PH;
-	Bucket *bucket = (Bucket*) malloc(sizeof(Bucket));
+	Bucket *bucket = (Bucket*) stdalloc(sizeof(Bucket));
 	if (! bucket)
 	  return NULL;
 	memset(bucket, 0, sizeof(Bucket));

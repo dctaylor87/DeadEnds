@@ -52,10 +52,10 @@ static int nameCompare(CString a, CString b) {
 
 // delete is the function that deletes a SequenceEl.
 static void delete(void* element) {
-	free(element);
+	stdfree(element);
 }
 
-void baseFree(void *word) { free(word); }
+void baseFree(void *word) { stdfree(word); }
 
 #define key_to_name(key, database)  (NAME(keyToPerson(key, database))->value)
 
@@ -66,7 +66,7 @@ static SequenceEl** sequenceElements(Sequence *sequence) {
 
 // createSequenceEl creates a SequenceEl.
 SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
-	SequenceEl* element = (SequenceEl*) malloc(sizeof(SequenceEl));
+	SequenceEl* element = (SequenceEl*) stdalloc(sizeof(SequenceEl));
 	GNode* root = getRecord(key, database);
 	ASSERT(root);
 	if (! element)
@@ -80,7 +80,7 @@ SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
 
 // createSequence creates a Sequence.
 Sequence* createSequence(Database* database) {
-	Sequence* sequence = (Sequence*) malloc(sizeof(Sequence));
+	Sequence* sequence = (Sequence*) stdalloc(sizeof(Sequence));
 	memset(sequence, 0, sizeof(Sequence));
 	initBlock(&(sequence->block));
 	sequence->database  = database;
@@ -98,7 +98,7 @@ int lengthSequence(Sequence* sequence) {
 void deleteSequence(Sequence* sequence) {
 	Block* block = &(sequence->block);
 	deleteBlock(block, delete);
-	free(sequence);
+	stdfree(sequence);
 }
 
 // emptySequence removes the elements from a Sequence.

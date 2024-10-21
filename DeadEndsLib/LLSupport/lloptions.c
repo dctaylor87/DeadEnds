@@ -190,7 +190,7 @@ load_config_file (String file, String * pmsg, String *chain)
 	int len;
 	fp = fopen(file, DEREADTEXT);
 	if (!fp) {
-		free(thisdir);
+		stdfree(thisdir);
 		return 0; /* 0 for not found */
 	}
 	f_predef = createStringTable(num_predef_buckets);

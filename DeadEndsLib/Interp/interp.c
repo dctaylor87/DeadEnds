@@ -47,7 +47,7 @@ void initializeInterpreter(Database* database) {
 
 // createContext creates a Context from a SymbolTable and Database.
 Context* createContext(SymbolTable *symbolTable, Database *database) {
-	Context* context = (Context*) malloc(sizeof(Context));
+	Context* context = (Context*) stdalloc(sizeof(Context));
 	if (! context)
 	  return NULL;
 	memset(context, 0, sizeof(Context));
@@ -59,7 +59,7 @@ Context* createContext(SymbolTable *symbolTable, Database *database) {
 // deleteContext deletes a Context; deletes the Symboltable but not the Database.
 void deleteContext(Context *context) {
 	deleteHashTable(context->symbolTable);
-	free(context);
+	stdfree(context);
 }
 
 // finishInterpreter is called when the interpreter is done; currently a no-op.

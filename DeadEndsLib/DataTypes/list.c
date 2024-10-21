@@ -13,7 +13,7 @@
 // createList creates and returns a List.
 List* createList(CString(*getKey)(void*), int(*compare)(CString, CString),
 				 void(*delete)(void*), bool sorted) {
-	List *list = (List *) malloc(sizeof(List));
+	List *list = (List *) stdalloc(sizeof(List));
 	if (! list)
 	  return NULL;
 	initList(list, getKey, compare, delete, sorted);
@@ -34,7 +34,7 @@ void initList(List *list, CString(*getKey)(void*), int(*compare)(CString, CStrin
 // deleteList frees a List and its elements.
 void deleteList(List *list) {
 	deleteBlock(&(list->block), list->delete);
-	free(list);
+	stdfree(list);
 }
 
 // lengthList returns the length of a List.
@@ -60,7 +60,7 @@ List* copyList(List* list, void* (*copyFunc)(void*)) {
 	Block* nblock = &copy->block;
 	nblock->length = oblock->length;
 	nblock->maxLength = oblock->maxLength;
-	nblock->elements = malloc(oblock->maxLength*sizeof(void*));
+	nblock->elements = stdalloc(oblock->maxLength*sizeof(void*));
 	for (int i = 0; i < oblock->length; i++) {
 		nblock->elements[i] = copyFunc(oblock->elements[i]);
 	}

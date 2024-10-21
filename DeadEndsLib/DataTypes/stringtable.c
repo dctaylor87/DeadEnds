@@ -22,9 +22,9 @@ static int compare(CString a, CString b) {
 // delete is the delete function for StringTable; key and value are both freed.
 static void delete(void* word) {
 	StringElement *element = (StringElement*) word;
-	free(element->key);
-	if (element->value) free(element->value);
-	free(element);
+	stdfree(element->key);
+	if (element->value) stdfree(element->value);
+	stdfree(element);
 }
 
 // createStringTable creates and returns a StringTable.
