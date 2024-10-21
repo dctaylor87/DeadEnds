@@ -70,7 +70,7 @@ PValue __requeue (PNode* node, Context* context, bool* eflg) {
         scriptError(node, "the second argument to requeue must be a program value");
         return nullPValue;
     }
-    PValue *ppvalue = (PValue*) malloc(sizeof(PValue));
+    PValue *ppvalue = (PValue*) stdalloc(sizeof(PValue));
     memcpy(ppvalue, &pvalue, sizeof(PValue));
     appendToList(list, ppvalue);
     return nullPValue;
