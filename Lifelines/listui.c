@@ -795,7 +795,11 @@ manufacture a listdisp here
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		element_indiseq(seq, i, &key, &name);
+#if defined(DEADENDS)
+		recnode = getRecord (key, seq->database);
+#else
 		recnode = key_to_type(key, 0);
+#endif
 		if (i == 0 && scrollable) mvwaddch(win, row, 1, '^');
 		if (i == len-1 && scrollable) mvwaddch(win, row, 1, '$');
 		if (i == mark) mvwaddch(win, row, 2, 'x');
