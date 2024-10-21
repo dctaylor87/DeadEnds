@@ -1,6 +1,12 @@
 bin_PROGRAMS = testprogram
 
-testprogram_SOURCES = test.c testsequence.c testgedcomstrings.c testwritedatabase.c importone.c
+testprogram_SOURCES = \
+	test.c \
+	testsequence.c \
+	testgedcomstrings.c \
+	testwritedatabase.c \
+	importone.c \
+	testgedpath.c
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
@@ -22,3 +28,9 @@ testprogram_LDADD =../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a \
 	../DeadEndsLib/Utils/libutils.a
 
+TEST_DIRS = \
+	-DREPORTS_DIR=\"$(top_srcdir)/Reports/\" \
+	-DSCRIPTS_DIR=\"$(top_srcdir)/Scripts\" \
+	-DGEDFILES_DIR=\"$(top_srcdir)/Gedfiles\"
+
+DEFS = $(TEST_DIRS) @DEFS@

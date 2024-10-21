@@ -18,8 +18,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/Partition \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Validate/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Validate/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Operations/Includes
 

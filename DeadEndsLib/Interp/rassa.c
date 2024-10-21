@@ -1,6 +1,9 @@
+// DeadEnds
+//
 // rassa.c -- Handle output to the product file
-//  Created on 10 February 2024.
-//  Last changed on 10 February 2024.
+
+// Created on 10 February 2024.
+// Last changed on 18 October 2024.
 
 #include <string.h>
 #include <stdio.h>
@@ -50,12 +53,11 @@ void finishrassa (void)
 	}
 }
 
-//  __pagemode -- Switch output to page mode
-//    usage: pagemode(INT, INT) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __pagemode (PNode *pnode, Context *context, bool *errflg)
+// __pagemode switches output to page mode.
+// usage: pagemode(INT, INT) -> VOID
+PValue __pagemode(PNode* pnode, Context* context, bool* errflg)
 {
-	PNode *arg = pnode->arguments;
+	PNode* arg = pnode->arguments;
 	PValue pvalue = evaluate(arg, context, errflg);
 	if (*errflg || pvalue.type != PVInt) return nullPValue;
 	int cols = (int) pvalue.value.uInt;
@@ -76,11 +78,9 @@ PValue __pagemode (PNode *pnode, Context *context, bool *errflg)
 	return nullPValue;
 }
 
-//  __linemode -- Switch output to line mode
-//    usage: linemode() -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __linemode (PNode *pnode, Context *context, bool *errflg)
-{
+// __linemode switches output to line mode.
+// usage: linemode() -> VOID
+PValue __linemode(PNode* pnode, Context* context, bool* errflg) {
 	outputmode = BUFFERED;
 	linebuflen = 0;
 	bufptr = linebuffer;
@@ -251,9 +251,8 @@ void adjust_cols (String str)
 	}
 }
 
-//  poutput -- Output string in current mode
-//--------------------------------------------------------------------------------------------------
-void poutput (String str)
+// poutput outputs a string in the current mode.
+void poutput(String str)
 {
 	String p; //, name;
 	int c, len;

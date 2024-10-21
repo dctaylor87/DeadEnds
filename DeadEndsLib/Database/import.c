@@ -15,8 +15,8 @@
 #include "utils.h"
 
 
-static bool timing = false;
-bool importDebugging = false;
+static bool timing = true;
+bool importDebugging = true;
 
 // importFromFiles imports a list of Gedcom files into a List of Databases, one per file. If errors
 // are found in a file the file's Database is not created and the ErrorLog will hold the errors.
@@ -64,7 +64,11 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 		deleteGNodeList(rootList, true);
 		return null;
 	}
-
+	// If the first record is a header remember it.
+	GNode* header = getFirstListElement(rootList);
+	if (nestr(header->tag, "HEAD")) {
+		header = null;
+	}
 	// Create the record indexes and root lists.
 	RecordIndex* personIndex = createRecordIndex();
 	RecordIndex* familyIndex = createRecordIndex();
@@ -105,6 +109,7 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 	deleteGNodeList(rootList, false);
 	// Create the Database and add the indexes.
 	Database* database = createDatabase(path);
+	database->header = header;
 	database->recordIndex = recordIndex;
 	database->personIndex = personIndex;
 	database->familyIndex = familyIndex;

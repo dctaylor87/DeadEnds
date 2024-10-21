@@ -3,7 +3,7 @@
 // standard.c hold some standard utiltiy functions.
 //
 // Creates by Thomas Wetmore on 7 November 2022.
-// Last changed on 3 October 2024.
+// Last changed on 18 October 2024.
 
 #include <stdlib.h>
 
@@ -27,7 +27,8 @@
 #include "standard.h"
 #include "path.h"
 
-#define ALLOCLOGFILE "~/alloc.log"
+//#define ALLOCLOGFILE "~/alloc.log"
+#define ALLOCLOGFILE "./alloc.log"
 
 static FILE *allocLogFile = null;  // The logging file.
 static bool logopen = false;       // The logging file is open for writing.
@@ -35,7 +36,7 @@ static bool loggingAllocs = false; // Whether currently logging.
 static long bytesAllocated = 0;
 static long bytesFreed = 0;
 
-CString version = "deadends.1.0.0";
+CString version = "deadends.0.0.1";
 
 // logAllocations turns allocation logging on or off; for debugging heap memory.
 void _logAllocations(bool onOrOff) {

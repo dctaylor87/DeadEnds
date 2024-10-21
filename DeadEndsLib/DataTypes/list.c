@@ -4,7 +4,7 @@
 // needed. Lists can be sorted or unsorted. Sorted lists require a compare function.
 //
 // Created by Thomas Wetmore on 22 November 2022.
-// Last changed on 20 April 2024.
+// Last changed on 15 October 2024.
 
 #include <stdlib.h>
 #include "list.h"
@@ -68,7 +68,7 @@ List* copyList(List* list, void* (*copyFunc)(void*)) {
 }
 
 // appendToList appends an element to the end of a List.
-void appendToList(List *list, void *element) {
+void appendToList(List* list, void* element) {
 	appendToBlock(&(list->block), element);
 	list->isSorted = false;
 }
@@ -86,6 +86,9 @@ void* getFromList(List* list, int index) {
 
 // getFirstListElement returns the first element from a List; it is not removed from the List.
 void* getFirstListElement(List* list) {
+	printf("getFirstListElement called with list of length %d\n", lengthList(list));
+	void* thing = getFirstBlockElement(&(list->block));
+	printf("was able to get the thing in getFirstListElement\n");
 	return getFirstBlockElement(&(list->block));
 }
 
@@ -198,6 +201,18 @@ bool isInList(List* list, CString key, int* index) {
 		return isInSortedBlock(&(list->block), key, list->getKey, list->compare, index);
 	}
 	return isInBlock(&(list->block), key, list->getKey, index);
+}
+
+// isFirstElementInList checks if an element is the last one in a List.
+bool isFirstElementInList(List* list, void* element) {
+	Block* block = &(list->block);
+	return block->length && element == block->elements[0];
+}
+
+// isLastElementInList checks if an element is the last one in a List.
+bool isLastElementInList(List* list, void* element) {
+	Block* block = &(list->block);
+	return block->length && element == block->elements[block->length - 1];
 }
 
 // iterateList iterates the elements of a List calling a function on each.

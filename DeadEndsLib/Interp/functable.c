@@ -1,11 +1,9 @@
+// DeadEnds
 //
-//  DeadEnds
+// functable.c -- Table of built-in functions in the DeadEnds scripting language.
 //
-//  functable.c -- Table of the built-in functions in the DeadEnds programming language.
-//
-//  Created by Thomas Wetmore on 10 January 2023.
-//  Last changed on 14 February 2024.
-//
+// Created by Thomas Wetmore on 10 January 2023.
+// Last changed on 19 October 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -22,7 +20,7 @@
 
 BuiltIn builtIns[] = {
   { "add",          2,    32,    __add },
-//{ "addnode",      3,    3,    __addnode },
+//{ "addnode",      2,    3,    __addnode },
   { "addtoset",     3,    3,    __addtoset },
   { "alpha",        1,    1,    __alpha },
   { "ancestorset",  1,    1,    __ancestorset },
@@ -43,7 +41,7 @@ BuiltIn builtIns[] = {
   { "col",          1,    1,    __col },
   { "concat",       2,    32,   __concat },
   { "copyfile",     1,    1,    __copyfile },
-  { "createnode",   2,    2,    __createnode },
+  { "createnode",   1,    2,    __createnode },
   { "d",            1,    1,    __d },
   { "database",     0,    1,    __noop },
   { "date",         1,    1,    __date },
@@ -57,6 +55,7 @@ BuiltIn builtIns[] = {
   { "dereference",  1,    1,    __getrecord },
   { "descendantset",1,    1,    __descendentset },
   { "descendentset",1,    1,    __descendentset },
+  { "detachnode",   1,    1,    __deletenode },
   { "difference",   2,    2,    __difference },
   { "div",          2,    2,    __div },
   { "empty",        1,    1,    __empty },
@@ -132,7 +131,7 @@ BuiltIn builtIns[] = {
 //{ "nextfam",      1,    1,    __nextfam },
   { "nextindi",     1,    1,    __nextindi },
   { "nextsib",      1,    1,    __nextsib },
-//{ "nfamilies",    1,    1,    __nfamilies },
+  { "nfamilies",    1,    1,    __nfamilies },
   { "nl",           0,    0,    __nl },
   { "not",          1,    1,    __not },
   { "nspouses",     1,    1,    __nspouses },
