@@ -15,7 +15,7 @@
 #include "file.h"
 #include "connect.h"
 
-static void getArguments(int, char**, String*);
+static void getArguments(int, char**, CString*);
 static void getEnvironment(String*);
 static void usage(void);
 static void goAway(ErrorLog*);
@@ -185,7 +185,7 @@ static List* createPartition(GNode* root, GNodeList* gnodes, GNodeIndex* index,
 }
 
 // getArguments gets the Gedcom file name from the command line.
-static void getArguments(int argc, char* argv[], String* gedcomFile) {
+static void getArguments(int argc, char* argv[], CString* gedcomFile) {
 	int ch;
 	while ((ch = getopt(argc, argv, "g:")) != -1) {
 		switch(ch) {
