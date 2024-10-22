@@ -55,6 +55,7 @@ int sizeHashTable(HashTable*);
 void showHashTable(HashTable*, void(*show)(void*));
 /*static*/ int getHash(CString, int);
 void removeFromHashTable(HashTable*, CString key);
+void iterateHashTable(HashTable*, void (*)(void*));
 int iterateHashTableWithPredicate(HashTable*, bool(*)(void*));
 int iterateHashTableWithPredicate2(HashTable*, void *, bool(*)(void*, void*));
 
