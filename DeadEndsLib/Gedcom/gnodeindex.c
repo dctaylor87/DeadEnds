@@ -10,12 +10,12 @@
 #include "gnodeindex.h"
 
 // compare compares the keys from to Gnode index elements.
-static int compare(String left, String right) {
+static int compare(CString left, CString right) {
 	return compareRecordKeys(left, right);
 }
 
 // getKey returns the key of a GNode index element.
-static String getKey(void* element) {
+static CString getKey(void* element) {
 	return ((GNodeIndexEl*) element)->root->key;
 }
 
