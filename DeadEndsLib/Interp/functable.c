@@ -20,7 +20,7 @@
 
 BuiltIn builtIns[] = {
   { "add",          2,    32,    __add },
-//{ "addnode",      2,    3,    __addnode },
+  { "addnode",      2,    3,    __addnode },
   { "addtoset",     3,    3,    __addtoset },
   { "alpha",        1,    1,    __alpha },
   { "ancestorset",  1,    1,    __ancestorset },
