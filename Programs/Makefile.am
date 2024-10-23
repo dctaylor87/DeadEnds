@@ -2,11 +2,13 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # what are we going to build?
-bin_PROGRAMS = deadends
+bin_PROGRAMS = deadends testpython
 
 # what goes into deadends
 
 deadends_SOURCES = deadends.c de-scripts.c
+
+testpython_SOURCES = testpython.c
 
 # Ordering:
 # Parser has to go before Interp
