@@ -183,7 +183,7 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
 		len = screen_width-2;
 	curpath[0] = 0;
 	destrapps(curpath, len, uu8, _(qSiddefpath));
-	destrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
+	destrapps(curpath, len, uu8, compressPath(path, len-strlen(curpath)-1));
 
 	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }

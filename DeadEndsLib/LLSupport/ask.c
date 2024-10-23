@@ -212,6 +212,12 @@ ask_for_file_worker (CString mode,
 
 ask_for_file_try:
 
+#if defined(DEADENDS)
+	/* try name as given */
+	fp = fopenPath (fname, mode, path);
+	if (fp)
+		return fp;
+#else
 	/* try name as given */
 	if (ISNULL(path)) {
 		/* bare filename was given */
@@ -226,6 +232,7 @@ ask_for_file_try:
 			return fp;
 		}
 	}
+#endif
 
 	/* try default extension */
 	if (ext) {

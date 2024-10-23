@@ -12,6 +12,8 @@
 
 #define MAXPATHBUFFER 1024
 
+static bool is_path_sep (char c);
+
 // filePath finds a file in a sequence of paths.
 CString resolveFile(CString name, CString path) {
 	if (!name || *name == 0) return null;
@@ -160,5 +162,87 @@ isDirSep (char c)
 	return c=U21=DECHRDIRSEPARATOR || c=='/';
 #else
 	return c==DECHRDIRSEPARATOR;
+#endif
+}
+
+/* compressPath -- return path truncated
+
+   Returns the trailing MIN(len, 120) bytes of path.  If path is too
+   long, it is truncated with the start replaced with '...' .
+
+   The return is in a static buffer.
+   Created 2001/12/22 for LifeLines by Perry Rapp. */
+
+String
+compressPath (CString path, int len)
+{
+  static char buf[120];
+  int pathlen = strlen(path);
+
+  if (len > (int)sizeof(buf)-1)
+    len = (int)sizeof(buf)-1;
+  /* TODO: be nice to expand "."  */
+  if (pathlen > len) {
+    String dotdotdot = "...";
+    int delta = pathlen - len - strlen(dotdotdot);
+    strcpy(buf, dotdotdot);
+    strcpy(buf+strlen(dotdotdot), path+delta);
+  } else
+    strcpy(buf, path);
+
+  return buf;
+}
+
+/* chopPath -- copy path into dirs, & zero-separate all dirs
+   path:  [IN]  path list to copy
+   dirs:  [OUT] output buffer
+
+   We replace the path separators with NUL and add an addition NUL at
+   the end.
+
+   NB: dirs should be two bytes larger than strlen(path)
+       ignore zero length paths */
+int
+chopPath (CString path, String dirs)
+{
+  int ndirs = 0;
+  String p;
+  CString q;
+  char c=0;
+
+  p = dirs;;
+  q = path;
+  while ((c = *q)) {
+    if (is_path_sep(c)) {
+      if (p == dirs || p[-1] == 0) {
+	q++;
+      } else {
+	*p++ = 0;
+	q++;
+	++ndirs;
+      }
+    } else {
+      *p++ = *q++;
+    }
+  }
+  if (!(p == dirs || p[-1] == 0)) {
+    *p++ = 0;
+    ++ndirs;
+  }
+  *p = 0; /* ends with extra trailing zero after last one */
+  return ndirs;
+}
+
+/* is_path_sep -- Is 'c' a path separator character
+   handle WIN32 characters */
+
+static bool
+is_path_sep (char c)
+{
+	/* : on UNIX and ; on Windows */
+#if defined(WIN32)
+  return (c == ';');
+#else
+  return (c==':');
 #endif
 }

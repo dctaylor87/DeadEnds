@@ -463,7 +463,7 @@ xl_load_all_dyntts (CString ttpath)
 	f_dyntts = createHashTable(NULL, NULL, NULL, num_dyntts_buckets);
 	dirs = (String)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
-	chop_path(ttpath, dirs);
+	chopPath(ttpath, dirs);
 	/* now process each directory */
 	for (p=dirs; *p; p+=strlen(p)+1) {
 		load_dynttlist_from_dir(p);

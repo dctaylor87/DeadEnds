@@ -104,7 +104,7 @@ add_path_files_to_proplist (CString path, SELECT_FNC selectfnc, List *list)
 	int ct=0;
 	if (!path || !path[0]) return 0;
 	dirs = (String)stdalloc(strlen(path)+2);
-	chop_path(path, dirs);
+	chopPath(path, dirs);
 	for (p=dirs; *p; p+=strlen(p)+1) {
 		add_dir_files_to_proplist(p, selectfnc, list);
 	}

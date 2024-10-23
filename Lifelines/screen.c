@@ -488,10 +488,17 @@ add_uiwin (UIWINDOW uiwin)
 static void
 remove_uiwin (UIWINDOW uiwin)
 {
+	ASSERT(list_uiwin);
+#if defined(DEADENDS)
+	int index;
+	if (searchList (list_uiwin, uiwin, &index)) {
+	  removeFromList (list_uiwin, index);
+	}
+#else
 	void *param = uiwin;
 	bool deleteall = false;
-	ASSERT(list_uiwin);
 	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
+#endif
 }
 /*==========================================
  * does_match -- Used as callback to remove_uiwin
@@ -1138,7 +1145,7 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
 		len = uiw_cols(ask_msg_win)-2;
 	curpath[0] = 0;
 	destrapps(curpath, len, uu8, _(qSiddefpath));
-	destrapps(curpath, len, uu8, compress_path(path, len-strlen(curpath)-1));
+	destrapps(curpath, len, uu8, compressPath(path, len-strlen(curpath)-1));
 
 	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
