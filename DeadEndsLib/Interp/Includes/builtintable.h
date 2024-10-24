@@ -89,6 +89,7 @@ extern PValue __intersect(PNode*, Context*, bool*);
 extern PValue __key(PNode*, Context*, bool*);
 extern PValue __keysort(PNode*, Context*, bool*);
 extern PValue __lastchild(PNode*, Context*, bool*);
+extern PValue __lastfam(PNode*, Context*, bool*);
 extern PValue __lastindi(PNode*, Context*, bool*);
 extern PValue __le(PNode*, Context*, bool*);
 extern PValue __length(PNode*, Context*, bool*);
