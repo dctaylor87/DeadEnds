@@ -159,7 +159,7 @@ bool
 isDirSep (char c)
 {
 #ifdef WIN32
-	return c=U21=DECHRDIRSEPARATOR || c=='/';
+	return c==DECHRDIRSEPARATOR || c=='/';
 #else
 	return c==DECHRDIRSEPARATOR;
 #endif
@@ -239,10 +239,6 @@ chopPath (CString path, String dirs)
 static bool
 is_path_sep (char c)
 {
-	/* : on UNIX and ; on Windows */
-#if defined(WIN32)
-  return (c == ';');
-#else
-  return (c==':');
-#endif
+  // : on UNIX and ; on Windows
+  return (c == DECHRPATHSEPARATOR);
 }
