@@ -56,6 +56,7 @@ bool pathMatch (CString path1, CString path2);
 String pathConcatAllocate (CString dir, CString file);
 String pathConcat (CString dir, CString file, int utf8, String buffer, int buflen);
 bool isDirSep (char c);
-
+String compressPath (CString path, int len);
+int chopPath (CString path, String dirs);
 
 #endif // path_h
