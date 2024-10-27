@@ -82,7 +82,7 @@ static void show_open_error(int dberr);
  *  perrmsg - [OUT]  translated error message
  *================================================*/
 bool
-select_database (String * dbrequested, int alteration, String * perrmsg)
+select_database (String * dbrequested, String * perrmsg)
 {
 	String dbdir = getdeoptstr("DEDATABASES", ".");
 	String dbused = NULL;
@@ -130,7 +130,7 @@ select_database (String * dbrequested, int alteration, String * perrmsg)
 	/* filepath returns alloc'd string */
 	if (!dbused) dbused = strsave(*dbrequested);
 
-	if (!open_or_create_database(alteration, &dbused)) {
+	if (!open_or_create_database(&dbused)) {
 		strfree(&dbused);
 		return false;
 	}
@@ -145,20 +145,19 @@ select_database (String * dbrequested, int alteration, String * perrmsg)
  *  creating new one if it doesn't exist
  * if fails, displays error (show_open_error) and returns 
  *  FALSE
- *  alteration:   [IN]  flags for locking, forcing open...
  *  dbused:       [I/O] actual database path (may be relative)
  * If this routine creates new database, it will alter dbused
  * Created: 2001/04/29, Perry Rapp
  *================================================*/
 bool
-open_or_create_database (int alteration, String *dbused)
+open_or_create_database (String *dbused)
 {
 	int lldberrnum=0;
 	char dbdir[MAXPATHLEN] = "";
         char newmsg[MAXPATHLEN+100] = "";
 
 	/* Open Database */
-	if (open_database(alteration, *dbused, &lldberrnum))
+	if (open_database(*dbused, &lldberrnum))
 		return true;
 
 	/* filter out real errors */

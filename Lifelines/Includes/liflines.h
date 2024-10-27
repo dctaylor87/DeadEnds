@@ -57,8 +57,8 @@ int choose_from_array_x(CString ttl, int count, String* list, DETAILFNC, void *)
 int display_list(CString ttl, List *list);
 
 /* selectdb.c */
-bool open_or_create_database(int alteration, String *dbused);
-bool select_database(String * dbrequested, int alteration, String * perrmsg);
+bool open_or_create_database(String *dbused);
+bool select_database(String * dbrequested, String * perrmsg);
 
 /* miscutls.c */
 void sighand_cursesui(int sig);

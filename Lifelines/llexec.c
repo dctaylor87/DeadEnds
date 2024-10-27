@@ -136,7 +136,6 @@ main (int argc, char **argv)
 	bool ok=false;
 	bool python_interactive = false;
 	String dbrequested=NULL; /* database (path) requested */
-	int alteration=0;
 	List *exprogs=NULL;
 	TABLE exargs=NULL;
 	String progout=NULL;
@@ -307,7 +306,7 @@ prompt_for_db:
 		} else {
 			strupdate(&dbrequested, "");
 		}
-		if (!select_database(&dbrequested, alteration, &errmsg)) {
+		if (!select_database(&dbrequested, &errmsg)) {
 			if (errmsg) {
 				llwprintf("%s", errmsg);
 			}
