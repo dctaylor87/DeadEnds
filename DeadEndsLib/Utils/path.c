@@ -12,7 +12,7 @@
 
 #define MAXPATHBUFFER 1024
 
-static bool is_path_sep (char c);
+static bool isPathSeparator (char c);
 
 // filePath finds a file in a sequence of paths.
 CString resolveFile(CString name, CString path) {
@@ -213,7 +213,7 @@ chopPath (CString path, String dirs)
   p = dirs;;
   q = path;
   while ((c = *q)) {
-    if (is_path_sep(c)) {
+    if (isPathSeparator(c)) {
       if (p == dirs || p[-1] == 0) {
 	q++;
       } else {
@@ -233,11 +233,11 @@ chopPath (CString path, String dirs)
   return ndirs;
 }
 
-/* is_path_sep -- Is 'c' a path separator character
+/* isPathSeparator -- Is 'c' a path separator character
    handle WIN32 characters */
 
 static bool
-is_path_sep (char c)
+isPathSeparator (char c)
 {
   // : on UNIX and ; on Windows
   return (c == DECHRPATHSEPARATOR);
