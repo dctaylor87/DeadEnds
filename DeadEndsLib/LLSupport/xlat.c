@@ -63,6 +63,9 @@ struct tag_xlat {
 /* dynamically loadable translation table, entry in dyntt list */
 struct tag_dyntt {
 	int refcnt; /* ref-countable object */
+#if defined(DEADENDS)
+	CString key;
+#endif
 	String name;
 	String path;
 	TRANTABLE tt; /* when loaded */
@@ -89,7 +92,7 @@ static XLSTEP create_iconv_step(CString src, CString dest);
 static XLSTEP create_dyntt_step(DYNTT dyntt);
 static XLAT create_null_xlat(bool adhoc);
 static XLAT create_xlat(CString src, CString dest, bool adhoc);
-static DYNTT create_dyntt(TRANTABLE tt, CString name, CString path);
+static DYNTT create_dyntt(TRANTABLE tt, CString key, CString name, CString path);
 #if !defined(DEADENDS)
 static void destroy_dyntt(DYNTT dyntt);
 static void dyntt_destructor(VTABLE *obj);
@@ -120,6 +123,10 @@ int num_dyntts_buckets = NUMBER_DYNTTS_BUCKETS;
  * body of module
  *********************************************/
 
+static CString getKey(void *element)
+{
+  return ((DYNTT)element)->key;
+}
 /*==========================================================
  * create_null_xlat -- Create a new translation
  * (also adds to cache)
@@ -206,12 +213,15 @@ create_dyntt_step (DYNTT dyntt)
  * Created: 2002/12/10 (Perry Rapp)
  *========================================================*/
 static DYNTT
-create_dyntt (TRANTABLE tt, CString name, CString path)
+create_dyntt (TRANTABLE tt, CString key, CString name, CString path)
 {
 	DYNTT dyntt = (DYNTT)stdalloc(sizeof(*dyntt));
 	memset(dyntt, 0, sizeof(*dyntt));
 	dyntt->refcnt = 1;
 	dyntt->tt = tt;
+#if defined(DEADENDS)
+	dyntt->key = key;
+#endif
 	dyntt->name = strsave(name);
 	dyntt->path = strsave(path);
 	return dyntt;
@@ -460,7 +470,7 @@ xl_load_all_dyntts (CString ttpath)
 #endif
 	if (!ttpath ||  !ttpath[0])
 		return;
-	f_dyntts = createHashTable(NULL, NULL, NULL, num_dyntts_buckets);
+	f_dyntts = createHashTable(getKey, NULL, NULL, num_dyntts_buckets);
 	dirs = (String)stdalloc(strlen(ttpath)+2);
 	/* find directories in dirs & delimit with zeros */
 	chopPath(ttpath, dirs);
@@ -507,9 +517,15 @@ load_dynttlist_from_dir (CString dir)
 			if (!searchHashTable(f_dyntts, zs_str(zfile_u))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
 				String path = pathConcatAllocate(dir, ttfile);
+#if defined(DEADENDS)
+				DYNTT dyntt = create_dyntt(tt, zs_str(zfile_u), ttfile, path);
+				strfree(&path);
+				addToHashTable(f_dyntts, dyntt, true);
+#else
 				DYNTT dyntt = create_dyntt(tt, ttfile, path);
 				strfree(&path);
 				insert_table_obj(f_dyntts, zs_str(zfile_u), dyntt);
+#endif
 				zs_free(&zfile_u);
 				--dyntt->refcnt; /* leave table as sole owner */
 			}
