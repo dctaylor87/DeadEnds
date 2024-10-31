@@ -31,7 +31,7 @@ static int compare (CString keyA, CString keyB)
 
 DatabaseList *createDatabaseList (void)
 {
-  return createlist (getKey, compare, null, true);
+  return createList (getKey, compare, null, true);
 }
 
 // insertInDatabaseList adds a Database* to the DatabaseList.
