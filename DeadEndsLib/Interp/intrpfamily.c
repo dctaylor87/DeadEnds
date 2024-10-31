@@ -64,7 +64,6 @@ PValue __nchildren (PNode* pnode, Context* context, bool* eflg) {
 	return PVALUE(PVInt, uInt, (long) count);
 }
 
-
 // __firstchild returns the first child of a family.
 // usage: firstchild(FAM) -> INDI
 PValue __firstchild(PNode* pnode, Context* context, bool* eflg) {
@@ -78,7 +77,7 @@ PValue __firstchild(PNode* pnode, Context* context, bool* eflg) {
 
 // __lastchild returns the last child of a family.
 // usage: lastchild(FAM) -> INDI
-PValue __lastchild(PNode *pnode, Context *context, bool* eflg) {
+PValue __lastchild(PNode* pnode, Context* context, bool* eflg) {
 	ASSERT(pnode && context);
 	GNode* fam = evaluateFamily(pnode->arguments, context, eflg);
 	if (*eflg || !fam) return nullPValue;
@@ -103,7 +102,6 @@ PValue __fnode(PNode* pnode, Context* context, bool* eflg) {
 // usage: fam(STRING) -> FAM
 PValue __fam(PNode* pnode, Context* context, bool* eflg) {
 	ASSERT(pnode && context);
-	// The argument must be a string.
 	PValue value = evaluate(pnode->arguments, context, eflg);
 	if (value.type != PVString) {
 		scriptError(pnode, "the argument must be a string\n");
@@ -111,9 +109,7 @@ PValue __fam(PNode* pnode, Context* context, bool* eflg) {
 		return nullPValue;
 	}
 	String key = value.value.uString;
-
-	//  Search the database for the family with the key.
-	GNode* family = keyToFamily(key, context->database);
+	GNode* family = keyToFamily(key, context->database); // Find family with key.
 	if (!family) {
 		scriptError(pnode, "Could not find a family with key %s.\n", key);
 		return nullPValue;
@@ -153,7 +149,7 @@ PValue __nextfam(PNode* pnode, Context* context, bool* eflg) {
 		scriptError(pnode, "The argument family doesn't have a valid index; call maintenance.");
 		return nullPValue;
 	}
-	if (index == lengthList(familyRoots) - 1) { // At last person.
+	if (index == lengthList(familyRoots) - 1) { // At last family.
 		return nullPValue;
 	}
 	return PVALUE(PVFamily, uGNode, getListElement(familyRoots, index + 1));
@@ -183,7 +179,6 @@ PValue __prevfam(PNode* pnode, Context* context, bool* eflg) {
 	return PVALUE(PVFamily, uGNode, (GNode*) getListElement(familyRoots, index - 1));
 }
 
-
 // lastfam returns the last family in the database.
 // usage: lastfam() -> FAM
 PValue __lastfam(PNode* pnode, Context* context, bool* eflg) {
@@ -196,4 +191,3 @@ PValue __lastfam(PNode* pnode, Context* context, bool* eflg) {
 	sortList(familyRoots);
 	return PVALUE(PVFamily, uGNode, (GNode*) getListElement(familyRoots, lengthList(familyRoots) - 1));
 }
-

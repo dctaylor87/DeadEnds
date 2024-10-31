@@ -1,9 +1,9 @@
 // DeadEnds
 //
-// rassa.c -- Handle output to the product file
-
-// Created on 10 February 2024.
-// Last changed on 18 October 2024.
+// rassa.c handles printing output from DeadEnds script programs.
+//
+// Created by Thomas Wetmore on 10 February 2024.
+// Last changed on 24 October 2024.
 
 #include <string.h>
 #include <stdio.h>
@@ -15,13 +15,13 @@
 #include "evaluate.h"
 #include "builtintable.h"
 
-#define MAXPAGESIZE 65536
 #define MAXROWS 512
 #define MAXCOLS 512
+#define MAXPAGESIZE (MAXROWS*MAXCOLS)
 int __cols = 0, __rows = 0;
 int curcol = 1, currow = 1;
 int outputmode = BUFFERED;
-static String pagebuffer = null;
+static String pagebuffer = null; // buffer for PAGEMODE.
 static char linebuffer[1024];
 static int linebuflen = 0;
 static String bufptr = linebuffer;
@@ -30,21 +30,16 @@ String outfilename;
 String noreport = (String) "No report was generated.";
 String whtout = (String) "What is the name of the output file?";
 
-/*=======================================
- * initrassa -- Initialize program output
- *=====================================*/
-void initrassa (void)
-{
+// initrassa initializes script program output.
+void initrassa(void) {
 	outputmode = BUFFERED;
 	linebuflen = 0;
 	bufptr = linebuffer;
 	curcol = 1;
 }
-/*=======================================
- * finishrassa -- Finalize program output
- *=====================================*/
-void finishrassa (void)
-{
+
+// finishrassa finalizes script program output.
+void finishrassa(void) {
 	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
 		fwrite(linebuffer, linebuflen, 1, Poutfp);
 		linebuflen = 0;
@@ -53,21 +48,28 @@ void finishrassa (void)
 	}
 }
 
-// __pagemode switches output to page mode.
+// __pagemode switches script program output to page mode.
 // usage: pagemode(INT, INT) -> VOID
-PValue __pagemode(PNode* pnode, Context* context, bool* errflg)
-{
+PValue __pagemode(PNode* pnode, Context* context, bool* errflg) {
 	PNode* arg = pnode->arguments;
 	PValue pvalue = evaluate(arg, context, errflg);
-	if (*errflg || pvalue.type != PVInt) return nullPValue;
+	if (*errflg || pvalue.type != PVInt) {
+		scriptError(pnode, "the cols argument to pagemode must be an integer.");
+		return nullPValue;
+	}
 	int cols = (int) pvalue.value.uInt;
 	arg = arg->next;
 	pvalue = evaluate(arg, context, errflg);
-	if (*errflg || pvalue.type != PVInt) return nullPValue;
+	if (*errflg || pvalue.type != PVInt) {
+		scriptError(pnode, "the rows argument to pagemode must be an integer.");
+		return nullPValue;
+	}
 	int rows = (int) pvalue.value.uInt;
 	*errflg = true;
-	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS)
+	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS) {
+		scriptError(pnode, "the value of rows or cols to pagemode is out of range.");
 		return nullPValue;
+	}
 	*errflg = false;
 	outputmode = PAGEMODE;
 	__rows = rows;
@@ -78,7 +80,7 @@ PValue __pagemode(PNode* pnode, Context* context, bool* errflg)
 	return nullPValue;
 }
 
-// __linemode switches output to line mode.
+// __linemode switches script program output to line mode.
 // usage: linemode() -> VOID
 PValue __linemode(PNode* pnode, Context* context, bool* errflg) {
 	outputmode = BUFFERED;
@@ -89,11 +91,9 @@ PValue __linemode(PNode* pnode, Context* context, bool* errflg) {
 	return nullPValue;
 }
 
-//  __newfile -- Switch output to new file
-//    usage: newfile(STRING, BOOL) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __newfile (PNode *pnode, Context *context, bool *errflg)
-{
+// __newfile switches script program output to a new file.
+// usage: newfile(STRING, BOOL) -> VOID
+PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
 	PNode *arg = pnode->arguments;
 	PValue pvalue = evaluate(arg, context, errflg);
 	if (*errflg || pvalue.type != PVString || strlen(pvalue.value.uString) == 0) {
@@ -121,11 +121,9 @@ PValue __newfile (PNode *pnode, Context *context, bool *errflg)
 	return nullPValue;
 }
 
-//  __outfile -- Return output file name
-//    usage: outfile() -> STRING
-//--------------------------------------------------------------------------------------------------
-//PValue __outfile (PNode *pnode, Context *context, bool *errflg)
-//{
+// __outfile returns the name of the script output file.
+// usage: outfile() -> STRING
+//PValue __outfile(PNode* pnode, Context* context, bool* errflg) {
 //	if (!Poutfp) {
 //		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
 //		if (!Poutfp)  {
@@ -138,11 +136,9 @@ PValue __newfile (PNode *pnode, Context *context, bool *errflg)
 //	return (WORD) outfilename;
 //}
 
-//  __pos -- Position page output to row and column
-//    usage: pos(INT, INT) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __pos (PNode *pnode, Context *context, bool *errflg)
-{
+// __pos positions page output to a row and column.
+// usage: pos(INT, INT) -> VOID
+PValue __pos(PNode* pnode, Context* context, bool* errflg) {
 	PNode *arg = pnode->arguments;
 	int col = evaluateInteger(arg, context, errflg);
 	if (*errflg) {
@@ -166,11 +162,9 @@ PValue __pos (PNode *pnode, Context *context, bool *errflg)
 	return nullPValue;
 }
 
-//  __row -- Position output to start of row
-//    usage: row(INT) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __row (PNode *pnode, Context *context, bool *errflg)
-{
+// __row positions output to the start of a row.
+// usage: row(INT) -> VOID
+PValue __row(PNode* pnode, Context* context, bool* errflg) {
 	int row = evaluateInteger(pnode->arguments, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The argument to row must be an integer.");
@@ -187,9 +181,8 @@ PValue __row (PNode *pnode, Context *context, bool *errflg)
 	return nullPValue;
 }
 
-//  __col -- Position output to column
-//    usage: col(INT) -> VOID
-//--------------------------------------------------------------------------------------------------
+// __col positions page output to specific column.
+// usage: col(INT) -> VOID
 PValue __col (PNode *pnode, Context *context, bool *errflg)
 {
 	int col = evaluateInteger(pnode->arguments, context, errflg);
@@ -203,11 +196,9 @@ PValue __col (PNode *pnode, Context *context, bool *errflg)
 	return nullPValue;
 }
 
-//  __pageout -- Output current page and clear page buffer
-//    usage: pageout() -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __pageout (PNode *pnode, Context *context, bool *errflg)
-{
+// __pageout outputs the current page and clears the page buffer.
+// usage: pageout() -> VOID
+PValue __pageout(PNode* pnode, Context* context, bool* errflg) {
 	char scratch[MAXCOLS+2];
 	String p;
 	int row, i;
@@ -238,12 +229,10 @@ PValue __pageout (PNode *pnode, Context *context, bool *errflg)
 	return nullPValue;
 }
 
-//  adjust_cols -- Adjust column after printing string
-//--------------------------------------------------------------------------------------------------
-void adjust_cols (String str)
-{
+// adjustCols adjusts the column after printing a string
+void adjustCols(String string) {
 	int c;
-	while ((c = *str++)) {
+	while ((c = *string++)) {
 		if (c == '\n')
 			curcol = 1;
 		else
@@ -252,11 +241,10 @@ void adjust_cols (String str)
 }
 
 // poutput outputs a string in the current mode.
-void poutput(String str)
-{
-	String p; //, name;
+void poutput(String string) {
+	String p;
 	int c, len;
-	if (!str || *str == 0 || (len = (int) strlen(str)) <= 0) return;
+	if (!string || *string == 0 || (len = (int) strlen(string)) <= 0) return;
 //	if (!Poutfp) {
 //		Poutfp = ask_for_file("w", whtout, &name, llreports);
 //		if (!Poutfp)  {
@@ -268,16 +256,16 @@ void poutput(String str)
 //	}
 	switch (outputmode) {
 	case UNBUFFERED:
-		fwrite(str, len, 1, Poutfp);
-		adjust_cols(str);
+		fwrite(string, len, 1, Poutfp);
+		adjustCols(string);
 		return;
 	case BUFFERED:
 		if (len > 1024) {
 			fwrite(linebuffer, linebuflen, 1, Poutfp);
-			fwrite(str, len, 1, Poutfp);
+			fwrite(string, len, 1, Poutfp);
 			linebuflen = 0;
 			bufptr = linebuffer;
-			adjust_cols(str);
+			adjustCols(string);
 			return;
 		}
 		if (len + linebuflen > 1024) {
@@ -286,7 +274,7 @@ void poutput(String str)
 			bufptr = linebuffer;
 		}
 		linebuflen += len;
-		while ((c = *bufptr++ = *str++)) {
+		while ((c = *bufptr++ = *string++)) {
 			if (c == '\n')
 				curcol = 1;
 			else
@@ -296,7 +284,7 @@ void poutput(String str)
 		return;
 	case PAGEMODE:
 		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
-		while ((c = *str++)) {
+		while ((c = *string++)) {
 			if (c == '\n') {
 				curcol = 1;
 				currow++;
