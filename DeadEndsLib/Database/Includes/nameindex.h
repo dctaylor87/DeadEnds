@@ -24,7 +24,7 @@ typedef HashTable NameIndex;
 // Interface to NameIndex.
 NameIndex *createNameIndex(void);
 void deleteNameIndex(NameIndex*);
-void insertInNameIndex(NameIndex*, CString nameKey, String personKey);
+void insertInNameIndex(NameIndex*, CString nameKey, CString personKey);
 void removeFromNameIndex (NameIndex *index, CString namekey, CString recordKey);
 extern void removeNamesOfPersonFromIndex (NameIndex* index, GNode* person);
 void showNameIndex(NameIndex*);

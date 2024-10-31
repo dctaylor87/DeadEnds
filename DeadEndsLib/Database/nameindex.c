@@ -56,7 +56,7 @@ void deleteNameIndex(NameIndex *nameIndex) {
 // insertInNameIndex adds a (name key, person key) relationship to a NameIndex.
 // MNOTE: nameKey is in static memory; it is saved if createNameIndexEl is called.
 // MNOTE: recordKey is the record key from the database; it is not saved.
-void insertInNameIndex(NameIndex* index, CString nameKey, String recordKey) {
+void insertInNameIndex(NameIndex* index, CString nameKey, CString recordKey) {
 	if (nameIndexDebugging)
 		printf("insertInNameIndex: nameKey, personKey: %s, %s\n", nameKey, recordKey);
 	NameIndexEl* element = (NameIndexEl*) searchHashTable(index, nameKey); // Name key seen before?
