@@ -326,27 +326,27 @@ static struct PyMethodDef Lifelines_Database_Methods[] =
     /* DATABASE method variants of the iterator functions */
 
    { "individuals",	(PyCFunction)llpy_individuals_db, METH_VARARGS | METH_KEYWORDS,
-     "individuals(void) -> iterator for the set of all INDI in the database" },
+     "(DATABASE).individuals(void) -> iterator for the set of all INDI in the database" },
    { "families",	(PyCFunction)llpy_families_db, METH_VARARGS | METH_KEYWORDS,
-     "families(void) -> iterator for the set of all FAM in the database" },
+     "(DATABASE).families(void) -> iterator for the set of all FAM in the database" },
    { "sources",		(PyCFunction)llpy_sources_db, METH_VARARGS | METH_KEYWORDS,
-     "sources(void) -> iterator for the set of all SOUR in the database" },
+     "(DATABASE).sources(void) -> iterator for the set of all SOUR in the database" },
    { "events",		(PyCFunction)llpy_events_db, METH_VARARGS | METH_KEYWORDS,
-     "events(void) --> iterator for the set of all EVEN in the database" },
+     "(DATABASE).events(void) --> iterator for the set of all EVEN in the database" },
    { "others",		(PyCFunction)llpy_others_db, METH_VARARGS | METH_KEYWORDS,
-     "others(void) --> iterator for the set of all OTHR records in the database" },
+     "(DATABASE).others(void) --> iterator for the set of all OTHR records in the database" },
 
    { "export",		(PyCFunction)llpy_export_db, METH_VARARGS | METH_KEYWORDS,
-     "export(file, [version], [submitter]) --> None or error" },
+     "(DATABASE).export(file, [version], [submitter]) --> None or error" },
 
    { "firstindi",	(PyCFunction)llpy_firstindi_db, METH_NOARGS,
-     "firstindi(void) -> INDI: first individual in database (in key order)" },
+     "(DATABASE).firstindi(void) -> INDI: first individual in database (in key order)" },
    { "lastindi",	llpy_lastindi_db, METH_NOARGS,
-     "lastindi(void) -> INDI: last individual in database  (in key order)" },
+     "(DATABASE).lastindi(void) -> INDI: last individual in database  (in key order)" },
    { "firstfam",	(PyCFunction)llpy_firstfam_db, METH_NOARGS,
-     "firstfam(void) -> FAM: first family in database (in key order)" },
+     "(DATABASE).firstfam(void) -> FAM: first family in database (in key order)" },
    { "lastfam",		llpy_lastfam_db, METH_NOARGS,
-     "lastfam(void) -> FAM: last family in database  (in key order)" },
+     "(DATABASE).lastfam(void) -> FAM: last family in database  (in key order)" },
    { NULL, 0, 0, NULL }		/* sentinel */
   };
 

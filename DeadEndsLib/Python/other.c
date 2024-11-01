@@ -63,7 +63,7 @@ static struct PyMethodDef Lifelines_Other_Methods[] =
 If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." },
 
    { "top_node", (PyCFunction)_llpy_top_node, METH_NOARGS,
-     "top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
+     "(OTHR).top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
 
    { NULL, 0, 0, NULL }		/* sentinel */
   };
