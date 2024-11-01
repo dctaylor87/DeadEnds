@@ -71,11 +71,11 @@
 #define database	currentDatabase
 
 /*=====================================================
- * choose_and_remove_family -- Choose & delete a family
+ * chooseAndRemoveFamily -- Choose & delete a family
  *  (remove all members, and delete F record)
  *===================================================*/
 void
-choose_and_remove_family (void)
+chooseAndRemoveFamily (void)
 {
 	GNode *fam, *node, *indi;
 	Sequence *spseq, *chseq;
@@ -138,13 +138,13 @@ choose_and_remove_family (void)
 	remove_indiseq(chseq);
 }
 /*================================================================
- * choose_and_remove_indi -- Prompt & delete person and links; if this leaves families
+ * chooseAndRemovePerson -- Prompt & delete person and links; if this leaves families
  *   with no links, remove them
  *  indi:  [in]  person to remove - (if null, will ask for person)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 void
-choose_and_remove_indi (GNode *indi, CONFIRMQ confirmq)
+chooseAndRemovePerson (GNode *indi, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), DOASK1))))
@@ -156,13 +156,13 @@ choose_and_remove_indi (GNode *indi, CONFIRMQ confirmq)
 	remove_indi_by_root(indi, currentDatabase);
 }
 /*================================================================
- * choose_and_remove_any_record -- Prompt & delete any record
+ * chooseAndRemoveAnyRecord -- Prompt & delete any record
  *   (delete any empty families produced)
  *  record:  [in]  record to remove (if null, will ask for record)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 bool
-choose_and_remove_any_record (RecordIndexEl *record, CONFIRMQ confirmq)
+chooseAndRemoveAnyRecord (RecordIndexEl *record, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1)))
@@ -175,13 +175,13 @@ choose_and_remove_any_record (RecordIndexEl *record, CONFIRMQ confirmq)
 	return remove_any_record(record, currentDatabase);
 }
 /*===========================================
- * choose_and_remove_spouse -- Remove spouse 
+ * chooseAndRemoveSpouse -- Remove spouse 
  *  from family (prompting for spouse and/or family
  *  if NULL passed)
  *  nolast: don't remove last member of family?
  *=========================================*/
 bool
-choose_and_remove_spouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
+chooseAndRemoveSpouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 {
 	GNode *fam;
 
@@ -194,7 +194,7 @@ choose_and_remove_spouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 	}
 
 /* Identify family to remove spouse from */
-	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidsrmf), true);
+	if (!frec) frec = chooseFamily(irec, _(qSparadox), _(qSidsrmf), true);
 	if (!frec) return false;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
@@ -212,13 +212,13 @@ choose_and_remove_spouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 	return true;
 }
 /*===========================================
- * choose_and_remove_child -- Remove child
+ * chooseAndRemoveChild -- Remove child
  *  from family (prompting for child and/or family
  *  if NULL passed)
  *  nolast: don't remove last member of family?
  *=========================================*/
 bool
-choose_and_remove_child (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
+chooseAndRemoveChild (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 {
 	GNode *fam;
 
@@ -231,7 +231,7 @@ choose_and_remove_child (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
 	}
 
 /* Identify family to remove child from */
-	if (!frec) frec = choose_family(irec, _(qSparadox), _(qSidcrmf), false);
+	if (!frec) frec = chooseFamily(irec, _(qSparadox), _(qSidcrmf), false);
 	if (!frec) return false;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {

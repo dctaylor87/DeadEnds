@@ -100,7 +100,7 @@ swap_children (RecordIndexEl *prnt, RecordIndexEl *frec)
 		frec = keyToFamilyRecord(rmvat(nval(FAMS(nztop(prnt)))), currentDatabase);
 		goto gotfam;
 	}
-	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), true)))
+	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true)))
 		return false;
 gotfam:
 	fam = nztop(frec);
@@ -118,9 +118,9 @@ gotfam:
 		RecordIndexEl *chil1, *chil2;
 		String key1, key2;
 		/* Identify children to swap */
-		chil1 = choose_child(NULL, frec, "e", _(qSid1csw), NOASK1);
+		chil1 = chooseChild(NULL, frec, "e", _(qSid1csw), NOASK1);
 		if (!chil1) return false;
-		chil2 = choose_child(NULL, frec, "e", _(qSid2csw), NOASK1);
+		chil2 = chooseChild(NULL, frec, "e", _(qSid2csw), NOASK1);
 		if (!chil2) return false;
 		if (chil1 == chil2) return false;
 		key1 = nxref(nztop(chil1));
@@ -208,7 +208,7 @@ reorder_child (RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt)
 		frec = keyToFamilyRecord(rmvat(nval(FAMS(nztop(prnt)))), currentDatabase);
 		goto gotfam;
 	}
-	if (!(frec = choose_family(prnt, _(qSntprnt), _(qSidfbys), true))) 
+	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true))) 
 		return false;
 gotfam:
 	fam = nztop(frec);
@@ -229,7 +229,7 @@ gotfam:
 	}
 
 	/* Identify children to swap */
-	child = nztop(choose_child(NULL, frec, "e", _(qSidcrdr), NOASK1));
+	child = nztop(chooseChild(NULL, frec, "e", _(qSidcrdr), NOASK1));
 	if (!child) return false;
 
 	prevorder = child_index(child, fam);
@@ -310,9 +310,9 @@ swap_families (RecordIndexEl *irec)
 		GNode *fam1, *fam2;
 		String key1, key2;
 		/* prompt for families */
-		fam1 = nztop(choose_family(irec, _(qSparadox), _(qSid1fsw), true));
+		fam1 = nztop(chooseFamily(irec, _(qSparadox), _(qSid1fsw), true));
 		if (!fam1) return false;
-		fam2 = nztop(choose_family(irec, _(qSparadox), _(qSid2fsw), true));
+		fam2 = nztop(chooseFamily(irec, _(qSparadox), _(qSid2fsw), true));
 		if (!fam2) return false;
 		if (fam1 == fam2) return false;
 		key1 = nxref(fam1);

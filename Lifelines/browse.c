@@ -220,14 +220,14 @@ prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
 		return;
 	}
 	if (*code == BROWSE_EVEN) {
-		*prec = choose_any_event();
+		*prec = chooseAnyEvent();
 		return;
 	}
 	if (*code == BROWSE_SOUR) {
-		*prec = choose_any_source();
+		*prec = chooseAnySource();
 		return;
 	}
-	*prec = choose_any_other();
+	*prec = chooseAnyOther();
 	return;
 }
 /*=========================================
@@ -352,7 +352,7 @@ pick_create_new_family (RecordIndexEl *current, RecordIndexEl *save, String * ad
 	int i;
 	RecordIndexEl *rec=0;
 
-	i = choose_from_array(_(qSidfcop), 2, addstrings);
+	i = chooseFromArray(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
 	if (i == 0) {
 		rec = add_family_by_edit(NULL, NULL, current, false);
@@ -460,7 +460,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			edit_indi(current, false);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
-			if ((tmp = choose_family(current, _(qSntprnt)
+			if ((tmp = chooseFamily(current, _(qSntprnt)
 				,  _(qSidfbrs), true))) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
@@ -468,9 +468,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM_FAMILIES:
-			if ((tmp = choose_family(current, _(qSntprnt),
+			if ((tmp = chooseFamily(current, _(qSntprnt),
 				_(qSid1fbr), true)) != 0) {
-				if ((tmp2 = choose_family(current, _(qSntprnt),
+				if ((tmp2 = chooseFamily(current, _(qSntprnt),
 					_(qSid2fbr), true)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -481,15 +481,15 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_FATHER: 	/* Browse to person's father */
-			if ((tmp = choose_father(current, NULL, _(qSnofath),
+			if ((tmp = chooseFather(current, NULL, _(qSnofath),
 				_(qSidhbrs), NOASK1)) != 0) {
 				setrecord(&current, &tmp);
 			}
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to person's fathers */
-			if ((tmp = choose_father(current, NULL, _(qSnofath),
+			if ((tmp = chooseFather(current, NULL, _(qSnofath),
 				_(qSid1hbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_father(current, NULL, _(qSnofath),
+				if ((tmp2 = chooseFather(current, NULL, _(qSnofath),
 					_(qSid2hbr), NOASK1)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -500,15 +500,15 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to person's mother */
-			if ((tmp = choose_mother(current, NULL, _(qSnomoth),
+			if ((tmp = chooseMother(current, NULL, _(qSnomoth),
 				_(qSidwbrs), NOASK1)) != 0) {
 				setrecord(&current, &tmp);
 			}
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to person's mothers */
-			if ((tmp = choose_mother(current, NULL, _(qSnomoth),
+			if ((tmp = chooseMother(current, NULL, _(qSnomoth),
 				_(qSid1wbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_mother(current, NULL, _(qSnomoth),
+				if ((tmp2 = chooseMother(current, NULL, _(qSnomoth),
 					_(qSid2wbr), NOASK1)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -534,12 +534,12 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_SPOUSE:	/* Browse to person's spouse */
-			if ((tmp = choose_spouse(current, _(qSnospse), _(qSidsbrs))) != 0)
+			if ((tmp = chooseSpouse(current, _(qSnospse), _(qSidsbrs))) != 0)
 				setrecord(&current, &tmp);
 			break;
 		case CMD_TANDEM_SPOUSES:	/* browse to tandem spouses */
-			if ((tmp = choose_spouse(current, _(qSnospse), _(qSid1sbr))) != 0) {
-				if ((tmp2 = choose_spouse(current, _(qSnospse), _(qSid2sbr))) != 0) {
+			if ((tmp = chooseSpouse(current, _(qSnospse), _(qSid1sbr))) != 0) {
+				if ((tmp2 = chooseSpouse(current, _(qSnospse), _(qSid2sbr))) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
 					rtn = BROWSE_TAND;
@@ -549,7 +549,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to person's child */
-			if ((tmp = choose_child(current, NULL, _(qSnocofp),
+			if ((tmp = chooseChild(current, NULL, _(qSnocofp),
 				_(qSidcbrs), NOASK1)) != 0) {
 				setrecord(&current, &tmp);
 			}
@@ -581,9 +581,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				message("%s", _(qSnochil));
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			if ((tmp = choose_child(current, NULL, _(qSnocofp),
+			if ((tmp = chooseChild(current, NULL, _(qSnocofp),
 				_(qSid1cbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_child(current, NULL, _(qSnocofp),
+				if ((tmp2 = chooseChild(current, NULL, _(qSnocofp),
 					_(qSid2cbr), NOASK1)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -612,7 +612,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				msg_error("%s", _(qSnoysib));
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
-			if ((tmp = choose_family(current, _(qSnoprnt),
+			if ((tmp = chooseFamily(current, _(qSnoprnt),
 				_(qSidfbrs), false)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
@@ -620,9 +620,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
-			if ((tmp = choose_family(current, _(qSnoprnt),
+			if ((tmp = chooseFamily(current, _(qSnoprnt),
 				_(qSid1fbr), false)) != 0) {
-				if ((tmp2 = choose_family(current, _(qSnoprnt),
+				if ((tmp2 = chooseFamily(current, _(qSnoprnt),
 					_(qSid2fbr), false)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -708,10 +708,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			indimode='i';
 			break;
 		case CMD_REMOVEASSPOUSE:	/* Remove person as spouse */
-			choose_and_remove_spouse(current, NULL, false);
+			chooseAndRemoveSpouse(current, NULL, false);
 			break;
 		case CMD_REMOVEASCHILD:	/* Remove person as child */
-			choose_and_remove_child(current, NULL, false);
+			chooseAndRemoveChild(current, NULL, false);
 			break;
 		case CMD_ADVANCED:	/* Advanced person edit */
 			advanced_person_edit(nztop(current));
@@ -738,21 +738,21 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_SOURCES:	/* Browse to sources */
-			if ((tmp = choose_source(current, _(qSnosour), _(qSidsour))) != 0) {
+			if ((tmp = chooseSource(current, _(qSnosour), _(qSidsour))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
+			if ((tmp = chooseNote(current, _(qSnonote), _(qSidnote))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
+			if ((tmp = choosePointer(current, _(qSnoptr), _(qSidptr))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
@@ -881,12 +881,12 @@ reprocess_aux_cmd:
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
+			if ((tmp = chooseNote(current, _(qSnonote), _(qSidnote))) != 0) {
 				setrecord(&current, &tmp);
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
+			if ((tmp = choosePointer(current, _(qSnoptr), _(qSidptr))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
@@ -962,9 +962,9 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 		}
 	}
 	joinFamily(fam, fref, husb, wife, chil, rest);
-	i = choose_from_array(_(qSidsrmv), i, spstrings);
+	i = chooseFromArray(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
-	choose_and_remove_spouse(_llpy_node_to_record(spnodes[i], currentDatabase), frec, true);
+	chooseAndRemoveSpouse(_llpy_node_to_record(spnodes[i], currentDatabase), frec, true);
 }
 /*===============================================
  * prompt_add_spouse_with_candidate -- 
@@ -1129,7 +1129,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			edit_family(current, false);
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
-			if ((tmp = choose_father(NULL, current, _(qSnohusb),
+			if ((tmp = chooseFather(NULL, current, _(qSnohusb),
 				_(qSidhbrs), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_INDI;
@@ -1137,9 +1137,9 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM_FATHERS:	/* Tandem Browse to family's fathers */
-			if ((tmp = choose_father(NULL, current, _(qSnohusb),
+			if ((tmp = chooseFather(NULL, current, _(qSnohusb),
 				_(qSid1hbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_father(NULL, current, _(qSnohusb),
+				if ((tmp2 = chooseFather(NULL, current, _(qSnohusb),
 					_(qSid2hbr), NOASK1)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -1150,7 +1150,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_MOTHER:	/* Browse to family's mother */
-			if ((tmp = choose_mother(NULL, current, _(qSnowife),
+			if ((tmp = chooseMother(NULL, current, _(qSnowife),
 				_(qSidwbrs), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_INDI;
@@ -1158,9 +1158,9 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM_MOTHERS:	/* Tandem Browse to family's mother */
-			if ((tmp = choose_mother(NULL, current, _(qSnowife),
+			if ((tmp = chooseMother(NULL, current, _(qSnowife),
 				_(qSid1wbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_mother(NULL, current, _(qSnowife), 
+				if ((tmp2 = chooseMother(NULL, current, _(qSnowife), 
 					_(qSid2wbr), NOASK1)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -1171,7 +1171,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_CHILDREN:	/* Browse to a child */
-			if ((tmp = choose_child(NULL, current, _(qSnocinf),
+			if ((tmp = chooseChild(NULL, current, _(qSnocinf),
 				_(qSidcbrs), NOASK1)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_INDI;
@@ -1179,9 +1179,9 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM_CHILDREN:	/* browse to tandem children */
-			if ((tmp = choose_child(NULL, current, _(qSnocinf),
+			if ((tmp = chooseChild(NULL, current, _(qSnocinf),
 				_(qSid1cbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_child(NULL, current, _(qSnocinf),
+				if ((tmp2 = chooseChild(NULL, current, _(qSnocinf),
 					_(qSid2cbr), NOASK1)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
@@ -1192,9 +1192,9 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_REMOVECHILD:	/* Remove a child */
-			if ((tmp = choose_child(NULL, current, _(qSnocinf),
+			if ((tmp = chooseChild(NULL, current, _(qSnocinf),
 				_(qSidcrmv), DOASK1)) != 0) {
-				choose_and_remove_child(tmp, current, true);
+				chooseAndRemoveChild(tmp, current, true);
 				setrecord(&tmp, 0);
 			}
 			break;
@@ -1314,21 +1314,21 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				break;
 			}
 		case CMD_SOURCES:	/* Browse to sources */
-			if ((tmp = choose_source(current, _(qSnosour), _(qSidsour))) != 0) {
+			if ((tmp = chooseSource(current, _(qSnosour), _(qSidsour))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_NOTES:	/* Browse to notes */
-			if ((tmp = choose_note(current, _(qSnonote), _(qSidnote))) != 0) {
+			if ((tmp = chooseNote(current, _(qSnonote), _(qSidnote))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_AUX;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_POINTERS:	/* Browse to references */
-			if ((tmp = choose_pointer(current, _(qSnoptr), _(qSidptr))) != 0) {
+			if ((tmp = choosePointer(current, _(qSnoptr), _(qSidptr))) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
@@ -1466,10 +1466,10 @@ browse_pedigree (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	return browse_indi_modes(prec1, prec2, pseq, 'p');
 }
 /*==================================================
- * choose_any_source -- choose from list of all sources
+ * chooseAnySource -- choose from list of all sources
  *================================================*/
 RecordIndexEl *
-choose_any_source (void)
+chooseAnySource (void)
 {
 	Sequence *seq;
 	RecordIndexEl *rec;
@@ -1479,15 +1479,15 @@ choose_any_source (void)
 		msg_error("%s", _(qSnosour));
 		return 0;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, _(qSidsour), _(qSidsour));
+	rec = chooseFromSequence(seq, DOASK1, _(qSidsour), _(qSidsour));
 	remove_indiseq(seq);
 	return rec;
 }
 /*==================================================
- * choose_any_event -- choose from list of all events
+ * chooseAnyEvent -- choose from list of all events
  *================================================*/
 RecordIndexEl *
-choose_any_event (void)
+chooseAnyEvent (void)
 {
 	Sequence *seq;
 	RecordIndexEl *rec;
@@ -1497,15 +1497,15 @@ choose_any_event (void)
 		msg_error("%s", _(qSnoeven));
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, _(qSideven), _(qSideven));
+	rec = chooseFromSequence(seq, DOASK1, _(qSideven), _(qSideven));
 	remove_indiseq(seq);
 	return rec;
 }
 /*==================================================
- * choose_any_other -- choose from list of all others
+ * chooseAnyOther -- choose from list of all others
  *================================================*/
 RecordIndexEl *
-choose_any_other (void)
+chooseAnyOther (void)
 {
 	Sequence *seq;
 	RecordIndexEl *rec;
@@ -1515,7 +1515,7 @@ choose_any_other (void)
 		msg_error("%s", _(qSnoothe));
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, _(qSidothe), _(qSidothe));
+	rec = chooseFromSequence(seq, DOASK1, _(qSidothe), _(qSidothe));
 	remove_indiseq(seq);
 	return rec;
 }
@@ -1903,7 +1903,7 @@ do_disp_history_list (struct hist * histp)
 		msg_error("%s", _(qSnohist));
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, _(qSidhist), _(qSidhist));
+	rec = chooseFromSequence(seq, DOASK1, _(qSidhist), _(qSidhist));
 	remove_indiseq(seq);
 	return rec;
 }
@@ -2074,7 +2074,7 @@ add_new_rec_maybe_ref (RecordIndexEl *current, char ntype)
 	choices[1] = _(qSeditcur);
 	choices[2] = _(qSgotonew);
 	choices[3] = _(qSstaycur);
-	rtn = choose_from_array(NULL, 4, choices);
+	rtn = chooseFromArray(NULL, 4, choices);
 	lock_status_msg(false);
 	switch(rtn) {
 	case 0: 

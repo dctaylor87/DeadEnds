@@ -12,7 +12,7 @@
 /* Types */
 
 /* screen.c types */
-/* data used in choose_from_array_x */
+/* data used in chooseFromArray_x */
 typedef struct tag_array_details {
   String * list; /* original array of choices */
   int cur; /* currently selected choice */
@@ -43,7 +43,7 @@ RecordIndexEl *ask_for_indi(CString ttl, ASK1Q ask1);
 bool ask_for_int(CString, int *);
 RecordIndexEl *ask_for_record(CString, int);
 String ask_for_record_key(CString title, CString prompt);
-RecordIndexEl *choose_from_indiseq(Sequence *, ASK1Q ask1, CString titl1, CString titln);
+RecordIndexEl *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln);
 
 /* askgedc.c */
 bool ask_for_gedcom(CString mode, CString ttl, String *pfname, String *pfullpath
@@ -53,7 +53,7 @@ bool ask_for_gedcom(CString mode, CString ttl, String *pfname, String *pfullpath
 void proparrdetails(ARRAY_DETAILS arrdets, void * param);
 
 /* screen.c functions */
-int choose_from_array_x(CString ttl, int count, String* list, DETAILFNC, void *);
+int chooseFromArray_x(CString ttl, int count, String* list, DETAILFNC, void *);
 int display_list(CString ttl, List *list);
 
 /* selectdb.c */

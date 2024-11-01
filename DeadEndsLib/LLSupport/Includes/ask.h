@@ -22,4 +22,4 @@ extern FILE *ask_for_output_file (CString mode,
 				  CString path,
 				  CString ext);
 extern RecordIndexEl *
-choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln);
+chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln);

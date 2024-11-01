@@ -105,7 +105,7 @@ select_database (String * dbrequested, String * perrmsg)
 			strfree(dbrequested);
 			if ((n=get_dblist(dbdir, &dblist, &dbdesclist)) > 0) {
 				int i;
-				i = choose_from_list(
+				i = chooseFromList(
 					_("Choose database to open")
 					, dbdesclist);
 				if (i >= 0) {

@@ -62,7 +62,7 @@ static void output(const char * txt);
 static int interact(CString ptrn);
 
 static int
-choose_or_view_array (CString ttl, int no, String *pstrngs, bool selectable);
+chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selectable);
 /*=============================================================
  * Xprintf() implementations
  *===========================================================*/
@@ -193,32 +193,32 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
  *===========================================================*/
 
 int
-choose_from_array (CString ttl, int no, String *pstrngs)
+chooseFromArray (CString ttl, int no, String *pstrngs)
 {
 	bool selectable = true;
-	return choose_or_view_array(ttl, no, pstrngs, selectable);
+	return chooseOrViewArray(ttl, no, pstrngs, selectable);
 }
 
 void
 view_array (CString ttl, int no, String *pstrngs)
 {
 	bool selectable = false;
-	choose_or_view_array(ttl, no, pstrngs, selectable);
+	chooseOrViewArray(ttl, no, pstrngs, selectable);
 }
 
 int
-choose_one_or_list_from_indiseq (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
+chooseOneOrListFromSequence (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
 {
 #if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* we certainly need the names */
 #endif
 
-	/* TODO: imitate choose_from_list & delegate to array chooser */
+	/* TODO: imitate chooseFromList & delegate to array chooser */
 	return 0;
 }
 
 static int
-choose_or_view_array (CString ttl, int no, String *pstrngs, bool selectable)
+chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selectable)
 {
 	String promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	String responses = selectable ? "0123456789udq" : "udq";

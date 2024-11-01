@@ -232,7 +232,7 @@ resize_win: /* we come back here if we resize the window */
  * Localizes ttl
  *===========================================================*/
 int
-choose_one_or_list_from_indiseq (CString ttl, Sequence *seq, bool multi)
+chooseOneOrListFromSequence (CString ttl, Sequence *seq, bool multi)
 {
 	WINDOW *win=0;
 	int row, done;

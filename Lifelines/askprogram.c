@@ -249,7 +249,7 @@ ask_for_program (CString mode,
 	for (i=0; i<nfiles; ++i) {
 		choices[i+1] = valueof_str(fileprops[i], valueof_str(fileprops[i], "d0"));
 	}
-	choice = choose_from_array_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
+	choice = chooseFromArray_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
 	if (choice > 0) {
 		TABLE props = fileprops[choice-1];
 		String fname = valueof_str(props, "filename");
@@ -274,9 +274,9 @@ AskForString:
 }
 /*================================================
  * proparrdetails -- print details of a file using proparray
- * Callback from choose_from_array_x
+ * Callback from chooseFromArray_x
  *  arrdets:  [IN]  package of list & current status
- *  param:    [IN]  the param we passed when we called choose_from_array_x
+ *  param:    [IN]  the param we passed when we called chooseFromArray_x
  * Created: 2001/12/15 (Perry Rapp)
  *==============================================*/
 void

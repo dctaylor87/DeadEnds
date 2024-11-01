@@ -231,7 +231,7 @@ ask_for_gedcom (CString mode,
 	for (i=0; i<nfiles; ++i) {
 		choices[i+1] = valueof_str(fileprops[i], valueof_str(fileprops[i], "d0"));
 	}
-	choice = choose_from_array_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
+	choice = chooseFromArray_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
 	if (choice > 0) {
 		TABLE props = fileprops[choice-1];
 		String fname = valueof_str(props, "filename");

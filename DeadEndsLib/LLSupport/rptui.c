@@ -146,11 +146,11 @@ rptui_ask_for_program (CString mode, CString ttl, String *pfname
 	return b;
 }
 int
-rptui_choose_from_array (CString ttl, int no, String *pstrngs)
+rptui_chooseFromArray (CString ttl, int no, String *pstrngs)
 {
 	int i;
 	begin_rptui();
-	i = choose_from_array(ttl, no, pstrngs);
+	i = chooseFromArray(ttl, no, pstrngs);
 	end_rptui();
 	return i;
 }

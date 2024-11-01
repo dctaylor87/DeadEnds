@@ -31,7 +31,7 @@ static PyObject *llpy_getindi (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_getfam (PyObject *self, PyObject *args);
 static PyObject *llpy_getint (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_getstr (PyObject *self, PyObject *args, PyObject *kw);
-//static PyObject *llpy_menuchoose (PyObject *self, PyObject *args, PyObject *kw);
+static PyObject *llpy_menuchoose (PyObject *self, PyObject *args, PyObject *kw);
 
 /* llpy_getindi (PROMPT) --> INDI: identify person through user interface */
 
@@ -163,7 +163,7 @@ static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
       PyArg_ParseTuple (tuple, "s", &c_string);
       strings[ndx] = c_string;
     }
-  answer = rptui_choose_from_array (prompt, len, strings);
+  answer = rptui_chooseFromArray (prompt, len, strings);
   stdfree (strings);
   return Py_BuildValue ("i", answer);
 }

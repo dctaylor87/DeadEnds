@@ -88,7 +88,7 @@ ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer,
 }
 
 int
-choose_from_list (CString ttl, List *list)
+chooseFromList (CString ttl, List *list)
 {
 	String * array=0;
 	String choice=0;
@@ -106,7 +106,7 @@ choose_from_list (CString ttl, List *list)
 	array[i] = strsave(choice);
 	++i;
 	ENDLIST
-	rtn = choose_from_array(ttl, len, array);
+	rtn = chooseFromArray(ttl, len, array);
 
 	for (i=0; i<len; ++i)
 		strfree(&array[i]);
@@ -114,7 +114,7 @@ choose_from_list (CString ttl, List *list)
 	return rtn;
 }
 
-/* choose_list_from_indiseq -- User chooses subsequence from
+/* chooseListFromsequence -- User chooses subsequence from
    person sequence
    returns input sequence, but may have deleted elements
    called by both reports & interactive use
@@ -123,21 +123,21 @@ choose_from_list (CString ttl, List *list)
    returns index of where user choose select (or -1 if quit)  */
 
 int
-choose_list_from_indiseq (CString ttl, Sequence *seq)
+chooseListFromsequence (CString ttl, Sequence *seq)
 {
-	return choose_one_or_list_from_indiseq(ttl, seq, true);
+	return chooseOneOrListFromSequence(ttl, seq, true);
 }
 
-/* choose_one_from_indiseq --
+/* chooseOneFromSequence --
    Choose a single person from indiseq
    Returns index of selected item (or -1 if user quit)
    ttl:  [IN]  title  */
  
 
 int
-choose_one_from_indiseq (CString ttl, Sequence *seq)
+chooseOneFromSequence (CString ttl, Sequence *seq)
 {
-	return choose_one_or_list_from_indiseq(ttl, seq, false);
+	return chooseOneOrListFromSequence(ttl, seq, false);
 }
 
 /* yes_no_value -- Convert character to true if y(es)  */

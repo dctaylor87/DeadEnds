@@ -123,7 +123,7 @@ ask_for_fam (CString pttl, CString sttl)
 		msg_error("%s", _(qSntprnt));
 		return NULL;
 	}
-	return choose_family(prn, _(qSparadox), _(qSidfbrs), true);
+	return chooseFamily(prn, _(qSparadox), _(qSidfbrs), true);
 }
 /*===========================================
  * ask_for_int -- Ask user to provide integer
@@ -359,9 +359,9 @@ ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
 	/* might be a single-entry indiseq, but if so still need to confirm */
 	ASSERT(*prc == RC_SELECT);
 	if (ctype == 'I') {
-		indi = choose_from_indiseq(seq, ask1, _(qSifonei), _(qSnotonei));
+		indi = chooseFromSequence(seq, ask1, _(qSifonei), _(qSnotonei));
 	} else {
-		indi = choose_from_indiseq(seq, ask1, _(qSifonex), _(qSnotonex));
+		indi = chooseFromSequence(seq, ask1, _(qSifonex), _(qSnotonex));
 	}
 	remove_indiseq(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
@@ -419,7 +419,7 @@ ask_for_indi_list (CString ttl, bool reask)
 			continue;
 		}
 		ASSERT(seq);
-		rc = choose_list_from_indiseq(_(qSnotonei), seq);
+		rc = chooseListFromSequence(_(qSnotonei), seq);
 		if (rc == -1) {
 			remove_indiseq(seq);
 			seq = NULL;
@@ -442,24 +442,24 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
 	return rmvat(nxref(node));
 }
 /*===============================================================
- * choose_one_from_indiseq_if_needed  -- handle ask1 cases
+ * chooseOneFromSequenceIfNeeded  -- handle ask1 cases
  *  seq:   [IN]  sequence from which to choose
  *  ask1:  [IN]  whether to prompt if only one element in sequence
  *  titl1: [IN]  title if sequence has one element
  *  titln: [IN]  title if sequence has multiple elements
  *=============================================================*/
 static int
-choose_one_from_indiseq_if_needed (Sequence *seq, ASK1Q ask1, CString titl1
+chooseOneFromSequenceIfNeeded (Sequence *seq, ASK1Q ask1, CString titl1
 	, CString titln)
 {
 	if (lengthSequence(seq) > 1)
-		return choose_one_from_indiseq(titln, seq);
+		return chooseOneFromSequence(titln, seq);
 	else if (ask1==DOASK1 && titl1)
-		return choose_one_from_indiseq(titl1, seq);
+		return chooseOneFromSequence(titl1, seq);
 	return 0;
 }
 /*======================================================
- * choose_from_indiseq -- Format sequence and have user
+ * chooseFromSequence -- Format sequence and have user
  *  choose from it (any type)
  * This handles bad pointers, which can get into the data
  *  several ways.
@@ -469,12 +469,12 @@ choose_one_from_indiseq_if_needed (Sequence *seq, ASK1Q ask1, CString titl1
  *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
 RecordIndexEl *
-choose_from_indiseq (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
+chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 {
 	int i = 0;
 	RecordIndexEl *rec=0;
 
-	i = choose_one_from_indiseq_if_needed(seq, ask1, titl1, titln);
+	i = chooseOneFromSequenceIfNeeded(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
 	CString skey;
 
@@ -511,7 +511,7 @@ ask_for_record (CString idstr, int letr)
 		Sequence *seq;
 		seq = refnToSequence(answer, currentDatabase);
 		if (!seq) return NULL;
-		rec = choose_from_indiseq(seq, NOASK1, _(qSduprfn), _(qSduprfn));
+		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn));
 		remove_indiseq(seq);
 	}
 	return rec;

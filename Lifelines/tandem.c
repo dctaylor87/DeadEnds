@@ -140,23 +140,23 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 			*prec1 = current1;
 			return BROWSE_INDI;
 		case CMD_FATHER: 	/* browse top person's father */
-			if ((tmp = choose_father(current1, NULL, _(qSnofath),
+			if ((tmp = chooseFather(current1, NULL, _(qSnofath),
 				_(qSidhbrs), NOASK1)) != 0) {
 				current1 = tmp;
 			}
 			break;
 		case CMD_MOTHER: 	/* browse top person's mother */
-			if ((tmp = choose_mother(current1, NULL, _(qSnomoth),
+			if ((tmp = chooseMother(current1, NULL, _(qSnomoth),
 				_(qSidwbrs), NOASK1)) != 0) {
 				current1 = tmp;
 			}
 			break;
 		case CMD_SPOUSE: 	/* browse top person's spouse/s */
-			if ((tmp = choose_spouse(current1, _(qSnospse), _(qSidsbrs))) != 0)
+			if ((tmp = chooseSpouse(current1, _(qSnospse), _(qSidsbrs))) != 0)
 				current1 = tmp;
 			break;
 		case CMD_CHILDREN: 	/* browse top person's children */
-			if ((tmp = choose_child(current1, NULL, _(qSnocofp),
+			if ((tmp = chooseChild(current1, NULL, _(qSnocofp),
 				_(qSidcbrs), NOASK1)) != 0)
 				current1 = tmp;
 			break;
@@ -286,9 +286,9 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			msg_error("%s", _(qStwohsb));
 			break;
 		case CMD_BOTH_MOTHERS:	/* browse to wives/moths */
-			if ((tmp = choose_mother(NULL, current1, _(qSnowife),
+			if ((tmp = chooseMother(NULL, current1, _(qSnowife),
 				_(qSid1wbr), NOASK1)) != 0) {
-				if ((tmp2 = choose_mother(NULL, current2, _(qSnowife), 
+				if ((tmp2 = chooseMother(NULL, current2, _(qSnowife), 
 					_(qSid2wbr), NOASK1)) != 0) {
 					*prec1 = tmp;
 					*prec2 = tmp2;

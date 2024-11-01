@@ -46,9 +46,9 @@ RecordIndexEl *ask_for_any(CString ttl, ASK1Q ask1);
 Sequence *ask_for_indiseq(CString ttl, char ctype, int *prc);
 
 /* browse.c */
-RecordIndexEl *choose_any_event(void);
-RecordIndexEl *choose_any_other(void);
-RecordIndexEl *choose_any_source(void);
+RecordIndexEl *chooseAnyEvent(void);
+RecordIndexEl *chooseAnyOther(void);
+RecordIndexEl *chooseAnySource(void);
 int get_chist_len(void);
 Sequence *get_chistory_list(void);
 int get_vhist_len(void);
@@ -64,13 +64,12 @@ GNode *my_prompt_add_child(GNode *child, GNode *fam);
 void term_browse_module(void);
 
 /* delete.c */
-void choose_and_remove_indi(GNode *indi, CONFIRMQ confirmq);
-void choose_and_delete_family(void);
-bool choose_and_remove_child(RecordIndexEl *irec, RecordIndexEl *frec,
+void chooseAndRemovePerson(GNode *indi, CONFIRMQ confirmq);
+bool chooseAndRemoveChild(RecordIndexEl *irec, RecordIndexEl *frec,
 			     bool nolast);
-bool choose_and_remove_spouse(RecordIndexEl *irec, RecordIndexEl *frec,
+bool chooseAndRemoveSpouse(RecordIndexEl *irec, RecordIndexEl *frec,
 			      bool nolast);
-bool choose_and_remove_any_record(RecordIndexEl *rec, CONFIRMQ confirmq);
+bool chooseAndRemoveAnyRecord(RecordIndexEl *rec, CONFIRMQ confirmq);
 
 /* edit.c */
 bool edit_family(RecordIndexEl *frec1, bool rfmt);

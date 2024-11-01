@@ -1295,7 +1295,7 @@ necessary, truncated to @code{buflen}.  The return value indicates
 whether the user provided an answer (true) or canceled (false).
 @end deftypefun
 
-@deftypefun RecordIndexEl* choose_from_indiseq (INDISEQ seq, ASK1Q ask1, String titl1, String titln)
+@deftypefun RecordIndexEl* chooseFromSequence (INDISEQ seq, ASK1Q ask1, String titl1, String titln)
 Format sequence and have user choose from it (any type).  This handles
 bad pointers.  Here, @code{seq} is the sequence from which to choose,
 @code{ask1} is whether to prompt if only one element is in the
@@ -1311,7 +1311,7 @@ and @code{titln} is the title if sequence has multiple elements.
 @end defun
 @defun ask_for_program (String mode, String ttl, String *pfname, String *pfullpath, String path, String ext, bool picklist) @arrow{} bool
 @end defun
-@defun choose_from_array (String ttl, int no, String *pstrngs) @arrow{} int
+@defun chooseFromArray (String ttl, int no, String *pstrngs) @arrow{} int
 @end defun
 @defun prompt_stdout (String prompt) @arrow{} int
 @end defun

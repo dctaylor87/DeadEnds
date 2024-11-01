@@ -271,7 +271,7 @@ ask_child_order (GNode *fam, PROMPTQ promptq, bool rfmt)
 /* If not first, find where child belongs */
 	} else {
 		childstrings[nchildren] = _(qSmklast);
-		i = choose_from_array(_(qSidcfam), nchildren+1, childstrings);
+		i = chooseFromArray(_(qSidcfam), nchildren+1, childstrings);
 	}
 	return i;
 }

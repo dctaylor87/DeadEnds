@@ -176,7 +176,7 @@ edit_family (RecordIndexEl *frec1, bool rfmt)
 			msg_error("%s", _(qSntprnt));
 			goto end_edit_fam;
 		} 
-		frec1 = choose_family(irec, _(qSparadox), _(qSidfbys), true);
+		frec1 = chooseFamily(irec, _(qSparadox), _(qSidfbys), true);
 		if (!frec1) return false; 
 	}
 	fam1 = nztop(frec1);

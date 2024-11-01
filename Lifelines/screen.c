@@ -141,7 +141,7 @@ static void append_to_msg_list(String msg);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
-static int choose_or_view_array (CString ttl, int no, String *pstrngs
+static int chooseOrViewArray (CString ttl, int no, String *pstrngs
 	, bool selecting, DETAILFNC detfnc, void *param);
 static int choose_tt(String prompt);
 static void clear_msgs(void);
@@ -737,7 +737,7 @@ search_for_one_record (void)
 	}
 	/* namesort uses canonkeysort for non-persons */
 	namesort_indiseq(seq);
-	return choose_from_indiseq(seq, DOASK1,
+	return chooseFromSequence(seq, DOASK1,
 		_("Search results"), _("Search results"));
 }
 /*=====================================
@@ -1286,18 +1286,18 @@ ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 	return rv;
 }
 /*============================================
- * choose_from_array -- Choose from string list
+ * chooseFromArray -- Choose from string list
  *  ttl:      [IN] title for choice display
  *  no:       [IN] number of choices
  *  pstrngs:  [IN] array of choices
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 int
-choose_from_array (CString ttl, int no, String *pstrngs)
+chooseFromArray (CString ttl, int no, String *pstrngs)
 {
 	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
-	return choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
+	return chooseOrViewArray(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
  * display_list -- Show user list of information
@@ -1309,18 +1309,18 @@ int
 display_list (CString ttl, List *list)
 {
 	/* TODO: Need to set some flag to suppress i & <enter> */
-	return choose_from_list(ttl, list);
+	return chooseFromList(ttl, list);
 }
 
 #if !defined(DEADENDS)
 /*============================================
- * choose_from_list -- Choose from string list
+ * chooseFromList -- Choose from string list
  *  ttl:    [IN] title for display
  *  list    [IN] list of string choices
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 int
-choose_from_list (CString ttl, List *list)
+chooseFromList (CString ttl, List *list)
 {
 	String * array=0;
 	String choice=0;
@@ -1339,7 +1339,7 @@ choose_from_list (CString ttl, List *list)
 		++i;
 	ENDLIST
 
-	rtn = choose_from_array(ttl, len, array);
+	rtn = chooseFromArray(ttl, len, array);
 
 	for (i=0; i<len; ++i)
 		strfree(&array[i]);
@@ -1349,7 +1349,7 @@ choose_from_list (CString ttl, List *list)
 #endif
 
 /*============================================
- * choose_from_array_x -- Choose from string list
+ * chooseFromArray_x -- Choose from string list
  *  ttl:      [IN]  title for choice display
  *  no:       [IN]  number of choices
  *  pstrngs:  [IN]  array of choices
@@ -1358,12 +1358,12 @@ choose_from_list (CString ttl, List *list)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 int
-choose_from_array_x (CString ttl, int no, String *pstrngs, DETAILFNC detfnc
+chooseFromArray_x (CString ttl, int no, String *pstrngs, DETAILFNC detfnc
 	, void *param)
 {
 	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
-	return choose_or_view_array(ttl, no, pstrngs, selecting, detfnc, param);
+	return chooseOrViewArray(ttl, no, pstrngs, selecting, detfnc, param);
 }
 /*============================================
  * view_array -- Choose from string list
@@ -1376,10 +1376,10 @@ void
 view_array (CString ttl, int no, String *pstrngs)
 {
 	bool selecting = false;
-	choose_or_view_array(ttl, no, pstrngs, selecting, 0, 0);
+	chooseOrViewArray(ttl, no, pstrngs, selecting, 0, 0);
 }
 /*============================================
- * choose_or_view_array -- Implement choose/view from array
+ * chooseOrViewArray -- Implement choose/view from array
  *  ttl:       [IN]  title for choice display
  *  no:        [IN]  number of choices
  *  pstrngs:   [IN]  array of choices
@@ -1389,7 +1389,7 @@ view_array (CString ttl, int no, String *pstrngs)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 static int
-choose_or_view_array (CString ttl, int no, String *pstrngs, bool selecting
+chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selecting
 	, DETAILFNC detfnc, void *param)
 {
 	int rv;
@@ -1400,18 +1400,18 @@ choose_or_view_array (CString ttl, int no, String *pstrngs, bool selecting
 
 #if !defined(DEADENDS)
 /*=============================================================
- * choose_one_from_indiseq --
+ * chooseOneFromSequence --
  * Choose a single person from indiseq
  * Returns index of selected item (or -1 if user quit)
  *  ttl:  [IN]  title
  *===========================================================*/
 int
-choose_one_from_indiseq (CString ttl, Sequence *seq)
+chooseOneFromSequence (CString ttl, Sequence *seq)
 {
-	return choose_one_or_list_from_indiseq(ttl, seq, false);
+	return chooseOneOrListFromSequence(ttl, seq, false);
 }
 /*==========================================================
- * choose_list_from_indiseq -- User chooses subsequence from
+ * chooseListFromsequence -- User chooses subsequence from
  *   person sequence
  * returns input sequence, but may have deleted elements
  * called by both reports & interactive use
@@ -1420,9 +1420,9 @@ choose_one_from_indiseq (CString ttl, Sequence *seq)
  * returns index of where user choose select (or -1 if quit)
  *========================================================*/
 int
-choose_list_from_indiseq (CString ttl, Sequence *seq)
+chooseListFromsequence (CString ttl, Sequence *seq)
 {
-	return choose_one_or_list_from_indiseq(ttl, seq, true);
+	return chooseOneOrListFromSequence(ttl, seq, true);
 }
 #endif
 
@@ -1538,11 +1538,11 @@ invoke_del_menu (void)
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
-	case 'c': choose_and_remove_child(NULL, NULL, false); break;
-	case 's': choose_and_remove_spouse(NULL, NULL, false); break;
-	case 'i': choose_and_remove_indi(NULL, DOCONFIRM); break;
-	case 'f': choose_and_remove_family(); break;
-	case 'o': choose_and_remove_any_record(NULL, DOCONFIRM); break;
+	case 'c': chooseAndRemoveChild(NULL, NULL, false); break;
+	case 's': chooseAndRemoveSpouse(NULL, NULL, false); break;
+	case 'i': chooseAndRemovePerson(NULL, DOCONFIRM); break;
+	case 'f': chooseAndRemoveFamily(); break;
+	case 'o': chooseAndRemoveAnyRecord(NULL, DOCONFIRM); break;
 	case 'q': break;
 	}
 }

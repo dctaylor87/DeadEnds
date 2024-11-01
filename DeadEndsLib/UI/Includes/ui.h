@@ -34,11 +34,11 @@ int ask_for_char_msg(CString msg, CString ttl, CString prmpt, CString ptrn);
 bool ask_for_db_filename (CString ttl, CString prmpt, CString basedir, String buffer, int buflen);
 bool ask_for_filename_impl(CString ttl, CString path, CString prmpt, String buffer, int buflen);
 bool ask_for_program (CString mode, CString ttl, String *pfname, String *pfullpath, CString path, CString ext, bool picklist);
-int choose_from_array (CString ttl, int no, String *pstrngs);
-int choose_from_list (CString ttl, List *list);
-int choose_list_from_indiseq (CString ttl, Sequence *seq);
-int choose_one_from_indiseq (CString ttl, Sequence *seq);
-int choose_one_or_list_from_indiseq(CString ttl, Sequence *seq, bool multi); /* XXX */
+int chooseFromArray (CString ttl, int no, String *pstrngs);
+int chooseFromList (CString ttl, List *list);
+int chooseListFromsequence (CString ttl, Sequence *seq);
+int chooseOneFromSequence (CString ttl, Sequence *seq);
+int chooseOneOrListFromSequence(CString ttl, Sequence *seq, bool multi); /* XXX */
 int prompt_stdout (CString prompt);
 void view_array (CString ttl, int no, String *pstrngs);
 bool yes_no_value(int c);

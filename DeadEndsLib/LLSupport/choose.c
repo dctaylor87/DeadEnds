@@ -58,7 +58,7 @@
 #define database	currentDatabase
 
 /*=================================================
- * choose_child -- Choose child of person or family
+ * chooseChild -- Choose child of person or family
  *  irec: [IN] parent (may be null if fam provided)
  *  frec:  [IN] family (may be null if indi provided)
  *  msg0: [IN] message to display if no children
@@ -66,7 +66,7 @@
  *  ask1: [IN] whether to prompt if only one child
  *===============================================*/
 RecordIndexEl *
-choose_child (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
+chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
@@ -77,19 +77,19 @@ choose_child (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
+	rec = chooseFromSequence(seq, ask1, msgn, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*========================================
- * choose_spouse -- Choose person's spouse
+ * chooseSpouse -- Choose person's spouse
  *  irec: [IN]  known person (gives up if this is null)
  *  msg0: [IN] message to display if no spouses
  *  msgn: [IN] title for choosing spouse from list
  *  asks if multiple
  *======================================*/
 RecordIndexEl *
-choose_spouse (RecordIndexEl *irec, CString msg0, CString msgn)
+chooseSpouse (RecordIndexEl *irec, CString msg0, CString msgn)
 {
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
@@ -99,17 +99,17 @@ choose_spouse (RecordIndexEl *irec, CString msg0, CString msgn)
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, NOASK1, NULL, msgn);
+	rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*========================================
- * choose_source -- Choose any referenced source from some,
+ * chooseSource -- Choose any referenced source from some,
  *  presumably top level, node
  *  always asks
  *======================================*/
 RecordIndexEl *
-choose_source (RecordIndexEl *current, CString msg0, CString msgn)
+chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
 {
 	Sequence *seq;
 	RecordIndexEl *rec;
@@ -118,18 +118,18 @@ choose_source (RecordIndexEl *current, CString msg0, CString msgn)
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
+	rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*========================================
- * choose_note -- Choose any referenced note from some,
+ * chooseNote -- Choose any referenced note from some,
  *  presumably top level, node
  *  always asks
  * Created: 2001/02/11, Perry Rapp
  *======================================*/
 RecordIndexEl *
-choose_note (RecordIndexEl *current, CString msg0, CString msgn)
+chooseNote (RecordIndexEl *current, CString msg0, CString msgn)
 {
 	Sequence *seq;
 	RecordIndexEl *rec;
@@ -138,19 +138,19 @@ choose_note (RecordIndexEl *current, CString msg0, CString msgn)
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
+	rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*========================================
- * choose_pointer -- Choose any reference (pointer) from some,
+ * choosePointer -- Choose any reference (pointer) from some,
  *  presumably top level, node
  *  always asks
  * Created: 2001/02/24, Perry Rapp
  * Returns addref'd record
  *======================================*/
 RecordIndexEl *
-choose_pointer (RecordIndexEl *current, CString msg0, CString msgn)
+choosePointer (RecordIndexEl *current, CString msg0, CString msgn)
 {
 	Sequence *seq;
 	RecordIndexEl *rec;
@@ -159,12 +159,12 @@ choose_pointer (RecordIndexEl *current, CString msg0, CString msgn)
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, DOASK1, msgn, msgn);
+	rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*==========================================================
- * choose_family -- Choose family from person's FAMS/C lines
+ * chooseFamily -- Choose family from person's FAMS/C lines
  *  asks if multiple
  * irec: [IN]  person of interest
  * msg0: [IN]  message to display if no families
@@ -172,7 +172,7 @@ choose_pointer (RecordIndexEl *current, CString msg0, CString msgn)
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
 RecordIndexEl *
-choose_family (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
+chooseFamily (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
 {
 	RecordIndexEl *rec=0;
 	Sequence *seq = indi_to_families(nztop(irec), fams);
@@ -181,12 +181,12 @@ choose_family (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
 			msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, NOASK1, NULL, msgn);
+	rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*===================================================
- * choose_father -- Choose father of person or family
+ * chooseFather -- Choose father of person or family
  * irec: [IN]  person of interest if non-null
  * frec: [IN]  family of interest if non-null
  * msg0: [IN]  message to display if no fathers
@@ -194,7 +194,7 @@ choose_family (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
 RecordIndexEl *
-choose_father (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
+chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
@@ -205,12 +205,12 @@ choose_father (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString m
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
+	rec = chooseFromSequence(seq, ask1, msgn, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
 /*===================================================
- * choose_mother -- Choose mother of person or family
+ * chooseMother -- Choose mother of person or family
  * irec: [IN]  person of interest if non-null
  * frec: [IN]  family of interest if non-null
  * msg0: [IN]  message to display if no mothers
@@ -218,7 +218,7 @@ choose_father (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString m
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
 RecordIndexEl *
-choose_mother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
+chooseMother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
 	RecordIndexEl *rec=0;
 	Sequence *seq=0;
@@ -229,7 +229,7 @@ choose_mother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString m
 		msg_error("%s", msg0);
 		return NULL;
 	}
-	rec = choose_from_indiseq(seq, ask1, msgn, msgn);
+	rec = chooseFromSequence(seq, ask1, msgn, msgn);
 	remove_indiseq(seq);
 	return rec;
 }
