@@ -89,10 +89,12 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 
 	/* Write data to database */
 
-#if !defined(DEADENDS)
+#if defined(DEADENDS)
+	key = nxref(indi1);
+#else
 	indi_to_dbase(indi1);
-#endif
 	key = rmvat(nxref(indi1));
+#endif
 	/* update name & refn info */
 	/* classify does a diff on its first two arguments, repopulating all three
 	arguments -- first is left-only, second is right-only, third is shared */
@@ -148,7 +150,7 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 #if !defined(DEADENDS)
 	fam_to_dbase(fam1);
 #endif
-	key = rmvat(nxref(fam1));
+	key = nxref(fam1);
 	/* remove deleted refns & add new ones */
 	classifyNodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
