@@ -240,9 +240,6 @@ static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   return (PyObject *)indi;
 }
 
-/* nextfam & prevfam are commented out until DeadEnds adds a 'highest
-   family record number' variable */
-
 /* llpy_nextfam (FAM) --> FAM
 
    Returns the next family (in key order) in the database.  */
@@ -399,7 +396,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
   if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */
 
-  record = choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei));
   deleteSequence (seq);
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
@@ -424,7 +421,7 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
   if (! seq || (seq->block.length < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 
-  record = choose_from_indiseq (seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence (seq, DOASK1, _(qSifonei), _(qSnotonei));
   deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */
@@ -489,7 +486,7 @@ If STRIP_PREFIX is True (default: False), the non numeric prefix is stripped." }
 through user interface.  Returns None if family has no spouses or user cancels." },
 
    { "top_node", (PyCFunction)_llpy_top_node, METH_NOARGS,
-     "top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
+     "(FAM).top_node(void) --> NODE.  Returns the top of the NODE tree associated with the RECORD." },
 
    { NULL, 0, 0, NULL }		/* sentinel */
   };
