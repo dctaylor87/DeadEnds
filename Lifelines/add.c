@@ -233,7 +233,7 @@ add_indi_no_cache (GNode *indi)
 	// Save INDI key value since rmvat static array entries may get reused
 	// before we write the INDI out (for example, >32 ASSO tags). This
 	// prevents us from writing the record out using the wrong key.
-	key = strsave(rmvat(nxref(indi)));
+	key = strsave(nxref(indi));
 
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 	for (node = name; node; node = nsibling(node))
@@ -690,7 +690,7 @@ editfam:
 
 	msg_info("%s", _(qSgdfadd));
 
-	key = rmvat(nxref(fam2));
+	key = nxref(fam2);
 	return keyToFamilyRecord(key, currentDatabase);
 }
 /*==========================================================
@@ -715,7 +715,7 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 /* Write updated records to database */
 
 	splitFamily(fam2, &refn, &husb, &wife, &chil, &body);
-	key = rmvat(nxref(fam2));
+	key = nxref(fam2);
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinFamily(fam2, refn, husb, wife, chil, body);

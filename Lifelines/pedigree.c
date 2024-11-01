@@ -542,7 +542,7 @@ node_lineprint (int width, void * param)
 		destrcatn(&ptr, " ", &mylen);
 	}
 	if (npp->gdvw == GDVW_EXPANDED && nval(node)) {
-		String key = rmvat(nval(node)), str;
+		String key = nval(node), str;
 		if (key) {
 			str = generic_to_list_string(NULL, key, mylen, ",", false, true, currentDatabase);
 			destrcatn(&ptr, " : ", &mylen);

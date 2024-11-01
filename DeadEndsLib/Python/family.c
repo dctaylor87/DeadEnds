@@ -96,7 +96,7 @@ static PyObject *llpy_husband (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
     /* family doesn't have a recorded husband */
     Py_RETURN_NONE;
 
-  key = rmvat (nval (husb_node));
+  key = nval (husb_node);
   if (! key)
     Py_RETURN_NONE;		/* it has a HUSB line, but no value -- no husband */
 
@@ -130,7 +130,7 @@ static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
     /* family doesn't have a recorded wife */
     Py_RETURN_NONE;
 
-  key = rmvat (nval (wife_node));
+  key = nval (wife_node);
   if (! key)
     Py_RETURN_NONE;		/* it has a WIFE line, but not value -- no wife */
 
@@ -178,7 +178,7 @@ static PyObject *llpy_firstchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
   if (! indi_node)
     Py_RETURN_NONE;		/* no children */
 
-  key = rmvat (nval (indi_node));
+  key = nval (indi_node);
   if (! key)
     Py_RETURN_NONE;		/* malformed CHIL line -- no value, no  children */
 
@@ -222,7 +222,7 @@ static PyObject *llpy_lastchild (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 	prev_node = indi_node;
       indi_node = nsibling (indi_node);
     }
-  key = rmvat (nval (prev_node));
+  key = nval (prev_node);
   if (! key)
     Py_RETURN_NONE;		/* malformed CHIL line -- no value, no children */
 

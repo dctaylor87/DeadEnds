@@ -213,7 +213,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 		return NULL;
 	}
 	nxref(node) = strsave((String)(*getreffnc)());
-	key = rmvat(nxref(node));
+	key = nxref(node);
 	for (refn = nchild(node); refn; refn = nsibling(refn)) {
 		if (eqstr("REFN", ntag(refn)) && nval(refn))
 			addRefn(nval(refn), key, database);
@@ -392,7 +392,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 /* Change the database */
 
 	(*todbase)(root1, database);
-	key = rmvat(nxref(root1));
+	key = nxref(root1);
 	/* remove deleted refns & add new ones */
 	classifyNodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))

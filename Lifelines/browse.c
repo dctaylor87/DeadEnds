@@ -361,7 +361,7 @@ pick_create_new_family (RecordIndexEl *current, RecordIndexEl *save, String * ad
 		String name = personToName(nztop(save), 55);
 		destrncpyf(scratch, sizeof(scratch), uu8, "%s%s", _(qSissnew), name);
 		if (keyflag) {
-			String key = rmvat(nxref(nztop(save)))+1;
+			String key = nxref(nztop(save))+1;
 			destrappf(scratch, sizeof(scratch), uu8, " (%s)", key);
 		}
 		if (ask_yes_or_no(scratch))
@@ -946,13 +946,13 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 	}
 	i = 0;
 	for (node = husb; node; node = nsibling(node)) {
-		root = keyToPerson(rmvat(nval(node)), currentDatabase);
+		root = keyToPerson(nval(node), currentDatabase);
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, true, true);
 		spnodes[i++] = root;
 	}
 	for (node = wife; node; node = nsibling(node)) {
-		root = keyToPerson(rmvat(nval(node)), currentDatabase);
+		root = keyToPerson(nval(node), currentDatabase);
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, true, true);
 		spnodes[i++] = root;
@@ -992,7 +992,7 @@ prompt_add_spouse_with_candidate (RecordIndexEl *fam, RecordIndexEl *candidate)
 		if (keyflag) {
 			snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSissnew),
 				 personToName(nztop(candidate), 56),
-				 rmvat(nxref(nztop(candidate)))+1);
+				 nxref(nztop(candidate))+1);
 		} else {
 			snprintf(scratch, sizeof(scratch), "%s%s", _(qSissnew),
 				 personToName(nztop(candidate), 56));
@@ -1022,11 +1022,11 @@ prompt_add_child_check_save (GNode *fam, GNode *save)
 			if(getdeoptint("DisplayKeyTags", 0) > 0) {
 				snprintf(scratch, sizeof(scratch), "%s%s (i%s)", _(qSiscnew),
 				 	personToName(save, 56),
-				 	rmvat(nxref(save))+1);
+				 	nxref(save)+1);
 			} else {
 				snprintf(scratch, sizeof(scratch), "%s%s (%s)", _(qSiscnew),
 				 	personToName(save, 56),
-				 	rmvat(nxref(save))+1);
+				 	nxref(save)+1);
 			}
 		else
 			snprintf(scratch, sizeof(scratch), "%s%s", _(qSiscnew),

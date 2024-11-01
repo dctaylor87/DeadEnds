@@ -204,7 +204,7 @@ next_spouse (GNode **node, RecordIndexEl **spouse, Database *database)
 	if (!node || !spouse) return 0;
 	while (*node) {
 	    if (eqstr(ntag(*node),"HUSB") || eqstr(ntag(*node),"WIFE")) {
-		key = rmvat(nval(*node));
+		key = nval(*node);
 		if (!key) return -1;
 		*spouse = keyToPersonRecord(key, database);
 		if (!*spouse) return -1;
@@ -231,7 +231,7 @@ indi_to_prev_sib_impl (GNode *indi, Database *database)
 	while (node) {
 		if (eqstr(nxref(indi), nval(node))) {
 			if (!prev) return NULL;
-			return keyToPersonRecord(rmvat(nval(prev)), database);
+			return keyToPersonRecord(nval(prev), database);
 		}
 		if (eqstr(ntag(node),"CHIL"))
 			prev = node;
@@ -263,7 +263,7 @@ indi_to_next_sib_impl (GNode *indi, Database *database)
 				found = true;
 		} else {
 			if (eqstr(ntag(node),"CHIL"))
-				return keyToPersonRecord(rmvat(nval(node)), database);
+				return keyToPersonRecord(nval(node), database);
 		}
 		node = nsibling(node);
 	}

@@ -107,7 +107,7 @@ get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *d
 	}
 	FORCHILDREN(fam,child,key, i, database)
 		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, true);
-		chkeys[i-1] = strsave(rmvat(nxref(child)));
+		chkeys[i-1] = strsave(nxref(child));
 	ENDCHILDREN
 	*pnum = nchil;
 	*pkeys = chkeys;
@@ -209,7 +209,7 @@ sour_to_list_string (GNode *sour, int len, String delim)
 		mylen=sizeof(scratch);
 	p[0]=0;
 	destrcatn(&p, "(S", &mylen);
-	destrcatn(&p, rmvat(nxref(sour))+1, &mylen);
+	destrcatn(&p, nxref(sour)+1, &mylen);
 	destrcatn(&p, ") ", &mylen);
 	name = node_to_tag(sour, "REFN", len);
 	if (name)
@@ -243,7 +243,7 @@ even_to_list_string (GNode *even, int len, ATTRIBUTE_UNUSED String delim)
 		mylen=sizeof(scratch);
 	p[0]=0;
 	destrcatn(&p, "(E", &mylen);
-	destrcatn(&p, rmvat(nxref(even))+1, &mylen);
+	destrcatn(&p, nxref(even)+1, &mylen);
 	destrcatn(&p, ") ", &mylen);
 	name = node_to_tag(even, "NAME", len);
 	if (name)
@@ -276,7 +276,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 		mylen=sizeof(scratch);
 	p[0]=0;
 	destrcatn(&p, "(F", &mylen);
-	destrcatn(&p, rmvat(nxref(fam))+1, &mylen);
+	destrcatn(&p, nxref(fam)+1, &mylen);
 	destrcatn(&p, ")", &mylen);
 	name = node_to_tag(fam, "REFN", len);
 	if (name) {
@@ -294,7 +294,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 	destrcatn(&p, " ", &mylen);
 	destrcatn(&p, counts, &mylen);
 	if (husbands) {
-		node = keyToPerson(rmvat(nval(husb)), database);
+		node = keyToPerson(nval(husb), database);
 		if (node) {
 			destrcatn(&p, delim, &mylen);
 			if (wives)
@@ -309,7 +309,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 		}
 	}
 	if (wives) {
-		node = keyToPerson(rmvat(nval(wife)), database);
+		node = keyToPerson(nval(wife), database);
 		if (node) {
 			if (!templen)
 				templen = mylen;
@@ -337,7 +337,7 @@ other_to_list_string(GNode *node, int len, ATTRIBUTE_UNUSED String delim)
 		mylen=sizeof(scratch);
 	p[0]=0;
 	destrcatn(&p, "(X", &mylen);
-	destrcatn(&p, rmvat(nxref(node))+1, &mylen);
+	destrcatn(&p, nxref(node)+1, &mylen);
 	destrcatn(&p, ") (", &mylen);
 	destrcatn(&p, ntag(node), &mylen);
 	destrcatn(&p, ") ", &mylen);
@@ -394,7 +394,7 @@ generic_to_list_string (GNode *node, String key, int len, String delim,
 	if (!node && key)
 		node = keyToPerson (key, database);
 	if (!key && node)
-		key = rmvat(nxref(node));
+		key = nxref(node);
 	if (node) {
 		switch (recordType (node))
 		{

@@ -97,7 +97,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	       child;
 	       child = findTag (child->sibling, "CHIL"))
 	    {
-	      CString child_key = rmvat (nval (child));
+	      CString child_key = nval (child);
 	      if (nestr (child_key, nzkey (indi)))
 		{
 		  /* child in same family, different key, must be sibling */
@@ -357,11 +357,11 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
       return 0;			/* no parents, nothing to do, success */
     }
 
-  fam = keyToFamilyRecord (rmvat (nval (famc)), database);
+  fam = keyToFamilyRecord (nval (famc), database);
   fam_node = nztop (fam);
   if ((parent = HUSB (fam_node)))
     {
-      RecordIndexEl *record = keyToPersonRecord (rmvat (nval (parent)), database);
+      RecordIndexEl *record = keyToPersonRecord (nval (parent), database);
       LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
       if (! new_indi)
@@ -386,7 +386,7 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
     }
   if ((parent = WIFE (fam_node)))
     {
-      RecordIndexEl *record = keyToPersonRecord (rmvat (nval (parent)), database);
+      RecordIndexEl *record = keyToPersonRecord (nval (parent), database);
       LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD,
 						      &llines_individual_type);
       if (! new_indi)

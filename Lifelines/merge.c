@@ -267,7 +267,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = fam12;
 	while (this) {
-		fam = key_to_fam(rmvat(nval(this)));
+		fam = key_to_fam(nval(this));
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = chil;
@@ -305,7 +305,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = famc1;
 	while (this) {
-		fam = key_to_fam(rmvat(nval(this)));
+		fam = key_to_fam(nval(this));
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = chil;
@@ -337,7 +337,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = fam12;
 	while (this) {
-		fam = key_to_fam(rmvat(nval(this)));
+		fam = key_to_fam(nval(this));
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		if (sx2 == sexMale)
@@ -373,7 +373,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = fams1;
 	while (this) {
-		fam = key_to_fam(rmvat(nval(this)));
+		fam = key_to_fam(nval(this));
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = (sx2 == sexMale) ? husb : wife;
@@ -410,7 +410,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	classifyNodes(&name2, &name3, &name24);
 	classifyNodes(&refn2, &refn3, &refn24);
 
-	key = rmvat(nxref(indi4));
+	key = nxref(indi4);
 	for (node = name2; node; node = nsibling(node))
 		removeFromNameIndex (currentDatabase->nameIndex, nval(node), key); 
 	for (node = name3; node; node = nsibling(node))
@@ -611,7 +611,7 @@ merge_fam_links (GNode *fam1, GNode *fam2, GNode *list1, GNode *list2, int code)
 		curs2 = list2;
 		while (curs2 && nestr(nval(curs1), nval(curs2)))
 			curs2 = nsibling(curs2);
-		indi = key_to_indi(rmvat(nval(curs1)));
+		indi = key_to_indi(nval(curs1));
 		splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 		prev = NULL;
 		if (code == CHUSB || code == CWIFE)
@@ -687,14 +687,14 @@ sort_children (GNode *chil1,
 	prev = chil3 = NULL;
 	while (copy1 && copy2) {
 		if (int1 == 1) {
-			kid1 = key_to_indi(rmvat(nval(copy1)));
+			kid1 = key_to_indi(nval(copy1));
 			year1 = eventToDate(BIRT(kid1), true);
 			if (!year1)
 				year1 = eventToDate(BAPT(kid1), true);
 			int1 = year1 ? atoi(year1) : 0;
 		}
 		if (int2 == 1) {
-			kid2 = key_to_indi(rmvat(nval(copy2)));
+			kid2 = key_to_indi(nval(copy2));
 			year2 = eventToDate(BIRT(kid2), true);
 			if (!year2)
 				year2 = eventToDate(BAPT(kid2), true);
@@ -797,7 +797,7 @@ check_indi_lineage_links (GNode *indi)
 	(& how many times each)
 	*/
 	for (curs = fams; curs; curs = nsibling(curs)) {
-		famkey = rmvat(nval(curs));
+		famkey = nval(curs);
 		if (!eqstr(ntag(curs), "FAMS")) {
 			char msg[512];
 			snprintf(msg, sizeof(msg), _("Bad spouse tag: %s"), ntag(curs));
@@ -844,7 +844,7 @@ check_indi_lineage_links (GNode *indi)
 	(& how many times each)
 	*/
 	for (curs = famc; curs; curs = nsibling(curs)) {
-		famkey = rmvat(nval(curs));
+		famkey = nval(curs);
 		if (!eqstr(ntag(curs), "FAMC")) {
 			char msg[512];
 			snprintf(msg, sizeof(msg), _("Bad child tag: %s"), ntag(curs));
@@ -916,7 +916,7 @@ check_fam_lineage_links (GNode *fam)
 	(& how many times each)
 	*/
 	for (curs = husb; curs; curs = nsibling(curs)) {
-		indikey = rmvat(nval(curs));
+		indikey = nval(curs);
 		if (!eqstr(ntag(curs), "HUSB")) {
 			char msg[512];
 			snprintf(msg, sizeof(msg), _("Bad HUSB tag: %s"), ntag(curs));
@@ -925,7 +925,7 @@ check_fam_lineage_links (GNode *fam)
 		incrIntegerTable(memtab, indikey);
 	}
 	for (curs = wife; curs; curs = nsibling(curs)) {
-		indikey = rmvat(nval(curs));
+		indikey = nval(curs);
 		if (!eqstr(ntag(curs), "WIFE")) {
 			char msg[512];
 			snprintf(msg, sizeof(msg), _("Bad HUSB tag: %s"), ntag(curs));
@@ -972,7 +972,7 @@ check_fam_lineage_links (GNode *fam)
 	(& how many times each)
 	*/
 	for (curs = chil; curs; curs = nsibling(curs)) {
-		indikey = rmvat(nval(curs));
+		indikey = nval(curs);
 		if (!eqstr(ntag(curs), "CHIL")) {
 			char msg[512];
 			snprintf(msg, sizeof(msg), _("Bad child tag: %s"), ntag(curs));

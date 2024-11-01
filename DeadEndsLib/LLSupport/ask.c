@@ -116,7 +116,7 @@ ask_for_fam (CString pttl, CString sttl)
 			msg_error("%s", _(qSntchld));
 			return NULL;
 		}
-		frec = keyToFamilyRecord(rmvat(nval(fam)), currentDatabase);
+		frec = keyToFamilyRecord(nval(fam), currentDatabase);
 		return frec;
 	}
 	if (!FAMS(nztop(prn))) {
@@ -439,7 +439,7 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
 	if (!indi) return NULL;
 	GNode *node = nztop(indi);
 	releaseRecord(indi);
-	return rmvat(nxref(node));
+	return nxref(node);
 }
 /*===============================================================
  * chooseOneFromSequenceIfNeeded  -- handle ask1 cases

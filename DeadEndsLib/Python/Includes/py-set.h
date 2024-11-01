@@ -30,7 +30,7 @@
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "CHIL")) break;\
-		__key = rmvat(nval(__node));\
+		__key = nval(__node);\
 		__node = nsibling(__node);\
 		if (!__key || !(child = keyToPersonRecord(__key, database))) {	\
 			continue;\
@@ -53,7 +53,7 @@
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "FAMS")) break;\
-		__key = rmvat(nval(__node));\
+		__key = nval(__node);\
 		__node = nsibling(__node);\
 		if (!__key || !(fam=keyToFamilyRecord(__key, database))) { \
 			continue;\
@@ -82,7 +82,7 @@
 			__node = nsibling(__node);\
 			continue;\
 		}\
-		__key = rmvat(nval(__node));\
+		__key = nval(__node);\
 		if (!__key || !(spouse = keyToPersonRecord(__key, database))) {	\
 			__node = nsibling(__node);\
 			continue;\

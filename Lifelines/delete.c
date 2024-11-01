@@ -94,10 +94,10 @@ chooseAndRemoveFamily (void)
 	for (node=nchild(fam); node; node = nsibling(node)) {
 		tag = ntag(node);
 		if (eqstr("HUSB", tag) || eqstr("WIFE", tag)) {
-			key = strsave(rmvat(nval(node)));
+			key = strsave(nval(node));
 			append_indiseq_null(spseq, key, NULL, true, true);
 		} else if (eqstr("CHIL", tag)) {
-			key = strsave(rmvat(nval(node)));
+			key = strsave(nval(node));
 			append_indiseq_null(chseq, key, NULL, true, true);
 		}
 	}

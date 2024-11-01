@@ -40,7 +40,7 @@ append_all_tags(Sequence *seq, GNode *node, CString tagname,
       String skey = 0;
       bool include=true;
 
-      strupdate(&skey, rmvat(key));
+      strupdate(&skey, key);
       if (skey) {
 	val = skey;
       } else {

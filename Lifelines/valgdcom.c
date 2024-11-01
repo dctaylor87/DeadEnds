@@ -154,7 +154,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 
 
 	rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
-	xref = xref ? rmvat(xref) : NULL;
+	xref = xref ? xref : NULL;
 	rec_type = OTHR_REC;
 	while (rc != DONE)  {
 		if (lev > curlev + 1 || rc == ERROR) {
@@ -166,7 +166,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 			curlev = lev;
 			rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val,
 			    &msg);
-			xref = xref ? rmvat(xref) : NULL;
+			xref = xref ? xref : NULL;
 			continue;
 		}
 		if (lev > 1) {
@@ -174,7 +174,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 			curlev = lev;
 			rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val,
 			    &msg);
-			xref = xref ? rmvat(xref) : NULL;
+			xref = xref ? xref : NULL;
 			continue;
 		}
 		if (lev == 0) {
@@ -245,7 +245,7 @@ validate_gedcom (IMPORT_FEEDBACK ifeed, FILE *fp)
 		}
 		curlev = lev;
 		rc = file_to_line(fp, xlat, &lev, &xref, &tag, &val, &msg);
-		xref = xref ? rmvat(xref) : NULL;
+		xref = xref ? xref : NULL;
 	}
 	if (rec_type == INDI_REC && !named)
 		handle_err(ifeed, qSnoname, defline);
@@ -547,20 +547,20 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, int line, CStri
 			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
-		(void) add_fam_defn(ifeed, rmvat(val), 0);
+		(void) add_fam_defn(ifeed, val, 0);
 	} else if (eqstr(tag, "FAMS")) {
 		if (!pointer_value(val)) {
 			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
-		(void) add_fam_defn(ifeed, rmvat(val), 0);
+		(void) add_fam_defn(ifeed, val, 0);
 	} else if (eqstr(tag, "FATH")) {
 		if (!pointer_value(val)) {
 			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
 		Male(indi) += 1;
-		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, val, 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "MOTH")) {
 		if (!pointer_value(val)) {
@@ -568,7 +568,7 @@ handle_indi_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, int line, CStri
 			return;
 		}
 		Fmle(indi) += 1;
-		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, val, 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "SEX")) {
 		if (val && (*val == 'M'))
@@ -600,7 +600,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, int line, CStrin
 			return;
 		}
 		if (fam) Male(fam) += 1;
-		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, val, 0, &pers) >= 0)
 			Sex(pers) |= BE_MALE;
 	} else if (eqstr(tag, "WIFE")) {
 		++members;
@@ -609,7 +609,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, int line, CStrin
 			return;
 		}
 		if (fam) Fmle(fam) += 1;
-		if (add_indi_defn(ifeed, rmvat(val), 0, &pers) >= 0)
+		if (add_indi_defn(ifeed, val, 0, &pers) >= 0)
 			Sex(pers) |= BE_FEMALE;
 	} else if (eqstr(tag, "CHIL")) {
 		++members;
@@ -617,7 +617,7 @@ handle_fam_lev1 (IMPORT_FEEDBACK ifeed, String tag, String val, int line, CStrin
 			report_missing_value(ifeed, tag, line, tag0, xref0);
 			return;
 		}
-		(void) add_indi_defn(ifeed, rmvat(val), 0, &pers);
+		(void) add_indi_defn(ifeed, val, 0, &pers);
 	} else
 		handle_value(val, line);
 }
@@ -890,7 +890,7 @@ handle_value (String val, int line)
 
 	if (rec_type == IGNR_REC) return;
 	if (!pointer_value(val)) return;
-	xref = rmvat(val);
+	xref = val;
 	if (xref_to_index(xref) != -1) return;
 	el = create_elmnt(UNKN_REC, xref);
 	New(el) = NULL;

@@ -129,7 +129,7 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig, Database *database)
 	  for (refn = refn1; refn != NULL; refn = nsibling(refn)) {
 	    ukey = nval(refn);
 	    CString key = getRefn (ukey, database);
-	    if (! key || ! orig || nestr(key, rmvat(nxref(indi1)))) {
+	    if (! key || ! orig || nestr(key, nxref(indi1))) {
 	      *pmsg = _(qSbadirefn);
 	      goto bad1;
 	    }

@@ -99,7 +99,7 @@ expand_tree (GNode *root0)
 #ifdef DEBUG
 		llwprintf("in list: %s %s\n", ntag(node), nval(node));
 #endif
-		key = rmvat(nval(node));
+		key = nval(node);
 		if ((sub = nztop (__llpy_key_to_record (key, NULL, database)))) {
 			copy = copy_node_subtree(sub);
 			nxref(node)    = nxref(copy);
@@ -171,9 +171,9 @@ advedit_expand_traverse (GNode *node, void *param)
 #endif /* DEBUG */
 	FORLIST(subs, el)
 #ifdef DEBUG
-	llwprintf("expand_traverse: %s %s\n", key, rmvat(nval((GNode *) el)));
+	llwprintf("expand_traverse: %s %s\n", key, nval((GNode *) el));
 #endif /* DEBUG */
-		if (eqstr(key, rmvat(nval((GNode *) el)))) {
+		if (eqstr(key, nval((GNode *) el))) {
 			stdfree(key);
 			return true;
 		}

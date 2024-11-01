@@ -71,7 +71,7 @@ static void remove_refn_list(GNode *refn, CString key, Database *database);
 void
 remove_indi_by_root (GNode *indi, Database *database)
 {
-	String key = rmvat(nxref(indi));
+	String key = nxref(indi);
 	GNode *name, *refn, *sex, *body, *famc, *fams;
 	GNode *node, *husb, *wife, *chil, *rest, *fam, *fref;
 
@@ -81,7 +81,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 /* Remove person from families he/she is in as a parent */
 
 	for (node = fams; node; node = nsibling(node)) {
-		fam = keyToFamily(rmvat(nval(node)), database);
+		fam = keyToFamily(nval(node), database);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		/* remove all occurrences of this person as spouse */
 		husb = remove_any_xrefs_node_list(nxref(indi), husb);
@@ -94,7 +94,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 /* Remove person from families he/she is in as a child */
 
 	for (node = famc; node; node = nsibling(node)) { 
-		fam = keyToFamily(rmvat(nval(node)), database);
+		fam = keyToFamily(nval(node), database);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		/* remove all occurrences of this person as child */
 		chil = remove_any_xrefs_node_list(nxref(indi), chil);
@@ -126,7 +126,7 @@ remove_empty_fam (GNode *fam, Database *database)
 	GNode *husb, *wife, *chil, *rest, *refn;
 
 	if (!fam) return true;
-	key = rmvat(nxref(fam));
+	key = nxref(fam);
 
 /* Factor out portions critical to lifelines (lineage-linking, names, & refns) */
 	splitFamily(fam, &refn, &husb, &wife, &chil, &rest);

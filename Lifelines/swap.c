@@ -97,7 +97,7 @@ swap_children (RecordIndexEl *prnt, RecordIndexEl *frec)
 
 /* Identify family if need be */
 	if (nfam == 1) {
-		frec = keyToFamilyRecord(rmvat(nval(FAMS(nztop(prnt)))), currentDatabase);
+		frec = keyToFamilyRecord(nval(FAMS(nztop(prnt))), currentDatabase);
 		goto gotfam;
 	}
 	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true)))
@@ -205,7 +205,7 @@ reorder_child (RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt)
 
 /* Identify family if need be */
 	if (nfam == 1) {
-		frec = keyToFamilyRecord(rmvat(nval(FAMS(nztop(prnt)))), currentDatabase);
+		frec = keyToFamilyRecord(nval(FAMS(nztop(prnt))), currentDatabase);
 		goto gotfam;
 	}
 	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true))) 
