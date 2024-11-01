@@ -21,7 +21,7 @@ typedef const char* CString;
 #include <unistd.h>
 #include "path.h"
 
-//#define DEBUGALLOCS // EMPTY
+#define DEBUGALLOCS // EMPTY
 #define MAXSTRINGSIZE 512
 
 // CharacterType -- Characters are partitioned into different types.
@@ -66,11 +66,11 @@ void __logAllocations(bool);  // Turn allocation logging on and off.
 // Turn on alloc and free debugging.
 #ifdef DEBUGALLOCS // Debugging allocs and free.
 	#define stdalloc(l)   _alloc(l, __FILE__, __LINE__)
-	#define stdfree(p)    _free(p, __FILE__, __LINE__)
+	#define stdfree(p)    _free((void *)p, __FILE__, __LINE__)
 	#define logAllocations(b) _logAllocations((b))
 #else // Not debugging allocs and frees.
-	#define stdalloc(l) malloc((l))
-	#define stdfree(p) free((p))
+	#define stdalloc(l) malloc((void *)(l))
+	#define stdfree(p) free(((void *)p))
 	#define logAllocations(b)
 #endif
 
