@@ -114,7 +114,7 @@ chooseFromList (CString ttl, List *list)
 	return rtn;
 }
 
-/* chooseListFromsequence -- User chooses subsequence from
+/* chooseListFromSequence -- User chooses subsequence from
    person sequence
    returns input sequence, but may have deleted elements
    called by both reports & interactive use
@@ -123,7 +123,7 @@ chooseFromList (CString ttl, List *list)
    returns index of where user choose select (or -1 if quit)  */
 
 int
-chooseListFromsequence (CString ttl, Sequence *seq)
+chooseListFromSequence (CString ttl, Sequence *seq)
 {
 	return chooseOneOrListFromSequence(ttl, seq, true);
 }

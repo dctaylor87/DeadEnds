@@ -1411,7 +1411,7 @@ chooseOneFromSequence (CString ttl, Sequence *seq)
 	return chooseOneOrListFromSequence(ttl, seq, false);
 }
 /*==========================================================
- * chooseListFromsequence -- User chooses subsequence from
+ * chooseListFromSequence -- User chooses subsequence from
  *   person sequence
  * returns input sequence, but may have deleted elements
  * called by both reports & interactive use
@@ -1420,7 +1420,7 @@ chooseOneFromSequence (CString ttl, Sequence *seq)
  * returns index of where user choose select (or -1 if quit)
  *========================================================*/
 int
-chooseListFromsequence (CString ttl, Sequence *seq)
+chooseListFromSequence (CString ttl, Sequence *seq)
 {
 	return chooseOneOrListFromSequence(ttl, seq, true);
 }
