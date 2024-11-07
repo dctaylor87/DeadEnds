@@ -40,7 +40,7 @@ extern void limit_width (String str, size_t width, bool utf8);
 
 /* strwhite.c */
 extern String trim (String str, int len);
-extern void striptrail (String p);
+//extern void striptrail (String p); // now declared in standard.h
 extern void skipws (String * ptr);
 extern bool allwhite (String p);
 extern void chomp (String str);
