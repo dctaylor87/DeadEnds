@@ -68,9 +68,6 @@
 #include "llpy-externs.h"
 #include "ui.h"
 
-/* everything in this file assumes we are dealing with the current database */
-//#define database	currentDatabase
-
 /*********************************************
  * external/imported variables
  *********************************************/
