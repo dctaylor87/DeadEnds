@@ -16,9 +16,10 @@ testpython_SOURCES = testpython.c
 # Utils has to go before DataTypes due to searchIntegerTable,insertInIntegerTable
 #
 #
-LDADD = ../DeadEndsLib/Python/libpyllines.a ../DeadEndsLib/LLSupport/libllsupport.a \
-	../DeadEndsLib/Interp/libinterp.a ../DeadEndsLib/Parser/libparser.a \
+LDADD = ../DeadEndsLib/Python/libpyllines.a \
+	../DeadEndsLib/LLSupport/libllsupport.a \
 	../DeadEndsLib/UI/libuicli.a \
+	../DeadEndsLib/Interp/libinterp.a ../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
