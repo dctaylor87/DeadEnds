@@ -52,17 +52,17 @@ typedef void *		VPTR;
 /* elt is an SequenceEl (SORTEL) */
 //#define element_skey(elt)		(elt->root->key)
 
-#define fam_to_children(node)		familyToChildren(node, database)
-#define fam_to_fathers(node)		familyToFathers(node, database)
-#define fam_to_mothers(node)		familyToMothers(node, database)
+//#define fam_to_children(node)		familyToChildren(node, database)
+//#define fam_to_fathers(node)		familyToFathers(node, database)
+//#define fam_to_mothers(node)		familyToMothers(node, database)
 //#define fam_to_husb(node)		familyToHusband(node, database)
-#define fam_to_first_chil(node)		familyToFirstChild(node, database)
+//#define fam_to_first_chil(node)		familyToFirstChild(node, database)
 #define fam_to_key(fam)			familyToKey(fam)
 
-#define indi_to_children(node)		personToChildren(node, database)
+//#define indi_to_children(node)		personToChildren(node, database)
 #define indi_to_families(person, fams)	personToFamilies(person, fams, database)
-#define indi_to_fathers(node)		personToFathers(node, database)
-#define indi_to_mothers(node)		personToMothers(node, database)
+//#define indi_to_fathers(node)		personToFathers(node, database)
+//#define indi_to_mothers(node)		personToMothers(node, database)
 #define indi_to_spouses(node)		personToSpouses(node, database)
 
 #define indi_to_name(node, len)		personToName(node,len)
@@ -82,9 +82,9 @@ typedef void *		VPTR;
 
 #define indi_to_dbase(node)	addOrUpdatePersonInDatabase(node, database)
 #define fam_to_dbase(node)	addOrUpdateFamilyInDatabase(node, database)
-#define even_to_dbase(node)	addOrUpdateEventInDatabase(node, database)
-#define othr_to_dbase(node)	addOrUpdateOtherInDatabase(node, database)
-#define sour_to_dbase(node)	addOrUpdateSourceInDatabase(node, database)
+//#define even_to_dbase(node)	addOrUpdateEventInDatabase(node, database)
+//#define othr_to_dbase(node)	addOrUpdateOtherInDatabase(node, database)
+//#define sour_to_dbase(node)	addOrUpdateSourceInDatabase(node, database)
 
 #define fam_to_cacheel(record)	0
 #define indi_to_cacheel(record)	0
@@ -149,9 +149,9 @@ typedef void *		VPTR;
 #define ISNULL(k)		(!k || *k == 0)
 
 #define resolve_refn_links(node)	resolveRefnLinks(node, database)
-#define add_refn(refn, key)		addRefn(refn, key, database)
+//#define add_refn(refn, key)		addRefn(refn, key, database)
 #define remove_refn(refn, key)		removeRefn(refn, key, database)
-#define get_refn(refn)			getRefn(refn, database)
+//#define get_refn(refn)			getRefn(refn, database)
 #define index_by_refn(node)		indexByRefn(node, database)
 //#define annotate_with_supplemental(node, rfmt)	annotateWithSupplemental(node, rfmt, database)
 #define traverse_refns(func, param)	traverseRefns(func, param, database)
