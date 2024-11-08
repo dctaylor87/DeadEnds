@@ -76,16 +76,16 @@ void validateReferences(Database *database, ErrorLog* errorLog) {
 			String refString = refn->value;
 			if (refString == null || strlen(refString) == 0) {
 				Error* error = createError(gedcomError, fname, LN(root, database, refn),
-									   "Missing REFN value");
-			addErrorToLog(errorLog, error);
-		} else if (!addToRefnIndex (refnIndex, refString, root->key)) {
-			Error *error = createError(gedcomError, fname, LN(root, database, refn),
-									   "REFN value already defined");
-			addErrorToLog(errorLog, error);
+							   "Missing REFN value");
+				addErrorToLog(errorLog, error);
+			} else if (!addToRefnIndex (refnIndex, refString, root->key)) {
+				Error *error = createError(gedcomError, fname, LN(root, database, refn),
+							   "REFN value already defined");
+				addErrorToLog(errorLog, error);
+			}
+			refn = refn->sibling;
+			if (refn && nestr(refn->tag, "REFN")) refn = null;
 		}
-		refn = refn->sibling;
-		if (refn && nestr(refn->tag, "REFN")) refn = null;
-	}
 	ENDHASHTABLE
 	database->refnIndex = refnIndex;
 	return;
