@@ -30,22 +30,28 @@
  *   3.0.3 - 14 Jan 96
  *========================================================*/
 
-#include "llstdlib.h"
-#include "table.h"
+#include <stdint.h>
+#include <stdarg.h>
+#include <ansidecl.h>
+
+#include "standard.h"
+#include "stringtable.h"
+#include "zstr.h"
+#include "list.h"
 #include "translat.h"
 #include "gedcom.h"
 #include "sequence.h"
-#include "gedcheck.h"
+//#include "gedcheck.h"
+#include "ask.h"
 #include "liflines.h"
 
 #include "llinesi.h"
-#include "loadsave.h"
+//#include "loadsave.h"
 #include "feedback.h"
-#include "impfeed.h"
+//#include "impfeed.h"
 #include "codesets.h"
-#include "zstr.h"
 #include "messages.h"
-
+#include "import.h"
 
 /*********************************************
  * external/imported variables
@@ -87,12 +93,12 @@ typedef struct gd_metadata_s {
  *********************************************/
 
 /* alphabetical */
-static bool do_import(IMPORT_FEEDBACK ifeed, FILE *fp);
+static bool do_import(ImportFeedback *ifeed, FILE *fp);
 static bool is_lossy_conversion(const char * cs_src, const char * cs_dest);
 static bool is_unicode_encoding_name(const char * codeset);
-static void restore_record(NODE node, int type, int num);
+static void restore_record(GNode *node, int type, int num);
 static String translate_key(String);
-static bool translate_values(NODE, void *);
+static bool translate_values(GNode *, void *);
 
 /*********************************************
  * local variables
@@ -111,7 +117,7 @@ static int gd_reuse = 1;/* reuse original keys in GEDCOM file if possible */
  *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
 bool
-import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
+import_from_gedcom_file (ImportFeedback *ifeed, FILE *fp)
 {
 	bool rtn=false;
 
@@ -126,9 +132,9 @@ import_from_gedcom_file (IMPORT_FEEDBACK ifeed, FILE *fp)
  *  fp:    [I/O] GEDCOM file whence to load data
  *===============================================*/
 static bool
-do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
+do_import (ImportFeedback *ifeed, FILE *fp)
 {
-	NODE node, conv;
+	GNode *node, *conv;
 	XLAT ttm = 0;
 	String msg;
 	bool emp;
@@ -139,7 +145,7 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	bool succeeded=false;
 	String str,unistr=0;
 	ZSTR zerr=0;
-	TABLE metadatatab = createStringTable();
+	StringTable *metadatatab = createStringTable();
 	String gdcodeset=0;
 	int warnings=0;
 
@@ -203,12 +209,12 @@ do_import (IMPORT_FEEDBACK ifeed, FILE *fp)
 	}
 
 	/* validate */
-	if (ifeed && ifeed->validating_fnc)
-		(*ifeed->validating_fnc)();
+	if (ifeed && ifeed->if_validating_fnc)
+		(*ifeed->if_validating_fnc)();
 
 	if (!validate_gedcom(ifeed, fp)) {
-		if (ifeed && ifeed->error_invalid_fnc)
-			(*ifeed->error_invalid_fnc)(_(qSgdnadd));
+		if (ifeed && ifeed->if_error_invalid_fnc)
+			(*ifeed->if_error_invalid_fnc)(_(qSgdnadd));
 		goto end_import;
 	}
 	warnings = validate_get_warning_count();
@@ -277,11 +283,11 @@ TODO: why were these here ?
 	/* test for read-only database here */
 
 	/* tell user we are beginning real part of import */
-	if (ifeed && ifeed->beginning_import_fnc) {
+	if (ifeed && ifeed->if_beginning_import_fnc) {
 		if(gd_reuse)
-			(*ifeed->beginning_import_fnc)(_(qSdboldk));
+			(*ifeed->if_beginning_import_fnc)(_(qSdboldk));
 		else
-			(*ifeed->beginning_import_fnc)(_(qSdbnewk));
+			(*ifeed->if_beginning_import_fnc)(_(qSdbnewk));
 	}
 
 
@@ -302,8 +308,8 @@ TODO: why were these here ?
 		default: FATAL();
 		}
 		restore_record(conv, type, num);
-		if (ifeed && ifeed->added_rec_fnc)
-			ifeed->added_rec_fnc(nxref(conv)[1], ntag(conv), num);
+		if (ifeed && ifeed->if_added_rec_fnc)
+			ifeed->if_added_rec_fnc(nxref(conv)[1], ntag(conv), num);
 		freeGNodes(node);
 		node = next_fp_to_node(fp, false, ttm, &msg, &emp);
 	}
@@ -311,8 +317,8 @@ TODO: why were these here ?
 		msg_error("%s", msg);
 	}
 	if(gd_reuse && ((totkeys - totused) > 0)) {
-		if (ifeed && ifeed->adding_unused_keys_fnc)
-			(*ifeed->adding_unused_keys_fnc)();
+		if (ifeed && ifeed->if_adding_unused_keys_fnc)
+			(*ifeed->if_adding_unused_keys_fnc)();
 		addmissingkeys(INDI_REC);
 		addmissingkeys(FAM_REC);
 		addmissingkeys(EVEN_REC);
@@ -332,13 +338,13 @@ end_import:
  * restore_record -- Restore record to database
  *===========================================*/
 static void
-restore_record (NODE node, int type, ATTRIBUTE_UNUSED int num)
+restore_record (GNode *node, int type, ATTRIBUTE_UNUSED int num)
 {
 	String old, new, str, key;
 
 	if (!node) return;
 	ASSERT(old = nxref(node));
-	new = translate_key(rmvat(old));
+	new = translate_key(old);
 	switch (type) {
 	case INDI_REC: break;
 	case FAM_REC:  break;
@@ -358,7 +364,7 @@ restore_record (NODE node, int type, ATTRIBUTE_UNUSED int num)
 	}
 	resolve_refn_links(node);
 	ASSERT(str = node_to_string(node));
-	key = rmvat(nxref(node));
+	key = nxref(node);
 	ASSERT(store_record(key, str, strlen(str)));
 	index_by_refn(node, key);
 	stdfree(str);
@@ -400,11 +406,11 @@ translate_key (String key)    /* key does not have surrounding @ chars */
  * translate_values -- Traverse function to translate pointers
  *==========================================================*/
 static bool
-translate_values (NODE node, ATTRIBUTE_UNUSED void *param)
+translate_values (GNode *node, ATTRIBUTE_UNUSED void *param)
 {
 	String new;
 	if (!pointer_value(nval(node))) return true;
-	new = translate_key(rmvat(nval(node)));
+	new = translate_key(nval(node));
 	stdfree(nval(node));
 	nval(node) = strsave(new);
 	return true;
