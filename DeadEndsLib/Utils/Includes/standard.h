@@ -61,7 +61,7 @@ void* _alloc(size_t, String, int) __attribute__ ((malloc)) __attribute__ ((alloc
 void _free(void* ptr, String, int);
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
-void __logAllocations(bool);  // Turn allocation logging on and off.
+void _logAllocations(bool);  // Turn allocation logging on and off.
 
 // Turn on alloc and free debugging.
 #ifdef DEBUGALLOCS // Debugging allocs and free.
@@ -82,7 +82,7 @@ void __logAllocations(bool);  // Turn allocation logging on and off.
 
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(a[0]))
 
-void _fatal(CString, int, CString, CString); // standard.c
+void _fatal(CString, int, CString, CString) __attribute__ ((__noreturn__)); // standard.c
 void _assert(bool, String, int); // standard.c
 
 extern CString version;		// standard.c
