@@ -248,7 +248,7 @@ bool isSorted(Block *block, CString(*getKey)(void*), int(*compare)(CString, CStr
 	CString key = getKey(elements[0]);
 	for (int i = 1; i < block->length; i++) {
 		CString next = getKey(elements[i]);
-		if (strcmp(key, next) > 0) return false;
+		if (compare(key, next) > 0) return false;
 		key = next;
 	}
 	return true;
