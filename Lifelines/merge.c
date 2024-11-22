@@ -41,9 +41,10 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "denls.h"
+#include "stringtable.h"
+#include "list.h"
 #include "options.h"
 
-#include "list.h"
 #include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
@@ -71,6 +72,7 @@
 #include "refns.h"
 #include "xreffile.h"
 #include "name.h"
+#include "xref.h"
 
 #include "llpy-externs.h"
 
@@ -787,7 +789,7 @@ check_indi_lineage_links (GNode *indi)
 	CString ikey = nxref(indi);
 
 	/* sanity check record is not deleted */
-	ASSERT(isKeyInUse(ikey));
+	ASSERT(isKeyInUse(ikey, currentDatabase));
 
 /* Now validate lineage links of this person */
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
@@ -906,7 +908,7 @@ check_fam_lineage_links (GNode *fam)
 	CString fkey = nxref(fam);
 
 	/* sanity check record is not deleted */
-	ASSERT(isKeyInUse(fkey));
+	ASSERT(isKeyInUse(fkey, currentDatabase));
 	
 /* Now validate lineage links of this family */
 	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
