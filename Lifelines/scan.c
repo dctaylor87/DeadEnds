@@ -53,6 +53,7 @@
 #include "xref.h"
 #include "refns.h"
 #include "de-strings.h"
+#include "name.h"
 
 /* everything in this file assumes we are dealing with the current database */
 //#define database	currentDatabase
