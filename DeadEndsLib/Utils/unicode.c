@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "standard.h"
 #include "unicode.h"
 
 // Function to check if a code point is a combining character
