@@ -61,8 +61,8 @@
 #include "liflines.h"
 #include "messages.h"
 #include "readwrite.h"
-#include "options.h"
 #include "stringtable.h"
+#include "options.h"
 #include "codesets.h"
 #include "ll-list.h"
 #include "gstrings.h"
@@ -73,6 +73,7 @@
 #include "signals.h"
 #include "errlog.h"
 #include "version.h"
+#include "init.h"
 
 /* for parser debugging */
 extern int yydebug;
