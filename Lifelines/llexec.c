@@ -108,7 +108,6 @@ extern int     progerror;
 bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
-String  ext_codeset = 0;       /* default codeset from locale */
 
 /*********************************************
  * local function prototypes
@@ -118,7 +117,6 @@ String  ext_codeset = 0;       /* default codeset from locale */
 static void load_usage(void);
 static void main_db_notify(String db, bool opening);
 static void parse_arg(const char * optarg, char ** optname, char **optval);
-static void platform_init(void);
 static void print_usage(void);
 
 /*********************************************
@@ -160,10 +158,6 @@ main (int argc, char **argv)
 	setlocale(LC_ALL, "");
 #endif /* HAVE_SETLOCALE */
 	
-	/* capture user's default codeset */
-	ext_codeset = strsave(ll_langinfo());
-	/* TODO: We can use this info for default conversions */
-
 #if ENABLE_NLS
 	/* setup gettext translation */
 	ll_bindtextdomain(PACKAGE, LOCALEDIR);
@@ -272,7 +266,6 @@ prompt_for_db:
 		/* yydebug = 1; */
 	}
 
-	platform_init();
 	set_displaykeys(keyflag);
 
 	/* initialize options & misc. stuff */
@@ -376,7 +369,6 @@ finish:
 	if (alldone == 2)
 		goto prompt_for_db; /* changing databases */
 	termlocale();
-	strfree(&ext_codeset);
 
 usage:
 	/* Display Version and/or Command-Line Usage Help */
@@ -421,15 +413,7 @@ void
 shutdown_ui (ATTRIBUTE_UNUSED bool pause)
 {
 }
-/*==================================================
- * platform_init -- platform specific initialization
- *================================================*/
-static void
-platform_init (void)
-{
-	/* TODO: We could do wtitle just like llines, but its declaration needs
-	to be moved somewhere more sensible for that (ie, not in curses.h!) */
-}
+
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
  * databases. 
