@@ -63,8 +63,8 @@
 #include "messages.h"
 #include "screen.h"
 #include "readwrite.h"
-#include "options.h"
 #include "stringtable.h"
+#include "options.h"
 #include "codesets.h"
 #include "ll-list.h"
 #include "gstrings.h"
@@ -153,9 +153,6 @@ main (int argc, char **argv)
 	   misnamed -- it initializes some btree stuff used by the LL
 	   on disk database. */
 #if !defined(DEADENDS)
-	/* initialize all the low-level platform code */
-	init_arch();
-
 	/* initialize all the low-level library code */
 	init_stdlib();
 #endif
@@ -462,6 +459,7 @@ shutdown_ui (bool pause)
 	if (!isendwin())
 		endwin();
 }
+
 /* Finnish language support modifies the soundex codes for names, so
  * a database created with this support is not compatible with other
  * databases. 
