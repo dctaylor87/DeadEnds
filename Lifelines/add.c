@@ -57,6 +57,7 @@
 #include "rfmt.h"
 #include "refns.h"
 #include "readwrite.h"
+#include "stringtable.h"
 #include "options.h"
 #include "gstrings.h"
 #include "llpy-externs.h"

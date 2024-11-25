@@ -61,6 +61,7 @@
 #include "cscurses.h"
 #include "lineage.h"
 #include "codesets.h"
+#include "stringtable.h"
 #include "options.h"
 #include "xreffile.h"
 #include "de-strings.h"

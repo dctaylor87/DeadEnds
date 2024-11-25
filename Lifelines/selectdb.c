@@ -38,6 +38,8 @@
 #include "standard.h"
 #include "denls.h"
 #include "sys_inc.h"
+#include "list.h"
+#include "stringtable.h"
 #include "options.h"
 
 #include "list.h"

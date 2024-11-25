@@ -41,9 +41,10 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "denls.h"
+#include "stringtable.h"
+#include "list.h"
 #include "options.h"
 
-#include "list.h"
 #include "zstr.h"
 #include "translat.h"
 #include "refnindex.h"

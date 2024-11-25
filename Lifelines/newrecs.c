@@ -43,6 +43,8 @@
 #include "refnindex.h"
 #include "gnode.h"
 #include "readwrite.h"
+#include "list.h"
+#include "stringtable.h"
 #include "options.h"
 
 #include "zstr.h"
