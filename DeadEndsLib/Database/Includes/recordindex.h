@@ -3,7 +3,7 @@
 // recordindex.h defines RecordIndex as a HashTable.
 //
 // Created by Thomas Wetmore on 29 November 2022.
-// Last changed on 13 May 2024.
+// Last changed on 22 November 2024.
 
 #ifndef recordindex_h
 #define recordindex_h
@@ -29,7 +29,7 @@ typedef HashTable RecordIndex;
 // Interface to RecordIndex.
 RecordIndex *createRecordIndex(void);
 void deleteRecordIndex(RecordIndex*);
-void addToRecordIndex(RecordIndex*, String, GNode*, int lineNo);
+void addToRecordIndex(RecordIndex*, String, GNode*);
 GNode* searchRecordIndex(RecordIndex*, CString);
 void showRecordIndex(RecordIndex*);
 

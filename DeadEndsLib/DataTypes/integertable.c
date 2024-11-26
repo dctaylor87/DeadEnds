@@ -42,3 +42,13 @@ void incrIntegerTable (IntegerTable* table, CString key) {
 	if (element) (element->value)++;
 	else insertInIntegerTable(table, key, 1);
 }
+
+static void show(void* element) {
+	IntegerElement* el = (IntegerElement*) element;
+	printf(" %s -> %d\n", el->key, el->value);
+}
+
+// showIntegerTable show the contents of an IntegerTable; for debugging.
+void showIntegerTable(IntegerTable* table) {
+	showHashTable(table, show);
+}

@@ -5,7 +5,7 @@
 // and used to build an internal database.
 //
 // Created by Thomas Wetmore on 10 November 2022.
-// Last changed 12 October 2024.
+// Last changed 17 November 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -220,7 +220,7 @@ void showTableSizes(Database *database) {
 
 // getNameIndexForDatabase indexes all person names in a database.
 void getNameIndexForDatabase(Database* database) {
-	int numNamesFound = 0; // For debugging.
+	int numNamesFound = 0; // Debugging.
 	NameIndex* nameIndex = createNameIndex();
 	FORHASHTABLE(database->personIndex, element) // Loop over all persons.
 		RecordIndexEl* el = element;
@@ -237,14 +237,6 @@ void getNameIndexForDatabase(Database* database) {
 	database->nameIndex = nameIndex;
 	if (indexNameDebugging) printf("the number of names encountered is %d.\n", numNamesFound);
 }
-
-// keyLineNumber returns the line in the Gedcome file where the record with the given key began.
-// If the key does not exist returns 0.
-//static int keyLineNumber (Database *database, CString key) {
-//	RecordIndexEl* el = (RecordIndexEl*) searchHashTable(database->recordIndex, key);
-//	if (!el) return 0;
-//	return el->line;
-//}
 
 // getRecord gets a record from the database given a key.
 GNode* getRecord(CString key, Database* database) {
@@ -265,7 +257,6 @@ void summarizeDatabase(Database* database) {
 		int numNames, numRecords;
 		getNameIndexStats(database->nameIndex, &numNames, &numRecords);
 		printf("\tName index: %d name keys in %d records.\n", numNames, numRecords);
-
 	}
 }
 
@@ -278,21 +269,21 @@ bool storeRecord (Database *database, GNode *root, int lineno, ErrorLog *errorLo
   switch (recordType (root))
     {
     case GRPerson:
-      addToRecordIndex(database->personIndex, root->key, root, lineno);
+      addToRecordIndex(database->personIndex, root->key, root);
       insertInRootList (database->personRoots, root);
       break;
     case GRFamily:
-      addToRecordIndex(database->familyIndex, root->key, root, lineno);
+      addToRecordIndex(database->familyIndex, root->key, root);
       insertInRootList (database->familyRoots, root);
       break;
     case GRSource:
-      addToRecordIndex(database->sourceIndex, root->key, root, lineno);
+      addToRecordIndex(database->sourceIndex, root->key, root);
       break;
     case GREvent:
-      addToRecordIndex(database->eventIndex, root->key, root, lineno);
+      addToRecordIndex(database->eventIndex, root->key, root);
       break;
     case GROther:
-      addToRecordIndex(database->otherIndex, root->key, root, lineno);
+      addToRecordIndex(database->otherIndex, root->key, root);
       break;
     default:
       fatal ("unkown record type");

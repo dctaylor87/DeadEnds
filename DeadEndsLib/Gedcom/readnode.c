@@ -3,7 +3,7 @@
 // readnode.c has the functions that read GNodes and GNode trees from files and Strings.
 //
 // Created by Thomas Wetmore on 17 December 2022.
-// Last changed on 3 September 2024.
+// Last changed on 22 November 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -15,6 +15,8 @@
 #include "list.h"
 #include "errors.h"
 #include "file.h"
+
+static bool extractDebugging = true;
 
 // Variables that maintain state between functions.
 String xfileName;
@@ -29,8 +31,10 @@ static bool ateof = false;
 // MNOTE: pkey, ptag and pvalue point into the original String.
 static ReadReturn extractFields(String p, int* plevel, String* pkey, String *ptag,
 						String* pvalue, String* errorString) {
-	*pvalue = "";
-	*pkey = "";
+	//*pvalue = "";
+	//*pkey = "";
+	*pvalue = null;
+	*pkey = null;
 	if (!p || *p == 0) {
 		*errorString = "Empty string";
 		return ReadError;
@@ -49,6 +53,7 @@ static ReadReturn extractFields(String p, int* plevel, String* pkey, String *pta
 	int level = *p++ - '0';
 	while (chartype(*p) == DIGIT) level = level*10 + *p++ - '0';
 	*plevel = level;
+	if (extractDebugging) printf("%d ", level);
 	while (iswhite(*p)) p++; // Before key or tag.
 	if (*p == 0) {
 		*errorString = "Gedcom line is incomplete";
@@ -71,6 +76,7 @@ static ReadReturn extractFields(String p, int* plevel, String* pkey, String *pta
 		}
 		*p++ = 0;
 		*pkey = key;
+		if (extractDebugging) printf("%s ", key);
 	}
 	while (iswhite(*p)) p++; // Tag.
 	if ((int) *p == 0) {
@@ -78,11 +84,19 @@ static ReadReturn extractFields(String p, int* plevel, String* pkey, String *pta
 		return ReadError;
 	}
 	*ptag = p++;
+
 	while (!iswhite(*p) && *p != 0) p++;
-	if (*p == 0) return ReadOkay;
+	if (*p == 0) {
+		if (extractDebugging) {
+			printf("%s\n", *ptag);
+			return ReadOkay;
+		}
+	}
 	*p++ = 0;
+	if (extractDebugging) printf("%s ", *ptag);
 	while (iswhite(*p)) p++; // Value.
 	*pvalue = p;
+	if (extractDebugging) printf("%s\n", p);
 	return ReadOkay;
 }
 

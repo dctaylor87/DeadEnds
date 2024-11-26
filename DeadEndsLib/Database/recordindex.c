@@ -44,14 +44,14 @@ void deleteRecordIndex(RecordIndex *index) {
 	deleteHashTable(index);
 }
 
-// addToRecordIndex adds a (root, lineNumber) element to a RecordIndex.
-void addToRecordIndex(RecordIndex* index, String key, GNode* root, int lineNumber) {
+// addToRecordIndex adds a GNode record tree to a RecordIndex.
+void addToRecordIndex(RecordIndex* index, String key, GNode* root) {
 	RecordIndexEl* element = (RecordIndexEl*) searchHashTable(index, key);
 	if (element) return;
 	element = (RecordIndexEl*) stdalloc(sizeof(RecordIndexEl));
 	memset(element, 0, sizeof(RecordIndexEl));
 	element->root = root;
-	element->line = lineNumber;
+	//element->line = lineNumber;
 	addToHashTable(index, element, false);
 }
 
