@@ -111,6 +111,8 @@ bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 
+CString ProgName = "llines";
+Database *currentDatabase = 0;
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -319,6 +321,7 @@ prompt_for_db:
 		exargs = 0;
 	}
 	/* Open database, prompting user if necessary */
+#if 0
 	if (1) {
 		String errmsg=0;
 		if (!alldone && c>0) {
@@ -334,7 +337,29 @@ prompt_for_db:
 			goto finish;
 		}
 	}
+#else
+	{
+	  String errmsg=0;
+	  if (!alldone && c>0)
+	    dbrequested = strsave(argv[optind]);
+	  else
+	    {
+	      fprintf (stderr, "%s: database argument is required\n", ProgName);
+	      print_usage();
+	      exit(1);
+	    }
 
+	  ErrorLog *errorLog = createErrorLog ();
+	  currentDatabase = selectAndOpenDatabase (&dbrequested, NULL, NULL, errorLog);
+	  if (! currentDatabase)
+	    {
+	      showErrorLog (errorLog);
+	      deleteList ((List *)errorLog);
+	      alldone = 0;
+	      goto finish;
+	    }
+	}
+#endif
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
 		llwprintf("%s", _(qSbaddb));
