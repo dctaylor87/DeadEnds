@@ -37,14 +37,17 @@
 #endif
 
 #include <ansidecl.h>
+#include <stdint.h>
 
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
 #include "denls.h"
-#include "readwrite.h"
 
 #include "gnode.h"
+#include "database.h"
+#include "locales.h"
+#include "readwrite.h"
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
@@ -55,6 +58,11 @@
 #include "messages.h"
 #include "screen.h"
 #include "lloptions.h"
+#include "zstr.h"
+#include "de-strings.h"
+#include "feedback.h"
+#include "import.h"
+#include "codesets.h"
 
 /*********************************************
  * local function prototypes
@@ -63,17 +71,17 @@
 /* alphabetical */
 static void clear_rec_counts(int pass);
 static void export_saved_rec(char ctype, int count);
-static void import_added_rec(char ctype, String tag, int count);
+static void import_added_rec(char ctype, CString tag, int count);
 static void import_adding_unused_keys(void);
-static void import_beginning_import(String msg);
-static void import_error_invalid(String reason);
+static void import_beginning_import(CString msg);
+static void import_error_invalid(CString reason);
 static void import_readonly(void);
 /* static void import_report_timing(int elapsed_sec, int uitime_sec); */
-static void import_validated_rec(char ctype, String tag, int count);
+static void import_validated_rec(RecordType type, CString tag, int count);
 static void import_validating(void);
-static void import_validation_error(String msg);
-static void import_validation_warning(String msg);
-static void update_rec_count(int pass, char ctype, String tag, int count);
+static void import_validation_error(CString msg);
+static void import_validation_warning(CString msg);
+static void update_rec_count(int pass, char ctype, CString tag, int count);
 
 /*********************************************
  * local variables
@@ -89,7 +97,7 @@ static void update_rec_count(int pass, char ctype, String tag, int count);
  * Functions to display record counts
  *==============================*/
 static void
-update_rec_count (int pass, char ctype, String tag, int count)
+update_rec_count (int pass, char ctype, CString tag, int count)
 {
 	int offset = 9*pass;
 	char msg[100];
@@ -141,17 +149,17 @@ clear_rec_counts (int pass)
  * Feedback functions for import
  *==============================*/
 static void
-import_validation_warning (String msg)
+import_validation_warning (CString msg)
 {
 	wfield(7, 1, msg);
 }
 static void
-import_validation_error (String msg)
+import_validation_error (CString msg)
 {
 	wfield(6, 1, msg);
 }
 static void
-import_error_invalid (String reason)
+import_error_invalid (CString reason)
 {
 	wfield(9, 0, reason);
 	wpos(10, 0);
@@ -180,7 +188,7 @@ import_validating (void)
 	wfield(row, 1, msg);
 }
 static void
-import_beginning_import (String msg)
+import_beginning_import (CString msg)
 {
 	wfield(9,  0, msg);
 	clear_rec_counts(1);
@@ -197,12 +205,12 @@ import_adding_unused_keys (void)
 	wfield(15, 0, _("Adding unused keys as deleted keys..."));
 }
 static void
-import_validated_rec (char ctype, String tag, int count)
+import_validated_rec (RecordType type, CString tag, int count)
 {
-	update_rec_count(0, ctype, tag, count);
+	update_rec_count(0, type, tag, count);
 }
 static void
-import_added_rec (char ctype, String tag, int count)
+import_added_rec (char ctype, CString tag, int count)
 {
 	update_rec_count(1, ctype, tag, count);
 }
@@ -218,7 +226,7 @@ void
 load_gedcom (bool picklist)
 {
 	FILE *fp=NULL;
-	struct tag_import_feedback ifeed;
+	ImportFeedback ifeed;
 	String srcdir=NULL;
 	String fullpath=0;
 	time_t begin = time(NULL);
@@ -238,15 +246,15 @@ load_gedcom (bool picklist)
 	*/
 
 	memset(&ifeed, 0, sizeof(ifeed));
-	ifeed.validating_fnc = import_validating;
-	ifeed.validated_rec_fnc = import_validated_rec;
-	ifeed.beginning_import_fnc = import_beginning_import;
-	ifeed.error_invalid_fnc = import_error_invalid;
-	ifeed.error_readonly_fnc = import_readonly;
-	ifeed.adding_unused_keys_fnc = import_adding_unused_keys;
-	ifeed.added_rec_fnc = import_added_rec;
-	ifeed.validation_error_fnc = import_validation_error;
-	ifeed.validation_warning_fnc =  import_validation_warning;
+	ifeed.if_validating_fnc = import_validating;
+	ifeed.if_validated_rec_fnc = import_validated_rec;
+	ifeed.if_beginning_import_fnc = import_beginning_import;
+	ifeed.if_error_invalid_fnc = import_error_invalid;
+	ifeed.if_error_readonly_fnc = import_readonly;
+	ifeed.if_adding_unused_keys_fnc = import_adding_unused_keys;
+	ifeed.if_added_rec_fnc = import_added_rec;
+	ifeed.if_validation_error_fnc = import_validation_error;
+	ifeed.if_validation_warning_fnc =  import_validation_warning;
 
 	import_from_gedcom_file(&ifeed, fp);
 	
