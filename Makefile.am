@@ -3,4 +3,4 @@
 
 SUBDIRS = \
 	DeadEndsLib PatchSex TestProgram RandomizeKeys RunScript \
-	Programs Lifelines MenuLibrary UseMenus Partition
+	Programs Lifelines MenuLibrary UseMenus Partition MultiBases

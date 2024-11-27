@@ -7,6 +7,8 @@
 // Created by Thomas Wetmore on 16 November 2024.
 // Last changed on 17 November 2024.
 
+#include <stdint.h>
+
 #include "standard.h"
 #include "utils.h"
 #include "list.h"

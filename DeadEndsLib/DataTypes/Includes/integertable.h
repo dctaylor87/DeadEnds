@@ -4,7 +4,7 @@
 // to integers.
 //
 // Created by Thomas Wetmore on 23 April 2023.
-// Last changed on 21 November 2024.
+// Last changed on 26 November 2024.
 
 #ifndef integertable_h
 #define integertable_h
@@ -23,7 +23,7 @@ typedef struct IntegerElement {
 extern CString integerGetKey(Word element);
 IntegerTable *createIntegerTable(int numBuckets);
 void insertInIntegerTable(IntegerTable*, CString key, int value);
-int searchIntegerTable(IntegerTable*, CString key);
+int searchIntegerTable(IntegerTable*, CString key); // Returns NAN if key not there.
 void incrIntegerTable (IntegerTable*, CString key);
 void showIntegerTable(IntegerTable*); // For debugging.
 

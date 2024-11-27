@@ -3,7 +3,7 @@
 // import.c has functions that import Gedcom files into internal structures.
 //
 // Created by Thomas Wetmore on 13 November 2022.
-// Last changed on 24 November 2024.
+// Last changed on 26 November 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -14,17 +14,13 @@
 #include "validate.h"
 #include "utils.h"
 
-
-#define adadf searchIntegerTable(keyLineMap, el->key)
-
 static bool timing = true;
 bool importDebugging = false;
 
 // gedcomFilesToDatabases imports a list of Gedcom files into a List of Databases, one per file.
-// If errors are found in a file the file's Database is not created and the ErrorLog will contain
-// the errors.
+// If errors are found in a file its Database is not created and the errors are logged.
 List* gedcomFilesToDatabases(List* filePaths, ErrorLog* errorLog) {
-	List* databases = createList(null, null, null, false);
+	List* databases = createList(null, null, null, false); // TODO: No delete function.
 	Database* database = null;
 	FORLIST(filePaths, path)
 		if ((database = gedcomFileToDatabase(path, errorLog)))
@@ -51,12 +47,14 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 {
 	String lastSegment = lastPathSegment(path); // MNOTE: strsave not needed.
 
-	// Get the GNode records from the file. If errors the error log will hold Errors.
+	// Get the GNode records from the file. The error log will hold any Errors. keymap maps keys
+	// to line numbers. The keys must not not be freed when the key map is deleted.
 	IntegerTable* keymap = createIntegerTable(4097);
 	GNodeList* roots = getGNodeTreesFromFile(file, keymap, log);
 	closeFile(file);
 	if (roots == null) {
 		if (importDebugging) printf("%s: errors processing last file.\n", getMillisecondsString());
+		//deleteIntegerTable(keymap, stdfree); // TODO: Delete the keymap
 		return null;
 	}
 	if (timing) printf("%s: got list of records.\n", getMillisecondsString());
@@ -132,7 +130,7 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 	validatePersons(database, keymap, log);
 	if (timing) printf("%s: validated %d persons.\n", getMillisecondsString(),
 					   sizeHashTable(database->personIndex));
-	validateFamilies(database, log);
+	validateFamilies(database, keymap, log);
 	if (timing) printf("%s: validated %d families.\n", getMillisecondsString(),
 					   sizeHashTable(database->familyIndex));
 	if (lengthList(log)) {
@@ -143,7 +141,7 @@ Database *importFromFileFP (File *file, CString path, ErrorLog *log)
 	getNameIndexForDatabase(database);
 	if (timing) printf("%s: indexed names.\n", getMillisecondsString());
 	// Create the REFN index and validate it.
-	validateReferences(database, log);
+	validateReferences(database, keymap, log);
 	if (timing) printf("%s: indexed REFNs.\n", getMillisecondsString());
 	if (timing) printf("%s: end of gedcomFileToDatabase.\n", getMillisecondsString());
 	if (lengthList(log)) {
@@ -175,10 +173,10 @@ void checkKeysAndReferences(GNodeList* records, String name, IntegerTable* keyma
 		addToSet(keySet, key);
 	ENDLIST
 	// Check that keys used as values are in the key set.
-	int numReferences = 0; // Debug and sanity.
-	int nodesTraversed = 0; // Debug and sanity.
-	int recordsVisited = 0; // Debug and sanity.
-	int nodesCounted = 0; // Debug and sanity.
+	int numReferences = 0; // These variables are for debugging.
+	int nodesTraversed = 0;
+	int recordsVisited = 0;
+	int nodesCounted = 0;
 	FORLIST(records, element)
 		recordsVisited++;
 		GNodeListEl* el = (GNodeListEl*) element;

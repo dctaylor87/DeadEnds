@@ -4,21 +4,22 @@
 // to integers.
 //
 // Created by Thomas Wetmore on 23 April 2023.
-// Last changed on 22 August 2024.
+// Last changed on 26 November 2024.
 
 #include "integertable.h"
 
-CString integerGetKey(void* element) { return ((IntegerElement*) element)->key; }
+static CString getKey(void* element) { return ((IntegerElement*) element)->key; }
 
 // createIntegerTable creates and returns an IntegerTable.
 IntegerTable* createIntegerTable(int numBuckets) {
-    return createHashTable(integerGetKey, null, null, numBuckets);
+	// basicDelete deletes the element but not objects the element points to.
+    return createHashTable(getKey, null, basicDelete, numBuckets);
 }
 
 // searchIntegerTable searches for a key in an IntegerTable and return its integer value.
 int searchIntegerTable(IntegerTable* table, CString key) {
     IntegerElement* element = (IntegerElement*) searchHashTable(table, key);
-    return element ? element->value : __INT_MAX__;
+    return element ? element->value : DeadEndsNAN; // Poor man's implementation of NAN for integers.
 }
 
 // insertInIntegerTable inserts a string key with integer value into an integer table.
