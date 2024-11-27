@@ -2005,7 +2005,7 @@ clearw (void)
  * wfield -- Write field in stdout window
  *=====================================*/
 void
-wfield (int row, int col, String str)
+wfield (int row, int col, CString str)
 {
 	UIWINDOW uiwin = stdout_win;
 	WINDOW *win = uiw_win(uiwin);

@@ -190,7 +190,7 @@ void toggle_browse_menu(void);
 int twofam_browse(GNode *, GNode *, int mode);
 int twoindi_browse(GNode *, GNode *, int mode);
 void uierase(UIWINDOW uiwin);
-void wfield(int, int, String);
+void wfield(int, int, CString);
 void wipe_window_rect(UIWINDOW uiwin, LLRECT rect);
 void wpos (int, int);
 
