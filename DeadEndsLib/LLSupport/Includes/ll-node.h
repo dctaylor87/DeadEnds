@@ -4,7 +4,7 @@ extern void unknown_node_to_dbase (GNode *node); /* XXX */
 extern int next_spouse (GNode **node, RecordIndexEl **spouse, Database *database);
 extern RecordIndexEl *indi_to_prev_sib (RecordIndexEl *irec, Database *database);
 extern RecordIndexEl *indi_to_next_sib (RecordIndexEl *irec, Database *database);
-extern String node_to_tag (GNode *node, String tag, int len);
+extern String node_to_tag (GNode *node, CString tag, int len);
 extern void record_to_date_place (RecordIndexEl *record, String tag,
 				  String * date, String * plac, int * count);
 extern GNode *record_to_first_event (RecordIndexEl *record, CString tag);
