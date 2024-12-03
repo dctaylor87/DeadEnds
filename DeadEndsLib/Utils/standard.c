@@ -66,7 +66,7 @@ void _logAllocations(bool onOrOff) {
 }
 
 // _alloc allocates memory; called by stdalloc.
-void* _alloc(size_t len, String file, int line) {
+void* _alloc(size_t len, CString file, int line) {
 	char* p;
 	if (len == 0) return null;
 	ASSERT(p = malloc(len));
