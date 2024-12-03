@@ -5,6 +5,10 @@ typedef struct uiio UIIO;
 
 extern void uiio_main_loop (UIIO *uiio);
 
+/* if pause is true, an error occurred and we should give the user a
+   chance to read a previously displayed message.  */
+extern void uiio_shutdown_ui (UIIO *uiio, bool pause);
+
 extern int uiio_input (UIIO *uiio, char **buffer, int *length, char **err_msg);
 extern int uiio_output (UIIO *uiio, char *buffer, char **err_msg);
 extern int uiio_error (UIIO *uiio, char *buffer, char **err_msg);
