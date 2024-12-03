@@ -40,7 +40,8 @@
 //#include "liflines.h"
 #include "gnode.h"
 #include "database.h"
-#include "feedback.h"
+//#include "feedback.h"
+#include "uiio.h"
 #include "readwrite.h"
 #include "errlog.h"
 #include "de-strings.h"
@@ -85,7 +86,7 @@ __fatal (String file, int line, CString details)
       /* offer crash dump before closing database */
       ll_optional_abort(_("ASSERT failure"));
       close_lifelines();
-      shutdown_ui(true); /* pause */
+      uiio_shutdown_ui(true); /* pause */
 
       failing=false;
     }
