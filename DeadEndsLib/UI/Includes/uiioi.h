@@ -21,6 +21,9 @@ struct uiio
      multiple front-ends communicating with multiple back ends, it
      should be defined...*/
   void (*uiio_main_loop)(void);
+  /* if pause is true, an error occurred and we should give the user a
+     chance to read a previously displayed message.  */
+  void (*uiio_shutdown)(bool pause);
 
   int (*uiio_input_func)(void *data, char **buffer, int *length, char **err_msg);
   int (*uiio_output_func)(void *data, const char *buffer, char **err_msg);
