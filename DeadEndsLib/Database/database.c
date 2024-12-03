@@ -263,8 +263,8 @@ void summarizeDatabase(Database* database) {
 // Add a record to the database.
 // Question: Should this have an additional argument: 'bool update'?
 // If update is true, this is an update and the record must already exist.
-// If update is false, this is a new record and it must already exist.
-bool storeRecord (Database *database, GNode *root, int lineno, ErrorLog *errorLog)
+// If update is false, this is a new record and it must not already exist.
+bool storeRecord (Database *database, GNode *root)
 {
   switch (recordType (root))
     {
