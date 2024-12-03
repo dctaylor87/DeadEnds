@@ -12,6 +12,8 @@ libparser_a_SOURCES = \
 	lexer.c \
 	grammar.y
 
+BUILT_SOURCES = grammar.h
+
 YACC = byacc
 AM_YFLAGS = -d
 
