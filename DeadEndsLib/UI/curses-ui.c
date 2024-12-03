@@ -1,3 +1,7 @@
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <ansidecl.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -18,6 +22,7 @@
 
 //#include "screen.h"
 #include "messages.h"
+#include "mycurses.h"
 #include "curses-ui.h"		/* curses_outputv */
 
 #include "uiio.h"
@@ -29,6 +34,8 @@
 /* forward references */
 
 static void curses_ui_main_loop (void);
+
+static void uiio_curses_shutdown (bool pause);
 
 static int
 curses_input (void *data, char **buffer, int *length, char **err_msg);
@@ -55,6 +62,7 @@ static struct uiio _uiio_curses =
     0,
     0,
     curses_ui_main_loop,
+    uiio_curses_shutdown,
     curses_input,
     curses_output,
     curses_error,
@@ -201,4 +209,15 @@ uiio_curses_init (void)
 {
   /* for now, there is nothing to do -- curses initialization is
      handled elsewhere */
+}
+
+static void
+uiio_curses_shutdown (bool pause)
+{
+  term_screen();
+  if (pause) /* if error, give user a second to read it */
+    sleep(1);
+  /* Terminate Curses UI */
+  if (!isendwin())
+    endwin();
 }
