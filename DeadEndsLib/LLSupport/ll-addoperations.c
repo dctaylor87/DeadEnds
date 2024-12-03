@@ -65,7 +65,5 @@ addOrUpdateRecordInDatabase (RecordType type,
 			     GNode *node,
 			     Database *database)
 {
-  ErrorLog *errorLog;
-
-  return storeRecord (database, node, -1, errorLog);
+  return storeRecord (database, node);
 }
