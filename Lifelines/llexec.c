@@ -55,7 +55,8 @@
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
 #include "ask.h"
-#include "feedback.h"
+//#include "feedback.h"
+#include "uiio.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
@@ -365,7 +366,7 @@ finish:
 	llpy_python_terminate ();
 #endif
 	close_lifelines();
-	shutdown_ui(!ok);
+	uiio_shutdown_ui(current_uiio, !ok);
 	if (alldone == 2)
 		goto prompt_for_db; /* changing databases */
 	termlocale();
@@ -405,13 +406,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 
 		}
 	}
-}
-/*===================================================
- * shutdown_ui -- (Placeholder, we don't need it)
- *=================================================*/
-void
-shutdown_ui (ATTRIBUTE_UNUSED bool pause)
-{
 }
 
 /* Finnish language support modifies the soundex codes for names, so
