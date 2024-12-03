@@ -16,7 +16,7 @@ static bool traverseDebug = true;
 
 // buildPath parses a Gedcom path expression to a GedPath. For example the string
 // "INDI->ANY*->DATE*" / is converted to a linked list of three GedPath structs.
-GedPath* buildGedPath(String string) {
+GedPath* buildGedPath(CString string) {
 	GedPath* first = null;
 	GedPath* prev = null;
 	char *expression = strdup(string);

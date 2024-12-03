@@ -21,7 +21,8 @@ struct GedPath {
 };
 
 GedPath* createGedPath(void); // Create empty GedPath.
-GedPath* buildGedPath(String); // Build GedPath from an expression.
+extern void deleteGedPath (GedPath *path);
+GedPath* buildGedPath(CString); // Build GedPath from an expression.
 void traverseGedPath(GNode*, GedPath*, GNodeList*, int*); // Search a GNode tree with GedPath.
 
 void showGedPath(GedPath*); // Debug function to show GedPath.
