@@ -3,6 +3,8 @@
 struct uiio;
 typedef struct uiio UIIO;
 
+extern void uiio_main_loop (UIIO *uiio);
+
 extern int uiio_input (UIIO *uiio, char **buffer, int *length, char **err_msg);
 extern int uiio_output (UIIO *uiio, char *buffer, char **err_msg);
 extern int uiio_error (UIIO *uiio, char *buffer, char **err_msg);

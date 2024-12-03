@@ -3,8 +3,12 @@
 noinst_LIBRARIES = libuicli.a libui.a
 #noinst_LIBRARIES = libui.a
 
-libui_core_SOURCES = ui.c print.c \
-	curses-ui.c stdio-ui.c \
+libui_core_SOURCES = \
+	ui.c \
+	uiio.c \
+	print.c \
+	curses-ui.c \
+	stdio-ui.c \
 	uiioi.h
 
 libui_a_SOURCES = $(libui_core_SOURCES)

@@ -7,16 +7,26 @@
 
 struct uiio
 {
+  CString uiio_name;		/* for use in error and debug messages */
+
   void *uiio_input_data;
   void *uiio_output_data;
   void *uiio_error_data;
 
   /* tentative argument lists and return values */
+
+  /* XXX might want to add a void* argument or a pointer to a defined
+     structure.  Currently all communication is via external variables
+     -- which is not a good interface.  Since there are potentially
+     multiple front-ends communicating with multiple back ends, it
+     should be defined...*/
+  void (*uiio_main_loop)(void);
+
   int (*uiio_input_func)(void *data, char **buffer, int *length, char **err_msg);
   int (*uiio_output_func)(void *data, const char *buffer, char **err_msg);
   int (*uiio_error_func)(void *data, const char *buffer, char **err_msg);
 
-  /* for errors, we use uiio_error_data,
+  /* Called by the msg_* functions.  For errors, we use uiio_error_data,
      for status and info we use uiio_output_data */
   void (*uiio_outputv_func)(void *data,
 			    MSG_LEVEL level, CString fmt, va_list args);

@@ -23,7 +23,12 @@
 #include "uiio.h"
 #include "uiioi.h"
 
+#include "stringtable.h"
+#include "options.h"		/* alldone */
+
 /* forward references */
+
+static void curses_ui_main_loop (void);
 
 static int
 curses_input (void *data, char **buffer, int *length, char **err_msg);
@@ -45,9 +50,11 @@ static void display_status (String text);
 
 static struct uiio _uiio_curses =
   {
+    "CURSES",
     0,
     0,
     0,
+    curses_ui_main_loop,
     curses_input,
     curses_output,
     curses_error,
@@ -181,6 +188,13 @@ display_status (String text)
   wrefresh(win);
 }
 #endif
+
+static void
+curses_ui_main_loop (void)
+{
+  while (! alldone)
+    main_menu ();
+}
 
 void
 uiio_curses_init (void)
