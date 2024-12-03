@@ -229,13 +229,16 @@ bool
 add_indi_no_cache (GNode *indi)
 {
 	GNode *node, *name, *refn, *sex, *body, *famc, *fams;
+#if 0
 	String str, key;
 
 	// Save INDI key value since rmvat static array entries may get reused
 	// before we write the INDI out (for example, >32 ASSO tags). This
 	// prevents us from writing the record out using the wrong key.
 	key = strsave(nxref(indi));
-
+#else
+	CString key;
+#endif
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 	for (node = name; node; node = nsibling(node))
 		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
@@ -243,11 +246,16 @@ add_indi_no_cache (GNode *indi)
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi, name, refn, sex, body, famc, fams);
 	resolve_refn_links(indi);
+#if 0
 	str = node_to_string(indi);
 	store_record(key, str, strlen(str));
 	stdfree(str);
 	stdfree(key);
+
 	return true;
+#else
+	return storeRecord (database, indi);
+#endif
 }
 /*========================================================
  * ask_child_order --  ask user in what order to put child
