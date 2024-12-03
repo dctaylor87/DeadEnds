@@ -64,6 +64,7 @@ void deleteGNodeList(GNodeList* list, void (*delete)(void*)) {
 // null is returned.
 static void deleteEl(void* el) { stdfree(el); }
 GNodeList* getGNodeTreesFromFile(File* file, IntegerTable* keymap, ErrorLog* elog) {
+	ASSERT(file);
 	int nerrors = lengthList(elog);
 	GNodeList* nodes = getGNodeListFromFile(file, keymap, elog);
 	if (nerrors != lengthList(elog)) {
