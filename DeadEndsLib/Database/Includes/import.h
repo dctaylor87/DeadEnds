@@ -15,6 +15,25 @@
 #include "gnodelist.h"
 #include "stringset.h"
 
+/* if the ImportFeedback* argument is non-NULL, then the if_* argument
+   is called (provided it is non-NULL) at various times during the
+   import to provide feedback to the user.  */
+
+struct ImportFeedback
+{
+  void (*if_validation_warning_fnc)(CString msg);
+  void (*if_validation_error_fnc)(CString msg);
+  void (*if_error_invalid_fnc)(CString reason);
+  void (*if_validating_fnc)(void);
+  void (*if_validated_rec_fnc)(RecordType type, CString tag, int count);
+  void (*if_beginning_import_fnc)(CString msg);
+  void (*if_error_readonly_fnc)(void);
+  void (*if_adding_unused_keys_fnc)(void);
+  void (*if_added_rec_fnc)(RecordType type, CString tag, int count);
+};
+
+typedef struct ImportFeedback ImportFeedback;
+
 List *gedcomFilesToDatabases(List*, ErrorLog*);
 Database *importFromFile(String, ErrorLog*);
 Database* gedcomFileToDatabase(CString, ErrorLog*);
