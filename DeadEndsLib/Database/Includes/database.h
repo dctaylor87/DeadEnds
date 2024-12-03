@@ -37,12 +37,26 @@ typedef struct Database {
 	RootList *personRoots;  // List of all person roots in the database.
 	RootList *familyRoots;  // List of all family roots in the database.
 #if 0
-    CString backupPath;	// path of the most recent backup, if any
+	CString backupPath;	// path of the most recent backup, if any
 #endif
+	CString name; // name of the database.
+	uint64_t max_indi;
+	uint64_t max_fam;
+	uint64_t max_even;
+	uint64_t max_sour;
+	uint64_t max_othr;
+	uint8_t flags;
 	uint8_t longestKeySeen; // Length of longest key added to database.
 } Database;
 
 extern Database *currentDatabase;
+
+/* database flags */
+#define DATABASE_DIRTY		0x1 /* modified since last written out */
+#define DATABASE_READONLY	0x2 /* is this useful? */
+
+#define database_dirty(database)	(database->flags & DATABASE_DIRTY)
+#define database_readonly(database)	(database->flags & DATABASE_READONLY)
 
 Database *createDatabase(CString fileName); // Create an empty database.
 void deleteDatabase(Database*); // Delete a database.
@@ -77,7 +91,7 @@ extern RecordIndexEl *keyToEventRecord(CString key, Database*);
 //  Get an other record from the database.
 extern RecordIndexEl *keyToOtherRecord(CString Key, Database*);
 
-bool storeRecord(Database*, GNode*, int lineno, ErrorLog*); // Add a record to the database.
+bool storeRecord(Database*, GNode*); // Add a record to the database.
 void showTableSizes(Database*);  // Show the sizes of the database tables. Debugging.
 void showPersonIndex(Database*); // Show the person index. Debugging.
 void showFamilyIndex(Database*); // Show the family index. Debugging.
