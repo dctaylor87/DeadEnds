@@ -1,3 +1,7 @@
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -11,6 +15,12 @@ void uiio_main_loop (UIIO *uiio)
 {
   if (uiio->uiio_main_loop)
     (*uiio->uiio_main_loop)();
+}
+
+void uiio_shutdown_ui (UIIO *uiio, bool pause)
+{
+  if (uiio->uiio_shutdown)
+  (*uiio->uiio_shutdown)(pause);
 }
 
 int uiio_input (UIIO *uiio, char **buffer, int *length, char **err_msg)
