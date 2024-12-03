@@ -28,6 +28,10 @@
  *   3.0.0 - 29 May 94    3.0.2 - 09 Nov 94
  *===========================================================*/
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include "sys_inc.h"
 #include <time.h>
 #include "llstdlib.h"

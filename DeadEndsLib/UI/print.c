@@ -2,6 +2,10 @@
 
    everthing gets redirected to an underlying function */
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <ansidecl.h>
 #include <stddef.h>
 #include <stdlib.h>

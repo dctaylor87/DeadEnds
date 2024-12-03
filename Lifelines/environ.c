@@ -28,6 +28,10 @@
  * Created in 3.0.6.dev, 23 Dec 2001
  *===========================================================*/
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <ansidecl.h>
 
 #include "ll-porting.h"

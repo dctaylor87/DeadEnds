@@ -30,6 +30,10 @@
  *   3.0.3 - 14 Jan 96
  *========================================================*/
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <stdint.h>
 #include <stdarg.h>
 #include <ansidecl.h>

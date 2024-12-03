@@ -11,6 +11,10 @@
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <ansidecl.h>
 #include <stdint.h>
 

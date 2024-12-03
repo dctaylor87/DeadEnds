@@ -1,3 +1,7 @@
+#if defined(HAVE_CONFIG_H)
+#include "config.h"
+#endif
+
 #include <ansidecl.h>
 #include <stdint.h>		/* uint64_t */
 #include <stdlib.h>		/* strtoull */
