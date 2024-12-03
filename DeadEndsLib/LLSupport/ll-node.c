@@ -280,7 +280,7 @@ indi_to_next_sib (RecordIndexEl *irec, Database *database)
  * node_to_tag -- Return a subtag of a node
  * (presumably top level, but not necessarily)
  *====================================*/
-String node_to_tag (GNode *node, String tag, int len)
+String node_to_tag (GNode *node, CString tag, int len)
 {
 	/* GEDCOM has no max, but MAXLINELEN is the longest line we support. */
 	static char scratch[MAXLINELEN+1];
