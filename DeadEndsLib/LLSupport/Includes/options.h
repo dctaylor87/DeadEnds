@@ -27,4 +27,5 @@ extern bool have_python_scripts;
 
 extern CString usageSummary;
 
+extern int alldone;		/* completion flag */
 #endif
