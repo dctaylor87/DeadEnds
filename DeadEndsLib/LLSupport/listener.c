@@ -82,7 +82,7 @@ delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 	lold = *notifiees;
 	*notifiees = createList (NULL, NULL, free, false);
 	while (!isEmptyList(lold)) {
-		struct callback_info * info = (struct callback_info *)removeFirstListElement(lold);
+		struct callback_info * info = (struct callback_info *)getAndRemoveFirstListElement(lold);
 		if (!found && info->fnc == fncptr && info->uparm == uparm) {
 			found = true;
 			info->fnc = NULL;
