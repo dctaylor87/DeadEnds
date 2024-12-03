@@ -44,7 +44,8 @@
 #include "list.h"
 #include "zstr.h"
 #include "translat.h"
-#include "feedback.h"
+//#include "feedback.h"
+#include "uiio.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
@@ -142,7 +143,7 @@ sighand_cursesui(int sig)
   char abort_msg[len];
 
   close_lifelines();
-  shutdown_ui(true); /* pause */
+  uiio_shutdown_ui(current_uiio, true); /* pause */
 
   showErrorLog(globalErrorLog);
 
