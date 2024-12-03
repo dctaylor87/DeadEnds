@@ -58,7 +58,7 @@
  * local function prototypes
  *********************************************/
 
-static GNode *remove_any_xrefs_node_list(String xref, GNode *list);
+static GNode *remove_any_xrefs_node_list(CString xref, GNode *list);
 static void remove_refn_list(GNode *refn, CString key, Database *database);
 
 /*================================================================
@@ -296,7 +296,7 @@ num_fam_xrefs (GNode *fam)
  * Returns head of list (which might be different if first node removed)
  *========================================*/
 static GNode *
-remove_any_xrefs_node_list (String xref, GNode *list)
+remove_any_xrefs_node_list (CString xref, GNode *list)
 {
 	GNode *prev = NULL;
 	GNode *curr = list;
