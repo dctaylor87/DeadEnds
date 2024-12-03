@@ -25,24 +25,6 @@
  *  ch: [in] starting byte
  * Created: 2001/08/02 (Perry Rapp)
  *============================*/
-#if 0
-int
-utf8len (char ch)
-{
-	/* test short cases first, as probably much more common */
-	if (!((ch & 0x80) && (ch & 0x40)))
-		return 1; /* not a multibyte lead byte */
-	if (!(ch & 0x20))
-		return 2;
-	if (!(ch & 0x10))
-		return 3;
-	if (!(ch & 0x08))
-		return 4;
-	if (!(ch & 0x04))
-		return 5;
-	return 6;
-}
-#endif
 
 int
 utf8len (char ch)
