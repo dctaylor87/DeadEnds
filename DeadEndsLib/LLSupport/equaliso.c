@@ -55,7 +55,7 @@ bool
 equal_tree (GNode *root1,
             GNode *root2)
 {
-	String str1, str2;
+	CString str1, str2;
 	if (!root1 && !root2) return true;
 	if (!root1 || !root2) return false;
 	if (gNodesLength(root1) != gNodesLength(root2)) return false;
@@ -79,7 +79,7 @@ bool
 equal_node (GNode *node1,
             GNode *node2)
 {
-	String str1, str2;
+	CString str1, str2;
 	if (!node1 && !node2) return true;
 	if (!node1 || !node2) return false;
 	if (nestr(ntag(node1), ntag(node2))) return false;
