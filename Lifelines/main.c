@@ -56,7 +56,8 @@
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
 #include "ask.h"
-#include "feedback.h"
+//#include "feedback.h"
+#include "uiio.h"
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
@@ -111,7 +112,11 @@ bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 
+#if defined(WIN32)
+CString ProgName = "Lines";
+#else
 CString ProgName = "llines";
+#endif
 Database *currentDatabase = 0;
 /*********************************************
  * local function prototypes
@@ -139,11 +144,9 @@ main (int argc, char **argv)
 	bool ok=false;
 	bool python_interactive = false;
 	String dbrequested=NULL; /* database (path) requested */
-	String dbused=NULL; /* database (path) found */
 	List *exprogs=NULL;
 	TABLE exargs=NULL;
 	String progout=NULL;
-	bool graphical=true;
 	String configfile=0;
 	String crashlog=NULL;
 	int i=0;
@@ -180,7 +183,7 @@ main (int argc, char **argv)
 	for (i=1; i<argc; ++i) {
 		if (!strcmp(argv[i], "--version")
 			|| !strcmp(argv[i], "-v")) {
-			print_version("llines");
+			print_version(ProgName);
 			return 0;
 		}
 		if (!strcmp(argv[i], "--help")
@@ -420,7 +423,6 @@ finish:
 	of memory, but to ensure we have the memory management right */
 	/* strfree frees memory & nulls pointer */
 	strfree(&dbrequested);
-	strfree(&dbused);
 #if !defined(DEADENDS)
 	strfree(&readpath_file);
 	shutdown_interpreter();
@@ -436,7 +438,7 @@ finish:
 
 usage:
 	/* Display Version and/or Command-Line Usage Help */
-	if (showversion) { print_version("llines"); }
+	if (showversion) { print_version(ProgName); }
 	if (showusage) puts(usage_summary);
 
 	/* Exit */

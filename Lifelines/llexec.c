@@ -110,6 +110,8 @@ bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 
+CString ProgName = "llexec";
+Database *currentDatabase = 0;
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -173,7 +175,7 @@ main (int argc, char **argv)
 	for (i=1; i<argc; ++i) {
 		if (!strcmp(argv[i], "--version")
 			|| !strcmp(argv[i], "-v")) {
-			print_version("llexec");
+			print_version(ProgName);
 			return 0;
 		}
 		if (!strcmp(argv[i], "--help")
@@ -373,7 +375,7 @@ finish:
 
 usage:
 	/* Display Version and/or Command-Line Usage Help */
-	if (showversion) { print_version("llexec"); }
+	if (showversion) { print_version(ProgName); }
 	if (showusage) puts(usage_summary);
 
 	/* Exit */
