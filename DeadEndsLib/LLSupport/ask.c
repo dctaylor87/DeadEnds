@@ -202,7 +202,7 @@ ask_for_file_worker (CString mode,
 
 	if (!rtn || !fname[0]) return NULL;
 
-	if (!expand_special_fname_chars(fname, sizeof(fname), uu8)) {
+	if (!expandSpecialFilenameChars(fname, sizeof(fname), uu8)) {
 		msg_error("%s", _(qSfn2long));
 		return NULL;
 	}

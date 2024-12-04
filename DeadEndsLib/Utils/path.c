@@ -5,7 +5,10 @@
 // Created by Thomas Wetmore on 14 December 2022.
 // Last changed on 28 October 2024
 
+#include <sys/types.h>
+#include <pwd.h>
 #include <unistd.h>
+
 #include "standard.h"
 #include "de-strings.h"
 #include "path.h"
@@ -226,4 +229,99 @@ isPathSeparator (char c)
 {
   // : on UNIX and ; on Windows
   return (c == DECHRPATHSEPARATOR);
+}
+
+/* expandSpecialFilenameChars -- Replace ~ with home */
+
+static String getUserHomedir (CString username);
+static String getHome (void);
+
+bool
+expandSpecialFilenameChars (String buffer, int buflen, int utf8)
+{
+  char * sep=0;
+  if (buffer[0]=='~') {
+    if (isDirSep(buffer[1])) {
+      String home = getHome();
+      if (home && home[0]) {
+	String tmp;
+	if ((int)strlen(home) + 1 + (int)strlen(buffer) > buflen) {
+	  return false;
+	}
+	tmp = strsave(buffer);
+	buffer[0] = 0;
+	destrapps(buffer, buflen, utf8, home);
+	destrapps(buffer, buflen, utf8, tmp+1);
+	strfree(&tmp);
+	return true;
+      }
+    }
+    /* check for ~name/... and resolve the ~name */
+    if ((sep = strchr(buffer,DECHRDIRSEPARATOR))) {
+      String username = strsave(buffer+1);
+      String homedir;
+      username[sep-buffer+1] = 0;
+      homedir = getUserHomedir(username);
+      strfree(&username);
+      if (homedir) {
+	String tmp=0;
+	if ((int)strlen(homedir) + 1 + (int)strlen(sep+1) > buflen) {
+	  return false;
+	}
+	tmp = strsave(sep+1);
+	buffer[0] = 0;
+	destrapps(buffer, buflen, utf8, homedir);
+	destrapps(buffer, buflen, utf8, tmp+(sep-buffer+1));
+	strfree(&tmp);
+	return true;
+      }
+    }
+  }
+  return true;
+}
+
+/* getHome -- Find user's home directory. */
+
+static String getHome (void)
+{
+  String home;
+#ifdef WIN32
+  /* replace ~ with user's home directory, if present */
+  /* TODO: Or HOMEPATH, HOMESHARE, or USERPROFILE ? */
+  home = (String)getenv("APPDATA");
+#else
+  home = (String)getenv("HOME");
+#endif
+  return home;
+}
+
+/* getUserHomedir -- Return home directory of specified user
+   returns 0 if unknown or error
+   returns alloc'd value. */
+ 
+static String
+getUserHomedir (CString username)
+{
+  struct passwd *pw=0;
+  if (! username)
+    return 0;
+#ifdef WIN32
+  /* This could be implemented for NT+ class using NetUserGetInfo,
+     but I doubt it's worth the trouble. Perry, 2005-11-25.  */
+#else /* not WIN32 */
+  setpwent();
+  /* loop through the password file/database
+     to see if the string following ~ matches
+     a login name.  */
+  while ((pw = getpwent())) {
+    if (eqstr(pw->pw_name, username)) {
+      /* found user in passwd file */
+      String homedir = strsave(pw->pw_dir);
+      endpwent();
+      return homedir;
+    }
+  }
+  endpwent();
+#endif
+  return 0;
 }

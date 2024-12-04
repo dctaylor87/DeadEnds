@@ -58,5 +58,6 @@ String pathConcat (CString dir, CString file, int utf8, String buffer, int bufle
 bool isDirSep (char c);
 String compressPath (CString path, int len);
 int chopPath (CString path, String dirs);
+bool expandSpecialFilenameChars (String buffer, int buflen, int utf8);
 
 #endif // path_h
