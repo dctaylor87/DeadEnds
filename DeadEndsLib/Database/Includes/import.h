@@ -1,9 +1,10 @@
 // DeadEnds
 //
-// import.h -- Header file for the Gedcom import process.
+// import.h has the declarations of the high level import function.
+// TODO: The string functions aren't here yet.
 //
 // Created by Thomas Wetmore on 13 November 2022.
-// Last changed on 19 November 2024.
+// Last changed on 6 December 2024.
 
 #ifndef import_h
 #define import_h
@@ -14,6 +15,7 @@
 #include "database.h"
 #include "gnodelist.h"
 #include "stringset.h"
+#include "integertable.h"
 
 /* if the ImportFeedback* argument is non-NULL, then the if_* argument
    is called (provided it is non-NULL) at various times during the
@@ -34,9 +36,9 @@ struct ImportFeedback
 
 typedef struct ImportFeedback ImportFeedback;
 
-List *gedcomFilesToDatabases(List*, ErrorLog*);
-Database *importFromFile(String, ErrorLog*);
-Database* gedcomFileToDatabase(CString, ErrorLog*);
+List *getDatabasesFromFiles(List*, int vcodes, ErrorLog*);
+Database* getDatabaseFromFile(CString, int vcodes, ErrorLog*);
+RecordIndex* getRecordIndexFromFile(String, RootList*, RootList*, IntegerTable*, ErrorLog*);
 void checkKeysAndReferences(GNodeList*, String name, IntegerTable*, ErrorLog*);
 extern Database *importFromFileFP(File* file, CString path, ErrorLog *log);
 

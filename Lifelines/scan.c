@@ -228,7 +228,7 @@ do_sources_scan (SCANNER * scanner, CString prompt, Database *database)
 #if defined(DEADENDS)
 	for (RecordIndexEl *rec = getFirstSourceRecord (database);
 	     rec;
-	     rec = getNextSourceRecord (rec->root->key, database))
+	     rec = getNextSourceRecord (nzkey(rec), database))
 	  do_fields_scan (scanner, rec, database);
 #else
 	while (1) {

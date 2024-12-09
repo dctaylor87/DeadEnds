@@ -185,6 +185,9 @@ write_header (FILE *file,
 static int
 write_body (FILE *file, Database *database)
 {
+#if 1
+  return write_all_records (file, database->recordIndex);
+#else
   /* Individuals */
   write_all_records (file, database->personIndex);
   /* Families */
@@ -195,7 +198,8 @@ write_body (FILE *file, Database *database)
   write_all_records (file, database->eventIndex);
   /* Others */
   write_all_records (file, database->otherIndex);
-  return (-1);
+  return (0);
+#endif
 }
 
 static int
@@ -209,7 +213,7 @@ write_all_records (FILE *file, RecordIndex *index)
        record;
        record = (RecordIndexEl *) nextInHashTable (index, &bucket_ndx, &element_ndx))
     {
-      GNode *root = record->root;
+      GNode *root = nztop(record);
       if (write_node_tree (file, root) < 0)
 	return (-1);
     }
@@ -321,7 +325,7 @@ valid_submitter (CString submitter, Database *database)
   if (! record)
     return false;
 
-  if (nestr (record->root->tag, "SUBM"))
+  if (nestr (nztop(record)->tag, "SUBM"))
     return false;
 
   return true;

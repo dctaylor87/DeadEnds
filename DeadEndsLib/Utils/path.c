@@ -252,7 +252,8 @@ expandSpecialFilenameChars (String buffer, int buflen, int utf8)
 	buffer[0] = 0;
 	destrapps(buffer, buflen, utf8, home);
 	destrapps(buffer, buflen, utf8, tmp+1);
-	strfree(&tmp);
+	stdfree(tmp);
+	tmp = 0;
 	return true;
       }
     }
@@ -262,7 +263,8 @@ expandSpecialFilenameChars (String buffer, int buflen, int utf8)
       String homedir;
       username[sep-buffer+1] = 0;
       homedir = getUserHomedir(username);
-      strfree(&username);
+      stdfree(username);
+      username = 0;
       if (homedir) {
 	String tmp=0;
 	if ((int)strlen(homedir) + 1 + (int)strlen(sep+1) > buflen) {
@@ -272,7 +274,8 @@ expandSpecialFilenameChars (String buffer, int buflen, int utf8)
 	buffer[0] = 0;
 	destrapps(buffer, buflen, utf8, homedir);
 	destrapps(buffer, buflen, utf8, tmp+(sep-buffer+1));
-	strfree(&tmp);
+	stdfree(tmp);
+	tmp = 0;
 	return true;
       }
     }

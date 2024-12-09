@@ -96,11 +96,13 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(recordType((*prec1)->root)==GRPerson);
+	ASSERT((*prec1)->parent);
+	ASSERT(nztype(*prec1)==GRPerson);
 	ASSERT(prec2);
 	ASSERT(*prec2);
-	ASSERT(recordType((*prec2)->root)==GRPerson);
-	ASSERT(!*pseq);
+	ASSERT((*prec2)->parent);
+	ASSERT(nztype(*prec2)==GRPerson);
+	ASSERT(! *pseq);
 	current1 = *prec1;
 	current2 = *prec2;
 
@@ -219,11 +221,11 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(recordType((*prec1)->root)==GRFamily);
+	ASSERT(nztype(*prec1)==GRFamily);
 	ASSERT(prec2);
 	ASSERT(*prec2);
-	ASSERT(recordType((*prec2)->root)==GRPerson);
-	ASSERT(!*pseq);
+	ASSERT(nztype(*prec2)==GRPerson);
+	ASSERT(! *pseq);
 	current1 = *prec1;
 	current2 = *prec2;
 
@@ -271,8 +273,8 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 				GNode *node1;
 				GNode *node2;
 
-				node1 = familyToHusband (current1->root, currentDatabase);
-				node2 = familyToHusband (current2->root, currentDatabase);
+				node1 = familyToHusband (nztop(current1), currentDatabase);
+				node2 = familyToHusband (nztop(current2), currentDatabase);
 
 				fam1 = _llpy_node_to_record (node1, currentDatabase);
 				fam2 = _llpy_node_to_record (node2, currentDatabase);

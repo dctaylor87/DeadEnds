@@ -4,7 +4,7 @@
 // index the Gedcom names in person records. A NameIndex is a specialization of HashTable.
 //
 // Created by Thomas Wetmore on 26 November 2022.
-// Last changed on 10 July 2024.
+// Last changed on 6 December 2024.
 
 #ifndef nameindex_h
 #define nameindex_h
@@ -28,6 +28,7 @@ void insertInNameIndex(NameIndex*, CString nameKey, CString personKey);
 void removeFromNameIndex (NameIndex *index, CString namekey, CString recordKey);
 extern void removeNamesOfPersonFromIndex (NameIndex* index, GNode* person);
 void showNameIndex(NameIndex*);
+void showNameIndexStats(NameIndex*);
 Set* searchNameIndex(NameIndex*, CString);
 void getNameIndexStats(NameIndex*, int*, int*);
 

@@ -5,7 +5,7 @@
 // or it may call a specific function.
 //
 // Created by Thomas Wetmore on 9 December 2022.
-// Last changed on 23 October 2024.
+// Last changed on 30 November 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -289,7 +289,7 @@ InterpType interpChildren (PNode* pnode, Context* context, PValue* pval) {
 		scriptError(pnode, "the first argument to children must be a family");
 		return InterpError;
 	}
-	FORCHILDREN(fam, chil, key, nchil, context->database) {
+	FORCHILDREN(fam, chil, key, nchil, context->database->recordIndex) {
 		assignValueToSymbol(context->symbolTable, pnode->childIden, PVALUE(PVPerson, uGNode, chil));
 		assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, nchil));
 		InterpType irc = interpret(pnode->loopState, context, pval);
@@ -314,7 +314,7 @@ InterpType interpSpouses(PNode* pnode, Context* context, PValue *pval) {
 		scriptError(pnode, "the first argument to spouses must be a person");
 		return InterpError;
 	}
-	FORSPOUSES(indi, spouse, fam, nspouses, context->database) {
+	FORSPOUSES(indi, spouse, fam, nspouses, context->database->recordIndex) {
 		assignValueToSymbol(context->symbolTable, pnode->spouseIden, PVALUE(PVPerson, uGNode, spouse));
 		assignValueToSymbol(context->symbolTable, pnode->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, nspouses));
@@ -344,12 +344,13 @@ InterpType interpFamilies(PNode* node, Context* context, PValue *pval) {
 	}
 	GNode *spouse = null;
 	int count = 0;
-	Database *database = context->database;
-	FORFAMSS(indi, fam, key, database) {
+	//Database *database = context->database;
+	RecordIndex* index = context->database->recordIndex;
+	FORFAMSS(indi, fam, key, index) {
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		SexType sex = SEXV(indi);
-		if (sex == sexMale) spouse = familyToWife(fam, database);
-		else if (sex == sexFemale) spouse = familyToHusband(fam, database);
+		if (sex == sexMale) spouse = familyToWife(fam, index);
+		else if (sex == sexFemale) spouse = familyToHusband(fam, index);
 		else spouse = null;
 		assignValueToSymbol(context->symbolTable, node->spouseIden, PVALUE(PVPerson, uGNode, spouse));
 		assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, ++count));
@@ -376,8 +377,8 @@ InterpType interpFathers(PNode* node, Context* context, PValue *pval) {
 		return InterpError;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam, key, context->database)
-		GNode *husb = familyToHusband(fam, context->database);
+	FORFAMCS(indi, fam, key, context->database->recordIndex)
+		GNode *husb = familyToHusband(fam, context->database->recordIndex);
 		if (husb == null) goto d;
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(context->symbolTable, node->fatherIden, PVALUE(PVFamily, uGNode, husb));
@@ -404,8 +405,8 @@ InterpType interpMothers (PNode* node, Context* context, PValue *pval) {
 		return InterpError;;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam, key, context->database) {
-		GNode *wife = familyToWife(fam, context->database);
+	FORFAMCS(indi, fam, key, context->database->recordIndex) {
+		GNode *wife = familyToWife(fam, context->database->recordIndex);
 		if (wife == null) goto d;
 		//  Assign the current loop identifier valujes to the symbol table.
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
@@ -436,7 +437,7 @@ InterpType interpParents(PNode* node, Context* context, PValue *pval) {
 		return InterpError;
 	}
 	int nfams = 0;
-	FORFAMCS(indi, fam, key, context->database) {
+	FORFAMCS(indi, fam, key, context->database->recordIndex) {
 		assignValueToSymbol(context->symbolTable, node->familyIden, PVALUE(PVFamily, uGNode, fam));
 		assignValueToSymbol(context->symbolTable, node->countIden,  PVALUE(PVInt, uInt, ++nfams));
 		irc = interpret(node->loopState, context, pval);
@@ -514,7 +515,7 @@ InterpType interpForindi (PNode* pnode, Context* context, PValue* pvalue) {
 	int numPersons = lengthList(rootList);
 	for (int i = 0; i < numPersons; i++) {
 		CString key = rootList->getKey(getListElement(rootList, i));
-		GNode* person = keyToPerson(key, context->database);
+		GNode* person = keyToPerson(key, context->database->recordIndex);
 		if (person) {
 			assignValueToSymbol(context->symbolTable, pnode->personIden, PVALUE(PVPerson, uGNode, person));
 			assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, i));
@@ -585,7 +586,7 @@ InterpType interp_foreven (PNode* node, Context* context, PValue *pval) {
 	char scratch[10];
 	for (int i = 1; i <= numEvents; i++) {
 		sprintf(scratch, "E%d", i);
-		GNode *event = keyToEvent(scratch, context->database);
+		GNode *event = keyToEvent(scratch, context->database->recordIndex);
 		if (event) {
 			assignValueToSymbol(context->symbolTable, node->eventIden, PVALUE(PVEvent, uGNode, event));
 			assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, i));
@@ -615,7 +616,7 @@ InterpType interp_forothr(PNode *node, Context *context, PValue *pval) {
 	char scratch[10];
 	for (int i = 1; i <= numOthers; i++) {
 		sprintf(scratch, "X%d", i);
-		GNode *event = keyToEvent(scratch, context->database);
+		GNode *event = keyToEvent(scratch, context->database->recordIndex);
 		if (event) {
 			assignValueToSymbol(context->symbolTable, node->otherIden, PVALUE(PVEvent, uGNode, event));
 			assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, i));
@@ -689,8 +690,9 @@ InterpType interpretSequenceLoop(PNode* pnode, Context* context, PValue* pval) {
 		return InterpError;
 	}
 	Sequence *seq = val.value.uSequence;
+	RecordIndex* index = context->database->recordIndex;
 	FORSEQUENCE(seq, el, ncount) {
-		GNode *indi = keyToPerson(el->root->key, context->database); // Update person in symbol table.
+		GNode *indi = keyToPerson(el->root->key, index); // Update person in symbol table.
 		assignValueToSymbol(context->symbolTable, pnode->elementIden, PVALUE(PVPerson, uGNode, indi));
 		PValue pvalue = (PValue) {PVInt, el->value}; // Update person's value in symbol table.
 		assignValueToSymbol(context->symbolTable, pnode->valueIden, pvalue);
@@ -746,7 +748,7 @@ InterpType interpProcCall(PNode* pnode, Context* context, PValue* pval) {
 	ASSERT(pnode && pnode->type == PNProcCall && context);
 	if (programDebugging) {
 		printf("interpProcCall: %d: %s: %2.3f\n", pnode->lineNumber, pnode->procName,
-			   getMilliseconds());
+			   getMseconds());
 	}
 	PNode* procedure = searchFunctionTable(procedureTable, pnode->procName);
 	if (!procedure) {

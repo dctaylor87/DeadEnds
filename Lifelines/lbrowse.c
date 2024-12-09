@@ -232,12 +232,12 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			cand2 = rec;
 			element_indiseq(seq, mark, &key, &name);
 			cand1 = __llpy_key_to_record(key, NULL, seq->database);
-			if (recordType(cand1->root)==GRPerson && recordType(cand2->root)==GRPerson) {
+			if (nztype(cand1)==GRPerson && nztype(cand2)==GRPerson) {
 				current_seq = NULL;
 				*prec1 = cand1;
 				*prec2 = cand2;
 				return BROWSE_TAND;
-			} else if (recordType(cand1->root)==GRFamily && recordType(cand2->root)==GRFamily) {
+			} else if (nztype(cand1)==GRFamily && nztype(cand2)==GRFamily) {
 				current_seq = NULL;
 				*prec1 = cand1;
 				*prec2 = cand2;

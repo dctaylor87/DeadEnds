@@ -68,18 +68,27 @@
 RecordIndexEl *
 chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-	RecordIndexEl *rec=0;
-	Sequence *seq=0;
+  RecordIndexEl *rec=0;
+  Sequence *seq=0;
 
-	if (irec) seq = personToChildren(nztop(irec), currentDatabase);
-	if (!irec && frec) seq = familyToChildren(nztop(frec), currentDatabase);
-	if (!seq) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, ask1, msgn, msgn);
-	remove_indiseq(seq);
-	return rec;
+  if (irec)
+    {
+      ASSERT (! irec->parent);
+      seq = personToChildren(nztop(irec), currentDatabase);
+    }
+  if (! irec && frec)
+    {
+      ASSERT (! frec->parent);
+      seq = familyToChildren(nztop(frec), currentDatabase);
+    }
+  if (!seq)
+    {
+      msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, ask1, msgn, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
 /*========================================
  * chooseSpouse -- Choose person's spouse
@@ -91,17 +100,19 @@ chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msg
 RecordIndexEl *
 chooseSpouse (RecordIndexEl *irec, CString msg0, CString msgn)
 {
-	RecordIndexEl *rec=0;
-	Sequence *seq=0;
+  RecordIndexEl *rec=0;
+  Sequence *seq=0;
 
-	if (!irec) return NULL;
-	if (!(seq = indi_to_spouses(nztop(irec)))) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
-	remove_indiseq(seq);
-	return rec;
+  if (!irec) return NULL;
+  ASSERT (! irec->parent);
+  if (!(seq = indi_to_spouses(nztop(irec))))
+    {
+      msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
 /*========================================
  * chooseSource -- Choose any referenced source from some,
@@ -111,17 +122,21 @@ chooseSpouse (RecordIndexEl *irec, CString msg0, CString msgn)
 RecordIndexEl *
 chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
 {
-	Sequence *seq;
-	RecordIndexEl *rec;
-	if (!current) return NULL;
-	if (!(seq = GNodeToSources(nztop(current), currentDatabase))) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
-	remove_indiseq(seq);
-	return rec;
+  Sequence *seq;
+  RecordIndexEl *rec;
+  if (! current)
+    return NULL;
+  ASSERT (! current->parent)
+    if (!(seq = GNodeToSources(nztop(current), currentDatabase)))
+      {
+	msg_error("%s", msg0);
+	return NULL;
+      }
+  rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
+
 /*========================================
  * chooseNote -- Choose any referenced note from some,
  *  presumably top level, node
@@ -131,17 +146,22 @@ chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
 RecordIndexEl *
 chooseNote (RecordIndexEl *current, CString msg0, CString msgn)
 {
-	Sequence *seq;
-	RecordIndexEl *rec;
-	if (!current) return NULL;
-	if (!(seq = GNodeToNotes(nztop(current), currentDatabase))) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
-	remove_indiseq(seq);
-	return rec;
+  Sequence *seq;
+  RecordIndexEl *rec;
+  if (! current)
+    return NULL;
+
+  ASSERT (! current->parent);
+  if (!(seq = GNodeToNotes(nztop(current), currentDatabase)))
+    {
+      msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
+
 /*========================================
  * choosePointer -- Choose any reference (pointer) from some,
  *  presumably top level, node
@@ -152,17 +172,21 @@ chooseNote (RecordIndexEl *current, CString msg0, CString msgn)
 RecordIndexEl *
 choosePointer (RecordIndexEl *current, CString msg0, CString msgn)
 {
-	Sequence *seq;
-	RecordIndexEl *rec;
-	if (!current) return NULL;
-	if (!(seq = GNodeToPointers(nztop(current), currentDatabase))) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
-	remove_indiseq(seq);
-	return rec;
+  Sequence *seq;
+  RecordIndexEl *rec;
+  if (! current)
+    return NULL;
+  ASSERT (! current->parent);
+  if (!(seq = GNodeToPointers(nztop(current), currentDatabase)))
+    {
+      msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
+
 /*==========================================================
  * chooseFamily -- Choose family from person's FAMS/C lines
  *  asks if multiple
@@ -174,17 +198,20 @@ choosePointer (RecordIndexEl *current, CString msg0, CString msgn)
 RecordIndexEl *
 chooseFamily (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
 {
-	RecordIndexEl *rec=0;
-	Sequence *seq = indi_to_families(nztop(irec), fams);
-	if (!seq) {
-		if (msg0)
-			msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
-	remove_indiseq(seq);
-	return rec;
+  RecordIndexEl *rec=0;
+  ASSERT (irec && ! irec->parent);
+  Sequence *seq = indi_to_families(nztop(irec), fams);
+  if (!seq)
+    {
+      if (msg0)
+	msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
+
 /*===================================================
  * chooseFather -- Choose father of person or family
  * irec: [IN]  person of interest if non-null
@@ -196,19 +223,29 @@ chooseFamily (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
 RecordIndexEl *
 chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-	RecordIndexEl *rec=0;
-	Sequence *seq=0;
+  RecordIndexEl *rec=0;
+  Sequence *seq=0;
 
-	if (irec) seq = personToFathers(nztop(irec), currentDatabase);
-	if (!irec && frec) seq = familyToFathers(nztop(frec), currentDatabase);
-	if (!seq) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, ask1, msgn, msgn);
-	remove_indiseq(seq);
-	return rec;
+  if (irec)
+    {
+      ASSERT (! irec->parent);
+      seq = personToFathers(nztop(irec), currentDatabase);
+    }
+  if (!irec && frec)
+    {
+      ASSERT (! frec->parent)
+	seq = familyToFathers(nztop(frec), currentDatabase);
+    }
+  if (!seq)
+    {
+      msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, ask1, msgn, msgn);
+  remove_indiseq(seq);
+  return rec;
 }
+
 /*===================================================
  * chooseMother -- Choose mother of person or family
  * irec: [IN]  person of interest if non-null
@@ -220,16 +257,25 @@ chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
 RecordIndexEl *
 chooseMother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-	RecordIndexEl *rec=0;
-	Sequence *seq=0;
+  RecordIndexEl *rec=0;
+  Sequence *seq=0;
 
-	if (irec) seq = personToMothers(nztop(irec), currentDatabase);
-	if (!irec && frec) seq = familyToMothers(nztop(frec), currentDatabase);
-	if (!seq) {
-		msg_error("%s", msg0);
-		return NULL;
-	}
-	rec = chooseFromSequence(seq, ask1, msgn, msgn);
-	remove_indiseq(seq);
-	return rec;
+  if (irec)
+    {
+      ASSERT (! irec->parent)
+	seq = personToMothers(nztop(irec), currentDatabase);
+    }
+  if (!irec && frec)
+    {
+      ASSERT (! frec->parent)
+	seq = familyToMothers(nztop(frec), currentDatabase);
+    }
+  if (!seq)
+    {
+      msg_error("%s", msg0);
+      return NULL;
+    }
+  rec = chooseFromSequence(seq, ask1, msgn, msgn);
+  remove_indiseq(seq);
+  return rec;
 }

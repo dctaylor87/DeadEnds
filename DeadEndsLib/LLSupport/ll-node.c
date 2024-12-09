@@ -242,7 +242,8 @@ indi_to_prev_sib_impl (GNode *indi, Database *database)
 RecordIndexEl *
 indi_to_prev_sib (RecordIndexEl *irec, Database *database)
 {
-	return indi_to_prev_sib_impl(nztop(irec), database);
+  ASSERT (irec && ! irec->parent);
+  return indi_to_prev_sib_impl(nztop(irec), database);
 }
 /*==============================================
  * indi_to_next_sib -- Return next sib of person
@@ -273,7 +274,8 @@ indi_to_next_sib_impl (GNode *indi, Database *database)
 RecordIndexEl *
 indi_to_next_sib (RecordIndexEl *irec, Database *database)
 {
-	return indi_to_next_sib_impl(nztop(irec), database);
+  ASSERT (irec && ! irec->parent);
+  return indi_to_next_sib_impl(nztop(irec), database);
 }
 
 /*======================================
@@ -303,19 +305,23 @@ String node_to_tag (GNode *node, CString tag, int len)
  *  count:   [I/O] #instances of tag found (caller must init)
  * Created: 2003-01-12 (Perry Rapp)
  *============================================*/
+
 void
 record_to_date_place (RecordIndexEl *record, String tag, String * date, String * plac
 	, int * count)
 {
-	GNode *node=0;
-	for (node = record_to_first_event(record, tag)
-		; node
-		; node = node_to_next_event(node, tag)) {
-		if (++(*count) == 1)
-			/* only record first instance */
-			event_to_date_place(node, date, plac);
-	}
+  GNode *node=0;
+  ASSERT (record && ! record->parent);
+  for (node = record_to_first_event(record, tag);
+       node;
+       node = node_to_next_event(node, tag))
+    {
+      if (++(*count) == 1)
+	/* only record first instance */
+	event_to_date_place(node, date, plac);
+    }
 }
+
 /*==============================================
  * record_to_first_event -- Find requested event subtree
  *  record:  [IN]  record to search
@@ -325,10 +331,14 @@ record_to_date_place (RecordIndexEl *record, String tag, String * date, String *
 GNode *
 record_to_first_event (RecordIndexEl *record, CString tag)
 {
-	GNode *node = nztop(record);
-	if (!node) return NULL;
-	return findTag(nchild(node), tag);
+  ASSERT (record && ! record->parent);
+  GNode *node = nztop(record);
+  if (!node)
+    return NULL;
+
+  return findTag(nchild(node), tag);
 }
+
 /*==============================================
  * node_to_next_event -- Find next event after node
  *  node:  [IN]  start search after node

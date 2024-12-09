@@ -260,7 +260,7 @@ bool
 edit_any_record (RecordIndexEl *rec, bool rfmt)
 {
 	ASSERT(rec);
-	switch (recordType(rec->root)) {
+	switch (recordType(nztop(rec))) {
 	case GRPerson: return edit_indi(rec, rfmt);
 	case GRFamily: return edit_family(rec, rfmt);
 	case GRSource: return edit_source(rec, rfmt);

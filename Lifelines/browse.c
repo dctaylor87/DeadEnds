@@ -95,7 +95,7 @@ RecordIndexEl *jumpnode; /* used by Ethel for direct navigation */
  * external/imported variables
  *********************************************/
 
-extern bool traditional;
+//extern bool traditional;
 
 /*********************************************
  * local enums & defines
@@ -279,7 +279,7 @@ main_browse (RecordIndexEl *rec1, int code)
 			code = browse_aux(&rec1, &rec2, &seq); break;
 		case BROWSE_UNK:
 			ASSERT(rec1);
-			switch(recordType(rec1->root)) {
+			switch(nztype(rec1)) {
 			case GRPerson: code=BROWSE_INDI; break;
 			case GRFamily: code=BROWSE_FAM; break;
 			case GRSource: code=BROWSE_SOUR; break;
@@ -412,7 +412,7 @@ browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(recordType((*prec1)->root)==GRPerson);
+	ASSERT(nztype(*prec1)==GRPerson);
 	ASSERT(!*prec2);
 	ASSERT(!*pseq);
 
@@ -525,7 +525,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
 			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
-				if (recordType(tmp->root) != GRPerson) {
+				if (nztype(tmp) != GRPerson) {
 					setrecord(prec1, &tmp);
 					rtn = BROWSE_UNK;
 					goto exitbrowse;
@@ -642,7 +642,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
-				if (recordType(current->root) != GRPerson) {
+				if (nztype(current) != GRPerson) {
 					setrecord(prec1, &current);
 					rtn = BROWSE_UNK;
 					goto exitbrowse;
@@ -817,16 +817,16 @@ browse_aux (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	while (true) {
 		if (nestr(nzkey(current), nkeyp)
-			|| recordType(current->root) != ntypep
-			|| auxmode != auxmodep) {
+		    || (nztype(current) != ntypep)
+		    || (auxmode != auxmodep)) {
 			show_reset_scroll();
 		}
-		ntype = recordType(current->root);
+		ntype = nztype(current);
 		history_record(current, &vhist);
 		c = display_aux(current, auxmode, reuse);
 		/* last keynum & mode, so can tell if changed */
 		nkeyp = nzkey(current);
-		ntypep = recordType(current->root);
+		ntypep = nztype(current);
 		auxmodep = auxmode;
 reprocess_aux_cmd:
 		reuse = false; /* don't reuse display unless specifically set */
@@ -1065,7 +1065,7 @@ browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	ASSERT(prec1);
 	ASSERT(*prec1);
-	ASSERT(recordType((*prec1)->root)==GRFamily);
+	ASSERT(nztype(*prec1)==GRFamily);
 	ASSERT(!*prec2);
 	ASSERT(!*pseq);
 
@@ -1238,7 +1238,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 				setrecord(&current, &tmp);
 				remove_indiseq(seq);
 				seq=NULL;
-				if (recordType(current->root) != GRFamily) {
+				if (nztype(current) != GRFamily) {
 					setrecord(prec1, &current);
 					rtn = BROWSE_UNK;
 					goto exitbrowse;
@@ -2112,7 +2112,7 @@ autoadd_xref (RecordIndexEl *rec, GNode *newnode)
 		nsibling(prev) = xref;
 	}
 
-	normalizeRecord(rec->root);
+	normalizeRecord(nztop(rec));
 }
 
 //#if !defined(DEADENDS)

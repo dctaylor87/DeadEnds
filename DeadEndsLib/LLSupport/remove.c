@@ -240,9 +240,9 @@ bool
 remove_any_record (RecordIndexEl *record, Database *database)
 {
 	GNode *root=0;
+	ASSERT(record && ! record->parent);
 	CString key = nzkey(record);
 	GNode *rest, *refn;
-	ASSERT(record);
 
 	/* indi & family records take special handling, for lineage-linking */
 	if (recordType(record->root) == GRPerson) {

@@ -14,9 +14,13 @@
 
 //#define RECORD		RecordIndexEl *
 
-#define nztop(record)	((record)->root)
-#define nzkey(record)	((record)->root->key)
-#define nztype(record)	recordType((record)->root)
+#define RecordIndexEl	GNode
+#define nztop(record)	(record)
+#define nzkey(record)	((record)->key)
+#define nztype(record)	recordType(record)
+//#define nztop(record)	((record)->root)
+//#define nzkey(record)	((record)->root->key)
+//#define nztype(record)	recordType((record)->root)
 
 #define DOSURCAP	true
 #define NOSURCAP	false

@@ -88,7 +88,7 @@ RecordIndexEl *merge_two_fams(GNode *, GNode *);
 
 /* miscutls.c */
 void key_util(void);
-void show_database_stats(void);
+void show_database_stats(Database *);
 #if !defined(DEADENDS)
 void who_is_he_she(void);
 #endif
