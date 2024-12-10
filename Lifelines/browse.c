@@ -308,7 +308,7 @@ goto_indi_child (RecordIndexEl *irec, int childno)
   if (!irec)
     return NULL;
   FORFAMS(indi, fam, num1, currentDatabase)
-    FORCHILDREN(fam, chil, key, num2, currentDatabase)
+    FORCHILDREN(fam, chil, key, num2, currentDatabase->recordIndex)
       if (num2 == childno) 
         akey = key;
     ENDCHILDREN
@@ -333,7 +333,7 @@ goto_fam_child (RecordIndexEl *frec, int childno)
   GNode *fam = nztop(frec);
   if (!frec)
     return NULL;
-  FORCHILDREN(fam, chil, key, num, currentDatabase)
+  FORCHILDREN(fam, chil, key, num, currentDatabase->recordIndex)
     if (num == childno) 
       akey = key;
   ENDCHILDREN
@@ -947,13 +947,13 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
 	}
 	i = 0;
 	for (node = husb; node; node = nsibling(node)) {
-		root = keyToPerson(nval(node), currentDatabase);
+		root = keyToPerson(nval(node), currentDatabase->recordIndex);
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, true, true);
 		spnodes[i++] = root;
 	}
 	for (node = wife; node; node = nsibling(node)) {
-		root = keyToPerson(nval(node), currentDatabase);
+		root = keyToPerson(nval(node), currentDatabase->recordIndex);
 		spstrings[i] = indi_to_list_string(root,
 			 NULL, 66, true, true);
 		spnodes[i++] = root;

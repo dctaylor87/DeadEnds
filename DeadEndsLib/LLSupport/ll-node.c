@@ -224,7 +224,7 @@ indi_to_prev_sib_impl (GNode *indi, Database *database)
 {
 	GNode *fam, *prev, *node;
 	if (!indi) return NULL;
-	if (!(fam = personToFamilyAsChild(indi, database))) return NULL;
+	if (!(fam = personToFamilyAsChild(indi, database->recordIndex))) return NULL;
 	prev = NULL;
 	node = CHIL(fam);
 	/* loop thru all nodes following first child, keeping most recent CHIL */
@@ -255,7 +255,7 @@ indi_to_next_sib_impl (GNode *indi, Database *database)
 	GNode *fam, *node;
 	bool found;
 	if (!indi) return NULL;
-	if (!(fam = personToFamilyAsChild(indi, database))) return NULL;
+	if (!(fam = personToFamilyAsChild(indi, database->recordIndex))) return NULL;
 	node = CHIL(fam);
 	found = false;  /* until we find indi */
 	while (node) {

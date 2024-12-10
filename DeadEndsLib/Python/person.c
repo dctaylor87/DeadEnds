@@ -354,7 +354,7 @@ static PyObject *llpy_father (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
-  GNode *indi_node = personToFather(nztop (indi->llr_record), database);
+  GNode *indi_node = personToFather(nztop (indi->llr_record), database->recordIndex);
   LLINES_PY_RECORD *father;
 
   if (! indi_node)
@@ -380,7 +380,7 @@ static PyObject *llpy_mother (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
-  GNode *indi_node = personToMother(nztop (indi->llr_record), database);
+  GNode *indi_node = personToMother(nztop (indi->llr_record), database->recordIndex);
   LLINES_PY_RECORD *mother;
 
   if (! indi_node)
@@ -406,7 +406,7 @@ static PyObject *llpy_nextsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
-  GNode *indi_node = personToNextSibling(nztop (indi->llr_record), database);
+  GNode *indi_node = personToNextSibling(nztop (indi->llr_record), database->recordIndex);
   LLINES_PY_RECORD *sibling;
 
   if (! indi_node)
@@ -429,7 +429,7 @@ static PyObject *llpy_prevsib (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
-  GNode *indi_node = personToPreviousSibling(nztop (indi->llr_record), database);
+  GNode *indi_node = personToPreviousSibling(nztop (indi->llr_record), database->recordIndex);
   LLINES_PY_RECORD *sibling;
 
   if (! indi_node)
@@ -570,7 +570,7 @@ static PyObject *llpy_parents (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   Database *database = indi->llr_database;
   GNode *indi_node = nztop (indi->llr_record);
-  GNode *fam_node = personToFamilyAsChild(indi_node, database);
+  GNode *fam_node = personToFamilyAsChild(indi_node, database->recordIndex);
   LLINES_PY_RECORD *fam;
 
   if (! fam_node)

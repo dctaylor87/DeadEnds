@@ -108,7 +108,7 @@
 			continue;\
 		}\
 		__key = nval(__node);\
-		if (!__key || !(spouse = keyToPerson(__key, database))) {	\
+		if (!__key || !(spouse = keyToPerson(__key, database->recordIndex))) {	\
 			__node = nsibling(__node);\
 			continue;\
 		}\

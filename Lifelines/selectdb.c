@@ -420,7 +420,6 @@ mergeDatabases (Database *database, Database *oldDatabase, ErrorLog *errorLog)
 static void
 mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy)
 {
-#if 1
   /* copy the records: database --> oldDatabase */
   FORHASHTABLE(database->recordIndex, element)
     GNode *root = (GNode *)element;
@@ -452,80 +451,7 @@ mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy)
       default:
       }
   ENDHASHTABLE
-#else
-  /* copy the records: database --> oldDatabase */
-  FORHASHTABLE(database->personIndex, element)
-    GNode *root = ((RecordIndexEl *)element)->root;
-    if (copy)
-      root = copyNodes (root, true, true);
-    addToRecordIndex (oldDatabase->personIndex, root->key, root);
-    addToRecordIndex (oldDatabase->recordIndex, root->key, root);
-    insertInRootList (oldDatabase->personRoots, root);
-    for (GNode *name = NAME(root);
-	 name && eqstr (name->tag, "NAME");
-	 name = name->sibling)
-      {
-	if (name->value)
-	  {
-	    String nameKey = nameToNameKey (name->value);
-	    insertInNameIndex (oldDatabase->nameIndex, nameKey, root->key);
-	  }
-      }
-  ENDHASHTABLE
-  FORHASHTABLE(database->familyIndex, element)
-    GNode *root = ((RecordIndexEl *)element)->root;
-    if (copy)
-      root = copyNodes (root, true, true);
-    addToRecordIndex (oldDatabase->familyIndex, root->key, root);
-    addToRecordIndex (oldDatabase->recordIndex, root->key, root);
-    insertInRootList (oldDatabase->familyRoots, root);
-  ENDHASHTABLE
-  FORHASHTABLE(database->sourceIndex, element)
-    GNode *root = ((RecordIndexEl *)element)->root;
-    if (copy)
-      root = copyNodes (root, true, true);
-    addToRecordIndex (oldDatabase->sourceIndex, root->key, root);
-    addToRecordIndex (oldDatabase->recordIndex, root->key, root);
-  ENDHASHTABLE
-  FORHASHTABLE(database->eventIndex, element)
-    GNode *root = ((RecordIndexEl *)element)->root;
-    if (copy)
-      root = copyNodes (root, true, true);
-    addToRecordIndex (oldDatabase->eventIndex, root->key, root);
-    addToRecordIndex (oldDatabase->recordIndex, root->key, root);
-  ENDHASHTABLE
-  FORHASHTABLE(database->otherIndex, element)
-    GNode *root = ((RecordIndexEl *)element)->root;
-    if (copy)
-      root = copyNodes (root, true, true);
-    addToRecordIndex (oldDatabase->otherIndex, root->key, root);
-    addToRecordIndex (oldDatabase->recordIndex, root->key, root);
-  ENDHASHTABLE
-#endif
 
-#if 0
-  FORLIST (database->personRoots, element)
-    /* update personRoots */
-    insertInRootList (oldDatabase->personRoots, element);
-    /* now, update nameIndex */
-    GNode *root = (GNode *)element;
-    for (GNode *name = NAME(root);
-	 name && eqstr(name->tag, "NAME");
-	 name = name->sibling)
-      {
-	if (name->value)
-	  {
-	    String nameKey = nameToNameKey (name->value);
-	    insertInNameIndex (oldDatabase->nameIndex, nameKey, root->key);
-	  }
-      }
-  ENDLIST
-
-  /* update familyRoots */
-  FORLIST (database->familyRoots, element)
-    insertInRootList (oldDatabase->familyRoots, element);
-  ENDLIST
-#endif
   /* database->refnIndex has already been checked for non-existent
      values, empty values, and overlap with oldDatabase, so we only
      need to propagate the values. */

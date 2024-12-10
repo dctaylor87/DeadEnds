@@ -13,6 +13,7 @@
 
 #include <ansidecl.h>
 #include <stdint.h>
+
 #include "standard.h"
 #include "denls.h"
 
@@ -22,6 +23,7 @@
 #include "database.h"
 #include "sequence.h"
 
+#include "porting.h"
 #include "ll-sequence.h"
 #include "py-set.h"
 
@@ -34,46 +36,48 @@
 Sequence *
 getAllPersons (Database *database)
 {
-  return getAllRecordIndex (database, database->personIndex);
+  return getAllRecordOfType (database, GRPerson);
 }
 
 Sequence *
 getAllFamilies (Database *database)
 {
-  return getAllRecordIndex (database, database->familyIndex);
+  return getAllRecordOfType (database, GRFamily);
 }
 
 Sequence *
 getAllSources (Database *database)
 {
-  return getAllRecordIndex (database, database->sourceIndex);
+  return getAllRecordOfType (database, GRSource);
 }
 
 Sequence *
 getAllEvents (Database *database)
 {
-  return getAllRecordIndex (database, database->eventIndex);
+  return getAllRecordOfType (database, GREvent);
 }
 
 Sequence *
 getAllOthers (Database *database)
 {
-  return getAllRecordIndex (database, database->otherIndex);
+  return getAllRecordOfType (database, GROther);
 }
 
 Sequence *
-getAllRecordIndex (Database *database, RecordIndex *index)
+getAllRecordOfType (Database *database, RecordType type)
 {
   Sequence *seq = createSequence (database);
   int bucket = 0;
   int element = 0;
   RecordIndexEl *record = 0;
 
-  for (record = firstInHashTable (index, &bucket, &element);
+  for (record = firstInHashTable (database->recordIndex, &bucket, &element);
        record;
-       record = nextInHashTable (index, &bucket, &element))
-    appendToSequence (seq, nzkey(record), NULL);
-
+       record = nextInHashTable (database->recordIndex, &bucket, &element))
+    {
+      if (nztype(record) == type)
+	appendToSequence (seq, nzkey(record), NULL);
+    }
   if (lengthSequence (seq) <= 0)
     {
       deleteSequence (seq);

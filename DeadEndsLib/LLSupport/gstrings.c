@@ -105,7 +105,7 @@ get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *d
 		chkeys = (String *) stdalloc((nchil+5)*sizeof(String));
 		maxchil = nchil + 5;
 	}
-	FORCHILDREN(fam,child,key, i, database)
+	FORCHILDREN(fam,child,key, i, database->recordIndex)
 		chstrings[i-1] = indi_to_list_string(child, NULL, 66, rfmt, true);
 		chkeys[i-1] = strsave(nxref(child));
 	ENDCHILDREN
@@ -294,7 +294,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 	destrcatn(&p, " ", &mylen);
 	destrcatn(&p, counts, &mylen);
 	if (husbands) {
-		node = keyToPerson(nval(husb), database);
+		node = keyToPerson(nval(husb), database->recordIndex);
 		if (node) {
 			destrcatn(&p, delim, &mylen);
 			if (wives)
@@ -309,7 +309,7 @@ fam_to_list_string (GNode *fam, int len, String delim, Database *database)
 		}
 	}
 	if (wives) {
-		node = keyToPerson(nval(wife), database);
+		node = keyToPerson(nval(wife), database->recordIndex);
 		if (node) {
 			if (!templen)
 				templen = mylen;
@@ -392,7 +392,7 @@ generic_to_list_string (GNode *node, String key, int len, String delim,
 	String str = 0;
 	str=NULL; /* set to appropriate format */
 	if (!node && key)
-		node = keyToPerson (key, database);
+		node = keyToPerson (key, database->recordIndex);
 	if (!key && node)
 		key = nxref(node);
 	if (node) {

@@ -315,12 +315,12 @@ init_display_indi (RecordIndexEl *irec, int width)
 
 	disp_person_birthdeath(Sdeat, irec, f_death_tags, false);
 
-	fth = personToFather(pers, currentDatabase);
+	fth = personToFather(pers, currentDatabase->recordIndex);
 	s = person_display(fth, NULL, width-13);
 	if (s) destrncpyf(Sfath, liwidth, uu8, "  %s: %s", _(qSdspl_fath), s);
 	else destrncpyf(Sfath, liwidth, uu8, "  %s:", _(qSdspl_fath));
 
-	mth = personToMother(pers, currentDatabase);
+	mth = personToMother(pers, currentDatabase->recordIndex);
 	s = person_display(mth, NULL, width-13);
 	if (s) destrncpyf(Smoth, liwidth, uu8, "  %s: %s", _(qSdspl_moth), s);
 	else destrncpyf(Smoth, liwidth, uu8, "  %s:", _(qSdspl_moth));
@@ -331,7 +331,7 @@ init_display_indi (RecordIndexEl *irec, int width)
 		if (sp) add_spouse_line(++nsp, sp, fam, width);
 	        if (this_fam != fam) {
 		        this_fam = fam; /* only do each family once */
-			FORCHILDREN(fam, chld, key, nm, database)
+			FORCHILDREN(fam, chld, key, nm, database->recordIndex)
 				if(chld) add_child_line(++nch, chld, width);
 			ENDCHILDREN
 		}
@@ -526,7 +526,7 @@ init_display_fam (RecordIndexEl *frec, int width)
 
 	Solen = 0;
 	nch = 0;
-	FORCHILDREN(fam, chld, key, nm, database)
+	FORCHILDREN(fam, chld, key, nm, database->recordIndex)
 	  add_child_line(++nch, chld, width);
 	ENDCHILDREN
 	releaseRecord(ihusb);

@@ -273,8 +273,8 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 				GNode *node1;
 				GNode *node2;
 
-				node1 = familyToHusband (nztop(current1), currentDatabase);
-				node2 = familyToHusband (nztop(current2), currentDatabase);
+				node1 = familyToHusband (nztop(current1), currentDatabase->recordIndex);
+				node2 = familyToHusband (nztop(current2), currentDatabase->recordIndex);
 
 				fam1 = _llpy_node_to_record (node1, currentDatabase);
 				fam2 = _llpy_node_to_record (node2, currentDatabase);

@@ -90,7 +90,7 @@ static PyObject *llpy_siblingset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 	   famc = findTag (famc->sibling, "FAMC"))
 	{
 	  /* famc points to a family that indi is a child in */
-	  node = keyToFamily (nval(famc), database); /* top node of family */
+	  node = keyToFamily (nval(famc), database->recordIndex); /* top node of family */
 
 	  /* for each child of that family... */
 	  for (GNode *child = findTag (node->child, "CHIL");

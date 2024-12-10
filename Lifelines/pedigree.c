@@ -444,11 +444,13 @@ add_parents (GNode *indi, int gen, int maxgen, int * count)
 	(*count)++;
 	if (gen<maxgen) {
 		tn->firstchild = 
-			add_parents(personToFather(indi, currentDatabase), gen+1, maxgen, count);
+			add_parents(personToFather(indi, currentDatabase->recordIndex),
+				    gen+1, maxgen, count);
 		if (tn->key)
-			indi=keyToPerson(tn->key, currentDatabase);
+			indi=keyToPerson(tn->key, currentDatabase->recordIndex);
 		tn->firstchild->nextsib = 
-			add_parents(personToMother(indi, currentDatabase), gen+1, maxgen, count);
+			add_parents(personToMother(indi, currentDatabase->recordIndex),
+				    gen+1, maxgen, count);
 	}
 	return tn;
 }
@@ -507,7 +509,7 @@ indi_lineprint (int width, void * param)
 	INDI_PRINT_PARAM ipp = (INDI_PRINT_PARAM)param;
 	GNode *indi=0;
 	if (ipp->key)
-		indi = keyToPerson(ipp->key, currentDatabase);
+		indi = keyToPerson(ipp->key, currentDatabase->recordIndex);
 	return indi_to_ped_fix(indi, width);
 }
 /*=================================
