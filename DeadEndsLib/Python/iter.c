@@ -235,7 +235,9 @@ static PyObject *llpy_record_iternext (PyObject *self)
   LLINES_PY_RECORD_ITER *iter = (LLINES_PY_RECORD_ITER *)self;
   Database *database = iter->li_database;
   RecordIndexEl *record;
-  RecordIndex *index;
+  RecordType DEtype;		/* GRPerson, GRFamily, GRSource, GREvent, or GROther */
+  PyTypeObject *PYtype;		/* llines_{event,family,individual,other,source}_type */
+  
 
   if (llpy_debug)
     {
@@ -253,126 +255,71 @@ static PyObject *llpy_record_iternext (PyObject *self)
       return NULL;
     }
 
-  /* which Database index should we search? */
   switch (iter->li_type)
     {
     case LLINES_TYPE_INDI:
-      index = database->personIndex;
+      PYtype = &llines_individual_type;
+      DEtype = GRPerson;
       break;
     case LLINES_TYPE_FAM:
-      index = database->familyIndex;
+      PYtype = &llines_family_type;
+      DEtype = GRFamily;
       break;
     case LLINES_TYPE_SOUR:
-      index = database->sourceIndex;
+      PYtype = &llines_source_type;
+      DEtype = GRSource;
       break;
     case LLINES_TYPE_OTHR:
-      index = database->otherIndex;
+      PYtype = &llines_other_type;
+      DEtype = GROther;
       break;
     case LLINES_TYPE_EVEN:
-      index = database->eventIndex;
+      PYtype = &llines_event_type;
+      DEtype = GREvent;
       break;
-    default:      
+    default:
       Py_UNREACHABLE ();	/* internal error */
     }
 
   if ((iter->li_bucket_ndx == -1) && (iter->li_element_ndx == -1))
     /* first time */
-    record = (RecordIndexEl *) firstInHashTable (index,
+    record = (RecordIndexEl *) firstInHashTable (database->recordIndex,
 						 &iter->li_bucket_ndx,
 						 &iter->li_element_ndx);
   else
     /* not first time */
-    record = (RecordIndexEl *) nextInHashTable (index,
+    record = (RecordIndexEl *) nextInHashTable (database->recordIndex,
 						&iter->li_bucket_ndx,
 						&iter->li_element_ndx);
 
+  /* now, check the type, iterate until right type or exhausted */
+  while (record && (recordType(record) != DEtype))
+    {
+      record = (RecordIndexEl *) nextInHashTable (database->recordIndex,
+						  &iter->li_bucket_ndx,
+						  &iter->li_element_ndx);
+    }
+
   if (! record)
     {
-      /* no record found -- exhausted */
+      /* no record found of appropriate type -- exhausted */
       iter->li_bucket_ndx = -2;
       iter->li_element_ndx = -2;
       return NULL;
     }
 
-  switch (iter->li_type)
+  LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, PYtype);
+  if (! obj)
     {
-    case LLINES_TYPE_EVEN:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_event_type);
-	if (! obj)
-	  {
-	    releaseRecord (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_EVEN;
-	obj->llr_database = database;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_INDI:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
-	if (! obj)
-	  {
-	    releaseRecord (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_INDI;
-	obj->llr_database = database;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_FAM:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_family_type);
-	if (! obj)
-	  {
-	    releaseRecord (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_FAM;
-	obj->llr_database = database;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_SOUR:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_source_type);
-	if (! obj)
-	  {
-	    releaseRecord (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_SOUR;
-	obj->llr_database = database;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    case LLINES_TYPE_OTHR:
-      {
-	LLINES_PY_RECORD *obj = PyObject_New (LLINES_PY_RECORD, &llines_other_type);
-	if (! obj)
-	  {
-	    releaseRecord (record);
-	    return NULL;
-	  }
-	obj->llr_type = LLINES_TYPE_OTHR;
-	obj->llr_database = database;
-	obj->llr_record = record;
-
-	return (PyObject *)obj;
-      }
-    default:
-      /* Something mighty weird is happening. Not only was there
-	 an internal error for us to be called with an unexpected
-	 type, but it was not caught by the previous switch
-	 statment.  */
-      Py_UNREACHABLE ();
+      releaseRecord (record);
+      return NULL;
     }
+
+  obj->llr_database = database;
+  obj->llr_record = record;
+  obj->llr_type = iter->li_type;
+
+  return (PyObject *)obj;
 }
 
 static void llpy_node_iter_dealloc (PyObject *self)

@@ -245,11 +245,11 @@ remove_any_record (RecordIndexEl *record, Database *database)
 	GNode *rest, *refn;
 
 	/* indi & family records take special handling, for lineage-linking */
-	if (recordType(record->root) == GRPerson) {
+	if (nztype(record) == GRPerson) {
 		remove_indi_by_root(nztop(record), database);
 		return true;
 	}
-	if (recordType(record->root) == GRFamily) {
+	if (nztype(record) == GRFamily) {
 		return remove_fam_record(record);
 	}
 

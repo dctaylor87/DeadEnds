@@ -72,7 +72,7 @@ getAllRecordIndex (Database *database, RecordIndex *index)
   for (record = firstInHashTable (index, &bucket, &element);
        record;
        record = nextInHashTable (index, &bucket, &element))
-    appendToSequence (seq, record->root->key, NULL);
+    appendToSequence (seq, nzkey(record), NULL);
 
   if (lengthSequence (seq) <= 0)
     {

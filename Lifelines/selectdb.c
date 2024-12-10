@@ -13,6 +13,7 @@
 #include "standard.h"
 #include "path.h"
 #include "hashtable.h"
+#include "gnode.h"
 #include "database.h"
 #include "import.h"
 #include "stringtable.h"
@@ -23,7 +24,7 @@
 #define SIZE_REKEY_TABLE	1025
 
 /* forward references */
-static bool indexHasStandardKeys (char prefix, RecordIndex *index);
+//static bool indexHasStandardKeys (char prefix, RecordIndex *index);
 static void mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy);
 
 /* selectAndOpenDatabase -- search along searchPath for dbFilename and import it.
@@ -109,6 +110,55 @@ selectAndOpenDatabase(CString *dbFilename,
   return (oldDatabase);
 }
 
+#if 1
+bool databaseHasStandardKeys (Database *database)
+{
+  FORHASHTABLE (database->recordIndex, element)
+    GNode *gnode = (GNode *)element;
+    CString key = gnode->key;
+
+    if (key[0] != '@')
+      return false;		/* not a key -- should never happen */
+
+    switch (recordType (gnode))
+      {
+      case GRPerson:
+	if (key[1] != 'I')
+	  return false;
+	break;
+      case GRFamily:
+	if (key[1] != 'F')
+	  return false;
+	break;
+      case GRSource:
+	if (key[1] != 'S')
+	  return false;
+	break;
+      case GREvent:
+	if (key[1] != 'E')
+	  return false;
+	break;
+      case GROther:
+	if (key[1] != 'X')
+	  return false;
+	break;
+      default:
+	return false;		/* should never happen */
+      }
+    unsigned long long keynum;
+    char *endptr = 0;
+
+    keynum = strtoull (&key[2], &endptr, 10);
+    if (*endptr != '@')
+      return false;
+    if ((keynum == ULLONG_MAX) && (errno == ERANGE))
+      return false;		/* overflow */
+  ENDHASHTABLE
+
+  return true;
+}
+
+#else
 bool databaseHasStandardKeys (Database *database)
 {
   if (indexHasStandardKeys ('I', database->personIndex) &&
@@ -123,7 +173,7 @@ bool databaseHasStandardKeys (Database *database)
 static bool indexHasStandardKeys (char prefix, RecordIndex *index)
 {
   FORHASHTABLE (index, element)
-    CString key = ((RecordIndexEl *)element)->root->key;
+    CString key = ((GNode *)element)->key;
 
     if (key[0] != '@')
       return false;		/* not a key -- should not happen */
@@ -146,6 +196,7 @@ static bool indexHasStandardKeys (char prefix, RecordIndex *index)
 
   return true;
 }
+#endif
 
 /* checkForRefnOverlap -- return  true if okay  to continue (no
    overlap), false if need to abort the database merge */
@@ -234,7 +285,7 @@ rekeyDatabase (Database *database, Database *oldDatabase, ErrorLog *errorLog)
       return false;
     }
   FORHASHTABLE (database->recordIndex, element)
-    GNode *root = ((RecordIndexEl *)element)->root;
+    GNode *root = (GNode *)element;
     CString oldKey = root->key;
     char newKey[25];
     uint64_t newNumber;
@@ -369,6 +420,39 @@ mergeDatabases (Database *database, Database *oldDatabase, ErrorLog *errorLog)
 static void
 mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy)
 {
+#if 1
+  /* copy the records: database --> oldDatabase */
+  FORHASHTABLE(database->recordIndex, element)
+    GNode *root = (GNode *)element;
+    if (copy)
+      root = copyNodes (root, true, true);
+    switch (recordType (root))
+      {
+      case GRPerson:
+	addToRecordIndex (oldDatabase->recordIndex, root);
+	insertInRootList (oldDatabase->personRoots, root);
+	for (GNode *name = NAME(root);
+	     name && eqstr (name->tag, "NAME");
+	     name = name->sibling)
+	  {
+	    if (name->value)
+	      {
+		String nameKey = nameToNameKey (name->value);
+		insertInNameIndex (oldDatabase->nameIndex, nameKey, root->key);
+	      }
+	  }
+	break;
+      case GRFamily:
+	addToRecordIndex (oldDatabase->recordIndex, root);
+	insertInRootList (oldDatabase->familyRoots, root);
+      case GRSource:
+      case GREvent:
+      case GROther:
+	addToRecordIndex (oldDatabase->recordIndex, root);
+      default:
+      }
+  ENDHASHTABLE
+#else
   /* copy the records: database --> oldDatabase */
   FORHASHTABLE(database->personIndex, element)
     GNode *root = ((RecordIndexEl *)element)->root;
@@ -417,6 +501,7 @@ mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy)
     addToRecordIndex (oldDatabase->otherIndex, root->key, root);
     addToRecordIndex (oldDatabase->recordIndex, root->key, root);
   ENDHASHTABLE
+#endif
 
 #if 0
   FORLIST (database->personRoots, element)

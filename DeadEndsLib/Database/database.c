@@ -33,9 +33,6 @@ Database *createDatabase(CString filePath) {
 	database->filePath = strsave(filePath);
 	database->lastSegment = strsave(lastPathSegment(filePath));
 	database->recordIndex = null;
-	database->sourceIndex = null;
-	database->eventIndex = null;
-	database->otherIndex = null;
 	database->nameIndex = null;
 	database->refnIndex = null;
 	database->personRoots = createRootList(); // null?
@@ -46,9 +43,6 @@ Database *createDatabase(CString filePath) {
 // deleteDatabase deletes a Database.
 void deleteDatabase(Database* database) {
 	if (database->recordIndex) deleteRecordIndex(database->recordIndex);
-	if (database->sourceIndex) deleteRecordIndex(database->sourceIndex);
-	if (database->eventIndex) deleteRecordIndex(database->eventIndex);
-	if (database->otherIndex) deleteRecordIndex(database->otherIndex);
 	if (database->nameIndex) deleteNameIndex(database->nameIndex);
 	if (database->refnIndex) deleteRefnIndex(database->refnIndex);
 	if (database->personRoots) deleteList(database->personRoots);
@@ -262,21 +256,17 @@ bool storeRecord (Database *database, GNode *root)
   switch (recordType (root))
     {
     case GRPerson:
-      addToRecordIndex(database->personIndex, root->key, root);
+      addToRecordIndex(database->recordIndex, root);
       insertInRootList (database->personRoots, root);
       break;
     case GRFamily:
-      addToRecordIndex(database->familyIndex, root->key, root);
+      addToRecordIndex(database->recordIndex, root);
       insertInRootList (database->familyRoots, root);
       break;
     case GRSource:
-      addToRecordIndex(database->sourceIndex, root->key, root);
-      break;
     case GREvent:
-      addToRecordIndex(database->eventIndex, root->key, root);
-      break;
     case GROther:
-      addToRecordIndex(database->otherIndex, root->key, root);
+      addToRecordIndex(database->recordIndex, root);
       break;
     default:
       fatal ("unkown record type");

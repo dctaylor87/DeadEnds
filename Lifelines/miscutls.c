@@ -44,7 +44,7 @@
 #include "list.h"
 #include "zstr.h"
 #include "translat.h"
-//#include "feedback.h"
+#include "feedback.h"
 #include "uiio.h"
 #include "refnindex.h"
 #include "gnode.h"
@@ -58,6 +58,8 @@
 #include "liflines.h"
 #include "messages.h"
 #include "init.h"
+
+ErrorLog *globalErrorLog = 0;
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -115,19 +117,19 @@ who_is_he_she (void)
 }
 #endif
 
-/*===========================================
- * show_database_stats -- Show database stats
- *=========================================*/
+/* show_database_stats -- Show database stats.  */
+
 void
-show_database_stats (void)
+show_database_stats (Database *database)
 {
-	char msg[80];
-	snprintf(msg, sizeof(msg), "%s", _(qSdbrecords));
-	strcat(msg, ": ");
-	snprintf(msg+strlen(msg), sizeof(msg)-strlen(msg)
-		, _(qSdbrecstats), num_indis(), num_fams()
-		, num_sours(), num_evens(), num_othrs());
-	msg_info("%s", msg);
+  char msg[80];
+  snprintf(msg, sizeof(msg), "%s", _(qSdbrecords));
+  strcat(msg, ": ");
+  snprintf(msg+strlen(msg), sizeof(msg)-strlen(msg), _(qSdbrecstats),
+	   numberPersons(database), numberFamilies(database),
+	   numberSources(database), numberEvents(database),
+	   numberOthers(database));
+  msg_info("%s", msg);
 }
 
 /*======================================

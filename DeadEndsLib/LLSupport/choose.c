@@ -126,7 +126,7 @@ chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
   RecordIndexEl *rec;
   if (! current)
     return NULL;
-  ASSERT (! current->parent)
+  ASSERT (! current->parent);
     if (!(seq = GNodeToSources(nztop(current), currentDatabase)))
       {
 	msg_error("%s", msg0);
@@ -233,7 +233,7 @@ chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
     }
   if (!irec && frec)
     {
-      ASSERT (! frec->parent)
+      ASSERT (! frec->parent);
 	seq = familyToFathers(nztop(frec), currentDatabase);
     }
   if (!seq)
@@ -262,12 +262,12 @@ chooseMother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
 
   if (irec)
     {
-      ASSERT (! irec->parent)
+      ASSERT (! irec->parent);
 	seq = personToMothers(nztop(irec), currentDatabase);
     }
   if (!irec && frec)
     {
-      ASSERT (! frec->parent)
+      ASSERT (! frec->parent);
 	seq = familyToMothers(nztop(frec), currentDatabase);
     }
   if (!seq)

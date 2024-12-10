@@ -51,8 +51,10 @@ llines_record_richcompare (PyObject *self, PyObject *other, int op)
 
       if (nztype (obj1->llr_record) == nztype (obj2->llr_record))
 	{
-	  int keynum1 = atoi (&(obj1->llr_record->root->key[1]));
-	  int keynum2 = atoi (&(obj2->llr_record->root->key[1]));
+	  CString key1 = nzkey(obj1->llr_record);
+	  CString key2 = nzkey(obj2->llr_record);
+	  int keynum1 = atoi (&(key1[2]));
+	  int keynum2 = atoi (&(key2[2]));
 
 	  Py_RETURN_RICHCOMPARE (keynum1, keynum2, op);
 	}
@@ -98,8 +100,10 @@ llines_node_richcompare (PyObject *self, PyObject *other, int op)
 
       if (nztype (obj1) == nztype (obj2))
 	{
-	  int keynum1 = atoi (&(obj1->root->key[1]));
-	  int keynum2 = atoi (&(obj2->root->key[1]));
+	  CString key1 = nzkey(obj1);
+	  CString key2 = nzkey(obj2);
+	  int keynum1 = atoi (&(key1[2]));
+	  int keynum2 = atoi (&(key2[2]));
 
 	  Py_RETURN_RICHCOMPARE (keynum1, keynum2, op);
 	}
