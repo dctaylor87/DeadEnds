@@ -139,50 +139,45 @@ GNode* keyToOther(CString key, RecordIndex* index) {
 	return keyToRecordOfType(key, index, GROther);
 }
 
-////  keyToPersonRecord -- Get a person record from a database.
-////--------------------------------------------------------------------------------------------------
-//RecordIndexEl* keyToPersonRecord(CString key, Database *database)
-////  key -- Key of person record. The @-signs are not part of the database key.
-////  index -- Record index to search for the person.
-//{
-//    RecordIndexEl* element = searchHashTable(database->personIndex, key);
-//    return element;
-//}
-//
-////  keyToFamilyRecord -- Get a family record from a record index.
-////--------------------------------------------------------------------------------------------------
-//RecordIndexEl* keyToFamilyRecord(CString key, Database *database)
-////  key -- Key of family record. The @-signs are not part of the key.
-////  index -- Record index to search for the family.
-//{
-//    //if (debugging) printf("keyToFamilyRecord called with key: %s\n", key);
-//    RecordIndexEl *element = (RecordIndexEl*) searchHashTable(database->familyIndex, key);
-//    return element;
-//}
-//
-////  keyToSourceRecord -- Get a source record from the database.
-////--------------------------------------------------------------------------------------------------
-//RecordIndexEl *keyToSourceRecord(CString key, Database *database)
-//{
-//    RecordIndexEl* element = searchHashTable(database->sourceIndex, key);
-//    return element;
-//}
-//
-////  keyToEventRecord -- Get an event record from a database.
-////--------------------------------------------------------------------------------------------------
-//RecordIndexEl *keyToEventRecord(CString key, Database *database)
-//{
-//    RecordIndexEl *element = searchHashTable(database->eventIndex, key);
-//    return element;
-//}
-//
-////  keyToOtherRecord -- Get an other record from a database.
-////--------------------------------------------------------------------------------------------------
-//RecordIndexEl *keyToOtherRecord(CString key, Database *database)
-//{
-//    RecordIndexEl *element = searchHashTable(database->otherIndex, key);
-//    return element;
-//}
+//  keyToPersonRecord -- Get a person record from a database.
+//--------------------------------------------------------------------------------------------------
+GNode* keyToPersonRecord(CString key, Database *database)
+//  key -- Key of person record. The @-signs are not part of the database key.
+//  index -- Record index to search for the person.
+{
+  return keyToPerson (key, database->recordIndex);
+}
+
+//  keyToFamilyRecord -- Get a family record from a record index.
+//--------------------------------------------------------------------------------------------------
+GNode* keyToFamilyRecord(CString key, Database *database)
+//  key -- Key of family record. The @-signs are not part of the key.
+//  index -- Record index to search for the family.
+{
+  //if (debugging) printf("keyToFamilyRecord called with key: %s\n", key);
+  return keyToFamily (key, database->recordIndex);
+}
+
+//  keyToSourceRecord -- Get a source record from the database.
+//--------------------------------------------------------------------------------------------------
+GNode *keyToSourceRecord(CString key, Database *database)
+{
+  return keyToSource (key, database->recordIndex);
+}
+
+//  keyToEventRecord -- Get an event record from a database.
+//--------------------------------------------------------------------------------------------------
+GNode *keyToEventRecord(CString key, Database *database)
+{
+  return keyToEvent (key, database->recordIndex);
+}
+
+//  keyToOtherRecord -- Get an other record from a database.
+//--------------------------------------------------------------------------------------------------
+GNode *keyToOtherRecord(CString key, Database *database)
+{
+  return keyToOther (key, database->recordIndex);
+}
 
 // getNameIndexFromPersons indexes all person names in a database.
 NameIndex* getNameIndexFromPersons(RootList* persons) {

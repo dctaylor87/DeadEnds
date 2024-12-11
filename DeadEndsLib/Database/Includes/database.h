@@ -64,7 +64,7 @@ int numberSources(Database*);    // Return the number of sources in the database
 int numberEvents(Database*);     // Return the number of events in the database.
 int numberOthers(Database*);     // Return the number of other records in the database.
 bool isEmptyDatabase(Database*);  // Return true if the database has not persons or families.
-RecordIndexEl *keyToRecord (CString key, Database *); // Return a key's record
+GNode *keyToRecord (CString key, Database *); // Return a key's record
 GNode *keyToPerson(CString key, RecordIndex*); // Get a person from record index.
 GNode *keyToFamily(CString key, RecordIndex*); // Get a family GNode from a RecordIndex.
 GNode *keyToSource(CString key, RecordIndex*); // Get a source record from the database.
@@ -76,15 +76,15 @@ GNode *getRecord(CString key, Database*);  // Get an arbitraray record from the 
 extern void oldIndexNames(Database* database);
 
 //  Get a person record from the database.
-extern RecordIndexEl *keyToPersonRecord(CString key, Database*);
+extern GNode *keyToPersonRecord(CString key, Database*);
 //  Get a family record from the database.
-extern RecordIndexEl *keyToFamilyRecord(CString key, Database*);
+extern GNode *keyToFamilyRecord(CString key, Database*);
 //  Get a source record from the database.
-extern RecordIndexEl *keyToSourceRecord(CString key, Database*);
+extern GNode *keyToSourceRecord(CString key, Database*);
 //  Get an event record from the database.
-extern RecordIndexEl *keyToEventRecord(CString key, Database*);
+extern GNode *keyToEventRecord(CString key, Database*);
 //  Get an other record from the database.
-extern RecordIndexEl *keyToOtherRecord(CString Key, Database*);
+extern GNode *keyToOtherRecord(CString Key, Database*);
 
 bool storeRecord(Database*, GNode*); // Add a record to the database.
 NameIndex* getNameIndexFromPersons(RootList*);

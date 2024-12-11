@@ -14,57 +14,49 @@
 #include "database.h"
 #include "xref.h"
 
-static RecordIndexEl *genericGetNextRecord (CString key, RecordIndex *index);
+static GNode *genericGetNextRecord (CString key, RecordIndex *index, RecordType type);
 
-static RecordIndexEl *
-getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList);
+static GNode *
+getFirstRecord_PF (RootList *rootList);
 
-static RecordIndexEl *
-getLastRecord_PF (RecordIndex *recordIndex, RootList *rootList);
+static GNode *
+getLastRecord_PF (RootList *rootList);
 
-static RecordIndexEl *
-getNextRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList);
+static GNode *
+getNextRecord_PF (CString key, RootList *rootList);
 
-static RecordIndexEl *
-getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList);
+static GNode *
+getPreviousRecord_PF (CString key, RootList *rootList);
 
-static RecordIndexEl *genericLastRecord (RecordIndex *index);
+static GNode *
+genericPreviousRecord (CString key, RecordIndex *index, RecordType type);
 
-RecordIndexEl *getFirstPersonRecord (Database *database)
+GNode *getFirstPersonRecord (Database *database)
 {
-  return getFirstRecord_PF (database->personIndex, database->personRoots);
+  return getFirstRecord_PF (database->personRoots);
 }
 
-RecordIndexEl *getFirstFamilyRecord (Database *database)
+GNode *getFirstFamilyRecord (Database *database)
 {
-  return getFirstRecord_PF (database->familyIndex, database->familyRoots);
+  return getFirstRecord_PF (database->familyRoots);
 }
 
-RecordIndexEl *getFirstSourceRecord (Database *database)
+GNode *getFirstSourceRecord (Database *database)
 {
-  int bucket_index;
-  int element_index;
-
-  return firstInHashTable (database->sourceIndex, &bucket_index, &element_index);
+  return genericGetNextRecord (NULL, database->recordIndex, GRSource);
 }
 
-RecordIndexEl *getFirstEventRecord (Database *database)
+GNode *getFirstEventRecord (Database *database)
 {
-  int bucket_index;
-  int element_index;
-
-  return firstInHashTable (database->eventIndex, &bucket_index, &element_index);
+  return genericGetNextRecord (NULL, database->recordIndex, GREvent);
 }
 
-RecordIndexEl *getFirstOtherRecord (Database *database)
+GNode *getFirstOtherRecord (Database *database)
 {
-  int bucket_index;
-  int element_index;
-
-  return firstInHashTable (database->otherIndex, &bucket_index, &element_index);
+  return genericGetNextRecord (NULL, database->recordIndex, GROther);
 }
 
-RecordIndexEl *getFirstRecord (RecordType type, Database *database)
+GNode *getFirstRecord (RecordType type, Database *database)
 {
   switch (type)
     {
@@ -83,32 +75,32 @@ RecordIndexEl *getFirstRecord (RecordType type, Database *database)
     }
 }
 
-RecordIndexEl *getNextPersonRecord (CString key, Database *database)
+GNode *getNextPersonRecord (CString key, Database *database)
 {
-  return getNextRecord_PF (key, database->personIndex, database->personRoots);
+  return getNextRecord_PF (key, database->personRoots);
 }
 
-RecordIndexEl *getNextFamilyRecord (CString key, Database *database)
+GNode *getNextFamilyRecord (CString key, Database *database)
 {
-  return getNextRecord_PF (key, database->familyIndex, database->familyRoots);
+  return getNextRecord_PF (key, database->familyRoots);
 }
 
-RecordIndexEl *getNextSourceRecord (CString key, Database *database)
+GNode *getNextSourceRecord (CString key, Database *database)
 {
-  return genericGetNextRecord (key, database->sourceIndex);
+  return genericGetNextRecord (key, database->recordIndex, GRSource);
 }
 
-RecordIndexEl *getNextEventRecord (CString key, Database *database)
+GNode *getNextEventRecord (CString key, Database *database)
 {
-  return genericGetNextRecord (key, database->eventIndex);
+  return genericGetNextRecord (key, database->recordIndex, GREvent);
 }
 
-RecordIndexEl *getNextOtherRecord (CString key, Database *database)
+GNode *getNextOtherRecord (CString key, Database *database)
 {
-  return genericGetNextRecord (key, database->otherIndex);
+  return genericGetNextRecord (key, database->recordIndex, GROther);
 }
 
-RecordIndexEl *getNextRecord (RecordType type, CString key, Database *database)
+GNode *getNextRecord (RecordType type, CString key, Database *database)
 {
   switch (type)
     {
@@ -127,32 +119,35 @@ RecordIndexEl *getNextRecord (RecordType type, CString key, Database *database)
     }
 }
 
-static RecordIndexEl *genericGetNextRecord (CString key, RecordIndex *index)
+static GNode *genericGetNextRecord (CString key, RecordIndex *index, RecordType type)
 {
   int bucket_index = 0;
   int element_index = 0;
+  GNode *new;
   void *detail;
 
   if (! key)
-    return firstInHashTable (index, &bucket_index, &element_index);
+    new = (GNode *)firstInHashTable (index, &bucket_index, &element_index);
+  else
+    {
+      detail = detailSearchHashTable (index, key, &bucket_index, &element_index);
+      if (! detail)
+	return NULL;		/* caller gave us a bad key */
+      new = (GNode *)nextInHashTable (index, &bucket_index, &element_index);
+    }
+  while (new && (recordType(new) != type))
+    new = nextInHashTable (index, &bucket_index, &element_index);
 
-  detail = detailSearchHashTable (index, key, &bucket_index, &element_index);
-  if (! detail)
-    /* need to log this error somehow!  maybe additional argument? */
-    return NULL;		/* caller gave us a bad key */
-
-  /* null above is not found -- caller gave us a bad key, null here
-     means exhausted -- have gone through all the elements, no more to
-     be returned. */
-  return nextInHashTable (index, &bucket_index, &element_index);
+  /* if new is NULL, we've exhausted the index, if non-NULL, we found one.  */
+  return (new);
 }
 
 /* get first record for Persons and Families */
 
-static RecordIndexEl *
-getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList)
+static GNode *
+getFirstRecord_PF (RootList *rootList)
 {
-  if (! recordIndex || ! rootList)
+  if (! rootList)
     return NULL;
 
   if (lengthList(rootList) == 0)
@@ -161,48 +156,40 @@ getFirstRecord_PF (RecordIndex *recordIndex, RootList *rootList)
   sortList (rootList);
   GNode *new = getListElement (rootList, 0);
 
-  /* sadly, we need the record,, not the root node, so we are not done. */
-  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
-  if (! record)
-    {
-      /* XXX report error -- database corrupt -- record in RootList
-       but not in RecordIndex XXX*/
-      return NULL;
-    }
-  return (record);
+  return (new);
 }
 
-RecordIndexEl *getLastPersonRecord (Database *database)
+GNode *getLastPersonRecord (Database *database)
 {
-  return getLastRecord_PF (database->personIndex, database->personRoots);
+  return getLastRecord_PF (database->personRoots);
 }
 
-RecordIndexEl *getLastFamilyRecord (Database *database)
+GNode *getLastFamilyRecord (Database *database)
 {
-  return getLastRecord_PF (database->familyIndex, database->familyRoots);
+  return getLastRecord_PF (database->familyRoots);
 }
 
-RecordIndexEl *getLastSourceRecord (Database *database)
+GNode *getLastSourceRecord (Database *database)
 {
-  return genericLastRecord (database->sourceIndex);
+  return genericPreviousRecord (NULL, database->recordIndex, GRSource);
 }
 
-RecordIndexEl *getLastEventRecord (Database *database)
+GNode *getLastEventRecord (Database *database)
 {
-  return genericLastRecord (database->eventIndex);
+  return genericPreviousRecord (NULL, database->recordIndex, GREvent);
 }
 
-RecordIndexEl *getLastOtherRecord (Database *database)
+GNode *getLastOtherRecord (Database *database)
 {
-  return genericLastRecord (database->otherIndex);
+  return genericPreviousRecord (NULL, database->recordIndex, GROther);
 }
 
 /* get last record for Persons and Families */
 
-static RecordIndexEl *
-getLastRecord_PF (RecordIndex *recordIndex, RootList *rootList)
+static GNode *
+getLastRecord_PF (RootList *rootList)
 {
-  if (! recordIndex || ! rootList)
+  if (! rootList)
     return NULL;
 
   if (lengthList(rootList) == 0)
@@ -211,48 +198,33 @@ getLastRecord_PF (RecordIndex *recordIndex, RootList *rootList)
   sortList (rootList);
   GNode *new = getListElement (rootList, lengthList(rootList) - 1);
 
-  /* sadly, we need the record,, not the root node, so we are not done. */
-  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
-  if (! record)
-    {
-      /* XXX report error -- database corrupt -- record in RootList
-       but not in RecordIndex XXX*/
-      return NULL;
-    }
-  return (record);
+  return (new);
 }
 
-RecordIndexEl *getLastRecord (RecordType type, Database *database)
+GNode *getLastRecord (RecordType type, Database *database)
 {
   switch (type)
     {
     case GRPerson:
-      return getLastRecord_PF(database->personIndex, database->personRoots);
+      return getLastRecord_PF(database->personRoots);
     case GRFamily:
-      return getLastRecord_PF(database->familyIndex, database->familyRoots);
+      return getLastRecord_PF(database->familyRoots);
     case GRSource:
-      return genericLastRecord (database->sourceIndex);
+      return genericPreviousRecord (NULL, database->recordIndex, GRSource);
     case GREvent:
-      return genericLastRecord (database->eventIndex);
+      return genericPreviousRecord (NULL, database->recordIndex, GREvent);
     case GROther:
-      return genericLastRecord (database->otherIndex);
+      return genericPreviousRecord (NULL, database->recordIndex, GROther);
 
     default:			/* should never happen */
       return NULL;
     }
 }
 
-static RecordIndexEl *genericLastRecord (RecordIndex *index)
-{
-  int bucketIndex = 0;
-  int elementIndex = 0;
-  return (RecordIndexEl *)lastInHashTable (index, &bucketIndex, &elementIndex);
-}
-
 /* get next record for Persons and Families */
 
-static RecordIndexEl *
-getNextRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
+static GNode *
+getNextRecord_PF (CString key, RootList *rootList)
 {
   sortList (rootList);
 
@@ -267,31 +239,23 @@ getNextRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
     return NULL;		/* at end of list, exhausted, no more */
   GNode *new = getListElement (rootList, index + 1);
 
-  /* sadly, we need the record, not the root node, so we are not done. */
-  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
-  if (! record)
-    {
-      /* XXX report error -- database corrupt -- record in RootList
-	 but not in RecordIndex XXX */
-      return NULL;
-    }
-  return (record);
+  return (new);
 }
 
-RecordIndexEl *getPreviousPersonRecord (CString key, Database *database)
+GNode *getPreviousPersonRecord (CString key, Database *database)
 {
-  return getPreviousRecord_PF (key, database->personIndex, database->personRoots);
+  return getPreviousRecord_PF (key, database->personRoots);
 }
 
-RecordIndexEl *getPreviousFamilyRecord (CString key, Database *database)
+GNode *getPreviousFamilyRecord (CString key, Database *database)
 {
-  return getPreviousRecord_PF (key, database->familyIndex, database->familyRoots);
+  return getPreviousRecord_PF (key, database->familyRoots);
 }
 
 /* get previous record for Persons and Families */
 
-static RecordIndexEl *
-getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
+static GNode *
+getPreviousRecord_PF (CString key, RootList *rootList)
 {
   sortList (rootList);
 
@@ -306,52 +270,52 @@ getPreviousRecord_PF (CString key, RecordIndex *recordIndex, RootList *rootList)
     return NULL;		/* at end of list, exhausted, no more */
   GNode *new = getListElement (rootList, index - 1);
 
-  /* sadly, we need the record, not the root node, so we are not done. */
-  RecordIndexEl *record = searchHashTable (recordIndex, new->key);
-  if (! record)
-    {
-      /* XXX report error -- database corrupt -- record in RootList
-	 but not in RecordIndex XXX */
-      return NULL;
-    }
-  return (record);
+  return (new);
 }
 
-static RecordIndexEl *
-genericPreviousRecord (CString key, RecordIndex *recordIndex)
+static GNode *
+genericPreviousRecord (CString key, RecordIndex *index, RecordType type)
 {
-  int bucketIndex;
-  int elementIndex;
+  int bucket_index;
+  int element_index;
+  GNode *new;
+  void *detail;
 
   if (! key)
-    return lastInHashTable (recordIndex, &bucketIndex, &elementIndex);
+    new = (GNode *)lastInHashTable (index, &bucket_index, &element_index);
+  else
+    {
+      detail = detailSearchHashTable (index, key, &bucket_index, &element_index);
+      if (! detail)
+	return NULL;		/* caller gave us a bad key */
+      new = (GNode *)previousInHashTable (index, &bucket_index, &element_index);
+    }
+  while (new && (recordType(new) != type))
+    new = previousInHashTable (index, &bucket_index, &element_index);
 
-  RecordIndexEl *record = detailSearchHashTable (recordIndex, key, &bucketIndex, &elementIndex);
-  if (! record)
-    return NULL;		/* bad input */
-
-  return previousInHashTable (recordIndex, &bucketIndex, &elementIndex);
+  /* if new is NULL, we've exhausted the index, if non-NULL, we found one.  */
+  return (new);
 }
 
-RecordIndexEl *
+GNode *
 getPreviousSourceRecord (CString key, Database *database)
 {
-  return genericPreviousRecord (key, database->sourceIndex);
+  return genericPreviousRecord (key, database->recordIndex, GRSource);
 }
 
-RecordIndexEl *
+GNode *
 getPreviousEventRecord (CString key, Database *database)
 {
-  return genericPreviousRecord (key, database->eventIndex);
+  return genericPreviousRecord (key, database->recordIndex, GREvent);
 }
 
-RecordIndexEl *
+GNode *
 getPreviousOtherRecord (CString key, Database *database)
 {
-  return genericPreviousRecord (key, database->otherIndex);
+  return genericPreviousRecord (key, database->recordIndex, GROther);
 }
 
-RecordIndexEl *
+GNode *
 getPreviousRecord (RecordType type, CString key, Database *database)
 {
   switch (type)
@@ -373,15 +337,7 @@ getPreviousRecord (RecordType type, CString key, Database *database)
 
 bool isKeyInUse (CString key, Database *database)
 {
-  if (searchHashTable (database->personIndex, key))
-    return true;
-  if (searchHashTable (database->familyIndex, key))
-    return true;
-  if (searchHashTable (database->sourceIndex, key))
-    return true;
-  if (searchHashTable (database->eventIndex, key))
-    return true;
-  if (searchHashTable (database->otherIndex, key))
+  if (searchHashTable (database->recordIndex, key))
     return true;
 
   return false;
