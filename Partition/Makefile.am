@@ -4,7 +4,7 @@
 # what are we going to build?
 bin_PROGRAMS = partition
 
-partition_SOURCES = main.c connect.c
+partition_SOURCES = main.c connect.c partition.c
 
 partition_LDADD = \
 	../DeadEndsLib/Database/libdatabase.a \

@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 
 	// Parse the Gedcom file and build a GNodeList of its records.
 	IntegerTable* keymap = createIntegerTable(4097);
-	GNodeList* roots = getGNodeTreesFromFile(file, keymap, log);
+	RootList* roots = getRootListFromFile(file, keymap, log);
 	printf("ramdomize keys: %s: read gedcom file.\n", getMsecondsStr());
 	if (lengthList(log) > 0) goAway(log);
 	closeFile(file);
@@ -50,8 +50,7 @@ int main(int argc, char** argv) {
 	StringTable* keyTable = createStringTable(1025);
 	initRecordKeyGenerator();
 	FORLIST(roots, element)
-		GNodeListEl* el = (GNodeListEl*) element;
-		GNode* root = el->node;
+		GNode* root = (GNode*) element;
 		String key = root->key;
 		if (!key) continue;
 		RecordType r = recordType(root);
@@ -63,8 +62,7 @@ int main(int argc, char** argv) {
 	// Change the keys throughout the list.
 	FORLIST(roots, element)
 		// Change the key on the root.
-		GNodeListEl* el = (GNodeListEl*) element;
-		GNode* root = el->node;
+		GNode* root = (GNode*) element;
 		String key = root->key;
 		if (key)  {
 			String new = searchStringTable(keyTable, key);
@@ -84,8 +82,8 @@ int main(int argc, char** argv) {
 
 	// Write the modified GNodeList to standard out.
 	FORLIST(roots, element)
-		GNodeListEl* el = (GNodeListEl*) element;
-		writeGNodeRecord(stdout, el->node, false);
+		GNode* node = (GNode*) element;
+		writeGNodeRecord(stdout, node, false);
 	ENDLIST
 	printf("ramdomize keys: %s: wrote gedcom file.\n", getMsecondsStr());
 	return 0;

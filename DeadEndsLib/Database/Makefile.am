@@ -14,8 +14,7 @@ libdatabase_a_SOURCES = \
 	recordindex.c \
 	import.c \
 	removeops.c \
-	refnindex.c \
-	rootlist.c
+	refnindex.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \

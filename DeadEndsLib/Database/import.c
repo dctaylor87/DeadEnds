@@ -3,7 +3,7 @@
 // import.c has functions that import Gedcom files into internal structures.
 //
 // Created by Thomas Wetmore on 13 November 2022.
-// Last changed on 6 December 2024.
+// Last changed on 11 December 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -33,21 +33,22 @@ List* getDatabasesFromFiles(List* filePaths, int vcodes, ErrorLog* errorLog) {
 // getDatabaseFromFile returns the Database of a single Gedcom file. Returns null if no Database
 // is created, and errorLog holds the Errors found.
 Database* getDatabaseFromFile(CString path, int vcodes, ErrorLog* elog) {
+	if (timing) printf("%s: getDatabaseFromFile: started\n", getMsecondsStr());
 	RootList* personRoots = createRootList();
 	RootList* familyRoots = createRootList();
 	IntegerTable* keymap = createIntegerTable(4097); // Map keys to lines; for error messages.
 	RecordIndex* recordIndex = getRecordIndexFromFile(path, personRoots, familyRoots, keymap, elog);
+	if (timing) printf("%s: getDatabaseFromFile: record index created\n", getMsecondsStr());
 	if (lengthList(elog)) return null; // TODO: Freeup structures.
 	Database* database = createDatabase(path);
 	database->recordIndex = recordIndex;
 	database->personRoots = personRoots;
 	database->familyRoots = familyRoots;
-	// Create the name index.
-	database->nameIndex = getNameIndexFromPersons(personRoots);
-	if (timing) printf("%s: indexed names.\n", getMsecondsStr());
-	// Create the REFN index and validate it.
-	if (timing) printf("%s: indexed REFNs.\n", getMsecondsStr());
-	if (timing) printf("%s: end of gedcomFileToDatabase.\n", getMsecondsStr());
+	// Create the name and REFN indexes.
+	database->nameIndex = getNameIndex(personRoots);
+	database->refnIndex = getReferenceIndex(recordIndex, path, keymap, elog);
+	if (timing) printf("%s: getDatabaseFromFile: indexed names and REFNs.\n", getMsecondsStr());
+	if (timing) printf("%s: getDatabaseFromFile: done.\n", getMsecondsStr());
 	if (lengthList(elog)) {
 		deleteDatabase(database);
 		return null;
@@ -58,11 +59,11 @@ Database* getDatabaseFromFile(CString path, int vcodes, ErrorLog* elog) {
 // checkKeysAndReferences checks record keys and their references. Creates a table of all keys
 // and checks for duplicates. Checks that all keys found as values refer to records.
 #define getline(key) (searchIntegerTable(keymap, key))
-void checkKeysAndReferences(GNodeList* records, String name, IntegerTable* keymap, ErrorLog* log) {
+//void checkKeysAndReferences(GNodeList* records, String name, IntegerTable* keymap, ErrorLog* log) {
+void checkKeysAndReferences(RootList* records, String name, IntegerTable* keymap, ErrorLog* log) {
 	StringSet* keySet = createStringSet();
 	FORLIST(records, element)
-		GNodeListEl* el = (GNodeListEl*) element;
-		GNode* root = el->node;
+		GNode* root = (GNode*) element;
 		String key = root->key;
 		if (!key) {
 			RecordType rtype = recordType(root);
@@ -83,15 +84,14 @@ void checkKeysAndReferences(GNodeList* records, String name, IntegerTable* keyma
 	int nodesCounted = 0;
 	FORLIST(records, element)
 		recordsVisited++;
-		GNodeListEl* el = (GNodeListEl*) element;
-		GNode* root = el->node;
+		GNode* root = (GNode*) element;
 		nodesCounted += countNodes(root);
 		FORTRAVERSE(root, node)
 			nodesTraversed++;
 			if (isKey(node->value)) numReferences++;
 			if (isKey(node->value) && !isInSet(keySet, node->value)) {
 				Error* error = createError(gedcomError, name,
-								getline(el->node->key) + countNodesBefore(node), "invalid key value");
+								getline(node->key) + countNodesBefore(node), "invalid key value");
 					addErrorToLog(log, error);
 				}
 		ENDTRAVERSE
@@ -111,21 +111,22 @@ void checkKeysAndReferences(GNodeList* records, String name, IntegerTable* keyma
 // familyRoots are not null they will be filled.
 RecordIndex* getRecordIndexFromFile(String path, RootList* personRoots, RootList* familyRoots,
 									IntegerTable* keymap, ErrorLog* elog) {
-	if (timing) printf("%s: getRecordIndexFromFile: start.\n", getMsecondsStr());
+	if (timing) printf("%s: getRecordIndexFromFile: started.\n", getMsecondsStr());
 	File* file = openFile(path, "r"); // Open the file.
 	if (!file) {
 		addErrorToLog(elog, createError(systemError, path, 0, "Could not open file."));
 		return null;
 	}
 	if (!keymap) keymap = createIntegerTable(4097); // MNOTE: HOW TO GET FREED!
-	GNodeList* roots = getGNodeTreesFromFile(file, keymap, elog); // Get the records from file.
+	//GNodeList* roots = getGNodeTreesFromFile(file, keymap, elog); // Get the records from file.
+	RootList* roots = getRootListFromFile(file, keymap, elog); // Get the records from file.
 	closeFile(file);
 	if (roots == null) {
 		if (importDebugging) printf("%s: errors processing last file.\n", getMsecondsStr());
 		//deleteIntegerTable(keymap, stdfree); // TODO: function not written yet.
 		return null;
 	}
-	if (timing) printf("%s: got list of records.\n", getMsecondsStr());
+	if (timing) printf("%s: getRecordIndexFromFile: got list of records.\n", getMsecondsStr());
 	if (importDebugging) printf("rootList contains %d records.\n", lengthList(roots));
 	if (lengthList(elog)) {
 		deleteGNodeList(roots, null); // TODO: Clean up. This situation can't happen.
@@ -141,21 +142,18 @@ RecordIndex* getRecordIndexFromFile(String path, RootList* personRoots, RootList
 	// Create the RecordIndex and optional RootLists.
 	RecordIndex* recordIndex = createRecordIndex();
 	FORLIST(roots, element)
-		GNode* root = ((GNodeListEl*) element)->node;
+		GNode* root = (GNode*) element;
 		if (root->key) addToRecordIndex(recordIndex, root);
 		RecordType rtype = recordType(root);
 		if (personRoots && rtype == GRPerson) insertInRootList(personRoots, root);
 		if (familyRoots && rtype == GRFamily) insertInRootList(familyRoots, root);
 	ENDLIST
 	deleteGNodeList(roots, false);
-
 	if (timing) printf("%s: getRecordIndexFromFile: record index created.\n",
 					   getMsecondsStr());
 	// Validate persons and families.
 	validatePersons(recordIndex, file->name, keymap, elog);
 	validateFamilies(recordIndex, file->name, keymap, elog);
-	//alidateReferences(recordIndex, file->name, keymap, elog);
-	RefnIndex* refnIndex = getReferenceIndex(recordIndex, file->name, keymap, elog);
 	if (timing) printf("%s: getRecordIndexFromFile: persons & families validated: returning.\n",
 					   getMsecondsStr());
 	return recordIndex;

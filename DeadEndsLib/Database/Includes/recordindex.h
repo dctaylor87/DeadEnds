@@ -3,7 +3,7 @@
 // recordindex.h defines RecordIndex as a HashTable.
 //
 // Created by Thomas Wetmore on 29 November 2022.
-// Last changed on 4 December 2024.
+// Last changed on 10 December 2024.
 
 #ifndef recordindex_h
 #define recordindex_h
@@ -30,4 +30,17 @@ extern void newShowRecordIndex(RecordIndex* index);
 extern void addrefRecord (RecordIndexEl *element);
 extern void releaseRecord (RecordIndexEl *element);
 
+// FORRECORDINDEX iterates a RecordIndex returning only GNode*s of a specific type.
+#define FORRECORDINDEX(table, gnode, type) {\
+		int __i = 0, __j = 0;\
+		HashTable *__table = table;\
+		GNode* gnode = null;\
+		GNode* __gnode = (GNode*) firstInHashTable(__table, &__i, &__j);\
+		for(; __gnode; __gnode = (GNode*) nextInHashTable(__table, &__i, &__j)) {\
+		if (recordType(__gnode) != type) continue;\
+			gnode = __gnode;
+#define ENDRECORDINDEX }}
+
 #endif // recordindex_h
+
+

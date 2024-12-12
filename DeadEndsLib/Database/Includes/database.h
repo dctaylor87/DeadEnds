@@ -3,7 +3,7 @@
 // database.h is the header file for the Database type.
 //
 // Created by Thomas Wetmore on 10 November 2022.
-// Last changed on 4 December 2024.
+// Last changed on 7 December 2024.
 
 #ifndef database_h
 #define database_h
@@ -17,24 +17,26 @@
 #include "errors.h"
 #include "rootlist.h"
 
-typedef HashTable RecordIndex;
+typedef HashTable RecordIndex; // Forward references.
 typedef HashTable NameIndex;
 typedef List RootList;
 
+// DBaseAction is a "Database action" that customizes Database processing.
+typedef void (*DBaseAction)(Database*, ErrorLog*);
+
 // Database is the structure that hold DeadEnds databases.
 typedef struct Database {
-	String filePath;  // Path to the Gedcom file this database was built from.
-	String lastSegment;  // Last segment of the path for error messages.
+	CString filePath;  // Path to Gedcom file this Database was built from.
+	CString name; // Use last segment of the path for the name of the Database.
 	GNode* header; // Root of header record.
 	RecordIndex* recordIndex; // Index of all keyed records.
-	NameIndex *nameIndex;  // Index of the names of the persons in this database.
+	NameIndex *nameIndex; // Index of the names of the persons in this database.
 	RefnIndex *refnIndex; // Index of the REFN values in this database.
-	RootList *personRoots;  // List of all person roots in the database.
-	RootList *familyRoots;  // List of all family roots in the database.
+	RootList *personRoots; // List of all person roots in the database.
+	RootList *familyRoots; // List of all family roots in the database.
 #if 0
 	CString backupPath;	// path of the most recent backup, if any
 #endif
-	CString name; // name of the database.
 	uint64_t max_indi;
 	uint64_t max_fam;
 	uint64_t max_even;
@@ -87,7 +89,6 @@ extern GNode *keyToEventRecord(CString key, Database*);
 extern GNode *keyToOtherRecord(CString Key, Database*);
 
 bool storeRecord(Database*, GNode*); // Add a record to the database.
-NameIndex* getNameIndexFromPersons(RootList*);
 void summarizeDatabase(Database*);
 
 extern int getCount(void);

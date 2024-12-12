@@ -17,6 +17,7 @@ libgedcom_a_SOURCES = \
 	nodeutls.c \
 	place.c \
 	readnode.c \
+	rootlist.c \
 	splitjoin.c \
 	temp-nodes.c \
 	writenode.c

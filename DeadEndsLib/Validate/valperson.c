@@ -3,7 +3,7 @@
 // valperson.c contains functions that validate person records in a Database.
 //
 // Created by Thomas Wetmore on 17 December 2023.
-// Last changed on 30 November 2024.
+// Last changed on 8 December 2024.
 
 #include <stdint.h>
 
@@ -17,6 +17,7 @@
 #include "list.h"
 #include "splitjoin.h"
 #include "integertable.h"
+#include "utils.h"
 
 #define LC(line, node) (line + countNodesBefore(node))
 
@@ -35,7 +36,7 @@ void validatePersons(RecordIndex* index, String name, IntegerTable* keymap, Erro
 			numPersonsValidated++;
 		}
 	ENDHASHTABLE
-	if (importDebugging) printf("Number of persons validated is %d.\n", numPersonsValidated);
+	if (importDebugging) printf("%s: validatePersons: %d persons validated.\n", getMsecondsStr(), numPersonsValidated);
 }
 
 // validatePerson validates a person record. Persons require at least one NAME and one SEX line

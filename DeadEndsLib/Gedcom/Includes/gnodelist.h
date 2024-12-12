@@ -3,7 +3,7 @@
 // gnodelist.h
 //
 // Created by Thomas Wetmore on 27 May 2024.
-// Last changed on 6 December 2024.
+// Last changed on 11 December 2024.
 
 #ifndef gnodelist_h
 #define gnodelist_h
@@ -12,6 +12,7 @@
 #include "gnode.h"
 #include "file.h"
 #include "integertable.h"
+#include "errors.h"
 
 // GNodeList is a List of GNodeListEls.
 typedef List GNodeList;
@@ -26,10 +27,8 @@ typedef struct GNodeListEl {
 GNodeListEl* createGNodeListEl(GNode*, void*);
 GNodeList* createGNodeList(void);
 void deleteGNodeList(GNodeList*, void(*delete)(void*));
-GNodeList* getGNodeTreesFromFile(File*, IntegerTable*, ErrorLog*);
 GNodeList* getGNodeListFromFile(File*, IntegerTable*, ErrorLog*);
 GNodeList* getGNodeListFromString(String, ErrorLog*);
-GNodeList* getGNodeTreesFromNodeList(GNodeList*, String file, ErrorLog*);
 GNodeList* getGNodeTreesFromString(String, String, ErrorLog* errorLog);
 void writeGNodeTreesToFile(GNodeList*, File*);
 void appendToGNodeList(GNodeList*, GNode*, void*);
