@@ -134,7 +134,9 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  currentDatabase = gedcomFileToDatabase (cmd_line_db, &error_log);
+  //currentDatabase = gedcomFileToDatabase (cmd_line_db, &error_log);
+  currentDatabase = getDatabaseFromFile (cmd_line_db, 0, &error_log);
+
   if (have_python_scripts)
     {
       int status = llpy_execute_scripts (0);
