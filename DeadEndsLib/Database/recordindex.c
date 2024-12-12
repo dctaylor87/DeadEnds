@@ -24,7 +24,7 @@ static int compare(CString left, CString right) {
 }
 
 // getKey returns the key of a RecordIndex element.
-static String getKey(void* element) {
+static CString getKey(void* element) {
 	return ((GNode*) element)->key;
 }
 
@@ -62,10 +62,10 @@ void showRecordIndex(RecordIndex* index) {
 void
 addrefRecord (RecordIndexEl *element)
 {
-  if (! element)
-    return;
+  //  if (! element)
+  //    return;
 
-  element->refcount++;
+  //  element->refcount++;
 }
 
 // releaseRecord -- decrement reference count of a RecordIndexEl.
@@ -75,9 +75,9 @@ addrefRecord (RecordIndexEl *element)
 void
 releaseRecord (RecordIndexEl *element)
 {
-  if (! element)
-    return;
+  //  if (! element)
+  //    return;
 
-  ASSERT(element->refcount);
-  element->refcount--;
+  //  ASSERT(element->refcount);
+  //  element->refcount--;
 }

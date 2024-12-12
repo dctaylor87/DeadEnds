@@ -189,7 +189,7 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 				GNode *child;
 				CString childkey, childname;
 				element_indiseq(childseq, i, &childkey, &childname);
-				child = key_to_indi(childkey);
+				child = keyToPerson(childkey, currentDatabase->recordIndex);
 				tn1 = add_children(child, gen+1, maxgen, count);
 				/* link new displaynode into tree we're building */
 				if (tn0)

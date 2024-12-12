@@ -88,7 +88,7 @@ int num_linkage_buckets = NUMBER_LINKAGE_BUCKETS;
  * external/imported variables
  *********************************************/
 
-extern bool traditional;
+//extern bool traditional;
 
 static void merge_fam_links(GNode *, GNode *, GNode *, GNode *, int);
 static GNode *remove_dupes(GNode *, GNode *);
@@ -269,7 +269,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = fam12;
 	while (this) {
-		fam = key_to_fam(nval(this));
+		fam = keyToFamily(nval(this), currentDatabase->recordIndex);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = chil;
@@ -307,7 +307,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = famc1;
 	while (this) {
-		fam = key_to_fam(nval(this));
+		fam = keyToFamily(nval(this), currentDatabase->recordIndex);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = chil;
@@ -339,7 +339,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = fam12;
 	while (this) {
-		fam = key_to_fam(nval(this));
+		fam = keyToFamily(nval(this), currentDatabase->recordIndex);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		if (sx2 == sexMale)
@@ -375,7 +375,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 	this = fams1;
 	while (this) {
-		fam = key_to_fam(nval(this));
+		fam = keyToFamily(nval(this), currentDatabase->recordIndex);
 		splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
 		prev = NULL;
 		that = (sx2 == sexMale) ? husb : wife;
@@ -613,7 +613,7 @@ merge_fam_links (GNode *fam1, GNode *fam2, GNode *list1, GNode *list2, int code)
 		curs2 = list2;
 		while (curs2 && nestr(nval(curs1), nval(curs2)))
 			curs2 = nsibling(curs2);
-		indi = key_to_indi(nval(curs1));
+		indi = keyToPerson(nval(curs1), currentDatabase->recordIndex);
 		splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 		prev = NULL;
 		if (code == CHUSB || code == CWIFE)
@@ -689,14 +689,14 @@ sort_children (GNode *chil1,
 	prev = chil3 = NULL;
 	while (copy1 && copy2) {
 		if (int1 == 1) {
-			kid1 = key_to_indi(nval(copy1));
+			kid1 = keyToPerson(nval(copy1), currentDatabase->recordIndex);
 			year1 = eventToDate(BIRT(kid1), true);
 			if (!year1)
 				year1 = eventToDate(BAPT(kid1), true);
 			int1 = year1 ? atoi(year1) : 0;
 		}
 		if (int2 == 1) {
-			kid2 = key_to_indi(nval(copy2));
+			kid2 = keyToPerson(nval(copy2), currentDatabase->recordIndex);
 			year2 = eventToDate(BIRT(kid2), true);
 			if (!year2)
 				year2 = eventToDate(BAPT(kid2), true);
@@ -817,7 +817,7 @@ check_indi_lineage_links (GNode *indi)
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        famkey = element->key;
 	        count = element->value;
-		GNode *fam = key_to_fam(famkey);
+		GNode *fam = keyToFamily(famkey, currentDatabase->recordIndex);
 		/*
 		count how many times our main person (ikey)
 		occurs in this family (fam) as a spouse (HUSB or WIFE)
@@ -864,7 +864,7 @@ check_indi_lineage_links (GNode *indi)
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        famkey = element->key;
 	        count = element->value;
-		GNode *fam = key_to_fam(famkey);
+		GNode *fam = keyToFamily(famkey, currentDatabase->recordIndex);
 		/*
 		count how many times our main person (ikey)
 		occurs in this family (fam) as a child (CHIL)
@@ -945,7 +945,7 @@ check_fam_lineage_links (GNode *fam)
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        indikey = element->key;
 	        count = element->value;
-		GNode *indi = key_to_indi(indikey);
+		GNode *indi = keyToPerson(indikey, currentDatabase->recordIndex);
 		/*
 		count how many times our main family (fkey)
 		occurs in this person (indi) as a spousal family (FAMS)
@@ -992,7 +992,7 @@ check_fam_lineage_links (GNode *fam)
 	     element = (IntegerElement *)nextInHashTable (memtab, &bucket_index, &element_index)) {
 	        indikey = element->key;
 	        count = element->value;
-		GNode *indi = key_to_indi(indikey);
+		GNode *indi = keyToPerson(indikey, currentDatabase->recordIndex);
 		/*
 		count how many times our main family (fkey)
 		occurs in this person (indi) as a parental family (FAMC)

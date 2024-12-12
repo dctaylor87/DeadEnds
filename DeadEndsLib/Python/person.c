@@ -539,7 +539,7 @@ static PyObject *llpy_nspouses (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   GNode *node = nztop (indi->llr_record);
   int nactual = 0;
 
-  FORSPOUSES(node, spouse, fam, nspouses, database)
+  FORSPOUSES(node, spouse, fam, nspouses, database->recordIndex)
     ++nactual;
   ENDSPOUSES
 
@@ -875,7 +875,7 @@ static int add_spouses (PyObject *item, PyObject *output_set)
   RecordIndexEl *spouse_r;
   GNode *indi = nztop (record);
 
-  FORSPOUSES(indi, spouse, fam, num, database)
+  FORSPOUSES(indi, spouse, fam, num, database->recordIndex)
     spouse_r = _llpy_node_to_record (spouse, database);
 
     LLINES_PY_RECORD *new_indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);

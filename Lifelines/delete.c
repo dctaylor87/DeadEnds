@@ -124,12 +124,12 @@ chooseAndRemoveFamily (void)
 		else {
 			/* the last remove command will delete the family */
 			FORSEQUENCE(spseq, el, num)
-				indi = key_to_indi(element_skey(el));
+				indi = keyToPerson(element_skey(el), currentDatabase->recordIndex);
 				remove_spouse(indi, fam, currentDatabase);
 			ENDSEQUENCE
 
 			FORSEQUENCE(chseq, el, num)
-				indi = key_to_indi(element_skey(el));
+				indi = keyToPerson(element_skey(el), currentDatabase->recordIndex);
 				remove_child(indi, fam, currentDatabase);
 			ENDSEQUENCE
 		}

@@ -25,7 +25,6 @@ List* getDatabasesFromFiles(List* filePaths, int vcodes, ErrorLog* errorLog) {
 	Database* database = null;
 	FORLIST(filePaths, path)
 		if ((database = getDatabaseFromFile(path, vcodes, errorLog)))
-		if ((database = gedcomFileToDatabase(path, errorLog)))
 			appendToList(databases, database);
 	ENDLIST
 	return databases;
@@ -34,8 +33,8 @@ List* getDatabasesFromFiles(List* filePaths, int vcodes, ErrorLog* errorLog) {
 // getDatabaseFromFile returns the Database of a single Gedcom file. Returns null if no Database
 // is created, and errorLog holds the Errors found.
 Database* getDatabaseFromFile(CString path, int vcodes, ErrorLog* elog) {
- 	RootList* personRoots = createRootList();
- 	RootList* familyRoots = createRootList();
+	RootList* personRoots = createRootList();
+	RootList* familyRoots = createRootList();
 	IntegerTable* keymap = createIntegerTable(4097); // Map keys to lines; for error messages.
 	RecordIndex* recordIndex = getRecordIndexFromFile(path, personRoots, familyRoots, keymap, elog);
 	if (lengthList(elog)) return null; // TODO: Freeup structures.
