@@ -57,16 +57,16 @@ static void display_status (String text);
 
 static struct uiio _uiio_curses =
   {
-    "CURSES",
-    0,
-    0,
-    0,
-    curses_ui_main_loop,
-    uiio_curses_shutdown,
-    curses_input,
-    curses_output,
-    curses_error,
-    curses_outputv
+    "CURSES",			/* name */
+    0,				/* input data */
+    0,				/* output data */
+    0,				/* error data */
+    curses_ui_main_loop,	/* main loop */
+    uiio_curses_shutdown,	/* shutdown */
+    curses_input,		/* input func */
+    curses_output,		/* output func */
+    curses_error,		/* error func */
+    curses_outputv		/* outputv func */
   };
 
 UIIO *uiio_curses = &_uiio_curses;

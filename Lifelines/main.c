@@ -56,7 +56,7 @@
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
 #include "ask.h"
-//#include "feedback.h"
+#include "feedback.h"
 #include "uiio.h"
 #include "llinesi.h"
 #include "errors.h"
@@ -77,6 +77,7 @@
 #include "errlog.h"
 #include "version.h"
 #include "init.h"
+#include "parse-args.h"
 
 /* for parser debugging */
 extern int yydebug;
@@ -91,10 +92,12 @@ extern int yydebug;
 #include "llpy-externs.h"
 #endif
 
-#if !defined(NUMBER_EXARGS_BUCKETS)
-#define NUMBER_EXARGS_BUCKETS	17
-#endif
-int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
+//#if !defined(NUMBER_EXARGS_BUCKETS)
+//#define NUMBER_EXARGS_BUCKETS	17
+//#endif
+//int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
+
+static CString optString = "adkntu:x:o:zC:I:p:Pvh?";
 
 /*********************************************
  * required global variables
@@ -125,7 +128,6 @@ Database *currentDatabase = 0;
 /* alphabetical */
 static void load_usage(void);
 static void main_db_notify(String db, bool opening);
-static void parse_arg(const char * optarg, char ** optname, char **optval);
 static void print_usage(void);
 
 /*********************************************
@@ -142,15 +144,15 @@ main (int argc, char **argv)
 	char * msg;
 	int c;
 	bool ok=false;
-	bool python_interactive = false;
+	//	bool python_interactive = false;
 	String dbrequested=NULL; /* database (path) requested */
-	List *exprogs=NULL;
-	TABLE exargs=NULL;
-	String progout=NULL;
+	//	List *exprogs=NULL;
+	//	TABLE exargs=NULL;
+	//	String progout=NULL;
 	String configfile=0;
 	String crashlog=NULL;
 	int i=0;
-	bool have_python_scripts = false;
+	//	bool have_python_scripts = false;
 
 	current_uiio = uiio_curses;
 
@@ -195,79 +197,7 @@ main (int argc, char **argv)
 	}
 
 	/* Parse Command-Line Arguments */
-	opterr = 0;	/* turn off getopt's error message */
-	while ((c = getopt(argc, argv, "adkntu:x:o:zC:I:p:Pvh?")) != -1) {
-		switch (c) {
-		case 'a':	/* debug allocation */
-			logAllocations(true);
-			break;
-		case 'd':	/* debug = no signal catchers */
-			debugmode = true;
-			break;
-		case 'k':	/* don't show key values */
-			keyflag = false;
-			break;
-		case 'n':	/* use non-traditional family rules */
-			traditional = false;
-			break;
-#if !defined(DEADENDS)		/* XXX not currently supported by DeadEnds XXX */
-		case 't': /* show lots of trace statements for debugging */
-			prog_trace = true;
-			break;
-#endif
-		case 'u': /* specify screen dimensions */
-			sscanf(optarg, SCN_INT "," SCN_INT, &winx, &winy);
-			break;
-		case 'x': /* execute program */
-			if (!exprogs) {
-				exprogs = createList (NULL, NULL, free, false);
-			}
-			push_list(exprogs, strdup(optarg ? optarg : ""));
-			break;
-		case 'I': /* program arguments */
-			{
-				String optname=0, optval=0;
-				parse_arg(optarg, &optname, &optval);
-				if (optname && optval) {
-					if (!exargs) {
-						exargs = createStringTable(num_exargs_buckets);
-					}
-					insert_table_str(exargs, optname, optval);
-				}
-				strfree(&optname);
-				strfree(&optval);
-			}
-			break;
-		case 'o': /* output directory */
-			progout = optarg;
-			break;
-		case 'z': /* nongraphical box */
-			graphical = false;
-			break;
-		case 'C': /* specify config file */
-			configfile = optarg;
-			break;
-		case 'P':	/* python interactive */
-			python_interactive = true;
-			break;
-		case 'p':
-#if HAVE_PYTHON
-			llpy_register_script (optarg);
-#endif
-			have_python_scripts = true;
-			break;
-		case 'v': /* show version */
-			showversion = true;
-			goto usage;
-			break;
-		case 'h': /* show usage */
-		case '?': /* show usage */
-			showusage = true;
-			showversion = true;
-			goto usage;
-			break;
-		}
-	}
+	parseArguments (argc, argv, optString);
 
 prompt_for_db:
 
@@ -320,27 +250,10 @@ prompt_for_db:
 
 	if (exargs) {
 		set_cmd_options(exargs);
-		release_table(exargs);
+		releaseHashTable(exargs);
 		exargs = 0;
 	}
 	/* Open database, prompting user if necessary */
-#if 0
-	if (1) {
-		String errmsg=0;
-		if (!alldone && c>0) {
-			dbrequested = strsave(argv[optind]);
-		} else {
-			strupdate(&dbrequested, "");
-		}
-		if (!select_database(&dbrequested, &errmsg)) {
-			if (errmsg) {
-				llwprintf("%s", errmsg);
-			}
-			alldone = 0;
-			goto finish;
-		}
-	}
-#else
 	{
 	  String errmsg=0;
 	  if (!alldone && c>0)
@@ -362,7 +275,6 @@ prompt_for_db:
 	      goto finish;
 	    }
 	}
-#endif
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
 		llwprintf("%s", _(qSbaddb));
@@ -443,34 +355,6 @@ usage:
 
 	/* Exit */
 	return !ok;
-}
-/*==================================
- * parse_arg -- Break argument into name & value
- *  eg, parse_arg("main_indi=I3", &a, &b)
- *   yields a="main_indi" and b="I3"
- *  (a & b are newly allocated from heap)
- *================================*/
-static void
-parse_arg (const char * optarg, char ** optname, char **optval)
-{
-	const char * ptr;
-	*optname = *optval = 0;
-	for (ptr = optarg; *ptr; ++ptr) {
-		if (*ptr == '=') {
-			char * namebuff = 0;
-			char * valbuff = 0;
-			int namelen = ptr - optarg;
-			if (!namelen)
-				return;
-			namebuff = (char *)stdalloc(namelen+1);
-			destrncpy(namebuff, optarg, namelen+1, 0);
-			*optname = namebuff;
-			valbuff = strdup(ptr+1);
-			*optval = valbuff;
-			return;
-
-		}
-	}
 }
 
 /* Finnish language support modifies the soundex codes for names, so

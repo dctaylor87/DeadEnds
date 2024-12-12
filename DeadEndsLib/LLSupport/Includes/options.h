@@ -4,12 +4,8 @@
 #if !defined(_OPTIONS_H_)
 #define _OPTIONS_H_
 
-extern bool keyflag;		/* whether to display key values */
-
 extern int winx;		/* screen size, columns */
 extern int winy;		/* screen size, rows */
-
-extern bool readonly;		/* database is read-only -- no modifications allowed */
 
 extern bool debugmode;		/* no signal handling, so we can get coredump */
 

@@ -60,7 +60,6 @@
 #include "lloptions.h"
 #include "zstr.h"
 #include "de-strings.h"
-#include "feedback.h"
 #include "import.h"
 #include "codesets.h"
 

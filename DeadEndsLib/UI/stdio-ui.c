@@ -34,13 +34,16 @@ stdio_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args);
 
 static struct uiio _uiio_stdio =
   {
-    0,
-    0,
-    0,
-    stdio_input,
-    stdio_output,
-    stdio_output,
-    stdio_outputv
+    "STDIO",			/* name */
+    0,				/* input data */
+    0,				/* output data */
+    0,				/* error data */
+    0,				/* main loop */
+    0,				/* shutdown */
+    stdio_input,		/* input func */
+    stdio_output,		/* output func */
+    stdio_output,		/* error func */
+    stdio_outputv		/* outputv func */
   };
 
 UIIO *uiio_stdio = &_uiio_stdio;

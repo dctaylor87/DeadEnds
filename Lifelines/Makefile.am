@@ -12,6 +12,7 @@ common_SOURCES = \
 	init.c \
 	lines_usage.c \
 	miscutls.c \
+	parse-args.c \
 	selectdb.c \
 	signals.c \
 	version.c

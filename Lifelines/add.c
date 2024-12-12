@@ -87,7 +87,7 @@
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
 
-extern bool traditional;
+//extern bool traditional;
 
 /*********************************************
  * local function prototypes
@@ -231,14 +231,14 @@ add_indi_no_cache (GNode *indi)
 	GNode *node, *name, *refn, *sex, *body, *famc, *fams;
 #if 0
 	String str, key;
-
+#else
+	CString key;
+#endif
 	// Save INDI key value since rmvat static array entries may get reused
 	// before we write the INDI out (for example, >32 ASSO tags). This
 	// prevents us from writing the record out using the wrong key.
 	key = strsave(nxref(indi));
-#else
-	CString key;
-#endif
+
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
 	for (node = name; node; node = nsibling(node))
 		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);

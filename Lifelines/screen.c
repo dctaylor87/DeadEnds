@@ -84,6 +84,7 @@
 #include "ui.h"
 #include "lloptions.h"
 #include "version.h"
+#include "feedback.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -222,7 +223,7 @@ static int AUX_LINES_DEF = 15;       /* number of lines in aux window */
 static int TANDEM_LINES=0;
 static int AUX_LINES=0;
 
-int winx=0, winy=0; /* user specified window size */
+//int winx=0, winy=0; /* user specified window size */
 
 static List *msg_list = 0;
 static bool msg_flag = false; /* need to show msg list */
@@ -1744,7 +1745,7 @@ invoke_utils_menu (void)
 #if !defined(DEADENDS)
 	case 'i': who_is_he_she(); break;
 #endif
-	case 'd': show_database_stats(); break;
+	case 'd': show_database_stats(database); break;
 #if !defined(DEADENDS)		/* DeadEnds has no cache */
 	case 'm': display_cache_stats(); break;
 	case 'e': edit_place_table(); break;
@@ -1846,7 +1847,7 @@ edit_user_options (void)
 	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate, (void *)param))
 		set_db_options(uopts);
 	strfree(&param);
-	release_table(uopts);
+	releaseHashTable(uopts);
 }
 #endif
 
