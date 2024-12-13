@@ -46,10 +46,10 @@
  *********************************************/
 
 /* alphabetical */
-static void add_gedcom_props(TABLE fileprops);
-static void parse_gedcoms(TABLE * fileprops);
+static void add_gedcom_props(HashTable *fileprops);
+static void parse_gedcoms(HashTable ** fileprops);
 static int select_gedcoms(const struct dirent *entry);
-static void set_gedcom_d0(TABLE * fileprops);
+static void set_gedcom_d0(HashTable ** fileprops);
 
 /*=========================
  * The supported meta-tags.
@@ -85,7 +85,7 @@ select_gedcoms (const struct dirent *entry)
  * Created: 2002/10/19, Perry Rapp
  *========================================================*/
 static void
-add_gedcom_props (TABLE fileprops)
+add_gedcom_props (HashTable *fileprops)
 {
 	String tagsfound[ARRAYSIZE(f_tags)];
 	FILE *fp;
@@ -95,8 +95,8 @@ add_gedcom_props (TABLE fileprops)
 	struct stat sbuf;
 
 	/* first get full path & open file */
-	String fname = valueof_str(fileprops, "filename");
-	String dir = valueof_str(fileprops, "dir");
+	String fname = searchStringTable(fileprops, "filename");
+	String dir = searchStringTable(fileprops, "dir");
 	String filepath = pathConcatAllocate(dir, fname);
 
 	if (!stat(filepath, &sbuf)) {
@@ -162,7 +162,7 @@ end_add_program_props:
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 static void
-parse_gedcoms (TABLE * fileprops)
+parse_gedcoms (HashTable ** fileprops)
 {
 	int i;
 	for (i=0; fileprops[i]; ++i) {
@@ -175,16 +175,16 @@ parse_gedcoms (TABLE * fileprops)
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 static void
-set_gedcom_d0 (TABLE * fileprops)
+set_gedcom_d0 (HashTable ** fileprops)
 {
 	int i;
 	for (i=0; fileprops[i]; ++i) {
-		TABLE props = fileprops[i];
+		HashTable *props = fileprops[i];
 		char buf[MAXLINELEN];
-		String filename = valueof_str(props, "filename");
-		String sour = valueof_str(props, (String)f_tags[P_SOUR]);
-		String date = valueof_str(props, (String)f_tags[P_DATE]);
-		String bytes = valueof_str(props, "bytes");
+		String filename = searchStringTable(props, "filename");
+		String sour = searchStringTable(props, (String)f_tags[P_SOUR]);
+		String date = searchStringTable(props, (String)f_tags[P_DATE]);
+		String bytes = searchStringTable(props, "bytes");
 		if (!sour) sour="?";
 		if (!date) date="?";
 		if (!bytes) bytes="?";
@@ -208,7 +208,7 @@ ask_for_gedcom (CString mode,
 {
 	int choice;
 	int nfiles, i;
-	TABLE * fileprops;
+	HashTable ** fileprops;
 	String * choices;
 	FILE * fp;
 
@@ -229,13 +229,13 @@ ask_for_gedcom (CString mode,
 	/* choices are all shared pointers */
 	choices[0] = _(qSextchoos);
 	for (i=0; i<nfiles; ++i) {
-		choices[i+1] = valueof_str(fileprops[i], valueof_str(fileprops[i], "d0"));
+		choices[i+1] = searchStringTable(fileprops[i], searchStringTable(fileprops[i], "d0"));
 	}
 	choice = chooseFromArray_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
 	if (choice > 0) {
-		TABLE props = fileprops[choice-1];
-		String fname = valueof_str(props, "filename");
-		String dir = valueof_str(props, "dir");
+		HashTable *props = fileprops[choice-1];
+		String fname = searchStringTable(props, "filename");
+		String dir = searchStringTable(props, "dir");
 		String filepath = pathConcatAllocate(dir, fname);
 		if (pfname)
 			*pfname = strsave(fname);

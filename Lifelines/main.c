@@ -298,7 +298,7 @@ prompt_for_db:
 		bool picklist = false;
 		bool timing = false;
 		interp_main(exprogs, progout, picklist, timing);
-		destroy_list(exprogs);
+		deleteList(exprogs);
 	} else if (have_python_scripts) {
 #if HAVE_PYTHON
 		int status = llpy_execute_scripts (false);

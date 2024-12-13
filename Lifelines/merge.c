@@ -838,7 +838,7 @@ check_indi_lineage_links (GNode *indi)
 			fatal(msg);
 		}
 	}
-	destroy_table(memtab);
+	deleteHashTable(memtab);
 	memtab = createIntegerTable(num_linkage_buckets);
 
 	/*
@@ -887,7 +887,7 @@ check_indi_lineage_links (GNode *indi)
 	}
 
 	joinPerson(indi, name, refn, sex, body, famc, fams);
-	destroy_table(memtab);
+	deleteHashTable(memtab);
 }
 /*=================================================
  * check_fam_lineage_links -- Check all persons of
@@ -966,7 +966,7 @@ check_fam_lineage_links (GNode *fam)
 			fatal(msg);
 		}
 	}
-	destroy_table(memtab);
+	deleteHashTable(memtab);
 	memtab = createIntegerTable(num_linkage_buckets);
 
 	/*

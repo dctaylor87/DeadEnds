@@ -611,11 +611,11 @@ destroy_windows (void)
 	// added to the global window list in add_uiwin().
 	//
 	// Since list_uiwin was created via create_list3() and has an element
-	// destructor, we can just call destroy_list(), which will remove each
+	// destructor, we can just call deleteList(), which will remove each
 	// element from the list, destroy it, and then finally destroy the
 	// empty list itself.
 
-	destroy_list(list_uiwin);
+	deleteList(list_uiwin);
 }
 /*==========================================
  * create_windows -- Create and init windows
@@ -727,7 +727,7 @@ search_for_one_record (void)
 	Sequence *seq = invoke_search_menu();
 	if (!seq) return NULL;
 	if (!lengthSequence(seq)) {
-		remove_indiseq(seq);
+		deleteSequence(seq);
 		return NULL;
 	}
 	/* namesort uses canonkeysort for non-persons */
@@ -1496,7 +1496,7 @@ invoke_cset_display (void)
 
 
 	display_list(_("Codeset information"), list);
-	destroy_list(list);
+	deleteList(list);
 	zs_free(&zstr);
 }
 /*======================================
@@ -1800,9 +1800,9 @@ invoke_extra_menu (RecordIndexEl **prec)
  *  returns descriptive string for failure, 0 for pass
  *=============================*/
 static String
-uopt_validate (TABLE tab, void * param)
+uopt_validate (HashTable *tab, void * param)
 {
-	String codeset = valueof_str(tab, "codeset");
+	String codeset = searchStringTable(tab, "codeset");
 	String original_codeset = (String)param;
 	/*
 	our only rule currently is that user may not change codeset
@@ -1832,10 +1832,10 @@ edit_place_table (void)
 static void
 edit_user_options (void)
 {
-	TABLE uopts = createStringTable();
+	HashTable *uopts = createStringTable();
 	String param=0;
 	get_db_options(uopts);
-	param = valueof_str(uopts, "codeset");
+	param = searchStringTable(uopts, "codeset");
 	param = (param ? strsave(param) : 0);
 
 	if (edit_valtab_from_db("VUOPT", &uopts, '=', _(qSuoperr), uopt_validate, (void *)param))
@@ -2482,7 +2482,7 @@ static void
 clear_msgs (void)
 {
 	if (msg_list) {
-		destroy_list(msg_list);
+		deleteList(msg_list);
 		msg_list = 0;
 	}
 	msg_flag = false;

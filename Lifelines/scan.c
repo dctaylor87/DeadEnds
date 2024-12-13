@@ -275,7 +275,7 @@ static void
 scanner_init (SCANNER * scanner, int scantype, CString statusmsg, Database *database)
 {
 	scanner->scantype = scantype;
-	scanner->seq = create_indiseq_null();
+	scanner->seq = createSequence(currentDatabase);
 	strcpy(scanner->pattern, "");
 	scanner->statusmsg = statusmsg;
 	scanner->field = NULL;
@@ -376,7 +376,7 @@ ns_callback (CString key, CString name, void *param, Database *database)
 				break;
 			}
 		ENDLIST
-		destroy_list(list);
+		deleteList(list);
 	}
 	return true;
 }

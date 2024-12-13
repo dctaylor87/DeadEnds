@@ -106,7 +106,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 	current_seq = seq;
 
 	while (true) {
-		element_indiseq(seq, cur, &key, &name);
+		elementFromSequence(seq, cur, &key, &name);
 		rec = __llpy_key_to_record(key, NULL, seq->database);
 		switch (c = list_browse(seq, top, &cur, mark)) {
 		case 'j':        /* Move down line */
@@ -201,7 +201,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 		case CMD_KY_ENTER:
 			*prec1 = rec;
 			if (current_seq)
-				remove_indiseq(current_seq);
+				deleteSequence(current_seq);
 			current_seq = NULL;
 			return BROWSE_UNK;
 		case 'm':        /* Mark current person */
@@ -210,7 +210,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 		case 'r':        /* Remove person from list */
 			if (len <= 1) {
 				if (current_seq)
-					remove_indiseq(current_seq);
+					deleteSequence(current_seq);
 				current_seq = NULL;
 				return BROWSE_QUIT;
 			}
@@ -230,7 +230,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 				break;
 			}
 			cand2 = rec;
-			element_indiseq(seq, mark, &key, &name);
+			elementFromSequence(seq, mark, &key, &name);
 			cand1 = __llpy_key_to_record(key, NULL, seq->database);
 			if (nztype(cand1)==GRPerson && nztype(cand2)==GRPerson) {
 				current_seq = NULL;
@@ -253,13 +253,13 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			if (!newseq) break;
 			/* Otherwise, if a new indiseq was created, then the previous indiseq must be freed. */
 			if (current_seq) {
-				remove_indiseq(current_seq);
+				deleteSequence(current_seq);
 			}
 			current_seq = seq = newseq;
-			element_indiseq(seq, 0, &key, &name);
+			elementFromSequence(seq, 0, &key, &name);
 			if ((len = lengthSequence(seq)) == 1) {
 				*prec1 = keyToPersonRecord(key, seq->database);
-				remove_indiseq(newseq);
+				deleteSequence(newseq);
 				current_seq = NULL;
 				return BROWSE_INDI;
 			}
@@ -283,7 +283,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			cur = top = 0;
 			mark = -1;
 			len = lengthSequence(seq);
-			remove_indiseq(newseq);
+			deleteSequence(newseq);
 			message("%s", _(qSlstnew));
 			break;
 		}
@@ -300,7 +300,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			break;
 		case 'q':        /* Return to main menu */
 			if (current_seq)
-				remove_indiseq(current_seq);
+				deleteSequence(current_seq);
 			current_seq = NULL;
 			return BROWSE_QUIT;
 		}

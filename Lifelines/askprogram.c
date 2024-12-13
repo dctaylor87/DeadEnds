@@ -49,10 +49,10 @@
  *********************************************/
 
 /* alphabetical */
-static void add_program_props(TABLE fileprops);
-static void parse_programs(TABLE * fileprops);
+static void add_program_props(HashTable *fileprops);
+static void parse_programs(HashTable ** fileprops);
 static int select_programs(const struct dirent *entry);
-static void set_programs_d0(TABLE * fileprops);
+static void set_programs_d0(HashTable ** fileprops);
 
 /*=========================
  * The supported meta-tags.
@@ -91,7 +91,7 @@ select_programs (const struct dirent *entry)
  * Created: 2002/10/19, Perry Rapp
  *========================================================*/
 static void
-add_program_props (TABLE fileprops)
+add_program_props (HashTable *fileprops)
 {
 	String tagsfound[ARRAYSIZE(f_tags)];
 	FILE *fp;
@@ -102,8 +102,8 @@ add_program_props (TABLE fileprops)
 	char * charset=0; /* charset of report, if found */
 
 	/* first get full path & open file */
-	String fname = valueof_str(fileprops, "filename");
-	String dir = valueof_str(fileprops, "dir");
+	String fname = searchStringTable(fileprops, "filename");
+	String dir = searchStringTable(fileprops, "dir");
 	String filepath = pathConcatAllocate(dir, fname);
 	char enc_cmd[] = "char_encoding(\"";
 
@@ -178,7 +178,7 @@ end_add_program_props:
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 static void
-parse_programs (TABLE * fileprops)
+parse_programs (HashTable ** fileprops)
 {
 	int i;
 	for (i=0; fileprops[i]; ++i) {
@@ -191,17 +191,17 @@ parse_programs (TABLE * fileprops)
  * Created: 2002/10/19, Perry Rapp
  *=================================================*/
 static void
-set_programs_d0 (TABLE * fileprops)
+set_programs_d0 (HashTable ** fileprops)
 {
 	int i;
 	for (i=0; fileprops[i]; ++i) {
-		TABLE props = fileprops[i];
+		HashTable *props = fileprops[i];
 		char buf[MAXLINELEN];
-		String program = valueof_str(props, (String)f_tags[P_PROGNAME]);
-		String version = valueof_str(props, (String)f_tags[P_VERSION]);
-		String output = valueof_str(props, (String)f_tags[P_OUTPUT]);
+		String program = searchStringTable(props, (String)f_tags[P_PROGNAME]);
+		String version = searchStringTable(props, (String)f_tags[P_VERSION]);
+		String output = searchStringTable(props, (String)f_tags[P_OUTPUT]);
 		if (!program)
-			program = valueof_str(props, "filename");
+			program = searchStringTable(props, "filename");
 		if (!output)
 			output = "?";
 		if (!version)
@@ -226,7 +226,7 @@ ask_for_program (CString mode,
 {
 	int choice;
 	int nfiles, i;
-	TABLE * fileprops;
+	HashTable ** fileprops;
 	String * choices;
 	FILE * fp;
 
@@ -247,13 +247,13 @@ ask_for_program (CString mode,
 	/* choices are all shared pointers */
 	choices[0] = _(qSextchoos);
 	for (i=0; i<nfiles; ++i) {
-		choices[i+1] = valueof_str(fileprops[i], valueof_str(fileprops[i], "d0"));
+		choices[i+1] = searchStringTable(fileprops[i], searchStringTable(fileprops[i], "d0"));
 	}
 	choice = chooseFromArray_x(ttl, nfiles+1, choices, proparrdetails, fileprops);
 	if (choice > 0) {
-		TABLE props = fileprops[choice-1];
-		String fname = valueof_str(props, "filename");
-		String dir = valueof_str(props, "dir");
+		HashTable *props = fileprops[choice-1];
+		String fname = searchStringTable(props, "filename");
+		String dir = searchStringTable(props, "dir");
 		String filepath = pathConcatAllocate(dir, fname);
 		*pfname = strsave(fname);
 		*pfullpath = filepath;
@@ -282,8 +282,8 @@ AskForString:
 void
 proparrdetails (ARRAY_DETAILS arrdets, void * param)
 {
-	TABLE * fileprops = (TABLE *)param;
-	TABLE props;
+	HashTable ** fileprops = (HashTable **)param;
+	HashTable *props;
 	int count = arrdets->count;
 	int maxlen = arrdets->maxlen;
 	int index = arrdets->cur - 1; /* slot#0 used by choose string */
@@ -296,7 +296,7 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 
 	props = fileprops[index];
 	
-	dnum = ll_atoi(valueof_str(props, "dn"), 0);
+	dnum = ll_atoi(searchStringTable(props, "dn"), 0);
 
 	/* print tags & values */
 	for (i=scroll; i<dnum && row<count; ++i, ++row) {
@@ -304,10 +304,10 @@ proparrdetails (ARRAY_DETAILS arrdets, void * param)
 		char temp[FMT_INT_LEN+1];
 		String name=0, value=0;
 		snprintf(temp, sizeof(temp), "d" FMT_INT, i+1);
-		name = valueof_str(props, temp);
+		name = searchStringTable(props, temp);
 		detail[0]=0;
 		if (name) {
-			value = valueof_str(props, name);
+			value = searchStringTable(props, name);
 			destrapps(detail, maxlen, uu8, name);
 			destrapps(detail, maxlen, uu8, ": ");
 			if (value) {

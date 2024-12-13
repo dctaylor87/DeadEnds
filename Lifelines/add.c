@@ -346,7 +346,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 			node = nsibling(node);
 		}
 	}
-	new = create_node(NULL, "CHIL", nxref(child), fam);
+	new = createGNode(NULL, "CHIL", nxref(child), fam);
 	nsibling(new) = node;
 	if (prev)
 		nsibling(prev) = new;
@@ -357,7 +357,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 /* Add FAMC node to child */
 
 	splitPerson(child, &name, &refn, &sex, &body, &famc, &fams);
-	nfmc = create_node(NULL, "FAMC", nxref(fam), child);
+	nfmc = createGNode(NULL, "FAMC", nxref(fam), child);
 	prev = NULL;
 	this = famc;
 	while (this) {
@@ -447,7 +447,7 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 			prev = this;
 			this = nsibling(this);
 		}
-		new = create_node(NULL, "HUSB", nxref(spouse), fam);
+		new = createGNode(NULL, "HUSB", nxref(spouse), fam);
 		if (prev)
 			nsibling(prev) = new;
 		else
@@ -459,7 +459,7 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 			prev = this;
 			this = nsibling(this);
 		}
-		new = create_node(NULL, "WIFE", nxref(spouse), fam);
+		new = createGNode(NULL, "WIFE", nxref(spouse), fam);
 		if (prev)
 			nsibling(prev) = new;
 		else
@@ -469,7 +469,7 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 
 	/* Add FAMS node to spouse */
 
-	fams = create_node(NULL, "FAMS", nxref(fam), spouse);
+	fams = createGNode(NULL, "FAMS", nxref(fam), spouse);
 	prev = NULL;
 	this = nchild(spouse);
 	while (this) {
@@ -496,7 +496,7 @@ add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child
 	GNode *refn, *body;
 	GNode *name, *sex, *famc, *fams, *node, *prev, *new, *this;
 	if (spouse1) {
-		new = create_node(NULL, "FAMS", xref, spouse1);
+		new = createGNode(NULL, "FAMS", xref, spouse1);
 		prev = NULL;
 		node = nchild(spouse1);
 		while (node) {
@@ -509,7 +509,7 @@ add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child
 			nchild(spouse1) = new;
 	}
 	if (spouse2) {
-		new = create_node(NULL, "FAMS", xref, spouse2);
+		new = createGNode(NULL, "FAMS", xref, spouse2);
 		prev = NULL;
 		node = nchild(spouse2);
 		while (node) {
@@ -523,7 +523,7 @@ add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child
 	}
 	if (child) {
 		splitPerson(child, &name, &refn, &sex, &body, &famc, &fams);
-		new = create_node(NULL, "FAMC", xref, child);
+		new = createGNode(NULL, "FAMC", xref, child);
 		prev = NULL;
 		this = famc;
 		while (this) {
@@ -593,28 +593,28 @@ editfam:
 	spouse2 = nztop(sprec2);
 	child = nztop(chrec);
 
-	fam1 = create_node(NULL, "FAM", NULL, NULL);
+	fam1 = createGNode(NULL, "FAM", NULL, NULL);
 	husb = wife = chil = NULL;
 	/* support non-traditional families if traditional is false
 	 * to do this we make slightly fib about the use of the
 	 * terms husb and wife in setting up spouse nodes
 	 */
 	if (sex1 == sex2 && sex2 == sexFemale) {
-	    husb = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	    husb = createGNode(NULL, "WIFE", nxref(spouse1), fam1);
 	} else if (sex1 == sexMale ) {
-	    husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
+	    husb = createGNode(NULL, "HUSB", nxref(spouse1), fam1);
 	} else if (sex2 == sexMale && sex1 != sexMale) {
-	    husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
+	    husb = createGNode(NULL, "HUSB", nxref(spouse2), fam1);
 	}
 	if (sex1 == sexFemale && sex2 != sexFemale) {
-	    wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+	    wife = createGNode(NULL, "WIFE", nxref(spouse1), fam1);
 	} else if (sex2 == sexFemale) {
-	    wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
+	    wife = createGNode(NULL, "WIFE", nxref(spouse2), fam1);
 	} else if (sex1 == sex2 && sex2 == sexMale) {
-	    wife = create_node(NULL, "HUSB", nxref(spouse2), fam1);
+	    wife = createGNode(NULL, "HUSB", nxref(spouse2), fam1);
 	}
 	if (child)
-		chil = create_node(NULL, "CHIL", nxref(child), fam1);
+		chil = createGNode(NULL, "CHIL", nxref(child), fam1);
 
 /* Prepare file for user to edit */
 
@@ -744,22 +744,22 @@ add_family_to_db (GNode *spouse1, GNode *spouse2, GNode *child)
 	bool emp;
 	FILE *fp;
 
-	fam1 = create_node(NULL, "FAM", NULL, NULL);
+	fam1 = createGNode(NULL, "FAM", NULL, NULL);
 	husb = wife = chil = NULL;
 	if (spouse1) {
 		if (sex1 == sexMale)
-			husb = create_node(NULL, "HUSB", nxref(spouse1), fam1);
+			husb = createGNode(NULL, "HUSB", nxref(spouse1), fam1);
 		else
-			wife = create_node(NULL, "WIFE", nxref(spouse1), fam1);
+			wife = createGNode(NULL, "WIFE", nxref(spouse1), fam1);
 	}
 	if (spouse2) {
 		if (sex2 == sexMale)
-			husb = create_node(NULL, "HUSB", nxref(spouse2), fam1);
+			husb = createGNode(NULL, "HUSB", nxref(spouse2), fam1);
 		else
-			wife = create_node(NULL, "WIFE", nxref(spouse2), fam1);
+			wife = createGNode(NULL, "WIFE", nxref(spouse2), fam1);
 	}
 	if (child)
-		chil = create_node(NULL, "CHIL", nxref(child), fam1);
+		chil = createGNode(NULL, "CHIL", nxref(child), fam1);
 
 /* Create file */
 

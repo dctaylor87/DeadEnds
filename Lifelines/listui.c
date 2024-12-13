@@ -457,7 +457,7 @@ shw_recordlist_details (Sequence *seq, listdisp * ld)
 	for (i=ld->rectDetails.top; i<=ld->rectDetails.bottom; ++i) {
 		clear_hseg(win, i, ld->rectDetails.left, ld->rectDetails.right-10);
 	}
-	element_indiseq(seq, ld->cur, &key, &name);
+	elementFromSequence(seq, ld->cur, &key, &name);
 	if (!show_record(ld->uiwin, key, ld->mode, &ld->rectDetails
 		, &ld->details_scroll, reuse)) {
 		/* if couldn't find record, just display record key */
@@ -794,7 +794,7 @@ manufacture a listdisp here
 		mvccwaddstr(win, i, 1, empstr51);
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
-		element_indiseq(seq, i, &key, &name);
+		elementFromSequence(seq, i, &key, &name);
 		recnode = getRecord (key, seq->database);
 		if (i == 0 && scrollable) mvwaddch(win, row, 1, '^');
 		if (i == len-1 && scrollable) mvwaddch(win, row, 1, '$');

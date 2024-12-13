@@ -210,9 +210,9 @@ prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
 		if (!*pseq) return;
 		if ((len = lengthSequence(*pseq)) < 1) return;
 		if (len == 1) {
-			element_indiseq(*pseq, 0, &key, &name);
+			elementFromSequence(*pseq, 0, &key, &name);
 			*prec = keyToPersonRecord(key, (*pseq)->database);
-			remove_indiseq(*pseq);
+			deleteSequence(*pseq);
 			*pseq = NULL;
 			*code = BROWSE_UNK; /* not sure what we got above */
 		} else {
@@ -248,7 +248,7 @@ main_browse (RecordIndexEl *rec1, int code)
 	if (!rec1) {
 		if (!seq) return;
 		if (!lengthSequence(seq)) {
-			remove_indiseq(seq);
+			deleteSequence(seq);
 			return;
 		}
 	}
@@ -637,10 +637,10 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
-				element_indiseq(seq, 0, &key, &name);
+				elementFromSequence(seq, 0, &key, &name);
 				tmp = keyToPersonRecord(key, seq->database);
 				setrecord(&current, &tmp);
-				remove_indiseq(seq);
+				deleteSequence(seq);
 				seq=NULL;
 				if (nztype(current) != GRPerson) {
 					setrecord(prec1, &current);
@@ -1233,10 +1233,10 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
-				element_indiseq(seq, 0, &key, &name);
+				elementFromSequence(seq, 0, &key, &name);
 				tmp = keyToPersonRecord(key, seq->database);
 				setrecord(&current, &tmp);
-				remove_indiseq(seq);
+				deleteSequence(seq);
 				seq=NULL;
 				if (nztype(current) != GRFamily) {
 					setrecord(prec1, &current);
@@ -1481,7 +1481,7 @@ chooseAnySource (void)
 		return 0;
 	}
 	rec = chooseFromSequence(seq, DOASK1, _(qSidsour), _(qSidsour));
-	remove_indiseq(seq);
+	deleteSequence(seq);
 	return rec;
 }
 /*==================================================
@@ -1499,7 +1499,7 @@ chooseAnyEvent (void)
 		return NULL;
 	}
 	rec = chooseFromSequence(seq, DOASK1, _(qSideven), _(qSideven));
-	remove_indiseq(seq);
+	deleteSequence(seq);
 	return rec;
 }
 /*==================================================
@@ -1517,7 +1517,7 @@ chooseAnyOther (void)
 		return NULL;
 	}
 	rec = chooseFromSequence(seq, DOASK1, _(qSidothe), _(qSidothe));
-	remove_indiseq(seq);
+	deleteSequence(seq);
 	return rec;
 }
 /*==================================================
@@ -1889,7 +1889,7 @@ do_disp_history_list (struct hist * histp)
 		return NULL;
 	}
 	rec = chooseFromSequence(seq, DOASK1, _(qSidhist), _(qSidhist));
-	remove_indiseq(seq);
+	deleteSequence(seq);
 	return rec;
 }
 /*==================================================
@@ -2080,7 +2080,7 @@ autoadd_xref (RecordIndexEl *rec, GNode *newnode)
 	GNode *xref; /* new xref added to end of node */
 	GNode *find, *prev; /* used finding last child of node */
 	GNode *node = nztop(rec);
-	xref = create_node(NULL, ntag(newnode), nxref(newnode), node);
+	xref = createGNode(NULL, ntag(newnode), nxref(newnode), node);
 	if (!(find = nchild(node))) {
 		nchild(node) = xref;
 	} else {

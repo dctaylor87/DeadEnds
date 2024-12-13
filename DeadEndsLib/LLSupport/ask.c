@@ -360,7 +360,7 @@ ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
 	} else {
 		indi = chooseFromSequence(seq, ask1, _(qSifonex), _(qSnotonex));
 	}
-	remove_indiseq(seq);
+	deleteSequence(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
 	return indi;
 }
@@ -418,7 +418,7 @@ ask_for_indi_list (CString ttl, bool reask)
 		ASSERT(seq);
 		rc = chooseListFromSequence(_(qSnotonei), seq);
 		if (rc == -1) {
-			remove_indiseq(seq);
+			deleteSequence(seq);
 			seq = NULL;
 			if (!reask || !ask_yes_or_no(_(qSentnam)))
 				return NULL;
@@ -509,7 +509,7 @@ ask_for_record (CString idstr, int letr)
 		seq = refnToSequence(answer, currentDatabase);
 		if (!seq) return NULL;
 		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn));
-		remove_indiseq(seq);
+		deleteSequence(seq);
 	}
 	return rec;
 }

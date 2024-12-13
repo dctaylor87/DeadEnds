@@ -87,7 +87,7 @@ chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msg
       return NULL;
     }
   rec = chooseFromSequence(seq, ask1, msgn, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 /*========================================
@@ -111,7 +111,7 @@ chooseSpouse (RecordIndexEl *irec, CString msg0, CString msgn)
       return NULL;
     }
   rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 /*========================================
@@ -133,7 +133,7 @@ chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
 	return NULL;
       }
   rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 
@@ -158,7 +158,7 @@ chooseNote (RecordIndexEl *current, CString msg0, CString msgn)
       return NULL;
     }
   rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 
@@ -183,7 +183,7 @@ choosePointer (RecordIndexEl *current, CString msg0, CString msgn)
       return NULL;
     }
   rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 
@@ -208,7 +208,7 @@ chooseFamily (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
       return NULL;
     }
   rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 
@@ -242,7 +242,7 @@ chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
       return NULL;
     }
   rec = chooseFromSequence(seq, ask1, msgn, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }
 
@@ -276,6 +276,6 @@ chooseMother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
       return NULL;
     }
   rec = chooseFromSequence(seq, ask1, msgn, msgn);
-  remove_indiseq(seq);
+  deleteSequence(seq);
   return rec;
 }

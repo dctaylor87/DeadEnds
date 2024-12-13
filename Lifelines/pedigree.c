@@ -188,7 +188,7 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 			for (i=0; i<lengthSequence(childseq); i++) {
 				GNode *child;
 				CString childkey, childname;
-				element_indiseq(childseq, i, &childkey, &childname);
+				elementFromSequence(childseq, i, &childkey, &childname);
 				child = keyToPerson(childkey, currentDatabase->recordIndex);
 				tn1 = add_children(child, gen+1, maxgen, count);
 				/* link new displaynode into tree we're building */
@@ -197,7 +197,7 @@ add_children (GNode *indi, int gen, int maxgen, int * count)
 				else /* first child - first time thru loop */
 					tn0 = tn->firstchild = tn1;
 			}
-			remove_indiseq(childseq);
+			deleteSequence(childseq);
 		}
 	}
 	return tn;
@@ -239,7 +239,7 @@ append_to_text_list (List *list, String text, int width, bool newline)
 	if (newline) {
 		temp = NULL;
 	} else {
-		temp = pop_list(list);
+		temp = getAndRemoveFirstListElement(list);
 		if (temp && (int)strlen(temp) >= width) {
 			enqueue_list(list, temp);
 			temp = NULL;
@@ -391,7 +391,7 @@ add_dnodes (GNode *node, int gen, int indent, int maxgen, int * count, CANVASDAT
 		tn0 = tn1;
 		(*count)++;
 	}
-	destroy_list(list);
+	deleteList(list);
 	list=0;
 
 	if (gen < maxgen) {

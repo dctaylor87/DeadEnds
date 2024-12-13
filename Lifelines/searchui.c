@@ -212,7 +212,7 @@ invoke_fullscan_menu (void)
 			if (lengthSequence(seq) > 0) {
 				done=true;
 			} else {
-				remove_indiseq(seq);
+				deleteSequence(seq);
 				seq = NULL;
 			}
 		}
@@ -281,7 +281,7 @@ invoke_search_source_menu (void)
 			if (lengthSequence(seq) > 0) {
 				done=true;
 			} else {
-				remove_indiseq(seq);
+				deleteSequence(seq);
 				seq = NULL;
 			}
 		}

@@ -80,8 +80,8 @@
  * global/exported variables
  *********************************************/
 
-TABLE tagtable=NULL;		/* table for tag strings */
-TABLE placabbvs=NULL;	/* table for place abbrevs */
+HashTable *tagtable=NULL;	/* table for tag strings */
+HashTable *placabbvs=NULL;	/* table for place abbrevs */
 String editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 String editfile=NULL; /* file used for editing, name obtained via mktemp */
 String readpath = NULL;		/* path to database */
@@ -298,7 +298,7 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 static void
 update_db_options (void)
 {
-	TABLE opttab = createStringTable(NUMBER_OPTION_BUCKETS);
+	HashTable *opttab = createStringTable(NUMBER_OPTION_BUCKETS);
 	CString str=0;
 	get_db_options(opttab);
 

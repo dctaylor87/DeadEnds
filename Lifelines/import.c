@@ -172,7 +172,7 @@ do_import (ImportFeedback *ifeed, FILE *fp)
 		goto end_import;
 	}
 
-	if ((str = valueof_str(metadatatab, "GEDC.FORM"))!= NULL) {
+	if ((str = searchStringTable(metadatatab, "GEDC.FORM"))!= NULL) {
 		if (!eqstr(str, "LINEAGE-LINKED")) {
 			if (!ask_yes_or_no_msg(
 				_("This is not a lineage linked GEDCOM file.")
@@ -181,7 +181,7 @@ do_import (ImportFeedback *ifeed, FILE *fp)
 				goto end_import;
 		}
 	}
-	if (!unistr && (str = valueof_str(metadatatab, "CHAR"))!= NULL) {
+	if (!unistr && (str = searchStringTable(metadatatab, "CHAR"))!= NULL) {
 		/* if no BOM, use file's declared encoding if present */
 		strupdate(&gdcodeset, str);
 	}
@@ -334,7 +334,7 @@ TODO: why were these here ?
 end_import:
 	validate_end_import();
 	zs_free(&zerr);
-	destroy_table(metadatatab);
+	deleteHashTable(metadatatab);
 	strfree(&gdcodeset);
 	return succeeded;
 }

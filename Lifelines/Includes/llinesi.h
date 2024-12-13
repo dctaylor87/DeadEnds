@@ -153,7 +153,7 @@ void addmissingkeys (int);
 int check_stdkeys (void);
 
 #if !defined(DEADENDS) /* scan_header is only used by import.c and valgdcom.c */
-bool scan_header(FILE * fp, TABLE metadatatab, ZSTR * zerr);
+bool scan_header(FILE * fp, HashTable *metadatatab, ZSTR * zerr);
 #endif
 bool validate_gedcom(IMPORT_FEEDBACK ifeed, FILE*);
 void validate_end_import(void);

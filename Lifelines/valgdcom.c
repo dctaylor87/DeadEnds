@@ -66,7 +66,7 @@ int gd_smax = 0;        /* maximum source key number */
 int gd_emax = 0;        /* maximum event key number */
 int gd_xmax = 0;        /* maximum other key number */
 
-static TABLE convtab = NULL;
+static HashTable *convtab = NULL;
 static int rec_type;
 static bool named = false; /* found a NAME in current INDI ? */
 static int members = 0; /* number members (HUSB,WIFE,CHIL) in current FAM */
@@ -1010,7 +1010,7 @@ add_to_structures (String xref, ELMNT el)
 	}
 	i = struct_len;
 	index_data[i] = el;
-	insert_table_int(convtab, xref, struct_len++);
+	insertInIntegerTable(convtab, xref, struct_len++);
 	return struct_len - 1;
 }
 /*========================================================
@@ -1024,7 +1024,7 @@ clear_structures (void)
 	if (convtab) {
 		/* elements are destroyed below, because
 		index_data points to them */
-		destroy_table(convtab);
+		deleteHashTable(convtab);
 		convtab = NULL;
 	}
 	for (i = 0; i < struct_len; i++) {
@@ -1053,7 +1053,7 @@ set_import_log (String logpath)
  * Created: 2003-02-03 (Perry Rapp)
  *==========================================================*/
 bool
-scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
+scan_header (FILE * fp, HashTable *metadatatab, ZSTR * zerr)
 {
 	String parents[2] = { 0, 0 };
 	int linno, head=0, lev=-1, curlev,i;
@@ -1108,7 +1108,7 @@ scan_header (FILE * fp, TABLE metadatatab, ZSTR * zerr)
 			for (i=1; i<lev && i<ARRAYSIZE(parents); ++i)
 				append_path(zpath, '.', parents[i-1]);
 			append_path(zpath, '.', tag);
-			insert_table_str(metadatatab, zs_str(zpath), val);
+			addToStringTable(metadatatab, zs_str(zpath), val);
 		}
 		if (lev>0 && lev-1<ARRAYSIZE(parents))
 			strupdate(&parents[lev-1], tag);

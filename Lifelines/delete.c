@@ -90,8 +90,8 @@ chooseAndRemoveFamily (void)
 		return;
 
 	/* get list of spouses & children */
-	spseq = create_indiseq_null(); /* spouses */
-	chseq = create_indiseq_null(); /* children */
+	spseq = createSequence(currentDatabase); /* spouses */
+	chseq = createSequence(currentDatabase); /* children */
 	for (node=nchild(fam); node; node = nsibling(node)) {
 		tag = ntag(node);
 		if (eqstr("HUSB", tag) || eqstr("WIFE", tag)) {
@@ -135,8 +135,8 @@ chooseAndRemoveFamily (void)
 		}
 	}
 	
-	remove_indiseq(spseq);
-	remove_indiseq(chseq);
+	deleteSequence(spseq);
+	deleteSequence(chseq);
 }
 /*================================================================
  * chooseAndRemovePerson -- Prompt & delete person and links; if this leaves families

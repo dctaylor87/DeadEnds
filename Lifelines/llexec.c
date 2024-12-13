@@ -264,7 +264,7 @@ prompt_for_db:
 		bool picklist = false;
 		bool timing = false;
 		interp_main(exprogs, progout, picklist, timing);
-		destroy_list(exprogs);
+		deleteList(exprogs);
 	} else {
 		/* TODO: prompt for report filename */
 	}
