@@ -490,16 +490,10 @@ static void
 remove_uiwin (UIWINDOW uiwin)
 {
 	ASSERT(list_uiwin);
-#if defined(DEADENDS)
 	int index;
 	if (searchList (list_uiwin, uiwin, &index)) {
 	  removeFromList (list_uiwin, index);
 	}
-#else
-	void *param = uiwin;
-	bool deleteall = false;
-	find_delete_list_elements(list_uiwin, param, &does_match, deleteall);
-#endif
 }
 /*==========================================
  * does_match -- Used as callback to remove_uiwin
@@ -2890,7 +2884,6 @@ register_screen_lang_callbacks (bool registering)
 static void
 screen_on_lang_change (ATTRIBUTE_UNUSED void *uparm)
 {
-#if defined(DEADENDS)
   int max = lengthList (list_uiwin);
   int ndx;
 
@@ -2899,14 +2892,4 @@ screen_on_lang_change (ATTRIBUTE_UNUSED void *uparm)
       UIWINDOW uiwin = (UIWINDOW) getListElement (list_uiwin, ndx);
       uiwin->outdated = true;
     }
-#else
-	LIST_ITER listit=0;
-	void *ptr=0;
-	listit = begin_list(list_uiwin);
-	while (next_list_ptr(listit, &ptr)) {
-		UIWINDOW uiwin = (UIWINDOW)ptr;
-		uiwin->outdated = true;
-	}
-	end_list_iter(&listit);
-#endif
 }

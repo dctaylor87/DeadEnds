@@ -136,10 +136,8 @@ Sequence *scanSourceByTitle(CString sts, Database*);
 /* screen.c */
 void clear_status_display(void);
 
-#if defined(DEADENDS)
 /* show.c */
 String indi_to_ped_fix(GNode *indi, int len);
-#endif
 
 /* swap.c */
 bool swap_children(RecordIndexEl *prnt, RecordIndexEl *frec);

@@ -89,12 +89,7 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 
 	/* Write data to database */
 
-#if defined(DEADENDS)
 	key = nxref(indi1);
-#else
-	indi_to_dbase(indi1);
-	key = rmvat(nxref(indi1));
-#endif
 	/* update name & refn info */
 	/* classify does a diff on its first two arguments, repopulating all three
 	arguments -- first is left-only, second is right-only, third is shared */

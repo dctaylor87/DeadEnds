@@ -225,21 +225,10 @@ do_sources_scan (SCANNER * scanner, CString prompt, Database *database)
 	/* msg_status takes String arg, should take CString - const declaration error */
 	msg_status("%s", (String)scanner->statusmsg);
 
-#if defined(DEADENDS)
 	for (RecordIndexEl *rec = getFirstSourceRecord (database);
 	     rec;
 	     rec = getNextSourceRecord (nzkey(rec), database))
 	  do_fields_scan (scanner, rec, database);
-#else
-	while (1) {
-		RecordIndexEl *rec = 0;
-		keynum = xref_nexts(keynum);
-		if (!keynum)
-			break;
-		rec = keynum_to_srecord(keynum);
-		do_fields_scan(scanner, rec, database);
-	}
-#endif
 }
 /*==============================
  * do_fields_scan -- traverse top nodes looking for desired field value
@@ -375,12 +364,8 @@ ns_callback (CString key, CString name, void *param, Database *database)
 		}
 	} else {
 		/* SCAN_NAME_FRAG */
-#if defined(DEADENDS)
 		List *list = createList (null, null, null, false);
 		nameToList (name, list, &len, &ind);
-#else
-		List *list = name_to_list(name, &len, &ind);
-#endif
 		FORLIST(list, el)
 			piece = (String)el;
 			if (scanner_does_pattern_match(scanner, piece)) {

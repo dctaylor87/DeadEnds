@@ -63,7 +63,5 @@ bool select_database(String * dbrequested, String * perrmsg);
 /* miscutls.c */
 void sighand_cursesui(int sig);
 
-#if defined(DEADENDS)
 extern ErrorLog *globalErrorLog;
-#endif
 #endif /* _LIFLINES_H */

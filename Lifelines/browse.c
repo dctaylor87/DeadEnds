@@ -1763,11 +1763,7 @@ history_record (RecordIndexEl *rec, struct hist * histp)
 	if (!histp->size) return;
 	if (histp->start==-1) {
 		histp->start = histp->past_end;
-#if defined(DEADENDS)
 		histp->list[histp->start] = nzkey(rec);
-#else
-		node_to_nkey(nztop(rec), &histp->list[histp->start]);
-#endif
 		histp->past_end = (histp->start+1) % histp->size;
 		return;
 	}
@@ -1775,11 +1771,7 @@ history_record (RecordIndexEl *rec, struct hist * histp)
 	copy new node into nkey variable so we can check
 	if this is the same as our most recent (histp->list[last])
 	*/
-#if defined(DEADENDS)
 	nkey = nzkey(rec);
-#else
-	node_to_nkey(nztop(rec), &nkey);
-#endif
 	if (protect<1 || protect>99)
 		protect=1;
 	if (protect>count)
@@ -1819,11 +1811,7 @@ history_back (struct hist * histp)
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
 		if (--last < 0) last += histp->size;
-#if defined(DEADENDS)
 		rec = keyToRecord (histp->list[last], currentDatabase);
-#else
-		nkey_to_record(&histp->list[last], &rec);
-#endif
 		if (rec) {
 			histp->past_end = (last+1) % histp->size;
 			return rec;
@@ -1843,11 +1831,7 @@ history_fwd (struct hist * histp)
 	if (!histp->size || histp->past_end == histp->start)
 		return NULL; /* at end of full history */
 	next = histp->past_end;
-#if defined(DEADENDS)
 	rec = keyToRecord (histp->list[next], currentDatabase);
-#else
-	nkey_to_record(&histp->list[next], &rec);
-#endif
 	return rec;
 }
 /*==================================================
@@ -1924,11 +1908,7 @@ get_history_list (struct hist * histp)
 	next = histp->start;
 	while (1) {
 		GNode *node=0;
-#if defined(DEADENDS)
 		node = getRecord (histp->list[next], currentDatabase);
-#else
-		nkey_to_node(&histp->list[next], &node);
-#endif
 		if (node) {
 			String key = node_to_key(node);
 			append_indiseq_null(seq, key, NULL, true, false);

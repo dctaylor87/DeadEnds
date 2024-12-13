@@ -25,11 +25,7 @@ extern XLAT transl_get_predefined_xlat(int trnum);
 extern bool xl_do_xlat(XLAT xlat, ZSTR zstr);
 extern void xl_free_adhoc_xlats(void);
 extern void xl_free_xlats(void);
-#if 0
-extern String xlat_get_description(XLAT xlat);
-#else
 extern ZSTR xlat_get_description(XLAT xlat);
-#endif
 extern CString xl_get_dest_codeset(XLAT xlat);
 extern TRANTABLE xl_get_legacy_tt(XLAT xlat);
 extern XLAT xl_get_null_xlat(void);

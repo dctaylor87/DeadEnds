@@ -111,7 +111,6 @@ selectAndOpenDatabase(CString *dbFilename,
   return (oldDatabase);
 }
 
-#if 1
 bool databaseHasStandardKeys (Database *database)
 {
   FORHASHTABLE (database->recordIndex, element)
@@ -158,46 +157,6 @@ bool databaseHasStandardKeys (Database *database)
 
   return true;
 }
-
-#else
-bool databaseHasStandardKeys (Database *database)
-{
-  if (indexHasStandardKeys ('I', database->personIndex) &&
-      indexHasStandardKeys ('F', database->familyIndex) &&
-      indexHasStandardKeys ('S', database->sourceIndex) &&
-      indexHasStandardKeys ('E', database->eventIndex) &&
-      indexHasStandardKeys ('X', database->otherIndex))
-    return true;
-  return false;
-}
-
-static bool indexHasStandardKeys (char prefix, RecordIndex *index)
-{
-  FORHASHTABLE (index, element)
-    CString key = ((GNode *)element)->key;
-
-    if (key[0] != '@')
-      return false;		/* not a key -- should not happen */
-    if (key[1] != prefix)
-      return false;
-    if (key[2] == '0')
-      return false;		/* no leading 0's, and our keys start at 1. */
-    if (! isdigit (key[2]))
-      return false;		/* our keys are all <prefix><digits> */
-
-    unsigned long long keynum;
-    char *endptr = 0;
-
-    keynum = strtoull (&key[2], &endptr, 10);
-    if (*endptr != '@')
-      return false;
-    if ((keynum == ULLONG_MAX) && (errno == ERANGE))
-      return false;		/* overflow */
-  ENDHASHTABLE
-
-  return true;
-}
-#endif
 
 /* checkForRefnOverlap -- return  true if okay  to continue (no
    overlap), false if need to abort the database merge */

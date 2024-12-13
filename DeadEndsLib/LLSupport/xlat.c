@@ -63,9 +63,7 @@ struct tag_xlat {
 /* dynamically loadable translation table, entry in dyntt list */
 struct tag_dyntt {
 	int refcnt; /* ref-countable object */
-#if defined(DEADENDS)
 	CString key;
-#endif
 	String name;
 	String path;
 	TRANTABLE tt; /* when loaded */
@@ -219,9 +217,7 @@ create_dyntt (TRANTABLE tt, CString key, CString name, CString path)
 	memset(dyntt, 0, sizeof(*dyntt));
 	dyntt->refcnt = 1;
 	dyntt->tt = tt;
-#if defined(DEADENDS)
 	dyntt->key = key;
-#endif
 	dyntt->name = strsave(name);
 	dyntt->path = strsave(path);
 	return dyntt;
@@ -517,15 +513,9 @@ load_dynttlist_from_dir (CString dir)
 			if (!searchHashTable(f_dyntts, zs_str(zfile_u))) {
 				TRANTABLE tt=0; /* will be loaded when needed */
 				String path = pathConcatAllocate(dir, ttfile);
-#if defined(DEADENDS)
 				DYNTT dyntt = create_dyntt(tt, zs_str(zfile_u), ttfile, path);
 				strfree(&path);
 				addToHashTable(f_dyntts, dyntt, true);
-#else
-				DYNTT dyntt = create_dyntt(tt, ttfile, path);
-				strfree(&path);
-				insert_table_obj(f_dyntts, zs_str(zfile_u), dyntt);
-#endif
 				zs_free(&zfile_u);
 				--dyntt->refcnt; /* leave table as sole owner */
 			}

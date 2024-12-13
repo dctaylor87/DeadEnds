@@ -56,11 +56,7 @@ CString transl_get_map_name(int trnum);
 TRANTABLE create_trantable(String *lefts, String *rights, int n, String name);
 bool init_map_from_rec(CString key, int trnum, TRANTABLE*);
 //bool custom_sort(const char *str1, const char *str2, int * rtn);
-#if 0
-String get_trantable_desc(TRANTABLE tt);
-#else
 ZSTR get_trantable_desc(TRANTABLE tt);
-#endif
 void remove_trantable(TRANTABLE);
 void translate_catn(XLAT ttm, String * pdest, CString src, int * len);
 void translate_string(XLAT, CString in, String out, int max);

@@ -1,8 +1,6 @@
 /* porting.h -- the purpose of this file is to ease porting between
    the Python code in LifeLines and the Python code in DeadEnds */
 
-//#if defined(DEADENDS)
-
 //typedef const char *	CNSTRING;
 
 //#define BOOLEAN		_Bool
@@ -76,12 +74,3 @@
 
 /* we drop efmt -- era format */
 #define do_format_date(str,dfmt,mfmt,yfmt,sfmt,efmt,cmplx) formatDate(str,dfmt,mfmt,yfmt,sfmt,cmplx)
-
-//#endif
-
-//#if !defined(DEADENDS)
-//
-//#define nrefcnt_inc(node)	nrefcnt(node)++
-//#define nrefcnt_dec(node)	nrefcnt(node)--
-//
-//#endif

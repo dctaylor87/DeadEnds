@@ -122,25 +122,6 @@ change_node_tag (GNode *node, String newtag)
 }
 #endif
 
-#if 0			  /* DeadEnds has freeGNodes */
-/* free_nodes -- Free all NODEs in tree.  */
-
-void
-free_nodes (GNode *node)
-{
-	GNode *sib;
-	while (node) {
-		if (nchild(node)) {
-			free_nodes(nchild(node));
-			nchild (node) = 0;
-		}
-		sib = nsibling(node);
-		free_node(node,"free_nodes");
-		node = sib;
-	}
-}
-#endif
-
 /*==============================================================
  * tree_strlen -- Compute string length of tree -- don't count 0
  *============================================================*/
@@ -386,71 +367,6 @@ event_to_date_place (GNode *node, String * date, String * plac)
 	}
 }
 
-#if 0			 /* DeadEnds now has eventToString */
-/*===========================================
- * event_to_string -- Convert event to string
- * Finds DATE & PLACE nodes, and prints a string
- * representation of them.
- *  node:  [IN]  node tree of event to describe
- *  ttm:   [IN]  translation table to use
- *  rfmt:  [IN]  reformatting info (may be NULL)
- *=========================================*/
-String
-event_to_string (GNode *node, RFMT rfmt)
-{
-	static char scratch1[MAXLINELEN+1];
-	String date, plac;
-	event_to_date_place(node, &date, &plac);
-	if (!date && !plac) return NULL;
-	/* Apply optional, caller-specified date & place reformatting */
-	if (rfmt && date && rfmt->rfmt_date)
-		date = (*rfmt->rfmt_date)(date);
-	if (rfmt && plac && rfmt->rfmt_plac)
-		plac = (*rfmt->rfmt_plac)(plac);
-	if (rfmt && rfmt->combopic && date && date[0] && plac && plac[0]) {
-		sprintpic2(scratch1, sizeof(scratch1), uu8, rfmt->combopic, date, plac);
-	} else if (date && date[0]) {
-		destrncpy(scratch1, date, sizeof(scratch1), uu8);
-	} else if (plac && plac[0]) {
-		destrncpy(scratch1, plac, sizeof(scratch1), uu8);
-	} else {
-		return NULL;
-	}
-	return scratch1;
-}
-#endif
-
-#if 0				/* DeadEnds has showGNode, showGNodeRecursive */
-/*================================
- * show_node -- Show tree -- DEBUG
- *==============================*/
-void
-show_node (GNode *node)
-{
-	if (!node) llwprintf("%s", "(NIL)");
-	show_node_rec(0, node);
-}
-/*================================================
- * show_node_rec -- Recursive version of show_node
- *==============================================*/
-void
-show_node_rec (int levl,
-               GNode *node)
-{
-	int i;
-	if (!node) return;
-	for (i = 1;  i < levl;  i++)
-		llwprintf("%s", "  ");
-	llwprintf(FMT_INT, levl);
-	if (nxref(node)) llwprintf(" %s", nxref(node));
-	llwprintf(" %s", ntag(node));
-	if (nval(node)) llwprintf(" %s", nval(node));
-	llwprintf("%s", "\n");
-	show_node_rec(levl + 1, nchild(node));
-	show_node_rec(levl    , nsibling(node));
-}
-#endif
-
 /*========================
  * copy_node_subtree -- Copy tree
  *======================*/
@@ -479,20 +395,6 @@ traverse_nodes (GNode *node, bool (*func)(GNode *, Word), Word param)
 	}
 	return true;
 }
-
-#if 0		  /* no callers */
-/*==================================================
- * num_spouses_of_indi -- Returns number of spouses of person
- *================================================*/
-int
-num_spouses_of_indi (GNode *indi)
-{
-	int nsp;
-	if (!indi) return 0;
-	FORSPOUSES(indi, spouse, fam, nsp, database) ENDSPOUSES
-	return nsp;  /* don't include self*/
-}
-#endif
 
 #if !defined(DEADENDS)
 /*=================================================

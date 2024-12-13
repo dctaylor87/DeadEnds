@@ -185,21 +185,7 @@ write_header (FILE *file,
 static int
 write_body (FILE *file, Database *database)
 {
-#if 1
   return write_all_records (file, database->recordIndex);
-#else
-  /* Individuals */
-  write_all_records (file, database->personIndex);
-  /* Families */
-  write_all_records (file, database->familyIndex);
-  /* Sources */
-  write_all_records (file, database->sourceIndex);
-  /* Events */
-  write_all_records (file, database->eventIndex);
-  /* Others */
-  write_all_records (file, database->otherIndex);
-  return (0);
-#endif
 }
 
 static int
