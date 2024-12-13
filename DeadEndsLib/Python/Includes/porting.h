@@ -33,7 +33,7 @@
 //#define FALSE		false	/* <stdbool.h> */
 //#define TRUE		true	/* <stdbool.h> */
 
-#define INT		int	/* XXX */
+//#define INT		int	/* XXX */
 
 //#define indi_to_fath(node)		personToFather(node, database)
 //#define indi_to_moth(node)		personToMother(node, database)
