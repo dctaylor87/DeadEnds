@@ -36,31 +36,9 @@ _llpy_node_to_record (GNode *node, Database *database)
   if (! top->key)
     return NULL;		/* without the key we can't find the record! */
 
-#if 1
   RecordIndexEl *record;
 
   record = ((RecordIndexEl *)searchHashTable
 	    ((HashTable *)database->recordIndex, top->key));
   return (record);
-#else
-  /* we can no longer assume that the first character of the key tells
-     us the record type, so we have to search ALL the key indexes */
-  RecordIndexEl *record;
-
-  record = ((RecordIndexEl *)searchHashTable
-	    ((HashTable *)database->personIndex, top->key));
-  if (! record)
-    record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)database->familyIndex, top->key));
-  if (! record)
-    record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)database->sourceIndex, top->key));
-  if (! record)
-    record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)database->eventIndex, top->key));
-  if (! record)
-    record = ((RecordIndexEl *)searchHashTable
-	      ((HashTable *)database->otherIndex, top->key));
-  return (record);
-#endif  
 }
