@@ -151,7 +151,7 @@ refnScan (CString sts, Database *database)
 			break;
 	}
 	msg_status("%s", sts);
-	traverse_refns(rs_callback, &scanner);
+	traverseRefns(rs_callback, &scanner, currentDatabase);
 
 	return scanner_free_and_return_seq(&scanner);
 }

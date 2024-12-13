@@ -154,7 +154,7 @@ add_indi_by_edit (bool rfmt)
 			break;
 		}
 		indi = nztop(indi0);
-		cnt = resolve_refn_links(indi);
+		cnt = resolveRefnLinks(indi, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
 		if (!valid_indi_tree(indi, &msg, NULL, currentDatabase)) {
@@ -216,7 +216,7 @@ add_new_indi_to_db (RecordIndexEl *indi0)
 			addRefn(nval(node), key, database);
 	}
 	joinPerson(indi, name, refn, sex, body, NULL, NULL);
-	resolve_refn_links(indi);
+	resolveRefnLinks(indi, currentDatabase);
 	indi_to_dbase(indi);
 }
 /*================================================================
@@ -241,7 +241,7 @@ add_indi_no_cache (GNode *indi)
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi, name, refn, sex, body, famc, fams);
-	resolve_refn_links(indi);
+	resolveRefnLinks(indi, currentDatabase);
 	return storeRecord (database, indi);
 }
 /*========================================================
@@ -372,8 +372,8 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
 
 /* Write updated records to database */
 
-	resolve_refn_links(child);
-	resolve_refn_links(fam);
+	resolveRefnLinks(child, currentDatabase);
+	resolveRefnLinks(fam, currentDatabase);
 	fam_to_dbase(fam);
 	indi_to_dbase(child);
 }
@@ -481,8 +481,8 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
 
 	/* Write updated records to database */
 
-	resolve_refn_links(spouse);
-	resolve_refn_links(fam);
+	resolveRefnLinks(spouse, currentDatabase);
+	resolveRefnLinks(fam, currentDatabase);
 	indi_to_dbase(spouse);
 	fam_to_dbase(fam);
 }
@@ -646,7 +646,7 @@ editfam:
 			}
 			break;
 		}
-		cnt = resolve_refn_links(fam2);
+		cnt = resolveRefnLinks(fam2, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
 		if (!valid_fam_tree(fam2, &msg, fam1, currentDatabase)) {
@@ -715,10 +715,10 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinFamily(fam2, refn, husb, wife, chil, body);
-	resolve_refn_links(fam2);
-	resolve_refn_links(spouse1);
-	resolve_refn_links(spouse2);
-	resolve_refn_links(child);
+	resolveRefnLinks(fam2, currentDatabase);
+	resolveRefnLinks(spouse1, currentDatabase);
+	resolveRefnLinks(spouse2, currentDatabase);
+	resolveRefnLinks(child, currentDatabase);
 	fam_to_dbase(fam2);
 	if (spouse1) indi_to_dbase(spouse1);
 	if (spouse2) indi_to_dbase(spouse2);

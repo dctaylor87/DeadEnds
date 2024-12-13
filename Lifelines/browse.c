@@ -172,7 +172,7 @@ struct hist {
 	int start;
 	int past_end;
 	int size;
-	NKEY * list;
+	String *list;
 };
 static struct hist vhist; /* records visited */
 static struct hist chist; /* records changed */
@@ -1582,7 +1582,7 @@ init_hist (struct hist * histp, int count)
 	int size = count * sizeof(histp->list[0]);
 	memset(histp, 0, sizeof(*histp));
 	histp->size = count;
-	histp->list = (NKEY *)stdalloc(size);
+	histp->list = (String *)stdalloc(size);
 	memset(histp->list, 0, size);
 	histp->start = -1;
 	histp->past_end = 0;
@@ -1756,7 +1756,7 @@ history_record_change (RecordIndexEl *rec)
 static void
 history_record (RecordIndexEl *rec, struct hist * histp)
 {
-	NKEY nkey = nkey_zero();
+	String nkey = 0;
 	int next, i;
 	int count = get_hist_count(histp);
 	int protect = getdeoptint("HistoryBounceSuppress", 0);
@@ -1780,12 +1780,12 @@ history_record (RecordIndexEl *rec, struct hist * histp)
 	next = (histp->past_end-1);
 	if (next < 0) next += histp->size;
 	for (i=0; i<protect; ++i) {
-		if (nkey_eq(&nkey, &histp->list[next]))
+		if (strcmp(nkey, histp->list[next]))
 			return;
 		if (--next < 0) next += histp->size;
 	}
 	/* it is a new one so add it to circular list */
-	nkey_copy(&nkey, &histp->list[histp->past_end]);
+	histp->list[histp->past_end] = nkey;
 	if (histp->start == histp->past_end) {
 		/* full buffer & we just overwrote the oldest */
 		histp->start = (histp->start+1) % histp->size;
@@ -1910,7 +1910,7 @@ get_history_list (struct hist * histp)
 		GNode *node=0;
 		node = getRecord (histp->list[next], currentDatabase);
 		if (node) {
-			String key = node_to_key(node);
+			String key = nxref(node);
 			append_indiseq_null(seq, key, NULL, true, false);
 		}
 		next = (next+1) % histp->size;

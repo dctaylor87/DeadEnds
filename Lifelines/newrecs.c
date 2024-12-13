@@ -184,7 +184,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 			} 
 			break;
 		}
-		cnt = resolve_refn_links(node);
+		cnt = resolveRefnLinks(node, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
 		if (!valid_node_type(node, ntype, &msg, NULL, currentDatabase)) {
@@ -326,7 +326,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 /* Have user edit record */
 	annotateWithSupplemental(root1, rfmt, database);
 	write_node_to_editfile(root1);
-	resolve_refn_links(root1);
+	resolveRefnLinks(root1, currentDatabase);
 
 	do_edit();
 
@@ -340,7 +340,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 			}
 			break;
 		}
-		cnt = resolve_refn_links(root2);
+		cnt = resolveRefnLinks(root2, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
 		if (!(*val)(root2, &msg, root1, database)) {
@@ -398,7 +398,7 @@ edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
 	/* remove deleted refns & add new ones */
 	classifyNodes(&refn1, &refnn, &refn1n);
 	for (node = refn1; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
+		if (nval(node)) removeRefn(nval(node), key, currentDatabase);
 	for (node = refnn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	freeGNodes(refn1);

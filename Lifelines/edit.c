@@ -112,7 +112,7 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
 			} 
 			break;
 		}
-		cnt = resolve_refn_links(indi2);
+		cnt = resolveRefnLinks(indi2, currentDatabase);
 		/* validate for showstopper errors */
 		if (!valid_indi_tree(indi2, &msg, indi1, currentDatabase)) {
 			/* if fail a showstopper error, must reedit or abort */
@@ -198,7 +198,7 @@ edit_family (RecordIndexEl *frec1, bool rfmt)
 			}
 			break;
 		}
-		cnt = resolve_refn_links(fam2);
+		cnt = resolveRefnLinks(fam2, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
 		if (!valid_fam_tree(fam2, &msg, fam1, currentDatabase)) {

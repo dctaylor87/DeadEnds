@@ -178,7 +178,7 @@ advedit_expand_traverse (GNode *node, void *param)
 			return true;
 		}
 	ENDLIST
-	enqueue_list(subs, node);
+	enqueueList(subs, node);
 	stdfree(key);
 	return true;
 }

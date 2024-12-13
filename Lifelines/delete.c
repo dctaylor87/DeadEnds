@@ -104,20 +104,20 @@ chooseAndRemoveFamily (void)
 	}
 
 	/* build confirm string */
-	n = ISize(spseq);
+	n = lengthSequence(spseq);
 	destrsetf(spouses, sizeof(spouses), uu8
 		, _pl(FMT_INT " spouse", FMT_INT " spouses", n), n);
-	n = ISize(chseq);
+	n = lengthSequence(chseq);
 	destrsetf(children, sizeof(children), uu8
 		, _pl(FMT_INT " child", FMT_INT " children", n), n);
 	destrsetf(members, sizeof(members), uu8
-		, _(qScffdeld), fam_to_key(fam), spouses, children);
+		, _(qScffdeld), familyToKey(fam), spouses, children);
 	destrapps(confirm, sizeof(confirm), uu8, _(qScffdel));
 	destrapps(confirm, sizeof(confirm), uu8, members);
 
 	if (ask_yes_or_no(confirm)) {
 
-		if (ISize(spseq)+ISize(chseq) == 0) {
+		if (lengthSequence(spseq)+lengthSequence(chseq) == 0) {
 			/* handle empty family */
 			remove_empty_fam(fam, currentDatabase);
 		}

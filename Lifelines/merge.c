@@ -419,7 +419,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
 	rename_from_browse_lists(key);
 	for (node = refn2; node; node = nsibling(node))
-		if (nval(node)) remove_refn(nval(node), key);
+		if (nval(node)) removeRefn(nval(node), key, currentDatabase);
 	for (node = refn3; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi3, name3, refn3, sex3, body3, famc3, fams3);
@@ -429,7 +429,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 
 /* done with changes, save new record to db */
 
-	resolve_refn_links(indi4);
+	resolveRefnLinks(indi4, currentDatabase);
 	indi_to_dbase(indi4);
 
 /* finally we're done with indi1 & indi2 */
@@ -584,7 +584,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	freeGNodes(chil1);
 	freeGNodes(rest1);
 	joinFamily(fam2, fref4, husb4, wife4, chil4, rest4);
-	resolve_refn_links(fam2);
+	resolveRefnLinks(fam2, currentDatabase);
 	fam_to_dbase(fam2);
 
 /* sanity check lineage links */

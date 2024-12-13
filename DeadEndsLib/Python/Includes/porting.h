@@ -4,7 +4,7 @@
 //typedef const char *	CNSTRING;
 
 //#define BOOLEAN		_Bool
-#define SURCAPTYPE	_Bool
+//#define SURCAPTYPE	_Bool
 //#define NODE		GNode *
 
 #define TRACK_NODE_REFCNT_INC(node) /* empty -- no current ref counts */

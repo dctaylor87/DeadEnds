@@ -33,9 +33,9 @@
 
 //#define INDISEQ		Sequence *
 //#define ISize(seq)	((seq)->size)
-#define ISize(seq)	((seq)->block.length)
+//#define ISize(seq)	((seq)->block.length)
 //#define length_indiseq(seq)	ISize(seq)
-#define IData(seq)	((SequenceEl **)((seq)->block.elements))
+//#define IData(seq)	((SequenceEl **)((seq)->block.elements))
 
 //#define remove_indiseq(seq)	deleteSequence(seq)
 
@@ -57,7 +57,7 @@
 //#define fam_to_mothers(node)		familyToMothers(node, database)
 //#define fam_to_husb(node)		familyToHusband(node, database)
 //#define fam_to_first_chil(node)		familyToFirstChild(node, database)
-#define fam_to_key(fam)			familyToKey(fam)
+//#define fam_to_key(fam)			familyToKey(fam)
 
 //#define indi_to_children(node)		personToChildren(node, database)
 #define indi_to_families(person, fams)	personToFamilies(person, fams, database)
@@ -65,8 +65,8 @@
 //#define indi_to_mothers(node)		personToMothers(node, database)
 #define indi_to_spouses(node)		personToSpouses(node, database)
 
-#define indi_to_name(node, len)		personToName(node,len)
-#define indi_to_title(node, len)	personToTitle(node,len)
+//#define indi_to_name(node, len)		personToName(node,len)
+//#define indi_to_title(node, len)	personToTitle(node,len)
 
 //#define split_indi_old(indi,name,refn,sex,body,famc,fams) splitPerson(indi,name,refn,sex,body,famc,fams)
 //#define split_fam(fam,refn,husb,wife,chil,rest) splitFamily(fam,refn,husb,wife,chil,rest)
@@ -91,7 +91,7 @@
 //#define lock_cache(cel)		/* empty */
 //#define unlock_cache(cel)	/* empty */
 
-#define uchar		u_char
+//#define uchar		u_char
 //#define INT32		int32_t
 //#define INT16		int16_t
 
@@ -111,11 +111,11 @@
 //#define valueof_obj(table, key)			searchHashTable(table, key)
 
 //#define release_table(table)			releaseHashTable(table)
-#define addref_table(table)			addrefHashTable(table)
+//#define addref_table(table)			addrefHashTable(table)
 
 //#define LIST		List *
 //#define create_list()			createList(NULL, NULL, NULL, false)
-#define enqueue_list			enqueueList
+//#define enqueue_list			enqueueList
 
 //#define back_list(list, elt)		appendListElement(list, elt)
 //#define destroy_list(list)		deleteList(list)
@@ -124,17 +124,17 @@
 //#define pop_list(list)		getAndRemoveFirstListElement(list)
 //#define push_list(list, vptr)		prependToList(list, vptr)
 
-#define num_indis()			numberPersons(database)
-#define num_fams()			numberFamilies(database)
-#define num_sours()			numberSources(database)
-#define num_evens()			numberEvents(database)
-#define num_othrs()			numberOthers(database)
+//#define num_indis()			numberPersons(database)
+//#define num_fams()			numberFamilies(database)
+//#define num_sours()			numberSources(database)
+//#define num_evens()			numberEvents(database)
+//#define num_othrs()			numberOthers(database)
 
-#define node_to_key(node)	(nxref(node))
+//#define node_to_key(node)	(nxref(node))
 //#define normalize_rec(rec)	normalizeNodeTree(rec->root)
 
-#define HINT_PARAM_UNUSED		ATTRIBUTE_UNUSED
-#define HINT_PRINTF(fmt, args)		ATTRIBUTE_PRINTF(fmt, args)
+//#define HINT_PARAM_UNUSED		ATTRIBUTE_UNUSED
+//#define HINT_PRINTF(fmt, args)		ATTRIBUTE_PRINTF(fmt, args)
 
 //#define FORINDISEQ(seq,elt,ndx)		FORSEQUENCE(seq,elt,ndx)
 //#define ENDINDISEQ			ENDSEQUENCE
@@ -148,19 +148,19 @@
 //#define strfree(ptr_to_str)	{ stdfree (*ptr_to_str); *ptr_to_str = 0; }
 #define ISNULL(k)		(!k || *k == 0)
 
-#define resolve_refn_links(node)	resolveRefnLinks(node, database)
+//#define resolve_refn_links(node)	resolveRefnLinks(node, database)
 //#define add_refn(refn, key)		addRefn(refn, key, database)
-#define remove_refn(refn, key)		removeRefn(refn, key, database)
+//#define remove_refn(refn, key)	removeRefn(refn, key, database)
 //#define get_refn(refn)			getRefn(refn, database)
-#define index_by_refn(node)		indexByRefn(node, database)
+//#define index_by_refn(node)		indexByRefn(node, database)
 //#define annotate_with_supplemental(node, rfmt)	annotateWithSupplemental(node, rfmt, database)
-#define traverse_refns(func, param)	traverseRefns(func, param, database)
+//#define traverse_refns(func, param)	traverseRefns(func, param, database)
 
 /* experimental NKEY stuff */
 
-#define NKEY	String
+//#define NKEY	String
 
-#define nkey_copy(src, dest)	*dest = strdup(*src)
-#define nkey_eq(nkey1, nkey2)	strcmp (*nkey1, *nkey2)
-#define nkey_clear(nkey)	*nkey = 0
-#define nkey_zero()		0
+//#define nkey_copy(src, dest)	*dest = strdup(*src)
+//#define nkey_eq(nkey1, nkey2)	strcmp (*nkey1, *nkey2)
+//#define nkey_clear(nkey)	*nkey = 0
+//#define nkey_zero()		0

@@ -255,11 +255,12 @@ retry_input_codeset:
 		}
 	}
 	
-	if((num_indis() > 0)
-		|| (num_fams() > 0)
-		|| (num_sours() > 0)
-		|| (num_evens() > 0)
-		|| (num_othrs() > 0)) gd_reuse = false;
+	if((numberPersons() > 0) ||
+	   (numberFamilies() > 0)
+	   (numberSources() > 0)
+	   (numberEvents() > 0)
+	   (numberOthers() > 0))
+	  gd_reuse = false;
 	else if((gd_reuse = check_stdkeys())) {
 		totused = gd_itot + gd_ftot + gd_stot + gd_etot + gd_xtot;
 		totkeys = gd_imax + gd_fmax + gd_smax + gd_emax + gd_xmax;
@@ -366,11 +367,11 @@ restore_record (GNode *node, int type, ATTRIBUTE_UNUSED int num)
 		add_indi_no_cache(node);
 		return;
 	}
-	resolve_refn_links(node);
+	resolveRefnLinks(node, currentDatabase);
 	ASSERT(str = node_to_string(node));
 	key = nxref(node);
 	ASSERT(store_record(key, str, strlen(str)));
-	index_by_refn(node, key);
+	indexByRefn(node, key, currentDatabase);
 	stdfree(str);
 }
 /*==============================================================

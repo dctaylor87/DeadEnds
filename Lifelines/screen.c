@@ -481,7 +481,7 @@ add_uiwin (UIWINDOW uiwin)
 {
 	if (!list_uiwin)
 		list_uiwin = createList(NULL, NULL, delete_uiwindow_impl, false);
-	enqueue_list(list_uiwin, uiwin);
+	enqueueList(list_uiwin, uiwin);
 }
 /*==========================================
  * remove_uiwin -- Remove uiwin from master list
@@ -1394,104 +1394,104 @@ invoke_cset_display (void)
 	ZSTR zstr=zs_newn(80);
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 	if (uu8) {
-		enqueue_list(list, strsave(_("Internal UTF-8: Yes")));
+		enqueueList(list, strsave(_("Internal UTF-8: Yes")));
 	} else {
-		enqueue_list(list, strsave(_("Internal UTF-8: No")));
+		enqueueList(list, strsave(_("Internal UTF-8: No")));
 	}
 
 	if (are_locales_supported())
-		enqueue_list(list, strsave(_("Locales are enabled.")));
+		enqueueList(list, strsave(_("Locales are enabled.")));
 	else
-		enqueue_list(list, strsave(_("Locales are disabled.")));
+		enqueueList(list, strsave(_("Locales are disabled.")));
 	
 	if (is_nls_supported()) {
-		enqueue_list(list, strsave(_("NLS (National Language Support) is compiled in.")));
+		enqueueList(list, strsave(_("NLS (National Language Support) is compiled in.")));
 		zs_setf(zstr, "LocaleDir (default): %s", LOCALEDIR);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 		zs_setf(zstr,  "LocaleDir (override): %s", getdeoptstr("LocaleDir", ""));
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	} else {
-		enqueue_list(list, strsave(_("NLS (National Language Support) is not compiled in.")));
+		enqueueList(list, strsave(_("NLS (National Language Support) is not compiled in.")));
 	}
 
 	if (1) {
 		CString str = get_gettext_codeset();
 		str = str ? str : "";
 		zs_setf(zstr, "bind_textdomain_codeset: %s", str);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	}
 
 	add_shims_info(list);
 
 	if (is_iconv_supported())
-		enqueue_list(list, strsave(_("iconv (codeset conversion) is compiled in.")));
+		enqueueList(list, strsave(_("iconv (codeset conversion) is compiled in.")));
 	else
-		enqueue_list(list, strsave(_("iconv (codeset conversion) is not compiled in.")));
+		enqueueList(list, strsave(_("iconv (codeset conversion) is not compiled in.")));
 	
 	zs_setf(zstr, _("Startup collate locale: %s"), get_original_locale_collate());
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 	
 	zs_setf(zstr, _("Startup messages locale: %s")	, get_original_locale_msgs());
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 	
 	zs_setf(zstr, _("Current collate locale: %s"), get_current_locale_collate());
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 	
 	zs_setf(zstr, _("Current messages locale: %s"), get_current_locale_msgs());
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 
 	zs_setf(zstr, _("Collation routine: %s"), ll_what_collation());
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 	
 	if (eqstr_ex(gui_codeset_in, gui_codeset_out)) {
 		zs_setf(zstr, _("GUI codeset: %s"), gui_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	} else {
 		zs_setf(zstr, _("GUI output codeset: %s"), gui_codeset_out);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 		zs_setf(zstr, _("GUI input codeset: %s"), gui_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	}
 
 	if (eqstr_ex(editor_codeset_in, editor_codeset_out)) {
 		zs_setf(zstr, _("editor codeset: %s"), editor_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	} else {
 		zs_setf(zstr, _("editor output codeset: %s"), editor_codeset_out);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 		zs_setf(zstr, _("editor input codeset: %s"), editor_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	}
 
 	if (eqstr_ex(report_codeset_in, report_codeset_out)) {
 		zs_setf(zstr, _("report codeset: %s"), report_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	} else {
 		zs_setf(zstr, _("report output codeset: %s"), report_codeset_out);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 		zs_setf(zstr, _("report input codeset: %s"), report_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	}
 
 	if (eqstr_ex(gedcom_codeset_in, gedcom_codeset_out)) {
 		zs_setf(zstr, _("GEDCOM codeset: %s"), gedcom_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	} else {
 		zs_setf(zstr, _("gedcom output codeset: %s"), gedcom_codeset_out);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 		zs_setf(zstr, _("gedcom input codeset: %s"), gedcom_codeset_in);
-		enqueue_list(list, strsave(zs_str(zstr)));
+		enqueueList(list, strsave(zs_str(zstr)));
 	}
 
 	zs_setf(zstr, "TTPATH: %s", getdeoptstr("TTPATH", "."));
-	enqueue_list(list, strsave(zs_str(zstr)));
+	enqueueList(list, strsave(zs_str(zstr)));
 
 	if (charprops_is_loaded()) {
-		enqueue_list(list, strsave(_("UTF-8 charprops loaded" )));
+		enqueueList(list, strsave(_("UTF-8 charprops loaded" )));
 	} else {
-		enqueue_list(list, strsave(_("UTF-8 charprops not loaded" )));
+		enqueueList(list, strsave(_("UTF-8 charprops not loaded" )));
 	}
 
 
@@ -1517,20 +1517,20 @@ add_shims_info (ATTRIBUTE_UNUSED List *list)
 		if (intlshim_get_property("dll_path", value, sizeof(value)))
 		{
 			zs_setf(zstr, _("gettext dll: %s"), value);
-			enqueue_list(list, strsave(zs_str(zstr)));
+			enqueueList(list, strsave(zs_str(zstr)));
 			if (intlshim_get_property("dll_version", value, sizeof(value)))
 			{
 				zs_setf(zstr, _("gettext dll version: %s"), value);
-				enqueue_list(list, strsave(zs_str(zstr)));
+				enqueueList(list, strsave(zs_str(zstr)));
 			}
 			else
 			{
-				enqueue_list(list, strsave(_("gettext dll had no version")));
+				enqueueList(list, strsave(_("gettext dll had no version")));
 			}
 		}
 		else
 		{
-			enqueue_list(list, strsave(_("no gettext dll found")));
+			enqueueList(list, strsave(_("no gettext dll found")));
 		}
 	}
 #endif
@@ -1540,20 +1540,20 @@ add_shims_info (ATTRIBUTE_UNUSED List *list)
 		if (iconvshim_get_property("dll_path", value, sizeof(value)))
 		{
 			zs_setf(zstr, _("iconv dll: %s"), value);
-			enqueue_list(list, strsave(zs_str(zstr)));
+			enqueueList(list, strsave(zs_str(zstr)));
 			if (iconvshim_get_property("dll_version", value, sizeof(value)))
 			{
 				zs_setf(zstr, _("iconv dll version: %s"), value);
-				enqueue_list(list, strsave(zs_str(zstr)));
+				enqueueList(list, strsave(zs_str(zstr)));
 			}
 			else
 			{
-				enqueue_list(list, strsave(_("iconv dll had no version")));
+				enqueueList(list, strsave(_("iconv dll had no version")));
 			}
 		}
 		else
 		{
-			enqueue_list(list, strsave(_("no iconv dll found")));
+			enqueueList(list, strsave(_("no iconv dll found")));
 		}
 	}
 #endif
@@ -1810,7 +1810,11 @@ uopt_validate (HashTable *tab, void * param)
 	*/
 	if (!eqstr_ex(codeset, original_codeset)
 		&& !eqstr_ex(codeset, int_codeset)) {
-		if (num_indis()+num_fams()+num_sours()+num_evens()+num_othrs())
+		if (numberPersons(currentDatabase)+
+		    numberFamilies(currentDatabase)+
+		    numberSources(currentDatabase)+
+		    numberEvents(currentDatabase)+
+		    numberOthers(currentDatabase))
 			return _("Impermissible to change codeset in a populated database");
 	}
 	return 0;
@@ -2439,7 +2443,7 @@ append_to_msg_list (String msg)
 {
 		if (!msg_list)
 			msg_list = createList (NULL, NULL, free, false);
-		enqueue_list(msg_list, strsave(msg));
+		enqueueList(msg_list, strsave(msg));
 }
 #endif
 /*=========================================

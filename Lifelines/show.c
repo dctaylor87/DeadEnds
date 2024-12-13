@@ -226,7 +226,7 @@ disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
 	zs_setf(zstr, "%s: %s ", prefix, name);
 	avail = width - zs_len(zstr)-zs_len(zkey)-2;
 	if (avail > 10) {
-		String t = indi_to_title(nztop(irec), avail-3);
+		String t = personToTitle(nztop(irec), avail-3);
 		if (t) zs_appf(zstr, "[%s] ", t);
 	}
 /* TODO: add more names if room */

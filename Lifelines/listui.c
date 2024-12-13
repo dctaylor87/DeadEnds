@@ -813,7 +813,7 @@ manufacture a listdisp here
 		}
 		scratch[0] =0;
 		if (name) {
-			SURCAPTYPE surcaptype = DOSURCAP;
+			bool surcaptype = DOSURCAP;
 			if (!getdeoptint("UppercaseSurnames", 1))
 				surcaptype = NOSURCAP;
 			/* NOTE: the 40 here is arbitrary */

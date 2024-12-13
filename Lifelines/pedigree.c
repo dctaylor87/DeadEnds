@@ -241,7 +241,7 @@ append_to_text_list (List *list, String text, int width, bool newline)
 	} else {
 		temp = getAndRemoveFirstListElement(list);
 		if (temp && (int)strlen(temp) >= width) {
-			enqueue_list(list, temp);
+			enqueueList(list, temp);
 			temp = NULL;
 		}
 	}
@@ -257,7 +257,7 @@ append_to_text_list (List *list, String text, int width, bool newline)
 		if (!len) {
 			/* done */
 			if (current[0]) {
-				enqueue_list(list, strsave(current));
+				enqueueList(list, strsave(current));
 			}
 			stdfree(current);
 			return;
@@ -269,7 +269,7 @@ append_to_text_list (List *list, String text, int width, bool newline)
 		ptr += (curptr - temp);
 		if (!curlen) {
 			/* filled up an item */
-			enqueue_list(list, strsave(current));
+			enqueueList(list, strsave(current));
 			current[0] = 0;
 			curptr = current;
 			curlen = width;
