@@ -241,7 +241,7 @@ annotate_node (GNode *node, bool expand_refns,
 	key = value_to_xref(nval(node));
 	if (!key) return;
 	
-	rec = __llpy_key_to_record (key, NULL, database);
+	rec = getRecord (key, database->recordIndex);
 	if (!rec) return;
 	
 	if (expand_refns) {
@@ -378,7 +378,7 @@ refn_to_record (String ukey,    /* user refn key */
   if (! key)
     return NULL;
 
-  return nztop (__llpy_key_to_record (key, NULL, database));
+  return nztop (getRecord (key, database->recordIndex));
 }
 
 /* getRefn -- searches the index for a mapping for refn, if found, returns it.

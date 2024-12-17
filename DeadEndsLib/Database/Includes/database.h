@@ -3,7 +3,7 @@
 // database.h is the header file for the Database type.
 //
 // Created by Thomas Wetmore on 10 November 2022.
-// Last changed on 7 December 2024.
+// Last changed on 13 December 2024.
 
 #ifndef database_h
 #define database_h
@@ -66,13 +66,13 @@ int numberSources(Database*);    // Return the number of sources in the database
 int numberEvents(Database*);     // Return the number of events in the database.
 int numberOthers(Database*);     // Return the number of other records in the database.
 bool isEmptyDatabase(Database*);  // Return true if the database has not persons or families.
-GNode *keyToRecord (CString key, Database *); // Return a key's record
+//GNode *keyToRecord (CString key, Database *); // Return a key's record
 GNode *keyToPerson(CString key, RecordIndex*); // Get a person from record index.
 GNode *keyToFamily(CString key, RecordIndex*); // Get a family GNode from a RecordIndex.
 GNode *keyToSource(CString key, RecordIndex*); // Get a source record from the database.
 GNode *keyToEvent(CString key, RecordIndex*); // Get an event record from the database.
 GNode *keyToOther(CString key, RecordIndex*); // Get an other record from the database.
-GNode *getRecord(CString key, Database*);  // Get an arbitraray record from the database.
+GNode *getRecord(CString key, RecordIndex*);  // Get an arbitraray record from the database.
 
 // oldIndexNames indexes all person names in a database.
 extern void oldIndexNames(Database* database);

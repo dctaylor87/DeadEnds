@@ -478,7 +478,7 @@ chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 	if (! elementFromSequence (seq, i, &skey, NULL))
 	  return NULL;
 
-	rec = __llpy_key_to_record (skey, NULL, seq->database);
+	rec =getRecord (skey, seq->index);
 
 	if(!rec) {
 		char buf[132];
@@ -503,10 +503,11 @@ ask_for_record (CString idstr, int letr)
 	if (!answer[0]) return NULL;
 
 	//rec = key_possible_to_record(answer, letr);
-	rec = __llpy_key_to_record (answer, NULL, currentDatabase);
+	rec = getRecord (answer, currentDatabase->recordIndex);
 	if (!rec) {
 		Sequence *seq;
-		seq = refnToSequence(answer, currentDatabase);
+		seq = refnToSequence(answer, currentDatabase->recordIndex,
+				     currentDatabase->nameIndex);
 		if (!seq) return NULL;
 		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn));
 		deleteSequence(seq);

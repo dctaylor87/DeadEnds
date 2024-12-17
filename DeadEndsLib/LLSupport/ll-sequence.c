@@ -66,7 +66,7 @@ getAllOthers (Database *database)
 Sequence *
 getAllRecordOfType (Database *database, RecordType type)
 {
-  Sequence *seq = createSequence (database);
+  Sequence *seq = createSequence (database->recordIndex);
   int bucket = 0;
   int element = 0;
   RecordIndexEl *record = 0;
@@ -90,7 +90,7 @@ getAllRecordOfType (Database *database, RecordType type)
 Sequence *
 getAllRefns (Database *database)
 {
-  Sequence *seq = createSequence (database);
+  Sequence *seq = createSequence (database->recordIndex);
   int bucket = 0;
   int element = 0;
   RefnIndexEl *refnelt = 0;
@@ -119,7 +119,7 @@ familyToSpouses (GNode *fam, Database *database)
 
   if (!fam)
     return NULL;
-  seq = createSequence (database);
+  seq = createSequence (database->recordIndex);
 
   FORFAMSPOUSES(fam, spouse, database)
     len++;

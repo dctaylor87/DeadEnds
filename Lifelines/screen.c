@@ -1907,7 +1907,7 @@ show_record (UIWINDOW uiwin, CString key, int mode, LLRECT rect
 
 	} else {
 		/* could be S,E,X -- show_aux handles all of these */
-		RecordIndexEl *rec = __llpy_key_to_record (key, NULL, currentDatabase);
+		RecordIndexEl *rec = getRecord (key, currentDatabase->recordIndex);
 		if (rec)
 			show_aux(uiwin, rec, mode, rect, scroll, reuse);
 		return rec != NULL;

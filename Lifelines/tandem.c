@@ -188,7 +188,7 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
 				elementFromSequence(seq, 0, &key, &name);
-				*prec1 = keyToPersonRecord(key, seq->database);
+				*prec1 = keyToPerson(key, seq->index);
 				deleteSequence(seq);
 				return BROWSE_INDI;
 			}

@@ -211,7 +211,7 @@ prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
 		if ((len = lengthSequence(*pseq)) < 1) return;
 		if (len == 1) {
 			elementFromSequence(*pseq, 0, &key, &name);
-			*prec = keyToPersonRecord(key, (*pseq)->database);
+			*prec = keyToPerson(key, (*pseq)->index);
 			deleteSequence(*pseq);
 			*pseq = NULL;
 			*code = BROWSE_UNK; /* not sure what we got above */
@@ -638,7 +638,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
 				elementFromSequence(seq, 0, &key, &name);
-				tmp = keyToPersonRecord(key, seq->database);
+				tmp = keyToPerson(key, seq->index);
 				setrecord(&current, &tmp);
 				deleteSequence(seq);
 				seq=NULL;
@@ -1234,7 +1234,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
 				elementFromSequence(seq, 0, &key, &name);
-				tmp = keyToPersonRecord(key, seq->database);
+				tmp = keyToPerson(key, seq->index);
 				setrecord(&current, &tmp);
 				deleteSequence(seq);
 				seq=NULL;
@@ -1811,7 +1811,7 @@ history_back (struct hist * histp)
 		/* loop is to keep going over deleted ones */
 		/* now back up before current item */
 		if (--last < 0) last += histp->size;
-		rec = keyToRecord (histp->list[last], currentDatabase);
+		rec = getRecord (histp->list[last], currentDatabase->recordIndex);
 		if (rec) {
 			histp->past_end = (last+1) % histp->size;
 			return rec;
@@ -1831,7 +1831,7 @@ history_fwd (struct hist * histp)
 	if (!histp->size || histp->past_end == histp->start)
 		return NULL; /* at end of full history */
 	next = histp->past_end;
-	rec = keyToRecord (histp->list[next], currentDatabase);
+	rec = getRecord (histp->list[next], currentDatabase->recordIndex);
 	return rec;
 }
 /*==================================================
@@ -1904,11 +1904,11 @@ get_history_list (struct hist * histp)
 		return NULL;
 	}
 	/* add all items of history to seq */
-	seq = createSequence(currentDatabase);
+	seq = createSequence(currentDatabase->recordIndex);
 	next = histp->start;
 	while (1) {
 		GNode *node=0;
-		node = getRecord (histp->list[next], currentDatabase);
+		node = getRecord (histp->list[next], currentDatabase->recordIndex);
 		if (node) {
 			String key = nxref(node);
 			append_indiseq_null(seq, key, NULL, true, false);

@@ -180,8 +180,8 @@ GNode *keyToOtherRecord(CString key, Database *database)
 }
 
 // getRecord gets a record from the database given a key.
-GNode* getRecord(CString key, Database* database) {
-	return searchRecordIndex(database->recordIndex, key);
+GNode* getRecord(CString key, RecordIndex* index) {
+	return searchRecordIndex(index, key);
 }
 
 // summarizeDatabase writes a short summary of a Database to standard output.

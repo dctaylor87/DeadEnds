@@ -275,7 +275,7 @@ static void
 scanner_init (SCANNER * scanner, int scantype, CString statusmsg, Database *database)
 {
 	scanner->scantype = scantype;
-	scanner->seq = createSequence(currentDatabase);
+	scanner->seq = createSequence(currentDatabase->recordIndex);
 	strcpy(scanner->pattern, "");
 	scanner->statusmsg = statusmsg;
 	scanner->field = NULL;

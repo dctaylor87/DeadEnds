@@ -92,7 +92,7 @@ GNodeToSources (GNode *node, Database *database)
 
   if (!node)
     return NULL;
-  seq = createSequence(database);
+  seq = createSequence(database->recordIndex);
   append_all_tags(seq, node, "SOUR", true, true);
   if (!lengthSequence(seq))
     {
@@ -113,7 +113,7 @@ GNodeToNotes (GNode *node, Database *database)
   if (!node)
     return NULL;
 
-  seq = createSequence(database);
+  seq = createSequence(database->recordIndex);
   append_all_tags(seq, node, "NOTE", true, true);
   if (! lengthSequence(seq))
     {
@@ -134,7 +134,7 @@ GNodeToPointers (GNode *node, Database *database)
   if (!node)
     return NULL;
 
-  seq = createSequence(database);
+  seq = createSequence(database->recordIndex);
   append_all_tags(seq, node, NULL, true, false);
   if (! lengthSequence(seq))
     {

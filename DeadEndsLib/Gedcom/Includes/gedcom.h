@@ -151,7 +151,7 @@ int compareRecordKeys(CString, CString);  // gedcom.c
 }
 
 // FORSPOUSES / ENDSPOUSES iterates over a person's spouses.
-#define FORSPOUSES(indi, spouse, fam, num, database)\
+#define FORSPOUSES(indi, spouse, fam, num, index)\
 {\
     GNode* __fnode = FAMS(indi);\
     int __sex = SEXV(indi);\
@@ -160,11 +160,11 @@ int compareRecordKeys(CString, CString);  // gedcom.c
     int num = 0;\
     while (__fnode) {\
         spouse = null;\
-        fam = keyToFamily(__fnode->value, database);\
+        fam = keyToFamily(__fnode->value, index);\
         if (__sex == sexMale)\
-            spouse = familyToWife(fam, database);\
+            spouse = familyToWife(fam, index);\
         else\
-            spouse = familyToHusband(fam, database);\
+            spouse = familyToHusband(fam, index);\
         if (spouse != null) {\
             num++;\
             {

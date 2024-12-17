@@ -221,7 +221,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 			addRefn(nval(refn), key, database);
 	}
 	(*todbasefnc)(node, database);
-	return __llpy_key_to_record (key, NULL, currentDatabase);
+	return getRecord (key, currentDatabase->recordIndex);
 }
 /*=======================================
  * edit_source -- Edit source in database

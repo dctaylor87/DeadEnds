@@ -3,7 +3,7 @@
 // sequence.h is the header file for the Sequence datatype.
 //
 // Created by Thomas Wetmore on 1 March 2023.
-// Last changed on 16 May 2024.
+// Last changed on 13 December 2024.
 
 #ifndef sequence_h
 #define sequence_h
@@ -11,6 +11,9 @@
 #include "standard.h"
 #include "block.h"
 #include "gnode.h"
+#include "recordindex.h"
+#include "nameindex.h"
+#include "refnindex.h" 
 
 // SortType holds the possible sorted states of the elements in a Sequence.
 typedef enum {
@@ -31,11 +34,11 @@ typedef struct Sequence {
 	Block block;
 	SortType sortType;
 	bool unique;
-	Database *database;
+	RecordIndex* index;
 } Sequence;
 
-SequenceEl* createSequenceEl(Database*, CString key, void* value);
-Sequence* createSequence(Database*);
+SequenceEl* createSequenceEl(RecordIndex*, CString key, void* value);
+Sequence* createSequence(RecordIndex*);
 void deleteSequence(Sequence*);
 Sequence* copySequence(Sequence*);
 int lengthSequence(Sequence*);
@@ -52,17 +55,17 @@ void keySortSequence(Sequence*);
 Sequence *uniqueSequence(Sequence*);
 void uniqueSequenceInPlace(Sequence *sequence);
 
-Sequence* personToChildren(GNode* person, Database*);
-Sequence* personToFathers(GNode* person, Database*);
-Sequence* personToMothers(GNode* person, Database*);
-Sequence* familyToChildren(GNode* family, Database*);
-Sequence* familyToFathers(GNode* family, Database*);
-Sequence* familyToMothers(GNode* family, Database*);
-Sequence* personToSpouses(GNode* person, Database*);
-Sequence* personToFamilies(GNode* person, bool, Database*);
-Sequence* nameToSequence(CString name, Database*);
-Sequence* keyToSequence(CString key, Database* database);
-Sequence* refnToSequence (CString value, Database* database);
+Sequence* personToChildren(GNode* person, RecordIndex*);
+Sequence* personToFathers(GNode* person, RecordIndex*);
+Sequence* personToMothers(GNode* person, RecordIndex*);
+Sequence* familyToChildren(GNode* family, RecordIndex*);
+Sequence* familyToFathers(GNode* family, RecordIndex*);
+Sequence* familyToMothers(GNode* family, RecordIndex*);
+Sequence* personToSpouses(GNode* person, RecordIndex*);
+Sequence* personToFamilies(GNode* person, bool, RecordIndex*);
+Sequence* nameToSequence(CString name, RecordIndex*, NameIndex*);
+Sequence* keyToSequence(CString key, RecordIndex*);
+Sequence* refnToSequence (CString value, RecordIndex*, NameIndex*);
 Sequence* stringToSequence(CString name, Database* database);
 
 Sequence* unionSequence(Sequence*, Sequence*);

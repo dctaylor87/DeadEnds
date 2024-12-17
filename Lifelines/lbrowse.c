@@ -107,7 +107,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 
 	while (true) {
 		elementFromSequence(seq, cur, &key, &name);
-		rec = __llpy_key_to_record(key, NULL, seq->database);
+		rec = getRecord(key, seq->index);
 		switch (c = list_browse(seq, top, &cur, mark)) {
 		case 'j':        /* Move down line */
 		case CMD_KY_DN:
@@ -231,7 +231,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			}
 			cand2 = rec;
 			elementFromSequence(seq, mark, &key, &name);
-			cand1 = __llpy_key_to_record(key, NULL, seq->database);
+			cand1 = getRecord(key, seq->index);
 			if (nztype(cand1)==GRPerson && nztype(cand2)==GRPerson) {
 				current_seq = NULL;
 				*prec1 = cand1;
@@ -258,7 +258,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			current_seq = seq = newseq;
 			elementFromSequence(seq, 0, &key, &name);
 			if ((len = lengthSequence(seq)) == 1) {
-				*prec1 = keyToPersonRecord(key, seq->database);
+				*prec1 = keyToPerson(key, seq->index);
 				deleteSequence(newseq);
 				current_seq = NULL;
 				return BROWSE_INDI;

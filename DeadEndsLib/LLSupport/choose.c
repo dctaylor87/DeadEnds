@@ -74,12 +74,12 @@ chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msg
   if (irec)
     {
       ASSERT (! irec->parent);
-      seq = personToChildren(nztop(irec), currentDatabase);
+      seq = personToChildren(nztop(irec), currentDatabase->recordIndex);
     }
   if (! irec && frec)
     {
       ASSERT (! frec->parent);
-      seq = familyToChildren(nztop(frec), currentDatabase);
+      seq = familyToChildren(nztop(frec), currentDatabase->recordIndex);
     }
   if (!seq)
     {
@@ -229,12 +229,12 @@ chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
   if (irec)
     {
       ASSERT (! irec->parent);
-      seq = personToFathers(nztop(irec), currentDatabase);
+      seq = personToFathers(nztop(irec), currentDatabase->recordIndex);
     }
   if (!irec && frec)
     {
       ASSERT (! frec->parent);
-	seq = familyToFathers(nztop(frec), currentDatabase);
+	seq = familyToFathers(nztop(frec), currentDatabase->recordIndex);
     }
   if (!seq)
     {
@@ -263,12 +263,12 @@ chooseMother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
   if (irec)
     {
       ASSERT (! irec->parent);
-	seq = personToMothers(nztop(irec), currentDatabase);
+	seq = personToMothers(nztop(irec), currentDatabase->recordIndex);
     }
   if (!irec && frec)
     {
       ASSERT (! frec->parent);
-	seq = familyToMothers(nztop(frec), currentDatabase);
+	seq = familyToMothers(nztop(frec), currentDatabase->recordIndex);
     }
   if (!seq)
     {

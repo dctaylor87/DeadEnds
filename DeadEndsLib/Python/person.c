@@ -713,7 +713,7 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
       return NULL;
     }
 
-  seq = personToChildren (node, database);
+  seq = personToChildren (node, database->recordIndex);
 
   if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */
@@ -745,7 +745,7 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
   Sequence *seq;
   LLINES_PY_RECORD *py_indi;
 
-  seq = personToSpouses (node, database);
+  seq = personToSpouses (node, database->recordIndex);
   if (! seq || (seq->block.length < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 
@@ -775,7 +775,7 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   Sequence *seq;
   RecordIndexEl *record;
 
-  seq = personToFamilies (nztop (indi->llr_record), true, database);
+  seq = personToFamilies (nztop (indi->llr_record), true, database->recordIndex);
   if (! seq || seq->block.length < 1)
     Py_RETURN_NONE;		/* person is not in any families */
 

@@ -795,7 +795,7 @@ manufacture a listdisp here
 	row = LIST_LINES+2;
 	for (i = top, j = 0; j < viewlines && i < len; i++, j++) {
 		elementFromSequence(seq, i, &key, &name);
-		recnode = getRecord (key, seq->database);
+		recnode = getRecord (key, seq->index);
 		if (i == 0 && scrollable) mvwaddch(win, row, 1, '^');
 		if (i == len-1 && scrollable) mvwaddch(win, row, 1, '$');
 		if (i == mark) mvwaddch(win, row, 2, 'x');

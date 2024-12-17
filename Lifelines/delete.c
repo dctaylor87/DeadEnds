@@ -90,8 +90,8 @@ chooseAndRemoveFamily (void)
 		return;
 
 	/* get list of spouses & children */
-	spseq = createSequence(currentDatabase); /* spouses */
-	chseq = createSequence(currentDatabase); /* children */
+	spseq = createSequence(currentDatabase->recordIndex); /* spouses */
+	chseq = createSequence(currentDatabase->recordIndex); /* children */
 	for (node=nchild(fam); node; node = nsibling(node)) {
 		tag = ntag(node);
 		if (eqstr("HUSB", tag) || eqstr("WIFE", tag)) {

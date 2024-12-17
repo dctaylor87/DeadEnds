@@ -391,7 +391,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
       return NULL;
     }
 
-  seq = familyToChildren (node, database);
+  seq = familyToChildren (node, database->recordIndex);
 
   if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */

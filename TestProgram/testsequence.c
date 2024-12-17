@@ -11,16 +11,17 @@
 #include "utils.h"
 
 static void checkTest(String, int, int);
-static Sequence* tomsAncestors(Database*);
-static Sequence* lusAncestors(Database*);
-static Sequence* tomAndLusAncestorsClosed(Database*);
+static Sequence* tomsAncestors(RecordIndex*);
+static Sequence* lusAncestors(RecordIndex*);
+static Sequence* tomAndLusAncestorsClosed(RecordIndex*);
 
 // testSequence is the starting function to test the Sequence type.
 void testSequence(Database* database, int testNumber) {
 	printf("%d: TEST SEQUENCE: %2.3f\n", testNumber, getMseconds());
 
 	// Create a Sequence.
-	Sequence* sequence = createSequence(database);
+	RecordIndex* index = database->recordIndex;
+	Sequence* sequence = createSequence(index);
 	int length = lengthSequence(sequence);
 	checkTest("Sequence should be empty", 0, length);
 
@@ -78,7 +79,7 @@ void testSequence(Database* database, int testNumber) {
 
 	// Test ancestorSequence.
 	printf("Testing ancestorSequence\n");
-	Sequence* ancestors = tomsAncestors(database);
+	Sequence* ancestors = tomsAncestors(index);
 	showSequence(ancestors, "Tom's Ancestors");
 	printf("Sort ancestors by key\n");
 	keySortSequence(ancestors);
@@ -89,7 +90,7 @@ void testSequence(Database* database, int testNumber) {
 	// Test closed form of ancestorSequence.
 	printf("Testing ancestorSequence with close set to true\n");
 	emptySequence(ancestors);
-	ancestors = tomAndLusAncestorsClosed(database);
+	ancestors = tomAndLusAncestorsClosed(index);
 	showSequence(ancestors, "tom and lu's ancestors closed");
 
 	// Test uniqueSequence.
@@ -119,23 +120,23 @@ void testSequence(Database* database, int testNumber) {
 
 	// Test personToChildren
 	printf("Testing personToChildren, personToFathers, personToMothers\n");
-	GNode* tom = getRecord("@I1@", database);
-	Sequence* kids = personToChildren(tom, database);
+	GNode* tom = getRecord("@I1@", index);
+	Sequence* kids = personToChildren(tom, index);
 	showSequence(kids, "Kids of I1");
 	deleteSequence(kids);
 	// Test personToFathers, personToMothers
-	Sequence* fathers = personToFathers(tom, database);
+	Sequence* fathers = personToFathers(tom, index);
 	showSequence(fathers, "fathers of I1");
-	Sequence* mothers = personToMothers(tom, database);
+	Sequence* mothers = personToMothers(tom, index);
 	showSequence(mothers, "Mothers of I1");
 	deleteSequence(fathers);
 	deleteSequence(mothers);
 	// Test familyToChildren, familyToFathers, familyToMothers
 	printf("Testing familyToChildren, familyToFathers, familyToMothers\n");
-	GNode* fam = getRecord("@F1@", database);
-	kids = familyToChildren(fam, database);
-	fathers = familyToFathers(fam, database);
-	mothers = familyToMothers(fam, database);
+	GNode* fam = getRecord("@F1@", index);
+	kids = familyToChildren(fam, index);
+	fathers = familyToFathers(fam, index);
+	mothers = familyToMothers(fam, index);
 	showSequence(kids, "Kids of F1");
 	showSequence(fathers, "Fathers of F1");
 	showSequence(mothers, "Mothers of F1");
@@ -144,15 +145,15 @@ void testSequence(Database* database, int testNumber) {
 	deleteSequence(mothers);
 	// Test personToSpouses
 	printf("Testing personToSpouses\n");
-	tom = getRecord("@I25@", database);
-	Sequence* spouses = personToSpouses(tom, database);
+	tom = getRecord("@I25@", index);
+	Sequence* spouses = personToSpouses(tom, index);
 	showSequence(spouses, "Spouses of I25");
 	// Test nameToSequence.
 	printf("Testing nameToSequence\n");
-	Sequence* tomwets = nameToSequence("Thomas Trask/Wtmre/", database);
+	Sequence* tomwets = nameToSequence("Thomas Trask/Wtmre/", index, database->nameIndex);
 	showSequence(tomwets, "Seauence of Thomas Trask/WTmre/s");
 	printf("Testing wild card name feature on */grenda/\n");
-	Sequence* grendas = nameToSequence("*/Grenda", database);
+	Sequence* grendas = nameToSequence("*/Grenda", index, database->nameIndex);
 	showSequence(grendas, "Sequence of */Grenda");
 	// Test childSequence.
 	printf("Testing childSequence\n");
@@ -183,8 +184,8 @@ void testSequence(Database* database, int testNumber) {
 	}
 	// Test unionSequence.
 	printf("Testing unionSequence\n");
-	Sequence* toms = tomsAncestors(database);
-	Sequence* lus = lusAncestors(database);
+	Sequence* toms = tomsAncestors(index);
+	Sequence* lus = lusAncestors(index);
 	Sequence* unionseq = unionSequence(toms, lus);
 	showSequence(unionseq, "Union of Tom and Lu's ancestors");
 	// Test intersectSequence.
@@ -205,37 +206,37 @@ void testSequence(Database* database, int testNumber) {
 //	void sequenceToGedcom(Sequence*, FILE*);
 }
 
-static Sequence* tomsAncestors(Database* database) {
-	Sequence* s = createSequence(database);
+static Sequence* tomsAncestors(RecordIndex* index) {
+	Sequence* s = createSequence(index);
 	appendToSequence(s, "@I1@", null);
 	Sequence* a = ancestorSequence(s, false);
 	deleteSequence(s);
 	return a;
 }
-static Sequence* tomAndLusAncestorsClosed(Database* database) {
-	Sequence* s = createSequence(database);
+static Sequence* tomAndLusAncestorsClosed(RecordIndex* index) {
+	Sequence* s = createSequence(index);
 	appendToSequence(s, "@I1@", null);
 	appendToSequence(s, "@I2@", null);
 	Sequence* a = ancestorSequence(s, true);
 	deleteSequence(s);
 	return a;
 }
-static Sequence* lusAncestors(Database* database) {
-	Sequence* s = createSequence(database);
+static Sequence* lusAncestors(RecordIndex* index) {
+	Sequence* s = createSequence(index);
 	appendToSequence(s, "@I2@", null);
 	Sequence* a = ancestorSequence(s, false);
 	deleteSequence(s);
 	return a;
 }
-static Sequence* tomsDescendents(Database* database) {
-	Sequence* s = createSequence(database);
+static Sequence* tomsDescendents(RecordIndex* index) {
+	Sequence* s = createSequence(index);
 	appendToSequence(s, "@I1@", null);
 	Sequence* d = descendentSequence(s, false);
 	deleteSequence(s);
 	return d;
 }
-static Sequence* lusDescendents(Database* database) {
-	Sequence* s = createSequence(database);
+static Sequence* lusDescendents(RecordIndex* index) {
+	Sequence* s = createSequence(index);
 	appendToSequence(s, "@I2@", null);
 	Sequence* d = descendentSequence(s, false);
 	deleteSequence(s);
