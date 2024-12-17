@@ -77,8 +77,8 @@ main (int argc, char *argv[])
   int opt;
   int longindex = 0;
   char *cmd_line_db;
-  File *db_file;
-  ErrorLog error_log;
+  //File *db_file;
+  ErrorLog *error_log;
   const char *env;
 
   ProgName = argv[0];
@@ -163,9 +163,19 @@ main (int argc, char *argv[])
 
   cmd_line_db = argv[optind];
 
-  /* XXX insert code to open cmd_line_db XXX */
+  error_log = createErrorLog ();
+#if 1
+  CString resolved_file = resolveFile (cmd_line_db, GEDCOM_search_path);
+  if (! resolved_file)
+    {
+      fprintf (stderr, "%s: resolveFile failed to find '%s'\n",
+	       ProgName, cmd_line_db);
+      exit (1);
+    }
 
-  db_file = openFile (cmd_line_db, "r");
+  currentDatabase = getDatabaseFromFile (resolved_file, 0, error_log);
+#else
+  File *db_file = openFile (cmd_line_db, "r");
   if (! db_file)
     {
       fprintf (stderr, "%s: fopenPath failed to open '%s': %s\n",
@@ -173,11 +183,12 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  currentDatabase = importFromFileFP (db_file, cmd_line_db, &error_log);
+  currentDatabase = importFromFileFP (db_file, cmd_line_db, error_log);
+#endif
   if (! currentDatabase)
     {
       fprintf (stderr, "%s: import failed\n", ProgName);
-      showErrorLog (&error_log);
+      showErrorLog (error_log);
       exit (1);
     }
 
