@@ -8,10 +8,6 @@
 #ifndef recordindex_h
 #define recordindex_h
 
-/* forward reference needed */
-struct RecordIndexEl;
-typedef struct RecordIndexEl RecordIndexEl;
-
 #include "gnode.h"
 #include "hashtable.h"
 
@@ -27,8 +23,8 @@ void showRecordIndex(RecordIndex*);
 
 extern int getRecordInsertCount(void); // Return the record insert count.  For debugging.
 extern void newShowRecordIndex(RecordIndex* index);
-extern void addrefRecord (RecordIndexEl *element);
-extern void releaseRecord (RecordIndexEl *element);
+//extern void addrefRecord (GNode *element);
+//extern void releaseRecord (GNode *element);
 
 // FORRECORDINDEX iterates a RecordIndex returning only GNode*s of a specific type.
 #define FORRECORDINDEX(table, gnode, type) {\

@@ -58,10 +58,10 @@ void showRecordIndex(RecordIndex* index) {
 	ENDHASHTABLE
 }
 
-// addrefRecord -- increment reference count of a RecordIndexEl.
+// addrefRecord -- increment reference count of a GNode.
 
 void
-addrefRecord (RecordIndexEl *element)
+addrefRecord (GNode *element)
 {
   //  if (! element)
   //    return;
@@ -69,12 +69,12 @@ addrefRecord (RecordIndexEl *element)
   //  element->refcount++;
 }
 
-// releaseRecord -- decrement reference count of a RecordIndexEl.
+// releaseRecord -- decrement reference count of a GNode.
 // If it reaches zero, we do NOT free it.
 // If it is zero before we decrement, we ABORT.
 
 void
-releaseRecord (RecordIndexEl *element)
+releaseRecord (GNode *element)
 {
   //  if (! element)
   //    return;
