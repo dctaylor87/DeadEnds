@@ -5,20 +5,20 @@
    GEDCOM, so they do no really belong in gedcom.h.  Hence, this
    header file. */
 
-extern RecordIndexEl *chooseChild(RecordIndexEl *irec, RecordIndexEl *frec,
-				   CString msg0, CString msgn, ASK1Q ask1);
+extern GNode *chooseChild(GNode *irec, GNode *frec,
+			  CString msg0, CString msgn, ASK1Q ask1);
 extern void chooseAndRemoveFamily(void);
-extern RecordIndexEl *chooseFather(RecordIndexEl *irec, RecordIndexEl *frec,
-				    CString msg0, CString msgn, ASK1Q ask1);
-extern RecordIndexEl *chooseFamily(RecordIndexEl *irec, CString msg0,
-				    CString msgn, bool fams);
-extern RecordIndexEl *chooseMother(RecordIndexEl *indi, RecordIndexEl *fam,
-				    CString msg0, CString msgn, ASK1Q ask1);
-extern RecordIndexEl *chooseNote(RecordIndexEl *current, CString msg0,
-				  CString msgn);
-extern RecordIndexEl *choosePointer(RecordIndexEl *current, CString msg0,
-				     CString msgn);
-extern RecordIndexEl *chooseSource(RecordIndexEl *current, CString msg0,
-				    CString msgn);
-extern RecordIndexEl *chooseSpouse(RecordIndexEl *irec, CString msg0,
-				    CString msgn);
+extern GNode *chooseFather(GNode *irec, GNode *frec,
+			   CString msg0, CString msgn, ASK1Q ask1);
+extern GNode *chooseFamily(GNode *irec, CString msg0,
+			   CString msgn, bool fams);
+extern GNode *chooseMother(GNode *indi, GNode *fam,
+			   CString msg0, CString msgn, ASK1Q ask1);
+extern GNode *chooseNote(GNode *current, CString msg0,
+			 CString msgn);
+extern GNode *choosePointer(GNode *current, CString msg0,
+			    CString msgn);
+extern GNode *chooseSource(GNode *current, CString msg0,
+			   CString msgn);
+extern GNode *chooseSpouse(GNode *irec, CString msg0,
+			   CString msgn);

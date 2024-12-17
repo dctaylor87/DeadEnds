@@ -169,10 +169,10 @@ static void edit_place_table(void);
 static void end_action(void);
 bool get_answer(UIWINDOW uiwin, int row, int col, String buffer, int buflen);
 static int get_brwsmenu_size(int screen);
-static RecordIndexEl *invoke_add_menu(void);
+static GNode *invoke_add_menu(void);
 static void invoke_cset_display(void);
 static void invoke_del_menu(void);
-static int invoke_extra_menu(RecordIndexEl **rec);
+static int invoke_extra_menu(GNode **rec);
 static void invoke_utils_menu(void);
 static void output_menu(UIWINDOW uiwin, DYNMENU dynmenu);
 static void place_cursor_main(void);
@@ -190,8 +190,8 @@ static void repaint_main_menu(UIWINDOW uiwin);
 static int resize_screen_impl(char * errmsg, int errsize);
 static void run_report(bool picklist);
 static void screen_on_lang_change(void *uparm);
-static RecordIndexEl *search_for_one_record(void);
-static void show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt, int width, int * scroll, bool reuse);
+static GNode *search_for_one_record(void);
+static void show_fam (UIWINDOW uiwin, GNode *frec, int mode, int row, int hgt, int width, int * scroll, bool reuse);
 bool show_record(UIWINDOW uiwin, CString key, int mode, LLRECT
 	, int * scroll, bool reuse);
 static void show_tandem_line(UIWINDOW uiwin, int row);
@@ -721,7 +721,7 @@ prompt_stdout (CString prompt)
 /*=====================================
  * search_for_one_record -- Invoke search menu & trim to one record
  *===================================*/
-static RecordIndexEl *
+static GNode *
 search_for_one_record (void)
 {
 	Sequence *seq = invoke_search_menu();
@@ -753,14 +753,14 @@ main_menu (void)
 	case 'b': main_browse(NULL, BROWSE_INDI); break;
 	case 's':
 		{
-			RecordIndexEl *rec = search_for_one_record();
+			GNode *rec = search_for_one_record();
 			if (rec)
 				main_browse(rec, BROWSE_UNK);
 		}
 		break;
 	case 'a':
 		{
-			RecordIndexEl *rec = 0;
+			GNode *rec = 0;
 
 			rec = invoke_add_menu();
 			if (rec)
@@ -778,7 +778,7 @@ main_menu (void)
 	case 'u': invoke_utils_menu(); break;
 	case 'x':
 		{
-			RecordIndexEl *rec=0;
+			GNode *rec=0;
 			c = invoke_extra_menu(&rec);
 			if (c != BROWSE_QUIT)
 				main_browse(rec, c);
@@ -856,7 +856,7 @@ update_browse_menu (int screen)
  *  @reuse:  [IN]  flag to save recalculating display strings
  *=======================================*/
 void
-show_indi (UIWINDOW uiwin, RecordIndexEl *irec, int mode, LLRECT rect
+show_indi (UIWINDOW uiwin, GNode *irec, int mode, LLRECT rect
 	, int * scroll, bool reuse)
 {
 	if (mode=='g')
@@ -882,7 +882,7 @@ show_indi (UIWINDOW uiwin, RecordIndexEl *irec, int mode, LLRECT rect
  *  reuse: [IN]  flag to save recalculating display strings
  *=======================================*/
 static void
-show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt
+show_fam (UIWINDOW uiwin, GNode *frec, int mode, int row, int hgt
 	, int width, int * scroll, bool reuse)
 {
 	struct tag_llrect rect;
@@ -903,7 +903,7 @@ show_fam (UIWINDOW uiwin, RecordIndexEl *frec, int mode, int row, int hgt
  * display_indi -- Paint indi on-screen
  *=======================================*/
 void
-display_indi (RecordIndexEl *indi, int mode, bool reuse)
+display_indi (GNode *indi, int mode, bool reuse)
 {
 	int screen = ONE_PER_SCREEN;
 	int lines=0;
@@ -930,7 +930,7 @@ interact_indi (void)
  * display_fam -- Paint fam on-screen
  *=====================================*/
 void
-display_fam (RecordIndexEl *frec, int mode, bool reuse)
+display_fam (GNode *frec, int mode, bool reuse)
 {
 	int width=0;
 	int screen = ONE_FAM_SCREEN;
@@ -953,7 +953,7 @@ interact_fam (void)
  * display_2indi -- Paint tandem indi screen
  *===========================================*/
 void
-display_2indi (RecordIndexEl *irec1, RecordIndexEl *irec2, int mode)
+display_2indi (GNode *irec1, GNode *irec2, int mode)
 {
 	int screen = TWO_PER_SCREEN;
 	int lines=0;
@@ -1004,7 +1004,7 @@ show_tandem_line (UIWINDOW win, int row)
  * display_2fam -- Paint tandem families
  *===========================================*/
 void
-display_2fam (RecordIndexEl *frec1, RecordIndexEl *frec2, int mode)
+display_2fam (GNode *frec1, GNode *frec2, int mode)
 {
 	UIWINDOW uiwin = main_win;
 	int width=0;
@@ -1050,7 +1050,7 @@ interact_popup (UIWINDOW uiwin, String str)
  * This is used for browsing S, E, or X records.
  *=====================================*/
 int
-aux_browse (RecordIndexEl *rec, int mode, bool reuse)
+aux_browse (GNode *rec, int mode, bool reuse)
 {
 	UIWINDOW uiwin = main_win;
 	int lines = update_browse_menu(AUX_SCREEN);
@@ -1316,12 +1316,12 @@ disp_trans_table_choice (UIWINDOW uiwin, int row, int col, int trnum)
  * invoke_add_menu -- Handle add menu
  * returns addref'd record
  *==========================*/
-static RecordIndexEl *
+static GNode *
 invoke_add_menu (void)
 {
 	UIWINDOW uiwin=0;
 	WINDOW * win=0;
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 	int code;
 
 	if (!add_menu_win) {
@@ -1758,7 +1758,7 @@ invoke_utils_menu (void)
  * invoke_extra_menu -- Handle extra menu
  *==============================*/
 static int
-invoke_extra_menu (RecordIndexEl **prec)
+invoke_extra_menu (GNode **prec)
 {
 	int code;
 	UIWINDOW uiwin=0;
@@ -1895,19 +1895,19 @@ show_record (UIWINDOW uiwin, CString key, int mode, LLRECT rect
 	int hgt = rect->bottom - rect->top + 1;
 	int width = rect->right - rect->left + 1;
 	if (key[0]=='I') {
-		RecordIndexEl *irec = keyToPersonRecord(key, currentDatabase);
+		GNode *irec = keyToPersonRecord(key, currentDatabase);
 		if (irec)
 			show_indi(uiwin, irec, mode, rect, scroll, reuse);
 		return irec != NULL;
 	} else if (key[0]=='F') {
-		RecordIndexEl *frec = keyToFamilyRecord(key, currentDatabase);
+		GNode *frec = keyToFamilyRecord(key, currentDatabase);
 		if (frec)
 			show_fam(uiwin, frec, mode, row, hgt, width, scroll, reuse);
 		return frec != NULL;
 
 	} else {
 		/* could be S,E,X -- show_aux handles all of these */
-		RecordIndexEl *rec = getRecord (key, currentDatabase->recordIndex);
+		GNode *rec = getRecord (key, currentDatabase->recordIndex);
 		if (rec)
 			show_aux(uiwin, rec, mode, rect, scroll, reuse);
 		return rec != NULL;

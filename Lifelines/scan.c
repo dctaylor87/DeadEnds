@@ -88,7 +88,7 @@ static int SCAN_SRC_TITL=4;
  * local function prototypes
  *********************************************/
 
-static void do_fields_scan(SCANNER * scanner, RecordIndexEl *rec, Database *database);
+static void do_fields_scan(SCANNER * scanner, GNode *rec, Database *database);
 static void do_name_scan(SCANNER * scanner, String prompt, Database *database);
 static void do_sources_scan(SCANNER * scanner, CString prompt, Database *database);
 static bool ns_callback(CString key, CString name, void *param, Database *database);
@@ -225,7 +225,7 @@ do_sources_scan (SCANNER * scanner, CString prompt, Database *database)
 	/* msg_status takes String arg, should take CString - const declaration error */
 	msg_status("%s", (String)scanner->statusmsg);
 
-	for (RecordIndexEl *rec = getFirstSourceRecord (database);
+	for (GNode *rec = getFirstSourceRecord (database);
 	     rec;
 	     rec = getNextSourceRecord (nzkey(rec), database))
 	  do_fields_scan (scanner, rec, database);
@@ -236,7 +236,7 @@ do_sources_scan (SCANNER * scanner, CString prompt, Database *database)
  *  rec:       [IN]  record to search
  *============================*/
 static void
-do_fields_scan (SCANNER * scanner, RecordIndexEl *rec, Database *database)
+do_fields_scan (SCANNER * scanner, GNode *rec, Database *database)
 {
 	/* NB: Only scanning top-level nodes right now */
 	GNode *node = nztop(rec);

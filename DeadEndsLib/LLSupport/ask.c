@@ -76,7 +76,7 @@
  * local function prototypes
  *********************************************/
 
-static RecordIndexEl *ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, int *prc);
+static GNode *ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, int *prc);
 static void make_fname_prompt(String fnamebuf, int len, CString ext);
 
 /*=====================================================
@@ -87,10 +87,10 @@ static void make_fname_prompt(String fnamebuf, int len, CString ext);
  *  pttl: [IN]  title for prompt to identify spouse
  *  sttl: [IN]  title for prompt to identify sibling
  *========================================================*/
-RecordIndexEl *
+GNode *
 ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
 {
-	RecordIndexEl *fam = ask_for_record(fttl, 'F');
+	GNode *fam = ask_for_record(fttl, 'F');
 	return fam ? fam : ask_for_fam(pttl, sttl);
 }
 /*===========================================
@@ -98,14 +98,14 @@ ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
  *  pttl: [IN]  title for prompt to identify spouse
  *  sttl: [IN]  title for prompt to identify sibling
  *=========================================*/
-RecordIndexEl *
+GNode *
 ask_for_fam (CString pttl, CString sttl)
 {
-	RecordIndexEl *sib=0, *prn=0;
+	GNode *sib=0, *prn=0;
 	prn = ask_for_indi(pttl, DOASK1);
 	if (!prn)  {
 		GNode *fam=0;
-		RecordIndexEl *frec=0;
+		GNode *frec=0;
 		sib = ask_for_indi(sttl, DOASK1);
 		if (!sib) return NULL;
 		fam = FAMC(nztop(sib));
@@ -345,10 +345,10 @@ ask_for_indiseq (CString ttl, char ctype, int *prc)
  *  ask1:  [IN]  whether to present list if only one matches their desc.
  *  prc:   [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/
-static RecordIndexEl *
+static GNode *
 ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
 {
-	RecordIndexEl *indi = 0;
+	GNode *indi = 0;
 	Sequence *seq = ask_for_indiseq(ttl, ctype, prc);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	ASSERT(*prc == RC_SELECT);
@@ -370,11 +370,11 @@ ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
  * ttl:      [in] title for question
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
-RecordIndexEl *
+GNode *
 ask_for_indi (CString ttl, ASK1Q ask1)
 {
 	int rc = 0;
-	RecordIndexEl *indi = ask_for_any_once(ttl, 'I', ask1, &rc);
+	GNode *indi = ask_for_any_once(ttl, 'I', ask1, &rc);
 	return indi;
 }
 /*=================================================================
@@ -384,13 +384,13 @@ ask_for_indi (CString ttl, ASK1Q ask1)
  * confirmq: [in] whether to confirm after choice
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
-RecordIndexEl *
+GNode *
 ask_for_any (CString ttl, ASK1Q ask1)
 {
 	char ctype = 0; /* code for any type */
 	while (true) {
 		int rc;
-		RecordIndexEl *record = ask_for_any_once(ttl, ctype, ask1, &rc);
+		GNode *record = ask_for_any_once(ttl, ctype, ask1, &rc);
 		if (rc == RC_DONE || rc == RC_SELECT)
 			return record;
 		return NULL;
@@ -432,7 +432,7 @@ ask_for_indi_list (CString ttl, bool reask)
 String
 ask_for_indi_key (CString ttl, ASK1Q ask1)
 {
-	RecordIndexEl *indi = ask_for_indi(ttl, ask1);
+	GNode *indi = ask_for_indi(ttl, ask1);
 	if (!indi) return NULL;
 	GNode *node = nztop(indi);
 	releaseRecord(indi);
@@ -465,11 +465,11 @@ chooseOneFromSequenceIfNeeded (Sequence *seq, ASK1Q ask1, CString titl1
  *  titl1: [IN]  title if sequence has one element
  *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
-RecordIndexEl *
+GNode *
 chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
 {
 	int i = 0;
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 
 	i = chooseOneFromSequenceIfNeeded(seq, ask1, titl1, titln);
 	if (i == -1) return NULL;
@@ -493,10 +493,10 @@ chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
  *  idstr: [IN]  question prompt
  *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
-RecordIndexEl *
+GNode *
 ask_for_record (CString idstr, int letr)
 {
-	RecordIndexEl *rec;
+	GNode *rec;
 	char answer[MAXPATHLEN];
 	if (!ask_for_string(idstr, _(qSidkyrfn), answer, sizeof(answer)))
 		return NULL;

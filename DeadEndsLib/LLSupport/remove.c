@@ -224,7 +224,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 bool
-remove_fam_record (ATTRIBUTE_UNUSED RecordIndexEl *frec)
+remove_fam_record (ATTRIBUTE_UNUSED GNode *frec)
 {
 	msg_error("%s", _("Families may not yet be removed in this fashion."));
 	return false;
@@ -237,7 +237,7 @@ remove_fam_record (ATTRIBUTE_UNUSED RecordIndexEl *frec)
  * Created: 2005/01/08, Perry Rapp
  *==============================================================*/
 bool
-remove_any_record (RecordIndexEl *record, Database *database)
+remove_any_record (GNode *record, Database *database)
 {
 	GNode *root=0;
 	ASSERT(record && ! record->parent);

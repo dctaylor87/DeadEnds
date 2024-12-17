@@ -105,7 +105,7 @@ static DISPNODE alloc_displaynode(void);
 static void append_to_text_list(List *list, String text, int width, bool newline);
 static void check_scroll_max(CANVASDATA canvas);
 static void count_nodes(GNode *node, int gen, int maxgen, int * count);
-static void draw_gedcom_text(RecordIndexEl *rec, CANVASDATA canvas, bool reuse, int indent);
+static void draw_gedcom_text(GNode *rec, CANVASDATA canvas, bool reuse, int indent);
 static void free_displaynode(DISPNODE tn);
 static void free_dispnode_tree(DISPNODE tn);
 static void free_entire_tree(void);
@@ -677,7 +677,7 @@ get_indent (void)
  * Created: 2000/12/07, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_descendants (RecordIndexEl *rec, CANVASDATA canvas, bool reuse)
+pedigree_draw_descendants (GNode *rec, CANVASDATA canvas, bool reuse)
 {
 	int gen=0;
 	int row = canvas->rect->top;
@@ -698,7 +698,7 @@ pedigree_draw_descendants (RecordIndexEl *rec, CANVASDATA canvas, bool reuse)
  * Created: 2001/01/27, Perry Rapp
  *=======================================================*/
 void
-pedigree_draw_gedcom (RecordIndexEl *rec, int gdvw, CANVASDATA canvas, bool reuse)
+pedigree_draw_gedcom (GNode *rec, int gdvw, CANVASDATA canvas, bool reuse)
 {
 	int count=0, gen=0, row=canvas->rect->top;
 	int indent = get_indent();
@@ -719,7 +719,7 @@ pedigree_draw_gedcom (RecordIndexEl *rec, int gdvw, CANVASDATA canvas, bool reus
  * Created: 2001/04/15, Perry Rapp
  *=======================================================*/
 static void
-draw_gedcom_text (RecordIndexEl *rec, CANVASDATA canvas, bool reuse, int indent)
+draw_gedcom_text (GNode *rec, CANVASDATA canvas, bool reuse, int indent)
 {
 	int gen=0;
 	int row = canvas->rect->top;
@@ -745,7 +745,7 @@ draw_gedcom_text (RecordIndexEl *rec, CANVASDATA canvas, bool reuse, int indent)
  * Created: 2000/12/07, Perry Rapp
  *===================================================*/
 void
-pedigree_draw_ancestors (RecordIndexEl *irec, CANVASDATA canvas, bool reuse)
+pedigree_draw_ancestors (GNode *irec, CANVASDATA canvas, bool reuse)
 {
 	int gen=0;
 	int row = canvas->rect->top;

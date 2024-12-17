@@ -76,7 +76,7 @@ enum { NEW_RECORD, EXISTING_LACKING_WH_RECORD };
 //#define alloc_node(msg) alloc_node_int(msg,__FILE__,__LINE__)
 //static GNode *alloc_node_int(char* msg, char *file, int line);
 //static String fixtag (String tag);
-static RecordIndexEl *indi_to_prev_sib_impl(GNode *indi, Database *database);
+static GNode *indi_to_prev_sib_impl(GNode *indi, Database *database);
 static int node_strlen(int levl, GNode *node);
 
 /*********************************************
@@ -179,7 +179,7 @@ unknown_node_to_dbase (GNode *node)
  * returns addref'd record in *spouse
  *=============================================*/
 int
-next_spouse (GNode **node, RecordIndexEl **spouse, Database *database)
+next_spouse (GNode **node, GNode **spouse, Database *database)
 {
 	CString key=0;
 	if (!node || !spouse) return 0;
@@ -200,7 +200,7 @@ next_spouse (GNode **node, RecordIndexEl **spouse, Database *database)
  * indi_to_prev_sib -- Return previous sib of person
  *  returns addref'd record
  *================================================*/
-static RecordIndexEl *
+static GNode *
 indi_to_prev_sib_impl (GNode *indi, Database *database)
 {
 	GNode *fam, *prev, *node;
@@ -220,8 +220,8 @@ indi_to_prev_sib_impl (GNode *indi, Database *database)
 	}
 	return NULL;
 }
-RecordIndexEl *
-indi_to_prev_sib (RecordIndexEl *irec, Database *database)
+GNode *
+indi_to_prev_sib (GNode *irec, Database *database)
 {
   ASSERT (irec && ! irec->parent);
   return indi_to_prev_sib_impl(nztop(irec), database);
@@ -230,7 +230,7 @@ indi_to_prev_sib (RecordIndexEl *irec, Database *database)
  * indi_to_next_sib -- Return next sib of person
  *  returns addref'd record
  *============================================*/
-static RecordIndexEl *
+static GNode *
 indi_to_next_sib_impl (GNode *indi, Database *database)
 {
 	GNode *fam, *node;
@@ -252,8 +252,8 @@ indi_to_next_sib_impl (GNode *indi, Database *database)
 	return NULL;
 }
 
-RecordIndexEl *
-indi_to_next_sib (RecordIndexEl *irec, Database *database)
+GNode *
+indi_to_next_sib (GNode *irec, Database *database)
 {
   ASSERT (irec && ! irec->parent);
   return indi_to_next_sib_impl(nztop(irec), database);
@@ -288,7 +288,7 @@ String node_to_tag (GNode *node, CString tag, int len)
  *============================================*/
 
 void
-record_to_date_place (RecordIndexEl *record, String tag, String * date, String * plac
+record_to_date_place (GNode *record, String tag, String * date, String * plac
 	, int * count)
 {
   GNode *node=0;
@@ -310,7 +310,7 @@ record_to_date_place (RecordIndexEl *record, String tag, String * date, String *
  * Created: 2003-01-12 (Perry Rapp)
  *============================================*/
 GNode *
-record_to_first_event (RecordIndexEl *record, CString tag)
+record_to_first_event (GNode *record, CString tag)
 {
   ASSERT (record && ! record->parent);
   GNode *node = nztop(record);

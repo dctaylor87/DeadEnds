@@ -29,26 +29,26 @@ typedef struct tag_import_feedback *IMPORT_FEEDBACK;
 struct tag_export_feedback;
 
 /* add.c */
-RecordIndexEl *add_family_by_edit(RecordIndexEl *sprec1, RecordIndexEl *sprec2,
-				  RecordIndexEl *chrec, bool rfmt);
-RecordIndexEl *add_indi_by_edit(bool rfmt);
+GNode *add_family_by_edit(GNode *sprec1, GNode *sprec2,
+			  GNode *chrec, bool rfmt);
+GNode *add_indi_by_edit(bool rfmt);
 bool add_indi_no_cache(GNode *);
 CString get_unresolved_ref_error_string(int count);
 GNode *prompt_add_child(GNode *child, GNode *fam, bool rfmt);
-bool prompt_add_spouse(RecordIndexEl *spouse, RecordIndexEl *fam, bool conf);
+bool prompt_add_spouse(GNode *spouse, GNode *fam, bool conf);
 
 /* advedit.c */
 void advanced_person_edit(GNode *);
 void advanced_family_edit(GNode *);
 
 /* ask.c */
-RecordIndexEl *ask_for_any(CString ttl, ASK1Q ask1);
+GNode *ask_for_any(CString ttl, ASK1Q ask1);
 Sequence *ask_for_indiseq(CString ttl, char ctype, int *prc);
 
 /* browse.c */
-RecordIndexEl *chooseAnyEvent(void);
-RecordIndexEl *chooseAnyOther(void);
-RecordIndexEl *chooseAnySource(void);
+GNode *chooseAnyEvent(void);
+GNode *chooseAnyOther(void);
+GNode *chooseAnySource(void);
 int get_chist_len(void);
 Sequence *get_chistory_list(void);
 int get_vhist_len(void);
@@ -57,34 +57,34 @@ bool handle_fam_mode_cmds(int c, int * mode);
 bool handle_indi_mode_cmds(int c, int * mode);
 bool handle_menu_cmds(int c, bool * reuse);
 bool handle_scroll_cmds(int c, bool * reuse);
-void history_record_change(RecordIndexEl *);
+void history_record_change(GNode *);
 void init_browse_module(void);
-void main_browse(RecordIndexEl *, int code);
+void main_browse(GNode *, int code);
 GNode *my_prompt_add_child(GNode *child, GNode *fam);
 void term_browse_module(void);
 
 /* delete.c */
 void chooseAndRemovePerson(GNode *indi, CONFIRMQ confirmq);
-bool chooseAndRemoveChild(RecordIndexEl *irec, RecordIndexEl *frec,
+bool chooseAndRemoveChild(GNode *irec, GNode *frec,
 			     bool nolast);
-bool chooseAndRemoveSpouse(RecordIndexEl *irec, RecordIndexEl *frec,
+bool chooseAndRemoveSpouse(GNode *irec, GNode *frec,
 			      bool nolast);
-bool chooseAndRemoveAnyRecord(RecordIndexEl *rec, CONFIRMQ confirmq);
+bool chooseAndRemoveAnyRecord(GNode *rec, CONFIRMQ confirmq);
 
 /* edit.c */
-bool edit_family(RecordIndexEl *frec1, bool rfmt);
-bool edit_indi(RecordIndexEl *irec1, bool rfmt);
+bool edit_family(GNode *frec1, bool rfmt);
+bool edit_indi(GNode *irec1, bool rfmt);
 
 /* lbrowse.c */
-int browse_list(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
+int browse_list(GNode **prec1, GNode **prec2, Sequence **pseq);
 
 /* lines_usage.c */
 void print_lines_usage(CString exename);
 
 
 /* merge.c */
-RecordIndexEl *merge_two_indis(GNode *, GNode *, bool);
-RecordIndexEl *merge_two_fams(GNode *, GNode *);
+GNode *merge_two_indis(GNode *, GNode *, bool);
+GNode *merge_two_fams(GNode *, GNode *);
 
 /* miscutls.c */
 void key_util(void);
@@ -96,13 +96,13 @@ void sighand_cursesui(int sig);
 void sighand_cmdline(int sig);
 
 /* newrecs.c */
-RecordIndexEl *edit_add_event(void);
-RecordIndexEl *edit_add_other(void);
-RecordIndexEl *edit_add_source(void);
-bool edit_any_record(RecordIndexEl *rec, bool rfmt);
-bool edit_event(RecordIndexEl *rec, bool rfmt);
-bool edit_other(RecordIndexEl *rec, bool rfmt);
-bool edit_source(RecordIndexEl *rec, bool rfmt);
+GNode *edit_add_event(void);
+GNode *edit_add_other(void);
+GNode *edit_add_source(void);
+bool edit_any_record(GNode *rec, bool rfmt);
+bool edit_event(GNode *rec, bool rfmt);
+bool edit_other(GNode *rec, bool rfmt);
+bool edit_source(GNode *rec, bool rfmt);
 
 /* pedigree.c */
 	/* gedcom view mode */
@@ -117,11 +117,11 @@ enum { GDVW_NORMAL, GDVW_EXPANDED, GDVW_TEXT };
 	typedef struct tag_canvasdata { LLRECT rect; int scroll; void * param;
 		PEDLINE line; } *CANVASDATA;
 	/* functions */
-void pedigree_draw_ancestors(RecordIndexEl *rec, CANVASDATA canvasdata,
+void pedigree_draw_ancestors(GNode *rec, CANVASDATA canvasdata,
 			     bool reuse);
-void pedigree_draw_descendants(RecordIndexEl *rec, CANVASDATA canvasdata,
+void pedigree_draw_descendants(GNode *rec, CANVASDATA canvasdata,
 			       bool reuse);
-void pedigree_draw_gedcom(RecordIndexEl *rec, int gdvw, CANVASDATA canvasdata,
+void pedigree_draw_gedcom(GNode *rec, int gdvw, CANVASDATA canvasdata,
 			  bool reuse);
 void pedigree_increase_generations(int delta);
 void pedigree_toggle_mode(void);
@@ -140,13 +140,13 @@ void clear_status_display(void);
 String indi_to_ped_fix(GNode *indi, int len);
 
 /* swap.c */
-bool swap_children(RecordIndexEl *prnt, RecordIndexEl *frec);
-bool reorder_child(RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt);
-bool swap_families(RecordIndexEl *);
+bool swap_children(GNode *prnt, GNode *frec);
+bool reorder_child(GNode *prnt, GNode *frec, bool rfmt);
+bool swap_families(GNode *);
 
 /* tandem.c */
-int browse_tandem(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
-int browse_2fam(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
+int browse_tandem(GNode **prec1, GNode **prec2, Sequence **pseq);
+int browse_2fam(GNode **prec1, GNode **prec2, Sequence **pseq);
 
 /* valgdcom.c */
 void addmissingkeys (int);

@@ -82,12 +82,12 @@ static bool handle_tandem_scroll_cmds(int c);
 /*=============================================
  * browse_tandem -- Two person browse operation
  *===========================================*/
-int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+int browse_tandem (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
-	RecordIndexEl *current1, *current2;
+	GNode *current1, *current2;
 	CString nkey1p, nkey2p;
 	int modep;
-	RecordIndexEl *tmp=0;
+	GNode *tmp=0;
 	CString key, name;
 	Sequence *seq;
 	int c, rc;
@@ -209,10 +209,10 @@ int browse_tandem (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
 /*==================================================
  * browse_2fam -- Handle two family browse operation
  *================================================*/
-int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+int browse_2fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
-	RecordIndexEl *current1, *current2;
-	RecordIndexEl *tmp, *tmp2;
+	GNode *current1, *current2;
+	GNode *tmp, *tmp2;
 	CString nkey1p, nkey2p;
 	int modep;
 	int c;
@@ -269,7 +269,7 @@ int browse_2fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			return BROWSE_FAM;
 		case CMD_BOTH_FATHERS:	/* browse to husbs/faths */
 			{
-				RecordIndexEl *fam1=0, *fam2=0;
+				GNode *fam1=0, *fam2=0;
 				GNode *node1;
 				GNode *node2;
 

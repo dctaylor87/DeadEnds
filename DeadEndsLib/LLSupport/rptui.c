@@ -81,10 +81,10 @@ rptui_elapsed (void)
  * Wrappers for ui functions
  *========================================================*/
 
-RecordIndexEl *
+GNode *
 rptui_ask_for_fam (CString s1, CString s2)
 {
-	RecordIndexEl *rec;
+	GNode *rec;
 	begin_rptui();
 	rec = ask_for_fam(s1, s2);
 	end_rptui();
@@ -101,10 +101,10 @@ rptui_ask_for_indi_list (CString ttl, bool reask)
 	return seq;
 }
 
-RecordIndexEl *
+GNode *
 rptui_ask_for_indi (CString ttl, ASK1Q ask1)
 {
-	RecordIndexEl *rec;
+	GNode *rec;
 	begin_rptui();
 	rec = ask_for_indi(ttl,ask1);
 	end_rptui();

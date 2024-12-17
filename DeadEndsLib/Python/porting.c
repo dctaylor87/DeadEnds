@@ -25,7 +25,7 @@
 
 #include "llpy-externs.h"
 
-RecordIndexEl *
+GNode *
 _llpy_node_to_record (GNode *node, Database *database)
 {
   GNode *top = node;
@@ -36,9 +36,9 @@ _llpy_node_to_record (GNode *node, Database *database)
   if (! top->key)
     return NULL;		/* without the key we can't find the record! */
 
-  RecordIndexEl *record;
+  GNode *record;
 
-  record = ((RecordIndexEl *)searchHashTable
+  record = ((GNode *)searchHashTable
 	    ((HashTable *)database->recordIndex, top->key));
   return (record);
 }

@@ -12,7 +12,7 @@
 
 //#define RECORD		RecordIndexEl *
 
-#define RecordIndexEl	GNode
+//#define RecordIndexEl	GNode
 #define nztop(record)	(record)
 #define nzkey(record)	((record)->key)
 #define nztype(record)	recordType(record)

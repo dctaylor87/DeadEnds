@@ -148,16 +148,16 @@ bool save_gedcom(void);
 void activate_uiwin(UIWINDOW uiwin);
 void adjust_browse_menu_cols(int delta);
 void adjust_browse_menu_height(int delta);
-int aux_browse(RecordIndexEl *rec, int mode, bool reuse);
+int aux_browse(GNode *rec, int mode, bool reuse);
 void clear_hseg(WINDOW *, int row, int x1, int x2);
 void clear_stdout_hseg(int row, int x1, int x2);
 void create_newwin2(UIWINDOW * puiw, CString name, int rows, int cols);
 void cycle_browse_menu(void);
 void deactivate_uiwin_and_touch_all(void);
-void display_2fam(RecordIndexEl *frec1, RecordIndexEl *frec2, int mode);
-void display_2indi(RecordIndexEl *irec1, RecordIndexEl *irec2, int mode);
-void display_fam(RecordIndexEl *fam, int mode, bool reuse);
-void display_indi(RecordIndexEl *indi, int mode, bool reuse);
+void display_2fam(GNode *frec1, GNode *frec2, int mode);
+void display_2indi(GNode *irec1, GNode *irec2, int mode);
+void display_fam(GNode *fam, int mode, bool reuse);
+void display_indi(GNode *indi, int mode, bool reuse);
 void display_screen(int);
 void dbprintf(String, ...) ATTRIBUTE_PRINTF(1,2);
 void draw_win_box(WINDOW * win);
@@ -178,9 +178,9 @@ void paint_main_screen(void);
 void paint_two_fam_screen(void);
 void set_screen_graphical(bool graphical);
 void show_horz_line(UIWINDOW, int, int, int);
-void show_indi(UIWINDOW uiwin, RecordIndexEl *indi, int mode, LLRECT
+void show_indi(UIWINDOW uiwin, GNode *indi, int mode, LLRECT
 	, int * scroll, bool reuse);
-void show_indi_vitals(UIWINDOW uiwin, RecordIndexEl *irec, LLRECT,
+void show_indi_vitals(UIWINDOW uiwin, GNode *irec, LLRECT,
 		      int *scroll, bool reuse);
 bool show_record(UIWINDOW uiwin, CString key, int mode, LLRECT
 	, int * scroll, bool reuse);
@@ -198,17 +198,17 @@ void wpos (int, int);
 /* show.c (curses specific) */
 extern int Scroll1;
 void init_show_module(void);
-void show_ancestors (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT
+void show_ancestors (UIWINDOW uiwin, GNode *irec, LLRECT
 	, int * scroll, bool reuse);
-void show_aux(UIWINDOW uiwin, RecordIndexEl *rec, int mode, LLRECT
+void show_aux(UIWINDOW uiwin, GNode *rec, int mode, LLRECT
 	, int * scroll, bool reuse);
 void show_big_list(Sequence *, int, int, int);
 void show_childnumbers(void);
-void show_descendants(UIWINDOW uiwin, RecordIndexEl *rec, LLRECT
+void show_descendants(UIWINDOW uiwin, GNode *rec, LLRECT
 	, int * scroll, bool reuse);
-void show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
+void show_fam_vitals (UIWINDOW uiwin, GNode *frec, int row, int hgt
 	, int width, int *scroll, bool reuse);
-void show_gedcom (UIWINDOW uiwin, RecordIndexEl *rec, int gdvw, LLRECT
+void show_gedcom (UIWINDOW uiwin, GNode *rec, int gdvw, LLRECT
 	, int * scroll, bool reuse);
 void show_reset_scroll(void);
 void show_sour_display(GNode *, int, int);

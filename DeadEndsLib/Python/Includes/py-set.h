@@ -26,7 +26,7 @@
 #define FORCHILDREN_RECORD(fam,child,database)	\
 	{\
         GNode *__node = findTag(nchild(nztop(fam)), "CHIL");	\
-	RecordIndexEl *child=0;\
+	GNode *child=0;\
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "CHIL")) break;\
@@ -48,7 +48,7 @@
 
 #define FORFAMS_RECORD(indi,fam) \
 	{\
-	RecordIndexEl *fam=0; \
+	GNode *fam=0; \
 	GNode *__node = findTag(nchild(nztop(indi)),"FAMS");	\
 	String __key=0;\
 	while (__node) {\
@@ -75,7 +75,7 @@
 #define FORFAMSPOUSES_RECORD(fam,spouse, database)	\
 	{\
 	GNode *__node = nchild(nztop(fam));	\
-	RecordIndexEl *spouse=0;\
+	GNode *spouse=0;\
 	String __key=0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "HUSB") && !eqstr(ntag(__node), "WIFE")) {\

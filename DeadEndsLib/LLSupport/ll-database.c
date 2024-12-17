@@ -24,7 +24,7 @@
 // Theyt exist because the curses interface calls them.
 
 // keynumToPersonRecord -- Get a person record from a database
-RecordIndexEl *keynumToPersonRecord(KEYNUM_TYPE keynum, Database *database)
+GNode *keynumToPersonRecord(KEYNUM_TYPE keynum, Database *database)
 {
   char key[MAXKEYWIDTH + 3];
   if ((keynum > MAXKEYNUMBER) || (keynum <= 0))
@@ -35,7 +35,7 @@ RecordIndexEl *keynumToPersonRecord(KEYNUM_TYPE keynum, Database *database)
 }
 
 // keynumToFamilyRecord -- Get a family record from a database
-RecordIndexEl *keynumToFamilyRecord(KEYNUM_TYPE keynum, Database *database)
+GNode *keynumToFamilyRecord(KEYNUM_TYPE keynum, Database *database)
 {
   char key[MAXKEYWIDTH + 3];
   if ((keynum > MAXKEYNUMBER) || (keynum <= 0))
@@ -46,7 +46,7 @@ RecordIndexEl *keynumToFamilyRecord(KEYNUM_TYPE keynum, Database *database)
 }
 
 // keynumToSourceRecord -- Get a source record from a database
-RecordIndexEl *keynumToSourceRecord(KEYNUM_TYPE keynum, Database *database)
+GNode *keynumToSourceRecord(KEYNUM_TYPE keynum, Database *database)
 {
   char key[MAXKEYWIDTH + 3];
   if ((keynum > MAXKEYNUMBER) || (keynum <= 0))
@@ -57,7 +57,7 @@ RecordIndexEl *keynumToSourceRecord(KEYNUM_TYPE keynum, Database *database)
 }
 
 // keynumToEventRecord -- Get an event record from a database
-RecordIndexEl *keynumToEventRecord(KEYNUM_TYPE keynum, Database *database)
+GNode *keynumToEventRecord(KEYNUM_TYPE keynum, Database *database)
 {
   char key[MAXKEYWIDTH + 3];
   if ((keynum > MAXKEYNUMBER) || (keynum <= 0))
@@ -68,7 +68,7 @@ RecordIndexEl *keynumToEventRecord(KEYNUM_TYPE keynum, Database *database)
 }
 
 // keynumToOtherRecord -- Get an other record from a database
-RecordIndexEl *keynumToOtherRecord(KEYNUM_TYPE keynum, Database *database)
+GNode *keynumToOtherRecord(KEYNUM_TYPE keynum, Database *database)
 {
   char key[MAXKEYWIDTH + 3];
   if ((keynum > MAXKEYNUMBER) || (keynum <= 0))

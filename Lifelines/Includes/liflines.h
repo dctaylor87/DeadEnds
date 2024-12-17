@@ -30,20 +30,20 @@ typedef int PROMPTQ;
 
 /* Function Prototypes */
 /* add.c */
-extern void add_new_indi_to_db(RecordIndexEl *indi0);
+extern void add_new_indi_to_db(GNode *indi0);
 extern void add_new_fam_to_db(GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child);
 void add_child_to_fam(GNode *child, GNode *fam, int i);
 GNode *add_family_to_db(GNode *spouse1, GNode *spouse2, GNode *child);
 void add_spouse_to_fam(GNode *spouse, GNode *fam, SexType sex);
 int ask_child_order(GNode *fam, PROMPTQ promptq, bool rfmt);
 String ask_for_indi_key(CString, ASK1Q ask1);
-RecordIndexEl *ask_for_indi(CString ttl, ASK1Q ask1);
+GNode *ask_for_indi(CString ttl, ASK1Q ask1);
 
 /* ask.c */
 bool ask_for_int(CString, int *);
-RecordIndexEl *ask_for_record(CString, int);
+GNode *ask_for_record(CString, int);
 String ask_for_record_key(CString title, CString prompt);
-RecordIndexEl *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln);
+GNode *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln);
 
 /* askgedc.c */
 bool ask_for_gedcom(CString mode, CString ttl, String *pfname, String *pfullpath

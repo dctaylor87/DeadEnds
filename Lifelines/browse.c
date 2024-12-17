@@ -89,7 +89,7 @@
  * global/exported variables
  *********************************************/
 
-RecordIndexEl *jumpnode; /* used by Ethel for direct navigation */
+GNode *jumpnode; /* used by Ethel for direct navigation */
 
 /*********************************************
  * external/imported variables
@@ -109,42 +109,42 @@ struct hist;
  *********************************************/
 
 /* alphabetical */
-static RecordIndexEl *add_new_rec_maybe_ref(RecordIndexEl *current, char ntype);
+static GNode *add_new_rec_maybe_ref(GNode *current, char ntype);
 static void ask_clear_history(struct hist * histp);
-static void autoadd_xref(RecordIndexEl *rec, GNode *newnode);
-static int browse_aux(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
-static int browse_indi(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
-static int browse_fam(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
-static int browse_indi_modes(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq
+static void autoadd_xref(GNode *rec, GNode *newnode);
+static int browse_aux(GNode **prec1, GNode **prec2, Sequence **pseq);
+static int browse_indi(GNode **prec1, GNode **prec2, Sequence **pseq);
+static int browse_fam(GNode **prec1, GNode **prec2, Sequence **pseq);
+static int browse_indi_modes(GNode **prec1, GNode **prec2, Sequence **pseq
 	, int indimode);
-static int browse_pedigree(RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq);
-static RecordIndexEl *disp_chistory_list(void);
-static RecordIndexEl *disp_vhistory_list(void);
-static int display_aux(RecordIndexEl *rec, int mode, bool reuse);
+static int browse_pedigree(GNode **prec1, GNode **prec2, Sequence **pseq);
+static GNode *disp_chistory_list(void);
+static GNode *disp_vhistory_list(void);
+static int display_aux(GNode *rec, int mode, bool reuse);
 static int get_hist_count(struct hist * histp);
 static Sequence *get_history_list(struct hist * histp);
-static RecordIndexEl *goto_fam_child(RecordIndexEl *frec, int childno);
-static RecordIndexEl *goto_indi_child(RecordIndexEl *irec, int childno);
+static GNode *goto_fam_child(GNode *frec, int childno);
+static GNode *goto_indi_child(GNode *irec, int childno);
 static bool handle_aux_mode_cmds(int c, int * mode);
-static int handle_history_cmds(int c, RecordIndexEl **prec1);
-static RecordIndexEl *history_back(struct hist * histp);
-static RecordIndexEl *do_disp_history_list(struct hist * histp);
-static void history_record(RecordIndexEl *rec, struct hist * histp);
-static RecordIndexEl *history_fwd(struct hist * histp);
+static int handle_history_cmds(int c, GNode **prec1);
+static GNode *history_back(struct hist * histp);
+static GNode *do_disp_history_list(struct hist * histp);
+static void history_record(GNode *rec, struct hist * histp);
+static GNode *history_fwd(struct hist * histp);
 static void init_hist_lists(void);
 static void init_hist(struct hist * histp, int count);
 #if !defined(DEADENDS)
 static void load_hist_lists(void);
 static void load_nkey_list(CString key, struct hist * histp);
 #endif
-static void prompt_add_spouse_with_candidate(RecordIndexEl *fam, RecordIndexEl *save);
-static RecordIndexEl *pick_create_new_family(RecordIndexEl *current, RecordIndexEl *save, String * addstrings);
-static void pick_remove_spouse_from_family(RecordIndexEl *frec);
+static void prompt_add_spouse_with_candidate(GNode *fam, GNode *save);
+static GNode *pick_create_new_family(GNode *current, GNode *save, String * addstrings);
+static void pick_remove_spouse_from_family(GNode *frec);
 #if !defined(DEADENDS)
 static void save_hist_lists(void);
 static void save_nkey_list(CString key, struct hist * histp);
 #endif
-static void setrecord(RecordIndexEl ** dest, RecordIndexEl ** src);
+static void setrecord(GNode ** dest, GNode ** src);
 static void term_hist_lists(void);
 static void term_hist(struct hist * histp);
 
@@ -193,7 +193,7 @@ static struct hist chist; /* records changed */
  *  returns addref'd record
  *=======================================*/
 static void
-prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
+prompt_for_browse (GNode ** prec, int * code, Sequence ** pseq)
 {
 	int len, rc;
 	CString key, name;
@@ -236,9 +236,9 @@ prompt_for_browse (RecordIndexEl ** prec, int * code, Sequence ** pseq)
  *  rec may be NULL (then prompt)
  *=======================================*/
 void
-main_browse (RecordIndexEl *rec1, int code)
+main_browse (GNode *rec1, int code)
 {
-	RecordIndexEl *rec2=0;
+	GNode *rec2=0;
 	Sequence *seq = NULL;
 
 	if (!rec1) {
@@ -298,11 +298,11 @@ main_browse (RecordIndexEl *rec1, int code)
  * goto_indi_child - jump to child by number
  * returns addref'd record
  *==============================================*/
-static RecordIndexEl *
-goto_indi_child (RecordIndexEl *irec, int childno)
+static GNode *
+goto_indi_child (GNode *irec, int childno)
 {
   int num1, num2;
-  RecordIndexEl *answer = 0;
+  GNode *answer = 0;
   CString akey=0; /* answer key */
   GNode *indi = nztop(irec);
   if (!irec)
@@ -324,11 +324,11 @@ goto_indi_child (RecordIndexEl *irec, int childno)
  * goto_fam_child - jump to child by number
  * returns addref'd record
  *==============================================*/
-static RecordIndexEl *
-goto_fam_child (RecordIndexEl *frec, int childno)
+static GNode *
+goto_fam_child (GNode *frec, int childno)
 {
   int num;
-  RecordIndexEl *answer = 0;
+  GNode *answer = 0;
   CString akey=0;
   GNode *fam = nztop(frec);
   if (!frec)
@@ -347,11 +347,11 @@ goto_fam_child (RecordIndexEl *frec, int childno)
  * pick_create_new_family -- 
  * returns addref'd record
  *=============================================*/
-static RecordIndexEl *
-pick_create_new_family (RecordIndexEl *current, RecordIndexEl *save, String * addstrings)
+static GNode *
+pick_create_new_family (GNode *current, GNode *save, String * addstrings)
 {
 	int i;
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 
 	i = chooseFromArray(_(qSidfcop), 2, addstrings);
 	if (i == -1) return NULL;
@@ -378,7 +378,7 @@ pick_create_new_family (RecordIndexEl *current, RecordIndexEl *save, String * ad
  *  Handles releasing old reference
  *==================================================*/
 static void
-setrecord (RecordIndexEl ** dest, RecordIndexEl ** src)
+setrecord (GNode ** dest, GNode ** src)
 {
 	ASSERT(dest);
 	if (*dest) {
@@ -398,15 +398,15 @@ setrecord (RecordIndexEl ** dest, RecordIndexEl ** src)
  *  pseq  [I/O]  current sequence in list browse
  *==================================================*/
 static int
-browse_indi_modes (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq, int indimode)
+browse_indi_modes (GNode **prec1, GNode **prec2, Sequence **pseq, int indimode)
 {
-	RecordIndexEl *current=0;
+	GNode *current=0;
 	CString key, name;
 	int i, c, rc;
 	bool reuse=false; /* flag to reuse same display strings */
 	int indimodep;
 	CString nkeyp;
-	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
+	GNode *save=0, *tmp=0, *tmp2=0;
 	Sequence *seq = NULL;
 	int rtn=0; /* return code */
 
@@ -774,7 +774,7 @@ exitbrowse:
  * Created: 2001/01/27, Perry Rapp
  *========================================*/
 static int
-display_aux (RecordIndexEl *rec, int mode, bool reuse)
+display_aux (GNode *rec, int mode, bool reuse)
 {
 	int c;
 	c = aux_browse(rec, mode, reuse);
@@ -785,15 +785,15 @@ display_aux (RecordIndexEl *rec, int mode, bool reuse)
  * Created: 2001/01/27, Perry Rapp
  *==================================================*/
 static int
-browse_aux (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+browse_aux (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
-	RecordIndexEl *current=0;
+	GNode *current=0;
 	int i, c;
 	bool reuse=false; /* flag to reuse same display strings */
 	int auxmode=0, auxmodep=0;
 	CString nkeyp=0;
 	RecordType ntype=GRUnknown, ntypep=GRUnknown;
-	RecordIndexEl *tmp=0;
+	GNode *tmp=0;
 	char c2;
 	int rtn=0; /* return code */
 
@@ -922,7 +922,7 @@ exitbrowse:
  * browse_indi -- Handle person browse operations.
  *==============================================*/
 static int
-browse_indi (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+browse_indi (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
 	return browse_indi_modes(prec1, prec2, pseq, 'n');
 }
@@ -932,7 +932,7 @@ browse_indi (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
  *  construct list of spouses, prompt for choice, & remove
  *=============================================*/
 static void
-pick_remove_spouse_from_family (RecordIndexEl *frec)
+pick_remove_spouse_from_family (GNode *frec)
 {
 	GNode *fam = nztop(frec);
 	GNode *fref, *husb, *wife, *chil, *rest;
@@ -975,7 +975,7 @@ pick_remove_spouse_from_family (RecordIndexEl *frec)
  * In either case, all work is delegated to prompt_add_spouse
  *=============================================*/
 static void
-prompt_add_spouse_with_candidate (RecordIndexEl *fam, RecordIndexEl *candidate)
+prompt_add_spouse_with_candidate (GNode *fam, GNode *candidate)
 {
 	GNode *fref, *husb, *wife, *chil, *rest;
 	bool confirm;
@@ -1049,15 +1049,15 @@ my_prompt_add_child (GNode *child, GNode *fam)
  * browse_fam -- Handle family browse selections.
  *=============================================*/
 static int
-browse_fam (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+browse_fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
-	RecordIndexEl *current=0;
+	GNode *current=0;
 	int i, c, rc;
 	bool reuse=false; /* flag to reuse same display strings */
 	static int fammode='n';
 	int fammodep;
 	CString nkeyp;
-	RecordIndexEl *save=0, *tmp=0, *tmp2=0;
+	GNode *save=0, *tmp=0, *tmp2=0;
 	Sequence *seq;
 	CString key, name;
 	char c2;
@@ -1462,18 +1462,18 @@ handle_aux_mode_cmds (int c, int * mode)
  * browse_pedigree -- Handle pedigree browse selections.
  *====================================================*/
 static int
-browse_pedigree (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+browse_pedigree (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
 	return browse_indi_modes(prec1, prec2, pseq, 'p');
 }
 /*==================================================
  * chooseAnySource -- choose from list of all sources
  *================================================*/
-RecordIndexEl *
+GNode *
 chooseAnySource (void)
 {
 	Sequence *seq;
-	RecordIndexEl *rec;
+	GNode *rec;
 	seq = getAllSources(currentDatabase);
 	if (!seq)
 	{
@@ -1487,11 +1487,11 @@ chooseAnySource (void)
 /*==================================================
  * chooseAnyEvent -- choose from list of all events
  *================================================*/
-RecordIndexEl *
+GNode *
 chooseAnyEvent (void)
 {
 	Sequence *seq;
-	RecordIndexEl *rec;
+	GNode *rec;
 	seq = getAllEvents(currentDatabase);
 	if (!seq)
 	{
@@ -1505,11 +1505,11 @@ chooseAnyEvent (void)
 /*==================================================
  * chooseAnyOther -- choose from list of all others
  *================================================*/
-RecordIndexEl *
+GNode *
 chooseAnyOther (void)
 {
 	Sequence *seq;
-	RecordIndexEl *rec;
+	GNode *rec;
 	seq = getAllOthers(currentDatabase);
 	if (!seq)
 	{
@@ -1745,7 +1745,7 @@ save_nkey_list (CString key, struct hist * histp)
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
 void
-history_record_change (RecordIndexEl *rec)
+history_record_change (GNode *rec)
 {
 	history_record(rec, &chist);
 }
@@ -1754,7 +1754,7 @@ history_record_change (RecordIndexEl *rec)
  * Created: 2001/03?, Perry Rapp
  *================================================*/
 static void
-history_record (RecordIndexEl *rec, struct hist * histp)
+history_record (GNode *rec, struct hist * histp)
 {
 	String nkey = 0;
 	int next, i;
@@ -1797,11 +1797,11 @@ history_record (RecordIndexEl *rec, struct hist * histp)
  * history_back -- return prev RECORD in history, if exists
  * Created: 2001/03?, Perry Rapp
  *================================================*/
-static RecordIndexEl *
+static GNode *
 history_back (struct hist * histp)
 {
 	int last=0;
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 	if (!histp->size || histp->start==-1)
 		return NULL;
 	/* back up from histp->past_end to current item */
@@ -1823,11 +1823,11 @@ history_back (struct hist * histp)
  * history_fwd -- return later NODE in history, if exists
  * Created: 2001/03?, Perry Rapp
  *================================================*/
-static RecordIndexEl *
+static GNode *
 history_fwd (struct hist * histp)
 {
 	int next;
-	RecordIndexEl *rec;
+	GNode *rec;
 	if (!histp->size || histp->past_end == histp->start)
 		return NULL; /* at end of full history */
 	next = histp->past_end;
@@ -1839,7 +1839,7 @@ history_fwd (struct hist * histp)
  *  returns NULL if no history or if user cancels
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
-static RecordIndexEl *
+static GNode *
 disp_vhistory_list (void)
 {
 	return do_disp_history_list(&vhist);
@@ -1849,7 +1849,7 @@ disp_vhistory_list (void)
  *  returns NULL if no history or if user cancels
  * Created: 2002/06/23, Perry Rapp
  *================================================*/
-static RecordIndexEl *
+static GNode *
 disp_chistory_list (void)
 {
 	return do_disp_history_list(&chist);
@@ -1878,11 +1878,11 @@ get_vhistory_list (void)
  *  returns NULL if no history or if user cancels
  * Created: 2001/04/12, Perry Rapp
  *================================================*/
-static RecordIndexEl *
+static GNode *
 do_disp_history_list (struct hist * histp)
 {
 	Sequence *seq = get_history_list(histp);
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 
 	if (!seq) {
 		msg_error("%s", _(qSnohist));
@@ -1947,9 +1947,9 @@ ask_clear_history (struct hist * histp)
  * Created: 2001/04/12, Perry Rapp
  *================================================*/
 static int
-handle_history_cmds (int c, RecordIndexEl ** prec1)
+handle_history_cmds (int c, GNode ** prec1)
 {
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 	if (c == CMD_VHISTORY_BACK) {
 		rec = history_back(&vhist);
 		if (rec) {
@@ -2021,10 +2021,10 @@ handle_history_cmds (int c, RecordIndexEl ** prec1)
  *       NULL to just stay where we are
  * Created: 2001/04/06, Perry Rapp
  *================================================*/
-static RecordIndexEl *
-add_new_rec_maybe_ref (RecordIndexEl *current, char ntype)
+static GNode *
+add_new_rec_maybe_ref (GNode *current, char ntype)
 {
-	RecordIndexEl *newrec=0;
+	GNode *newrec=0;
 	GNode *newnode;
 	String choices[4];
 	char title[60];
@@ -2075,7 +2075,7 @@ add_new_rec_maybe_ref (RecordIndexEl *current, char ntype)
  * Created: 2001/11/11, Perry Rapp
  *================================================*/
 static void
-autoadd_xref (RecordIndexEl *rec, GNode *newnode)
+autoadd_xref (GNode *rec, GNode *newnode)
 {
 	GNode *xref; /* new xref added to end of node */
 	GNode *find, *prev; /* used finding last child of node */

@@ -22,7 +22,7 @@ typedef struct {
 typedef struct {
   PyObject_HEAD
   int llr_type;
-  RecordIndexEl *llr_record;	/* Lifelines GEDCOM generic RECORD */
+  GNode *llr_record;		/* Lifelines GEDCOM generic RECORD */
   Database *llr_database;	/* which database does this record belong to? */
 } LLINES_PY_RECORD;
 

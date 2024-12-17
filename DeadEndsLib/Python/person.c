@@ -632,7 +632,7 @@ static PyObject *llpy_nextindi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   CString key = nzkey (indi->llr_record);
   Database *database = indi->llr_database;
-  RecordIndexEl *new;
+  GNode *new;
 
   if (! key)
     {
@@ -673,7 +673,7 @@ static PyObject *llpy_previndi (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   CString key = nzkey (indi->llr_record);
   Database *database = indi->llr_database;
-  RecordIndexEl *new;
+  GNode *new;
 
   if (! key)
     {
@@ -704,7 +704,7 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
   GNode *node = nztop (indi->llr_record);
   Database *database = indi->llr_database;
   Sequence *seq=0;
-  RecordIndexEl *record;
+  GNode *record;
 
   if (! node)
     {
@@ -741,7 +741,7 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   GNode *node = nztop (indi->llr_record);
   Database *database = indi->llr_database;
-  RecordIndexEl *record;
+  GNode *record;
   Sequence *seq;
   LLINES_PY_RECORD *py_indi;
 
@@ -773,7 +773,7 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   Database *database = indi->llr_database;
   LLINES_PY_RECORD *fam;
   Sequence *seq;
-  RecordIndexEl *record;
+  GNode *record;
 
   seq = personToFamilies (nztop (indi->llr_record), true, database->recordIndex);
   if (! seq || seq->block.length < 1)
@@ -869,10 +869,10 @@ static PyObject *llpy_spouseset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args
 
 static int add_spouses (PyObject *item, PyObject *output_set)
 {
-  RecordIndexEl *record = ((LLINES_PY_RECORD *)item)->llr_record;
+  GNode *record = ((LLINES_PY_RECORD *)item)->llr_record;
 
   Database *database = ((LLINES_PY_RECORD *)item)->llr_database;
-  RecordIndexEl *spouse_r;
+  GNode *spouse_r;
   GNode *indi = nztop (record);
 
   FORSPOUSES(indi, spouse, fam, num, database->recordIndex)
@@ -1085,7 +1085,7 @@ static PyObject *llpy_childset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args,
 static int add_children (PyObject *obj, PyObject *working_set, PyObject *output_set)
 {
   int status;
-  RecordIndexEl *record;
+  GNode *record;
   Database *database;
 
   if (output_set)

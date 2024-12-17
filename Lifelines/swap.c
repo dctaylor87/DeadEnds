@@ -81,7 +81,7 @@ static void swap_children_impl(GNode *fam, GNode *one, GNode *two);
  *  fam:  [IN]  family (may be NULL)
  *===========================================*/
 bool
-swap_children (RecordIndexEl *prnt, RecordIndexEl *frec)
+swap_children (GNode *prnt, GNode *frec)
 {
 	GNode *fam, *chil, *one, *two;
 	int nfam, nchil;
@@ -116,7 +116,7 @@ gotfam:
 		one = CHIL(fam);
 		two = nsibling(one);
 	} else {
-		RecordIndexEl *chil1, *chil2;
+		GNode *chil1, *chil2;
 		String key1, key2;
 		/* Identify children to swap */
 		chil1 = chooseChild(NULL, frec, "e", _(qSid1csw), NOASK1);
@@ -188,7 +188,7 @@ swap_children_impl (GNode *fam, GNode *one, GNode *two)
  *  rftm: [IN]  person formatting for prompts
  *===========================================*/
 bool
-reorder_child (RecordIndexEl *prnt, RecordIndexEl *frec, bool rfmt)
+reorder_child (GNode *prnt, GNode *frec, bool rfmt)
 {
 	int nfam, nchil;
 	int prevorder, i;
@@ -281,7 +281,7 @@ child_index (GNode *child, GNode *fam)
  *  Ask for yes/no confirm
  *===========================================*/
 bool
-swap_families (RecordIndexEl *irec)
+swap_families (GNode *irec)
 {
 	GNode *indi, *fams, *one, *two, *tmp;
 	int nfam;

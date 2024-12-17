@@ -320,15 +320,15 @@ The DeadEnds Report Writing language primarily deals with nodes.  By
 contrast, the Python Extension primarily deals with records.
 
 Both nodes and records are reference counted.  When creating a
-reference to either a GNode or a RecordIndexEl it is important to
-ensure that its reference count is incremented.  And when destroying a
-reference, that it is decremented.
+reference to a GNode it is important to ensure that its reference
+count is incremented.  And when destroying a reference, that it is
+decremented.
 
 NOTE: The GNode reference counts @b{DO NOT} include references from
 other GNodes, such as the parent, sibling, and child links.  Nor the
-link from a record to its top GNode.  The reference counts @b{DO} count
-the number of @code{PVALUE}s and @code{PyObject}s that point to the
-GNode.
+links from a RecordIndex to its GNodes.  The reference counts @b{DO}
+count the number of @code{PVALUE}s and @code{PyObject}s that point to
+the GNode.
 
 Additionally, GNodes have a flags element.  Only one flag bit is
 currently defined -- whether the GNode is a temporary GNode or not.  A
@@ -656,28 +656,28 @@ the new reference count of the GNode.
 @end defmac
 
 @section GNode to Record traversal
-@deftypefun RecordIndexEl* node_to_record (GNode* node) @arrow{} RECORD
+@deftypefun GNode* node_to_record (GNode* node) @arrow{} RECORD
 
 Returns the RECORD that contains GNode @code{node}.
 @end deftypefun
 
 @section RECORD Functions 
 @subsection Information about a Record
-@deftypefun GNode* nztop (RecordIndexEl *record)
+@deftypefun GNode* nztop (GNode *record)
 Returns the top node of @code{record}.
 @end deftypefun
 
-@deftypefun CString nzkey (RecordIndexEl *record)
+@deftypefun CString nzkey (GNode *record)
 Returns @code{record}'s key.
 @end deftypefun
 
-@defmac RecordType nztype (RecordIndexEl *record)
+@defmac RecordType nztype (GNode *record)
 Returns @code{record}'s type.
 @end defmac
 
 @subsection RECORD Reference Counts
 
-@deftypefun void release_record (RecordIndexEl *record)
+@deftypefun void release_record (GNode *record)
 Decrement reference count of @code{record} and free the record if the
 reference count reaches zero.
 @end deftypefun
@@ -782,20 +782,20 @@ When set, the current database was opened in read-only mode and changes are not 
 
 The following functions are defined in directory @file{DeadEndsLib/Database}.
 
-@deftypefun RecordIndexEl* keyToPersonRecord (CString key, Database* database)
-@deftypefunx RecordIndexEl* keyToFamilyRecord (CString key, Database* database)
-@deftypefunx RecordIndexEl* keyToSourceRecord (CString key, Database* database)
-@deftypefunx RecordIndexEl* keyToEventRecord (CString key, Database* database)
-@deftypefunx RecordIndexEl* keyToOtherRecord (CString key, Database* database)
-Looks for a RecordIndexEl* of the given type having the specified key.
+@deftypefun GNode* keyToPersonRecord (CString key, Database* database)
+@deftypefunx GNode* keyToFamilyRecord (CString key, Database* database)
+@deftypefunx GNode* keyToSourceRecord (CString key, Database* database)
+@deftypefunx GNode* keyToEventRecord (CString key, Database* database)
+@deftypefunx GNode* keyToOtherRecord (CString key, Database* database)
+Looks for a GNode* of the given type having the specified key.
 On success, returns an addref'd record.  On failure, returns NULL.
 Defined in @file{database.c}, declared in @file{database.h}.
 @end deftypefun
 
-@deftypefun RecordIndexEl* keynum_to_frecord (int keynum)
-@deftypefunx RecordIndexEl* keynum_to_irecord (int keynum)
-@deftypefunx RecordIndexEl* keynum_to_record (char ntype, int keynum)
-Looks for a RecordIndexEl* of the specified type having the specifed keynum.
+@deftypefun GNode* keynum_to_frecord (int keynum)
+@deftypefunx GNode* keynum_to_irecord (int keynum)
+@deftypefunx GNode* keynum_to_record (char ntype, int keynum)
+Looks for a GNode* of the specified type having the specifed keynum.
 If found, returns the record.  Otherwise returns NULL.
 @end deftypefun
 
@@ -1269,13 +1269,13 @@ other than read-only and @code{name} is not absolute nor
 These entries are found in the @file{Lifelines} directory.
 
 @section User Interaction
-@deftypefun RecordIndexEl* ask_for_fam (String pttl, String sttl)
+@deftypefun GNode* ask_for_fam (String pttl, String sttl)
 Ask user to identify family by spouses.  String @code{pttl} is a
 prompt to identify a spouse in the family.  String @code{sttl} is a
 prompt to identify a child in the family.
 @end deftypefun
 
-@deftypefun RecordIndexEl* ask_for_indi (String ttl, ASK1Q ask1)
+@deftypefun GNode* ask_for_indi (String ttl, ASK1Q ask1)
 Ask user to identify sequence and select a person.  String @code{ttl}
 is a title for the question.  And @code{ask1q} says whether to present
 the list if only one individual matches.
@@ -1295,7 +1295,7 @@ necessary, truncated to @code{buflen}.  The return value indicates
 whether the user provided an answer (true) or canceled (false).
 @end deftypefun
 
-@deftypefun RecordIndexEl* chooseFromSequence (INDISEQ seq, ASK1Q ask1, String titl1, String titln)
+@deftypefun GNode* chooseFromSequence (INDISEQ seq, ASK1Q ask1, String titl1, String titln)
 Format sequence and have user choose from it (any type).  This handles
 bad pointers.  Here, @code{seq} is the sequence from which to choose,
 @code{ask1} is whether to prompt if only one element is in the

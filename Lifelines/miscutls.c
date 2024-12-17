@@ -70,7 +70,7 @@ ErrorLog *globalErrorLog = 0;
 void
 key_util (void)
 {
-	RecordIndexEl *indi = ask_for_indi(_("Whose key value do you want?"), NOASK1);
+	GNode *indi = ask_for_indi(_("Whose key value do you want?"), NOASK1);
 	if (!indi) return;
 	msg_info("%s - %s", nxref(nztop(indi)), personToName(nztop(indi), 70));
 }

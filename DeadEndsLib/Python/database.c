@@ -58,7 +58,7 @@ static PyObject *llpy_others_db (PyObject *self, PyObject *args);
 static PyObject *llpy_firstindi_db (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   Database *database = ((LLINES_PY_DATABASE *)self)->lld_database;
-  RecordIndexEl *new;
+  GNode *new;
   LLINES_PY_RECORD *rec;
 
   if (! database)
@@ -88,7 +88,7 @@ static PyObject *llpy_firstindi_db (PyObject *self, PyObject *args ATTRIBUTE_UNU
 static PyObject *llpy_lastindi_db (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   Database *database = ((LLINES_PY_DATABASE *)self)->lld_database;
-  RecordIndexEl *new;
+  GNode *new;
   LLINES_PY_RECORD *rec;
 
   if (! database)
@@ -119,7 +119,7 @@ static PyObject *llpy_lastindi_db (PyObject *self, PyObject *args ATTRIBUTE_UNUS
 static PyObject *llpy_firstfam_db (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   Database *database = ((LLINES_PY_DATABASE *)self)->lld_database;
-  RecordIndexEl *new;
+  GNode *new;
   LLINES_PY_RECORD *rec;
 
   if (! database)
@@ -150,7 +150,7 @@ static PyObject *llpy_firstfam_db (PyObject *self, PyObject *args ATTRIBUTE_UNUS
 static PyObject *llpy_lastfam_db (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   Database *database = ((LLINES_PY_DATABASE *)self)->lld_database;
-  RecordIndexEl *new;
+  GNode *new;
   LLINES_PY_RECORD *rec;
 
   if (! database)

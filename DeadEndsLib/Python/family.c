@@ -155,7 +155,7 @@ static PyObject *llpy_wife (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 static PyObject *llpy_nchildren (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
-  RecordIndexEl *fam_record = fam->llr_record;
+  GNode *fam_record = fam->llr_record;
   int count = gNodesLength (CHIL (nztop (fam_record)));
 
   return (Py_BuildValue ("i", count));
@@ -249,7 +249,7 @@ static PyObject *llpy_nextfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   CString key = nzkey(fam->llr_record);
   Database *database = fam->llr_database;
-  RecordIndexEl *new;
+  GNode *new;
 
   if (! key)
     {
@@ -278,7 +278,7 @@ static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   CString key = nzkey(fam->llr_record);
   Database *database = fam->llr_database;
-  RecordIndexEl *new;
+  GNode *new;
 
   if (! key)
     {
@@ -303,7 +303,7 @@ static PyObject *llpy_prevfam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
 static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  RecordIndexEl *fam = ((LLINES_PY_RECORD *)self)->llr_record;
+  GNode *fam = ((LLINES_PY_RECORD *)self)->llr_record;
   Database *database = ((LLINES_PY_RECORD *)self)->llr_database;
   PyObject *output_set = PySet_New (NULL);
 
@@ -339,7 +339,7 @@ static PyObject *llpy_children_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSE
 
 static PyObject *llpy_spouses_f (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 {
-  RecordIndexEl *fam = ((LLINES_PY_RECORD *)self)->llr_record;
+  GNode *fam = ((LLINES_PY_RECORD *)self)->llr_record;
   Database *database = ((LLINES_PY_RECORD *)self)->llr_database;
   PyObject *output_set = PySet_New (NULL);
 
@@ -381,7 +381,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
   GNode *node = nztop (fam->llr_record);
   Database *database = fam->llr_database;
   Sequence *seq=0;
-  RecordIndexEl *record;
+  GNode *record;
   LLINES_PY_RECORD *indi;
 
   if (! node)
@@ -413,7 +413,7 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   GNode *node = nztop (fam->llr_record);
-  RecordIndexEl *record;
+  GNode *record;
   Sequence *seq;
   LLINES_PY_RECORD *py_indi;
 

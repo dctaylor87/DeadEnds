@@ -68,7 +68,7 @@ static void write_node(int levl, FILE *fp, XLAT ttm,
  * pemp: [OUT] set true if file is empty
  * returns addref'd record
  *===============================================*/
-RecordIndexEl *
+GNode *
 file_to_record (String fname, XLAT ttm, String *pmsg, bool *pemp)
 {
 	GNode *node = file_to_node(fname, ttm, pmsg, pemp);
@@ -76,10 +76,10 @@ file_to_record (String fname, XLAT ttm, String *pmsg, bool *pemp)
 		return 0;
 	if (nxref(node)) {
 		CACHEEL cel = node_to_cacheel_old(node);
-		RecordIndexEl *rec = get_record_for_cel(cel);
+		GNode *rec = get_record_for_cel(cel);
 		return rec;
 	} else {
-		RecordIndexEl *rec = create_record_for_unkeyed_node(node);
+		GNode *rec = create_record_for_unkeyed_node(node);
 		return rec;
 	}
 }

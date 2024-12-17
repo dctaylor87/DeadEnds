@@ -79,12 +79,12 @@ static void name_the_list(Sequence *seq);
  * browse_list -- Handle list browse mode
  *=====================================*/
 int
-browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
+browse_list (GNode **prec1, GNode **prec2, Sequence **pseq)
 {
 	int c, top, cur, mark, len, tmp, rc;
 	CString key, name;
 	String lname="";
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 	Sequence *seq, *newseq;
 	
 	ASSERT(prec1);
@@ -224,7 +224,7 @@ browse_list (RecordIndexEl **prec1, RecordIndexEl **prec2, Sequence **pseq)
 			break;
 		case 't':        /* Enter tandem mode */
 		{
-			RecordIndexEl *cand1=0, *cand2=0;
+			GNode *cand1=0, *cand2=0;
 			if (mark == -1 || cur == mark) {
 				msg_error("%s", _(qSmrkrec));
 				break;

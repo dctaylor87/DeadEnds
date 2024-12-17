@@ -236,7 +236,7 @@ annotate_node (GNode *node, bool expand_refns,
 	       Database *database)
 {
 	String key=0;
-	RecordIndexEl *rec=0;
+	GNode *rec=0;
 
 	key = value_to_xref(nval(node));
 	if (!key) return;
@@ -334,7 +334,7 @@ record_letter (CString tag)
    let:  if string starts with a letter, it must be this (eg, 'I' for indi)
    This returns NULL upon failure.  */
 
-RecordIndexEl *key_possible_to_record (String str, /* string that may be a key */
+GNode *key_possible_to_record (String str, /* string that may be a key */
                     int let)    /* if string starts with letter it
                                    must be this */
 {

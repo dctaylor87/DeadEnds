@@ -110,11 +110,11 @@ variable, and checked & resized at init_display_indi time */
 static void add_child_line(int, GNode *node, int width);
 static void add_spouse_line(int, GNode *, GNode *, int width);
 static bool append_event(String * pstr, String evt, int * plen, int minlen);
-static void disp_person_birthdeath(ZSTR zstr, RecordIndexEl *irec, struct tag_prefix * tags, RFMT rfmt);
-static void disp_person_name(ZSTR zstr, String prefix, RecordIndexEl *irec, int width);
+static void disp_person_birthdeath(ZSTR zstr, GNode *irec, struct tag_prefix * tags, RFMT rfmt);
+static void disp_person_name(ZSTR zstr, String prefix, GNode *irec, int width);
 static void indi_events(String outstr, GNode *indi, int len);
-static void init_display_indi(RecordIndexEl *irec, int width);
-static void init_display_fam(RecordIndexEl *frec, int width);
+static void init_display_indi(GNode *irec, int width);
+static void init_display_fam(GNode *frec, int width);
 static void pedigree_line(CANVASDATA canvas, int x, int y, String string, int overflow);
 static String person_display(GNode *, GNode *, int);
 static void put_out_line(UIWINDOW uiwin, int x, int y, String string, int maxcol, int flag);
@@ -215,7 +215,7 @@ term_show_module (void)
  * Created: 2003-01-11 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
+disp_person_name (ZSTR zstr, String prefix, GNode *irec, int width)
 {
 /* TODO: width handling is wrong, it should not be byte based */
 	ZSTR zkey = zs_news(nxref(nztop(irec)));
@@ -244,7 +244,7 @@ disp_person_name (ZSTR zstr, String prefix, RecordIndexEl *irec, int width)
  * Created: 2003-01-12 (Perry Rapp)
  *=============================================*/
 static void
-disp_person_birthdeath (ZSTR zstr, RecordIndexEl *irec, struct tag_prefix * tags, RFMT rfmt)
+disp_person_birthdeath (ZSTR zstr, GNode *irec, struct tag_prefix * tags, RFMT rfmt)
 {
 	struct tag_prefix *tg;
 	int ct=0;
@@ -295,7 +295,7 @@ disp_person_birthdeath (ZSTR zstr, RecordIndexEl *irec, struct tag_prefix * tags
  *  display mode (Spers, Sbirt, etc)
  *=============================================*/
 static void
-init_display_indi (RecordIndexEl *irec, int width)
+init_display_indi (GNode *irec, int width)
 {
 	GNode *pers=nztop(irec);
 	GNode *this_fam = 0;
@@ -351,7 +351,7 @@ init_display_indi (RecordIndexEl *irec, int width)
  * person displayed last.
  *============================*/
 void
-show_indi_vitals (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
+show_indi_vitals (UIWINDOW uiwin, GNode *irec, LLRECT rect
 	, int *scroll, bool reuse)
 {
 	int i;
@@ -434,7 +434,7 @@ add_child_line (int num, GNode *node, int width)
  * init_display_fam -- Initialize display family
  *============================================*/
 static void
-init_display_fam (RecordIndexEl *frec, int width)
+init_display_fam (GNode *frec, int width)
 {
 	GNode *fam=nztop(frec);
 	GNode *husb=0, *wife=0;
@@ -443,7 +443,7 @@ init_display_fam (RecordIndexEl *frec, int width)
 	int nch, nm, wtemp;
 	String father = _(qSdspl_fath);
 	String mother = _(qSdspl_moth);
-	RecordIndexEl *ihusb=0, *iwife=0;
+	GNode *ihusb=0, *iwife=0;
 	int husbstatus = 0;
 	int wifestatus = 0;
 	GNode *fnode;
@@ -541,7 +541,7 @@ init_display_fam (RecordIndexEl *frec, int width)
  * [in] reuse: flag to save recalculating display strings
  *=================================*/
 void
-show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
+show_fam_vitals (UIWINDOW uiwin, GNode *frec, int row, int hgt
 	, int width, int *scroll, bool reuse)
 {
 	int i;
@@ -593,7 +593,7 @@ show_fam_vitals (UIWINDOW uiwin, RecordIndexEl *frec, int row, int hgt
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_ancestors (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
+show_ancestors (UIWINDOW uiwin, GNode *irec, LLRECT rect
 	, int * scroll, bool reuse)
 {
 	struct tag_canvasdata canvas;
@@ -612,7 +612,7 @@ show_ancestors (UIWINDOW uiwin, RecordIndexEl *irec, LLRECT rect
  * Created: 2001/02/04, Perry Rapp
  *==============================================*/
 void
-show_descendants (UIWINDOW uiwin, RecordIndexEl *rec, LLRECT rect
+show_descendants (UIWINDOW uiwin, GNode *rec, LLRECT rect
 	, int * scroll, bool reuse)
 {
 	struct tag_canvasdata canvas;
@@ -631,7 +631,7 @@ show_descendants (UIWINDOW uiwin, RecordIndexEl *rec, LLRECT rect
  * Created: 2001/01/27, Perry Rapp
  *==============================================*/
 void
-show_gedcom (UIWINDOW uiwin, RecordIndexEl *rec, int gdvw, LLRECT rect
+show_gedcom (UIWINDOW uiwin, GNode *rec, int gdvw, LLRECT rect
 	, int * scroll, bool reuse)
 {
 	struct tag_canvasdata canvas;
@@ -909,7 +909,7 @@ person_display (GNode *indi, GNode *fam, int len)
  * show_aux -- Show source, event or other record
  *======================================================*/
 void
-show_aux (UIWINDOW uiwin, RecordIndexEl *rec, int mode, LLRECT rect
+show_aux (UIWINDOW uiwin, GNode *rec, int mode, LLRECT rect
 	, int * scroll, bool reuse)
 {
 	if (mode == 'g')

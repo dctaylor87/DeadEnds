@@ -82,8 +82,8 @@ llines_record_richcompare (PyObject *self, PyObject *other, int op)
 PyObject *
 llines_node_richcompare (PyObject *self, PyObject *other, int op)
 {
-  RecordIndexEl *obj1;
-  RecordIndexEl *obj2;
+  GNode *obj1;
+  GNode *obj2;
 
   /* determine if 'other' is a RECORD, a NODE, or something else.
      While *we* are only going to create sets where everything is a
@@ -160,7 +160,7 @@ llines_node_richcompare (PyObject *self, PyObject *other, int op)
 Py_hash_t llines_record_hash (PyObject *obj)
 {
   LLINES_PY_RECORD *pyobj = (LLINES_PY_RECORD *)obj;
-  RecordIndexEl *record;
+  GNode *record;
   CString key;
   PyObject *hash_arg;
   Py_hash_t hash;

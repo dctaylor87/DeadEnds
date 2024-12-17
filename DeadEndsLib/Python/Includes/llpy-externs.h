@@ -9,8 +9,8 @@ extern int llpy_execute_scripts (int continue_on_failure);
 extern int llpy_python_interactive (void);
 
 #if defined(DEADENDS)
-extern RecordIndexEl *_llpy_node_to_record (GNode *node, Database *database);
-extern RecordIndexEl *__llpy_key_to_record (CString key, int *int_type,
-					    Database *database);
+extern GNode *_llpy_node_to_record (GNode *node, Database *database);
+extern GNode *__llpy_key_to_record (CString key, int *int_type,
+				    Database *database);
 
 #endif

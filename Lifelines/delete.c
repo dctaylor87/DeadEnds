@@ -163,7 +163,7 @@ chooseAndRemovePerson (GNode *indi, CONFIRMQ confirmq)
  *  conf:  [in]  have user confirm ?
  *==============================================================*/
 bool
-chooseAndRemoveAnyRecord (RecordIndexEl *record, CONFIRMQ confirmq)
+chooseAndRemoveAnyRecord (GNode *record, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
 	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1)))
@@ -182,7 +182,7 @@ chooseAndRemoveAnyRecord (RecordIndexEl *record, CONFIRMQ confirmq)
  *  nolast: don't remove last member of family?
  *=========================================*/
 bool
-chooseAndRemoveSpouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
+chooseAndRemoveSpouse (GNode *irec, GNode *frec, bool nolast)
 {
 	GNode *fam;
 
@@ -219,7 +219,7 @@ chooseAndRemoveSpouse (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
  *  nolast: don't remove last member of family?
  *=========================================*/
 bool
-chooseAndRemoveChild (RecordIndexEl *irec, RecordIndexEl *frec, bool nolast)
+chooseAndRemoveChild (GNode *irec, GNode *frec, bool nolast)
 {
 	GNode *fam;
 

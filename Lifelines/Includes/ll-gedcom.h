@@ -2,7 +2,7 @@
    LifeLines hdrs/gedcom.h and hdrs/gedcom_macros.h. */
 #define FORFAMS(indi,fam,num,database)	\
 	{\
-	RecordIndexEl *frec=0;	\
+	GNode *frec=0;	\
 	GNode *__node = findTag(nchild(indi),"FAMS");\
 	GNode *fam=0;\
 	String __key=0;\

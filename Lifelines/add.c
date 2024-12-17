@@ -110,11 +110,11 @@ get_unresolved_ref_error_string (int count)
  * (with user interaction)
  * returns addref'd record
  *========================================================*/
-RecordIndexEl *
+GNode *
 add_indi_by_edit (bool rfmt)
 {
 	FILE *fp;
-	RecordIndexEl *indi0=0;
+	GNode *indi0=0;
 	GNode *indi=0;
 	String str, msg;
 	bool emp;
@@ -197,7 +197,7 @@ add_indi_by_edit (bool rfmt)
  * creates record & adds to cache
  *========================================================*/
 void
-add_new_indi_to_db (RecordIndexEl *indi0)
+add_new_indi_to_db (GNode *indi0)
 {
 	GNode *name, *refn, *sex, *body, *dumb, *node;
 	char key[MAXKEYWIDTH]="";
@@ -285,7 +285,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 /* Identify child if caller did not */
 
 	if (!child) {
-		RecordIndexEl *rec = ask_for_indi(_(qSidchld), DOASK1);
+		GNode *rec = ask_for_indi(_(qSidchld), DOASK1);
 		child = nztop(rec);
 		releaseRecord(rec);
 	}
@@ -300,7 +300,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 /* Identify family if caller did not */
 
 	if (!fam) {
-		RecordIndexEl *rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
+		GNode *rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
 		fam = nztop(rec);
 		releaseRecord(rec);
 	}
@@ -386,7 +386,7 @@ add_child_to_fam (GNode *child, GNode *fam, int i)
  * (with user interaction)
  *=================================*/
 bool
-prompt_add_spouse (RecordIndexEl *sprec, RecordIndexEl *frec, bool conf)
+prompt_add_spouse (GNode *sprec, GNode *frec, bool conf)
 {
 	SexType sex;
 	GNode *spouse, *fam = nztop(frec);
@@ -541,9 +541,9 @@ add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child
  * add_family_by_edit -- Add new family to database
  * (with user interaction)
  *=======================================*/
-RecordIndexEl *
-add_family_by_edit (RecordIndexEl *sprec1, RecordIndexEl *sprec2,
-		    RecordIndexEl *chrec, bool rfmt)
+GNode *
+add_family_by_edit (GNode *sprec1, GNode *sprec2,
+		    GNode *chrec, bool rfmt)
 {
 	SexType sex1 = sexUnknown;
 	SexType sex2 = sexUnknown;

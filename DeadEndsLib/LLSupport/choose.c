@@ -65,10 +65,10 @@
  *  msgn: [IN] title for choosing child from list
  *  ask1: [IN] whether to prompt if only one child
  *===============================================*/
-RecordIndexEl *
-chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
+GNode *
+chooseChild (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-  RecordIndexEl *rec=0;
+  GNode *rec=0;
   Sequence *seq=0;
 
   if (irec)
@@ -97,10 +97,10 @@ chooseChild (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msg
  *  msgn: [IN] title for choosing spouse from list
  *  asks if multiple
  *======================================*/
-RecordIndexEl *
-chooseSpouse (RecordIndexEl *irec, CString msg0, CString msgn)
+GNode *
+chooseSpouse (GNode *irec, CString msg0, CString msgn)
 {
-  RecordIndexEl *rec=0;
+  GNode *rec=0;
   Sequence *seq=0;
 
   if (!irec) return NULL;
@@ -119,11 +119,11 @@ chooseSpouse (RecordIndexEl *irec, CString msg0, CString msgn)
  *  presumably top level, node
  *  always asks
  *======================================*/
-RecordIndexEl *
-chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
+GNode *
+chooseSource (GNode *current, CString msg0, CString msgn)
 {
   Sequence *seq;
-  RecordIndexEl *rec;
+  GNode *rec;
   if (! current)
     return NULL;
   ASSERT (! current->parent);
@@ -143,11 +143,11 @@ chooseSource (RecordIndexEl *current, CString msg0, CString msgn)
  *  always asks
  * Created: 2001/02/11, Perry Rapp
  *======================================*/
-RecordIndexEl *
-chooseNote (RecordIndexEl *current, CString msg0, CString msgn)
+GNode *
+chooseNote (GNode *current, CString msg0, CString msgn)
 {
   Sequence *seq;
-  RecordIndexEl *rec;
+  GNode *rec;
   if (! current)
     return NULL;
 
@@ -169,11 +169,11 @@ chooseNote (RecordIndexEl *current, CString msg0, CString msgn)
  * Created: 2001/02/24, Perry Rapp
  * Returns addref'd record
  *======================================*/
-RecordIndexEl *
-choosePointer (RecordIndexEl *current, CString msg0, CString msgn)
+GNode *
+choosePointer (GNode *current, CString msg0, CString msgn)
 {
   Sequence *seq;
-  RecordIndexEl *rec;
+  GNode *rec;
   if (! current)
     return NULL;
   ASSERT (! current->parent);
@@ -195,10 +195,10 @@ choosePointer (RecordIndexEl *current, CString msg0, CString msgn)
  * msgn: [IN]  title if need to choose which family
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
-RecordIndexEl *
-chooseFamily (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
+GNode *
+chooseFamily (GNode *irec, CString msg0, CString msgn, bool fams)
 {
-  RecordIndexEl *rec=0;
+  GNode *rec=0;
   ASSERT (irec && ! irec->parent);
   Sequence *seq = indi_to_families(nztop(irec), fams);
   if (!seq)
@@ -220,10 +220,10 @@ chooseFamily (RecordIndexEl *irec, CString msg0, CString msgn, bool fams)
  * msgn: [IN]  title if need to choose which father
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
-RecordIndexEl *
-chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
+GNode *
+chooseFather (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-  RecordIndexEl *rec=0;
+  GNode *rec=0;
   Sequence *seq=0;
 
   if (irec)
@@ -254,10 +254,10 @@ chooseFather (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString ms
  * msgn: [IN]  title if need to choose which mother
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
-RecordIndexEl *
-chooseMother (RecordIndexEl *irec, RecordIndexEl *frec, CString msg0, CString msgn, ASK1Q ask1)
+GNode *
+chooseMother (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
 {
-  RecordIndexEl *rec=0;
+  GNode *rec=0;
   Sequence *seq=0;
 
   if (irec)

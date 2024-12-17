@@ -191,13 +191,13 @@ write_body (FILE *file, Database *database)
 static int
 write_all_records (FILE *file, RecordIndex *index)
 {
-  RecordIndexEl *record;
+  GNode *record;
   int bucket_ndx = -1;
   int element_ndx = -1;
 
-  for (record = (RecordIndexEl *) firstInHashTable (index, &bucket_ndx, &element_ndx);
+  for (record = (GNode *) firstInHashTable (index, &bucket_ndx, &element_ndx);
        record;
-       record = (RecordIndexEl *) nextInHashTable (index, &bucket_ndx, &element_ndx))
+       record = (GNode *) nextInHashTable (index, &bucket_ndx, &element_ndx))
     {
       GNode *root = nztop(record);
       if (write_node_tree (file, root) < 0)
@@ -304,7 +304,7 @@ write_trailer (FILE *file)
 static bool
 valid_submitter (CString submitter, Database *database)
 {
-  RecordIndexEl *record;
+  GNode *record;
   int type = 'X';
 
   record = __llpy_key_to_record (submitter, &type, database);

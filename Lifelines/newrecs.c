@@ -86,9 +86,9 @@
  *********************************************/
 
 /* alphabetical */
-static RecordIndexEl *edit_add_record(String recstr, String redt, String redtopt
+static GNode *edit_add_record(String recstr, String redt, String redtopt
 	, char ntype, String cfrm);
-static bool edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
+static bool edit_record(GNode *rec1, String idedt, int letr, String redt,
 			   String redtopt,
 			   bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
 			   bool (*todbase)(GNode *, Database *),
@@ -102,7 +102,7 @@ static bool edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt
 /*================================================
  * edit_add_source -- Add source to database by editing
  *==============================================*/
-RecordIndexEl *
+GNode *
 edit_add_source (void)
 {
 	String str;
@@ -113,7 +113,7 @@ edit_add_source (void)
 /*==============================================
  * edit_add_event -- Add event to database by editing
  *============================================*/
-RecordIndexEl *
+GNode *
 edit_add_event (void)
 {
 	String str;
@@ -124,7 +124,7 @@ edit_add_event (void)
 /*====================================================
  * edit_add_other -- Add user record to database by editing
  *==================================================*/
-RecordIndexEl *
+GNode *
 edit_add_other (void)
 {
 	String str;
@@ -140,7 +140,7 @@ edit_add_other (void)
  *  ntype,   [IN] S, E, or X
  *  cfrm:    [IN] confirm message
  *==============================================*/
-static RecordIndexEl *
+static GNode *
 edit_add_record (String recstr, String redt, String redtopt, char ntype, String cfrm)
 {
 	FILE *fp;
@@ -227,7 +227,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
  * edit_source -- Edit source in database
  *=====================================*/
 bool
-edit_source (RecordIndexEl *rec, bool rfmt)
+edit_source (GNode *rec, bool rfmt)
 {
 	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt),
 			   valid_sour_tree, _(qScfrupt),
@@ -237,7 +237,7 @@ edit_source (RecordIndexEl *rec, bool rfmt)
  * edit_event -- Edit event in database
  *===================================*/
 bool
-edit_event (RecordIndexEl *rec, bool rfmt)
+edit_event (GNode *rec, bool rfmt)
 {
 	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt),
 			   valid_even_tree, _(qScfeupt),
@@ -247,7 +247,7 @@ edit_event (RecordIndexEl *rec, bool rfmt)
  * edit_other -- Edit other record in database (eg, NOTE)
  *=========================================*/
 bool
-edit_other (RecordIndexEl *rec, bool rfmt)
+edit_other (GNode *rec, bool rfmt)
 {
 	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt),
 			   valid_othr_tree, _(qScfxupt),
@@ -257,7 +257,7 @@ edit_other (RecordIndexEl *rec, bool rfmt)
  * edit_any_record -- Edit record of any type
  *=====================================*/
 bool
-edit_any_record (RecordIndexEl *rec, bool rfmt)
+edit_any_record (GNode *rec, bool rfmt)
 {
 	ASSERT(rec);
 	switch (recordType(nztop(rec))) {
@@ -300,7 +300,7 @@ write_node_to_editfile (GNode *node)
  *  rfmt:    [IN]  display reformatter
  *=====================================*/
 static bool
-edit_record(RecordIndexEl *rec1, String idedt, int letr, String redt,
+edit_record(GNode *rec1, String idedt, int letr, String redt,
 	    String redtopt,
 	    bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
 	    bool (*todbase)(GNode *, Database *),

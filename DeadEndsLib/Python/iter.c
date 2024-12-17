@@ -234,7 +234,7 @@ static PyObject *llpy_record_iternext (PyObject *self)
 {
   LLINES_PY_RECORD_ITER *iter = (LLINES_PY_RECORD_ITER *)self;
   Database *database = iter->li_database;
-  RecordIndexEl *record;
+  GNode *record;
   RecordType DEtype;		/* GRPerson, GRFamily, GRSource, GREvent, or GROther */
   PyTypeObject *PYtype;		/* llines_{event,family,individual,other,source}_type */
   
@@ -283,21 +283,21 @@ static PyObject *llpy_record_iternext (PyObject *self)
 
   if ((iter->li_bucket_ndx == -1) && (iter->li_element_ndx == -1))
     /* first time */
-    record = (RecordIndexEl *) firstInHashTable (database->recordIndex,
+    record = (GNode *) firstInHashTable (database->recordIndex,
 						 &iter->li_bucket_ndx,
 						 &iter->li_element_ndx);
   else
     /* not first time */
-    record = (RecordIndexEl *) nextInHashTable (database->recordIndex,
-						&iter->li_bucket_ndx,
-						&iter->li_element_ndx);
+    record = (GNode *) nextInHashTable (database->recordIndex,
+					&iter->li_bucket_ndx,
+					&iter->li_element_ndx);
 
   /* now, check the type, iterate until right type or exhausted */
   while (record && (recordType(record) != DEtype))
     {
-      record = (RecordIndexEl *) nextInHashTable (database->recordIndex,
-						  &iter->li_bucket_ndx,
-						  &iter->li_element_ndx);
+      record = (GNode *) nextInHashTable (database->recordIndex,
+					  &iter->li_bucket_ndx,
+					  &iter->li_element_ndx);
     }
 
   if (! record)

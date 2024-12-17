@@ -1,13 +1,13 @@
 //extern void change_node_tag (GNode *node, String newtag);
 extern int tree_strlen (int levl, GNode *node);
 extern void unknown_node_to_dbase (GNode *node); /* XXX */
-extern int next_spouse (GNode **node, RecordIndexEl **spouse, Database *database);
-extern RecordIndexEl *indi_to_prev_sib (RecordIndexEl *irec, Database *database);
-extern RecordIndexEl *indi_to_next_sib (RecordIndexEl *irec, Database *database);
+extern int next_spouse (GNode **node, GNode **spouse, Database *database);
+extern GNode *indi_to_prev_sib (GNode *irec, Database *database);
+extern GNode *indi_to_next_sib (GNode *irec, Database *database);
 extern String node_to_tag (GNode *node, CString tag, int len);
-extern void record_to_date_place (RecordIndexEl *record, String tag,
+extern void record_to_date_place (GNode *record, String tag,
 				  String * date, String * plac, int * count);
-extern GNode *record_to_first_event (RecordIndexEl *record, CString tag);
+extern GNode *record_to_first_event (GNode *record, CString tag);
 extern GNode *node_to_next_event (GNode *node, CString tag);
 extern void event_to_date_place (GNode *node, String * date, String * plac);
 //extern String event_to_string (GNode *node, RFMT rfmt);

@@ -69,7 +69,7 @@ getAllRecordOfType (Database *database, RecordType type)
   Sequence *seq = createSequence (database->recordIndex);
   int bucket = 0;
   int element = 0;
-  RecordIndexEl *record = 0;
+  GNode *record = 0;
 
   for (record = firstInHashTable (database->recordIndex, &bucket, &element);
        record;

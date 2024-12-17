@@ -117,7 +117,7 @@ static void check_fam_lineage_links(GNode *fam);
  *   indi3 - merged version of the two persons before editing
  *   indi4 - merged version of the two persons after editing
  *==============================================================*/
-RecordIndexEl *
+GNode *
 merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 {
 	GNode *indi01, *indi02;	/* original arguments */
@@ -467,7 +467,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
  *   fam4 - merged version of the two persons after editing
  *     the nodes inside fam4 are stored into fam2 & to dbase at the very end
  *===============================================================*/
-RecordIndexEl *
+GNode *
 merge_two_fams (GNode *fam1, GNode *fam2)
 {
 	GNode *husb1, *wife1, *chil1, *rest1, *husb2, *wife2, *chil2, *rest2;

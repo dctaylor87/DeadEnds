@@ -81,7 +81,7 @@
  * returns TRUE if user makes changes (& saves them)
  *===================================*/
 bool
-edit_indi (RecordIndexEl *irec1, bool rfmt)
+edit_indi (GNode *irec1, bool rfmt)
 {
 	GNode *indi1, *indi2=0;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
@@ -161,10 +161,10 @@ edit_indi (RecordIndexEl *irec1, bool rfmt)
  * (with user interaction)
  *==================================*/
 bool
-edit_family (RecordIndexEl *frec1, bool rfmt)
+edit_family (GNode *frec1, bool rfmt)
 {
 	GNode *fam1=0, *fam2=0;
-	RecordIndexEl *irec=0;
+	GNode *irec=0;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	String msg;
 	bool changed = false;
