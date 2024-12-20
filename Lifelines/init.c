@@ -120,7 +120,7 @@ static char global_conf_path[MAXPATHLEN]="";
  *  This is called before first (or later) database opened
  *===============================*/
 bool
-init_lifelines_global (String configfile, String * pmsg, void (*notify)(String db, bool opening))
+init_lifelines_global (String configfile, String * pmsg)
 {
 	String e;
 	String dirvars[] = { "DEPROGRAMS", "DEREPORTS", "DEARCHIVES"
@@ -133,7 +133,7 @@ init_lifelines_global (String configfile, String * pmsg, void (*notify)(String d
 	register_notify(&update_useropts);
 	suppress_reload = true;
 
-	dbnotify_set(notify);
+	//dbnotify_set(notify);
 
 	if (!load_configs(configfile, pmsg)) {
 		suppress_reload = false;
@@ -214,8 +214,10 @@ init_lifelines_postdb (void)
 	tagtable = createStringTable(NUMBER_TAG_BUCKETS); /* values are same as keys */
 	placabbvs = createStringTable(NUMBER_PLACABBV_BUCKETS);
 
+#if !defined(DEADENDS)		/* XXX should figure out a way to init these, possibly from a config file XXX */
 	init_valtab_from_rec("VPLAC", placabbvs, ':', &emsg);
 	init_valtab_from_rec("VUOPT", dbopts, '=', &emsg);
+#endif
 	set_db_options(dbopts);
 	releaseHashTable(dbopts);
 	init_browse_lists();
