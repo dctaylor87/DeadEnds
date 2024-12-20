@@ -13,7 +13,6 @@
 #include "denls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
-#include "recordindex.h"	/* RecordIndexEl */
 
 #include "types.h"
 

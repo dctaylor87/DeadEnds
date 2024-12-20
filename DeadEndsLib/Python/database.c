@@ -21,7 +21,6 @@
 #include "denls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
-#include "recordindex.h"	/* RecordIndexEl */
 
 #include "xref.h"
 #include "python-to-c.h"

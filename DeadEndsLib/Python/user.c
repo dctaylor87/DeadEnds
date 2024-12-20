@@ -18,7 +18,6 @@
 #include "denls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
-#include "recordindex.h"	/* RecordIndexEl */
 #include "ask.h"
 #include "rptui.h"
 #include "py-messages.h"
