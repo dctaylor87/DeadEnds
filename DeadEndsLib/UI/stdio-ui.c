@@ -38,6 +38,8 @@ static struct uiio _uiio_stdio =
     0,				/* input data */
     0,				/* output data */
     0,				/* error data */
+    0,				/* pre database init */
+    0,				/* post database init */
     0,				/* main loop */
     0,				/* shutdown */
     stdio_input,		/* input func */

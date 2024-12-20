@@ -127,7 +127,7 @@ Database *currentDatabase = 0;
 
 /* alphabetical */
 static void load_usage(void);
-static void main_db_notify(String db, bool opening);
+//static void main_db_notify(String db, bool opening);
 static void print_usage(void);
 
 /*********************************************
@@ -217,10 +217,17 @@ prompt_for_db:
 
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
+#if defined(DEADENDS)
+	if (!init_lifelines_global(configfile, &msg)) {
+		llwprintf("%s", msg);
+		goto finish;
+	}
+#else
 	if (!init_lifelines_global(configfile, &msg, &main_db_notify)) {
 		llwprintf("%s", msg);
 		goto finish;
 	}
+#endif
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
 	crashlog = getdeoptstr("CrashLog_deadends", NULL);
 	if (!crashlog) { crashlog = "CrashLog_deadends.log"; }
@@ -228,6 +235,13 @@ prompt_for_db:
 
 	/* do we need curses?  If we're running a script or the Python
 	   interpreter, don't bother... */
+#if 1
+	bool runningInterpreter = false;
+	if (exprogs || have_python_scripts || python_interactive)
+	  runningInterpreter = true;
+	if (uiio_pre_database_init (current_uiio, runningInterpreter))
+	    goto finish;
+#else
 	if (! exprogs && ! have_python_scripts && ! python_interactive) {
 	        /* start (n)curses and create windows */
 		char errmsg[512];
@@ -239,6 +253,7 @@ prompt_for_db:
 		}
 		set_screen_graphical(graphical);
 	}
+#endif
 	/* give interpreter its turn at initialization */
 	initializeInterpreter(currentDatabase);
 
@@ -387,6 +402,8 @@ print_usage (void)
 #endif
 	print_lines_usage(exename);
 }
+
+#if !defined(DEADENDS)
 /*==================================================
  * main_db_notify -- callback called whenever a db is
  *  opened or closed
@@ -401,3 +418,4 @@ main_db_notify (String db, bool opening)
 	else
 		crash_setdb("");
 }
+#endif

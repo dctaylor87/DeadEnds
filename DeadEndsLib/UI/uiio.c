@@ -11,6 +11,20 @@
 #include "uiio.h"
 #include "uiioi.h"
 
+bool uiio_pre_database_init (UIIO *uiio, bool runningInterpreter)
+{
+  if (uiio->uiio_pre_database_init)
+    return (*uiio->uiio_pre_database_init)(runningInterpreter);
+
+  return true;			/* nothing to do, so we succeed */
+}
+
+void uiio_post_database_init (UIIO *uiio)
+{
+  if (uiio->uiio_post_database_init)
+    (*uiio->uiio_post_database_init)();
+}
+
 void uiio_main_loop (UIIO *uiio)
 {
   if (uiio->uiio_main_loop)

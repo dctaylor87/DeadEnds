@@ -33,6 +33,10 @@
 
 /* forward references */
 
+static bool curses_ui_pre_db_init (bool runningInterpreter);
+
+static void curses_ui_post_db_init (void);
+
 static void curses_ui_main_loop (void);
 
 static void uiio_curses_shutdown (bool pause);
@@ -61,6 +65,8 @@ static struct uiio _uiio_curses =
     0,				/* input data */
     0,				/* output data */
     0,				/* error data */
+    curses_ui_pre_db_init,	/* pre database init */
+    curses_ui_post_db_init,	/* post database init */
     curses_ui_main_loop,	/* main loop */
     uiio_curses_shutdown,	/* shutdown */
     curses_input,		/* input func */
@@ -196,6 +202,28 @@ display_status (String text)
   wrefresh(win);
 }
 #endif
+
+static bool curses_ui_pre_db_init (bool runningInterpreter)
+{
+  if (! runningInterpreter)
+    {
+      /* start (n)curses and create windows */
+      char errmsg[512];
+      if (! init_screen(errmsg, sizeof(errmsg)))
+	{
+	  /* init_screen failed -- give the bad news */
+	  endwin();
+	  fprintf(stderr, "%s", errmsg);
+	  return false;
+	}
+      set_screen_graphical(graphical);
+    }
+  return true;
+}
+
+static void curses_ui_post_db_init (void)
+{
+}
 
 static void
 curses_ui_main_loop (void)

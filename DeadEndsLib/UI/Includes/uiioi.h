@@ -15,6 +15,20 @@ struct uiio
 
   /* tentative argument lists and return values */
 
+  /* XXX FUTURES: the next two might be merged.  Also, might add UIIO*
+     as argument (with 'void *ui_private' as a UIIO member to allow
+     storing persistent UI specific data.  XXX */
+
+  /* Called before the first database is opened.  Unclear if it should
+     be called before each open.  */
+  bool (*uiio_pre_database_init)(bool runningInterpreter);
+
+  /* Called after the first database is opened.  Unclear if it is
+     called after each database is opened.  Responsible for UI
+     initialization that is done after the database is opened.  */
+
+  void (*uiio_post_database_init)(void);
+
   /* XXX might want to add a void* argument or a pointer to a defined
      structure.  Currently all communication is via external variables
      -- which is not a good interface.  Since there are potentially
@@ -22,11 +36,15 @@ struct uiio
      should be defined...*/
   void (*uiio_main_loop)(void);
 
-  /* if pause is true, an error occurred and we should give the user a
-     chance to read a previously displayed message.  */
+  /* Shutdown the UI.  If pause is true, an error occurred and we
+     should give the user a chance to read a previously displayed
+     message.  */
   void (*uiio_shutdown)(bool pause);
 
+  /* 'data' is provided as a parallel to the output/error routines */
   int (*uiio_input_func)(void *data, char **buffer, int *length, char **err_msg);
+
+  /* 'data' allows the output and error functions to potentially be the same. */
   int (*uiio_output_func)(void *data, const char *buffer, char **err_msg);
   int (*uiio_error_func)(void *data, const char *buffer, char **err_msg);
 
