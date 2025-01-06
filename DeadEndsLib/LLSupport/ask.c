@@ -63,7 +63,6 @@
 #include "codesets.h"
 #include "gnode.h"
 #include "database.h"
-#include "recordindex.h"
 #include "de-strings.h"
 #include "llpy-externs.h"
 #include "ui.h"

@@ -38,7 +38,6 @@
 #include "readwrite.h"
 #include "ll-list.h"
 #include "de-strings.h"
-#include "zstr.h"
 #include "strcvt.h"
 #include "icvt.h"
 #include "charmaps.h"

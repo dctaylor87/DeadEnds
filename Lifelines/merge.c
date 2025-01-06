@@ -61,7 +61,6 @@
 #include "ask.h"
 #include "llinesi.h"
 #include "errors.h"
-#include "feedback.h"
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"

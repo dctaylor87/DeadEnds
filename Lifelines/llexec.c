@@ -68,7 +68,6 @@
 #include "ll-list.h"
 #include "gstrings.h"
 #include "de-strings.h"
-#include "uiio.h"
 #include "lloptions.h"
 #include "interp.h"
 #include "signals.h"

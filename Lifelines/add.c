@@ -76,7 +76,6 @@
 #include "messages.h"
 #include "splitjoin.h"
 #include "codesets.h"
-#include "readwrite.h"
 #include "lineage.h"
 #include "xreffile.h"
 #include "de-strings.h"

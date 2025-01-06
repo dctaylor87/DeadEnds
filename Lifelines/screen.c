@@ -26,8 +26,6 @@
  * Copyright(c) 1992-96 by T.T. Wetmore IV; all rights reserved
  *===========================================================*/
 
-#include <ansidecl.h>
-
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
 #endif
@@ -68,7 +66,6 @@
 #include "screeni.h"
 #include "curses-ui.h"
 #include "cscurses.h"
-#include "messages.h"
 #include "codesets.h"
 #include "listui.h"
 #include "locales.h"
@@ -79,7 +76,6 @@
 #include "llgettext.h"
 #include "llpy-externs.h"
 #include "ll-list.h"
-#include "locales.h"
 #include "de-strings.h"
 #include "ui.h"
 #include "lloptions.h"
