@@ -8,11 +8,9 @@
 #include <stdint.h>
 
 #include "stdlib.h"
-#include "refnindex.h"
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"
-#include "addrmvops.h"
 
 // removeChildFromFamily removes an existing child from an existing family in a Database.
 bool removeChildFromFamily(GNode* child, GNode* family, Database* database) {
