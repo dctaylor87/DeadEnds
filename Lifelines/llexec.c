@@ -61,6 +61,7 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "stringtable.h"
 #include "options.h"
@@ -112,7 +113,6 @@ bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 
-CString ProgName = "llexec";
 Database *currentDatabase = 0;
 /*********************************************
  * local function prototypes
@@ -220,8 +220,10 @@ prompt_for_db:
 	}
 #endif
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crashlog = getdeoptstr("CrashLog_deexec", NULL);
-	if (!crashlog) { crashlog = "Crashlog_deexec.log"; }
+	crashlog = getdeoptstr(crashlog_optname, NULL);
+	if (! crashlog)
+		crashlog = crashlog_default;
+
 	crash_setcrashlog(crashlog);
 	/* give interpreter its turn at initialization */
 	initializeInterpreter(currentDatabase);
@@ -352,8 +354,7 @@ load_usage (void)
 static void
 print_usage (void)
 {
-	char * exename = "llexec";
-	print_lines_usage(exename);
+	print_lines_usage(ProgName);
 }
 
 #if !defined(DEADENDS)

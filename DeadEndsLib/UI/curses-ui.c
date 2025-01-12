@@ -223,6 +223,14 @@ static bool curses_ui_pre_db_init (bool runningInterpreter)
 
 static void curses_ui_post_db_init (void)
 {
+  if (!int_codeset[0]) {
+    msg_info("%s", _("Warning: database codeset unspecified"));
+  } else if (!transl_are_all_conversions_ok()) {
+    msg_info("%s", _("Warning: not all conversions available"));
+  }
+
+  init_show_module();
+  init_browse_module();
 }
 
 static void

@@ -62,7 +62,7 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
-//#include "screen.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "stringtable.h"
 #include "options.h"
@@ -114,11 +114,6 @@ bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
 
-#if defined(WIN32)
-CString ProgName = "Lines";
-#else
-CString ProgName = "llines";
-#endif
 Database *currentDatabase = 0;
 /*********************************************
  * local function prototypes
@@ -217,7 +212,7 @@ prompt_for_db:
 	/* initialize options & misc. stuff */
 	llgettext_set_default_localedir(LOCALEDIR);
 #if defined(DEADENDS)
-	if (!init_lifelines_global(configfile, &msg)) {
+	if (! init_lifelines_global(configfile, &msg)) {
 		llwprintf("%s", msg);
 		goto finish;
 	}
@@ -228,31 +223,21 @@ prompt_for_db:
 	}
 #endif
 	/* setup crashlog in case init_screen fails (eg, bad menu shortcuts) */
-	crashlog = getdeoptstr("CrashLog_deadends", NULL);
-	if (!crashlog) { crashlog = "CrashLog_deadends.log"; }
+	crashlog = getdeoptstr(crashlog_optname, NULL);
+	if (! crashlog)
+		crashlog = crashlog_default;
+
 	crash_setcrashlog(crashlog);
 
 	/* do we need curses?  If we're running a script or the Python
 	   interpreter, don't bother... */
-#if 1
+
 	bool runningInterpreter = false;
 	if (exprogs || have_python_scripts || python_interactive)
 	  runningInterpreter = true;
 	if (uiio_pre_database_init (current_uiio, runningInterpreter))
 	    goto finish;
-#else
-	if (! exprogs && ! have_python_scripts && ! python_interactive) {
-	        /* start (n)curses and create windows */
-		char errmsg[512];
-		if (!init_screen(errmsg, sizeof(errmsg)/sizeof(errmsg[0])))
-		{
-			endwin();
-			fprintf(stderr, "%s", errmsg);
-			goto finish;
-		}
-		set_screen_graphical(graphical);
-	}
-#endif
+
 	/* give interpreter its turn at initialization */
 	initializeInterpreter(currentDatabase);
 
@@ -294,19 +279,8 @@ prompt_for_db:
 		llwprintf("%s", _(qSbaddb));
 		goto finish;
 	}
-	if (!int_codeset[0]) {
-		msg_info("%s", _("Warning: database codeset unspecified"));
-	} else if (!transl_are_all_conversions_ok()) {
-		msg_info("%s", _("Warning: not all conversions available"));
-	}
 
-	init_show_module();
-	init_browse_module();
-#if 0				/* this will be initialized if we use it -p/-P */
-#if defined(HAVE_PYTHON)
-	llpy_init ();
-#endif
-#endif
+	uiio_post_database_init (current_uiio);
 
 	if (exprogs) {
 		bool picklist = false;
@@ -394,12 +368,7 @@ load_usage (void)
 static void
 print_usage (void)
 {
-#ifdef WIN32
-	char * exename = "Lines";
-#else
-	char * exename = "llines";
-#endif
-	print_lines_usage(exename);
+	print_lines_usage(ProgName);
 }
 
 #if !defined(DEADENDS)
