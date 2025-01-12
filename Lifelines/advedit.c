@@ -46,6 +46,7 @@
 #include "translat.h"
 #include "refnindex.h"
 #include "gnode.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "rfmt.h"
 #include "sequence.h"

@@ -18,6 +18,7 @@
 #include <dirent.h>
 #endif
 
+#include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
 
@@ -36,6 +37,9 @@
 #include "errors.h"
 #include "liflines.h"
 #include "messages.h"
+#include "zstr.h"
+#include "translat.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "proptbls.h"
 #include "de-strings.h"

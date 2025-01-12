@@ -36,6 +36,8 @@
 #include "codesets.h"
 #include "refns.h"
 #include "ll-node.h"
+#include "file.h"
+#include "path.h"
 
 /*********************************************
  * local function prototypes, alphabetical
@@ -57,6 +59,41 @@ static void write_node(int levl, FILE *fp, XLAT ttm,
  * local function definitions
  * body of module
  *********************************************/
+
+GNode *
+file_to_node (String fname,
+	      XLAT ttmi ATTRIBUTE_UNUSED,
+	      String *pmsg, bool *pemp)
+{
+  ErrorLog *errorLog = createErrorLog ();
+  File *file = openFile (fname, DEREADTEXT);
+  RootList *rootList = getRootListFromFile (file, NULL, errorLog);
+
+  *pemp = false;		/* XXX should this be an argument? XXX */
+  if (! rootList)
+    {
+      /* XXX insert code to convert errorLog to a string *OR*
+       take an errorLog as an argument instead of pmsg.  XXX */
+      return NULL;
+    }
+  int len = lengthList (rootList);
+  if (len <= 0)
+    {
+      /* Should never happen -- length should never be < 0 and if 0,
+	 getRootListFromFile is supposed to return NULL.  */
+      *pmsg = "Internal Error: fileToNode: getRootListFromFile returned bad list";
+      return NULL;
+    }
+  else if (len > 1)
+    {
+      /* Should not happen -- file is supposed to have exactly one record!  */
+      *pmsg = "fileToNode: file contains multiple records!";
+      return NULL;
+    }
+  GNode *node = (GNode *)getAndRemoveFirstListElement (rootList);
+  deleteList (rootList);
+  return (node);
+}
 
 #if 0		   /* XXX depends heavily on cache, needs a rewrite XXX */
 /*=================================================

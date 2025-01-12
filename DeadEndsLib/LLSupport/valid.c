@@ -47,10 +47,10 @@
 #include "translat.h"
 #include "refnindex.h"
 #include "gnode.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "splitjoin.h"
 #include "rfmt.h"
-#include "xlat.h"
 #include "nodeutils.h"
 #include "editing.h"		/* NAMESEP */
 #include "messages.h"

@@ -49,8 +49,9 @@
 #include "xreffile.h"
 #include "refnindex.h"
 #include "gnode.h"
-#include "readwrite.h"
 #include "translat.h"
+#include "xlat.h"
+#include "readwrite.h"
 #include "de-strings.h"
 
 /*===================================================================

@@ -33,3 +33,8 @@ extern bool valid_node_type(GNode *node, char ntype, String *pmsg,
 extern bool valid_sour_tree(GNode *, String*, GNode *, Database *database);
 extern bool valid_even_tree(GNode *, String*, GNode *, Database *database);
 extern bool valid_othr_tree(GNode *, String*, GNode *, Database *database);
+
+/* write.c */
+
+/* XXX interface and/or name might change XXX */
+extern GNode *file_to_node (String fname, XLAT ttmi, String *pmsg, bool *pemp);

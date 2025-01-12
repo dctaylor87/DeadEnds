@@ -31,8 +31,8 @@
 #include "codesets.h"
 #include "refnindex.h"
 #include "gnode.h"
-#include "readwrite.h"
 #include "xlat.h"
+#include "readwrite.h"
 #include "charmaps.h"
 #include "de-strings.h"
 

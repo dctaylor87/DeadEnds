@@ -47,6 +47,7 @@
 #include "codesets.h"
 #include "impfeed.h"
 #include "version.h"
+#include "zstr.h"
 #include "xlat.h"
 
 /*********************************************

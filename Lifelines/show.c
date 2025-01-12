@@ -50,6 +50,7 @@
 #include "rfmt.h"
 #include "refnindex.h"
 #include "gnode.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "sequence.h"
 #include "ask.h"

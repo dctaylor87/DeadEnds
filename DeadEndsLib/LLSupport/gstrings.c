@@ -53,6 +53,7 @@
 #include "lineage.h"
 #include "de-strings.h"
 #include "codesets.h"
+#include "xlat.h"
 #include "readwrite.h"
 #include "splitjoin.h"
 #include "ll-node.h"

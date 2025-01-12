@@ -27,6 +27,9 @@
 #include "denls.h"
 #include "refnindex.h"
 #include "gnode.h"
+#include "zstr.h"
+#include "translat.h"
+#include "xlat.h"
 #include "readwrite.h"
 
 #include "feedback.h"
