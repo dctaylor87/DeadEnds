@@ -11,7 +11,6 @@
 #include "gnode.h"
 #include "gedcom.h"
 #include "splitjoin.h"
-#include "operations.h"
 
 static bool checkFamilyMember(GNode*, SexType);
 
