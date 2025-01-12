@@ -26,11 +26,13 @@ llines_SOURCES = add.c advedit.c askgedc.c askprogram.c \
 	newrecs.c pedigree.c \
 	scan.c screen.c searchui.c show.c swap.c \
 	tandem.c \
+	opt-llines.c \
 	$(common_SOURCES)
 
 # what goes into llexec ?
 llexec_SOURCES = llexec.c \
 	llexec.h \
+	opt-llexec.c \
 	$(common_SOURCES)
 
 PYTHON_LIBS = @PYTHON_LIBS@
