@@ -347,7 +347,12 @@ static void
 scanner_add_result (SCANNER * scanner, CString key)
 {
 	/* if we pass in name, append_indiseq won't check for dups */
+#if defined(DEADENDS)
+	if (! isInSequence (scanner->seq, key))
+		appendToSequence(scanner->seq, strsave(key), NULL);
+#else
 	append_indiseq_null(scanner->seq, strsave(key), NULL, false, true);
+#endif
 }
 /*===========================================
  * ns_callback -- callback for name traversal
