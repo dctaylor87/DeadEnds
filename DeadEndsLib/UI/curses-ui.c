@@ -24,6 +24,7 @@
 #include "messages.h"
 #include "mycurses.h"
 #include "codesets.h"
+#include "denls.h"
 #include "curses-ui.h"		/* curses_outputv */
 
 #include "uiio.h"
