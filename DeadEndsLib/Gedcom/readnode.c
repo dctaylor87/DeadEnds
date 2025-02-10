@@ -3,7 +3,7 @@
 // readnode.c has the functions that read GNodes and GNode trees from files and Strings.
 //
 // Created by Thomas Wetmore on 17 December 2022.
-// Last changed on 22 November 2024.
+// Last changed on 1 January 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -31,8 +31,6 @@ static bool ateof = false;
 // MNOTE: pkey, ptag and pvalue point into the original String.
 static ReadReturn extractFields(String p, int* plevel, String* pkey, String *ptag,
 						String* pvalue, String* errorString) {
-	//*pvalue = "";
-	//*pkey = "";
 	*pvalue = null;
 	*pkey = null;
 	if (!p || *p == 0) {
@@ -46,7 +44,7 @@ static ReadReturn extractFields(String p, int* plevel, String* pkey, String *pta
 	}
 	while (iswhite(*p)) p++; // Level.
 	if (chartype(*p) != DIGIT) {
-		*errorString = "Line does not beging with a level";
+		*errorString = "Line does not begin with a level";
 		return ReadError;
 	}
 
