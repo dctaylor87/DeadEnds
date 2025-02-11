@@ -74,6 +74,7 @@
 static int child_index(GNode *child, GNode *fam);
 static bool confirm_and_swap_children_impl(GNode *fam, GNode *one, GNode *two);
 static void swap_children_impl(GNode *fam, GNode *one, GNode *two);
+static int num_children (GNode *fam);
 
 /*=============================================
  * swap_children -- Swap two children in family
@@ -345,4 +346,15 @@ swap_families (GNode *irec)
 	indi_to_dbase(indi);
 	msg_info("%s", _(qSokfswp));
 	return true;
+}
+
+static int num_children (GNode *fam)
+{
+  int num = 0;
+  GNode *node = nchild (fam);
+
+  for (node = nchild (fam); node; node = nsibling (node))
+    if (strcmp (ntag (node), "CHIL") == 0)
+      num++;
+  return (num);
 }

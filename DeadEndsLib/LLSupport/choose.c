@@ -105,7 +105,7 @@ chooseSpouse (GNode *irec, CString msg0, CString msgn)
 
   if (!irec) return NULL;
   ASSERT (! irec->parent);
-  if (!(seq = indi_to_spouses(nztop(irec))))
+  if (!(seq = personToSpouses(nztop(irec), currentDatabase->recordIndex)))
     {
       msg_error("%s", msg0);
       return NULL;
@@ -200,7 +200,7 @@ chooseFamily (GNode *irec, CString msg0, CString msgn, bool fams)
 {
   GNode *rec=0;
   ASSERT (irec && ! irec->parent);
-  Sequence *seq = indi_to_families(nztop(irec), fams);
+  Sequence *seq = personToFamilies(nztop(irec), fams, currentDatabase->recordIndex);
   if (!seq)
     {
       if (msg0)

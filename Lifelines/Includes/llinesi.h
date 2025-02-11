@@ -79,8 +79,10 @@ bool edit_indi(GNode *irec1, bool rfmt);
 int browse_list(GNode **prec1, GNode **prec2, Sequence **pseq);
 
 /* lines_usage.c */
-void print_lines_usage(CString exename);
+void print_lines_usage(CString exename, bool curses_interface);
 
+/* main.c */
+void print_usage(void);
 
 /* merge.c */
 GNode *merge_two_indis(GNode *, GNode *, bool);

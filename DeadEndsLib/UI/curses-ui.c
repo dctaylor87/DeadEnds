@@ -25,6 +25,10 @@
 #include "mycurses.h"
 #include "codesets.h"
 #include "denls.h"
+//#include "llinesi.h"
+#include "screen.h"
+#include "zstr.h"
+#include "translat.h"
 #include "curses-ui.h"		/* curses_outputv */
 
 #include "uiio.h"

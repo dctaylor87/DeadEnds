@@ -9,3 +9,6 @@ extern CString crashlog_optname;
 
 /* default crash log file name */
 extern CString crashlog_default;
+
+/* First line of usage message */
+extern CString usage_summary;

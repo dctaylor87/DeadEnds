@@ -727,7 +727,11 @@ search_for_one_record (void)
 		return NULL;
 	}
 	/* namesort uses canonkeysort for non-persons */
+#if defined(DEADENDS)
+	nameSortSequence (seq);
+#else
 	namesort_indiseq(seq);
+#endif
 	return chooseFromSequence(seq, DOASK1,
 		_("Search results"), _("Search results"));
 }
@@ -1728,7 +1732,7 @@ invoke_utils_menu (void)
 
 	begin_action();
 	switch (code) {
-	case 's': save_gedcom(); break;
+	case 's': save_gedcom(currentDatabase); break;
 	case 'r': load_gedcom(false); break;
 	case 'R': load_gedcom(true); break;
 	case 'k': key_util(); break;

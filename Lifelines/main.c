@@ -102,7 +102,6 @@ static CString optString = "adkntu:x:o:zC:I:p:Pvh?";
  * required global variables
  *********************************************/
 
-static String usage_summary = "";      /* usage string */
 bool debugmode = false;     /* no signal handling, so we can get coredump */
 bool opt_nocb  = false;     /* no cb. data is displayed if TRUE */
 bool keyflag   = true;      /* show key values */
@@ -120,9 +119,8 @@ Database *currentDatabase = 0;
  *********************************************/
 
 /* alphabetical */
-static void load_usage(void);
+//static void load_usage(void);
 //static void main_db_notify(String db, bool opening);
-static void print_usage(void);
 
 /*********************************************
  * local function definitions
@@ -172,23 +170,7 @@ main (int argc, char **argv)
 #endif
 
 	save_original_locales();
-	load_usage();
-
-	/* handle conventional arguments --version and --help */
-	/* needed for help2man to synthesize manual pages */
-	for (i=1; i<argc; ++i) {
-		if (!strcmp(argv[i], "--version")
-			|| !strcmp(argv[i], "-v")) {
-			print_version(ProgName);
-			return 0;
-		}
-		if (!strcmp(argv[i], "--help")
-			|| !strcmp(argv[i], "-h")
-			|| !strcmp(argv[i], "-?")) {
-			print_usage();
-			return 0;
-		}
-	}
+	//load_usage();
 
 	/* Parse Command-Line Arguments */
 	parseArguments (argc, argv, optString);
@@ -356,19 +338,21 @@ usage:
  *      wrong if you make modifications whilst in the wrong mode.
  */
 
+#if 0
 static void
 load_usage (void)
 {
 	usage_summary = _(qSusgNorm);
 }
+#endif
 /*===============================================
  * print_usage -- display program help/usage
  *  displays to stdout
  *=============================================*/
-static void
+void
 print_usage (void)
 {
-	print_lines_usage(ProgName);
+  print_lines_usage(ProgName, true);
 }
 
 #if !defined(DEADENDS)

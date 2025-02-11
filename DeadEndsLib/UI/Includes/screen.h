@@ -142,7 +142,7 @@ struct tag_menuset;
 
 /* loadsave.c */
 void load_gedcom(bool picklist);
-bool save_gedcom(void);
+bool save_gedcom(Database *database);
 
 /* screen.c */
 void activate_uiwin(UIWINDOW uiwin);

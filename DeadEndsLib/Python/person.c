@@ -1160,7 +1160,7 @@ static struct PyMethodDef Lifelines_Person_Methods[] =
      "(INDI).name([caps]) -->NAME; returns the name found on the first '1 NAME' line.\n\n\
 If CAPS (optional) is True (default), the surname is made all capitals." },
    { "fullname",	(PyCFunction)llpy_fullname, METH_VARARGS | METH_KEYWORDS,
-     "(INDI).fullname([upcase], [keep_order], [max_length]) -->" },
+     "(INDI).fullname([upcase], [keep_order], [max_length]) --> STRING" },
    { "surname",		(PyCFunction)llpy_surname, METH_NOARGS,
      "(INDI).surname(void) --> STRING: returns the surname as found in the first '1 NAME' line.\n\n\
 Slashes are removed." },

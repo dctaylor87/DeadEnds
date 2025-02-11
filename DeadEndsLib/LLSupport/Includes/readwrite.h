@@ -17,6 +17,9 @@
 #define FMT_INT_04	"%04d"
 #define FMT_INT_LEN	22	/* sign + 20 digits + NULL */
 
+#define FMT_INT_02	"%02d"
+#define FMT_INT_03	"%03d"
+
 #define FMT_INT		"%d"
 #define SCN_INT		"%d"
 

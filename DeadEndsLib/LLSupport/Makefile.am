@@ -32,6 +32,7 @@ libllsupport_a_SOURCES = \
 	remove.c \
 	replace.c \
 	rptui.c \
+	sprintpic.c \
 	strcvt.c \
 	translat.c \
 	valid.c \

@@ -7,8 +7,10 @@ CString optString = "adkntu:x:o:zC:I:p:Pvh?";
 /* program name for messages */
 #if defined(WIN32)
 CString ProgName = "Lines";
+CString usage_summary =
 #else
 CString ProgName = "llines";
+CString usage_summary = "llines [-{adkntu:x:o:zC:I:p:Pvh?}] [database]";
 #endif
 
 /* which set of UIIO routines to use */

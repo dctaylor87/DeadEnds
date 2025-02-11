@@ -21,7 +21,7 @@ extern String configfile;
 extern bool python_interactive;
 extern bool have_python_scripts;
 
-extern CString usageSummary;
+//extern CString usageSummary;
 
 extern int alldone;		/* completion flag */
 #endif

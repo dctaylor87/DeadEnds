@@ -49,6 +49,7 @@
 #include "errlog.h"
 #include "de-strings.h"
 #include "codesets.h"		/* uu8 */
+#include "feedback.h"
 
 /* local variables */
 

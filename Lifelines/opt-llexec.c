@@ -6,6 +6,7 @@ CString optString = "adkntx:o:C:I:p:Pvh?";
 
 /* program name for messages */
 CString ProgName = "llexec";
+CString usage_summary = "llexec [-{adkntx:o:C:I:p:Pvh?}] [database]";
 
 /* which set of UIIO routines to use */
 //UIIO *current_uiio = uiio_stdio;

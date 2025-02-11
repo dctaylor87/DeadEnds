@@ -53,6 +53,10 @@
 #include "readwrite.h"
 #include "de-strings.h"
 #include "options.h"
+#include "sequence.h"
+#include "ask.h"
+#include "llinesi.h"
+#include "version.h"
 #include "parse-args.h"
 
 #if defined(HAVE_PYTHON)
@@ -164,7 +168,7 @@ parseArguments (int argc, char *argv[], CString optString)
       have_python_scripts = true;
       break;
     case 'v': /* show version */
-      showVersion();
+      print_version(ProgName);
       exit (0);			/* not reached */
     case 'h': /* show usage */
       showUsage(0);
@@ -214,6 +218,6 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 static void
 showUsage(int exitCode)
 {
-  fprintf ((exitCode ? stderr : stdout), "usage: %s %s\n", ProgName, usageSummary);
+  fprintf ((exitCode ? stderr : stdout), "usage: %s %s\n", ProgName, usage_summary);
   exit (exitCode);
 }
