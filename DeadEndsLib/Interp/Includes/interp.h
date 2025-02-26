@@ -35,7 +35,7 @@ void initrassa(void);
 void parseProgram(CString fileName, CString searchPath);
 void finishInterpreter(void);
 void finishrassa(void);
-void progmessage(char*);
+void progmessage(int, CString);
 
 Context *createContext(SymbolTable*, Database*);
 void deleteContext(Context*);

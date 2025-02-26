@@ -113,6 +113,12 @@ selectAndOpenDatabase(CString *dbFilename,
 
 bool databaseHasStandardKeys (Database *database)
 {
+  uint64_t last_person = database->db_max_person;
+  uint64_t last_family = database->db_max_family;
+  uint64_t last_source = database->db_max_source;
+  uint64_t last_event = database->db_max_event;
+  uint64_t last_other = database->db_max_other;
+
   FORHASHTABLE (database->recordIndex, element)
     GNode *gnode = (GNode *)element;
     CString key = gnode->key;
@@ -153,7 +159,39 @@ bool databaseHasStandardKeys (Database *database)
       return false;
     if ((keynum == ULLONG_MAX) && (errno == ERANGE))
       return false;		/* overflow */
+
+    switch (recordType (gnode))
+      {
+      case GRPerson:
+	if (keynum > last_person)
+	  last_person = keynum;
+	break;
+      case GRFamily:
+	if (keynum > last_family)
+	  last_family = keynum;
+	break;
+      case GRSource:
+	if (keynum > last_source)
+	  last_source = keynum;
+	break;
+      case GREvent:
+	if (keynum > last_event)
+	  last_event = keynum;
+	break;
+      case GROther:
+	if (keynum > last_other)
+	  last_other = keynum;
+	break;
+      default:
+	return false;		/* should never happen */
+      }
   ENDHASHTABLE
+
+  database->db_max_person = last_person;
+  database->db_max_family = last_family;
+  database->db_max_source = last_source;
+  database->db_max_event = last_event;
+  database->db_max_other = last_other;
 
   return true;
 }
@@ -221,11 +259,11 @@ rekeyDatabase (Database *database, Database *oldDatabase, ErrorLog *errorLog)
 
   if (oldDatabase)
     {
-      last_indi = oldDatabase->max_indi;
-      last_fam = oldDatabase->max_fam;
-      last_even = oldDatabase->max_even;
-      last_sour = oldDatabase->max_sour;
-      last_othr = oldDatabase->max_othr;
+      last_indi = oldDatabase->db_max_person;
+      last_fam = oldDatabase->db_max_family;
+      last_even = oldDatabase->db_max_event;
+      last_sour = oldDatabase->db_max_source;
+      last_othr = oldDatabase->db_max_other;
     }
   else
     {
@@ -404,6 +442,7 @@ mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy)
       case GRFamily:
 	addToRecordIndex (oldDatabase->recordIndex, root);
 	insertInRootList (oldDatabase->familyRoots, root);
+	break;
       case GRSource:
       case GREvent:
       case GROther:

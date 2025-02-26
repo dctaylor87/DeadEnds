@@ -141,7 +141,7 @@ struct tag_menuset;
 */
 
 /* loadsave.c */
-void load_gedcom(bool picklist);
+void load_gedcom(bool picklist, Database *database);
 bool save_gedcom(Database *database);
 
 /* screen.c */

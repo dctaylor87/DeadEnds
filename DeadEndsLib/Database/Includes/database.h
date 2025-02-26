@@ -37,23 +37,27 @@ typedef struct Database {
 #if 0
 	CString backupPath;	// path of the most recent backup, if any
 #endif
-	uint64_t max_indi;
-	uint64_t max_fam;
-	uint64_t max_even;
-	uint64_t max_sour;
-	uint64_t max_othr;
-	uint8_t flags;
-	uint8_t longestKeySeen; // Length of longest key added to database.
+	/* the following five fields only make sense when the database has
+	   been rekeyed. */
+	uint64_t db_max_person;	// current max for person keys
+	uint64_t db_max_family;	// current max for family keys
+	uint64_t db_max_event;	// current max for event keys
+	uint64_t db_max_source;	// current max for source keys
+	uint64_t db_max_other;	// current max for other keys
+
+	bool db_dirty;		// if true, database is dirty
 } Database;
 
 extern Database *currentDatabase;
 
-/* database flags */
-#define DATABASE_DIRTY		0x1 /* modified since last written out */
-#define DATABASE_READONLY	0x2 /* is this useful? */
+// returns true if database is dirty; false if database is clean
+extern bool databaseIsDirty (Database *database);
 
-#define database_dirty(database)	(database->flags & DATABASE_DIRTY)
-#define database_readonly(database)	(database->flags & DATABASE_READONLY)
+// sets database dirty state to value of 'dirty'
+extern void setDatabaseDirty (Database *database, bool dirty);
+
+// gets database dirty state
+extern bool getDatabaseDirty (Database *database);
 
 Database *createDatabase(CString fileName); // Create an empty database.
 void deleteDatabase(Database*); // Delete a database.

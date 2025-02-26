@@ -1733,8 +1733,8 @@ invoke_utils_menu (void)
 	begin_action();
 	switch (code) {
 	case 's': save_gedcom(currentDatabase); break;
-	case 'r': load_gedcom(false); break;
-	case 'R': load_gedcom(true); break;
+	case 'r': load_gedcom(false, currentDatabase); break;
+	case 'R': load_gedcom(true, currentDatabase); break;
 	case 'k': key_util(); break;
 #if !defined(DEADENDS)
 	case 'i': who_is_he_she(); break;

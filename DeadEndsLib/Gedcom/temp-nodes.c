@@ -35,7 +35,7 @@ GNode *
 createTempGNode (String xref, String tag, String val, GNode *prnt)
 {
 	GNode *node = createGNode(xref, tag, val, prnt);
-	nflag(node) = ND_TEMP;
+	nflag(node) |= ND_TEMP;
 	return node;
 }
 
