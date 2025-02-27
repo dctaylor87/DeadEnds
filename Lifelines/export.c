@@ -32,29 +32,28 @@
 #include "config.h"
 #endif
 
+#include <ansidecl.h>
+
+#include "standard.h"
+
 #include "sys_inc.h"
 #include <time.h>
-#include "llstdlib.h"
-#include "btree.h"
-#include "table.h"
+#include "zstr.h"
+#include "list.h"
 #include "translat.h"
 #include "gedcom.h"
+#include "sequence.h"
 #include "liflines.h"
 #include "llinesi.h"
-#include "loadsave.h"
 #include "feedback.h"
 #include "lloptions.h"
 #include "codesets.h"
-#include "impfeed.h"
 #include "version.h"
-#include "zstr.h"
 #include "xlat.h"
 
 /*********************************************
  * external/imported variables
  *********************************************/
-
-extern BTREE BTR;
 
 /*********************************************
  * local types
@@ -95,7 +94,7 @@ static int nindi, nfam, neven, nsour, nothr;
  * archive_in_file -- Archive database in GEDCOM file
  *=================================================*/
 bool
-archive_in_file (struct tag_export_feedback * efeed, FILE *fp)
+archive_in_file (struct tag_export_feedback * efeed, Database *database, FILE *fp)
 {
 	char dat[30]="", tim[20]="";
 	struct tm *pt=0;
