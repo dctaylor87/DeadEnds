@@ -85,7 +85,6 @@ HashTable *placabbvs=NULL;	/* table for place abbrevs */
 String editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 String editfile=NULL; /* file used for editing, name obtained via mktemp */
 String readpath = NULL;		/* path to database */
-String readpath_file = NULL;	/* final component of path to database */
 
 /*********************************************
  * external/imported variables
