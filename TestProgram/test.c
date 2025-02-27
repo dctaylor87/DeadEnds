@@ -144,9 +144,12 @@ void parseAndRunProgramTest(Database *database, int testNumber) {
 	//parseProgram("llprogram", REPORTS_DIR);
 	//parseProgram("scriptindiseq", REPORTS_DIR);
 	//parseProgram("llprogram", SCRIPTS_DIR");
-	parseProgram("llprogram", SCRIPTS_DIR);
+	ErrorLog *errorLog = createErrorLog();
+	parseProgram("llprogram", SCRIPTS_DIR, errorLog);
 	printf("Finished parsing: %2.3f\n", getMseconds());
-
+	if (Perrors > 0)
+		showErrorLog (errorLog);
+	deleteErrorLog (errorLog);
 	curFileName = "internal";
 	curLine = 1;
 	PNode *pnode = procCallPNode("main", null); // PNode to call main proc.

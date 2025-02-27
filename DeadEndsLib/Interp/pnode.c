@@ -169,7 +169,7 @@ PNode* funcDefPNode(String name, PNode* parms, PNode* body) {
 }
 
 // funcCallPNode creates a builtin or user-defined function call program node.
-PNode* funcCallPNode(String name, PNode* alist) {
+PNode* funcCallPNode(String name, PNode* alist, ErrorLog *errorLog) {
     if (isInHashTable(functionTable, name)) { // User-defined.
         PNode *node = allocPNode(PNFuncCall);
         node->funcName = name;
@@ -198,9 +198,13 @@ PNode* funcCallPNode(String name, PNode* alist) {
     if (found) { // Is a builtin
         int n;
         if ((n = num_params(alist)) < builtIns[md].minParams || n > builtIns[md].maxParams) {
-            printf("%s: must have %d to %d parameters.\n", name,
+	  int len = 40 + strlen(name) + 30;
+	  char buffer[len];
+	  snprintf (buffer, len, "%s: must have %d to %d parameters.\n", name,
                    builtIns[md].minParams, builtIns[md].maxParams);
-            Perrors++;
+	  Error *error = createError (syntaxError, curFileName, curLine, buffer);
+	  addErrorToLog (errorLog, error);
+	  Perrors++;
         }
         PNode *node = allocPNode(PNBltinCall);
         node->funcName = name;

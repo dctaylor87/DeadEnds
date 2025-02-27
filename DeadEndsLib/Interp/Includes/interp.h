@@ -32,7 +32,7 @@ typedef struct Context {
 void initializeInterpreter(Database*);
 void initset(void);
 void initrassa(void);
-void parseProgram(CString fileName, CString searchPath);
+void parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
 void finishInterpreter(void);
 void finishrassa(void);
 void progmessage(int, CString);
@@ -87,7 +87,7 @@ void show_pnodes(PNode*);
 PNode* string_node(String);
 //PValue valueOfIdent(SymbolTable*, String);
 int yylex(void);
-int yyparse(void);
+int yyparse(ErrorLog *errorLog);
 
 void poutput(String);
 //void interp_main(void);

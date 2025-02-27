@@ -33,11 +33,11 @@ CString curFileName = null; // File being parsed
 FILE* currentFile = null; // FILE being parsed.
 int curLine = 1; // Line number in current file.
 
-static void parseFile(CString file, CString path);
+static void parseFile(CString file, CString path, ErrorLog *errorLog);
 
 // parseProgram parses a DeadEnds script and prepares for interpreting. A file name and search
 // path are passed in. The file may include other files. parseFile is called on each.
-void parseProgram(CString fileName, CString searchPath) {
+void parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog) {
     pendingFiles = createList(null, null, null, false);
     prependToList(pendingFiles, fileName);
 	Set* included = createStringSet(); // Parsed so far.
@@ -51,7 +51,7 @@ void parseProgram(CString fileName, CString searchPath) {
         String nextFile = (String) getLastListElement(pendingFiles);
         if (!isInSet(included, nextFile)) {
             addToSet(included, nextFile);
-            parseFile(nextFile, searchPath); // May add to pendingFiles.
+            parseFile(nextFile, searchPath, errorLog); // May add to pendingFiles.
         }
         removeLastListElement(pendingFiles);
     }
@@ -63,21 +63,22 @@ void parseProgram(CString fileName, CString searchPath) {
     if (Perrors) { printf("The program contains errors.\n"); }
 }
 
-
-
 // parseFile parses a single script file with the yacc-generated parser.
-static void parseFile(CString fileName, CString searchPath) {
+static void parseFile(CString fileName, CString searchPath, ErrorLog *errorLog) {
     if (!fileName || *fileName == 0) return;
     curFileName = fileName;
     currentFile = fopenPath(fileName, "r", searchPath);
     if (!currentFile) {
-        printf("Error: file \"%s\" cannot be found.\n", fileName);
-        curFileName = null;
-        Perrors++;
-        return;
+      Error *error = createError (systemError, fileName, 0,
+				  "file cannot be found\n");
+      addErrorToLog (errorLog, error);
+      
+      curFileName = null;
+      Perrors++;
+      return;
     }
     if (debugging) printf("Parsing %s.\n", fileName);
     curLine = 1;
-    yyparse(); // Yacc parser.
+    yyparse(errorLog); // Yacc parser.
     fclose(currentFile);
 }

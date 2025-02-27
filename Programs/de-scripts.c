@@ -97,9 +97,17 @@ deadend_execute_scripts (int continue_on_failure, Database *database)
 static int
 execute_script (CString report_name, Database *database)
 {
-  // parse a DeadEnds script
-  parseProgram (report_name, DEADENDS_search_path);
+  ErrorLog *errorLog = createErrorLog ();
 
+  // parse a DeadEnds script
+  parseProgram (report_name, DEADENDS_search_path, errorLog);
+
+  if (Perrors > 0)
+    {
+      showErrorLog (errorLog);
+      deleteErrorLog (errorLog);
+      return (-1);
+    }
   //  Create a PNProcCall node to call the main procedure with
   curFileName = report_name;
   curLine = 1;

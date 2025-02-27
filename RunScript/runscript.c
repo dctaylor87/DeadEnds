@@ -44,10 +44,17 @@ int main(int argc, char* argv[]) {
 		}
 		fprintf(stderr, "%s: Database created.\n", getMsecondsStr());
 	// Parse and run the script.
-	parseProgram(scriptFile, scriptPath);
+	parseProgram(scriptFile, scriptPath, errorLog);
 	fprintf(stderr, "%s: Script parsed.\n", getMsecondsStr());
-	runScript(database, scriptFile);
-	fprintf(stderr, "%s: RunScript done.\n", getMsecondsStr());
+	if (Perrors > 0)
+		showErrorLog (errorLog);
+	deleteErrorLog (errorLog);
+	if (Perrors > 0)
+	  fprintf(stderr, "Script not run due to errors.\n");
+	else {
+		runScript(database, scriptFile);
+		fprintf(stderr, "%s: RunScript done.\n", getMsecondsStr());
+	}
 }
 
 // getArguments gets the file names from the command line.

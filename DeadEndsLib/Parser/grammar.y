@@ -14,6 +14,7 @@
 #include "functiontable.h"
 #include "list.h"
 #include "pnode.h"
+#include "errors.h"
 #include "interp.h"
 #include <stdlib.h>
 
@@ -28,10 +29,12 @@ static PNode *this, *prev;
 
 // Functions defined in the third section.
 static void join(PNode* list, PNode* last);
-static void yyerror(String str);
+static void yyerror(ErrorLog *errorLog, const char *str);
 
 #define YYSTYPE SemanticValue
 %}
+
+%parse-param {ErrorLog *errorLog}
 
 %token  <integer> ICONS
 %token  <floating> FCONS
@@ -249,7 +252,7 @@ static void yyerror(String str);
         $$->arguments = null;
     }
     |	IDEN m '(' exprso ')' {
-        $$ = funcCallPNode($1, $4);
+        $$ = funcCallPNode($1, $4, errorLog);
         $$->lineNumber = (int)$2;
     }
     |	SCONS {
@@ -302,8 +305,9 @@ void join(PNode* list, PNode* last) {
 	prev->next = last;
 }
 
-void yyerror(String str) {
+void yyerror(ErrorLog *errorLog, const char *str) {
 	extern String curFileName;
-	printf("Syntax Error (%s): %s: line %d\n", str, curFileName, curLine);
+	Error *error = createError (syntaxError, curFileName, curLine, str);
+	addErrorToLog (errorLog, error);
 	Perrors++;
 }

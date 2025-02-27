@@ -11,8 +11,10 @@
 #define parse_h
 
 #include "standard.h"  // String.
+#include "errors.h"
 
-void parseProgram(CString fileName, CString searchPath);// Parse fileName found in searchPath.
+// Parse fileName found in searchPath.
+void parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
 extern CString curFileName;  // Name of file being parsed.
 extern int curLine;   // Current line number in file being parsed.
 extern FILE *currentFile;

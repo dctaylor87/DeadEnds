@@ -122,7 +122,7 @@ PNode *returnPNode(PNode*);
 PNode *procDefPNode(String, PNode*, PNode*);
 PNode *procCallPNode(String, PNode*);
 PNode *funcDefPNode(String, PNode*, PNode*);
-PNode *funcCallPNode(String, PNode*);
+PNode *funcCallPNode(String, PNode*, ErrorLog*);
 PNode* traversePNode(PNode*, String, String, PNode*);
 PNode *fornodesPNode(PNode*, String, PNode*);
 PNode *familiesPNode(PNode*, String, String, String, PNode*);
