@@ -65,187 +65,66 @@
 #include "import.h"
 #include "codesets.h"
 
-/*********************************************
- * local function prototypes
- *********************************************/
-
-/* alphabetical */
-static void clear_rec_counts(int pass);
-static void export_saved_rec(char ctype, int count);
-static void import_added_rec(char ctype, CString tag, int count);
-static void import_adding_unused_keys(void);
-static void import_beginning_import(CString msg);
-static void import_error_invalid(CString reason);
-static void import_readonly(void);
-/* static void import_report_timing(int elapsed_sec, int uitime_sec); */
-static void import_validated_rec(RecordType type, CString tag, int count);
-static void import_validating(void);
-static void import_validation_error(CString msg);
-static void import_validation_warning(CString msg);
-static void update_rec_count(int pass, char ctype, CString tag, int count);
-
-/*********************************************
- * local variables
- *********************************************/
-
-/*********************************************
- * local & exported function definitions
- * body of module
- *********************************************/
-
-
-/*================================
- * Functions to display record counts
- *==============================*/
-static void
-update_rec_count (int pass, char ctype, CString tag, int count)
-{
-	int offset = 9*pass;
-	char msg[100];
-	String numstr=0;
-	int row=0;
-
-	switch(ctype) {
-	case 'I':
-		numstr = _pl("Person", "Persons", count);
-		row = 1;
-		break;
-	case 'F':
-		numstr = _pl("Family", "Families", count);
-		row = 2;
-		break;
-	case 'S':
-		numstr = _pl("Source", "Sources", count);
-		row = 3;
-		break;
-	case 'E':
-		numstr = _pl("Event", "Events", count);
-		row = 4;
-		break;
-	default: 
-		numstr = _pl("Other", "Others", count);
-		row = 5;
-		break;
-	}
-	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
-	if (row == 5 && tag && tag[0])
-		destrappf(msg, sizeof(msg), uu8, " (%s)", tag);
-	row += offset;
-	clear_stdout_hseg(row, 1, 70); /* TODO: how wide should this be ? */
-	wfield(row, 1, msg);
-}
-/*================================
- * Display 0 counts for all types
- *==============================*/
-static void
-clear_rec_counts (int pass)
-{
-	update_rec_count(pass, 'I', 0, 0);
-	update_rec_count(pass, 'F', 0, 0);
-	update_rec_count(pass, 'S', 0, 0);
-	update_rec_count(pass, 'E', 0, 0);
-	update_rec_count(pass, 'X', 0, 0);
-}
-/*================================
- * Feedback functions for import
- *==============================*/
-static void
-import_validation_warning (CString msg)
-{
-	wfield(7, 1, msg);
-}
-static void
-import_validation_error (CString msg)
-{
-	wfield(6, 1, msg);
-}
-static void
-import_error_invalid (CString reason)
-{
-	wfield(9, 0, reason);
-	wpos(10, 0);
-}
-static void
-import_validating (void)
-{
-	char msg[100];
-	String numstr=0;
-	int count=0;
-	int row=0;
-
-	llwprintf("%s\n", _("Checking GEDCOM file for errors."));
-	clear_rec_counts(0);
-
-	numstr = _pl("Error", "Errors", count);
-	row = 6;
-	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
-	clear_stdout_hseg(row, 1, 70);
-	wfield(row, 1, msg);
-
-	numstr = _pl("Warning", "Warnings", count);
-	row = 7;
-	snprintf(msg, sizeof(msg), FMT_INT_6 " %s", count, numstr);
-	clear_stdout_hseg(row, 1, 70);
-	wfield(row, 1, msg);
-}
-static void
-import_beginning_import (CString msg)
-{
-	wfield(9,  0, msg);
-	clear_rec_counts(1);
-}
-static void
-import_readonly (void)
-{
-	wfield(10, 0, _("The database is read-only; loading has been canceled."));
-	wpos(11, 0);
-}
-static void
-import_adding_unused_keys (void)
-{
-	wfield(15, 0, _("Adding unused keys as deleted keys..."));
-}
-static void
-import_validated_rec (RecordType type, CString tag, int count)
-{
-	update_rec_count(0, type, tag, count);
-}
-static void
-import_added_rec (char ctype, CString tag, int count)
-{
-	update_rec_count(1, ctype, tag, count);
-}
-static void
-export_saved_rec (char ctype, int count)
-{
-	update_rec_count(0, ctype, "", count);
-}
 /*================================
  * load_gedcom -- have user select gedcom file & import it
  *==============================*/
+
 void
-load_gedcom (bool picklist)
+load_gedcom (bool picklist, Databnase *database)
 {
+#if !defined(DEADENDS)
 	FILE *fp=NULL;
 	ImportFeedback ifeed;
+#endif
 	String srcdir=NULL;
 	String fullpath=0;
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 
 	srcdir = getdeoptstr("InputPath", ".");
+#if defined(DEADENDS)
+	if (! ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)) {
+		strfree(&fullpath);
+		return;
+	}
+#else
 	if (!ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
 		|| !(fp = fopen(fullpath, DEREADBINARY))) {
 		strfree(&fullpath);
 		return;
 	}
-
+#endif
 	/*
 	Note: we read the file in binary mode, so ftell & fseek will work correctly.
 	Microsoft's ftell/fseek do not work correctly if the file has simple unix (\n)
 	line terminations! -- Perry, 2003-02-11
 	*/
 
+#if defined(DEADENDS)
+	/* LifeLines first validates the file and then reads the file
+	   a second time putting it into the database.  But, DeadEnds
+	   is different -- it reads the file once, creates the
+	   database, validates it, and then if there are errors,
+	   throws away the database.
+
+	   Since we are potentially adding to an existing database, we
+	   do it slighly differently.  We create a new database, we
+	   validate it, if errors, we discard.  If no errors, we merge
+	   into the existing database and discard the new database.
+
+	   Currently, there is one argument -- picklist, later there
+	   will be two arguments -- picklist and database.  For the
+	   old behavior, database will be the database to merge into
+	   (likely currentDatabase).  If database is NULL, then this
+	   will be a way to create a new database from the curses
+	   UI.  */
+	errorLog = createErrorLog ();
+	Database *newDB = selectAndOpenDatabase (&fullpath, srcdir, database, errorLog);
+	if (newDB)
+	  {
+	    /* XXX delete error log XXX */
+	  }
+#else
 	memset(&ifeed, 0, sizeof(ifeed));
 	ifeed.if_validating_fnc = import_validating;
 	ifeed.if_validated_rec_fnc = import_validated_rec;
@@ -261,7 +140,7 @@ load_gedcom (bool picklist)
 	
 	fclose(fp);
 	strfree(&fullpath);
-
+#endif
 
 	if (1) {
 		int duration = time(NULL) - begin;
@@ -281,15 +160,20 @@ load_gedcom (bool picklist)
 	wpos(15,0);
 }
 
+#if 0				/* not yet */
 /*================================
  * save_gedcom -- save gedcom file
  *==============================*/
+
 bool
-save_gedcom (void)
+save_gedcom (Database *database)
 {
 	FILE *fp=NULL;
 	struct tag_export_feedback efeed;
 	String srcdir=NULL, fname=0, fullpath=0;
+
+	if (! database)
+		database = currentDatabase;
 
 	srcdir = getdeoptstr("DEARCHIVES", ".");
 	fp = ask_for_output_file(DEWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
@@ -308,7 +192,7 @@ save_gedcom (void)
 	/* Display 0 counts */
 	clear_rec_counts(0);
 
-	archive_in_file(&efeed, fp);
+	archive_in_file(&efeed, database, fp);
 	fclose(fp);
 
 	wpos(7,0);
@@ -317,3 +201,4 @@ save_gedcom (void)
 	
 	return true;
 }
+#endif
