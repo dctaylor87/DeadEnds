@@ -56,6 +56,7 @@
 #include "llinesi.h"
 #include "errors.h"
 #include "liflines.h"
+#include "llabort.h"
 #include "messages.h"
 #include "init.h"
 

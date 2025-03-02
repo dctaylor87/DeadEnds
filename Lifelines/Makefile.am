@@ -11,6 +11,7 @@ common_SOURCES = \
 	environ.c \
 	init.c \
 	lines_usage.c \
+	llabort.c \
 	miscutls.c \
 	parse-args.c \
 	selectdb.c \
