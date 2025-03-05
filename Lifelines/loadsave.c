@@ -70,7 +70,7 @@
  *==============================*/
 
 void
-load_gedcom (bool picklist, Databnase *database)
+load_gedcom (bool picklist, Database *database)
 {
 #if !defined(DEADENDS)
 	FILE *fp=NULL;
@@ -118,8 +118,9 @@ load_gedcom (bool picklist, Databnase *database)
 	   (likely currentDatabase).  If database is NULL, then this
 	   will be a way to create a new database from the curses
 	   UI.  */
-	errorLog = createErrorLog ();
+	ErrorLog *errorLog = createErrorLog ();
 	Database *newDB = selectAndOpenDatabase (&fullpath, srcdir, database, errorLog);
+
 	if (newDB)
 	  {
 	    /* XXX delete error log XXX */
@@ -142,18 +143,16 @@ load_gedcom (bool picklist, Databnase *database)
 	strfree(&fullpath);
 #endif
 
-	if (1) {
-		int duration = time(NULL) - begin;
-		int uitime = get_uitime() - beginui;
-		ZSTR zt1=approx_time(duration-uitime), zt2=approx_time(uitime);
-		/* TRANSLATORS: how long Import ran, and how much of that was UI delay */
-		ZSTR zout = zs_newf(_("Import time %s (ui %s)\n")
-			, zs_str(zt1), zs_str(zt2));
-		wfield(8,0, zs_str(zout));
-		zs_free(&zt1);
-		zs_free(&zt2);
-		zs_free(&zout);
-	}
+	int duration = time(NULL) - begin;
+	int uitime = get_uitime() - beginui;
+	ZSTR zt1=approx_time(duration-uitime), zt2=approx_time(uitime);
+	/* TRANSLATORS: how long Import ran, and how much of that was UI delay */
+	ZSTR zout = zs_newf(_("Import time %s (ui %s)\n")
+			    , zs_str(zt1), zs_str(zt2));
+	wfield(8,0, zs_str(zout));
+	zs_free(&zt1);
+	zs_free(&zt2);
+	zs_free(&zout);
 
 	/* position cursor further down stdout so check_stdout 
 	doesn't overwrite our messages from above */
