@@ -6,7 +6,9 @@
 typedef int64_t		KEYNUM_TYPE;
 
 #define MAXKEYNUMBER	999999999999L
-#define MAXKEYWIDTH	13	/* does NOT include NUL nor surrounding @'s */
+/* XXX not sure if MAXKEYWIDTH is still used.  Have eliminated most uses.  XXX */
+/* was 13, changed to 26 in case we switch from uint32_t to uint64_t */
+#define MAXKEYWIDTH	26	/* does NOT include NUL nor surrounding @'s */
 
 #define PRIdKEYNUM	PRId64
 #define FMT_KEYNUM	"%" PRIdKEYNUM
