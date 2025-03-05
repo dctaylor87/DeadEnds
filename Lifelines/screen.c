@@ -157,8 +157,8 @@ static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, int row, int col, int indx);
 static void display_status(String text);
 static bool does_match(void *param, void *el);
-static void edit_tt_menu(void);
 #if !defined(DEADENDS)
+static void edit_tt_menu(void);
 static void edit_user_options(void);
 static void edit_place_table(void);
 #endif
@@ -746,7 +746,8 @@ main_menu (void)
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
-	c = interact_choice_string(uiwin, "bsadprtuxqQ");
+	//c = interact_choice_string(uiwin, "bsadprtuxqQ");
+	c = interact_choice_string(uiwin, "bsadpruxqQ");
 	place_std_msg();
 	wrefresh(win);
 	switch (c) {
@@ -774,7 +775,9 @@ main_menu (void)
 		break;
 	case 'p': run_report(true); break;
 	case 'r': run_report(false); break;
+#if !defined(DEADENDS)
 	case 't': edit_tt_menu(); break;
+#endif
 	case 'u': invoke_utils_menu(); break;
 	case 'x':
 		{
@@ -1582,11 +1585,14 @@ invoke_trans_menu (void)
 		repaint_trans_menu(uiwin);
 		reactivate_uiwin(uiwin);
 		wmove(uiw_win(uiwin), 1, strlen(_(qSmn_tt_ttl))+3);
-		code = interact(uiwin, "elsxiq", -1);
+		//code = interact(uiwin, "elsxiq", -1);
+		code = interact(uiwin, "lsxiq", -1);
 
 		begin_action();
 		switch (code) {
+#if !defined(DEADENDS)
 		case 'e': edit_tt_menu(); break;
+#endif
 		case 'l': load_tt_action(); break;
 		case 's': save_tt_action(); break;
 		case 'x': export_tts(); break;
@@ -1598,6 +1604,8 @@ invoke_trans_menu (void)
 	deactivate_uiwin_and_touch_all();
 }
 #endif
+
+#if !defined(DEADENDS)
 /*======================================
  * edit_tt_menu -- menu for "Edit translation table"
  *====================================*/
@@ -1610,6 +1618,8 @@ edit_tt_menu (void)
 		stdout_vis = false; /* don't need to see errors after done */
 	}
 }
+#endif
+
 /*======================================
  * load_tt_action -- menu for "Load translation table"
  *====================================*/
