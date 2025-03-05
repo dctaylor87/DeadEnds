@@ -185,7 +185,6 @@ init_show_module (void)
 	Swdeat = zs_new();
 	for (i=0; i<MAXOTHERS; i++)
 		Sothers[i] = (LINESTRING)stdalloc(liwidth);
-	init_disp_reformat();
 }
 /*===============================================
  * term_show_module -- Free memory used by show module
