@@ -57,8 +57,10 @@ int chooseFromArray_x(CString ttl, int count, String* list, DETAILFNC, void *);
 int display_list(CString ttl, List *list);
 
 /* selectdb.c */
-bool open_or_create_database(String *dbused);
-bool select_database(String * dbrequested, String * perrmsg);
+//bool open_or_create_database(String *dbused);
+//bool select_database(String * dbrequested, String * perrmsg);
+Database *selectAndOpenDatabase (CString *dbFilename, CString searchPath,
+				 Database *oldDatabase, ErrorLog *errorLog);
 
 /* miscutls.c */
 void sighand_cursesui(int sig);
