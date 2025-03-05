@@ -554,6 +554,8 @@ void addfxref (int key) { addfxref_impl((int32_t)key, NODUPS); }
 void addsxref (int key) { addsxref_impl((int32_t)key, NODUPS); }
 void addexref (int key) { addexref_impl((int32_t)key, NODUPS); }
 void addxxref (int key) { addxxref_impl((int32_t)key, NODUPS); }
+
+#if !defined(DEADENDS)
 /*===================================================
  * addxref_impl -- Mark key free (accepts string key, any type)
  *  key:    [IN]  key to delete (add to free set)
@@ -594,6 +596,7 @@ bool addxref_if_missing (CString key)
 {
 	return addxref_impl(key, DUPSOK);
 }
+#endif
 
 /*==========================================
  * growxrefs -- Grow memory for xrefs array.
@@ -683,6 +686,8 @@ parse_key (CString key, char * ktype, int32_t * kval)
 	*kval = atoi(key+1);
 	return true;
 }
+
+#if !defined(DEADENDS)	  /* no callers */
 /*==========================================
  * is_key_in_use -- Return true if a live record
  *========================================*/
@@ -711,6 +716,7 @@ is_key_in_use (CString key)
 	
 	return result;
 }
+#endif
 
 #if !defined(DEADENDS)
 /*==========================================
