@@ -5,7 +5,7 @@
 // and used to build an internal database.
 //
 // Created by Thomas Wetmore on 10 November 2022.
-// Last changed 4 December 2024.
+// Last changed 21 February 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -32,6 +32,7 @@ Database *createDatabase(CString filePath) {
 	memset (database, 0, sizeof(Database));
 	database->filePath = strsave(filePath);
 	database->name = strsave(lastPathSegment(filePath));
+	database->dirty = false;
 	database->recordIndex = null;
 	database->nameIndex = null;
 	database->refnIndex = null;
