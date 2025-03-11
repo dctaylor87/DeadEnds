@@ -667,25 +667,28 @@ dnl **************************************************************
 AC_CONFIG_FILES([Makefile \
 	DeadEndsLib/Makefile \
         DeadEndsLib/Database/Makefile \
+        DeadEndsLib/DataTypes/Makefile \
         DeadEndsLib/Gedcom/Makefile \
         DeadEndsLib/Interp/Makefile \
         DeadEndsLib/LLSupport/Makefile \
+	DeadEndsLib/Operations/Makefile \
         DeadEndsLib/Parser/Makefile \
         DeadEndsLib/Python/Makefile \
-        DeadEndsLib/DataTypes/Makefile \
         DeadEndsLib/UI/Makefile \
         DeadEndsLib/Utils/Makefile \
         DeadEndsLib/Validate/Makefile \
-	DeadEndsLib/Operations/Makefile \
         Docs/Manual/Makefile \
+	GenerateSExpressions/Makefile \
+        Lifelines/Makefile \
+	MenuLibrary/Makefile \
+	MultiBases/Makefile \
+	Partition/Makefile \
 	PatchSex/Makefile \
+        Programs/Makefile \
 	RandomizeKeys/Makefile \
 	RunScript/Makefile \
+	TestDates/Makefile \
 	TestProgram/Makefile \
-        Lifelines/Makefile \
-        Programs/Makefile \
-	MenuLibrary/Makefile \
-	Partition/Makefile \
-	MultiBases/Makefile \
 	UseMenus/Makefile])
+
 AC_OUTPUT
