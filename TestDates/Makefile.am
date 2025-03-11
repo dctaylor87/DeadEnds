@@ -14,7 +14,6 @@ gensexpr_LDADD = \
 	../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Parser/libparser.a \
-	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Utils/libutils.a
 
 AM_CPPFLAGS = \
