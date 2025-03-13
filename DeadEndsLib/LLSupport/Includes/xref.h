@@ -35,3 +35,27 @@ extern GNode *getNextRecord (RecordType type, CString key, Database *database);
 extern GNode *getPreviousRecord (RecordType type, CString key, Database *database);
 
 extern bool isKeyInUse (CString key, Database *database);
+
+/* The following five functions return a new (unused) key of the specified type.
+   It is the callers responsibility to use the key or release it.
+   Also, the key is in static storage and the caller should save it
+   (strsave or similar).  */
+
+extern CString getNewFamilyKey (Database *database);
+extern CString getNewPersonKey (Database *database);
+extern CString getNewSourceKey (Database *database);
+extern CString getNewEventKey (Database *database);
+extern CString getNewOtherKey (Database *database);
+
+/* The following five functions release a key of the specified type.
+   It is the callers responsibility to have already removed the
+   corresponding record from the database.
+
+   Keys must be of the appropriate type, however we accept both with
+   and without the surrounding '@'s.  */
+
+extern void releaseFamilyKey (Database *database, CString key);
+extern void releasePersonKey (Database *databas, CString key);
+extern void releaseSourceKey (Database *database, CString key);
+extern void releaseEventKey (Database *database, CString key);
+extern void releaseOtherKey (Database *database, CString key);

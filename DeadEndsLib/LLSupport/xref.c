@@ -342,3 +342,159 @@ bool isKeyInUse (CString key, Database *database)
 
   return false;
 }
+
+CString getNewFamilyKey (Database *database)
+{
+  static char key[24];		/* '@' + letter + 20 digits + '@' + '\0' */
+  uint64_t keynum = ++database->db_max_family;
+  sprintf (key, "@F%lu@", keynum);
+  return (key);
+}
+
+CString getNewPersonKey (Database *database)
+{
+  static char key[24];		/* '@' + letter + 20 digits + '@' + '\0' */
+  uint64_t keynum = ++database->db_max_person;
+  sprintf (key, "@I%lu@", keynum);
+  return (key);
+}
+
+CString getNewSourceKey (Database *database)
+{
+  static char key[24];		/* '@' + letter + 20 digits + '@' + '\0' */
+  uint64_t keynum = ++database->db_max_source;
+  sprintf (key, "@S%lu@", keynum);
+  return (key);
+}
+
+CString getNewEventKey (Database *database)
+{
+  static char key[24];		/* '@' + letter + 20 digits + '@' + '\0' */
+  uint64_t keynum = ++database->db_max_event;
+  sprintf (key, "@E%lu@", keynum);
+  return (key);
+}
+
+CString getNewOtherKey (Database *database)
+{
+  static char key[24];		/* '@' + letter + 20 digits + '@' + '\0' */
+  uint64_t keynum = ++database->db_max_other;
+  sprintf (key, "@X%lu@", keynum);
+  return (key);
+}
+
+#if 0
+void releaseFamilyKey (Database *database, CString key)
+{
+  uint64_t keynum;
+  char *endptr = 0;
+  if (! key)
+    return;			/* error: bad argument */
+  if (*key == '@')
+    key++;
+  if (*key != 'F')
+    return;			/* error: bad argument */
+  key++;
+  keynum = strtoull (key, &endptr, 10);
+  if ((*endptr != '@') && (*endptr != '\0'))
+    return;			/* error: bad argument */
+  if (keynum == database->db_max_family)
+    database->db_max_family--;
+  /* XXX FUTURE: insert code to place key on a 'deleted' list.  XXX */
+}
+
+/* keys must be on the appropriate type, but we accept both with and
+   without the surrounding '@'s. */
+
+void releasePersonKey (Database *database, CString key)
+{
+  uint64_t keynum;
+  char *endptr = 0;
+  if (! key)
+    return;			/* error: bad argument */
+  if (*key == '@')
+    key++;
+  if (*key != 'I')
+    return;			/* error: bad argument */
+  key++;
+  keynum = strtoull (key, &endptr, 10);
+  if ((*endptr != '@') && (*endptr != '\0'))
+    return;			/* error: bad argument */
+  if (keynum == database->db_max_person)
+    database->db_max_person--;
+  /* XXX FUTURE: insert code to place key on a 'deleted' list.  XXX */
+}
+
+void releaseSourceKey (Database *database, CString key)
+{
+  uint64_t keynum;
+  char *endptr = 0;
+  if (! key)
+    return;			/* error: bad argument */
+  if (*key == '@')
+    key++;
+  if (*key != 'S')
+    return;			/* error: bad argument */
+  key++;
+  keynum = strtoull (key, &endptr, 10);
+  if ((*endptr != '@') && (*endptr != '\0'))
+    return;			/* error: bad argument */
+  if (keynum == database->db_max_source)
+    database->db_max_source--;
+  /* XXX FUTURE: insert code to place key on a 'deleted' list.  XXX */
+}
+
+void releaseEventKey (Database *database, CString key)
+{
+  uint64_t keynum;
+  char *endptr = 0;
+  if (! key)
+    return;			/* error: bad argument */
+  if (*key == '@')
+    key++;
+  if (*key != 'E')
+    return;			/* error: bad argument */
+  key++;
+  keynum = strtoull (key, &endptr, 10);
+  if ((*endptr != '@') && (*endptr != '\0'))
+    return;			/* error: bad argument */
+  if (keynum == database->db_max_event)
+    database->db_max_event--;
+  /* XXX FUTURE: insert code to place key on a 'deleted' list.  XXX */
+}
+
+void releaseOtherKey (Database *database, CString key)
+{
+  uint64_t keynum;
+  char *endptr = 0;
+  if (! key)
+    return;			/* error: bad argument */
+  if (*key == '@')
+    key++;
+  if (*key != 'X')
+    return;			/* error: bad argument */
+  key++;
+  keynum = strtoull (key, &endptr, 10);
+  if ((*endptr != '@') && (*endptr != '\0'))
+    return;			/* error: bad argument */
+  if (keynum == database->db_max_other)
+    database->db_max_other--;
+  /* XXX FUTURE: insert code to place key on a 'deleted' list.  XXX */
+}
+#endif
+
+uint64_t
+xref_max_any (Database *database)
+{
+  uint64_t maxkey = database->db_max_person;
+  if (database->db_max_family > maxkey)
+    maxkey = database->db_max_family;
+  if (database->db_max_event > maxkey)
+    maxkey = database->db_max_event;
+  if (database->db_max_source > maxkey)
+    maxkey = database->db_max_source;
+  if (database->db_max_other > maxkey)
+    maxkey = database->db_max_other;
+
+  return (maxkey);
+}

@@ -14,5 +14,7 @@ extern void rename_from_browse_lists(String);
 extern Sequence *stringToSequence (CString name, Database *database);
 extern Sequence *find_named_seq(CString);
 
+/* lbrowse.c */
+extern Sequence *current_seq;
 
 //extern void rename_indiseq(Sequence *, String);

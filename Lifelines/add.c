@@ -77,7 +77,7 @@
 #include "splitjoin.h"
 #include "codesets.h"
 #include "lineage.h"
-#include "xreffile.h"
+#include "xref.h"
 #include "de-strings.h"
 #include "ui.h"
 #include "locales.h"
@@ -199,13 +199,11 @@ void
 add_new_indi_to_db (GNode *indi0)
 {
 	GNode *name, *refn, *sex, *body, *dumb, *node;
-	char key[MAXKEYWIDTH]="";
-	int32_t keynum=0;
+	CString key;
 	GNode *indi = nztop(indi0);
 
 	splitPerson(indi, &name, &refn, &sex, &body, &dumb, &dumb);
-	keynum = getixrefnum();
-	snprintf(key, sizeof(key), "I" FMT_INT32, keynum);
+	key = getNewPersonKey (currentDatabase);
 	init_new_record(indi0, key);
 	for (node = name; node; node = nsibling(node)) {
 		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
@@ -699,7 +697,7 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 	GNode *refn, *husb, *wife, *chil, *body;
 	GNode *node;
 	String key=0;
-	String xref = getfxref();
+	String xref = getNewFamilyKey(currentDatabase);
 
 	nxref(fam2) = strsave(xref);
 

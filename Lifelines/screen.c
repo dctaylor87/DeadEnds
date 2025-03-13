@@ -123,8 +123,6 @@ static UIWINDOW extra_menu_win=NULL;
  * external/imported variables
  *********************************************/
 
-extern int alldone;
-
 /*********************************************
  * local function prototypes
  *********************************************/
@@ -806,7 +804,7 @@ run_report (bool picklist)
 	String ofile = NULL; /* will prompt for output file */
 	bool timing = true;
 	begin_action();
-	interp_main(progfiles, ofile, picklist, timing);
+	interp_main(progfiles, currentDatabase, ofile, picklist, timing);
 	end_action(); /* displays any errors that happened */
 }
 /*=========================================

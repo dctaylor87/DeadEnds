@@ -60,7 +60,8 @@
 #include "nodeutils.h"
 //#include "readindex.h"
 #include "database.h"
-#include "xreffile.h"
+//#include "xreffile.h"
+#include "xref.h"
 #include "ll-addoperations.h"
 #include "splitjoin.h"
 #include "refns.h"
@@ -148,18 +149,18 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	String msg, key;
 	bool emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	String (*getreffnc)(void) = NULL; /* get next internal key */
+	String (*getreffnc)(Database *) = NULL; /* get next internal key */
 	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
 	
 	/* set up functions according to type */
 	if (ntype == 'S') {
-		getreffnc = getsxref;
+		getreffnc = getNewSourceKey;
 		todbasefnc = addOrUpdateSourceInDatabase;
 	} else if (ntype == 'E') {
-		getreffnc = getexref;
+		getreffnc = getNewEventKey;
 		todbasefnc = addOrUpdateEventInDatabase;
 	} else { /* X */
-		getreffnc = getxxref;
+		getreffnc = getNewOtherKey;
 		todbasefnc = addOrUpdateOtherInDatabase;
 	}
 
@@ -214,7 +215,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 		if (node) freeGNodes(node);
 		return NULL;
 	}
-	nxref(node) = strsave((String)(*getreffnc)());
+	nxref(node) = strsave((String)(*getreffnc)(currentDatabase));
 	key = nxref(node);
 	for (refn = nchild(node); refn; refn = nsibling(refn)) {
 		if (eqstr("REFN", ntag(refn)) && nval(refn))

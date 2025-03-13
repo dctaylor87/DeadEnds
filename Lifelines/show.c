@@ -832,7 +832,7 @@ indi_events (String outstr, GNode *indi, int len)
 static int
 max_keywidth (void)
 {
-	int32_t maxkey = xref_max_any();
+	uint64_t maxkey = xref_max_any();
 	if (maxkey>9999) {
 		if (maxkey>999999)
 			return 7;

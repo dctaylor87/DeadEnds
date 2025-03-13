@@ -70,8 +70,6 @@
 
 #define VIEWABLE 13
 
-extern Sequence *current_seq;
-
 static void name_the_list(Sequence *seq);
 
 /*=======================================
