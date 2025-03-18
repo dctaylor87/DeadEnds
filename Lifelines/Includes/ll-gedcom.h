@@ -6,7 +6,7 @@
 	GNode *__node = findTag(nchild(indi),"FAMS");\
 	GNode *fam=0;\
 	String __key=0;\
-	num = 0;\
+	ATTRIBUTE_UNUSED num = 0;\
 	while (__node) {\
 		if (!eqstr(ntag(__node), "FAMS")) break;\
 		__key = nval(__node);\

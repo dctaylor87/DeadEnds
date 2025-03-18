@@ -92,7 +92,7 @@ extern void baseFree(void *word);
 //  FORSEQUENCE and ENDSEQUENCE iterate a Sequence.
 #define FORSEQUENCE(sequence, element, count) {\
 	SequenceEl* element;\
-	int count;\
+	int count ATTRIBUTE_UNUSED;\
 	Block* ___block = &(sequence->block);\
 	SequenceEl** __elements = (SequenceEl**) ___block->elements;\
 	for (int __i = 0; __i < ___block->length; __i++){\

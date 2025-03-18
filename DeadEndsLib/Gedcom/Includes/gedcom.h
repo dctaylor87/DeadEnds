@@ -42,7 +42,7 @@ int compareRecordKeys(CString, CString);  // gedcom.c
 	{\
 	GNode* __node = findTag(fam->child, "CHIL");\
 	GNode* childd;\
-	int num = 0;\
+	ATTRIBUTE_UNUSED int num = 0;\
 	String key = null;\
 	while (__node) {\
 		key = __node->value;\
@@ -157,7 +157,7 @@ int compareRecordKeys(CString, CString);  // gedcom.c
     int __sex = SEXV(indi);\
     GNode* spouse;\
     GNode* fam;\
-    int num = 0;\
+    ATTRIBUTE_UNUSED int num = 0;\
     while (__fnode) {\
         spouse = null;\
         fam = keyToFamily(__fnode->value, index);\
