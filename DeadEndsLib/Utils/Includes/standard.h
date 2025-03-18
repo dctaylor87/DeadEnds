@@ -13,6 +13,8 @@ typedef char* String;
 typedef const char* CString;
 
 #include <sys/types.h>
+#include <ansidecl.h> // ATTRIBUTE_UNUSED
+#include <stdint.h>   // uint64_t and friends
 #include <stdlib.h> // malloc, free, abort.
 #include <stdio.h>  // FILE, fopen, fclose, printf, sprintf, fprintf.
 #include <string.h> // strlen, strcmp, strcpy, strcmp, strrchr.
