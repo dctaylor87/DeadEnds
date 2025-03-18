@@ -63,6 +63,7 @@
 #include "lineage.h"
 #include "codesets.h"
 #include "stringtable.h"
+#include "recordindex.h"
 #include "options.h"
 #include "xreffile.h"
 #include "de-strings.h"

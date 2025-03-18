@@ -19,6 +19,7 @@
 #include "rfmt.h"
 #include "gstrings.h"
 #include "gedcom.h"
+#include "recordindex.h"
 
 #include "refns.h"
 #include "locales.h"
