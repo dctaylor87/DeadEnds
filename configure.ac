@@ -689,6 +689,7 @@ AC_CONFIG_FILES([Makefile \
 	RunScript/Makefile \
 	TestDates/Makefile \
 	TestProgram/Makefile \
+	tests/Makefile \
 	UseMenus/Makefile])
 
 AC_OUTPUT
