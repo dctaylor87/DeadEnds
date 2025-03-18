@@ -63,10 +63,10 @@ void showRecordIndex(RecordIndex* index) {
 void
 addrefRecord (GNode *element)
 {
-  //  if (! element)
-  //    return;
+  if (! element)
+    return;
 
-  //  element->refcount++;
+  element->refcount++;
 }
 
 // releaseRecord -- decrement reference count of a GNode.
@@ -76,9 +76,9 @@ addrefRecord (GNode *element)
 void
 releaseRecord (GNode *element)
 {
-  //  if (! element)
-  //    return;
+  if (! element)
+    return;
 
-  //  ASSERT(element->refcount);
-  //  element->refcount--;
+  ASSERT(element->refcount);
+  element->refcount--;
 }
