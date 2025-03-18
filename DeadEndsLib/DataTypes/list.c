@@ -11,7 +11,7 @@
 #include "sort.h"
 
 // createList creates and returns a List.
-List* createList(CString(*getKey)(void*), int(*compare)(CString, CString),
+List* createList(CString(*getKey)(const void*), int(*compare)(CString, CString),
 				 void(*delete)(void*), bool sorted) {
 	List *list = (List *) stdalloc(sizeof(List));
 	if (! list)
@@ -21,7 +21,7 @@ List* createList(CString(*getKey)(void*), int(*compare)(CString, CString),
 }
 
 // initList initializes a List.
-void initList(List *list, CString(*getKey)(void*), int(*compare)(CString, CString),
+void initList(List *list, CString(*getKey)(const void*), int(*compare)(CString, CString),
 			  void (*delete)(void*), bool sorted) {
 	memset(list, 0, sizeof(List));
 	initBlock(&(list->block));

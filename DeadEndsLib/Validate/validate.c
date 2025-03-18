@@ -40,7 +40,7 @@ static bool validateOther(GNode* other, Database* db, ErrorLog* elog) {return tr
 
 // getReferenceIndex creates the reference index while validating the 1 REFN nodes in a Database.
 // TODO: This file isn't the right location for this function.
-RefnIndex* getReferenceIndex(RecordIndex *index, String fname, IntegerTable* keymap, ErrorLog* elog) {
+RefnIndex* getReferenceIndex(RecordIndex *index, CString fname, IntegerTable* keymap, ErrorLog* elog) {
 	RefnIndex* refnIndex = createRefnIndex();
 	FORHASHTABLE(index, element)
 		GNode* root = (GNode*) element;

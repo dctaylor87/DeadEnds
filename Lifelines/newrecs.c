@@ -149,7 +149,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	String msg, key;
 	bool emp;
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
-	String (*getreffnc)(Database *) = NULL; /* get next internal key */
+	CString (*getreffnc)(Database *) = NULL; /* get next internal key */
 	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
 	
 	/* set up functions according to type */

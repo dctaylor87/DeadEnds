@@ -21,7 +21,7 @@ Set* createSet(CString(*get)(void*), int(*cmp)(CString, CString), void(*del)(voi
 void deleteSet(Set*);
 int lengthSet(Set*);
 bool isInSet(Set*, CString);
-void addToSet(Set*, void*);
+void addToSet(Set*, const void*);
 void removeFromSet(Set*, CString);
 void iterateSet(Set*, void(*iter)(void*));
 void showSet(Set*, String(*show)(void*));

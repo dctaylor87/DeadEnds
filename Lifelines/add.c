@@ -697,7 +697,7 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 	GNode *refn, *husb, *wife, *chil, *body;
 	GNode *node;
 	String key=0;
-	String xref = getNewFamilyKey(currentDatabase);
+	CString xref = getNewFamilyKey(currentDatabase);
 
 	nxref(fam2) = strsave(xref);
 

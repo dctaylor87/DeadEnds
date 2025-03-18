@@ -13,7 +13,7 @@
 #include "writenode.h"
 
 // getKey is the get key function for RootLists.
-static CString getKey(void* element) {
+static CString getKey(const void* element) {
 	return ((GNode*) element)->key;
 }
 

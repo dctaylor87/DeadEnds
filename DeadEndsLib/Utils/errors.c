@@ -12,7 +12,7 @@
 static bool debugging = false;
 
 // getKey returns the comparison key of an error.
-static CString getKey(void* error) {
+static CString getKey(const void* error) {
 	static char buffer[NUMKEYS][128];
 	static int dex = 0;
 	if (++dex > NUMKEYS - 1) dex = 0;

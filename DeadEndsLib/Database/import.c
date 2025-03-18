@@ -109,7 +109,7 @@ void checkKeysAndReferences(RootList* records, String name, IntegerTable* keymap
 
 // getRecordIndexFromFile reads a Gedcom file into a RecordIndex. If personRoots and/or
 // familyRoots are not null they will be filled.
-RecordIndex* getRecordIndexFromFile(String path, RootList* personRoots, RootList* familyRoots,
+RecordIndex* getRecordIndexFromFile(CString path, RootList* personRoots, RootList* familyRoots,
 				    IntegerTable* keymap, ErrorLog* elog) {
 	if (timing) printf("%s: getRecordIndexFromFile: started.\n", gms);
 	File* file = openFile(path, "r"); // Open the file.

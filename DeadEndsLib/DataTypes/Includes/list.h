@@ -26,8 +26,8 @@ typedef struct List {
 	int (*compare)(CString, CString);
 } List;
 
-List* createList(CString(*g)(void*), int(*c)(CString, CString), void (*d)(void*), bool sorted);
-void initList(List*, CString(*g)(void*), int(*c)(CString, CString), void(*d)(void*), bool sorted);
+List* createList(CString(*g)(const void*), int(*c)(CString, CString), void (*d)(void*), bool sorted);
+void initList(List*, CString(*g)(const void*), int(*c)(CString, CString), void(*d)(void*), bool sorted);
 void deleteList(List*);
 int lengthList(List*);
 void emptyList(List*);

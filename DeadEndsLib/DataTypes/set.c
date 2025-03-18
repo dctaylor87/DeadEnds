@@ -28,7 +28,7 @@ void deleteSet(Set *set) {
 }
 
 // addToSet adds an element to a Set. If an element with the same key is in the Set it is removed.
-void addToSet(Set* set, void* element) {
+void addToSet(Set* set, const void* element) {
 	int index;
 	List* list = &(set->list);
 	CString key = list->getKey(element);

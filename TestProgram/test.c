@@ -89,7 +89,7 @@ Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorL
 }
 
 // getKey gets the key of a GNode element.
-static CString getKey(void* element) { return ((GNode*) element)->key; }
+static CString getKey(const void* element) { return ((GNode*) element)->key; }
 
 // compare compares two record keys.
 static int compare(CString a, CString b) { return compareRecordKeys(a, b); }
