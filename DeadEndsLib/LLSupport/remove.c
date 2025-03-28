@@ -44,6 +44,7 @@
 #include "refnindex.h"
 #include "gnode.h"
 #include "sequence.h"
+#include "errors.h"
 #include "feedback.h"
 #include "remove.h"
 #include "splitjoin.h"

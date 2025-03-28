@@ -39,6 +39,7 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
+#include "errors.h"
 #include "denls.h"
 
 #include "list.h"
@@ -54,7 +55,6 @@
 #include "ask.h"
 #include "lineage.h"
 #include "llinesi.h"
-#include "errors.h"
 #include "liflines.h"
 #include "llabort.h"
 #include "messages.h"

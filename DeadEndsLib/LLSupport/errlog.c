@@ -37,10 +37,9 @@
 #include "denls.h"
 #include "sys_inc.h"
 
-//#include "liflines.h"
 #include "gnode.h"
 #include "database.h"
-//#include "feedback.h"
+#include "errors.h"
 #include "uiio.h"
 #include "zstr.h"
 #include "translat.h"

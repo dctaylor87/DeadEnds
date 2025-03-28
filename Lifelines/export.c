@@ -43,6 +43,7 @@
 #include "translat.h"
 #include "gedcom.h"
 #include "sequence.h"
+#include "errors.h"
 #include "liflines.h"
 #include "llinesi.h"
 #include "feedback.h"

@@ -218,6 +218,7 @@ void switch_scrolls(void);
 void term_show_module(void);
 
 #ifndef _FEEDBACK_H
+#include "errors.h"
 #include "feedback.h"
 #endif /* _FEEDBACK_H */
 

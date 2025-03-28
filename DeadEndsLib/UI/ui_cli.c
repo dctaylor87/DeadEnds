@@ -39,6 +39,7 @@
 #include "standard.h"
 #include "denls.h"
 #include "sequence.h"
+#include "errors.h"
 #include "feedback.h"
 #include "zstr.h"
 #include "translat.h"

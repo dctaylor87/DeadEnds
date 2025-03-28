@@ -18,6 +18,7 @@
 #include "denls.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
+#include "errors.h"
 #include "ask.h"
 #include "rptui.h"
 #include "py-messages.h"

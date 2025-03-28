@@ -12,7 +12,7 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"		/* ASSERT */
-//#include "denls.h"
+#include "errors.h"
 #include "feedback.h"
 #include "messages.h"
 

@@ -55,11 +55,11 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
+#include "errors.h"
 #include "ask.h"
 #include "feedback.h"
 #include "uiio.h"
 #include "llinesi.h"
-#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "xlat.h"

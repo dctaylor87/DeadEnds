@@ -48,6 +48,7 @@
 
 #include "zstr.h"
 #include "translat.h"
+#include "errors.h"
 #include "feedback.h"
 #include "refnindex.h"
 #include "gnode.h"
@@ -60,7 +61,6 @@
 #include "ask.h"
 #include "choose.h"
 #include "llinesi.h"
-#include "errors.h"
 #include "liflines.h"
 #include "gedcom.h"
 #include "messages.h"

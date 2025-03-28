@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "standard.h"
+#include "errors.h"
 #include "feedback.h"
 #include "uiio.h"
 #include "uiioi.h"

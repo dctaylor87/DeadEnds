@@ -10,6 +10,7 @@
 #include "standard.h"
 #include "denls.h"
 #include "sequence.h"
+#include "errors.h"
 #include "ui.h"
 #include "messages.h"
 #include "feedback.h"

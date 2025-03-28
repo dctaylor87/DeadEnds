@@ -27,6 +27,7 @@
 #include "denls.h"
 #include "refnindex.h"
 #include "gnode.h"
+#include "errors.h"
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"

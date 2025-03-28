@@ -43,6 +43,7 @@
 #include "denls.h"
 #include "stringtable.h"
 #include "list.h"
+#include "errors.h"
 #include "options.h"
 
 #include "zstr.h"
@@ -60,7 +61,6 @@
 #include "integertable.h"
 #include "ask.h"
 #include "llinesi.h"
-#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "splitjoin.h"

@@ -24,6 +24,7 @@
 #include "denls.h"
 
 #include "list.h"
+#include "errors.h"
 #include "zstr.h"
 #include "translat.h"
 #include "feedback.h"

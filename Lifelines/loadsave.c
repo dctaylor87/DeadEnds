@@ -54,6 +54,7 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
+#include "errors.h"
 #include "writenode.h"
 #include "ask.h"
 #include "feedback.h"
