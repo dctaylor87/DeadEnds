@@ -73,8 +73,7 @@ valid_indi_tree (GNode *indi1, String *pmsg, GNode *orig, Database *database)
 	GNode *name1, *refn1, *sex1, *body1, *famc1, *fams1, *node;
 	GNode *name0, *refn0, *sex0, *body0, *famc0, *fams0;
 	SexType isex;
-	int num;
-	String *keys, ukey;
+	String ukey;
 
 	if (!indi1) {
 		*pmsg = _(qSbademp);
