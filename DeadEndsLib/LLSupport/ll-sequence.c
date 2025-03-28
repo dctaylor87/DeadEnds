@@ -121,7 +121,7 @@ familyToSpouses (GNode *fam, Database *database)
     return NULL;
   seq = createSequence (database->recordIndex);
 
-  FORFAMSPOUSES(fam, spouse, database)
+  FORFAMSPOUSES(fam, spouse, database->recordIndex)
     len++;
     appendToSequence(seq, __key, spouse);
   ENDFAMSPOUSES

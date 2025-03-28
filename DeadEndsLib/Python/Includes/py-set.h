@@ -97,7 +97,7 @@
 /* FORFAMSPOUSES -- iterate over all spouses in one family (All
    husbands and wives).  */
 
-#define FORFAMSPOUSES(fam,spouse,database)	\
+#define FORFAMSPOUSES(fam,spouse,index)	\
 	{\
 	GNode *__node = nchild(fam);	\
 	GNode *spouse=0;\
@@ -108,7 +108,7 @@
 			continue;\
 		}\
 		__key = nval(__node);\
-		if (!__key || !(spouse = keyToPerson(__key, database->recordIndex))) {	\
+		if (!__key || !(spouse = keyToPerson(__key, index))) {	\
 			__node = nsibling(__node);\
 			continue;\
 		}\
