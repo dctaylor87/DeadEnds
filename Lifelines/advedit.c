@@ -58,6 +58,7 @@
 #include "pvalue.h"
 #include "editing.h"
 #include "ll-node.h"
+#include "xref.h"
 
 #include "llpy-externs.h"
 
