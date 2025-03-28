@@ -43,13 +43,13 @@
 #include "rfmt.h"
 #include "refnindex.h"
 #include "sequence.h"
+#include "database.h"
 #include "ask.h"
 #include "feedback.h"
 #include "errors.h"
 #include "liflines.h"
 #include "fpattern.h"
 #include "messages.h"
-#include "xreffile.h"
 #include "xref.h"
 #include "refns.h"
 #include "de-strings.h"
@@ -91,7 +91,9 @@ static int SCAN_SRC_TITL=4;
 static void do_fields_scan(SCANNER * scanner, GNode *rec, Database *database);
 static void do_name_scan(SCANNER * scanner, String prompt, Database *database);
 static void do_sources_scan(SCANNER * scanner, CString prompt, Database *database);
+#if !defined(DEADENDS)
 static bool ns_callback(CString key, CString name, void *param, Database *database);
+#endif
 static bool rs_callback(CString key, CString refn, void *param, Database *database);
 static void scanner_add_result(SCANNER * scanner, CString key);
 static bool scanner_does_pattern_match(SCANNER *scanner, CString text);
@@ -200,7 +202,21 @@ do_name_scan (SCANNER * scanner, String prompt, Database *database)
 			break;
 	}
 	msg_status("%s", (String)scanner->statusmsg);
+#if defined(DEADENDS)
+	FORLIST(database->personRoots, element)
+	  GNode *record = (GNode *)element;
+	  for (GNode *node = NAME(record);
+	       node && eqstr (node->tag, "NAME");
+	       node = node->sibling)
+	    {
+	      if (node->value &&
+		  scanner_does_pattern_match (scanner, node->value))
+		scanner_add_result (scanner, record->key);
+	    }
+	ENDLIST
+#else
 	traverse_names(ns_callback, scanner);
+#endif
 }
 /*==============================
  * do_sources_scan -- traverse sources looking for pattern matching
@@ -236,7 +252,7 @@ do_sources_scan (SCANNER * scanner, CString prompt, Database *database)
  *  rec:       [IN]  record to search
  *============================*/
 static void
-do_fields_scan (SCANNER * scanner, GNode *rec, Database *database)
+do_fields_scan (SCANNER * scanner, GNode *rec, Database *database ATTRIBUTE_UNUSED)
 {
 	/* NB: Only scanning top-level nodes right now */
 	GNode *node = nztop(rec);
@@ -272,10 +288,11 @@ do_fields_scan (SCANNER * scanner, GNode *rec, Database *database)
  * init_scan_pattern -- Initialize scan pattern fields
  *============================*/
 static void
-scanner_init (SCANNER * scanner, int scantype, CString statusmsg, Database *database)
+scanner_init (SCANNER * scanner, int scantype, CString statusmsg,
+	      Database *database)
 {
 	scanner->scantype = scantype;
-	scanner->seq = createSequence(currentDatabase->recordIndex);
+	scanner->seq = createSequence(database->recordIndex);
 	strcpy(scanner->pattern, "");
 	scanner->statusmsg = statusmsg;
 	scanner->field = NULL;
@@ -354,6 +371,8 @@ scanner_add_result (SCANNER * scanner, CString key)
 	append_indiseq_null(scanner->seq, strsave(key), NULL, false, true);
 #endif
 }
+
+#if !defined(DEADENDS)
 /*===========================================
  * ns_callback -- callback for name traversal
  *=========================================*/
@@ -385,11 +404,14 @@ ns_callback (CString key, CString name, void *param, Database *database)
 	}
 	return true;
 }
+#endif
+
 /*===========================================
  * rs_callback -- callback for refn traversal
  *=========================================*/
 static bool
-rs_callback (CString key, CString refn, void *param, Database *database)
+rs_callback (CString key, CString refn, void *param,
+	     Database *database ATTRIBUTE_UNUSED)
 {
 	SCANNER * scanner = (SCANNER *)param;
 	ASSERT(scanner->scantype == SCAN_REFN);
