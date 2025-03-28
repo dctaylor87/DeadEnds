@@ -300,7 +300,7 @@ init_display_indi (GNode *irec, int width)
 {
 	GNode *pers=nztop(irec);
 	GNode *this_fam = 0;
-	int nsp, nch, num, nm;
+	int nsp, nch;
 	String s;
 	GNode *fth;
 	GNode *mth;
@@ -441,7 +441,7 @@ init_display_fam (GNode *frec, int width)
 	GNode *husb=0, *wife=0;
 	String s=0;
 	ZSTR famkey = zs_news(nxref(fam));
-	int nch, nm, wtemp;
+	int nch, wtemp;
 	String father = _(qSdspl_fath);
 	String mother = _(qSdspl_moth);
 	GNode *ihusb=0, *iwife=0;
@@ -548,7 +548,6 @@ show_fam_vitals (UIWINDOW uiwin, GNode *frec, int row, int hgt
 	int i;
 	int localrow;
 	int overflow;
-	char buf[132];
 	int maxcol = width-1;
 	WINDOW * win = uiw_win(uiwin);
 	struct tag_llrect rect;
