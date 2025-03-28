@@ -69,7 +69,6 @@
 #include "ll-addoperations.h"
 #include "browse.h"
 #include "refns.h"
-#include "xreffile.h"
 #include "name.h"
 #include "xref.h"
 
