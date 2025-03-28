@@ -54,6 +54,7 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
+#include "writenode.h"
 #include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
@@ -64,84 +65,76 @@
 #include "de-strings.h"
 #include "import.h"
 #include "codesets.h"
+#include "version.h"
+#include "editing.h"
+#include "dateprint.h"
+#include "loadsave.h"
 
-/*================================
- * load_gedcom -- have user select gedcom file & import it
- *==============================*/
+/* local variables */
+
+static XLAT xlat_gedout; /* TODO: could do away with this via param to traverse */
+
+static char *mabbv[] =
+  {
+    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
+  };
+
+/* load_gedcom -- have user select gedcom file & import it.  */
+
+/* LifeLines first validates the file and then reads the file
+   a second time putting it into the database.  But, DeadEnds
+   is different -- it reads the file once, creates the
+   database, validates it, and then if there are errors,
+   throws away the database.
+
+   Since we are potentially adding to an existing database, we
+   do it slighly differently.  We create a new database, we
+   validate it, if errors, we discard.  If no errors, we merge
+   into the existing database and discard the new database.
+
+   There are two arguments -- picklist and database.
+
+   For the old (LifeLines) behavior, database is the database
+   to merge into (likely currentDatabase).  If database is
+   NULL, then this will be a way to create a new database from
+   the curses UI.  */
 
 void
 load_gedcom (bool picklist, Database *database)
 {
-#if !defined(DEADENDS)
-	FILE *fp=NULL;
-	ImportFeedback ifeed;
-#endif
 	String srcdir=NULL;
 	String fullpath=0;
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 
 	srcdir = getdeoptstr("InputPath", ".");
-#if defined(DEADENDS)
 	if (! ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)) {
 		strfree(&fullpath);
 		return;
 	}
-#else
-	if (!ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)
-		|| !(fp = fopen(fullpath, DEREADBINARY))) {
-		strfree(&fullpath);
-		return;
-	}
-#endif
-	/*
-	Note: we read the file in binary mode, so ftell & fseek will work correctly.
-	Microsoft's ftell/fseek do not work correctly if the file has simple unix (\n)
-	line terminations! -- Perry, 2003-02-11
-	*/
 
-#if defined(DEADENDS)
-	/* LifeLines first validates the file and then reads the file
-	   a second time putting it into the database.  But, DeadEnds
-	   is different -- it reads the file once, creates the
-	   database, validates it, and then if there are errors,
-	   throws away the database.
-
-	   Since we are potentially adding to an existing database, we
-	   do it slighly differently.  We create a new database, we
-	   validate it, if errors, we discard.  If no errors, we merge
-	   into the existing database and discard the new database.
-
-	   Currently, there is one argument -- picklist, later there
-	   will be two arguments -- picklist and database.  For the
-	   old behavior, database will be the database to merge into
-	   (likely currentDatabase).  If database is NULL, then this
-	   will be a way to create a new database from the curses
-	   UI.  */
 	ErrorLog *errorLog = createErrorLog ();
 	Database *newDB = selectAndOpenDatabase (&fullpath, srcdir, database, errorLog);
 
 	if (newDB)
 	  {
-	    /* XXX delete error log XXX */
+	    /* if database is non-NULL, then the file was merged into
+	       database, newDB == database, and the database list does
+	       not need to be updated.  */
+	    if (! database)
+	      {
+		/* otherwise newDB is truly new.  Add it to the
+		   database list.  */
+		insertInDatabaseList (newDB);
+	      }
 	  }
-#else
-	memset(&ifeed, 0, sizeof(ifeed));
-	ifeed.if_validating_fnc = import_validating;
-	ifeed.if_validated_rec_fnc = import_validated_rec;
-	ifeed.if_beginning_import_fnc = import_beginning_import;
-	ifeed.if_error_invalid_fnc = import_error_invalid;
-	ifeed.if_error_readonly_fnc = import_readonly;
-	ifeed.if_adding_unused_keys_fnc = import_adding_unused_keys;
-	ifeed.if_added_rec_fnc = import_added_rec;
-	ifeed.if_validation_error_fnc = import_validation_error;
-	ifeed.if_validation_warning_fnc =  import_validation_warning;
-
-	import_from_gedcom_file(&ifeed, fp);
-	
-	fclose(fp);
-	strfree(&fullpath);
-#endif
+	else
+	  {
+	    /* XXX selectAndOpenDatabase failed, show the error log
+	       and offer to put it into a file.  XXX */
+	  }
+	deleteErrorLog (errorLog);
 
 	int duration = time(NULL) - begin;
 	int uitime = get_uitime() - beginui;
@@ -159,7 +152,6 @@ load_gedcom (bool picklist, Database *database)
 	wpos(15,0);
 }
 
-#if 0				/* not yet */
 /*================================
  * save_gedcom -- save gedcom file
  *==============================*/
@@ -168,7 +160,7 @@ bool
 save_gedcom (Database *database)
 {
 	FILE *fp=NULL;
-	struct tag_export_feedback efeed;
+	//struct tag_export_feedback efeed;
 	String srcdir=NULL, fname=0, fullpath=0;
 
 	if (! database)
@@ -181,23 +173,85 @@ save_gedcom (Database *database)
 		msg_error("%s", _("The database was not saved."));
 		return false; 
 	}
-	prefix_file_for_gedcom(fp);
 
-	memset(&efeed, 0, sizeof(efeed));
-	efeed.added_rec_fnc = export_saved_rec;
+	llwprintf(_("Saving database `%s' in file `%s'."), database->name, fullpath);
 
-	llwprintf(_("Saving database `%s' in file `%s'."), readpath_file, fullpath);
+	write_header (fp);
 
-	/* Display 0 counts */
-	clear_rec_counts(0);
+	write_body (fp, database);
 
-	archive_in_file(&efeed, database, fp);
+	write_trailer (fp);
 	fclose(fp);
 
 	wpos(7,0);
-	msg_info(_(qSoutfin), readpath_file, fname);
+	msg_info(_(qSoutfin), database->name, fname);
 	strfree(&fname);
 	
 	return true;
 }
-#endif
+
+/* XXX needs to be adapted for DE.  We should support GEDCOM 5.5.1 or
+   7.0.  And we should consider having the get..opt.. functions take a
+   Database* as an argument -- that is, I can imagine having Database
+   specific option values.  XXX */
+
+void
+write_header (FILE *fp)
+{
+  char dat[30]="", tim[20]="";
+  struct tm *pt=0;
+  time_t curtime;
+  String str=0;
+  xlat_gedout = transl_get_predefined_xlat(MINGD); /* internal to GEDCOM */
+
+  /* reportedly needed on Windwos; neither Linux nor MacOS needs it.  */
+  prefix_file_for_gedcom(fp);
+
+  curtime = time(NULL);
+  pt = localtime(&curtime);
+  snprintf(dat, sizeof(dat), "%d %s %d", pt->tm_mday, mabbv[pt->tm_mon],
+	   1900 + pt->tm_year);
+  snprintf(tim, sizeof(tim), "%d:%.2d", pt->tm_hour, pt->tm_min);
+
+  fprintf(fp, "0 HEAD\n1 SOUR LIFELINES %s\n1 DEST ANY\n",
+	  get_deadends_version(80));
+
+  /* header date & time */
+  fprintf(fp, "1 DATE %s\n2 TIME %s\n", dat, tim);
+
+  /* header submitter entry */
+  str = getdeoptstr("HDR_SUBM", "1 SUBM");
+  fprintf(fp, "%s\n", str);
+
+  /* header gedcom version info */
+  str = getdeoptstr("HDR_GEDC", "1 GEDC\n2 VERS 5.5\n2 FORM LINEAGE-LINKED");
+  fprintf(fp, "%s\n", str);
+
+  /* header character set info -- should be outcharset; that is what
+     is being used */
+
+  str = getdeoptstr("HDR_CHAR", 0);
+  if (str) {
+    fprintf(fp, "%s\n", str);
+  } else {
+    /* xlat_gedout is the actual conversion used, so
+       we should use the name of its output */
+    CString outcharset = xl_get_dest_codeset(xlat_gedout);
+    fprintf(fp, "1 CHAR %s\n", outcharset);
+  }
+  /* finished header */
+}
+
+void
+write_body (FILE *fp, Database *database)
+{
+  FORHASHTABLE (database->recordIndex, element)
+    writeGNodeRecord (fp, (GNode *) element, false);
+  ENDHASHTABLE
+}
+
+void
+write_trailer (FILE *fp)
+{
+  fprintf (fp, "0 TRLR\n");
+}
