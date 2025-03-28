@@ -22,7 +22,7 @@ llines_SOURCES = add.c advedit.c askgedc.c askprogram.c \
 	browse.c brwsmenu.c \
 	cscurses.c delete.c dynmenu.c \
 	edit.c interact.c \
-	lbrowse.c listui.c \
+	lbrowse.c listui.c loadsave.c \
 	main.c menuset.c merge.c \
 	newrecs.c pedigree.c \
 	scan.c screen.c searchui.c show.c swap.c \
