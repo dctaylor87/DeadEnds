@@ -7,6 +7,8 @@
 #include "standard.h"
 #include "denls.h"
 #include "de-strings.h"
+#include "zstr.h"
+#include "stdlibi.h"
 
 void
 strfree (String *str)
@@ -42,4 +44,28 @@ allocsubbytes (String s, int start, int num)
 	strncpy(substr, &s[start], num);
 	substr[num] = 0;
 	return substr;
+}
+
+/* ll_what_collation -- get string describing collation in use.  */
+
+CString
+ll_what_collation (void)
+{
+  int rtn;
+
+#ifdef HAVE_WCSCOLL
+  {
+    ZSTR zstr = makewide("test");
+    rtn = (zstr != 0);
+    zs_free(&zstr);
+    if (rtn)
+      return "wcscoll";
+  }
+#endif
+
+#ifdef HAVE_STRCOLL
+  return "strcoll";
+#else
+  return "strcmp";
+#endif
 }
