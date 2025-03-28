@@ -32,8 +32,6 @@ extern int32_t xref_max_sours (void);
 extern int32_t xref_max_evens (void);
 extern int32_t xref_max_othrs (void);
 
-extern int32_t xref_max_any (void);
-
 extern String newixref (CString xrefp, bool flag);
 extern String newfxref (CString xrefp, bool flag);
 extern String newsxref (CString xrefp, bool flag);
