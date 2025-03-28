@@ -57,3 +57,4 @@ extern void appendstr(String * pdest, int * len, int utf8, CString src);
 extern void strfree (String *str);
 extern void strupdate (String *str, CString value);
 extern String allocsubbytes (String s, int start, int num);
+extern CString ll_what_collation (void);
