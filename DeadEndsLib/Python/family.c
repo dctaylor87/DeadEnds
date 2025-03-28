@@ -396,7 +396,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
   if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */
 
-  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei), chooseTypeDefault);
   deleteSequence (seq);
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
@@ -421,7 +421,7 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
   if (! seq || (seq->block.length < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 
-  record = chooseFromSequence (seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence (seq, DOASK1, _(qSifonei), _(qSnotonei), chooseTypeSpouse);
   deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */

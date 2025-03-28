@@ -36,6 +36,7 @@
 #include "py-set.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "choose.h"
 
 #define MAX_NAME_LENGTH	68 /* see comment in llrpt_fullname (interp/builtin.c) */
 
@@ -717,7 +718,7 @@ static PyObject *llpy_choosechild_i (PyObject *self, PyObject *args ATTRIBUTE_UN
   if (! seq || (seq->block.length < 1))
       Py_RETURN_NONE;	/* no children to choose from */
 
-  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei), chooseTypeDefault);
   deleteSequence (seq);
 
   indi = PyObject_New (LLINES_PY_RECORD, &llines_individual_type);
@@ -748,7 +749,7 @@ static PyObject *llpy_choosespouse_i (PyObject *self, PyObject *args ATTRIBUTE_U
   if (! seq || (seq->block.length < 1))
     Py_RETURN_NONE;		/* no spouses for family */
 
-  record = chooseFromSequence (seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence (seq, DOASK1, _(qSifonei), _(qSnotonei), chooseTypeSpouse);
   deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */
@@ -778,7 +779,7 @@ static PyObject *llpy_choosefam (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
   if (! seq || seq->block.length < 1)
     Py_RETURN_NONE;		/* person is not in any families */
 
-  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei));
+  record = chooseFromSequence(seq, DOASK1, _(qSifonei), _(qSnotonei), chooseTypeFamily);
   deleteSequence (seq);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */

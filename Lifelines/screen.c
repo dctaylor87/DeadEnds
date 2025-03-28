@@ -731,7 +731,8 @@ search_for_one_record (void)
 	namesort_indiseq(seq);
 #endif
 	return chooseFromSequence(seq, DOASK1,
-		_("Search results"), _("Search results"));
+				  _("Search results"), _("Search results"),
+				  chooseTypeDefault);
 }
 /*=====================================
  * main_menu -- Handle main_menu screen

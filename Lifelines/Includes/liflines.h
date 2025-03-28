@@ -43,7 +43,8 @@ GNode *ask_for_indi(CString ttl, ASK1Q ask1);
 bool ask_for_int(CString, int *);
 GNode *ask_for_record(CString, int);
 String ask_for_record_key(CString title, CString prompt);
-GNode *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln);
+GNode *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln,
+			  enum SequenceType type);
 
 /* askgedc.c */
 bool ask_for_gedcom(CString mode, CString ttl, String *pfname, String *pfullpath

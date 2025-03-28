@@ -86,7 +86,7 @@ chooseChild (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
       msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, ask1, msgn, msgn);
+  rec = chooseFromSequence(seq, ask1, msgn, msgn, chooseTypeDefault);
   deleteSequence(seq);
   return rec;
 }
@@ -110,7 +110,7 @@ chooseSpouse (GNode *irec, CString msg0, CString msgn)
       msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
+  rec = chooseFromSequence(seq, NOASK1, NULL, msgn, chooseTypeSpouse);
   deleteSequence(seq);
   return rec;
 }
@@ -132,7 +132,7 @@ chooseSource (GNode *current, CString msg0, CString msgn)
 	msg_error("%s", msg0);
 	return NULL;
       }
-  rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
+  rec = chooseFromSequence(seq, DOASK1, msgn, msgn, chooseTypeDefault);
   deleteSequence(seq);
   return rec;
 }
@@ -157,7 +157,7 @@ chooseNote (GNode *current, CString msg0, CString msgn)
       msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
+  rec = chooseFromSequence(seq, DOASK1, msgn, msgn, chooseTypeDefault);
   deleteSequence(seq);
   return rec;
 }
@@ -182,7 +182,7 @@ choosePointer (GNode *current, CString msg0, CString msgn)
       msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, DOASK1, msgn, msgn);
+  rec = chooseFromSequence(seq, DOASK1, msgn, msgn, chooseTypeDefault);
   deleteSequence(seq);
   return rec;
 }
@@ -207,7 +207,7 @@ chooseFamily (GNode *irec, CString msg0, CString msgn, bool fams)
 	msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, NOASK1, NULL, msgn);
+  rec = chooseFromSequence(seq, NOASK1, NULL, msgn, chooseTypeFamily);
   deleteSequence(seq);
   return rec;
 }
@@ -241,7 +241,7 @@ chooseFather (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
       msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, ask1, msgn, msgn);
+  rec = chooseFromSequence(seq, ask1, msgn, msgn, chooseTypeDefault);
   deleteSequence(seq);
   return rec;
 }
@@ -275,7 +275,7 @@ chooseMother (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
       msg_error("%s", msg0);
       return NULL;
     }
-  rec = chooseFromSequence(seq, ask1, msgn, msgn);
+  rec = chooseFromSequence(seq, ask1, msgn, msgn, chooseTypeDefault);
   deleteSequence(seq);
   return rec;
 }

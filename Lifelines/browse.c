@@ -301,7 +301,7 @@ main_browse (GNode *rec1, int code)
 static GNode *
 goto_indi_child (GNode *irec, int childno)
 {
-  int num1, num2;
+  int num1;
   GNode *answer = 0;
   CString akey=0; /* answer key */
   GNode *indi = nztop(irec);
@@ -327,7 +327,6 @@ goto_indi_child (GNode *irec, int childno)
 static GNode *
 goto_fam_child (GNode *frec, int childno)
 {
-  int num;
   GNode *answer = 0;
   CString akey=0;
   GNode *fam = nztop(frec);
@@ -1480,7 +1479,7 @@ chooseAnySource (void)
 		msg_error("%s", _(qSnosour));
 		return 0;
 	}
-	rec = chooseFromSequence(seq, DOASK1, _(qSidsour), _(qSidsour));
+	rec = chooseFromSequence(seq, DOASK1, _(qSidsour), _(qSidsour), chooseTypeDefault);
 	deleteSequence(seq);
 	return rec;
 }
@@ -1498,7 +1497,7 @@ chooseAnyEvent (void)
 		msg_error("%s", _(qSnoeven));
 		return NULL;
 	}
-	rec = chooseFromSequence(seq, DOASK1, _(qSideven), _(qSideven));
+	rec = chooseFromSequence(seq, DOASK1, _(qSideven), _(qSideven), chooseTypeDefault);
 	deleteSequence(seq);
 	return rec;
 }
@@ -1516,7 +1515,7 @@ chooseAnyOther (void)
 		msg_error("%s", _(qSnoothe));
 		return NULL;
 	}
-	rec = chooseFromSequence(seq, DOASK1, _(qSidothe), _(qSidothe));
+	rec = chooseFromSequence(seq, DOASK1, _(qSidothe), _(qSidothe), chooseTypeDefault);
 	deleteSequence(seq);
 	return rec;
 }
@@ -1888,7 +1887,7 @@ do_disp_history_list (struct hist * histp)
 		msg_error("%s", _(qSnohist));
 		return NULL;
 	}
-	rec = chooseFromSequence(seq, DOASK1, _(qSidhist), _(qSidhist));
+	rec = chooseFromSequence(seq, DOASK1, _(qSidhist), _(qSidhist), chooseTypeDefault);
 	deleteSequence(seq);
 	return rec;
 }

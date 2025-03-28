@@ -355,9 +355,9 @@ ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
 	/* might be a single-entry indiseq, but if so still need to confirm */
 	ASSERT(*prc == RC_SELECT);
 	if (ctype == 'I') {
-		indi = chooseFromSequence(seq, ask1, _(qSifonei), _(qSnotonei));
+		indi = chooseFromSequence(seq, ask1, _(qSifonei), _(qSnotonei), chooseTypeDefault);
 	} else {
-		indi = chooseFromSequence(seq, ask1, _(qSifonex), _(qSnotonex));
+		indi = chooseFromSequence(seq, ask1, _(qSifonex), _(qSnotonex), chooseTypeDefault);
 	}
 	deleteSequence(seq);
 	*prc = indi ? RC_SELECT : RC_NOSELECT;
@@ -465,7 +465,8 @@ chooseOneFromSequenceIfNeeded (Sequence *seq, ASK1Q ask1, CString titl1
  *  titln: [IN]  title if sequence has multiple elements
  *=====================================================*/
 GNode *
-chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln)
+chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln,
+		    enum SequenceType type)
 {
 	int i = 0;
 	GNode *rec=0;
@@ -508,7 +509,7 @@ ask_for_record (CString idstr, int letr)
 		seq = refnToSequence(answer, currentDatabase->recordIndex,
 				     currentDatabase->nameIndex);
 		if (!seq) return NULL;
-		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn));
+		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn), chooseTypeDefault);
 		deleteSequence(seq);
 	}
 	return rec;
