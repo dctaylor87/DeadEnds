@@ -25,6 +25,7 @@
 #include "zstr.h"
 #include "refnindex.h"
 #include "gnode.h"
+#include "errors.h"
 #include "translat.h"
 #include "feedback.h"
 #include "date.h"
@@ -270,7 +271,6 @@ prefix_file_for_edit (FILE *fp)
 	prefix_file(fp, ttmo);
 }
 
-#if 1 /* !defined(DEADENDS) */
 /*=====================================
  * prefix_file_for_gedcom - write BOM prefix to file if appropriate
  *  This handles prepending BOM (byte order mark) to UTF-8 files
@@ -291,7 +291,6 @@ prefix_file_for_report (FILE *fp)
 	XLAT ttmo = transl_get_predefined_xlat(MINRP);
 	prefix_file(fp, ttmo);
 }
-#endif
 
 /*=====================================
  * prefix_file - write BOM prefix to file if appropriate
