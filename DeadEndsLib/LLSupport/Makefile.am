@@ -12,12 +12,14 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	choose.c \
 	codesets.c \
+	datei.c \
 	errlog.c \
 	expandvars.c \
 	gstrings.c \
 	icvt.c \
 	listener.c \
 	ll-addoperations.c \
+	ll-indiseq.c \
 	ll-node.c \
 	ll-node-seq.c \
 	ll-sequence.c \
@@ -38,8 +40,7 @@ libllsupport_a_SOURCES = \
 	valid.c \
 	write.c \
 	xlat.c \
-	xref.c \
-	xreffile.c
+	xref.c
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
