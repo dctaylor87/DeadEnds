@@ -28,6 +28,7 @@ void msg_info(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
 	/* report transitory state that should not be preserved */
 void msg_status(CString fmt, ...) ATTRIBUTE_PRINTF(1,2);
 	/* more longwinded ways */
+void msg_errorlog (ErrorLog *errorLog);
 typedef enum { MSG_ERROR=-1, MSG_INFO, MSG_STATUS } MSG_LEVEL;
 void msg_output(MSG_LEVEL, CString fmt, ...) ATTRIBUTE_PRINTF(2,3);
 void msg_outputv(MSG_LEVEL, CString fmt, va_list args);

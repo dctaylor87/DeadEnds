@@ -15,7 +15,7 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"		/* ASSERT */
-//#include "denls.h"
+#include "errors.h"
 
 #include "messages.h"
 #include "feedback.h"
@@ -71,6 +71,30 @@ msg_status (CString fmt, ...)
   va_start(args, fmt);
   msg_outputv(MSG_STATUS, fmt, args);
   va_end(args);
+}
+
+/* print an error log */
+
+void
+msg_errlog (ErrorLog *errorLog)
+{
+  if (! errorLog)
+    {
+      msg_output (MSG_ERROR, "Error log does not exist.\n");
+      return;
+    }
+  else if (lengthList (errorLog) == 0)
+    {
+      msg_output (MSG_ERROR, "Error log is empty.\n");
+      return;
+    }
+  FORLIST (errorLog, element)
+    Error *error = (Error *) element;
+    msg_output (MSG_ERROR, "error in '%s' line %d: %s.\n",
+		(error->fileName ? error->fileName : ""),
+		error->lineNumber,
+		(error->message ? error->message : "unknown"));
+  ENDLIST
 }
 
 /* msg_output -- handle any message
