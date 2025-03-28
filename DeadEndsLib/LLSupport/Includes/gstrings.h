@@ -7,7 +7,7 @@ extern String even_to_list_string (GNode *even, int len, String delim);
 extern String fam_to_list_string (GNode *fam, int len, String delim,
 				  Database *database);
 extern String other_to_list_string(GNode *node, int len, String delim);
-extern String generic_to_list_string (GNode *node, String key, int len,
+extern String generic_to_list_string (GNode *node, CString key, int len,
 				      String delim, bool rfmt, bool appkey,
 				      Database *database);
 extern void set_displaykeys (bool keyflag);

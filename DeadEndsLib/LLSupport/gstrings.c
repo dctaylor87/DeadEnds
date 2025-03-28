@@ -387,7 +387,7 @@ other_to_list_string(GNode *node, int len, ATTRIBUTE_UNUSED String delim)
  *  appkey: [IN]  allow appending key ?
  *=========================================*/
 String
-generic_to_list_string (GNode *node, String key, int len, String delim,
+generic_to_list_string (GNode *node, CString key, int len, String delim,
 			bool rfmt, bool appkey, Database *database)
 {
 	String str = 0;
