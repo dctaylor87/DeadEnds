@@ -59,3 +59,6 @@ extern void releasePersonKey (Database *databas, CString key);
 extern void releaseSourceKey (Database *database, CString key);
 extern void releaseEventKey (Database *database, CString key);
 extern void releaseOtherKey (Database *database, CString key);
+
+extern uint64_t xref_max_any (Database *database);
+extern CString value_to_xref (CString val);
