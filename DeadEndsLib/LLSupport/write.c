@@ -51,7 +51,7 @@ static String swrite_nodes(int levl, GNode *node, String p);
 #endif
 static bool should_write_bom(void);
 static void write_fam_to_file(GNode *fam, CString file);
-static void write_indi_to_file(GNode *indi, CString file);
+//static void write_indi_to_file(GNode *indi, CString file);
 static void write_node(int levl, FILE *fp, XLAT ttm,
 	GNode *node, bool indent);
 
@@ -270,7 +270,7 @@ prefix_file_for_edit (FILE *fp)
 	prefix_file(fp, ttmo);
 }
 
-#if !defined(DEADENDS)
+#if 1 /* !defined(DEADENDS) */
 /*=====================================
  * prefix_file_for_gedcom - write BOM prefix to file if appropriate
  *  This handles prepending BOM (byte order mark) to UTF-8 files
