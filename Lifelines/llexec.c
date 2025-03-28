@@ -54,11 +54,11 @@
 #include "sequence.h"
 #include "hashtable.h"
 #include "database.h"		/* currentDatabase */
+#include "errors.h"
 #include "ask.h"
 #include "feedback.h"
 #include "uiio.h"
 #include "llinesi.h"
-#include "errors.h"
 #include "liflines.h"
 #include "messages.h"
 #include "xlat.h"
@@ -105,9 +105,6 @@ bool debugmode = false;     /* no signal handling, so we can get coredump */
 bool opt_nocb  = false;     /* no cb. data is displayed if TRUE */
 bool keyflag   = true;      /* show key values */
 int alldone       = 0;         /* completion flag */
-extern bool progrunning;
-extern bool progparsing;
-extern int     progerror;
 bool traditional = true;    /* use traditional family rules */
 bool showusage = false;     /* show usage */
 bool showversion = false;   /* show version */
@@ -253,7 +250,7 @@ prompt_for_db:
 	if (exprogs) {
 		bool picklist = false;
 		bool timing = false;
-		interp_main(exprogs, progout, picklist, timing);
+		interp_main(exprogs, currentDatabase, progout, picklist, timing);
 		deleteList(exprogs);
 	} else {
 		/* TODO: prompt for report filename */
