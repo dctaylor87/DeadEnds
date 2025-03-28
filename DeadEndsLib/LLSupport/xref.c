@@ -498,3 +498,32 @@ xref_max_any (Database *database)
 
   return (maxkey);
 }
+
+/* value_to_xref -- in DeadEnds, unlike LifeLines, keys contain the '@'s.
+   So, after verifying that it is a proper LL/DE key
+
+   '@' <one of the five letters I,F,S,E,X> <numbers> '@'
+
+   rather than strip the '@'s, and return the result, we just return it.  */
+
+CString value_to_xref (CString val)
+{
+  const char *cur = val;
+  if ((! cur) || (*cur != '@') || (strlen (cur) < 4) ||
+      (cur[strlen(cur) - 1] != '@'))
+    return NULL;
+  cur++;
+
+  if ((*cur != 'I') && (*cur != 'F') && (*cur != 'S') &&
+      (*cur != 'E') && (*cur != 'X'))
+    return NULL;
+
+  while (isdigit (*cur))
+    cur++;
+  if (*cur != '@')
+    return NULL;
+  cur++;
+  if (*cur != '\0')
+    return NULL;
+  return val;
+}
