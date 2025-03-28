@@ -59,6 +59,8 @@
 #include "llabort.h"
 #include "messages.h"
 #include "init.h"
+#include "readwrite.h"
+#include "loadsave.h"		/* approx_time */
 
 ErrorLog *globalErrorLog = 0;
 
@@ -164,4 +166,39 @@ void
 sighand_cmdline(int sig ATTRIBUTE_UNUSED)
 {
   exit(1);
+}
+
+/* approx_time -- display duration specified in seconds
+   eg, approx_time(70000) returns "19h26m".  */
+ 
+ZSTR
+approx_time (int seconds)
+{
+  int minutes, hours, days, years;
+  minutes = seconds/60;
+  if (!minutes) {
+    /* TRANSLATORS: seconds time interval */
+    return zs_newf(_(FMT_INT_02 "s"), seconds);
+  }
+  seconds = seconds - minutes*60;
+  hours = minutes/60;
+  if (!hours) {
+    /* TRANSLATORS: minutes & seconds time interval */
+    return zs_newf(_(FMT_INT "m" FMT_INT_02 "s"), minutes, seconds);
+  }
+  minutes = minutes - hours*60;
+  days = hours/60;
+  if (!days) {
+    /* TRANSLATORS: hours & minutes time interval */
+    return zs_newf(_(FMT_INT "h" FMT_INT_02 "m"), hours, minutes);
+  }
+  hours = hours - days*24;
+  years = days/365.2425;
+  if (!years) {
+    /* TRANSLATORS: days & hours time interval */
+    return zs_newf(_(FMT_INT "d" FMT_INT_02 "h"), days, hours);
+  }
+  days = days - years*365.2425;
+  /* TRANSLATORS: years & days time interval */
+  return zs_newf( _(FMT_INT "y" FMT_INT_03 "d"), years, days);
 }
