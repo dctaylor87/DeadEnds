@@ -108,6 +108,13 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
 		return nullPValue;
 	}
 	bool aflag = pvalue.value.uBool;
+#if 1
+	CString errorMessage = null;
+	bool success = setScriptOutputFile (name, aflag, &errorMessage);
+	if (! success)
+	  scriptError (pnode, "%s %s", errorMessage, name);
+	return nullPValue;
+#else
 	if (Poutfp) {
 		finishrassa();
 		fclose(Poutfp);
@@ -118,7 +125,28 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
 		scriptError(pnode, "Could not open file %s", name);
 		return nullPValue;
 	}
+#endif
 	return nullPValue;
+}
+
+bool
+setScriptOutputFile (CString filename, bool append, CString *errorMessage)
+{
+  if (Poutfp) {
+    finishrassa();
+    fclose(Poutfp);
+    Poutfp = null;
+  }
+  if (filename) {
+    outfilename = strsave(filename);
+    if (! (Poutfp = fopenPath (filename, (append ? "a" : "w"), "." /*llprograms*/))) {
+      *errorMessage = "Could not open file";
+      return false;
+    }
+  } else
+    outfilename = null;
+
+  return true;
 }
 
 // __outfile returns the name of the script output file.
@@ -230,7 +258,7 @@ PValue __pageout(PNode* pnode, Context* context, bool* errflg) {
 }
 
 // adjustCols adjusts the column after printing a string
-void adjustCols(String string) {
+static void adjustCols(String string) {
 	int c;
 	while ((c = *string++)) {
 		if (c == '\n')

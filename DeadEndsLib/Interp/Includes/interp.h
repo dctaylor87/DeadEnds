@@ -89,6 +89,7 @@ PNode* string_node(String);
 int yylex(void);
 int yyparse(ErrorLog *errorLog);
 
+bool setScriptOutputFile (CString filename, bool append, CString *errorMessage);
 void poutput(String);
 //void interp_main(void);
 
