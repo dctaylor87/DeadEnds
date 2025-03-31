@@ -127,7 +127,7 @@ load_gedcom (bool picklist, Database *database)
 	      {
 		/* otherwise newDB is truly new.  Add it to the
 		   database list.  */
-		insertInDatabaseList (newDB);
+		//insertInDatabaseList (newDB);  /* XXX someday XXX */
 	      }
 	  }
 	else
