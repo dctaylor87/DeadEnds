@@ -10,6 +10,7 @@ bin_PROGRAMS = llines llexec
 common_SOURCES = \
 	environ.c \
 	init.c \
+	interp-prog.c \
 	lines_usage.c \
 	llabort.c \
 	miscutls.c \
