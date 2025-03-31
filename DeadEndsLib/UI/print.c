@@ -76,7 +76,7 @@ msg_status (CString fmt, ...)
 /* print an error log */
 
 void
-msg_errlog (ErrorLog *errorLog)
+msg_errorlog (ErrorLog *errorLog)
 {
   if (! errorLog)
     {
