@@ -104,7 +104,7 @@ notify_listeners (List **notifiees)
 {
 	struct callback_info * info;
 	List  *list;
-	if (!notifiees || isEmptyList(*notifiees))
+	if (!notifiees || ! *notifiees || isEmptyList(*notifiees))
 		return;
 	list = *notifiees;
 	FORLIST(list, el)
