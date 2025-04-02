@@ -82,11 +82,29 @@ selectAndOpenDatabase(CString *dbFilename,
   //  database = gedcomFileToDatabase (newName, errorLog);
   database = getDatabaseFromFile (newName, 0, errorLog);
 
+  if (! database)
+    {
+      /* there were errors */
+      msg_errorlog (errorLog);
+      if (saveErrorLog (ImportLog, errorLog))
+	msg_error ("Import errors have been saved in %s\n", ImportLog);
+      else
+	msg_error ("Attempt to save import errors to %s failed\n", ImportLog);
+      return NULL;
+    }
   if (oldDatabase)
     {
       if (! checkForRefnOverlap (database, oldDatabase, errorLog))
 	/* we're trying to do a merge and there is overlap, give the bad news */
-	return NULL;
+	{
+	  /* there were errors */
+	  msg_errorlog (errorLog);
+	  if (saveErrorLog (ImportLog, errorLog))
+	    msg_error ("Import errors have been saved in %s\n", ImportLog);
+	  else
+	    msg_error ("Attempt to save import errors to %s failed\n", ImportLog);
+	  return NULL;
+	}
     }
 
   bool standardKeys = databaseHasStandardKeys (database);
@@ -96,7 +114,18 @@ selectAndOpenDatabase(CString *dbFilename,
 
   if (oldDatabase || ! standardKeys)
     /* need to rekey the new database, figure out the starting key values */
-    rekeyDatabase (database, oldDatabase, errorLog);
+    {
+      if (! rekeyDatabase (database, oldDatabase, errorLog))
+	{
+	  /* there were errors */
+	  msg_errorlog (errorLog);
+	  if (saveErrorLog (ImportLog, errorLog))
+	    msg_error ("Import errors have been saved in %s\n", ImportLog);
+	  else
+	    msg_error ("Attempt to save import errors to %s failed\n", ImportLog);
+	  return NULL;
+	}
+    }
 
   /* no failures from here on out, update dbFilename -- newName was
      malloc'ed by resolveFile */

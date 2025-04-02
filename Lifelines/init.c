@@ -85,6 +85,7 @@ HashTable *placabbvs=NULL;	/* table for place abbrevs */
 String editstr=NULL; /* edit command to run to edit (has editfile inside of it) */
 String editfile=NULL; /* file used for editing, name obtained via mktemp */
 String readpath = NULL;		/* path to database */
+String ImportLog = NULL;	/* where to put import errors */
 
 /*********************************************
  * external/imported variables
@@ -191,6 +192,12 @@ init_lifelines_global (String configfile, String * pmsg)
 	editfile = strsave(editfile );
 	editstr = (String) stdalloc(strlen(e) + strlen(editfile) + 2);
 	snprintf(editstr, strlen(e) + strlen(editfile) + 2, "%s %s", e, editfile);
+
+	/* this should be done after the config file(s), if any, are
+	   read in case they set ImportLog.  And before the first
+	   database is opened.  */
+	ImportLog = getdeoptstr ("ImportLog", "errs.log");
+
 #if !defined(DEADENDS)		/* usersort is not used by DEADENDS */
 	set_usersort(custom_sort);
 #endif

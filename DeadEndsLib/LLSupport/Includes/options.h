@@ -18,6 +18,8 @@ extern String progout;
 extern bool graphical;
 extern String configfile;
 
+extern String ImportLog;	/* file location of import errors */
+
 extern bool python_interactive;
 extern bool have_python_scripts;
 
