@@ -121,5 +121,6 @@ bool saveErrorLog (String filename, ErrorLog *errorLog)
     return false;
 
   showErrorLog_1 (file, errorLog);
+  fclose (file);
   return true;
 }
