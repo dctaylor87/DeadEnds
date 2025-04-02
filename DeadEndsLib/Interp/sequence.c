@@ -851,8 +851,9 @@ Sequence* keyToSequence(CString key, RecordIndex* index) {
 // refnToSequence returns a single element Sequence with the record with given refn value; or null.
 Sequence* refnToSequence(CString value, RecordIndex* index, RefnIndex* findex) {
 	String recordKey = searchRefnIndex(findex, value);
+	if (! recordKey) return null;
 	GNode* record = getRecord(recordKey, index);
-	if (!record) return null;
+	if (!record) return null;	// SHOULD NOT HAPPEN -- DATABASE IS INCONSISTENT!
 	Sequence* sequence = createSequence(index);
 	appendToSequence(sequence, recordKey, null);
 	return sequence;
