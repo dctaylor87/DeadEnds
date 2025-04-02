@@ -214,11 +214,8 @@ prompt_for_db:
 	bool runningInterpreter = false;
 	if (exprogs || have_python_scripts || python_interactive)
 	  runningInterpreter = true;
-	if (uiio_pre_database_init (current_uiio, runningInterpreter))
+	if (! uiio_pre_database_init (current_uiio, runningInterpreter))
 	    goto finish;
-
-	/* give interpreter its turn at initialization */
-	initializeInterpreter(currentDatabase);
 
 	c = argc - optind;
 	if (c > 1) {
@@ -252,6 +249,9 @@ prompt_for_db:
 	      goto finish;
 	    }
 	}
+	/* give interpreter its turn at initialization */
+	initializeInterpreter(currentDatabase);
+
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
 		llwprintf("%s", _(qSbaddb));
