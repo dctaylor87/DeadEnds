@@ -122,7 +122,8 @@ init_codesets (void)
 	if (!defval || !defval[0])
 		defval = "ASCII";
 	stdfree (defcodeset);
-	defcodeset = defval;
+	if (defval)
+	  defcodeset = strsave (defval);
 	/*
 	We are using Markus Kuhn's emulator for systems without nl_langinfo
 	see arch/langinfo.c
