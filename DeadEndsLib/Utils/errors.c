@@ -55,7 +55,7 @@ Error* createError(ErrorType type, CString fileName, int lineNumber, String mess
 	memset(error, 0, sizeof(Error));
 	error->type = type;
 	error->severity = severeError;
-	error->fileName = fileName;  // Do not free.
+	error->fileName = strsave(fileName);
 	error->lineNumber = lineNumber;
 	error->message = strsave(message);
 	if (debugging) printf("CREATE ERROR: %s, %d, %s\n", fileName, lineNumber, message);
@@ -70,6 +70,7 @@ void setSeverityError(Error* error, ErrorSeverity severity) {
 // deleteError deletes an Error.
 void deleteError (Error* error) {
 	if (error->message) stdfree(error->message);
+	if (error->fileName) stdfree(error->fileName);
 	stdfree(error);
 }
 
