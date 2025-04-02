@@ -214,7 +214,9 @@ init_lifelines_global (String configfile, String * pmsg)
 bool
 init_lifelines_postdb (void)
 {
+#if !defined(DEADENDS)
 	String emsg;
+#endif
 	StringTable *dbopts = createStringTable(NUMBER_OPTION_BUCKETS);
 
 	tagtable = createStringTable(NUMBER_TAG_BUCKETS); /* values are same as keys */
@@ -281,7 +283,10 @@ update_useropts (ATTRIBUTE_UNUSED void *uparm)
 		return;
 	/* deal with db-specific options */
 	/* includes setting int_codeset */
-#if !defined(DEADENDS)
+#if defined(DEADENDS)
+	if (currentDatabase)
+		update_db_options();
+#else
 	if (def_lldb)
 		update_db_options();
 #endif
