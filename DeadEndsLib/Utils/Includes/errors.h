@@ -45,6 +45,7 @@ extern void setSeverityError(Error *error, ErrorSeverity severity);
 void deleteError(Error*);
 void addErrorToLog(ErrorLog*, Error*);
 void showErrorLog(ErrorLog*);
-void showError(Error*);
+void showError(FILE *, Error*);
+bool saveErrorLog (String filename, ErrorLog *errorLog);
 
 #endif // errors_h

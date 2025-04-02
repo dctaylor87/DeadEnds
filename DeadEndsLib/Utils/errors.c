@@ -11,6 +11,9 @@
 #define NUMKEYS 64
 static bool debugging = false;
 
+/* forward reference */
+static showErrorLog_1 (FILE *file, ErrorLog *errorLog);
+
 // getKey returns the comparison key of an error.
 static CString getKey(const void* error) {
 	static char buffer[NUMKEYS][128];
@@ -77,11 +80,11 @@ void addErrorToLog (ErrorLog* errorLog, Error* error) {
 }
 
 // showError shows an Error on standard output.
-void showError(Error* error) {
-	printf("error");
-	if (error->fileName) printf(" in %s", error->fileName);
-	if (error->lineNumber) printf(" line %d:", error->lineNumber);
-	if (error->message) printf(": %s.\n", error->message);
+void showError(FILE *file, Error* error) {
+	fprintf(file, "error");
+	if (error->fileName) fprintf(file, " in %s", error->fileName);
+	if (error->lineNumber) fprintf(file, " line %d:", error->lineNumber);
+	if (error->message) fprintf(file, ": %s.\n", error->message);
 }
 
 // deleteErrorLog deletes an ErrorLog.
@@ -91,17 +94,32 @@ void deleteErrorLog(ErrorLog* errorLog) {
 
 // showErrorLog shows the contents of an ErrorLog on standard output.
 void showErrorLog(ErrorLog* errorLog) {
+  showErrorLog_1 (stdout, errorLog);
+}
+
+static showErrorLog_1 (FILE *file, ErrorLog *errorLog) {
 	if (!errorLog) {
-		printf("Error log does not exist.\n");
+		fprintf(file, "Error log does not exist.\n");
 		return;
 	}
 	if (lengthList(errorLog) == 0) {
-		printf("Error log is empty.\n");
+		fprintf(file, "Error log is empty.\n");
 		return;
 	}
-	printf("Error log:\n");
+	fprintf(file, "Error log:\n");
 	sortList(errorLog);
 	FORLIST(errorLog, error)
-		showError((Error*) error);
+		showError(file, (Error*) error);
 	ENDLIST
+}
+
+bool saveErrorLog (String filename, ErrorLog *errorLog)
+{
+  FILE *file = fopen (filename, "w");
+
+  if (! file)
+    return false;
+
+  showErrorLog_1 (file, errorLog);
+  return true;
 }
