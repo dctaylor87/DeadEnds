@@ -33,6 +33,8 @@ void initList(List *list, CString(*getKey)(const void*), int(*compare)(CString, 
 
 // deleteList frees a List and its elements.
 void deleteList(List *list) {
+	if (! list)
+		return;
 	deleteBlock(&(list->block), list->delete);
 	stdfree(list);
 }
