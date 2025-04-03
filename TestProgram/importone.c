@@ -18,8 +18,7 @@
 // importDatabaseTest tests the new import organization.
  Database* importDatabaseTest(ErrorLog* log, int testNumber) {
 	printf("%d: START OF IMPORT DATABASE TEST: %s %s\n", testNumber, "modified.ged", getMsecondsStr());
-	//String gedcomFile = "/Users/ttw4/Desktop/DeadEnds/Gedfiles/modified.ged";
-	String gedcomFile = GEDFILES_DIR "/modified.ged";
+	String gedcomFile = GEDFILES_DIR "/unknownsex.ged";
 	String lastSegment = lastPathSegment(gedcomFile);
 	printf("lastPathSegment: %s\n", lastSegment);
 	int vcodes = 31; // First five bits sest.

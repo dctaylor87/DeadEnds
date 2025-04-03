@@ -4,7 +4,7 @@
 // persons and other record types. It underlies the indiseq data type of DeadEnds Script.
 //
 // Created by Thomas Wetmore on 1 March 2023.
-// Last changed on 13 December 2024.
+// Last changed on 3 April 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -839,9 +839,8 @@ void showSequence(Sequence* sequence, String title) {
 //}
 
 // keyToSequence returns a single element Sequence with the record with the given key; or null.
-// THIS NEEDS TO BE MADE MORE COMPLICATED--I & F optional, @-signs optional.
 Sequence* keyToSequence(CString key, RecordIndex* index) {
-	GNode* record = getRecord(key, index);
+	GNode* record = getRecord(keyToKey(key), index);
 	if (!record) return null;
 	Sequence* sequence = createSequence(index);
 	appendToSequence(sequence, key, null);
@@ -851,9 +850,7 @@ Sequence* keyToSequence(CString key, RecordIndex* index) {
 // refnToSequence returns a single element Sequence with the record with given refn value; or null.
 Sequence* refnToSequence(CString value, RecordIndex* index, RefnIndex* findex) {
 	String recordKey = searchRefnIndex(findex, value);
-	if (! recordKey) return null;
-	GNode* record = getRecord(recordKey, index);
-	if (!record) return null;	// SHOULD NOT HAPPEN -- DATABASE IS INCONSISTENT!
+	if (!recordKey) return null;
 	Sequence* sequence = createSequence(index);
 	appendToSequence(sequence, recordKey, null);
 	return sequence;
