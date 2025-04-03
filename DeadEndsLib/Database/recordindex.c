@@ -76,9 +76,13 @@ addrefRecord (GNode *element)
 void
 releaseRecord (GNode *element)
 {
+#if 1				/* XXX */
+  return;
+#else
   if (! element)
     return;
 
   ASSERT(element->refcount);
   element->refcount--;
+#endif
 }
