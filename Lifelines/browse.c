@@ -426,8 +426,8 @@ browse_indi_modes (GNode **prec1, GNode **prec2, Sequence **pseq, int indimode)
 
 	while (true) {
 		setrecord(&tmp, NULL);
-		if (nestr (nzkey(current), nkeyp)
-			|| indimode != indimodep) {
+		if (! nkeyp || nestr (nzkey(current), nkeyp) ||
+		    (indimode != indimodep)) {
 			show_reset_scroll();
 		}
 		history_record(current, &vhist);
