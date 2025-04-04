@@ -116,9 +116,9 @@ int browse_tandem (GNode **prec1, GNode **prec2, Sequence **pseq)
 	modep = mode;
 
 	while (true) {
-		if (nestr (nzkey(current1), nkey1p)
-		    || nestr(nzkey(current2), nkey2p)
-			|| mode != modep) {
+		if (! nkey1p || nestr (nzkey(current1), nkey1p) ||
+		    ! nkey2p || nestr(nzkey(current2), nkey2p) ||
+		    (mode != modep)) {
 			show_reset_scroll();
 		}
 		display_2indi(current1, current2, mode);
@@ -239,9 +239,9 @@ int browse_2fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 	modep = mode;
 
 	while (true) {
-		if (nestr (nzkey(current1), nkey1p)
-		    || nestr (nzkey(current2), nkey2p)
-			|| mode != modep) {
+		if (! nkey1p || nestr (nzkey(current1), nkey1p) ||
+		    ! nkey2p || nestr (nzkey(current2), nkey2p) ||
+		    (mode != modep)) {
 			show_reset_scroll();
 		}
 		display_2fam(current1, current2, mode);

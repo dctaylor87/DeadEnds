@@ -815,9 +815,9 @@ browse_aux (GNode **prec1, GNode **prec2, Sequence **pseq)
 	auxmodep = auxmode;
 
 	while (true) {
-		if (nestr(nzkey(current), nkeyp)
-		    || (nztype(current) != ntypep)
-		    || (auxmode != auxmodep)) {
+		if (! nkeyp ||nestr(nzkey(current), nkeyp) ||
+		    (nztype(current) != ntypep) ||
+		    (auxmode != auxmodep)) {
 			show_reset_scroll();
 		}
 		ntype = nztype(current);
@@ -1079,8 +1079,8 @@ browse_fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 
 	while (true) {
 		setrecord(&tmp, NULL);
-		if (nestr (nzkey(current), nkeyp)
-			|| fammode != fammodep) {
+		if (! nkeyp || nestr (nzkey(current), nkeyp) ||
+		    (fammode != fammodep)) {
 			show_reset_scroll();
 		}
 		history_record(current, &vhist);
