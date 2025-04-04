@@ -840,10 +840,11 @@ void showSequence(Sequence* sequence, String title) {
 
 // keyToSequence returns a single element Sequence with the record with the given key; or null.
 Sequence* keyToSequence(CString key, RecordIndex* index) {
-	GNode* record = getRecord(keyToKey(key), index);
+	String newKey = keyToKey (key);
+	GNode* record = getRecord(newKey, index);
 	if (!record) return null;
 	Sequence* sequence = createSequence(index);
-	appendToSequence(sequence, key, null);
+	appendToSequence(sequence, newKey, null);
 	return sequence;
 }
 
