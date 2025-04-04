@@ -236,6 +236,15 @@ static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
  * local & exported function definitions
  * body of module
  *********************************************/
+static CString getKey (void * win)
+{
+  return (((UIWINDOW) win)->name);
+}
+
+static compare (CString a, CString b)
+{
+  return strcmp (a, b);
+}
 
 /*============================
  * set_screen_graphical -- Specify whether to use ncurses box characters
@@ -474,7 +483,7 @@ static void
 add_uiwin (UIWINDOW uiwin)
 {
 	if (!list_uiwin)
-		list_uiwin = createList(NULL, NULL, delete_uiwindow_impl, false);
+		list_uiwin = createList(getKey, compare, delete_uiwindow_impl, false);
 	enqueueList(list_uiwin, uiwin);
 }
 /*==========================================
