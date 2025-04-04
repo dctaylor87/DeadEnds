@@ -106,9 +106,9 @@ static bool handle_popup_list_resize(listdisp * ld, int code);
 static void print_list_title(char * buffer, int len, const listdisp * ld, CString ttl);
 static void shw_array_of_strings(String *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
-static void shw_popup_list(Sequence *seq, listdisp * ld);
+static void shw_popup_list(Sequence *seq, listdisp * ld, enum SequenceType type);
 static void shw_recordlist_details(Sequence *seq, listdisp * ld);
-static void shw_recordlist_list(Sequence *seq, listdisp * ld);
+static void shw_recordlist_list(Sequence *seq, listdisp * ld, enum SequenceType type);
 
 /*********************************************
  * local variables
@@ -235,7 +235,7 @@ resize_win: /* we come back here if we resize the window */
  * Localizes ttl
  *===========================================================*/
 int
-chooseOneOrListFromSequence (CString ttl, Sequence *seq, bool multi)
+chooseOneOrListFromSequence (CString ttl, Sequence *seq, bool multi, enum SequenceType type)
 {
 	WINDOW *win=0;
 	int row, done;
@@ -270,7 +270,7 @@ resize_win: /* we come back here if we resize the window */
 	if (first) {
 		elemwidth = ld.rectDetails.right - ld.rectDetails.left + 1;
 		if (lengthSequence(seq)<50)
-		  preprint_indiseq(seq, elemwidth, true, currentDatabase);
+		  preprint_indiseq(seq, elemwidth, true, type, currentDatabase);
 		first=false;
 	}
 	uierase(ld.uiwin);
@@ -283,7 +283,7 @@ resize_win: /* we come back here if we resize the window */
 		int code=0, ret=0;
 		print_list_title(fulltitle, sizeof(fulltitle), &ld, ttl);
 		mvccwaddstr(win, 1, 1, fulltitle);
-		shw_popup_list(seq, &ld);
+		shw_popup_list(seq, &ld, type);
 		wmove(win, row, 11);
 		wrefresh(win);
 		code = interact_popup(ld.uiwin, choices);
@@ -432,7 +432,7 @@ handle_list_cmds (listdisp * ld, int code)
  * shw_popup_list -- Draw list & details of popup list
  *===================================================*/
 static void
-shw_popup_list (Sequence *seq, listdisp * ld)
+shw_popup_list (Sequence *seq, listdisp * ld, enum SequenceType type)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	ASSERT(ld->listlen == lengthSequence(seq));
@@ -444,7 +444,7 @@ shw_popup_list (Sequence *seq, listdisp * ld)
 		row = ld->rectDetails.bottom+1;
 		mvccwaddstr(win, row, ld->rectDetails.left, _("--- LIST ---"));
 	}
-	shw_recordlist_list(seq, ld);
+	shw_recordlist_list(seq, ld, type);
 }
 /*=====================================================
  * shw_recordlist_details -- Draw record details for a list
@@ -503,7 +503,7 @@ handle_popup_list_resize (listdisp * ld, int code)
  * For either popup list or full-screen list (list browse)
  *===================================================*/
 static void
-shw_recordlist_list (Sequence *seq, listdisp * ld)
+shw_recordlist_list (Sequence *seq, listdisp * ld, enum SequenceType type)
 {
 	WINDOW *win = uiw_win(ld->uiwin);
 	int width = (ld->rectList.right - ld->rectList.left + 1) - 4;
@@ -539,7 +539,7 @@ shw_recordlist_list (Sequence *seq, listdisp * ld)
 				snprintf(numstr, sizeof(numstr), FMT_INT ":", i+1);
 				mvccwaddstr(win, row, ld->rectList.left+4, numstr);
 			}
-			print_indiseq_element(seq, i, buffer, width, true, currentDatabase);
+			print_indiseq_element(seq, i, buffer, width, true, type, currentDatabase);
 			mvccwaddstr(win, row, ld->rectList.left+offset, buffer);
 		}
 	}

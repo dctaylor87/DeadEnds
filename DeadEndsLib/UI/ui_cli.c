@@ -48,6 +48,7 @@
 #include "messages.h"
 #include "codesets.h"
 #include "de-strings.h"
+#include "ask.h"
 #include "ui.h"
 
 /*********************************************
@@ -211,7 +212,10 @@ view_array (CString ttl, int no, String *pstrngs)
 }
 
 int
-chooseOneOrListFromSequence (ATTRIBUTE_UNUSED CString ttl, Sequence *seq, ATTRIBUTE_UNUSED bool multi)
+chooseOneOrListFromSequence (ATTRIBUTE_UNUSED CString ttl,
+			     ATTRIBUTE_UNUSED Sequence *seq,
+			     ATTRIBUTE_UNUSED bool multi,
+			     ATTRIBUTE_UNUSED enum SequenceType type)
 {
 #if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* we certainly need the names */

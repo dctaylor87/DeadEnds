@@ -415,7 +415,7 @@ ask_for_indi_list (CString ttl, bool reask)
 			continue;
 		}
 		ASSERT(seq);
-		rc = chooseListFromSequence(_(qSnotonei), seq);
+		rc = chooseListFromSequence(_(qSnotonei), seq, chooseTypeSpouse);
 		if (rc == -1) {
 			deleteSequence(seq);
 			seq = NULL;
@@ -445,13 +445,13 @@ ask_for_indi_key (CString ttl, ASK1Q ask1)
  *  titln: [IN]  title if sequence has multiple elements
  *=============================================================*/
 static int
-chooseOneFromSequenceIfNeeded (Sequence *seq, ASK1Q ask1, CString titl1
-	, CString titln)
+chooseOneFromSequenceIfNeeded (Sequence *seq, ASK1Q ask1, CString titl1,
+			       CString titln, enum SequenceType type)
 {
 	if (lengthSequence(seq) > 1)
-		return chooseOneFromSequence(titln, seq);
+		return chooseOneFromSequence(titln, seq, type);
 	else if (ask1==DOASK1 && titl1)
-		return chooseOneFromSequence(titl1, seq);
+		return chooseOneFromSequence(titl1, seq, type);
 	return 0;
 }
 /*======================================================
@@ -471,7 +471,7 @@ chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln,
 	int i = 0;
 	GNode *rec=0;
 
-	i = chooseOneFromSequenceIfNeeded(seq, ask1, titl1, titln);
+	i = chooseOneFromSequenceIfNeeded(seq, ask1, titl1, titln, type);
 	if (i == -1) return NULL;
 	CString skey;
 

@@ -11,6 +11,7 @@
 #include "denls.h"
 #include "sequence.h"
 #include "errors.h"
+#include "ask.h"
 #include "ui.h"
 #include "messages.h"
 #include "feedback.h"
@@ -122,9 +123,9 @@ chooseFromList (CString ttl, List *list)
    returns index of where user choose select (or -1 if quit)  */
 
 int
-chooseListFromSequence (CString ttl, Sequence *seq)
+chooseListFromSequence (CString ttl, Sequence *seq, enum SequenceType type)
 {
-	return chooseOneOrListFromSequence(ttl, seq, true);
+	return chooseOneOrListFromSequence(ttl, seq, true, type);
 }
 
 /* chooseOneFromSequence --
@@ -134,9 +135,9 @@ chooseListFromSequence (CString ttl, Sequence *seq)
  
 
 int
-chooseOneFromSequence (CString ttl, Sequence *seq)
+chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type)
 {
-	return chooseOneOrListFromSequence(ttl, seq, false);
+	return chooseOneOrListFromSequence(ttl, seq, false, type);
 }
 
 /* yes_no_value -- Convert character to true if y(es)  */

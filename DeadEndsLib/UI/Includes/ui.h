@@ -36,9 +36,9 @@ bool ask_for_filename_impl(CString ttl, CString path, CString prmpt, String buff
 bool ask_for_program (CString mode, CString ttl, String *pfname, String *pfullpath, CString path, CString ext, bool picklist);
 int chooseFromArray (CString ttl, int no, String *pstrngs);
 int chooseFromList (CString ttl, List *list);
-int chooseListFromSequence (CString ttl, Sequence *seq);
-int chooseOneFromSequence (CString ttl, Sequence *seq);
-int chooseOneOrListFromSequence(CString ttl, Sequence *seq, bool multi); /* XXX */
+int chooseListFromSequence (CString ttl, Sequence *seq, enum SequenceType type);
+int chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type);
+int chooseOneOrListFromSequence(CString ttl, Sequence *seq, bool multi, enum SequenceType type); /* XXX */
 int prompt_stdout (CString prompt);
 void view_array (CString ttl, int no, String *pstrngs);
 bool yes_no_value(int c);
