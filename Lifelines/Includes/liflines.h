@@ -41,7 +41,7 @@ GNode *ask_for_indi(CString ttl, ASK1Q ask1);
 
 /* ask.c */
 bool ask_for_int(CString, int *);
-GNode *ask_for_record(CString, int);
+GNode *ask_for_record(CString, int, Database *);
 String ask_for_record_key(CString title, CString prompt);
 GNode *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln,
 			  enum SequenceType type);
