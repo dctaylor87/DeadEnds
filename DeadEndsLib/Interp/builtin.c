@@ -179,9 +179,16 @@ PValue __strsoundex(PNode* expr, Context* context, bool* eflg) {
 PValue __set(PNode* pnode, Context* context, bool* eflg) {
 	PNode *iden = pnode->arguments;
 	PNode *expr = iden->next;
-	if (iden->type != PNIdent) { *eflg = true; return nullPValue; }
+	if (iden->type != PNIdent) {
+		*eflg = true;
+		scriptError (pnode, "the first argument to set must be an variable");
+		return nullPValue;
+	}
 	PValue value = evaluate(expr, context, eflg);
-	if (*eflg) return nullPValue;
+	if (*eflg) {
+		scriptError (pnode, "error evaluating the second argument to set");
+		return nullPValue;
+	}
 	assignValueToSymbol(context->symbolTable, iden->identifier, value);
 	return nullPValue;
 }
