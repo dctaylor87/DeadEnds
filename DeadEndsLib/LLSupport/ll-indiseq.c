@@ -245,10 +245,10 @@ get_print_el (Sequence *seq, int i, int len, RFMT rfmt,
   CString str;
   switch (type)
     {
-    case ISPRN_FAMSEQ:
+    case chooseTypeFamily:
       str = famseq_print_el(seq, i, len, rfmt, database);
       break;
-    case ISPRN_SPOUSESEQ:
+    case chooseTypeSpouse:
       str = spouseseq_print_el(seq, i, len, rfmt, database);
       break;
     default:
@@ -304,6 +304,6 @@ preprint_indiseq (Sequence *seq, int len, RFMT rfmt,
 		  enum SequenceType type, Database *database)
 {
 	FORSEQUENCE(seq, el, num)
-		sprn(el) = get_print_el(seq, num, len, rfmt, type, database);
+		sprn(el) = get_print_el(seq, num-1, len, rfmt, type, database);
 	ENDSEQUENCE
 }
