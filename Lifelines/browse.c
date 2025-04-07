@@ -1263,7 +1263,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM:	/* Enter family tandem mode */
-			if ((tmp = ask_for_fam(_(qSids2fm), _(qSidc2fm))) != 0) {
+		  if ((tmp = ask_for_fam(_(qSids2fm), _(qSidc2fm), currentDatabase)) != 0) {
 				setrecord(prec1, &current);
 				setrecord(prec2, &tmp);
 				rtn = BROWSE_2FAM;

@@ -927,7 +927,7 @@ Returns the timing information.
 Each of the following functions wraps a function with the same name
 and signature but without the @code{rptui_} prefix.
 
-@defun rptui_ask_for_fam (String s1, String s2) @arrow{} RECORD
+@defun rptui_ask_for_fam (String s1, String s2, Database *database) @arrow{} RECORD
 @end defun
 @defun rptui_ask_for_indi (String ttl, ASK1Q ask1) @arrow{} RECORD
 @end defun
@@ -1269,7 +1269,7 @@ other than read-only and @code{name} is not absolute nor
 These entries are found in the @file{Lifelines} directory.
 
 @section User Interaction
-@deftypefun GNode* ask_for_fam (String pttl, String sttl)
+@deftypefun GNode* ask_for_fam (String pttl, String sttl, Database *database)
 Ask user to identify family by spouses.  String @code{pttl} is a
 prompt to identify a spouse in the family.  String @code{sttl} is a
 prompt to identify a child in the family.

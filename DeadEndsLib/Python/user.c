@@ -28,7 +28,7 @@
 #include "types.h"
 
 static PyObject *llpy_getindi (PyObject *self, PyObject *args, PyObject *kw);
-static PyObject *llpy_getfam (PyObject *self, PyObject *args);
+static PyObject *llpy_getfam (PyObject *self, PyObject *args , PyObject *kw);
 static PyObject *llpy_getint (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_getstr (PyObject *self, PyObject *args, PyObject *kw);
 static PyObject *llpy_menuchoose (PyObject *self, PyObject *args, PyObject *kw);
@@ -55,13 +55,25 @@ static PyObject *llpy_getindi (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, 
 
 /* llpy_getfam (void) --> FAM; Identify family through user interface */
 
-static PyObject *llpy_getfam (PyObject *self ATTRIBUTE_UNUSED, PyObject *args ATTRIBUTE_UNUSED)
-{
+static PyObject *llpy_getfam (PyObject *self ATTRIBUTE_UNUSED, PyObject *args , PyObject *kw){
+
   LLINES_PY_RECORD *family;
   GNode *record;
+  LLINES_PY_DATABASE *py_database = 0;
+  Database *database;
+  static char *keywords[] = { "database", NULL };
+
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|O!", keywords,
+				     &llines_database_type, &py_database))
+    return NULL;
+
+  if (py_database)
+    database = py_database->lld_database;
+  else
+    database = currentDatabase;
 
   record = rptui_ask_for_fam(_("Enter a spouse from family."),
-			     _("Enter a sibling from family."));
+			     _("Enter a sibling from family."), database);
   if (! record)
     Py_RETURN_NONE;		/* user cancelled */
 

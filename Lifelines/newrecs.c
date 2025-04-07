@@ -314,7 +314,7 @@ edit_record(GNode *rec1, String idedt, int letr, String redt,
 
 /* Identify record if need be */
 	if (!rec1) {
-		rec1 = ask_for_record(idedt, letr);
+		rec1 = ask_for_record(idedt, letr, database);
 	}
 	root1 = nztop(rec1);
 	if (!root1) {

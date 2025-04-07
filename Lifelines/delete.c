@@ -86,7 +86,7 @@ chooseAndRemoveFamily (void)
 	char spouses[32], children[32];
 	int n;
 
-	fam = nztop(ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch)));
+	fam = nztop(ask_for_fam_by_key(_(qSidfrmv), _(qSidfrsp), _(qSidfrch), database));
 	if (!fam)
 		return;
 

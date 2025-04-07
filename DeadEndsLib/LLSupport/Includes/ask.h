@@ -6,8 +6,8 @@ typedef int ASK1Q;
 /* type of sequence -- used by chooseFromSequence */
 enum SequenceType { chooseTypeSpouse, chooseTypeFamily, chooseTypeDefault };
 
-extern GNode *ask_for_fam (CString pttl, CString sttl);
-extern GNode *ask_for_fam_by_key(CString fttl, CString pttl, CString sttl);
+extern GNode *ask_for_fam (CString pttl, CString sttl, Database *);
+extern GNode *ask_for_fam_by_key(CString fttl, CString pttl, CString sttl, Database *database);
 extern GNode *ask_for_indi (CString ttl, ASK1Q ask1);
 extern String ask_for_indi_key (CString ttl, ASK1Q ask1);
 extern Sequence *ask_for_indi_list (CString ttl, bool reask);

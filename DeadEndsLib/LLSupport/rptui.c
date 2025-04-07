@@ -82,11 +82,11 @@ rptui_elapsed (void)
  *========================================================*/
 
 GNode *
-rptui_ask_for_fam (CString s1, CString s2)
+rptui_ask_for_fam (CString s1, CString s2, Database *database)
 {
 	GNode *rec;
 	begin_rptui();
-	rec = ask_for_fam(s1, s2);
+	rec = ask_for_fam(s1, s2, database);
 	end_rptui();
 	return rec;
 }

@@ -305,7 +305,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 /* Identify family if caller did not */
 
 	if (!fam) {
-		GNode *rec = ask_for_fam(_(qSidprnt), _(qSidsbln));
+		GNode *rec = ask_for_fam(_(qSidprnt), _(qSidsbln), database);
 		fam = nztop(rec);
 		releaseRecord(rec);
 	}
@@ -407,7 +407,7 @@ prompt_add_spouse (GNode *sprec, GNode *frec, bool conf)
 	}
 /* Identify family to add spouse to */
 
-	if (!fam) fam = nztop(ask_for_fam(_(qSidsinf), _(qSkchild)));
+	if (!fam) fam = nztop(ask_for_fam(_(qSidsinf), _(qSkchild), database));
 	if (!fam) return false;
 
 /* Check that spouse can be added */

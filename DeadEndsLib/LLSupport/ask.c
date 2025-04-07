@@ -87,10 +87,10 @@ static void make_fname_prompt(String fnamebuf, int len, CString ext);
  *  sttl: [IN]  title for prompt to identify sibling
  *========================================================*/
 GNode *
-ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
+ask_for_fam_by_key (CString fttl, CString pttl, CString sttl, Database *database)
 {
-	GNode *fam = ask_for_record(fttl, 'F');
-	return fam ? fam : ask_for_fam(pttl, sttl);
+  GNode *fam = ask_for_record(fttl, 'F', database);
+  return fam ? fam : ask_for_fam(pttl, sttl, database);
 }
 /*===========================================
  * ask_for_fam -- Ask user to identify family by spouses
@@ -98,7 +98,7 @@ ask_for_fam_by_key (CString fttl, CString pttl, CString sttl)
  *  sttl: [IN]  title for prompt to identify sibling
  *=========================================*/
 GNode *
-ask_for_fam (CString pttl, CString sttl)
+ask_for_fam (CString pttl, CString sttl, Database *database)
 {
 	GNode *sib=0, *prn=0;
 	prn = ask_for_indi(pttl, DOASK1);
@@ -494,7 +494,7 @@ chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln,
  *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
 GNode *
-ask_for_record (CString idstr, int letr)
+ask_for_record (CString idstr, int letr, Database *database)
 {
 	GNode *rec;
 	char answer[MAXPATHLEN];
@@ -503,11 +503,11 @@ ask_for_record (CString idstr, int letr)
 	if (!answer[0]) return NULL;
 
 	//rec = key_possible_to_record(answer, letr);
-	rec = getRecord (answer, currentDatabase->recordIndex);
+	rec = getRecord (answer, database->recordIndex);
 	if (!rec) {
 		Sequence *seq;
-		seq = refnToSequence(answer, currentDatabase->recordIndex,
-				     currentDatabase->nameIndex);
+		seq = refnToSequence(answer, database->recordIndex,
+				     database->nameIndex);
 		if (!seq) return NULL;
 		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn), chooseTypeDefault);
 		deleteSequence(seq);
