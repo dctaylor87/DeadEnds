@@ -58,23 +58,27 @@ PValue __fullname(PNode* pnode, Context* context, bool* eflg) {
     PNode* arg = pnode->arguments;
     GNode* indi = evaluatePerson(arg, context, eflg); // Person.
     if (*eflg || !indi) {
+        *eflg = true;
         scriptError(pnode, "the first argument to fullname must be a person");
         return nullPValue;
     }
     PValue pvalue = evaluate(arg = arg->next, context, eflg); // Allcaps boolean.
     if (*eflg || pvalue.type != PVBool) {
+        *eflg = true;
         scriptError(pnode, "the second argument to fullname must be a boolean");
         return nullPValue;
     }
     bool caps = pvalue.value.uBool;
     pvalue = evaluate(arg = arg->next, context, eflg); // Surname first with comma boolean.
     if (*eflg || pvalue.type != PVBool) {
+        *eflg = true;
         scriptError(pnode, "the third argument to fullname must be a boolean");
         return nullPValue;
     }
     bool reg = pvalue.value.uBool;
     pvalue = evaluate(arg = arg->next, context, eflg); // Max field width.
     if (*eflg || pvalue.type != PVInt) {
+        *eflg = true;
         scriptError(pnode, "the fourth argument to fullname must be an integer");
         return nullPValue;
     }
@@ -128,6 +132,7 @@ PValue __trimname(PNode* node, Context* context, bool *eflg) {
     PNode* arg = node->arguments;
     GNode* indi = evaluatePerson(arg, context, eflg); // Person
     if (*eflg || !indi) {
+        *eflg = true;
         scriptError(node, "the first argument to trimname must be a person");
         return nullPValue;
     }
@@ -139,6 +144,7 @@ PValue __trimname(PNode* node, Context* context, bool *eflg) {
     *eflg = false;
     PValue length = evaluate(arg->next, context, eflg); // Field width.
     if (*eflg || length.type != PVInt) {
+        *eflg = true;
         scriptError(node, "the second argument to trimname must be an integer");
         return nullPValue;
     }

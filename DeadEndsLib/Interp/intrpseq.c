@@ -153,6 +153,7 @@ PValue __deletefromset(PNode* pnode, Context* context, bool* eflg) {
 PValue __namesort(PNode* pnode, Context* context, bool* errflg) {
     PValue value = evaluate(pnode->arguments, context, errflg);
     if (*errflg || value.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the argument to namesort must be a set.");
         return nullPValue;
     }
@@ -167,6 +168,7 @@ PValue __keysort(PNode* pnode, Context* context, bool* eflg)
 {
     PValue value = evaluate(pnode->arguments, context, eflg);
     if (*eflg || value.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the arg to keysort must be a set.");
         return nullPValue;
     }
@@ -196,6 +198,7 @@ PValue __valuesort(PNode* node, Context* context, bool* eflg)
 PValue __uniqueset(PNode* pnode, Context* context, bool* eflg) {
     PValue value = evaluate(pnode->arguments, context, eflg);
     if (*eflg || value.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the arg to uniqueset must be a set");
         return nullPValue;
     }
@@ -209,12 +212,14 @@ PValue __union(PNode* pnode, Context* context, bool* eflg) {
     PNode *arg1 = pnode->arguments, *arg2 = arg1->next;
     PValue val = evaluate(arg1, context, eflg); // Sequence one.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the first argument to union must be a set.");
         return nullPValue;
     }
     Sequence *op1 = val.value.uSequence;
     val = evaluate(arg2, context, eflg); // Sequence two.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the second arg to union must be a set.");
         return nullPValue;
     }
@@ -228,12 +233,14 @@ PValue __intersect(PNode* pnode, Context* context, bool* eflg) {
     PNode *arg1 = pnode->arguments, *arg2 = arg1->next;
     PValue val = evaluate(arg1, context, eflg); // Sequence one.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the first argument to intersect must be a set.");
         return nullPValue;
     }
     Sequence *op1 = val.value.uSequence;
     val = evaluate(arg2, context, eflg); // Sequence two.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the second arg to intersect must be a set.");
         return nullPValue;
     }
@@ -247,12 +254,14 @@ PValue __difference(PNode* pnode, Context* context, bool* eflg) {
     PNode* arg1 = pnode->arguments, *arg2 = arg1->next;
     PValue val = evaluate(arg1, context, eflg); // Sequence one.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the first argument to difference must be a set.");
         return nullPValue;
     }
     Sequence* op1 = val.value.uSequence;
     val = evaluate(arg2, context, eflg); // Sequence two.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the second arg to difference must be a set.");
         return nullPValue;
     }
@@ -265,6 +274,7 @@ PValue __difference(PNode* pnode, Context* context, bool* eflg) {
 PValue __parentset(PNode* pnode, Context* context, bool* eflg) {
     PValue val = evaluate(pnode->arguments, context, eflg); // Sequence
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the arg to parentset must be a set.");
         return nullPValue;
     }
@@ -277,6 +287,7 @@ PValue __parentset(PNode* pnode, Context* context, bool* eflg) {
 PValue __childset(PNode* pnode, Context* context, bool* eflg) {
     PValue val = evaluate(pnode->arguments, context, eflg); // Sequence
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the arg to childset must be a set.");
         return nullPValue;
     }
@@ -289,6 +300,7 @@ PValue __childset(PNode* pnode, Context* context, bool* eflg) {
 PValue __siblingset(PNode *node, Context *context, bool *eflg) {
     PValue val = evaluate(node->arguments, context, eflg); // Sequence
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(node, "the argument to siblingset must be a set");
         return nullPValue;
     }
@@ -301,6 +313,7 @@ PValue __siblingset(PNode *node, Context *context, bool *eflg) {
 PValue __spouseset(PNode* pnode, Context* context, bool* eflg) {
     PValue val = evaluate(pnode->arguments, context, eflg); // Sequence
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the argument to spouseset must be a set");
         return nullPValue;
     }
@@ -326,6 +339,7 @@ PValue __descendentset(PNode* pnode, Context* context, bool* eflg) {
     ASSERT(pnode && pnode->arguments && !pnode->arguments->next && context);
     PValue val = evaluate(pnode->arguments, context, eflg); // Sequence.
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(pnode, "the arg to descendentset must be a set.");
         return nullPValue;
     }
@@ -342,6 +356,7 @@ PValue __gengedcom(PNode *programNode, Context *context, bool *eflg)
     //  The argument must evaluate to a sequence.
     PValue val = evaluate(programNode->arguments, context, eflg);
     if (*eflg || val.type != PVSequence) {
+        *errflg = true;
         scriptError(programNode, "the argument to gengedcom must be a set");
         return nullPValue;
     }

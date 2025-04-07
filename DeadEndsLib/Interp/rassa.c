@@ -54,6 +54,7 @@ PValue __pagemode(PNode* pnode, Context* context, bool* errflg) {
 	PNode* arg = pnode->arguments;
 	PValue pvalue = evaluate(arg, context, errflg);
 	if (*errflg || pvalue.type != PVInt) {
+		*errflg = true;
 		scriptError(pnode, "the cols argument to pagemode must be an integer.");
 		return nullPValue;
 	}
@@ -61,6 +62,7 @@ PValue __pagemode(PNode* pnode, Context* context, bool* errflg) {
 	arg = arg->next;
 	pvalue = evaluate(arg, context, errflg);
 	if (*errflg || pvalue.type != PVInt) {
+		*errflg = true;
 		scriptError(pnode, "the rows argument to pagemode must be an integer.");
 		return nullPValue;
 	}
@@ -97,6 +99,7 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
 	PNode *arg = pnode->arguments;
 	PValue pvalue = evaluate(arg, context, errflg);
 	if (*errflg || pvalue.type != PVString || strlen(pvalue.value.uString) == 0) {
+		*errflg = true;
 		scriptError(pnode, "First argument to newfile must be a string.");
 		return nullPValue;
 	}
