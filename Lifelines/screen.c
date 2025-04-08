@@ -494,7 +494,7 @@ remove_uiwin (UIWINDOW uiwin)
 {
 	ASSERT(list_uiwin);
 	int index;
-	if (searchList (list_uiwin, uiwin, &index)) {
+	if (searchList (list_uiwin, uiwin->name, &index)) {
 	  removeFromList (list_uiwin, index);
 	}
 }
@@ -559,7 +559,7 @@ delete_uiwindow (UIWINDOW * uiw)
 		// remove window from master list
 		remove_uiwin(w);
 		// delete window
-		delete_uiwindow_impl(w);
+		//delete_uiwindow_impl(w);	// remove_uiwin indirectly calls this!
 		// clear pointer
 		*uiw = 0;
 	}
