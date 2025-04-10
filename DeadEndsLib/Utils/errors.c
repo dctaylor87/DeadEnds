@@ -12,7 +12,7 @@
 static bool debugging = false;
 
 /* forward reference */
-static showErrorLog_1 (FILE *file, ErrorLog *errorLog);
+static void showErrorLog_1 (FILE *file, ErrorLog *errorLog);
 
 // getKey returns the comparison key of an error.
 static CString getKey(const void* error) {
@@ -98,7 +98,7 @@ void showErrorLog(ErrorLog* errorLog) {
   showErrorLog_1 (stdout, errorLog);
 }
 
-static showErrorLog_1 (FILE *file, ErrorLog *errorLog) {
+static void showErrorLog_1 (FILE *file, ErrorLog *errorLog) {
 	if (!errorLog) {
 		fprintf(file, "Error log does not exist.\n");
 		return;
