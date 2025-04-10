@@ -70,6 +70,7 @@
 #include "ll-node.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "xref.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -768,7 +769,7 @@ family_events (String outstr, GNode *indi, GNode *fam, int len)
 	if (!opt_nocb) {
 		GNode *chld;
 		/* Look for birth or christening of first child */
-		if (chld = familyToFirstChild(fam, currentDatabase->recordIndex)) {
+		if ((chld = familyToFirstChild(fam, currentDatabase->recordIndex))) {
 			evt = sh_indi_to_event_shrt(chld, "BIRT", _(qSdspa_chbr), mylen-2);
 			if (evt && !append_event(&p, evt, &mylen, 10))
 				return;
@@ -832,7 +833,7 @@ indi_events (String outstr, GNode *indi, int len)
 static int
 max_keywidth (void)
 {
-	uint64_t maxkey = xref_max_any();
+	uint64_t maxkey = xref_max_any(currentDatabase);
 	if (maxkey>9999) {
 		if (maxkey>999999)
 			return 7;
