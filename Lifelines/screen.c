@@ -241,7 +241,7 @@ static CString getKey (void * win)
   return (((UIWINDOW) win)->name);
 }
 
-static compare (CString a, CString b)
+static int compare (CString a, CString b)
 {
   return strcmp (a, b);
 }
