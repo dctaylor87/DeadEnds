@@ -20,6 +20,7 @@
 #include "options.h"
 #include "name.h"
 #include "import-dct.h"
+#include "feedback.h"
 
 #define SIZE_REKEY_TABLE	1025
 
