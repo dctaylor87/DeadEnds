@@ -42,6 +42,7 @@
 #include "messages.h"
 #include "codesets.h"
 #include "strcvt.h"
+#include "de-strings.h"
 
 /*********************************************
  * local function prototypes

@@ -80,7 +80,7 @@ expandVariables (CString input, String *output, CString *details)
 	  /* now, get the user's home directory */
 	  CString homedir = 0;
 	  struct passwd *pw;
-	  while (pw = getpwent())
+	  while ((pw = getpwent()))
 	    {
 	      if (eqstr (pw->pw_name, user))
 		homedir = pw->pw_dir;

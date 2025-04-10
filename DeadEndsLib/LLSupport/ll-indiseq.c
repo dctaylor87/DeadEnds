@@ -58,6 +58,7 @@
 #include "ask.h"
 #include "ll-indiseq.h"
 #include "py-set.h"		/* need to move FOR... macros elsewhere! */
+#include "de-strings.h"
 
 /*
 	indiseqs are typed as to value
