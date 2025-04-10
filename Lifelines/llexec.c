@@ -139,7 +139,6 @@ main (int argc, char **argv)
 	//	String progout=NULL;
 	String configfile=0;
 	String crashlog=NULL;
-	int i=0;
 	//	bool have_python_scripts = false;
 
 	current_uiio = uiio_stdio;
@@ -220,7 +219,6 @@ prompt_for_db:
 	}
 	/* Open database, prompting user if necessary */
 	{
-	  String errmsg=0;
 	  if (!alldone && c>0)
 	    dbrequested = strsave(argv[optind]);
 	  else
