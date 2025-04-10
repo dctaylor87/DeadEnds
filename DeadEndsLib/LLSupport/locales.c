@@ -46,6 +46,7 @@
 #include "de-strings.h"
 #include "hashtable.h"
 #include "lloptions.h"
+#include "dateprint.h"
 
 /*********************************************
  * local function prototypes
