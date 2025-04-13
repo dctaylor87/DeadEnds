@@ -79,12 +79,12 @@ void insertInNameIndex(NameIndex* index, CString nameKey, CString recordKey) {
 	if (nameIndexDebugging)
 		printf("insertInNameIndex: nameKey, personKey: %s, %s\n", nameKey, recordKey);
 	NameIndexEl* element = (NameIndexEl*) searchHashTable(index, nameKey); // Name key seen before?
-	if (!element) { // No.
+	if (! element) { // No.
 		element = createNameIndexEl(nameKey); // MNOTE: createNameIndexEl saves nameKey.
 		addToHashTable(index, element, true);
 	}
 	Set* recordKeys = element->recordKeys;
-	if (!isInSet(recordKeys, recordKey)) {
+	if (! isInSet(recordKeys, recordKey)) {
 		addToSet(recordKeys, recordKey); // MNOTE: recordKey from Database stored in index as is.
 	}
 }
@@ -92,12 +92,12 @@ void insertInNameIndex(NameIndex* index, CString nameKey, CString recordKey) {
 // removeFromNameIndex
 void removeFromNameIndex(NameIndex* index, CString nameKey, CString recordKey) {
 	NameIndexEl* el = (NameIndexEl*) searchHashTable(index, nameKey);
-	if (!el) {
+	if (! el) {
 		// Log something happened.
 		return;
 	}
 	Set* recordKeys = el->recordKeys;
-	if (!isInSet(recordKeys, recordKey)) {
+	if (! isInSet(recordKeys, recordKey)) {
 		// Log something happened.
 		return;
 	}
