@@ -25,6 +25,8 @@
 #include "date.h"
 #include "place.h"
 #include "builtintable.h"
+#include "denls.h"
+#include "ask.h"
 
 // Global constants for useful PValues.
 const PValue nullPValue = {PVNull, PV()};
@@ -129,24 +131,23 @@ bool isZeroVUnion(PVType type, VUnion vunion) {
 // * __getfam -- Have user identify family
 // *   usage: getfam(IDEN [,STRING]) --> VOID
 // *=======================================*/
-//static char *choosefamily = "Choose family by selecting spouse:";
-//WORD __getfam (PNode *expr, Table stab, bool* eflg)
-//{
-//    INTERP arg = (INTERP) ielist(node);
-//    CACHEEL cel = NULL;
-//    NODE fam;
-//    STRING ttl = (STRING) "Identify family for report program:";
-//    *eflg = TRUE;
-//    if (!iistype(arg, IIDENT)) return NULL;
-//    *eflg = FALSE;
-//    if (inext(arg)) ttl = (STRING) evaluate(inext(arg), stab, eflg);
-//    if (*eflg) return NULL;
-//    fam = ask_for_fam("Enter a spouse from family.",
-//        "Enter a sibling from family.");
-//    if (fam) cel = fam_to_cacheel(fam);
-//    assignIdent(stab, iident(arg), (WORD) cel);
-//    return NULL;
-//}
+
+PValue __getfam (PNode *pnode, Context *context, bool *eflg) {
+  PNode *iden = pnode->arguments;
+  PNode *expr = iden->next;
+
+  if (iden->type != PNIdent) {
+    *eflg = true;
+    scriptError (pnode, "the first argument to getfam must be a variable");
+    return nullPValue;
+  }
+  GNode *fam = ask_for_fam (_("Enter a spouse from family."),
+			    _("Enter a sibling from family."),
+			    null);
+  assignValueToSymbol(context->symbolTable, iden->identifier,
+		      PVALUE(PVGNode, uGNode, fam));
+  return nullPValue;
+}
 
 // * __getindiset -- Have user identify set of persons
 // *   usage: getindiset(IDEN [,STRING]) --> VOID
@@ -424,23 +425,6 @@ PValue __capitalize(PNode *node, Context *context, bool* eflg)
 	return PVALUE(PVString, uString, capitalize(val.value.uString));
 }
 
-
-// __print prints a list of expresseion values to the stdout window.
-// usage: print([STRING]+,) -> VOID
-//WORD __print (node, stab, eflg)
-//INTERP node; TABLE stab; bool *eflg;
-//{
-//    INTERP arg = (INTERP) ielist(node);
-//    WORD val;
-//    while (arg) {
-//        val = evaluate(arg, stab, eflg);
-//        if (*eflg) return NULL;
-//        if (val) wprintf("%s", (STRING) val);
-//        arg = inext(arg);
-//    }
-//    return NULL;
-//}
-
 // __root returns the root node of record the argument node is in.
 // usage: root(NODE) -> NODE
 PValue __root (PNode* pnode, Context* context, bool* errflg) {
@@ -609,15 +593,21 @@ PValue __copyfile (PNode *node, Context *context, bool *eflg) {
 
 // __nl is the newline function.
 // usage: nl() -> STRING
-PValue __nl(PNode* pnode, Context* context, bool* errflg) { return newlinePValue; }
+PValue __nl(PNode* pnode ATTRIBUTE_UNUSED,
+	    Context* context ATTRIBUTE_UNUSED,
+	    bool* errflg ATTRIBUTE_UNUSED) { return newlinePValue; }
 
 // __space is the space function.
 // usage: sp() -> STRING
-PValue __space(PNode* pnode, Context* context, bool* errflg) { return spacePValue; }
+PValue __space(PNode* pnode ATTRIBUTE_UNUSED,
+	       Context* context ATTRIBUTE_UNUSED,
+	       bool* errflg ATTRIBUTE_UNUSED) { return spacePValue; }
 
 // __qt is the double quote function
 // usage: qt() -> STRING
-PValue __qt(PNode *pnode, Context *context, bool* errflg) { return quotePValue; }
+PValue __qt(PNode *pnode ATTRIBUTE_UNUSED,
+	    Context *context ATTRIBUTE_UNUSED,
+	    bool* errflg ATTRIBUTE_UNUSED) { return quotePValue; }
 
 //  __children returns the Sequence of children in a family
 PValue __children(PNode *pnode, Context *context, bool* errflg)
@@ -768,7 +758,9 @@ PValue __getrecord (PNode *pnode, Context *context, bool *errflg) {
 
 // __freerecord is now a no-op because of the in-Ram database.
 // usage: freerecord(NODE) -> VOID
-PValue __freerecord (PNode* pnode, Context* context, bool* errflg) {
+PValue __freerecord (PNode* pnode ATTRIBUTE_UNUSED,
+		     Context* context ATTRIBUTE_UNUSED,
+		     bool* errflg ATTRIBUTE_UNUSED) {
 	return nullPValue;
 }
 
