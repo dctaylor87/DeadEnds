@@ -102,7 +102,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
     {
       /* Caller did not provide a script name, ask the user for one */
       String fname = null;
-      if (! rptui_ask_for_program(DEREADTEXT, _(qSwhatrpt), &fname, &fullpath,
+      if (! rptui_ask_for_program(DEREADTEXT, _(qSwhatrpt), &fname,
 				  programsdir, ".ll", picklist))
 	{
 	  llwprintf(_("Report not found: %s"), sfile);

@@ -205,7 +205,6 @@ bool
 ask_for_gedcom (CString mode,
                  CString ttl,
                  String *pfname,
-                 String *pfullpath,
                  String path,
                  String ext,
                  bool picklist)
@@ -217,7 +216,6 @@ ask_for_gedcom (CString mode,
 	FILE * fp;
 
 	if (pfname) *pfname = 0;
-	if (pfullpath) *pfullpath = 0;
 
 	if (!picklist) {
 		goto AskForString;
@@ -243,7 +241,6 @@ ask_for_gedcom (CString mode,
 		String filepath = pathConcatAllocate(dir, fname);
 		if (pfname)
 			*pfname = strsave(fname);
-		*pfullpath = filepath;
 	}
 	free_proparray(&fileprops);
 	stdfree(choices);
@@ -254,7 +251,7 @@ ask_for_gedcom (CString mode,
 	return (choice > 0);
 
 AskForString:
-	fp = ask_for_input_file(mode, ttl, pfname, pfullpath, path, ext);
+	fp = ask_for_input_file(mode, ttl, pfname, path, ext);
 	if (fp)
 		fclose(fp);
 	return fp != 0;

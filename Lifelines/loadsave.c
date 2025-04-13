@@ -105,15 +105,17 @@ void
 load_gedcom (bool picklist, Database *database)
 {
 	String srcdir=NULL;
+	String filename = 0;
 	String fullpath=0;
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 
 	srcdir = getdeoptstr("InputPath", ".");
-	if (! ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), 0, &fullpath, srcdir, ".ged", picklist)) {
-		strfree(&fullpath);
+	if (! ask_for_gedcom(DEREADTEXT, _(qSwhatgedc), &filename, srcdir, ".ged", picklist)) {
+		strfree(&filename);
 		return;
 	}
+	fullpath = resolveFile (filename, srcdir);
 
 	ErrorLog *errorLog = createErrorLog ();
 	Database *newDB = selectAndOpenDatabase (&fullpath, srcdir, database, errorLog);
@@ -168,13 +170,14 @@ save_gedcom (Database *database)
 		database = currentDatabase;
 
 	srcdir = getdeoptstr("DEARCHIVES", ".");
-	fp = ask_for_output_file(DEWRITETEXT, _(qSoutarc), &fname, &fullpath, srcdir, ".ged");
+	fp = ask_for_output_file(DEWRITETEXT, _(qSoutarc), &fname, srcdir, ".ged");
 	if (!fp) {
 		strfree(&fname);
 		msg_error("%s", _("The database was not saved."));
 		return false; 
 	}
 
+	fullpath = resolveFile (fname, srcdir);
 	llwprintf(_("Saving database `%s' in file `%s'."), database->name, fullpath);
 
 	write_header (fp);
