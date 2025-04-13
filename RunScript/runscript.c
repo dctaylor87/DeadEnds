@@ -24,6 +24,8 @@ static void getArguments(int, char**, CString*, CString*);
 static void getEnvironment(CString*, CString*);
 static void runScript(Database*, CString);
 
+Database *currentDatabase = 0;
+
 // main is the main program of the RunScript program.
 int main(int argc, char* argv[]) {
 	// Get the files.
@@ -52,6 +54,7 @@ int main(int argc, char* argv[]) {
 	if (Perrors > 0)
 	  fprintf(stderr, "Script not run due to errors.\n");
 	else {
+		currentDatabase = database;
 		runScript(database, scriptFile);
 		fprintf(stderr, "%s: RunScript done.\n", getMsecondsStr());
 	}

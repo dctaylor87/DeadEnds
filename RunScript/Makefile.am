@@ -8,6 +8,8 @@ runscript_SOURCES = runscript.c
 
 runscript_LDADD = \
 	../DeadEndsLib/Interp/libinterp.a \
+	../DeadEndsLib/LLSupport/libllsupport.a \
+	../DeadEndsLib/UI/libuicli.a \
 	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
