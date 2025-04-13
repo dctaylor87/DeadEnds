@@ -31,6 +31,7 @@ static void genSExpressions(void);
 
 // External functions (avoids a header file).
 String getMsecondsStr(void);
+Database *currentDatabase = 0;
 
 // main.c is the main program of  DeadEnds GenerateSExpressions program.
 int main(int argc, char* argv[]) {

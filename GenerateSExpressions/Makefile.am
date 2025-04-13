@@ -9,6 +9,8 @@ gensexpr_SOURCES = main.c sexpr.c
 gensexpr_LDADD = \
 	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Interp/libinterp.a \
+	../DeadEndsLib/LLSupport/libllsupport.a \
+	../DeadEndsLib/UI/libuicli.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
