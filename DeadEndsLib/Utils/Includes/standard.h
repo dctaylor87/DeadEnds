@@ -62,7 +62,7 @@ void basicDelete(void*);
 
 // User interface to the standard functions.
 //--------------------------------------------------------------------------------------------------
-void* _alloc(size_t, CString, int) __attribute__ ((malloc)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute ((returns_nonnull));
+void* _alloc(size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 void _free(void* ptr, String, int);
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
