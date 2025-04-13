@@ -121,6 +121,12 @@ parseArguments (int argc, char *argv[], CString optString)
     case 'n':	/* use non-traditional family rules */
       traditional = false;
       break;
+    case 's':	       /* startup delay -- sleep interval */
+      {
+	int sleep_interval = atoi(optarg);
+	sleep(sleep_interval);
+      }
+      break;
 #if !defined(DEADENDS)		/* XXX not currently supported by DeadEnds XXX */
     case 't': /* show lots of trace statements for debugging */
       prog_trace = true;

@@ -96,7 +96,7 @@ extern int yydebug;
 //#endif
 //int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
 
-static CString optString = "adkntu:x:o:zC:I:p:Pvh?";
+static CString optString = "adkns:tu:x:o:zC:I:p:Pvh?";
 
 /*********************************************
  * required global variables
@@ -143,6 +143,7 @@ main (int argc, char **argv)
 	int i=0;
 	//	bool have_python_scripts = false;
 
+	//sleep (60);
 	current_uiio = uiio_curses;
 
 	/* DEADENDS: init_arch is just 'return 0', init_stdlib is
@@ -263,7 +264,12 @@ prompt_for_db:
 	if (exprogs) {
 		bool picklist = false;
 		bool timing = false;
-		interp_main(exprogs, currentDatabase, progout, picklist, timing);
+		int len = lengthList (exprogs);
+		for (int ndx = 0; ndx < len; ndx++) {
+		  CString prog = getListElement (exprogs, ndx);
+		  interp_main (prog, currentDatabase, progout, picklist, timing);
+		}
+		//interp_main(exprogs, currentDatabase, progout, picklist, timing);
 		deleteList(exprogs);
 	} else if (have_python_scripts) {
 #if HAVE_PYTHON

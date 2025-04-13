@@ -2,7 +2,7 @@
 #include "uiio.h"
 
 /* options recognized by getopt */
-CString optString = "adkntu:x:o:zC:I:p:Pvh?";
+CString optString = "adkns:tu:x:o:zC:I:p:Pvh?";
 
 /* program name for messages */
 #if defined(WIN32)
@@ -10,7 +10,7 @@ CString ProgName = "Lines";
 CString usage_summary =
 #else
 CString ProgName = "llines";
-CString usage_summary = "llines [-{adkntu:x:o:zC:I:p:Pvh?}] [database]";
+CString usage_summary = "llines [-{adkns:tu:x:o:zC:I:p:Pvh?}] [database]";
 #endif
 
 /* which set of UIIO routines to use */
