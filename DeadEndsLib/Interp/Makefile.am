@@ -35,7 +35,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Database/Includes
+	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
+	-I$(top_srcdir)/DeadEndsLib/LLSupport/Includes
 
 #AM_CFLAGS = -Wno-unused-but-set-variable -Wno-missing-braces
 AM_CLFAGS = -fanalyzer
