@@ -14,6 +14,10 @@
 #include "interp.h"
 #include "evaluate.h"
 #include "builtintable.h"
+#include "messages.h"
+#include "ask.h"
+#include "locales.h"		/* CALLBACK_FNC, needed by lloptions.h */
+#include "lloptions.h"		/* getdeoptstr */
 
 #define MAXROWS 512
 #define MAXCOLS 512
@@ -28,7 +32,7 @@ static String bufptr = linebuffer;
 String outfilename;
 
 String noreport = (String) "No report was generated.";
-String whtout = (String) "What is the name of the output file?";
+//String whtout = (String) "What is the name of the output file?";
 
 // initrassa initializes script program output.
 void initrassa(void) {
@@ -84,7 +88,9 @@ PValue __pagemode(PNode* pnode, Context* context, bool* errflg) {
 
 // __linemode switches script program output to line mode.
 // usage: linemode() -> VOID
-PValue __linemode(PNode* pnode, Context* context, bool* errflg) {
+PValue __linemode(PNode* pnode ATTRIBUTE_UNUSED,
+		  Context* context ATTRIBUTE_UNUSED,
+		  bool* errflg) {
 	outputmode = BUFFERED;
 	linebuflen = 0;
 	bufptr = linebuffer;
@@ -152,20 +158,56 @@ setScriptOutputFile (CString filename, bool append, CString *errorMessage)
   return true;
 }
 
+// __print prints a list of expresseion values to the stdout window.
+// usage: print([STRING]+,) -> VOID
+PValue __print (PNode *pnode, Context *context, bool *errflg)
+{
+  // __outfile does this, so we do it for consistency
+  if (! Poutfp) {
+    String dereports = getdeoptstr ("DEREPORTS", ".");
+    Poutfp = ask_for_output_file("w", qSwhtout, &outfilename, dereports, NULL);
+    if (! Poutfp) {
+      *errflg = true;
+      scriptError (pnode, noreport);
+      return nullPValue;
+    }
+    setbuf(Poutfp, NULL);
+  }
+
+  int count = 0;
+  for (PNode *arg = pnode->arguments; arg; arg = arg->next)
+    {
+      count++;
+      PValue str = evaluate (arg, context, errflg);
+      if (*errflg || (str.type != PVString))
+	{
+	  *errflg = true;
+	  printf("arg %d is of type %d\n", count, str.type);
+	  scriptError (pnode, "argument number %d to print is not a string", count);
+	  return nullPValue;
+	}
+      fprintf (Poutfp, "%s", str.value.uString);
+  }
+  return nullPValue;
+}
+
 // __outfile returns the name of the script output file.
 // usage: outfile() -> STRING
-//PValue __outfile(PNode* pnode, Context* context, bool* errflg) {
-//	if (!Poutfp) {
-//		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
-//		if (!Poutfp)  {
-//			message(noreport);
-//			return;
-//		}
-//		setbuf(Poutfp, NULL);
-//	}
-//	*eflg = false;
-//	return (WORD) outfilename;
-//}
+PValue __outfile(PNode* pnode, Context* context, bool* errflg)
+{
+  if (! Poutfp) {
+    String dereports = getdeoptstr ("DEREPORTS", ".");
+    Poutfp = ask_for_output_file("w", qSwhtout, &outfilename, dereports, NULL);
+    if (! Poutfp) {
+      *errflg = true;
+      scriptError (pnode, noreport);
+      return nullPValue;
+    }
+    setbuf(Poutfp, NULL);
+  }
+  *errflg = false;
+  return PVALUE (PVString, uString, outfilename);
+}
 
 // __pos positions page output to a row and column.
 // usage: pos(INT, INT) -> VOID
@@ -229,7 +271,9 @@ PValue __col (PNode *pnode, Context *context, bool *errflg)
 
 // __pageout outputs the current page and clears the page buffer.
 // usage: pageout() -> VOID
-PValue __pageout(PNode* pnode, Context* context, bool* errflg) {
+PValue __pageout(PNode* pnode ATTRIBUTE_UNUSED,
+		 Context* context ATTRIBUTE_UNUSED,
+		 bool* errflg) {
 	char scratch[MAXCOLS+2];
 	String p;
 	int row, i;
