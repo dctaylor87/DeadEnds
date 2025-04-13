@@ -15,13 +15,11 @@ extern bool ask_for_int (CString ttl, int *prtn);
 extern FILE *ask_for_input_file (CString mode,
 				 CString ttl,
 				 String *pfname,
-				 String *pfullpath,
 				 CString path,
 				 CString ext);
 extern FILE *ask_for_output_file (CString mode,
 				  CString ttl,
 				  String *pfname,
-				  String *pfullpath,
 				  CString path,
 				  CString ext);
 extern GNode *

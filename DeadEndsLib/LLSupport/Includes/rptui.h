@@ -4,9 +4,9 @@ GNode *rptui_ask_for_indi (CString ttl, ASK1Q ask1);
 CString rptui_ask_for_indi_key(CString ttl, ASK1Q ask1);
 bool rptui_ask_for_int(CString, int *);
 FILE * rptui_ask_for_output_file(CString mode, CString ttl, String *pfname,
-				 String *pfullpath, CString path, CString ext);
+				 CString path, CString ext);
 bool rptui_ask_for_program(CString mode, CString ttl, String *pfname,
-			   String *pfullpath, CString path, CString ext, bool picklist);
+			   CString path, CString ext, bool picklist);
 int rptui_chooseFromArray(CString ttl, int no, String *pstrngs);
 int rptui_elapsed(void);
 void rptui_init(void);

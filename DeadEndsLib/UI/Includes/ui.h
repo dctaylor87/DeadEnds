@@ -33,7 +33,7 @@ int ask_for_char(CString ttl, CString prmpt, CString ptrn);
 int ask_for_char_msg(CString msg, CString ttl, CString prmpt, CString ptrn);
 bool ask_for_db_filename (CString ttl, CString prmpt, CString basedir, String buffer, int buflen);
 bool ask_for_filename_impl(CString ttl, CString path, CString prmpt, String buffer, int buflen);
-bool ask_for_program (CString mode, CString ttl, String *pfname, String *pfullpath, CString path, CString ext, bool picklist);
+bool ask_for_program (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist);
 int chooseFromArray (CString ttl, int no, String *pstrngs);
 int chooseFromList (CString ttl, List *list);
 enum SequenceType;		/* forward reference */

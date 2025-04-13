@@ -130,22 +130,22 @@ rptui_ask_for_int (CString ttl, int * prtn)
 	return b;
 }
 FILE *
-rptui_ask_for_output_file (CString mode, CString ttl, String *pfname
-	, String *pfullpath, CString path, CString ext)
+rptui_ask_for_output_file (CString mode, CString ttl, String *pfname,
+			   CString path, CString ext)
 {
 	FILE * fp;
 	begin_rptui();
-	fp = ask_for_output_file(mode, ttl, pfname, pfullpath, path, ext);
+	fp = ask_for_output_file(mode, ttl, pfname, path, ext);
 	end_rptui();
 	return fp;
 }
 bool
-rptui_ask_for_program (CString mode, CString ttl, String *pfname
-	, String *pfullpath, CString path, CString ext, bool picklist)
+rptui_ask_for_program (CString mode, CString ttl, String *pfname,
+		       CString path, CString ext, bool picklist)
 {
 	bool b;
 	begin_rptui();
-	b = ask_for_program(mode, ttl, pfname, pfullpath, path, ext, picklist);
+	b = ask_for_program(mode, ttl, pfname, path, ext, picklist);
 	end_rptui();
 	return b;
 }

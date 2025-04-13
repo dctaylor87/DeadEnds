@@ -133,7 +133,6 @@ bool
 ask_for_program (ATTRIBUTE_UNUSED CString mode,
                  ATTRIBUTE_UNUSED CString ttl,
                  ATTRIBUTE_UNUSED String *pfname,
-                 ATTRIBUTE_UNUSED String *pfullpath,
                  ATTRIBUTE_UNUSED CString path,
                  ATTRIBUTE_UNUSED CString ext,
                  ATTRIBUTE_UNUSED bool picklist)

@@ -101,6 +101,9 @@ GNode *
 ask_for_fam (CString pttl, CString sttl, Database *database)
 {
 	GNode *sib=0, *prn=0;
+	if (! database)
+	  database = currentDatabase;
+
 	prn = ask_for_indi(pttl, DOASK1);
 	if (!prn)  {
 		GNode *fam=0;
@@ -112,7 +115,7 @@ ask_for_fam (CString pttl, CString sttl, Database *database)
 			msg_error("%s", _(qSntchld));
 			return NULL;
 		}
-		frec = keyToFamilyRecord(nval(fam), currentDatabase);
+		frec = keyToFamilyRecord(nval(fam), database);
 		return frec;
 	}
 	if (!FAMS(nztop(prn))) {
@@ -165,15 +168,13 @@ ask_for_int (CString ttl, int * prtn)
  * ask_for_file_worker -- Ask for and open file
  *  ttl:       [IN]  title of question (1rst line)
  *  pfname     [OUT] file as user entered it (optional param)
- *  pfullpath  [OUT] file as found (optional param)
- * pfname & pfulllpath are heap-allocated
+ * pfname is  heap-allocated
  *====================================*/
 typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
 ask_for_file_worker (CString mode,
                      CString ttl,
                      String *pfname,
-                     String *pfullpath,
                      CString path,
                      CString ext,
                      DIRECTION direction)
@@ -197,8 +198,6 @@ ask_for_file_worker (CString mode,
 		else
 			*pfname = 0;
 	}
-	if (pfullpath) *pfullpath = 0; /* 0 indicates we didn't try to open */
-
 	if (!rtn || !fname[0]) return NULL;
 
 	if (!expandSpecialFilenameChars(fname, sizeof(fname), uu8)) {
@@ -208,27 +207,10 @@ ask_for_file_worker (CString mode,
 
 ask_for_file_try:
 
-#if defined(DEADENDS)
 	/* try name as given */
 	fp = fopenPath (fname, mode, path);
 	if (fp)
 		return fp;
-#else
-	/* try name as given */
-	if (ISNULL(path)) {
-		/* bare filename was given */
-		if ((fp = fopen(fname, mode)) != NULL) {
-			if (pfname)
-				strupdate(pfname, fname);
-			return fp;
-		}
-	} else {
-		/* fully qualified path was given */
-		if ((fp = fopenpath(fname, mode, path, ext, uu8, pfullpath)) != NULL) {
-			return fp;
-		}
-	}
-#endif
 
 	/* try default extension */
 	if (ext) {
@@ -274,11 +256,10 @@ FILE *
 ask_for_input_file (CString mode,
                     CString ttl,
                     String *pfname,
-                    String *pfullpath,
                     CString path,
                     CString ext)
 {
-	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, INPUT);
+	return ask_for_file_worker(mode, ttl, pfname, path, ext, INPUT);
 }
 
 /*======================================
@@ -290,11 +271,10 @@ FILE *
 ask_for_output_file (CString mode,
                      CString ttl,
                      String *pfname,
-                     String *pfullpath,
                      CString path,
                      CString ext)
 {
-	return ask_for_file_worker(mode, ttl, pfname, pfullpath, path, ext, OUTPUT);
+	return ask_for_file_worker(mode, ttl, pfname, path, ext, OUTPUT);
 }
 	/* RC_DONE means user just hit enter -- interpret as a cancel */
 #define RC_DONE       0
