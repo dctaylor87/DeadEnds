@@ -75,7 +75,7 @@ static int getPivot(int left, int right) {
 }
 
 // linearSearch searches a list of elements for the one with a matching key.
-void* linearSearch(void** elements, int length, CString key, CString(*getKey)(void*), int* index) {
+void* linearSearch(void** elements, int length, CString key, CString(*getKey)(const void*), int* index) {
 	ASSERT(elements && key && getKey);
 	if (index) *index = 0;
 	if (!elements || !key || !getKey) return null;
@@ -89,7 +89,7 @@ void* linearSearch(void** elements, int length, CString key, CString(*getKey)(vo
 }
 
 // binarySearch search a sorted list of elements for an element with given key.
-void* binarySearch(void** elements, int length, CString key, CString(*getKey)(void*),
+void* binarySearch(void** elements, int length, CString key, CString(*getKey)(const void*),
 				   int(*compare)(CString, CString), int* index) {
 	ASSERT(elements && key && getKey && compare);
 	if (index) *index = -1;

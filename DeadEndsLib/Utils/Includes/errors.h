@@ -40,7 +40,7 @@ typedef struct Error {
 #define ErrorLog List
 ErrorLog *createErrorLog(void);
 void deleteErrorLog(ErrorLog*);
-Error *createError(ErrorType type, CString fileName, int lineNumber, String message);
+Error *createError(ErrorType type, CString fileName, int lineNumber, CString message);
 extern void setSeverityError(Error *error, ErrorSeverity severity);
 void deleteError(Error*);
 void addErrorToLog(ErrorLog*, Error*);

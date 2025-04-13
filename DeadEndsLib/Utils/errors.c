@@ -48,7 +48,7 @@ ErrorLog* createErrorLog(void) {
 }
 
 // createError creates an Error.
-Error* createError(ErrorType type, CString fileName, int lineNumber, String message) {
+Error* createError(ErrorType type, CString fileName, int lineNumber, CString message) {
 	Error *error = (Error*) stdalloc(sizeof(Error));
 	if (! error)
 	  return NULL;

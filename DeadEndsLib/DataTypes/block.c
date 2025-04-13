@@ -90,13 +90,13 @@ void setBlockElement(Block* block, void* element, void(*delete)(void*), int inde
 }
 
 // findInBlock returns the element with given key if it exists; null otherwise; uses linear search.
-void* findInBlock(Block* block, CString key, CString(*getKey)(void*), int* index) {
+void* findInBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
 	return linearSearch(block->elements, block->length, key, getKey, index);
 }
 
 // findInSortedBlock returns the element with given key if it exists; null otherwise; uses
 // binary search.
-void* findInSortedBlock(Block* block, CString key, CString(*getKey)(void*),
+void* findInSortedBlock(Block* block, CString key, CString(*getKey)(const void*),
 						int(*compare)(CString, CString), int* index) {
 	if (block->length == 0) {
 		if (index) *index = 0;
@@ -106,12 +106,12 @@ void* findInSortedBlock(Block* block, CString key, CString(*getKey)(void*),
 }
 
 // isInBlock returns true if an element with given key is in the Block; linear search is used.
-bool isInBlock(Block* block, CString key, CString(*getKey)(void*), int* index) {
+bool isInBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
 	return findInBlock(block, key, getKey, index) != null;
 }
 
 // isInSortedBlock returns true if an element with given key is in the Block; binary search is used.
-bool isInSortedBlock(Block* block, CString key, CString(*getKey)(void*),
+bool isInSortedBlock(Block* block, CString key, CString(*getKey)(const void*),
 					 int(*compare)(CString, CString), int* index) {
 	return findInSortedBlock(block, key, getKey, compare, index);
 }
@@ -127,17 +127,17 @@ Block *copyBlock(Block *block, void*(*copyfunc)(void*)) {
 }
 
 // appendToBlock appends a new element to the end of a Block's elements.
-void appendToBlock(Block *block, void *element) {
+void appendToBlock(Block *block, const void *element) {
 	insertInBlock(block, element, block->length);
 }
 
 // prependToBlock prepends a new element to the front of a Block's elements.
-void prependToBlock(Block *block, void *element) {
+void prependToBlock(Block *block, const void *element) {
 	insertInBlock(block, element, 0);
 }
 
 // insertInBlock inserts an element into a Block at a given index.
-void insertInBlock(Block *block, void *element, int index) {
+void insertInBlock(Block *block, const void *element, int index) {
 	ASSERT(block && element && index >= 0 && index <= block->length);
 	if (block->length >= block->maxLength) growBlock(block);
 	void **elements = block->elements;
@@ -175,7 +175,7 @@ bool removeLastBlockElement(Block *block, void(*delete)(void*)) {
 // removeFromBlock removes the element at a specific index from a Block's elements.
 bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
 	if (blockDebugging) printf("remove from %d\n", index);
-	if (!block || index < 0 || index >= block->length) return false;
+	if (! block || index < 0 || index >= block->length) return false;
 	void **elements = block->elements;
 	if (delete) delete(elements[index]);
 	for (; index < block->length - 1; index++)
@@ -189,7 +189,7 @@ bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(void *a),
 						   int(*compare)(CString, CString), void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from sorted block\n", key);
 	int index = -1;
-	if (!binarySearch(block->elements, block->length, key, getKey, compare, &index)) return false;
+	if (! binarySearch(block->elements, block->length, key, getKey, compare, &index)) return false;
 	removeFromBlock(block, index, delete);
 	return true;
 }
@@ -199,25 +199,25 @@ bool removeFromUnsortedBlock(Block* block, CString key, CString(*getKey)(void*),
 							 void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from unsorted block\n", key);
 	int index = -1;
-	if (!linearSearch(block->elements, block->length, key, getKey, &index)) return false;
+	if (! linearSearch(block->elements, block->length, key, getKey, &index)) return false;
 	removeFromBlock(block, index, delete);
 	return true;
 }
 
 //  sortBlock sorts the elements in a Block.
-void sortBlock(Block* block, CString(*getKey)(void*), int(*compare)(CString, CString)) {
+void sortBlock(Block* block, CString(*getKey)(const void*), int(*compare)(CString, CString)) {
 	if (blockDebugging) printf("sortBlock of length %d\n", block->length);
 	sortElements(block->elements, block->length, getKey, compare);
 }
 
 // searchBlock searches an unsorted Block for an element. Index is set to its location.
-void* searchBlock(Block* block, CString key, CString(*getKey)(void*), int* index) {
+void* searchBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
 	if (index) *index = -1;
 	return linearSearch(block->elements, block->length, key, getKey, index);
 }
 
 // searchSortedBlock searches a sorted Block for an element. Index is set to its location.
-void* searchSortedBlock(Block *block, CString key, CString(*getKey)(void*),
+void* searchSortedBlock(Block *block, CString key, CString(*getKey)(const void*),
 						int(*compare)(CString, CString), int* index) {
 	if (index) *index = -1;
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);
@@ -234,7 +234,7 @@ void showBlock(Block *block, CString(*getString)(void*)) {
 
 // fprintfBlock is a debugging function that prints the contents of a Block to an open file.
 void fprintfBlock(FILE* file, Block* block, CString(*toString)(void*)) {
-	if (!file) return;
+	if (! file) return;
 	fprintf(file, "Block: %d %d\n", (int)block->length, (int)block->maxLength);
 	for (int i = 0; i < block->length; i++) {
 		fprintf(file, "%s\n", toString(block->elements[i]));
@@ -243,7 +243,7 @@ void fprintfBlock(FILE* file, Block* block, CString(*toString)(void*)) {
 }
 
 // isSorted returns true if the Block is sorted.
-bool isSorted(Block *block, CString(*getKey)(void*), int(*compare)(CString, CString)) {
+bool isSorted(Block *block, CString(*getKey)(const void*), int(*compare)(CString, CString)) {
 	if (block->length <= 1) return true;
 	void **elements = block->elements;
 	CString key = getKey(elements[0]);
@@ -259,7 +259,7 @@ bool isSorted(Block *block, CString(*getKey)(void*), int(*compare)(CString, CStr
 // iterateBlock iterates over the elements of a Block performing an action.
 void iterateBlock(Block *block, void(*perform)(void*)) {
 	ASSERT(block && perform);
-	if (!perform) return;
+	if (! perform) return;
 	for (int i = 0; i < block->length; i++) {
 		(*perform)(block->elements[i]);
 	}
@@ -267,10 +267,10 @@ void iterateBlock(Block *block, void(*perform)(void*)) {
 
 // uniqueBlock removes elements with duplicate keys from a Block. The Block must be ordered so
 // that all elements with the same key are grouped together.
-void uniqueBlock(Block* block, CString(*getKey)(void*), void(*delete)(void*)) {
+void uniqueBlock(Block* block, CString(*getKey)(const void*), void(*delete)(void*)) {
 	ASSERT(block && getKey);
 	int length = block->length;
-	if (!block || !getKey || length <= 0) return;
+	if (! block || !getKey || length <= 0) return;
 	void** elements = block->elements;
 	int j = 0;
 	CString key = getKey(elements[0]);

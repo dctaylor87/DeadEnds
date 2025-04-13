@@ -17,7 +17,7 @@ typedef struct Set {
 } Set;
 
 // Public interface.
-Set* createSet(CString(*get)(void*), int(*cmp)(CString, CString), void(*del)(void*));
+Set* createSet(CString(*get)(const void*), int(*cmp)(CString, CString), void(*del)(void*));
 void deleteSet(Set*);
 int lengthSet(Set*);
 bool isInSet(Set*, CString);

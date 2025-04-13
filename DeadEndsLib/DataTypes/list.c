@@ -178,7 +178,7 @@ void* getListElement(List *list, int index) {
 // insertInList inserts an element into a list at a given location, moving followers down. The
 // isSorted flag is not changed. If an insertion can cause a sorted list to become unsorted the
 // the caller should change the flag to false.
-void insertInList(List *list, void *element, int index) {
+void insertInList(List *list, const void *element, int index) {
 	insertInBlock(&(list->block), element, index);
 }
 

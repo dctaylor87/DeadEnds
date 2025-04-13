@@ -22,7 +22,7 @@ typedef struct List {
 	bool sorted; // Is a sorted list.
 	bool isSorted; // Is currently sorted.
 	void (*delete)(void*);
-	CString (*getKey)(void*);
+	CString (*getKey)(const void*);
 	int (*compare)(CString, CString);
 } List;
 
@@ -41,7 +41,7 @@ void *getListElement(List *list, int index);
 
 void appendToList(List*, void*);
 void prependToList(List*, void*);
-void insertInList(List*, void*, int);
+void insertInList(List*, const void*, int);
 bool isSortedList(List*); // Uses sorted flag.
 bool isListSorted(List*); // Really checks.
 void sortList(List*);
