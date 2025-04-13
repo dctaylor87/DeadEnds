@@ -64,6 +64,7 @@
 #include "ui.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "ll-indiseq.h"		/* preprint_indiseq, print_indiseq_element */
 
 static int LISTWIN_WIDTH=0;
 
