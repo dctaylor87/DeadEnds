@@ -28,13 +28,13 @@ extern int uiio_output (UIIO *uiio, char *buffer, char **err_msg);
 /* print the NUL terminated message on the UI's equivalent of stderr. */
 extern int uiio_error (UIIO *uiio, char *buffer, char **err_msg);
 
-extern void uiio_init (void);
+extern bool uiio_init (UIIO *uiio);
 
 extern void uiio_printf (UIIO *uiio, char *format, ...);
 
 /* XXX these should be removed from here and be entry points in the structure XXX */
-extern void uiio_stdio_init (void);
-extern void uiio_curses_init (void);
+extern bool uiio_stdio_init (void);
+extern bool uiio_curses_init (void);
 
 extern UIIO *uiio_curses;
 extern UIIO *uiio_stdio;

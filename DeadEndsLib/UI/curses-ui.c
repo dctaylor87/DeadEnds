@@ -71,6 +71,7 @@ static struct uiio _uiio_curses =
     0,				/* input data */
     0,				/* output data */
     0,				/* error data */
+    uiio_curses_init,		/* early initialization */
     curses_ui_pre_db_init,	/* pre database init */
     curses_ui_post_db_init,	/* post database init */
     curses_ui_main_loop,	/* main loop */
@@ -246,11 +247,12 @@ curses_ui_main_loop (void)
     main_menu ();
 }
 
-void
+bool
 uiio_curses_init (void)
 {
   /* for now, there is nothing to do -- curses initialization is
      handled elsewhere */
+  return true;
 }
 
 static void

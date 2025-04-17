@@ -66,8 +66,12 @@ int uiio_error (UIIO *uiio, char *buffer, char **err_msg)
 }
 
 /* XXX call the init function for each know UIIO instance XXX */
-void uiio_init (void)
+bool uiio_init (UIIO *uiio)
 {
+  if (uiio->uiio_init)
+    return (*uiio->uiio_init)();
+
+  return true;
 }
 
 void uiio_printf (UIIO *uiio, char *format, ...)

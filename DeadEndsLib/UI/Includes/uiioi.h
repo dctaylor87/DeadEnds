@@ -15,9 +15,12 @@ struct uiio
 
   /* tentative argument lists and return values */
 
-  /* XXX FUTURES: the next two might be merged.  Also, might add UIIO*
+  /* XXX FUTURES: the next thrre might be merged.  Also, might add UIIO*
      as argument (with 'void *ui_private' as a UIIO member to allow
      storing persistent UI specific data.  XXX */
+
+  /* called early for initialization */
+  bool (*uiio_init)(void);
 
   /* Called before the first database is opened.  Unclear if it should
      be called before each open.  */

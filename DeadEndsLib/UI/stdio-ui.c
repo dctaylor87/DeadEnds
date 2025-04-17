@@ -38,6 +38,7 @@ static struct uiio _uiio_stdio =
     0,				/* input data */
     0,				/* output data */
     0,				/* error data */
+    uiio_stdio_init,		/* early initialization */
     0,				/* pre database init */
     0,				/* post database init */
     0,				/* main loop */
@@ -135,10 +136,11 @@ stdio_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args)
   fputc ('\n', file);
 }
 
-void
+bool
 uiio_stdio_init (void)
 {
   _uiio_stdio.uiio_input_data = (void *)stdin;
   _uiio_stdio.uiio_output_data = (void *)stdout;
   _uiio_stdio.uiio_error_data = (void *)stderr;
+  return true;
 }
