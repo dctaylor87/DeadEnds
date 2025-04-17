@@ -342,7 +342,7 @@ ZST qSrerwlv      = N_("The record begins at wrong level.");
 /* &&begin signals */
 ZST qScoredump    = N_("\nAborting now. Core dump? [y/n]");
 ZST qSprogsig     = N_("Looks like a program was running.\nCheck file %1 around line %2.\n");
-ZST qSsignal      = N_("signal %1: %2");
+ZST qSsignal      = N_("signal %d: %s");
 	/* system signal#0 name */
 ZST qSsig00       = N_("SIGNAL 0");
 ZST qSsig01       = N_("HANGUP");

@@ -319,7 +319,7 @@ extern ZST qSrerwlv;      /* "The record begins at wrong level." */
 /* &&begin signals */
 extern ZST qScoredump;    /* "\nAborting now. Core dump? [y/n]" */
 extern ZST qSprogsig;     /* "Looks like a program was running.\nCheck file %1 around line %2.\n" */
-extern ZST qSsignal;      /* "signal %1: %2" */
+extern ZST qSsignal;      /* "signal %d: %s" */
 	/* system signal#0 name */
 extern ZST qSsig00;       /* "SIGNAL 0" */
 extern ZST qSsig01;       /* "HANGUP" */
