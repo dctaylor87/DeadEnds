@@ -142,6 +142,7 @@ main (int argc, char **argv)
 	String crashlog=NULL;
 	int i=0;
 	//	bool have_python_scripts = false;
+	UIIO *saved_uiio = NULL;
 
 	//sleep (60);
 	current_uiio = uiio_curses;
@@ -214,9 +215,15 @@ prompt_for_db:
 
 	bool runningInterpreter = false;
 	if (exprogs || have_python_scripts || python_interactive)
-	  runningInterpreter = true;
+	  {
+	    current_uiio = uiio_stdio;
+	    runningInterpreter = true;
+	  }
+	if (! uiio_init (current_uiio))
+	  goto finish;
+
 	if (! uiio_pre_database_init (current_uiio, runningInterpreter))
-	    goto finish;
+	  goto finish;
 
 	c = argc - optind;
 	if (c > 1) {
@@ -298,6 +305,7 @@ prompt_for_db:
 		while (!alldone)
 			main_menu();
 	}
+
 	term_show_module();
 	term_browse_module();
 	ok=true;
