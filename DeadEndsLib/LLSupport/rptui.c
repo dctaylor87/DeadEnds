@@ -158,6 +158,7 @@ rptui_chooseFromArray (CString ttl, int no, String *pstrngs)
 	end_rptui();
 	return i;
 }
+
 int
 rptui_prompt_stdout (CString prompt)
 {
@@ -167,6 +168,7 @@ rptui_prompt_stdout (CString prompt)
 	end_rptui();
 	return i;
 }
+
 void
 rptui_view_array (CString ttl, int no, String *pstrngs)
 {

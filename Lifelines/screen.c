@@ -705,6 +705,7 @@ check_stdout (void)
 		deactivate_uiwin_and_touch_all();
 	}
 }
+
 /*=====================================
  * prompt_stdout -- Prompt user in stdout
  * This is like check_stdout, except it always
@@ -721,6 +722,7 @@ prompt_stdout (CString prompt)
 	i = do_prompt_stdout(prompt);
 	return i;
 }
+
 /*=====================================
  * search_for_one_record -- Invoke search menu & trim to one record
  *===================================*/
@@ -1966,6 +1968,8 @@ place_std_msg (void)
 		wrefresh(win);
 	place_cursor_main();
 }
+
+#if 0				/* no callers */
 /*==================================+
  * rpt_print -- Implement report language print function
  * Created: 2003-02-01 (Perry Rapp)
@@ -1975,6 +1979,8 @@ rpt_print (CString str)
 {
 	llwprintf("%s", str);
 }
+#endif
+
 /*=================================================
  * llvwprintf -- Called as wprintf(fmt, argp)
  *===============================================*/
@@ -2373,6 +2379,7 @@ display_status (String text)
   wrefresh(win);
 }
 
+#if 0			       /* no callers */
 /*=====================================
  * msg_width -- get max width of msgs
  *===================================*/
@@ -2381,6 +2388,8 @@ msg_width (void)
 {
 	return ll_cols-6;
 }
+#endif
+
 #if 1			   /* for now... */
 /*=========================================
  * curses_outputv -- output message varargs style arguments
@@ -2744,6 +2753,8 @@ switch_to_uiwin (UIWINDOW uiwin)
 	touchwin(win);
 	wrefresh(win);
 }
+
+#if 0				/*  no callers */
 /*============================
  * refresh_stdout --
  *  bring stdout to front
@@ -2753,6 +2764,9 @@ refresh_stdout (void)
 {
 	wrefresh(uiw_win(stdout_win));
 }
+#endif
+
+#if 0				/* no callers */
 /*============================
  * call_system_cmd --
  *  execute a shell command (for report interpreter)
@@ -2777,6 +2791,8 @@ call_system_cmd (CString cmd)
 	place_cursor_main();
 	wrefresh(curscr);
 }
+#endif
+
 /*============================
  * uierase -- erase window
  *  handles manual erasing if broken_curses flag set

@@ -77,6 +77,8 @@ llvwprintf (CString fmt, va_list args)
 {
 	vprintf(fmt, args);
 }
+
+#if 0  /* no callers */
 /*=============================================================
  * Report output functions
  *===========================================================*/
@@ -86,13 +88,17 @@ rpt_print (CString str)
 {
 	printf("%s", str);
 }
+#endif
 
+#if 0				/* no callers */
 void
 refresh_stdout (void)
 {
 	/* We don't need to do anything as we're using stdout */
 }
+#endif
 
+#if 0  /* no callers */
 /*=============================================================
  * Message output functions
  *===========================================================*/
@@ -103,7 +109,9 @@ msg_width (void)
 	/* arbitrarily high number */
 	return 999;
 }
+#endif
 
+#if 0  /* no callers */
 /*=============================================================
  * MTE: this really belongs in stdlib/
  *===========================================================*/
@@ -124,6 +132,7 @@ call_system_cmd (CString cmd)
 		sleep(2);
         }
 }
+#endif
 
 /*=============================================================
  * ASK Routines
