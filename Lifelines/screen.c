@@ -736,11 +736,7 @@ search_for_one_record (void)
 		return NULL;
 	}
 	/* namesort uses canonkeysort for non-persons */
-#if defined(DEADENDS)
 	nameSortSequence (seq);
-#else
-	namesort_indiseq(seq);
-#endif
 	return chooseFromSequence(seq, DOASK1,
 				  _("Search results"), _("Search results"),
 				  chooseTypeDefault);

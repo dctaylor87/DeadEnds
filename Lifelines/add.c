@@ -144,11 +144,7 @@ add_indi_by_edit (bool rfmt)
 			releaseRecord(indi0);
 			indi0=0;
 		}
-#if defined(DEADENDS)
 		indi0 = file_to_node(editfile, ttmi, &msg, &emp);
-#else
-		indi0 = file_to_record(editfile, ttmi, &msg, &emp);
-#endif
 		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -208,11 +204,7 @@ add_new_indi_to_db (GNode *indi0)
 
 	splitPerson(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	key = getNewPersonKey (currentDatabase);
-#if defined(DEADENDS)
 	indi0->key = strdup(key);
-#else
-	init_new_record(indi0, key);
-#endif
 	for (node = name; node; node = nsibling(node)) {
 		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
 	}

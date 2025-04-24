@@ -1910,12 +1910,8 @@ get_history_list (struct hist * histp)
 		node = getRecord (histp->list[next], currentDatabase->recordIndex);
 		if (node) {
 			String key = nxref(node);
-#if defined(DEADENDS)
 			key = strsave(key);
 			appendToSequence(seq, key, NULL);
-#else
-			append_indiseq_null(seq, key, NULL, true, false);
-#endif
 		}
 		next = (next+1) % histp->size;
 		if (next == histp->past_end)

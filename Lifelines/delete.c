@@ -97,18 +97,10 @@ chooseAndRemoveFamily (void)
 		tag = ntag(node);
 		if (eqstr("HUSB", tag) || eqstr("WIFE", tag)) {
 			key = strsave(nval(node));
-#if defined(DEADENDS)
 			appendToSequence(spseq, key, NULL);
-#else
-			append_indiseq_null(spseq, key, NULL, true, true);
-#endif
 		} else if (eqstr("CHIL", tag)) {
 			key = strsave(nval(node));
-#if defined(DEADENDS)
 			appendToSequence(chseq, key, NULL);
-#else
-			append_indiseq_null(chseq, key, NULL, true, true);
-#endif
 		}
 	}
 

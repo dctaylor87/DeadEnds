@@ -276,18 +276,11 @@ browse_list (GNode **prec1, GNode **prec2, Sequence **pseq)
 			FORSEQUENCE(newseq, el, i)
 				skey = element_skey(el);
 				snam = element_name(el);
-#if defined(DEADENDS)
+
 				if (! isInSequence (seq, skey))
 					appendToSequence(seq, strsave(skey), snam);
-#else
-				append_indiseq_null(seq, strsave(skey), snam, false, true);
-#endif
 			ENDSEQUENCE
-#if defined(DEADENDS)
 			nameSortSequence (seq);
-#else
-			namesort_indiseq(seq);
-#endif
 			cur = top = 0;
 			mark = -1;
 			len = lengthSequence(seq);
