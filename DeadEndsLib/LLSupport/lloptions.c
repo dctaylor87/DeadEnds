@@ -15,6 +15,10 @@
 #include "config.h"
 #endif
 
+#if HAVE_PWD_H
+#include <pwd.h>
+#endif
+
 #include <ansidecl.h>
 #include <stdint.h>
 
@@ -458,4 +462,74 @@ static void
 send_notifications (void)
 {
 	notify_listeners(&f_notifications);
+}
+
+/* get_user_fullname -- Extract current users full name returns static
+   buffer (actually system buffer) */
+
+static String
+get_user_fullname(void)
+{
+  String retval = NULL;
+
+#if defined(HAVE_GETPWUID)
+  /* Get name using getpwuid() */
+  struct passwd *pwent = getpwuid(getuid());
+  if (NULL != pwent && NULL != pwent->pw_gecos)
+    retval = (String) pwent->pw_gecos; /* XXX Is it safe to pass this on? */
+#else
+	return NULL;
+#endif
+
+  return retval;
+}
+
+/* get_user_email -- Construct email address using username and host
+   name returns static buffer.  */
+ 
+static String
+get_user_email (void)
+{
+  String retval = NULL;
+
+#if defined(HAVE_GETPWUID)
+  static char username[256];
+  char hostname[256];
+  struct passwd *pwent = getpwuid(getuid());
+  if (NULL != pwent &&
+      (int)sizeof(hostname) > gethostname(hostname, sizeof(hostname)))
+    {
+      destrncpyf(username, sizeof(username), uu8, "%s@%s",
+	       pwent->pw_name, hostname);
+      username[sizeof(username)-1] = '\0';
+      retval = (String) username;
+    }
+#else
+	return NULL;
+#endif
+
+  return retval;
+}
+
+/* get_property -- Try getdeoptstr_rpt, which tries user options table
+   & config file.  */
+
+String
+get_property (CString opt)
+{
+  String val;
+
+  if (NULL == opt)
+    return NULL;
+
+  val = getdeoptstr_rpt(opt, NULL);
+  if (NULL == val)
+    {
+      if (eqstr(opt, "user.fullname"))
+        val = get_user_fullname();
+
+      if (eqstr(opt, "user.email"))
+        val = get_user_email();
+    }
+  return val;
 }

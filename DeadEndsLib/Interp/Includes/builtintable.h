@@ -72,6 +72,7 @@ extern PValue __getfam(PNode*, Context*, bool*);
 extern PValue __getindi(PNode*, Context*, bool*);
 extern PValue __getindiset(PNode*, Context*, bool*);
 extern PValue __getint(PNode*, Context*, bool*);
+extern PValue __getproperty(PNode*, Context*, bool*);
 extern PValue __getrecord(PNode*, Context*, bool*);
 extern PValue __getstr(PNode*, Context*, bool*);
 extern PValue __gettoday(PNode*, Context*, bool*);

@@ -11,6 +11,7 @@ libinterp_a_SOURCES = \
 	builtin.c \
 	builtintable.c \
 	evaluate.c \
+	extra.c \
 	functable.c \
 	functiontable.c \
 	interp.c \

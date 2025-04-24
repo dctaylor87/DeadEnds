@@ -38,4 +38,5 @@ int getdeoptint(CString optname, int defval);
 String getdeoptstr_dbonly(CString optname, String defval);
 String getdeoptstr_rpt(CString optname, String defval);
 
+String get_property (CString opt);
 #endif /* OPTIONS_H_INCLUDED */
