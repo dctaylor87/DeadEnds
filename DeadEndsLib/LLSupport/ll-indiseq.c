@@ -178,11 +178,7 @@ spouseseq_print_el (Sequence *seq, int i, int len, RFMT rfmt, Database *database
 	if (! element_indiseq_ival(seq, i, &key, &val, &name))
 	  return NULL;
 	indi = keyToPerson(key, seq->index);
-#if defined(DEADENDS)
 	fam = keyToFamily (key, database->recordIndex);
-#else
-	fam = keynum_to_fam(val);
-#endif
 	str = indi_to_list_string(indi, fam, len, rfmt, true);
 	return str;
 }
@@ -210,11 +206,7 @@ famseq_print_el (Sequence *seq, int i, int len, RFMT rfmt, Database *database)
 	/* build sequence of other spouses in this family */
 	FORFAMSPOUSES(fam, spouse, seq->index)
 		len++;
-#if defined(DEADENDS)
 		key = nxref(spouse);
-#else
-		key = indi_to_key(spouse);
-#endif
 		spkeynum = atoi(key + 1);
 		if (val != spkeynum) {
 			appendToSequence(spseq, key, NULL);
