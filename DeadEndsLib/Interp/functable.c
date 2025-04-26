@@ -25,6 +25,7 @@ BuiltIn builtIns[] = {
   { "alpha",        1,    1,    __alpha },
   { "ancestorset",  1,    1,    __ancestorset },
   { "and",          2,    32,    __and },
+  { "atoi",         1,    1,    __strtoint },		// LL compatibility
   { "baptism",      1,    1,    __baptism },
   { "birth",        1,    1,    __birth },
   { "burial",       1,    1,    __burial },
