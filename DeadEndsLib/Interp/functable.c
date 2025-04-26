@@ -119,7 +119,7 @@ BuiltIn builtIns[] = {
   { "lt",           2,    2,    __lt },
   { "male",         1,    1,    __male },
   { "marriage",     1,    1,    __marriage },
-//{ "menuchoose",   1,    2,    __menuchoose },
+  { "menuchoose",   1,    2,    __menuchoose },
   { "mod",          2,    2,    __mod },
   { "monthformat",  1,    1,    __monthformat },
   { "mother",       1,    1,    __mother },
