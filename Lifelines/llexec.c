@@ -95,7 +95,7 @@ extern int yydebug;
 //#endif
 //int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
 
-static CString optString = "adkntx:o:C:I:p:Pvh?";
+static CString optString = "adkns:tx:o:C:I:p:Pvh?";
 
 /*********************************************
  * required global variables
@@ -203,8 +203,12 @@ prompt_for_db:
 		crashlog = crashlog_default;
 
 	crash_setcrashlog(crashlog);
-	/* give interpreter its turn at initialization */
-	initializeInterpreter(currentDatabase);
+
+	if (! uiio_init (current_uiio))
+	  goto finish;
+
+	if (! uiio_pre_database_init (current_uiio, true))
+	  goto finish;
 
 	c = argc - optind;
 	if (c > 1) {
@@ -238,6 +242,7 @@ prompt_for_db:
 	      goto finish;
 	    }
 	}
+
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
 		llwprintf("%s", _(qSbaddb));
@@ -245,10 +250,17 @@ prompt_for_db:
 	}
 	/* does not use show module */
 	/* does not use browse module */
+
+	uiio_post_database_init (current_uiio);
+
 	if (exprogs) {
 		bool picklist = false;
 		bool timing = false;
-		interp_main(exprogs, currentDatabase, progout, picklist, timing);
+		int len = lengthList (exprogs);
+		for (int ndx = 0; ndx < len; ndx++) {
+		  CString prog = getListElement (exprogs, ndx);
+		  interp_main (prog, currentDatabase, progout, picklist, timing);
+		}
 		deleteList(exprogs);
 	} else {
 		/* TODO: prompt for report filename */
