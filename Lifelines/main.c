@@ -144,7 +144,6 @@ main (int argc, char **argv)
 	//	bool have_python_scripts = false;
 	UIIO *saved_uiio = NULL;
 
-	//sleep (60);
 	current_uiio = uiio_curses;
 
 	/* DEADENDS: init_arch is just 'return 0', init_stdlib is
@@ -258,7 +257,7 @@ prompt_for_db:
 	    }
 	}
 	/* give interpreter its turn at initialization */
-	initializeInterpreter(currentDatabase);
+	//initializeInterpreter(currentDatabase);
 
 	/* Start Program */
 	if (!init_lifelines_postdb()) {
