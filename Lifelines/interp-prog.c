@@ -112,12 +112,12 @@ interp_program (String proc, int nargs, void **args, CString sfile,
       sfile = fname;
     }
 
-  Perrors = 0;
+  /* give interpreter its chance at initialization */
+  initializeInterpreter(database);
+
   ErrorLog *errorLog = createErrorLog ();
   parseProgram (sfile, programsdir, errorLog);
   //programParsing = true;
-
-  initializeInterpreter(database);
 
   if (Perrors)
     {
