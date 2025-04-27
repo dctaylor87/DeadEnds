@@ -118,13 +118,11 @@ static PyObject *llpy_name (PyObject *self, PyObject *args, PyObject *kw)
 
   if (! (node_name = NAME (nztop (indi->llr_record))))
     {
-#if !defined(DEADENDS)
       if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("name: person does not have a name"));
 	  return NULL;
 	}
-#endif
       Py_RETURN_NONE;
     }
   name = manipulateName(nval(node_name), caps ? DOSURCAP : NOSURCAP, REGORDER, MAX_NAME_LENGTH);
@@ -160,13 +158,11 @@ static PyObject *llpy_fullname (PyObject *self, PyObject *args, PyObject *kw)
 
   if (! (node_name = NAME (nztop (indi->llr_record))) || ! nval(node_name))
     {
-#if !defined(DEADENDS)
       if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("fullname: person does not have a name"));
 	  return NULL;
 	}
-#endif
       Py_RETURN_NONE;
 
     }
@@ -191,13 +187,11 @@ static PyObject *llpy_surname (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
   node_name = nztop (indi->llr_record);
   if (! (node_name = NAME(node_name)) || ! nval(node_name))
     {
-#if !defined(DEADENDS)
       if (getdeoptint ("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("surname: person does not have a name"));
 	  return NULL;
 	}
-#endif
       Py_RETURN_NONE;
     }
   name = getSurname(nval(node_name));
@@ -216,13 +210,11 @@ static PyObject *llpy_givens (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
   if (!(name = NAME(nztop (indi->llr_record))) || !nval(name))
     {
-#if !defined(DEADENDS)
       if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("givens: person does not have a name"));
 	  return NULL;
 	}
-#endif
       Py_RETURN_NONE;
     }
   return (Py_BuildValue ("s", getGivenNames(nval(name))));
@@ -245,13 +237,11 @@ static PyObject *llpy_trimname (PyObject *self, PyObject *args, PyObject *kw)
 
   if (!(indi = NAME(indi)) || ! nval(indi))
     {
-#if !defined(DEADENDS)
       if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("trimname: person does not have a name"));
 	  return NULL;
 	}
-#endif
       Py_RETURN_NONE;
     }
   str = nameString (trimName (nval (indi), max_length));
@@ -611,13 +601,11 @@ static PyObject *llpy_soundex (PyObject *self, PyObject *args ATTRIBUTE_UNUSED)
 
   if (!(name = NAME(nztop (indi->llr_record))) || !nval(name))
     {
-#if !defined(DEADENDS)
       if (getdeoptint("RequireNames", 0))
 	{
 	  PyErr_SetString (PyExc_ValueError, _("soundex: person does not have a name"));
 	  return NULL;
 	}
-#endif
       Py_RETURN_NONE;
     }
   return Py_BuildValue ("s", soundex (getSurname (nval (name))));
