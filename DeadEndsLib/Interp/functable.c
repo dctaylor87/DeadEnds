@@ -163,7 +163,7 @@ BuiltIn builtIns[] = {
   { "root",         1,    1,    __root },  // Not needed as in LL; now walks up the Gedcom tree.
   { "row",          1,    1,    __row },
   { "save",         1,    1,    __save },
-//{ "savenode",     1,    1,    __savenode },
+  { "savenode",     1,    1,    __savenode },
   { "set",          2,    2,    __set },
   { "setel",        3,    3,    __setel },
   { "sex",          1,    1,    __sex },
