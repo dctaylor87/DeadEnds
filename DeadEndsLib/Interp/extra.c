@@ -378,17 +378,12 @@ PValue __menuchoose (PNode *pnode, Context *context, bool *eflg)
   int ndx = 0;
 
   FORLIST (list, el)
-#if 0
-    PValue vel = (PValue) el;
-    strngs[ndx] = pvalueToString (vel, false);
-#else
-    strngs[ndx] = (String) el;	/* XXX is it a string? XXX */
-#endif
+    strngs[ndx] = ((PValue *)el)->value.uString;
     ndx++;
   ENDLIST
   ndx = rptui_chooseFromArray (msg, len, strngs);
   for (int ndx2 = 0; ndx2 < len; ndx2++)
     stdfree (strngs[ndx2]);
   stdfree (strngs);
-  return PVALUE (PVInt, uInt, ndx);
+  return PVALUE (PVInt, uInt, (ndx + 1));
 }
