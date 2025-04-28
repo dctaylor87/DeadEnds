@@ -143,11 +143,12 @@ PValue __getel (PNode *node, Context *context, bool *eflg) {
         return nullPValue;
     }
     int index = (int) pvalue.value.uInt;
-    if (index < 0 || index >= lengthList(list)) {
+    if (index <= 0 || index > lengthList(list)) {
         scriptError(node, "the index to getel is out of range");
         *eflg = true;
         return nullPValue;
     }
+    index--;
     PValue *ppvalue = (PValue*) getListElement(list, index);
     memcpy(&pvalue, ppvalue, sizeof(PValue));
     return pvalue;
