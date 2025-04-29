@@ -4,7 +4,7 @@
 //  interp.y is the yacc file for the DeadEnds script language.
 //
 //  Created by Thomas Wetmore on 8 December 2022.
-//  Last changed 7 March 2025.
+//  Last changed 29 April 2025.
 %{
 #include <stdint.h>
 #include "refnindex.h"
@@ -65,7 +65,7 @@ static void yyerror(ErrorLog *errorLog, const char *str);
     |	func
     |	IDEN '(' IDEN ')' {  // Interested in "global".
         if (eqstr("global", $1))
-            assignValueToSymbol(globalTable, $3, (PValue) {PVAny});
+            assignValueToSymbol(globalTable, $3, (PValue) {PVNull});
     }
     |	IDEN '(' SCONS ')' {  // Interested in "include".
         if (eqstr("include", $1))
