@@ -62,7 +62,8 @@ PValue __getindi (PNode *pnode, Context *context, bool* eflg)
       return nullPValue;
 
     assignValueToSymbol(context->symbolTable, iden->identifier,
-			PVALUE (PVString, uString, key));
+			PVALUE (PVPerson, uGNode,
+				keyToPerson (key, context->database->recordIndex)));
     return nullPValue;
 }
 
