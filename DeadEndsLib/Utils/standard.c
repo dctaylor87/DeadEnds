@@ -3,7 +3,7 @@
 // standard.c hold some standard utiltiy functions.
 //
 // Creates by Thomas Wetmore on 7 November 2022.
-// Last changed on 25 November 2024.
+// Last changed on 28 April 2025.
 
 #include <stdlib.h>
 
@@ -94,7 +94,7 @@ void _free (void* ptr, String file, int line) {
 
 // strsave returns a copy of a String on the heap. If the string is null or empty null is returned.
 String strsave(CString string) {
-	if (string == null || *string == 0) return null;
+	if (string == null) return null;
 	return strcpy(stdalloc(strlen(string) + 1), string);
 }
 
