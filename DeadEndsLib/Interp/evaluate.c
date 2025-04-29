@@ -144,23 +144,10 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
 PValue evaluateBoolean(PNode* pnode, Context* context, bool* errflg) {
     PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg) return nullPValue;
-    switch (pvalue.type) {
-        case PVNull: return falsePValue;
-        case PVBool: return pvalue;
-        case PVInt: return pvalue.value.uInt ? truePValue : falsePValue;
-        case PVFloat: return pvalue.value.uFloat != 0.0 ? truePValue : falsePValue;
-        case PVString: return strlen(pvalue.value.uString) > 0 ? truePValue : falsePValue;
-        case PVPerson:
-        case PVFamily:
-        case PVSource:
-        case PVEvent:
-        case PVOther:
-        case PVGNode: return pvalue.value.uGNode ? truePValue : falsePValue;
-        case PVSequence: return pvalue.value.uSequence ? truePValue : falsePValue;
-        //case PVTable: return pvalue.pvValue.uTable ? truePValue : falsePValue;
-        //case PVList: return pvalue.pvValue.uList ? truePValue : falsePValue;
-        default: *errflg = true; return nullPValue;
-    }
+    if (pvalueToBoolean (pvalue))
+      return truePValue;
+    else
+      return falsePValue;
 }
 
 // pvalueToBoolean converts a program value to a boolean using C like rules.
