@@ -275,7 +275,7 @@ PValue __getproperty (PNode *pnode, Context *context, bool *eflg)
       return nullPValue;
     }
   str = get_property (str);
-  return PVALUE (PVString, uString, str);
+  return createStringPValue(str);
 }
 
 #if 0

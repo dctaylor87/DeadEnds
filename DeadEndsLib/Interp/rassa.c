@@ -206,7 +206,7 @@ PValue __outfile(PNode* pnode, Context* context, bool* errflg)
     setbuf(Poutfp, NULL);
   }
   *errflg = false;
-  return PVALUE (PVString, uString, outfilename);
+  return createStringPValue(outfilename);
 }
 
 // __pos positions page output to a row and column.
