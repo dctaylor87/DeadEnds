@@ -80,6 +80,28 @@ void* _alloc(size_t len, CString file, int line) {
 	return p;
 }
 
+// _realloc reallocates memory; called by stdrealloc.
+void* _realloc(void* ptr, size_t len, CString file, int line) {
+	char* p;
+	ASSERT(len != 0);
+#if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
+	if (loggingAllocs) {
+		bytesFreed += malloc_size(p);
+		fprintf(allocLogFile, "FR %s\t%d\t%zu\t%p\n",
+			lastPathSegment(file), line, malloc_size(ptr), ptr);
+	}
+#endif
+	ASSERT(p = realloc(ptr, len));
+#if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
+	if (loggingAllocs) {
+		bytesAllocated += malloc_size(p);
+		fprintf(allocLogFile, "AR %s\t%d\t%zu\t%zu\t%p\n",
+			lastPathSegment(file), line, len, malloc_size(p), (void *) p);
+	}
+#endif
+	return p;
+}
+
 // _free deallocates memory; called by sdtfree.
 void _free (void* ptr, String file, int line) {
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)

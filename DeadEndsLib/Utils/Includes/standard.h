@@ -64,18 +64,21 @@ void basicDelete(void*);
 //--------------------------------------------------------------------------------------------------
 void* _alloc(size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 void _free(void* ptr, String, int);
+void* _realloc(void* ptr, size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (2))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
 void _logAllocations(bool);  // Turn allocation logging on and off.
 
 // Turn on alloc and free debugging.
 #ifdef DEBUGALLOCS // Debugging allocs and free.
-	#define stdalloc(l)   _alloc(l, __FILE__, __LINE__)
-	#define stdfree(p)    _free((void *)p, __FILE__, __LINE__)
+	#define stdalloc(l)       _alloc(l, __FILE__, __LINE__)
+	#define stdfree(p)        _free((void *)p, __FILE__, __LINE__)
+	#define stdrealloc(p, s)  _realloc((void *)p, s, __FILE__, __LINE__)
 	#define logAllocations(b) _logAllocations((b))
 #else // Not debugging allocs and frees.
-	#define stdalloc(l) malloc((void *)(l))
-	#define stdfree(p) free(((void *)p))
+	#define stdalloc(l)        malloc((void *)(l))
+	#define stdfree(p)         free(((void *)p))
+	#define stdrealloc(p, s)   reallloc ((void *)p, s)
 	#define logAllocations(b)
 #endif
 
