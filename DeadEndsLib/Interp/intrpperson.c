@@ -3,7 +3,7 @@
 // intrpperson.c has the built-in script functions that deal with persons.
 //
 // Created by Thomas Wetmore on 17 March 2023.
-// Last changed on 23 October 2024.
+// Last changed on 30 April 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -48,7 +48,7 @@ PValue __name(PNode* pnode, Context* context, bool* errflg) {
     }
     String name = manipulateName(nameNode->value, useCaps, true, 68);
     //  MNOTE: The program value below has a pointer to data space, not heap space.
-    if (name) return PVALUE(PVString, uString, name);
+    if (name) return createStringPValue(name);
     else return nullPValue;
 }
 
@@ -89,7 +89,7 @@ PValue __fullname(PNode* pnode, Context* context, bool* eflg) {
         scriptError(pnode, "the person must have a name");
         return nullPValue;
     }
-    return PVALUE(PVString, uString, manipulateName(name->value, caps, reg, len));
+    return createStringPValue(manipulateName(name->value, caps, reg, len));
 }
 
 // __surname gets a person's surname.
@@ -106,7 +106,7 @@ PValue __surname(PNode* pnode, Context* context, bool* errflg) {
         scriptError(pnode, "the person must have a name");
         return nullPValue;
     }
-    return PVALUE(PVString, uString, getSurname(gnode->value));
+    return createStringPValue(getSurname(gnode->value));
 }
 
 // __givens gets the given names of a person. They are returned as a single string.
@@ -123,7 +123,7 @@ PValue __givens(PNode* pnode, Context* context, bool* errflg) {
         scriptError(pnode, "the person must have a name");
         return nullPValue;
     }
-    return PVALUE(PVString, uString, getGivenNames(this->value));
+    return createStringPValue(getGivenNames(this->value));
 }
 
 // __trimname trims a name if too long
@@ -148,7 +148,7 @@ PValue __trimname(PNode* node, Context* context, bool *eflg) {
         scriptError(node, "the second argument to trimname must be an integer");
         return nullPValue;
     }
-    return PVALUE(PVString, uString, nameString(trimName(indi->value, (int) length.value.uInt)));
+    return createStringPValue(nameString(trimName(indi->value, (int) length.value.uInt)));
 }
 
 // __birth returns the first birth event of a person.
@@ -244,17 +244,14 @@ PValue __prevsib(PNode* pnode, Context* context, bool* eflg) {
 // __sex returns the sex of a person as a string M, F or U.
 // usage: sex(INDI) -> STRING
 PValue __sex(PNode* pnode, Context* context, bool* eflg) {
-    const static PValue malePValue = PVALUE(PVString, uString, "M");
-    const static PValue femalePValue = PVALUE(PVString, uString, "F");
-    const static PValue unknownPValue = PVALUE(PVString, uString, "U");
     GNode* indi = evaluatePerson(pnode->arguments, context, eflg);
     if (*eflg || !indi) return nullPValue;
     GNode* sex = SEX(indi);
     if (sex && sex->value) {
-        if (eqstr(sex->value, "M")) return malePValue;
-        else if (eqstr(sex->value, "F")) return femalePValue;
+        if (eqstr(sex->value, "M")) return createStringPValue("M");
+        else if (eqstr(sex->value, "F")) return createStringPValue("F");
     }
-    return unknownPValue;
+    return createStringPValue("U");
 }
 
 // __male checks if a person is male.
@@ -286,8 +283,8 @@ PValue __pn(PNode* node, Context* context, bool* eflg) {
     PValue typ = evaluate(arg->next, context, eflg);
     if (*eflg || typ.type != PVInt) return nullPValue;
     int pncode = (int) typ.value.uInt;
-    if (SEXV(indi) == sexFemale) return PVALUE(PVString, uString, fpns[pncode]);
-    else return PVALUE(PVString, uString, mpns[pncode]);
+    if (SEXV(indi) == sexFemale) return createStringPValue(fpns[pncode]);
+    else return createStringPValue(mpns[pncode]);
 }
 
 // __nfamilies returns the number of families a person is a spouse in.
@@ -321,7 +318,7 @@ PValue __title(PNode* pnode, Context* context, bool* errflg) {
     GNode* gnode = evaluatePerson(pnode->arguments, context, errflg);
     if (*errflg || !gnode) return nullPValue;
     gnode = findTag(gnode->child, "TITL");
-    if (gnode && gnode->value) return PVALUE(PVString, uString, gnode->value);
+    if (gnode && gnode->value) return createStringPValue(gnode->value);
     return nullPValue;
 }
 
@@ -334,7 +331,7 @@ PValue __soundex (PNode* pnode, Context* context, bool* eflg) {
         *eflg = true;
         return nullPValue;
     }
-    return PVALUE(PVString, uString, strsave(soundex(getSurname(gnode->value))));
+    return createStringPValue(soundex(getSurname(gnode->value)));
 }
 
 // __inode returns the root of a person.

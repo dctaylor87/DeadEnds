@@ -8,7 +8,7 @@
 //  identifiers to PValue pointers.
 
 //  Created by Thomas Wetmore on 15 December 2022.
-//  Last changed on 29 April 2025.
+//  Last changed on 30 April 2025.
 
 #include <ansidecl.h>
 #include <stdint.h>
@@ -41,7 +41,7 @@ PValue evaluate(PNode* pnode, Context* context, bool* errflg) {
     if (pnode->type == PNFuncCall) return evaluateUserFunc(pnode, context, errflg);
     *errflg = false;
     if (pnode->type == PNICons) return PVALUE(PVInt, uInt, pnode->intCons);
-    if (pnode->type == PNSCons) return PVALUE(PVString, uString, pnode->stringCons);
+    if (pnode->type == PNSCons) return createStringPValue(pnode->stringCons);
     if (pnode->type == PNFCons) return PVALUE(PVFloat, uFloat, pnode->floatCons);
     *errflg = true;
     return nullPValue;
@@ -93,8 +93,8 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
 	if (debugging) printf("evaulateUserFunc: %s\n", name);
     PNode *func;
     if ((func = (PNode*) searchFunctionTable(functionTable, name)) == null) {
-        *errflg = true;
         scriptError(pnode, "The function %s is undefined", pnode->funcName);
+        *errflg = true;
         return nullPValue;
     }
     SymbolTable *newtab = createSymbolTable();
@@ -120,6 +120,7 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
         *errflg = true;
         scriptError(pnode, "there are different numbers of arguments and parameters");
         deleteContext(newContext);
+        *errflg = true;
         return nullPValue;
     }
 	if (debugging) showSymbolTable(newtab);
@@ -135,11 +136,10 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
         case InterpBreak:
         case InterpContinue:
         case InterpError:
+        default:
             *errflg = true;
             return nullPValue;
     }
-    *errflg = true;
-    return nullPValue;
 }
 
 // evaluateBoolean evaluates an expression and converts it to a boolean PValue using C like rules
