@@ -17,6 +17,10 @@
 #include "errors.h"
 #include "interp.h"
 #include <stdlib.h>
+#include "standard.h"	// DEBUGALLOCS
+#if defined(DEBUGALLOCS)
+#include "remap-allocs.h"
+#endif
 
 // Global variables that form the interface between the lexer, parser and interpreter.
 extern SymbolTable *globalTable; // Global variables.
