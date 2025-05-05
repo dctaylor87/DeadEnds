@@ -3,7 +3,7 @@
 // builtin.c contains many built-in functions of the DeadEnds script language.
 //
 // Created by Thomas Wetmore on 14 December 2022.
-// Last changed on 30 April 2025.
+// Last changed on 3 May 2025.
 
 #include <ansidecl.h>
 #include <stdint.h>
@@ -32,6 +32,7 @@
 const PValue nullPValue = {PVNull, PV()};
 const PValue truePValue = PVALUE(PVBool, uBool, true);
 const PValue falsePValue = PVALUE(PVBool, uBool, false);
+extern bool symbolTableDebugging;
 
 static bool debugging = false;
 
@@ -190,6 +191,10 @@ PValue __set(PNode* pnode, Context* context, bool* eflg) {
 		return nullPValue;
 	}
 	assignValueToSymbol(context->symbolTable, iden->identifier, value);
+    if (symbolTableDebugging) {
+        printf("Symtab after set() builtin with variable %s\n", iden->identifier);
+        showSymbolTable(context->symbolTable);
+    }
 	return nullPValue;
 }
 
@@ -243,9 +248,9 @@ PValue __ord(PNode* expr, Context* context, bool* eflg) {
 	if (lvalue < 1) return __d(expr, context, eflg);
 	if (lvalue > 12) {
 		sprintf(scratch, "%ldth", lvalue);
-		value.value.uString = strsave(scratch);
+        createStringPValue(scratch);
 	} else {
-		value.value.uString = strsave(ordinals[lvalue - 1]);
+        createStringPValue(ordinals[lvalue - 1]);
 	}
 	return value;
 }
@@ -434,7 +439,8 @@ PValue __capitalize(PNode *node, Context *context, bool* eflg) {
 // __root returns the root node of record the argument node is in.
 // usage: root(NODE) -> NODE
 PValue __root (PNode* pnode, Context* context, bool* errflg) {
-	GNode *gnode = evaluateGNode(pnode, context, errflg);
+  PNode *arg = pnode->arguments;
+	GNode *gnode = evaluateGNode(arg, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The first argument to root must be a Gedcom node.");
 		return nullPValue;

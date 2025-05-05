@@ -3,7 +3,7 @@
 // functable.c has the table of built-in functions in the DeadEnds scripting language.
 //
 // Created by Thomas Wetmore on 10 January 2023.
-// Last changed on 26 April 2025.
+// Last changed on 4 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -25,6 +25,7 @@ BuiltIn builtIns[] = {
   { "alpha",        1,    1,    __alpha },
   { "ancestorset",  1,    1,    __ancestorset },
   { "and",          2,    32,    __and },
+  { "append",        2,   2,    __append },
   { "atoi",         1,    1,    __strtoint },		// LL compatibility
   { "baptism",      1,    1,    __baptism },
   { "birth",        1,    1,    __birth },
@@ -40,7 +41,7 @@ BuiltIn builtIns[] = {
 //{ "choosespouse", 1,    1,    __choosespouse },
 //{ "choosesubset", 1,    1,    __choosesubset },
   { "col",          1,    1,    __col },
-  { "concat",       2,    32,   __concat },
+  { "concat",       1,    32,   __concat },
   { "copyfile",     1,    1,    __copyfile },
   { "createnode",   1,    2,    __createnode },
   { "d",            1,    1,    __d },
@@ -52,7 +53,7 @@ BuiltIn builtIns[] = {
   { "decr",         1,    1,    __decr },
   { "deletefromset",3,    3,    __deletefromset },
   { "deletenode",   1,    1,    __deletenode },
-  { "dequeue",      1,    1,    __dequeue },
+  { "dequeue",      1,    1,    __removeLast },
   { "dereference",  1,    1,    __getrecord },
   { "descendantset",1,    1,    __descendentset },
   { "descendentset",1,    1,    __descendentset },
@@ -60,7 +61,7 @@ BuiltIn builtIns[] = {
   { "difference",   2,    2,    __difference },
   { "div",          2,    2,    __div },
   { "empty",        1,    1,    __empty },
-  { "enqueue",      2,    2,    __push },
+  { "enqueue",      2,    2,    __prepend },
   { "eq",           2,    2,    __eq },
   { "eqstr",        2,    2,    __eqstr },
   { "exp",          2,    2,    __exp },
@@ -102,6 +103,7 @@ BuiltIn builtIns[] = {
   { "inode",        1,    1,    __inode },
   { "insert",       3,    3,    __insert },
   { "intersect",    2,    2,    __intersect },
+  { "isnull",       1,    1,    __isnull },
   { "key",          1,    2,    __key },
   { "keysort",      1,    1,    __keysort },
   { "lastchild",    1,    1,    __lastchild },
@@ -148,16 +150,19 @@ BuiltIn builtIns[] = {
   { "parentset",    1,    1,    __parentset },
   { "place",        1,    1,    __place },
   { "pn",           2,    2,    __pn },  // Outputs pronouns
-  { "pop",          1,    1,    __pop },
+  { "pop",          1,    1,    __removeFirst },
   { "pos",          2,    2,    __pos },
+  { "prepend",      2,    2,    __prepend },
   { "prevfam",      1,    1,    __prevfam },
   { "previndi",     1,    1,    __previndi },
   { "prevsib",      1,    1,    __prevsib },
-  { "print",        1,    32,    __print },
-  { "push",         2,    2,    __push },
+  { "print",        1,    32,   __print },
+  { "push",         2,    2,    __prepend },
   { "qt",           0,    0,    __qt },
   { "reference",    1,    1,    __reference },
-  { "requeue",      2,    2,    __requeue },
+  { "removeFirst",  1,    1,    __removeFirst },
+  { "removeLast",   1,    1,    __removeLast },
+  { "requeue",      2,    2,    __append },
   { "rjustify",     2,    2,    __rjustify },
   { "roman",        1,    1,    __roman },
   { "root",         1,    1,    __root },  // Not needed as in LL; now walks up the Gedcom tree.

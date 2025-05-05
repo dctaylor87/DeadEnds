@@ -98,6 +98,7 @@ PValue eqPValues(PValue, PValue, bool* eflag);
 
 // PValue Functions.
 void coercePValue(PValue* pvalue, int newType, bool* errorFlag);
+PValue* clonePValue(const PValue* original);
 //PValue copyPValue(PValue);
 //void deletePValue(PValue);
 //bool eqv_pvalues(PValue, PValue);
@@ -119,6 +120,6 @@ String pvalueToString(PValue pvalue, bool showType);
 // Functions that allocate and free PValues.
 PValue* allocPValue(PVType type, VUnion value);
 void freePValue(PValue* pvalue);
-extern PValue *copyPValue(PValue pvalue);
+extern PValue copyPValue(PValue pvalue);
 
 #endif // pvalue_h

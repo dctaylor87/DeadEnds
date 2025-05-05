@@ -45,18 +45,26 @@ PValue __insert (PNode *node, Context *context, bool *eflg) {
     }
     PValueTable *table = pvalue.value.uTable;
     arg = arg->next; // Key.
+#if 1
+    String key = evaluateString (arg, context, eflg);
+    if (*eflg) {
+	scriptError (node, "the second argument to insert must be a string");
+	return nullPValue;
+    }
+#else
     if (arg->type != PNIdent) {
         *eflg = true;
         scriptError(node, "the second argument to insert must be an identifier");
         return nullPValue;
     }
     String key = arg->stringCons;
+#endif
     pvalue = evaluate(arg->next, context, eflg); // Element.
     if (*eflg) {
         scriptError(node, "the third argument to insert must be a value");
         return nullPValue;
     }
-    insertInPValueTable(table, key, pvalue); // Add (key, value).
+    insertInPValueTable(table, key, *clonePValue(&pvalue));
     return nullPValue;
 }
 
@@ -71,12 +79,20 @@ PValue __lookup (PNode* node, Context* context, bool* eflg) {
         return nullPValue;
     }
     PValueTable *table = pvalue.value.uTable;
+#if 1
+    String key = evaluateString (arg->next, context, eflg);
+    if (*eflg) {
+	scriptError (node, "the second argument to lookup must be a string");
+	return nullPValue;
+    }
+#else
     if (arg->next->type != PNIdent) { // Key.
         *eflg = true;
         scriptError(node, "the second argument to lookup must be an identifier");
         return nullPValue;
     }
     String key = arg->stringCons;
+#endif
     pvalue = getValueOfPValueElement(table, key);
-    return pvalue;
+    return *clonePValue(&pvalue);
 }
