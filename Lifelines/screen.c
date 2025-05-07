@@ -433,7 +433,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	destrncpyf(title, width, uu8, _(qSmtitle), get_deadends_version(ll_cols-4));
 	mvccwaddstr(win, 1, 2, title);
 	mvccwaddstr(win, 2, 4, _(qScright));
-	str = getdeoptint("FullDbPath", 1) ? database->filePath : database->name;
+	str = getdeoptint("FullDbPath", 1) ? database->path : database->name;
 	mvccwprintw(win, 3, 4, _(qSdbname), str);
 	row = 5;
 	/* i18n problem: the letters are not being read from the menu strings */

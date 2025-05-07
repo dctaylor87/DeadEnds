@@ -244,7 +244,7 @@ checkForRefnOverlap (Database *database, Database *oldDatabase,
   ASSERT (oldDatabase);
 
   /* if needed for error messages */
-  CString baseName = (oldDatabase->name) ? oldDatabase->name : oldDatabase->filePath;
+  CString baseName = (oldDatabase->name) ? oldDatabase->name : oldDatabase->path;
   CString refn_fmt = "REFN '%s' in database '%s' (key '%s')\n is already present in base database '%s' (key %s)";
 
   FORHASHTABLE(database->refnIndex, element)
@@ -252,7 +252,7 @@ checkForRefnOverlap (Database *database, Database *oldDatabase,
     CString baseKey = searchRefnIndex (oldDatabase->refnIndex, refn);
     if (baseKey)
       {
-	CString dbName = (database->name) ? database->name : database->filePath;
+	CString dbName = (database->name) ? database->name : database->path;
 	CString dbKey = ((RefnIndexEl *)element)->key;
 
 	int len = strlen (refn_fmt) + strlen (baseName) +
@@ -261,7 +261,7 @@ checkForRefnOverlap (Database *database, Database *oldDatabase,
 	char *refn_msg = alloca(len);
 
 	sprintf (refn_msg, refn_fmt, refn, dbName, dbKey, baseName, baseKey);
-	Error *error = createError (gedcomError, database->filePath, 0, refn_msg);
+	Error *error = createError (gedcomError, database->path, 0, refn_msg);
 	setSeverityError (error, warningError);
 	addErrorToLog (errorLog, error);
 	overlap = true;
@@ -307,7 +307,7 @@ rekeyDatabase (Database *database, Database *oldDatabase, ErrorLog *errorLog)
   StringTable *rekeyTable = createStringTable (SIZE_REKEY_TABLE);
   if (! rekeyTable)
     {
-      Error *error = createError (systemError, database->filePath, 0,
+      Error *error = createError (systemError, database->path, 0,
 				  "unable to rekey due to createStringTable failing");
       addErrorToLog (errorLog, error);
       return false;
@@ -386,7 +386,7 @@ rekeyDatabase (Database *database, Database *oldDatabase, ErrorLog *errorLog)
   if (! newIndex)
     {
       /* should not happen -- must be low memory or similar */
-      Error *error = createError (systemError, database->filePath, 0,
+      Error *error = createError (systemError, database->path, 0,
 				  "createNameIndex failed -- ?out of memory?");
       addErrorToLog (errorLog, error);
       return false;
