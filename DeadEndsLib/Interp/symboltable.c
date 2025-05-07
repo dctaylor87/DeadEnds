@@ -3,7 +3,7 @@
 // symboltable.c holds the functions that implement SymbolTables.
 //
 // Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 24 May 2024.
+// Last changed on 5 May 2025.
 
 #include <stdint.h>
 
@@ -125,16 +125,13 @@ PValue getValueOfSymbol(SymbolTable* symtab, CString ident) {
     if (!symbol) symbol = searchHashTable(globalTable, ident);
     if (!symbol || !symbol->value) return nullPValue;
 
-    PValue* stored = symbol->value;
-    if (stored->type == PVString && stored->value.uString) {
-        return createStringPValue(stored->value.uString); // copy string
-    }
-    return *stored; // shallow copy for ints, floats, etc.
+    // Return a clone of the PValue (deep enough)
+    return cloneAndReturnPValue(symbol->value);
 }
 
 // showSymbolTable shows the contents of a SymbolTable.
 void showSymbolTable(SymbolTable* table) {
-	printf("Symbol Table at Location %p\n", table);
+	printf("Symbol Table contents:\n");
 	for (int i = 0; i < table->numBuckets; i++) {
 		Bucket *bucket = table->buckets[i];
 		if (!bucket) continue;

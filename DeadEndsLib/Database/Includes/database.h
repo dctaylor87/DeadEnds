@@ -3,7 +3,7 @@
 // database.h is the header file for the Database type.
 //
 // Created by Thomas Wetmore on 10 November 2022.
-// Last changed on 21 February 2025.
+// Last changed on 5 May 2025.
 
 #ifndef database_h
 #define database_h
@@ -16,17 +16,19 @@
 #include "gnode.h"
 #include "errors.h"
 #include "rootlist.h"
+#include "integertable.h"
 
 typedef HashTable RecordIndex; // Forward references.
 typedef HashTable NameIndex;
 typedef List RootList;
 
 // DBaseAction is a "Database action" that customizes Database processing.
+// NOTE: THIS IS A GOOD IDEA THAT IS NOT INCORPORTATED YET.
 typedef void (*DBaseAction)(Database*, ErrorLog*);
 
 // Database is the structure that hold DeadEnds databases.
 typedef struct Database {
-	CString filePath;  // Path to Gedcom file this Database was built from.
+	CString path;  // Path to Gedcom file this Database was built from.
 	CString name; // Use last segment of the path for the name of the Database.
 	GNode* header; // Root of header record.
 	bool dirty; // Dirty flag.
@@ -35,6 +37,9 @@ typedef struct Database {
 	RefnIndex *refnIndex; // Index of the REFN values in this database.
 	RootList *personRoots; // List of all person roots in the database.
 	RootList *familyRoots; // List of all family roots in the database.
+	RootList *sourceRoots; // List of all source roots in the database.
+	RootList *eventRoots;  // List of all the event roots in the database.
+	RootList *otherRoots;  // List of all the other roots in the database.
 #if 0
 	CString backupPath;	// path of the most recent backup, if any
 #endif
@@ -60,7 +65,7 @@ extern void setDatabaseDirty (Database *database, bool dirty);
 // gets database dirty state
 extern bool getDatabaseDirty (Database *database);
 
-Database *createDatabase(CString fileName); // Create an empty database.
+Database *createDatabase(CString fileName, RootList*, IntegerTable*, ErrorLog*); // Create a database.
 void deleteDatabase(Database*); // Delete a database.
 void writeDatabase(String fileName, Database*);
 

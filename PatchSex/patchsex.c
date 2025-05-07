@@ -20,17 +20,14 @@ static void patchSexLine(GNode*);
 int main(void) {
 	// Get the Gedcom records from the file.
 	String fileName = "/Users/ttw4/Desktop/DeadEnds/Gedfiles/07022024.ged";
-	File* file = openFile(fileName, "r");
 	ErrorLog* log = createErrorLog();
 	IntegerTable* keymap = createIntegerTable(4097);
-	GNodeList* roots = getRootListFromFile(file, keymap, log);
+	GNodeList* roots = getRecordListFromFile(fileName, keymap, log);
 	if (lengthList(log) > 0) {
 		printf("patchsex: cancelled due to errors\n");
 		showErrorLog(log);
-		closeFile(file);
 		exit(1);
 	}
-	closeFile(file);
 	printf("The length of roots is %d.\n", lengthList(roots));
 	if (lengthList(roots) <= 0) {
 		printf("patchsex: no persons to patch.\n");

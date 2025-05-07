@@ -3,7 +3,7 @@
 // intrpperson.c has the built-in script functions that deal with persons.
 //
 // Created by Thomas Wetmore on 17 March 2023.
-// Last changed on 30 April 2025.
+// Last changed on 5 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -47,7 +47,6 @@ PValue __name(PNode* pnode, Context* context, bool* errflg) {
         return nullPValue;
     }
     String name = manipulateName(nameNode->value, useCaps, true, 68);
-    //  MNOTE: The program value below has a pointer to data space, not heap space.
     if (name) return createStringPValue(name);
     else return nullPValue;
 }

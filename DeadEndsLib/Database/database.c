@@ -5,7 +5,7 @@
 // and used to build an internal database.
 //
 // Created by Thomas Wetmore on 10 November 2022.
-// Last changed 4 April 2025.
+// Last changed 5 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -21,23 +21,40 @@
 #include "errors.h"
 #include "rootlist.h"
 #include "writenode.h"
+#include "validate.h"
+#include "import.h"
 
 bool indexNameDebugging = false;
 
 // createDatabase creates a database.
-Database *createDatabase(CString filePath) {
+Database *createDatabase(CString path, RootList* records, IntegerTable* keymap, ErrorLog* errlog) {
 	Database *database = (Database*) stdalloc(sizeof(Database));
 	if (! database)
 	  return NULL;
 	memset (database, 0, sizeof(Database));
-	database->filePath = strsave(filePath);
-	database->name = strsave(lastPathSegment(filePath));
+	database->path = strsave(path);
+	database->name = strsave(lastPathSegment(path));
 	database->dirty = false;
-	database->recordIndex = null;
-	database->nameIndex = null;
-	database->refnIndex = null;
-	database->personRoots = createRootList(); // null?
-	database->familyRoots = createRootList(); // null?
+	database->recordIndex = createRecordIndex();
+	database->personRoots = createRootList();
+	database->familyRoots = createRootList();
+	database->sourceRoots = createRootList();
+	database->eventRoots = createRootList();
+	database->otherRoots = createRootList();
+
+    FORLIST(records, element)
+        GNode* root = (GNode*) element;
+        if (root->key) addToRecordIndex(database->recordIndex, root);
+        RecordType rtype = recordType(root);
+        if (rtype == GRPerson) insertInRootList(database->personRoots, root);
+        if (rtype == GRFamily) insertInRootList(database->familyRoots, root);
+        if (rtype == GRSource) insertInRootList(database->sourceRoots, root);
+        if (rtype == GREvent) insertInRootList(database->eventRoots, root);
+        if (rtype == GROther) insertInRootList(database->otherRoots, root);
+    ENDLIST
+    deleteRootList(records);
+	database->nameIndex = getNameIndex(database->personRoots);
+    database->refnIndex = getReferenceIndex(database->recordIndex, path, keymap, errlog);
 	return database;
 }
 
@@ -48,6 +65,9 @@ void deleteDatabase(Database* database) {
 	if (database->refnIndex) deleteRefnIndex(database->refnIndex);
 	if (database->personRoots) deleteList(database->personRoots);
 	if (database->familyRoots) deleteList(database->familyRoots);
+    if (database->sourceRoots) deleteList(database->sourceRoots);
+    if (database->eventRoots) deleteList(database->eventRoots);
+    if (database->otherRoots) deleteList(database->otherRoots);
 }
 
 // writeDatabase writes the contents of a Database to a Gedcom file.
@@ -193,7 +213,7 @@ void summarizeDatabase(Database* database) {
 		printf("Database does not exist.\n");
 		return;
 	}
-	printf("Summary of database: %s.\n", database->filePath);
+	printf("Summary of database: %s.\n", database->path);
 	if (database->recordIndex) {
 		printf("\tThe record index has %d records.\n", sizeHashTable(database->recordIndex));
 		printf("\tThere are %d persons and %d families in the database.\n",
