@@ -28,6 +28,8 @@
 #include "denls.h"
 #include "ask.h"
 
+#define BAD_YEAR	-99999	// this is the value that LL uses
+
 // Global constants for useful PValues.
 const PValue nullPValue = {PVNull, PV()};
 const PValue truePValue = PVALUE(PVBool, uBool, true);
@@ -486,7 +488,12 @@ PValue __extractdate(PNode *pnode, Context *context, bool* errflg) {
         str = eventToDate(gnode, false);
     else
         str = gnode->value;
-    if (!str || *str == 0) return nullPValue;  // Not considered an error.
+    if (!str || *str == 0) {
+	assignValueToSymbol(context->symbolTable, dvar->identifier, PVALUE(PVInt, uInt, 0));
+	assignValueToSymbol(context->symbolTable, mvar->identifier, PVALUE(PVInt, uInt, 0));
+	assignValueToSymbol(context->symbolTable, yvar->identifier, PVALUE(PVInt, uInt, BAD_YEAR));
+        return nullPValue;  // Not considered an error.
+    }
     String stryear;
     extractDate(str, &daormo, &day, &month, &year, &stryear);
     assignValueToSymbol(context->symbolTable, dvar->identifier, PVALUE(PVInt, uInt, day));
@@ -506,11 +513,25 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg)
 	PNode *lvar = lexp->next;
 	PNode *svar = lvar->next;
 	GNode *name = evaluateGNode(nexp, context, errflg);
+#if 1
+	if (*errflg) {
+		scriptError(pnode, "The first argument to extractnames must be a NAME node or an INDI node.");
+		return nullPValue;
+	}
+	if (nestr(name->tag, "NAME"))
+		name = NAME(name);
+	if (! name) {
+		*errflg = true;
+		scriptError(pnode, "The first argument to extractnames must be a NAME node or an INDI node.");
+		return nullPValue;
+	}
+#else
 	if (*errflg || nestr(name->tag, "NAME")) {
 		*errflg = true;
 		scriptError(pnode, "The first argument to extractnames must be a NAME node.");
 		return nullPValue;
 	}
+#endif
 	// Get the list to put the names in.
 	PValue pvalue = evaluate(lexp, context, errflg);
 	if (*errflg || pvalue.type != PVList) {
