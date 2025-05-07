@@ -686,6 +686,12 @@ AC_CONFIG_FILES([Makefile \
 	PatchSex/Makefile \
         Programs/Makefile \
 	RandomizeKeys/Makefile \
+        Reports/Makefile \
+        Reports/desc-tex2/Makefile \
+        Reports/novel/Makefile \
+        Reports/pedtex/Makefile \
+        Reports/ps-fan/Makefile \
+        Reports/st/Makefile \
 	RunScript/Makefile \
 	TestDates/Makefile \
 	TestProgram/Makefile \
