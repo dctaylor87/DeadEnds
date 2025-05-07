@@ -67,8 +67,7 @@ file_to_node (String fname,
 	      String *pmsg, bool *pemp)
 {
   ErrorLog *errorLog = createErrorLog ();
-  File *file = openFile (fname, DEREADTEXT);
-  RootList *rootList = getRootListFromFile (file, NULL, errorLog);
+  RootList *rootList = getRecordListFromFile (fname, NULL, errorLog);
 
   *pemp = false;		/* XXX should this be an argument? XXX */
   if (! rootList)
