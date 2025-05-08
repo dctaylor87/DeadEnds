@@ -70,6 +70,7 @@
 #include "editing.h"
 #include "dateprint.h"
 #include "loadsave.h"
+#include "selectdb.h"
 
 /* local variables */
 

@@ -77,6 +77,7 @@
 #include "version.h"
 #include "init.h"
 #include "parse-args.h"
+#include "selectdb.h"
 
 /* for parser debugging */
 extern int yydebug;
