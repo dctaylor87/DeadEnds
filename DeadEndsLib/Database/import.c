@@ -59,7 +59,7 @@ Database* getDatabaseFromFile(CString path, int vcodes, ErrorLog* errlog) {
 // checkKeysAndReferences checks record keys and their references. Creates a table of all keys
 // and checks for duplicates. Checks that all keys found as values refer to records.
 #define getline(key) (searchIntegerTable(keymap, key))
-void checkKeysAndReferences(RootList* records, String name, IntegerTable* keymap, ErrorLog* log) {
+void checkKeysAndReferences(RootList* records, CString name, IntegerTable* keymap, ErrorLog* log) {
 	StringSet* keySet = createStringSet();
 	FORLIST(records, element)
 		GNode* root = (GNode*) element;

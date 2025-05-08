@@ -39,7 +39,7 @@ typedef struct ImportFeedback ImportFeedback;
 List *getDatabasesFromFiles(List*, int vcodes, ErrorLog*);
 Database* getDatabaseFromFile(CString, int vcodes, ErrorLog*);
 RootList* getRecordListFromFile(CString, IntegerTable*, ErrorLog*);
-void checkKeysAndReferences(GNodeList*, String name, IntegerTable*, ErrorLog*);
+void checkKeysAndReferences(GNodeList*, CString name, IntegerTable*, ErrorLog*);
 extern Database *importFromFileFP(File* file, CString path, ErrorLog *log);
 
 #endif // import_h
