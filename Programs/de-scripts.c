@@ -45,9 +45,9 @@ deadend_register_script (CString script)
   const char **new_array;
 
   if (nscripts)
-    new_array = (const char **)realloc ((void *)script_array, (nscripts + 1) * sizeof (char *));
+    new_array = (const char **)stdrealloc ((void *)script_array, (nscripts + 1) * sizeof (char *));
   else
-    new_array = (const char **)malloc (sizeof (char *));
+    new_array = (const char **)stdalloc (sizeof (char *));
 
   if (! new_array)
     return (-1);		/* malloc / realloc failed! */
