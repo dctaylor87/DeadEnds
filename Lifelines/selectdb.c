@@ -240,8 +240,20 @@ checkForRefnOverlap (Database *database, Database *oldDatabase,
   /* validate that there is no REFN overlap */
   bool overlap = false;
 
-  ASSERT (database);
-  ASSERT (oldDatabase);
+  if (! database)
+    {
+      Error *error = createError (usageError, NULL, 0,
+				  "first argument to checkForRefnOverlap is NULL");
+      addErrorToLog (errorLog, error);
+      return false;
+    }
+  if (! oldDatabase)
+    {
+      Error *error = createError (usageError, NULL, 0,
+				  "second argument to checkForRefnOverlap is NULL");
+      addErrorToLog (errorLog, error);
+      return false;
+    }
 
   /* if needed for error messages */
   CString baseName = (oldDatabase->name) ? oldDatabase->name : oldDatabase->path;
