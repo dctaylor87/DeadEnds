@@ -5,7 +5,7 @@
 // or it may call a specific function.
 //
 // Created by Thomas Wetmore on 9 December 2022.
-// Last changed on 2 May 2025.
+// Last changed on 9 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -97,11 +97,7 @@ InterpType interpret(PNode* programNode, Context* context, PValue* returnValue) 
         case PNFCons:
             break;
         case PNIdent: // Idents with String values are written.
-            pvalue = evaluateIdent(programNode, context, &errorFlag);
-            if (errorFlag) {
-                scriptError(programNode, "error evaluating an identifier");
-                return InterpError;
-            }
+            pvalue = evaluateIdent(programNode, context);
             if (pvalue.type == PVString && pvalue.value.uString)
                 printf("%s", pvalue.value.uString);
             break;
@@ -137,10 +133,16 @@ InterpType interpret(PNode* programNode, Context* context, PValue* returnValue) 
                 stdfree(pvalue.value.uString);  // The pvalue's string is in the heap.
             }
             break;
+        case PNNotes: // Iterate NOTEs.
+            switch (returnCode = interpFornotes(programNode, context, returnValue)) {
+            case InterpOkay: break;
+            case InterpError: return InterpError;
+            default: return returnCode;
+            }
+            break;
         case PNFuncDef: // Illegal during interpretation.
         case PNProcDef:
         case PNTable:
-        case PNNotes: // Maybe this is legit?
             FATAL();
         case PNChildren: // Interpret children loop.
             switch (returnCode = interpChildren(programNode, context, returnValue)) {
@@ -200,7 +202,7 @@ InterpType interpret(PNode* programNode, Context* context, PValue* returnValue) 
             }
             break;
         case PNFams: // All families loop.
-            switch (returnCode = interpForFam(programNode, context, returnValue)) {
+            switch (returnCode = interpForfam(programNode, context, returnValue)) {
             case InterpOkay: break;
             case InterpError: return InterpError;
             default:
@@ -208,21 +210,21 @@ InterpType interpret(PNode* programNode, Context* context, PValue* returnValue) 
             }
             break;
         case PNSources: // Source loop.
-           switch (returnCode = interp_forsour(programNode, context, returnValue)) {
+           switch (returnCode = interpForsour(programNode, context, returnValue)) {
             case InterpOkay: break;
             case InterpError: return InterpError;
             default: return returnCode;
             }
             break;
         case PNEvents: // Event loop.
-            switch (returnCode = interp_foreven(programNode, context, returnValue)) {
+            switch (returnCode = interpForeven(programNode, context, returnValue)) {
             case InterpOkay: break;
             case InterpError: return InterpError;
             default: return returnCode;
             }
             break;
         case PNOthers: // All other records loop.
-            switch (returnCode = interp_forothr(programNode, context, returnValue)) {
+            switch (returnCode = interpForothr(programNode, context, returnValue)) {
             case InterpOkay: break;
             case InterpError: return InterpError;
             default: return returnCode;
@@ -461,14 +463,14 @@ InterpType interpParents(PNode* node, Context* context, PValue *pval) {
     return InterpOkay;
 }
 
-// interp_fornotes -- Interpret NOTE loop
-InterpType interp_fornotes(PNode* node, Context* context, PValue *pval) {
+// interp_fornotes interprets the fornote loop.
+InterpType interpFornotes(PNode* node, Context* context, PValue *pval) {
     ASSERT(node && context);
     bool eflg = false;
     InterpType irc;
-    GNode *root = evaluateGNode(node, context, &eflg);
+    GNode *root = evaluateGNode(node->gnodeExpr, context, &eflg);
     if (eflg) {
-        scriptError(node, "1st arg to fornotes must be a record line");
+        scriptError(node, "first arg of fornotes() must evaluate to a gedcom node.");
         return InterpError;
     }
     if (!root) return InterpOkay;
@@ -518,160 +520,115 @@ InterpType interp_fornodes(PNode* node, Context* context, PValue *pval) {
 // interpForindi interprets the forindi statement looping through all persons in the Database.
 // Usage: forindi(INDI_V, INT_V) {...}; Fields: personIden, countIden, loopState.
 InterpType interpForindi (PNode* pnode, Context* context, PValue* pvalue) {
-    RootList *rootList = context->database->personRoots;
-    sortList(rootList); // Sort by key.
-    int numPersons = lengthList(rootList);
-    for (int i = 0; i < numPersons; i++) {
-        String key = rootList->getKey(getListElement(rootList, i));
-        GNode* person = keyToPerson(key, context->database->recordIndex);
-        if (person) {
-            assignValueToSymbol(context->symbolTable, pnode->personIden, PVALUE(PVPerson, uGNode, person));
-            assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, i));
-            InterpType irc = interpret(pnode->loopState, context, pvalue);
-            switch (irc) {
-            case InterpContinue:
-            case InterpOkay: continue;
-            case InterpBreak:
-            case InterpReturn: goto e;
-            case InterpError: return InterpError;
-            }
-        } else {
-            printf("HIT THE ELSE IN INTERPFORINDI--PROBABLY NOT GOOD\n");
+    RootList *roots = context->database->personRoots;
+    sortList(roots);
+    for (int i = 0; i < lengthList(roots); i++) {
+        GNode* person = getListElement(roots, i);
+        assignValueToSymbol(context->symbolTable, pnode->personIden, PVALUE(PVPerson, uGNode, person));
+        assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, i));
+        InterpType irc = interpret(pnode->loopState, context, pvalue);
+        switch (irc) {
+        case InterpContinue:
+        case InterpOkay: continue;
+        case InterpBreak:
+        case InterpReturn: goto e;
+        case InterpError: return InterpError;
         }
     }
     e:  removeFromHashTable(context->symbolTable, pnode->personIden);
     removeFromHashTable(context->symbolTable, pnode->countIden);
     return InterpOkay;
 }
-/////*========================================+
-//// * interp_forsour -- Interpret forsour loop
-//// *  usage: forsour(SOUR_V,INT_V) {...}
-//// *=======================================*/
-InterpType interp_forsour (PNode *node, Context *context, PValue *pval)
-{
-    ////    NODE sour;
-    ////    static char key[MAXKEYWIDTH];
-    ////    STRING record;
-    ////    INTERPTYPE irc;
-    ////    INT len, count = 0;
-    ////    INT scount = 0;
-    ////    insert_pvtable(stab, inum(node), PINT, 0);
-    ////    while (TRUE) {
-    ////        printkey(key, 'S', ++count);
-    ////        if (!(record = retrieve_record(key, &len))) {
-    ////            if(scount < num_sours()) continue;
-    ////            break;
-    ////        }
-    ////        if (!(sour = stringToGNodeTree(record))) continue;
-    ////        scount++;
-    ////        insert_pvtable(stab, ielement(node), PSOUR,
-    ////                       sour_to_cacheel(sour));
-    ////        insert_pvtable(stab, inum(node), PINT, (VPTR)count);
-    ////        irc = interpret((PNODE) ibody(node), stab, pval);
-    ////        free_nodes(sour);
-    ////        stdfree(record);
-    ////        switch (irc) {
-    ////            case INTCONTINUE:
-    ////            case INTOKAY:
-    ////                continue;
-    ////            case INTBREAK:
-    ////                return INTOKAY;
-    ////            default:
-    ////                return irc;
-    ////        }
-    ////    }
-    ////    return INTOKAY;
-    return InterpOkay;
-}
-//
 
-// interp_foreven interpret the foreven statement looping through all events in the Database.
-// usage: foreven(EVEN_V,INT_V) {...}
-// THIS IS BASED ON LIFELINES ASSUMPTIONS AND DOES NOT YET WORK IN DEADENDS.
-InterpType interp_foreven (PNode* node, Context* context, PValue *pval) {
-    int numEvents = numberEvents(context->database);
-    int numMisses = 0;
-    char scratch[10];
-    for (int i = 1; i <= numEvents; i++) {
-        sprintf(scratch, "E%d", i);
-        GNode *event = keyToEvent(scratch, context->database->recordIndex);
-        if (event) {
-            assignValueToSymbol(context->symbolTable, node->eventIden, PVALUE(PVEvent, uGNode, event));
-            assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, i));
-            InterpType irc = interpret(node->loopState, context, pval);
-            switch (irc) {
-            case InterpContinue:
-            case InterpOkay: continue;
-            case InterpBreak:
-            case InterpReturn: goto e;
-            case InterpError: return InterpError;
-            }
-        } else {
-            numMisses++;
-        }
-    }
-    e:  removeFromHashTable(context->symbolTable, node->personIden);
-    removeFromHashTable(context->symbolTable, node->countIden);
-    return InterpOkay;
-}
-
-// interp_forothr Interprets the forothr statement looping through all events in the Database.
-// usage: forothr(OTHR_V,INT_V) {...}
-// THIS IS BASED ON LIFELINES ASSUMPTIONS AND DOES NOT YET WORK IN DEADENDS.
-InterpType interp_forothr(PNode *node, Context *context, PValue *pval) {
-    int numOthers = numberOthers(context->database);
-    int numMisses = 0;
-    char scratch[10];
-    for (int i = 1; i <= numOthers; i++) {
-        sprintf(scratch, "X%d", i);
-        GNode *event = keyToEvent(scratch, context->database->recordIndex);
-        if (event) {
-            assignValueToSymbol(context->symbolTable, node->otherIden, PVALUE(PVEvent, uGNode, event));
-            assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, i));
-            InterpType irc = interpret(node->loopState, context, pval);
-            switch (irc) {
-            case InterpContinue:
-            case InterpOkay: continue;
-            case InterpBreak:
-            case InterpReturn: goto e;
-            case InterpError: return InterpError;
-            }
-        } else {
-            numMisses++;
-        }
-    }
-    e:  removeFromHashTable(context->symbolTable, node->personIden);
-    removeFromHashTable(context->symbolTable, node->countIden);
-    return InterpOkay;
-    return InterpOkay;
-}
-
-// interpForFam interprets thr forfam statement looping through all families in the Database.
+// interpForfam interprets the forfam statement that iterates over all families in the Database.
 // usage: forfam(FAM_V,INT_V) {...}
-InterpType interpForFam (PNode* pnode, Context* context, PValue* pvalue) {
-    RootList *rootList = context->database->familyRoots;
-    sortList(rootList); // Sort by key.
-    int numFamilies = lengthList(rootList);
-    for (int i = 0; i < numFamilies; i++) {
-        String key = rootList->getKey(getListElement(rootList, i));
-        GNode* family = keyToFamily(key, context->database->recordIndex);
-        if (family) {
-            assignValueToSymbol(context->symbolTable, pnode->familyIden, PVALUE(PVFamily, uGNode, family));
-            assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, i));
-            InterpType irc = interpret(pnode->loopState, context, pvalue);
-            switch (irc) {
-            case InterpContinue:
-            case InterpOkay: continue;
-            case InterpBreak:
-            case InterpReturn: goto e;
-            case InterpError: return InterpError;
-            }
-        } else {
-            printf("HIT THE ELSE IN INTERPFORFAM--PROBABLY NOT GOOD\n");
+InterpType interpForfam(PNode* pnode, Context* context, PValue* pvalue) {
+    RootList *roots = context->database->familyRoots;
+    sortList(roots);
+    for (int i = 0; i < lengthList(roots); i++) {
+        GNode* family = getListElement(roots, i);
+        assignValueToSymbol(context->symbolTable, pnode->familyIden, PVALUE(PVFamily, uGNode, family));
+        assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, i));
+        InterpType irc = interpret(pnode->loopState, context, pvalue);
+        switch (irc) {
+        case InterpContinue:
+        case InterpOkay: continue;
+        case InterpBreak:
+        case InterpReturn: goto e;
+        case InterpError: return InterpError;
         }
     }
     e:  removeFromHashTable(context->symbolTable, pnode->familyIden);
     removeFromHashTable(context->symbolTable, pnode->countIden);
+    return InterpOkay;
+}
+
+// interpForSour interprets the forsour statement that iterates over all sources in the database.
+// usage: forsour(SOUR_V, INT_V) {...}
+InterpType interpForsour(PNode *pnode, Context *context, PValue *pvalue) {
+    RootList *roots = context->database->sourceRoots;
+    sortList(roots);
+    for (int i = 0; i < lengthList(roots); i++) {
+        GNode* source = getListElement(roots, i);
+        assignValueToSymbol(context->symbolTable, pnode->familyIden, PVALUE(PVFamily, uGNode, source));
+        assignValueToSymbol(context->symbolTable, pnode->countIden, PVALUE(PVInt, uInt, i));
+        InterpType irc = interpret(pnode->loopState, context, pvalue);
+        switch (irc) {
+        case InterpContinue:
+        case InterpOkay: continue;
+        case InterpBreak:
+        case InterpReturn: goto e;
+        case InterpError: return InterpError;
+        }
+    }
+    e:  removeFromHashTable(context->symbolTable, pnode->familyIden);
+    removeFromHashTable(context->symbolTable, pnode->countIden);
+    return InterpOkay;
+}
+
+// interpForeven interpret the foreven statement looping through all events in the Database.
+// usage: foreven(EVEN_V,INT_V) {...}
+InterpType interpForeven (PNode* node, Context* context, PValue *pvalue) {
+    RootList* roots = context->database->eventRoots;
+    sortList(roots);
+    for (int i = 0; i < lengthList(roots); i++) {
+        GNode *event = getListElement(roots, i);
+        assignValueToSymbol(context->symbolTable, node->eventIden, PVALUE(PVEvent, uGNode, event));
+        assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, i));
+        InterpType irc = interpret(node->loopState, context, pvalue);
+        switch (irc) {
+        case InterpContinue:
+        case InterpOkay: continue;
+        case InterpBreak:
+        case InterpReturn: goto e;
+        case InterpError: return InterpError;
+        }
+    }
+    e:  removeFromHashTable(context->symbolTable, node->personIden);
+    removeFromHashTable(context->symbolTable, node->countIden);
+    return InterpOkay;
+}
+
+// interpForothr Interprets the forothr statement looping through all events in the Database.
+// usage: forothr(OTHR_V,INT_V) {...}
+InterpType interpForothr(PNode *node, Context *context, PValue *pval) {
+    RootList* roots = context->database->otherRoots;
+    for (int i = 0; i <= lengthList(roots); i++) {
+        GNode* othr = getListElement(roots, i);
+        assignValueToSymbol(context->symbolTable, node->otherIden, PVALUE(PVEvent, uGNode, othr));
+        assignValueToSymbol(context->symbolTable, node->countIden, PVALUE(PVInt, uInt, i));
+        InterpType irc = interpret(node->loopState, context, pval);
+        switch (irc) {
+        case InterpContinue:
+        case InterpOkay: continue;
+        case InterpBreak:
+        case InterpReturn: goto e;
+        case InterpError: return InterpError;
+        }
+    }
+    e:  removeFromHashTable(context->symbolTable, node->personIden);
+    removeFromHashTable(context->symbolTable, node->countIden);
+    return InterpOkay;
     return InterpOkay;
 }
 
@@ -812,15 +769,15 @@ InterpType interpTraverse(PNode* traverseNode, Context* context, PValue* returnV
         // Interpret loop body
         InterpType irc = interpret(traverseNode->loopState, context, returnValue);
         switch (irc) {
-            case InterpContinue:
-            case InterpOkay:
-                break;
-            case InterpBreak:
-                returnIrc = InterpOkay;
-                goto cleanup;
-            default:
-                returnIrc = irc;
-                goto cleanup;
+        case InterpContinue:
+        case InterpOkay:
+            break;
+        case InterpBreak:
+            returnIrc = InterpOkay;
+            goto cleanup;
+        default:
+            returnIrc = irc;
+            goto cleanup;
         }
         // Traverse to first child.
         if (nodeStack[lev]->child) {
