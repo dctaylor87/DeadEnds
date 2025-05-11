@@ -342,7 +342,7 @@ static void llpy_node_iter_dealloc (PyObject *self)
   nodeiter->ni_cur_node = 0;
 
   if (nodeiter->ni_tag)
-    free (nodeiter->ni_tag);
+    stdfree (nodeiter->ni_tag);
   nodeiter->ni_tag = 0;
 
   if (llpy_debug)

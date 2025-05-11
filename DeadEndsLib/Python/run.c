@@ -61,9 +61,9 @@ llpy_register_script (char *script)
   char **new_array;
 
   if (nscripts)
-    new_array = (char **)realloc ((void *)script_array, (nscripts + 1) * sizeof (char *));
+    new_array = (char **)stdrealloc ((void *)script_array, (nscripts + 1) * sizeof (char *));
   else
-    new_array = (char **)malloc (sizeof (char *));
+    new_array = (char **)stdalloc (sizeof (char *));
 
   if (! new_array)
     return (-1);		/* malloc / realloc failed! */
