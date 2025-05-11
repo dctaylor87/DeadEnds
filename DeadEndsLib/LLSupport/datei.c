@@ -49,11 +49,13 @@
  *********************************************/
 
 /* alphabetical */
+#if !defined(DEADENDS)
 static void init_keywordtbl(void);
 static void load_lang(void);
 static String lower_dup(String s);
 static String title_dup(String s);
 static String upper_dup(String s);
+#endif
 
 /*********************************************
  * local variables
@@ -67,6 +69,7 @@ String date_pic;
 /* generated month names (for Gregorian/Julian months) */
 String calendar_pics[GDV_CALENDARS_IX];
 
+#if !defined(DEADENDS)		/* not referenced */
 String roman_lower[] = { "i","ii","iii","iv","v","vi","vii","viii"
 	,"ix","x","xi","xii","xiii" };
 String roman_upper[] = { "I","II","III","IV","V","VI","VII","VIII"
@@ -75,6 +78,9 @@ String roman_upper[] = { "I","II","III","IV","V","VI","VII","VIII"
 MONTH_NAMES months_gj[12];
 MONTH_NAMES months_fr[13];
 MONTH_NAMES months_heb[13];
+#endif
+
+#if !defined(DEADENDS)		/* not referenced */
 
 /* GEDCOM keywords (fixed, not language dependent) */
 struct gedcom_keywords_s gedkeys[] = {
@@ -166,12 +172,13 @@ struct gedcom_keywords_s gedkeys[] = {
 	,{ "AFTER", 1000+GD_AFT }
 	,{ "BETWEEN", 1000+GD_BET }
 };
-
+#endif
 
 HashTable *keywordtbl = NULL;
 bool lang_changed=false;
 
 
+#if !defined(DEADENDS)		/* never called */
 /*=============================
  * initialize_if_needed -- init module or reload language
  *===========================*/
@@ -186,6 +193,7 @@ initialize_if_needed (void)
 		lang_changed = false;
 	}
 }
+
 /*=========================================
  * init_keywordtbl -- Set up table of known
  *  keywords which we recognize in parsing dates
@@ -201,6 +209,7 @@ init_keywordtbl (void)
 		insertInIntegerTable(keywordtbl, gedkeys[i].keyword, j);
 	}
 }
+
 /*=============================
  * load_one_cmplx_pic -- Generate case variations
  *  of one complex picture string.
@@ -229,6 +238,7 @@ load_one_cmplx_pic (int ecmplx, String abbrev, String full)
 	stdfree(loc_full);
 
 }
+
 /*=============================
  * load_one_month -- Generate case variations
  *  of one month name
@@ -256,6 +266,8 @@ load_one_month (int monum, MONTH_NAMES * monarr, String abbrev, String full)
 	stdfree(locx_abbrev);
 	stdfree(loc_full);
 }
+#endif
+
 /*=============================
  * clear_lang -- Free all generated picture strings
  * This is used both changing languages, and at cleanup time
@@ -265,15 +277,18 @@ clear_lang (void)
 {
 	int i,j;
 	/* clear complex pics */
+#if !defined(DEADENDS)
 	for (i=0; i<ECMPLX_END; ++i) {
 		for (j=0; j<6; ++j) {
 			strfree(&cmplx_pics[i][j]);
 		}
 	}
+#endif
 	/* clear calendar pics */
 	for (i=0; i<(int)ARRAYSIZE(calendar_pics); ++i) {
 		strfree(&calendar_pics[i]);
 	}
+#if !defined(DEADENDS)
 	/* clear Gregorian/Julian month names */
 	for (i=0; i<(int)ARRAYSIZE(months_gj); ++i) {
 		for (j=0; j<(int)ARRAYSIZE(months_gj[0]); ++j) {
@@ -292,7 +307,10 @@ clear_lang (void)
 			strfree(&months_fr[i][j]);
 		}
 	}
+#endif
 }
+
+#if !defined(DEADNES)		/* never called */
 /*=============================
  * load_lang -- Load generated picture strings
  *  based on current language
@@ -395,6 +413,8 @@ load_lang (void)
 		}
 	}
 }
+#endif
+
 /*=============================
  * term_date -- Cleanup for finishing program
  * Created: 2003-02-02 (Perry Rapp)
@@ -408,6 +428,8 @@ term_date (void)
 		keywordtbl = 0;
 	}
 }
+
+#if !defined(DEADENDS)
 /*=============================
  * upper_dup -- Get uppercase & strdup it
  *===========================*/
@@ -441,6 +463,9 @@ title_dup (String s)
 	zs_free(&zstr);
 	return str;
 }
+#endif
+
+#if !defined(DEADENDS)
 /*=============================
  * date_get_day -- Day number of first date
  *===========================*/
@@ -487,3 +512,4 @@ date_get_mod (GDATEVAL gdv)
 	ASSERT(gdv);
 	return gdv->date1.mod;
 }
+#endif
