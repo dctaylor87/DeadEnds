@@ -16,7 +16,8 @@ typedef enum ErrorType {
 	systemError,
 	syntaxError,
 	gedcomError,
-	linkageError
+	linkageError,
+	usageError
 } ErrorType;
 
 // ErrorSeverity is the severity of a DeadEnds Error.
