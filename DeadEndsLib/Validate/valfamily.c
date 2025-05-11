@@ -3,7 +3,7 @@
 // valfamily.c has the functions that validate family records.
 //
 // Created by Thomas Wetmore on 18 December 2023.
-// Last changed on 3 December 2024.
+// Last changed on 9 May 2025.
 
 #include <stdint.h>
 
@@ -91,7 +91,7 @@ static bool validateFamily(GNode* family, String name, RecordIndex* index, Integ
 			if (family == fam) numOccurences++;
 		ENDFAMSS
 		if (numOccurences != 1) {
-			addErrorToLog(elog, createError(linkageError, name, 111, "GET ERROR MESSAGE"));
+			addErrorToLog(elog, createError(linkageError, name, 111, "Husband married to same wife in multiple families"));
 			errorCount++;
 		}
 	ENDHUSBS
@@ -102,7 +102,10 @@ static bool validateFamily(GNode* family, String name, RecordIndex* index, Integ
 		FORFAMSS(wife, fam, fkey, index)
 			if (family == fam) numOccurences++;
 		ENDFAMSS
-		ASSERT(numOccurences == 1);
+        if (numOccurences != 1) {
+            addErrorToLog(elog, createError(linkageError, name, 111, "Wife married to same husband in multiple families"));
+            errorCount++;
+        }
 	} ENDWIFES
 
 	//  For each CHIL node in the family.
@@ -111,7 +114,10 @@ static bool validateFamily(GNode* family, String name, RecordIndex* index, Integ
 		FORFAMCS(child, fam, key, index)
 			if (family == fam) numOccurences++;
 		ENDFAMCS
-		ASSERT(numOccurences == 1);
+    if (numOccurences != 1) {
+        addErrorToLog(elog, createError(linkageError, name, 111, "Person is a child in multiple families"));
+        errorCount++;
+    }
 	ENDFAMCS
 
 	bool hasHusb = HUSB(family) != null;

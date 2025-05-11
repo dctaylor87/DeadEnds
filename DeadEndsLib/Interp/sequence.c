@@ -139,8 +139,8 @@ void renameElementInSequence(Sequence* sequence, CString key) {
 	}
 }
 
-// isInSequence checks if a SequenceEl with given key is in a Sequence. NOTE: Consider
-// what could be done if the sequence were sorted.
+// isInSequence checks if a SequenceEl with given key is in a Sequence.
+// TODO: Should take advantage of the sortability of the Sequence.
 bool isInSequence(Sequence *seq, CString key) {
 	if (!seq || !key) return false;
 	Block *block = &(seq->block);

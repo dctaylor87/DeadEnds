@@ -106,6 +106,6 @@ int showGNodePath(GNode* node, int level) {
 void deleteGedPath(GedPath* path) {
 	if (!path) return;
 	deleteGedPath(path->next);
-	if (path->tag) free(path->tag);
-	free(path);
+	if (path->tag) stdfree(path->tag);
+	stdfree(path);
 }
