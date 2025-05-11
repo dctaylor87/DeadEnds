@@ -14,15 +14,9 @@ char_encoding("ASCII")
 
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
-include("st_aux")
-include("st_collate_UTF-8")
-include("st_collate_8859-1")
-
-/* entry point in case not invoked via st_all.ll */
-proc main()
-{
-	call testCollate()
-}
+include("st_aux.li")
+include("st_collate_UTF-8.li")
+include("st_collate_8859-1.li")
 
 proc testCollate()
 {

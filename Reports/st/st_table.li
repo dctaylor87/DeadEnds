@@ -11,13 +11,7 @@ char_encoding("ASCII")
 
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
-include("st_aux")
-
-/* entry point in case not invoked via st_all.ll */
-proc main()
-{
-	call testTables()
-}
+include("st_aux.li")
 
 /*
  test some table functions

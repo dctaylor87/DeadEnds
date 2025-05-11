@@ -87,7 +87,7 @@
  *     Sources should eventually be turned into endnotes so Word can do
  *     any special processing.
  */
-include("rtflib")
+include("rtflib.li")
 global(childby)
 global(curr_index)
 global(doindex)

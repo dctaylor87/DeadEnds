@@ -11,13 +11,7 @@ char_encoding("UTF-8")
 
 require("lifelines-reports.version:1.3")
 option("explicitvars") /* Disallow use of undefined variables */
-include("st_aux")
-
-/* entry point in case not invoked via st_all.ll */
-proc main()
-{
-	call testStrings_UTF_8()
-}
+include("st_aux.li")
 
 /*
  test some string functions against defined & undefined strings

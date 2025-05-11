@@ -54,7 +54,7 @@ Examples:
 
   1) Report references used in a set of individuals
 
-     include("sour.ll")
+     include("sour.li")
      ...
      sour_init()        / * initialize the current source list and table * /
      ...                / * create a set of individuals * /
@@ -65,7 +65,7 @@ Examples:
   2) List references for groups of individuals, and then a master
      list of all sources referenced:
 
-     include("sour.ll")
+     include("sour.li")
      ...
      table(my_table)
      list(my_list)
@@ -88,7 +88,7 @@ Examples:
 
   3) Output all sources for a set of individuals in GEDCOM format:
 
-     include("sour.ll")
+     include("sour.li")
      ...
      sour_init()        / * initialize the current source list and table * /
      ...                / * create a set of individuals * /
