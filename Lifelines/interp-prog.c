@@ -85,7 +85,10 @@ interp_program (String proc, int nargs, void **args, CString sfile,
 {
   SymbolTable *stab = NULL;
   int ranit=0;
-  String programsdir = getdeoptstr("LLPROGRAMS", ".");
+  String programsdir = getdeoptstr("DEPROGRAMS", NULL);
+
+  if (! programsdir)		/* fall back, most LL scripts work with DE */
+    programsdir = getdeoptstr("LLPROGRAMS", ".");
 
   String fullpath = 0;
   if (sfile)
