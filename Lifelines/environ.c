@@ -89,7 +89,8 @@ environ_determine_editor (int program ATTRIBUTE_UNUSED)
 {
 	String e;
 
-	e = (String) getenv("LLEDITOR");
+	e = (String) getenv("DEEDITOR");
+	if (ISNULL(e)) e = (String) getenv("LLEDITOR");
 	if (ISNULL(e)) e = (String) getenv("ED");
 	if (ISNULL(e)) e = (String) getenv("EDITOR");
 #ifdef WIN32
