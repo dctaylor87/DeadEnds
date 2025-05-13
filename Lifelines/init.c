@@ -405,7 +405,7 @@ load_configs (String configfile, String * pmsg)
 
 		/* look for global config file */
 		destrncpy(cfg_name, global_conf_path, sizeof(cfg_name), 0);
-		destrapps(cfg_name, sizeof(cfg_name), 0, "/lifelines.conf");
+		destrapps(cfg_name, sizeof(cfg_name), 0, "/de-lifelines.conf");
 		rtn = load_global_options(cfg_name, pmsg);
 		if (rtn == -1) return false;
 
