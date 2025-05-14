@@ -63,6 +63,10 @@ int display_list(CString ttl, List *list);
 Database *selectAndOpenDatabase (CString *dbFilename, CString searchPath,
 				 Database *oldDatabase, ErrorLog *errorLog);
 
+/* interp-prog.c */
+void interp_main (CString sfile, Database *database, String ofile,
+		  bool picklist, bool timing);
+
 /* miscutls.c */
 void sighand_cursesui(int sig);
 
