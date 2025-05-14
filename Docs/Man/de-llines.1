@@ -1,0 +1,116 @@
+.TH de\-llines 1 "2025 May" "DE LifeLines 0.8"
+.SH NAME
+de\-llines \- DE LifeLines genealogy program
+.SH SYNOPSIS
+.BI "de\-llines [" OPTION ]... 
+.br
+.BI "de\-llines [" OPTION ]... Database
+.SH DESCRIPTION
+\fIde\-llines\fR invokes the DE LifeLines genealogy program.
+.PP
+For up to date documentation please refer to the Documentation 
+section of this man page.
+.PP
+DE LifeLines is a program to manipulate genealogical information in
+lineage-linked GEDCOM format. It has a curses interface, and a
+built-in interpreter for its own genealogical report language.  It
+also has an embedded Python interpreter.
+.SH OPTIONS
+The following options are some of the options available for \fIde\-llines\fR.
+.TP
+.BI \-C
+Specify configuration file location.
+.TP
+.BI \-I
+Specify a user property (e.g. -ILLEDITOR=gvim)
+.TP
+.BI \-P
+Invoke the Python interactive interpreter (if configured in)
+.TP
+.BI \-a
+Log dynamic memory operation (for debugging)
+.TP
+.BI \-s \fIseconds\fP
+Sleep for \fIseconds\fR when processed (for debugging, allowing the user to attach a debugger)
+.TP
+.BI \-d
+Developmental/debug mode (signals are not caught)
+.TP
+.BI \-k
+Always show key values (normally key is not shown if a REFN is shown)
+.TP
+.BI \-n
+Do not use traditional family rules
+.TP
+.BI \-o
+Specify program output filename (eg, -o/tmp/mytests)
+.TP
+.BI \-p \fIscript.py\fP
+Execute a single LifeLines Python script directly (if configured in)
+.TP
+.BI \-u \fICOLS\fP,\fIROWS\fR
+Specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+.TP
+.BI \-x
+Execute a single DE LifeLines report program directly
+.TP
+.BI \-z
+Use normal ASCII characters for drawing lines in user
+interface rather than the vt100 special characters
+.TP
+.BI \-?
+Display options summary, (on UNIX or Linux use the \-h option)
+.PP
+\fIde\-llexec\fR is a version of \fIde\-llines\fR without the user interface for
+non-interactive processing of report programs. (Typically used with the -x
+option.)
+.SH CONFIGURATION FILES
+The DE LifeLines programs looks for configuration files in a variety of
+locations.  If a configuratiion file is specified on the command line,
+it is read.  Otherwise, if the environment variables
+.B LLCONFIGFILE
+exists, the file pointed to is read.  Otherwise, the following three
+configuration files are searched for and read, in turn, if found:
+.br
+.I /etc/de-lifelines.conf
+.br
+.I ~/.linesrc
+(on Windows,
+.I ~/lines.cfg
+is read instead).
+.br
+.I ./.linesrc
+(on Windows,
+.I ./lines.cfg
+is read instead)
+
+Finally, if the database defines the option
+.B LLCONFIGFILE
+then that file is read.
+
+.SH FILES
+.I /etc/de-lifelines.conf
+.br
+.I ~/.linesrc
+.br
+.I ~/lines.cfg
+.br
+.I ./.linesrc
+.br
+.I ./lines.cfg
+.RS
+Possible locations for DE LifeLines configuration file DE LifeLines
+looks for a configuration file for various settings. See section
+\fISystem And User Properties\fR in the userguide for details.
+.RE
+.SH DOCUMENTATION
+The DE LifeLines documentation should be installed as part of the installation,
+and may also be viewed at the project site: https://lifelines.github.io/lifelines/
+Look for ll-userguide and ll-reportmanual (with appropriate extensions for
+text, html and pdf formats).
+The normal installation process includes a large number of sample report
+programs that you can customize to suit your needs.  In the directory
+containing these reports you should find a file named index.html which gives a
+very brief summary of each report.
+.SH "SEE ALSO"
+.BR de\-llexec (1),

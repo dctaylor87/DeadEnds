@@ -1,0 +1,78 @@
+.TH de\-llexec 1 "2025 May" "DE LifeLines 0.8"
+.SH NAME
+de\-llexec \- DE LifeLines Report Processor
+.SH SYNOPSIS
+.B de\-llexec
+[\fIOPTION\fR]... \fIDatabase\fR
+.br
+.SH DESCRIPTION
+.PP
+de\-llexec is a slimmed down version of the \fIde\-llines\fR 
+DE lifeLines genealogy program, used for executing reports
+from scripts.
+.PP
+de\-llexec has simplified and stubbed out input/output in
+place of de\-llines curses interface, and expects to be invoked
+with a report on the commandline (via the \fI-x\fR option).
+.PP
+de\-llexec uses almost all the same options as \fIde\-llines\fR.
+.SH OPTIONS
+The following options are some of the options available for \fIde\-llexec\fR.
+.TP
+.BI \-C
+Specify configuration file location.
+.TP
+.BI \-I
+Specify a user property (e.g. -ILLEDITOR=gvim)
+.TP
+.BI \-P
+Invoke the Python interactive interpreter (if configured in)
+.TP
+.BI \-a
+Log dynamic memory operation (for debugging)
+.TP
+.BI \-s \fIseconds\fP
+Sleep for \fIseconds\fR when processed (for debugging, allowing the user to attach a debugger)
+.TP
+.BI \-d
+Developmental/debug mode (signals are not caught)
+.TP
+.BI \-k
+Always show key values (normally key is not shown if a REFN is shown)
+.TP
+.BI \-n
+Do not use traditional family rules
+.TP
+.BI \-o
+Specify program output filename (eg, -o/tmp/mytests)
+.TP
+.BI \-p \fIscript.py\fP
+Execute a single LifeLines Python script directly (if configured in)
+.TP
+.BI \-u \fICOLS\fP,\fIROWS\fR
+Specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+.TP
+.BI \-x
+Execute a single DE LifeLines report program directly
+.TP
+.BI \-z
+Use normal ASCII characters for drawing lines in user
+interface rather than the vt100 special characters
+.TP
+.BI \-?
+Display options summary, (on UNIX or Linux use the \-h option)
+.SH FILES
+de\-llexec looks for a configuration file for various settings, in
+exactly the same manner as \fIde\-llines\fR. See the DE LifeLines userguide
+for details.
+.SH DOCUMENTATION
+The DE LifeLines documentation should be installed as part of the installation,
+and may also be viewed at the project site: https://lifelines.github.io/lifelines/
+Look for ll-userguide and ll-reportmanual (with appropriate extensions for
+text, html and pdf formats).
+The normal installation process includes a large number of sample report
+programs that you can customize to suit your needs.  In the directory
+containing these reports you should find a file named index.html which gives a
+very brief summary of each report.
+.SH "SEE ALSO"
+.BR de\-llexec (1).
