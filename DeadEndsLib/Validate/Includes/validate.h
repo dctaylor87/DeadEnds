@@ -21,9 +21,9 @@ typedef enum ValidationCodes {
 extern void validatePersons(RecordIndex*, String name, IntegerTable*, ErrorLog*);
 extern void validateFamilies(RecordIndex*, String name, IntegerTable*, ErrorLog*);
 extern RefnIndex* getReferenceIndex(RecordIndex*, CString name, IntegerTable*, ErrorLog*);
-//extern bool validateSourceIndex(Database* database, ErrorLog* errorLog);
-//extern bool validateEventIndex(Database* database, ErrorLog* errorLog);
-//extern bool validateOtherIndex(Database* database, ErrorLog* errorLog);
+extern bool validateSourceIndex(Database* database, ErrorLog* errorLog);
+extern bool validateEventIndex(Database* database, ErrorLog* errorLog);
+extern bool validateOtherIndex(Database* database, ErrorLog* errorLog);
 //extern void validateReferences(Database*, IntegerTable*, ErrorLog*);
 extern int rootLine(GNode*, IntegerTable*);
 
