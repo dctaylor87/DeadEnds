@@ -237,26 +237,39 @@ prompt_for_db:
 		exargs = 0;
 	}
 	/* Open database, prompting user if necessary */
-	{
-	  if (!alldone && c>0)
-	    dbrequested = strsave(argv[optind]);
-	  else
-	    {
-	      fprintf (stderr, "%s: database argument is required\n", ProgName);
-	      print_usage();
-	      exit(1);
-	    }
 
-	  ErrorLog *errorLog = createErrorLog ();
-	  currentDatabase = selectAndOpenDatabase (&dbrequested, NULL, NULL, errorLog);
-	  if (! currentDatabase)
-	    {
-	      showErrorLog (errorLog);
-	      deleteList ((List *)errorLog);
-	      alldone = 0;
-	      goto finish;
-	    }
-	}
+	if (!alldone && c>0)
+	  dbrequested = strsave(argv[optind]);
+	else
+	  {
+	    CString InputPath = getdeoptstr ("InputPath", ".");
+	    bool picklist = true;
+	    CString ext = "-.ged";
+	    dbrequested = NULL;
+	    bool status = ask_for_gedcom (DEREADTEXT, _(qSwhatgedc),
+					  &dbrequested, InputPath, ext, picklist);
+
+	    /* XXX add code to ask about creating an empty database XXX */
+	    if (! status)
+	      {
+		ok = 0;
+		goto finish;
+	      }
+	  }
+
+	ErrorLog *errorLog = createErrorLog ();
+	currentDatabase = selectAndOpenDatabase (&dbrequested, NULL, NULL, errorLog);
+	if (! currentDatabase)
+	  {
+	    showErrorLog (errorLog);
+	    deleteList ((List *)errorLog);
+	    alldone = 0;
+	    goto finish;
+	  }
+
+	if (! dbrequested || (*dbrequested == 0))
+	  goto finish;
+
 	/* give interpreter its turn at initialization */
 	//initializeInterpreter(currentDatabase);
 
