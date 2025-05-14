@@ -301,7 +301,7 @@ main_browse (GNode *rec1, int code)
 static GNode *
 goto_indi_child (GNode *irec, int childno)
 {
-  int num1;
+  //int num1;
   GNode *answer = 0;
   CString akey=0; /* answer key */
   GNode *indi = nztop(irec);
