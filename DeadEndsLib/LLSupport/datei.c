@@ -49,6 +49,11 @@
  *********************************************/
 
 /* alphabetical */
+static void load_one_cmplx_pic (int ecmplx, String abbrev,
+				String full);
+static void load_one_month (int monum, MONTH_NAMES * monarr,
+			    String abbrev, String full);
+
 #if !defined(DEADENDS)
 static void init_keywordtbl(void);
 static void load_lang(void);
