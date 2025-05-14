@@ -39,6 +39,7 @@
 #include "ll-node.h"
 #include "file.h"
 #include "path.h"
+#include "import.h"
 
 /*********************************************
  * local function prototypes, alphabetical
