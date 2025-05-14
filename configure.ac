@@ -677,6 +677,7 @@ AC_CONFIG_FILES([Makefile \
         DeadEndsLib/UI/Makefile \
         DeadEndsLib/Utils/Makefile \
         DeadEndsLib/Validate/Makefile \
+        Docs/Man/Makefile \
         Docs/Manual/Makefile \
 	GenerateSExpressions/Makefile \
         Lifelines/Makefile \
