@@ -25,6 +25,8 @@
 #include "locales.h"
 #include "lloptions.h"
 #include "messages.h"
+#include "de-strings.h"
+#include "feedback.h"
 
 static void compute_pi(String pi, CString sub);
 static int ll_index(CString str, CString sub, int num);
@@ -67,21 +69,36 @@ PValue __getindi (PNode *pnode, Context *context, bool* eflg)
     return nullPValue;
 }
 
+/* __choosechild -- have user choose child of person or family.
+   usage: choosechild (INDI|FAM) --> INDI.  */
+
 PValue __choosechild (PNode *pnode, Context *context, bool* eflg)
 {
 }
+
+/* __chooseindi -- have user choose person from a set
+   usage: chooseindi (SET) --> INDI.  */
 
 PValue __chooseindi (PNode *pnode, Context *context, bool* eflg)
 {
 }
 
+/* __choosespouse -- have user choose spouse of person.
+   usage: choosespouse(INDI|FAM) --> INDI.  */
+
 PValue __choosespouse (PNode *pnode, Context *context, bool* eflg)
 {
 }
 
+/* __choosesubset -- have user choose subset from a set.
+   usage: choosesubset (SET) --> SET.  */
+
 PValue __choosesubset (PNode *pnode, Context *context, bool* eflg)
 {
 }
+
+/* __choosefam -- have user choose family of person.
+   usage: choosefam (INDI) --> FAM.  */
 
 PValue __choosefam (PNode *pnode, Context *context, bool* eflg)
 {
@@ -153,7 +170,6 @@ PValue __getstr (PNode *pnode, Context *context, bool* eflg)
 	}
       prompt = pvalue.value.uString;
     }
-  int num;
   if (! ask_for_string (prompt, _(qSaskstr), buffer, sizeof (buffer)))
     {
       *eflg = true;
@@ -162,7 +178,7 @@ PValue __getstr (PNode *pnode, Context *context, bool* eflg)
       return nullPValue;
     }
   assignValueToSymbol (context->symbolTable, iden->identifier,
-		       PVALUE (PVInt, uInt, (long)num));
+		       createStringPValue (buffer));
   return nullPValue;
 }
 
@@ -277,64 +293,6 @@ PValue __getproperty (PNode *pnode, Context *context, bool *eflg)
   str = get_property (str);
   return createStringPValue(str);
 }
-
-#if 0
-static void
-makestring (PValue val, String str, INT len, bool *eflg)
-{
-  str[0]=0;
-
-  switch(val.type) {
-  case PVNull:
-    destrapps(str, len, uu8, "<NULL>");
-    break;
-  case PVInt:
-  case PVFloat:
-    destrappf(str, len, uu8, "%f", pvalue_to_float(val));
-    break;
-  case PVBool:
-    /* TODO: Should we localize this ? */
-    destrapps(str, len, uu8, val.value.uBool ? "True" : "False");
-    break;
-  case PVString:
-    destrapps(str, len, uu8, val.value.uString);
-    break;
-  case PVGNode:
-    {
-      /* TODO: report codeset conversion */
-      GNode *node = val.value.uGNode;
-      if (ntag(node)) {
-	destrappf(str, len, uu8, "%s: ", ntag(node));
-      }
-      if (nval(node))
-	destrapps(str, len, uu8, nval(node));
-    }
-    break;
-  case PVPerson:
-  case PVFamily:
-  case PVSource:
-  case PVEvent:
-  case PVOther:
-    {
-      GNode *node = val.value.uGNode;
-      String txt = generic_to_list_string(node, NULL, len, " ", NULL, TRUE);
-      destrapps(str, len, uu8, txt);
-    }
-    break;
-  case PVList:
-    destrapps(str, len, uu8, "<List>");
-    break;
-  case PVTable:
-    destrapps(str, len, uu8, "<Table>");
-    break;
-  case PVSequence:
-    destrapps(str, len, uu8, "<Sequence>");
-    break;
-  default:
-    *eflg = TRUE;
-  }
-}
-#endif
 
 /* __menuchoose -- have user choose from a list of options
 
