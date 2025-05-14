@@ -21,6 +21,8 @@
 #include "name.h"
 #include "selectdb.h"
 #include "feedback.h"
+#include "denls.h"
+#include "messages.h"
 
 #define SIZE_REKEY_TABLE	1025
 
@@ -41,13 +43,6 @@ selectAndOpenDatabase(CString *dbFilename,
 {
   CString newName;
   Database *database;
-#if 0			       /* not yet */
-  /* were we given a filename to open? */
-  if (! dbFilename || ! *dbFilename)
-    {
-      /* XXX add support for not being given a database name XXX */
-    }
-#endif
 
   /* first, we need to find the file */
   newName = resolveFile (*dbFilename, searchPath);
