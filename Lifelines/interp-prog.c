@@ -28,6 +28,7 @@
 #include "dateprint.h"
 #include "readwrite.h"
 #include "codesets.h"
+#include "liflines.h"		/* interp_main */
 
 static int
 interp_program (String proc, int nargs, void **args, CString sfile,
