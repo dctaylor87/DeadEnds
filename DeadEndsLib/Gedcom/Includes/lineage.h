@@ -26,4 +26,5 @@ int numberOfSpouses(GNode*, Database*); // Return the number of spouses of a per
 int numberOfFamilies(GNode*); // Return the number of families a person is a spouse in.
 SexType oppositeSex(SexType); // Return the opposite sex of a person.
 
+extern GNode *personToSpouse(GNode *person, GNode *family); /* no callers */
 #endif // lineage_h

@@ -3,7 +3,7 @@
 // symboltable.c holds the functions that implement SymbolTables.
 //
 // Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 5 May 2025.
+// Last changed on 11 May 2025.
 
 #include <stdint.h>
 
@@ -129,7 +129,7 @@ PValue getValueOfSymbol(SymbolTable* symtab, CString ident) {
     return cloneAndReturnPValue(symbol->value);
 }
 
-// showSymbolTable shows the contents of a SymbolTable.
+// showSymbolTable shows the contents of a SymbolTable. For debugging.
 void showSymbolTable(SymbolTable* table) {
 	printf("Symbol Table contents:\n");
 	for (int i = 0; i < table->numBuckets; i++) {

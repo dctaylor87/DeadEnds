@@ -5,7 +5,7 @@
 // MNOTE: Memory management is an issue to be dealt with carefully.
 //
 // Created by Thomas Wetmore on 16 April 2023.
-// Last changed on 8 May 2024.
+// Last changed on 13 May 2024.
 
 #include <ansidecl.h>
 #include <stdint.h>
@@ -17,8 +17,11 @@
 #include "pvalue.h"
 #include "builtintable.h"
 
+static bool localDebugging = false;
+
 // __list creates a list.
 // usage: list(IDENT) -> VOID
+static void delete(void* element) { stdfree(element); } // Free strings when list freed.
 PValue __list(PNode* pnode, Context* context, bool* errflg) {
     PNode *var = pnode->arguments;
     if (var->type != PNIdent) {
@@ -28,8 +31,9 @@ PValue __list(PNode* pnode, Context* context, bool* errflg) {
     }
     String ident = var->identifier;
     ASSERT(ident);
-    List *list = createList(null, null, null, false);
+    List *list = createList(null, null, delete, false);
     assignValueToSymbol(context->symbolTable, ident, PVALUE(PVList, uList, list));
+    if (localDebugging) showSymbolTable(context->symbolTable);
     return nullPValue;
 }
 
@@ -90,7 +94,7 @@ PValue __removeFirst(PNode* node, Context* context, bool* errflg) {
     }
     List *list = arg.value.uList;
     ASSERT(list);
-    PValue *ppvalue = (PValue*) popList(list);
+    PValue *ppvalue = (PValue*) dequeueList(list);
     if (!ppvalue) return nullPValue;
     PValue result = cloneAndReturnPValue(ppvalue);
     freePValue(ppvalue);
