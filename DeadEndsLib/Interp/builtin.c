@@ -3,7 +3,7 @@
 // builtin.c contains many built-in functions of the DeadEnds script language.
 //
 // Created by Thomas Wetmore on 14 December 2022.
-// Last changed on 13 May 2025.
+// Last changed on 14 May 2025.
 
 #include <ansidecl.h>
 #include <stdint.h>
@@ -250,11 +250,9 @@ PValue __ord(PNode* expr, Context* context, bool* eflg) {
 	if (lvalue < 1) return __d(expr, context, eflg);
 	if (lvalue > 12) {
 		sprintf(scratch, "%ldth", lvalue);
-        createStringPValue(scratch);
-	} else {
-        createStringPValue(ordinals[lvalue - 1]);
+        return createStringPValue(scratch);
 	}
-	return value;
+    return createStringPValue(ordinals[lvalue - 1]);
 }
 
 // __card convert a small integer to a cardinal string. If out of range returns d(INT).
@@ -771,7 +769,7 @@ PValue __deletenode(PNode *node, Context *context, bool *errflg) {
 	// If this node has no parent, it is a root node, and they cannot be deleted.
 	if (!this->parent) {
 		*errflg = true;
-		scriptError(node, "the argument node is a root and cannot be deleted.");
+		scriptError(node, "the argument node is a root and cannot be deleted");
 		return nullPValue;
 	}
 	GNode *parent = this->parent;
@@ -800,7 +798,7 @@ PValue __deletenode(PNode *node, Context *context, bool *errflg) {
 PValue __getrecord (PNode *pnode, Context *context, bool *errflg) {
 	String key = evaluateString(pnode->arguments, context, errflg);
 	if (*errflg || !key || *key == 0) {
-		scriptError(pnode, "The first parameter to getrecord (dereference) must be a record key.");
+		scriptError(pnode, "first parameter to getrecord/dereference() must be a record key");
 		*errflg = true;
 		return nullPValue;
 	}
@@ -831,9 +829,7 @@ PValue __reference (PNode* pnode, Context* context, bool* errflg) {
 
 // __extracttokens -- Extract tokens from a STRING value
 // usage: extracttokens(STRING, LIST, VARB, STRING) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __extracttokens (PNode *pnode, Context *context, bool *errflg)
-{
+PValue __extracttokens (PNode *pnode, Context *context, bool *errflg) {
 	// Get the String to be tokenized.
 	PNode *sexp = pnode->arguments;
 	String str = evaluateString(sexp, context, errflg);
@@ -866,18 +862,17 @@ PValue __extracttokens (PNode *pnode, Context *context, bool *errflg)
 	}
 	int len = 0;
 	valueToList(str, list, dlm);
-	assignValueToSymbol(context->symbolTable, lvar->identifier, PVALUE(PVInt, uInt, len));
+	assignValueToSymbol(context->symbolTable, lvar->identifier,
+			    PVALUE(PVInt, uInt, lengthList(list)));
 	return nullPValue;
 }
 
 //  __savenode -- Save Gedcom tree permanently.
-//    usage: savenode(NODE) -> NODE
-//--------------------------------------------------------------------------------------------------
-PValue __savenode (PNode *pnode, Context *context, bool *errflg)
-{
+//  usage: savenode(NODE) -> NODE
+PValue __savenode (PNode *pnode, Context *context, bool *errflg) {
 	GNode *node = evaluateGNode(pnode->arguments, context, errflg);
 	if (*errflg || !node) {
-		scriptError(pnode, "The argument to savenode must be a Gedcom node.");
+		scriptError(pnode, "argument to savenode() must be a Gedcom node");
 		*errflg = true;
 		return nullPValue;
 	}
