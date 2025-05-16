@@ -190,7 +190,6 @@ parseArguments (int argc, char *argv[], CString optString)
       break;
     }
   }
-
 }
 
 /* parse_arg -- Break argument into name & value pairs

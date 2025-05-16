@@ -61,7 +61,6 @@ void basicDelete(void*);
 #endif
 
 // User interface to the standard functions.
-//--------------------------------------------------------------------------------------------------
 void* _alloc(size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 void _free(void* ptr, String, int);
 void* _realloc(void* ptr, size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (2))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));

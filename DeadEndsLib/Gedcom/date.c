@@ -353,6 +353,7 @@ static String formatDay (int day, int format) {
     *p = 0;
     return (String) scratch;
 }
+
 // formatMonth formats the month part of a date. month is the month number (0 for unknown), format
 // is a code.
 // MNOTE: may return a static buffer or .text space.

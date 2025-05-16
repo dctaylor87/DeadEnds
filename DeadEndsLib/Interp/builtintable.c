@@ -31,7 +31,7 @@ PValue __table(PNode* pnode, Context* context, bool* errflg) {
 
 // __insert adds an element to a script value table.
 // usage: insert(TAB, STRING, ANY) -> VOID
-PValue __insert (PNode *node, Context *context, bool *errflg) {
+PValue __insert(PNode *node, Context *context, bool *errflg) {
     PNode* arg = node->arguments; // Table.
     PValue tvalue = evaluate(arg, context, errflg);
     if (*errflg || tvalue.type != PVTable) {
@@ -40,7 +40,7 @@ PValue __insert (PNode *node, Context *context, bool *errflg) {
         return nullPValue;
     }
     PValueTable *table = tvalue.value.uTable;
-    arg = arg->next; // Key fr table entry.
+    arg = arg->next; // Key for table entry.
     PValue svalue = evaluate(arg, context, errflg);
     if (*errflg || svalue.type != PVString) {
         *errflg = true;
@@ -60,7 +60,7 @@ PValue __insert (PNode *node, Context *context, bool *errflg) {
 
 // __lookup looks up an element in a script value table.
 // usage: lookup(TAB, STRING) -> ANY
-PValue __lookup (PNode* node, Context* context, bool* errflg) {
+PValue __lookup(PNode* node, Context* context, bool* errflg) {
     PNode* arg = node->arguments; // Table.
     PValue tvalue = evaluate(arg, context, errflg);
     if (*errflg || tvalue.type != PVTable) {

@@ -50,9 +50,7 @@ PValue __year(PNode *pnode, Context *context, bool* errflg) {
 
 //  __long return the long form of an event as a string.
 //  usage: long(EVENT) -> STRING
-//--------------------------------------------------------------------------------------------------
-PValue __long(PNode *pnode, Context *context, bool* errflg)
-{
+PValue __long(PNode *pnode, Context *context, bool* errflg) {
     PValue event = evaluate(pnode->arguments, context, errflg);
     if (*errflg || !isRecordType(event.type)) return nullPValue;
     return createStringPValue(eventToString(event.value.uGNode, false));
@@ -60,9 +58,7 @@ PValue __long(PNode *pnode, Context *context, bool* errflg)
 
 //  __short return the short form of an event as a string.
 //  usage: short(EVENT) -> STRING
-//--------------------------------------------------------------------------------------------------
-PValue __short (PNode *pnode, Context *context, bool* errflg)
-{
+PValue __short (PNode *pnode, Context *context, bool* errflg) {
     PValue event = evaluate(pnode->arguments, context, errflg);
     if (*errflg || !isRecordType(event.type)) return nullPValue;
     return createStringPValue(eventToString(event.value.uGNode, true));
