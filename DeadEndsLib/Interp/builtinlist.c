@@ -94,7 +94,7 @@ PValue __removeFirst(PNode* node, Context* context, bool* errflg) {
     }
     List *list = arg.value.uList;
     ASSERT(list);
-    PValue *ppvalue = (PValue*) dequeueList(list);
+    PValue *ppvalue = (PValue*) popList(list);
     if (!ppvalue) return nullPValue;
     PValue result = cloneAndReturnPValue(ppvalue);
     freePValue(ppvalue);
@@ -114,7 +114,7 @@ PValue __removeLast(PNode* node, Context* context, bool* errflg) {
 
     List *list = arg.value.uList;
     ASSERT(list);
-    PValue *ppvalue = (PValue*) popList(list);
+    PValue *ppvalue = (PValue*) dequeueList(list);
     if (!ppvalue) return nullPValue;
     PValue result = cloneAndReturnPValue(ppvalue);
     freePValue(ppvalue);
@@ -199,6 +199,7 @@ PValue __getel(PNode *node, Context *context, bool *errflg) {
         return nullPValue;
     }
     int index = (int) indexVal.value.uInt;
+    index--;		       // getel is 1-based, lists are 0-based
     if (index < 0 || index >= lengthList(list)) {
         scriptError(node, "the index to getel is out of range");
         *errflg = true;
