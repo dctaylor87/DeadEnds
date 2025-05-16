@@ -62,7 +62,6 @@ void* getLastListElement(List*);
 void* getAndRemoveLastListElement(List*);
 void* getAndRemoveFirstListElement(List*);
 
-extern void emptyList(List *list); // Make a list empty.
 Block* blockOfList(List*);
 void showList(List *list, String(*describe)(void*));
 

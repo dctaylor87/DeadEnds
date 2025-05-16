@@ -24,7 +24,6 @@ extern RefnIndex* getReferenceIndex(RecordIndex*, CString name, IntegerTable*, E
 extern bool validateSourceIndex(Database* database, ErrorLog* errorLog);
 extern bool validateEventIndex(Database* database, ErrorLog* errorLog);
 extern bool validateOtherIndex(Database* database, ErrorLog* errorLog);
-//extern void validateReferences(Database*, IntegerTable*, ErrorLog*);
 extern int rootLine(GNode*, IntegerTable*);
 
 #endif // validate_h

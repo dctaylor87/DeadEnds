@@ -21,8 +21,6 @@ void addToRecordIndex(RecordIndex*, GNode* root);
 GNode* searchRecordIndex(RecordIndex*, CString);
 void showRecordIndex(RecordIndex*);
 
-extern int getRecordInsertCount(void); // Return the record insert count.  For debugging.
-extern void newShowRecordIndex(RecordIndex* index);
 extern void addrefRecord (GNode *element);
 extern void releaseRecord (GNode *element);
 
