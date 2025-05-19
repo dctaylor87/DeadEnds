@@ -120,9 +120,10 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
 #if 1
 	CString errorMessage = null;
 	bool success = setScriptOutputFile (name, aflag, &errorMessage);
-	if (! success)
+	if (! success) {
 	  scriptError (pnode, "%s %s", errorMessage, name);
-	return nullPValue;
+	  return nullPValue;
+	}
 #else
 	if (Poutfp) {
 		finishrassa();
