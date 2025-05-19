@@ -195,7 +195,7 @@ proc descendants (indi, number, generation_count, spousefamilies) {
                         lookup( strings, "Relationship")
                 }
 
-                if ( ne( spouse, null)) {
+                if (spouse) {
                         " " lookup( strings, "with") " "
                         call print_person(spouse, 1)
                 } else {
