@@ -487,7 +487,7 @@ ask_for_record (CString idstr, int letr, Database *database)
 	if (!rec) {
 		Sequence *seq;
 		seq = refnToSequence(answer, database->recordIndex,
-				     database->nameIndex);
+				     database->refnIndex);
 		if (!seq) return NULL;
 		rec = chooseFromSequence(seq, NOASK1, _(qSduprfn), _(qSduprfn), chooseTypeDefault);
 		deleteSequence(seq);

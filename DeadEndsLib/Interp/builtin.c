@@ -603,7 +603,6 @@ PValue __extractplaces(PNode *pnode, Context *context, bool *errflg) {
         *errflg = true;
         return nullPValue;
     }
-    int count = 0; // Extract places.
     if (!placeToList(placeNode->value, list)) {
         scriptError(pnode, "place value could not be split into phrases");
         *errflg = true;
@@ -611,7 +610,8 @@ PValue __extractplaces(PNode *pnode, Context *context, bool *errflg) {
     }
 
     // Assign the count to the symbol table
-    assignValueToSymbol(context->symbolTable, countVar->identifier, PVALUE(PVInt, uInt, count));
+    assignValueToSymbol(context->symbolTable, countVar->identifier,
+			PVALUE(PVInt, uInt, lengthList(list)));
 
     if (localDebugging) showSymbolTable(context->symbolTable); // Debug.
 
@@ -860,7 +860,6 @@ PValue __extracttokens (PNode *pnode, Context *context, bool *errflg) {
 		*errflg = true;
 		return nullPValue;
 	}
-	int len = 0;
 	valueToList(str, list, dlm);
 	assignValueToSymbol(context->symbolTable, lvar->identifier,
 			    PVALUE(PVInt, uInt, lengthList(list)));
