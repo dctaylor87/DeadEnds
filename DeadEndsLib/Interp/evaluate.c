@@ -153,10 +153,7 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
 PValue evaluateBoolean(PNode* pnode, Context* context, bool* errflg) {
     PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg) return nullPValue;
-    if (pvalueToBoolean (pvalue))
-      return truePValue;
-    else
-      return falsePValue;
+    return pvalueToBoolean(pvalue) ? truePValue : falsePValue;
 }
 
 // pvalueToBoolean converts a program value to a boolean using C like rules.

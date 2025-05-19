@@ -55,7 +55,7 @@ bool removeFromSequenceByIndex (Sequence *sequence, int index);
 void nameSortSequence(Sequence*);
 void keySortSequence(Sequence*);
 //void valueSortSequence(Sequence*);
-Sequence *uniqueSequence(Sequence*);
+Sequence* uniqueSequence(Sequence*);
 void uniqueSequenceInPlace(Sequence *sequence);
 
 Sequence* personToChildren(GNode* person, RecordIndex*);
@@ -68,7 +68,7 @@ Sequence* personToSpouses(GNode* person, RecordIndex*);
 Sequence* personToFamilies(GNode* person, bool, RecordIndex*);
 Sequence* nameToSequence(CString name, RecordIndex*, NameIndex*);
 Sequence* keyToSequence(CString key, RecordIndex*);
-Sequence* refnToSequence (CString value, RecordIndex*, NameIndex*);
+Sequence* refnToSequence (CString value, RecordIndex*, RefnIndex*);
 Sequence* stringToSequence(CString name, Database* database);
 
 Sequence* unionSequence(Sequence*, Sequence*);
@@ -89,7 +89,7 @@ bool limitPersonNode(GNode *node, int level);
 
 extern void baseFree(void *word);
 
-//  FORSEQUENCE and ENDSEQUENCE iterate a Sequence.
+// FORSEQUENCE and ENDSEQUENCE iterate a Sequence.
 #define FORSEQUENCE(sequence, element, count) {\
 	SequenceEl* element;\
 	int count ATTRIBUTE_UNUSED;\

@@ -37,7 +37,7 @@ void insertInIntegerTable(IntegerTable* table, CString key, int value) {
     addToHashTable(table, element, false);
 }
 
-// incrIntegerTable -- increments the value of an element in the IntegerTable
+// incrIntegerTable increments the value of an element in the IntegerTable.
 void incrIntegerTable (IntegerTable* table, CString key) {
 	IntegerElement* element = searchHashTable(table, key);
 	if (element) (element->value)++;
