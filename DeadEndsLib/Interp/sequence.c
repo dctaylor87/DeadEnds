@@ -176,7 +176,7 @@ bool removeFromSequenceByIndex (Sequence *sequence, int index)
   if (! sequence)
     return false;		/* no sequence */
   if (! elementFromSequence (sequence, index, &key, NULL))
-    return false;		/* key out of range */
+    return false;		/* index out of range */
 
   return removeFromSequence (sequence, key);
 }
