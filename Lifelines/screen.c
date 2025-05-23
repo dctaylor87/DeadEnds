@@ -138,7 +138,9 @@ static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
 static int chooseOrViewArray (CString ttl, int no, String *pstrngs
 	, bool selecting, DETAILFNC detfnc, void *param);
+#if !defined(DEADENDS)
 static int choose_tt(String prompt);
+#endif
 static void clear_msgs(void);
 static void clear_status(void);
 static void clearw(void);
@@ -154,8 +156,8 @@ static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
 static void disp_trans_table_choice(UIWINDOW uiwin, int row, int col, int indx);
 static void display_status(String text);
-static bool does_match(void *param, void *el);
 #if !defined(DEADENDS)
+static bool does_match(void *param, void *el);
 static void edit_tt_menu(void);
 static void edit_user_options(void);
 static void edit_place_table(void);
@@ -498,6 +500,8 @@ remove_uiwin (UIWINDOW uiwin)
 	  removeFromList (list_uiwin, index);
 	}
 }
+
+#if !defined(DEADENDS)
 /*==========================================
  * does_match -- Used as callback to remove_uiwin
  *  in finding an element in a list
@@ -507,6 +511,8 @@ does_match (void *param, void *el)
 {
 	return param == el;
 }
+#endif
+
 /*==========================================
  * create_boxed_newwin2 -- Create a window with
  *  an auxiliary box window outside it
@@ -808,11 +814,11 @@ main_menu (void)
 void
 run_report (bool picklist)
 {
-	List *progfiles = NULL; /* will prompt for report */
+	CString progfile = NULL; /* will prompt for report */
 	String ofile = NULL; /* will prompt for output file */
 	bool timing = true;
 	begin_action();
-	interp_main(progfiles, currentDatabase, ofile, picklist, timing);
+	interp_main(progfile, currentDatabase, ofile, picklist, timing);
 	end_action(); /* displays any errors that happened */
 }
 /*=========================================
@@ -1695,6 +1701,8 @@ save_tt_action (void)
 	strfree(&fname);
 }
 #endif
+
+#if !defined(DEADENDS)
 /*======================================
  * choose_tt -- select a translation table (-1 for none)
  *====================================*/
@@ -1721,6 +1729,8 @@ choose_tt (String prompt)
 		}
 	}
 }
+#endif
+
 /*====================================
  * invoke_utils_menu -- Handle utilities menu
  *==================================*/
@@ -1811,6 +1821,8 @@ invoke_extra_menu (GNode **prec)
 		}
 	}
 }
+
+#if !defined(DEADENDS)
 /*===============================
  * uopt_validate -- Validator when user edits 'user options table'
  *  returns descriptive string for failure, 0 for pass
@@ -1835,6 +1847,7 @@ uopt_validate (HashTable *tab, void * param)
 	}
 	return 0;
 }
+#endif
 
 #if !defined(DEADENDS)
 /*===============================
