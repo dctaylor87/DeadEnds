@@ -3,7 +3,7 @@
 // builtin.c contains many built-in functions of the DeadEnds script language.
 //
 // Created by Thomas Wetmore on 14 December 2022.
-// Last changed on 14 May 2025.
+// Last changed on 16 May 2025.
 
 #include <ansidecl.h>
 #include <stdint.h>
@@ -362,8 +362,8 @@ PValue __strlen (PNode *node, Context *context, bool* eflg) {
 }
 
 //  __concat catenates potentially two to thirty-two strings.
-//    usage: concat(STRING [, STRING]+) -> STRING
-PValue __concat (PNode *pnode, Context *context, bool *errflg) {
+//  usage: concat(STRING [, STRING]+) -> STRING
+PValue __concat(PNode *pnode, Context *context, bool *errflg) {
 	PNode *arg = pnode->arguments;
 	if (arg == null) return nullPValue;
 	int len = 0, nstrs = 0;
@@ -612,9 +612,7 @@ PValue __extractplaces(PNode *pnode, Context *context, bool *errflg) {
     // Assign the count to the symbol table
     assignValueToSymbol(context->symbolTable, countVar->identifier,
 			PVALUE(PVInt, uInt, lengthList(list)));
-
     if (localDebugging) showSymbolTable(context->symbolTable); // Debug.
-
     return nullPValue;
 }
 
@@ -806,7 +804,7 @@ PValue __getrecord (PNode *pnode, Context *context, bool *errflg) {
 	return root ? PVALUE(PVGNode, uGNode, root) : nullPValue;
 }
 
-// __freerecord is now a no-op because of the in-Ram database.
+// __freerecord is a no-op because of the in-Ram database.
 // usage: freerecord(NODE) -> VOID
 PValue __freerecord (PNode* pnode ATTRIBUTE_UNUSED,
 		     Context* context ATTRIBUTE_UNUSED,

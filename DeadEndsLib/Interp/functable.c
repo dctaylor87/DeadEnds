@@ -3,7 +3,7 @@
 // functable.c has the table of built-in functions in the DeadEnds scripting language.
 //
 // Created by Thomas Wetmore on 10 January 2023.
-// Last changed on 10 May 2025.
+// Last changed on 17 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
