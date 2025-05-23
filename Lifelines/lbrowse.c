@@ -272,7 +272,7 @@ browse_list (GNode **prec1, GNode **prec2, Sequence **pseq)
 				break;
 			}
 			if (! seq)
-				seq = createSequence (currentDatabase);
+				seq = createSequence (currentDatabase->recordIndex);
 			FORSEQUENCE(newseq, el, i)
 				skey = element_skey(el);
 				snam = element_name(el);
