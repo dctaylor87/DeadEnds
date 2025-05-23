@@ -86,7 +86,7 @@ void* _realloc(void* ptr, size_t len, CString file, int line) {
 	ASSERT(len != 0);
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
-		bytesFreed += malloc_size(p);
+		bytesFreed += malloc_size(ptr);
 		fprintf(allocLogFile, "FR %s\t%d\t%zu\t%p\n",
 			lastPathSegment(file), line, malloc_size(ptr), ptr);
 	}
