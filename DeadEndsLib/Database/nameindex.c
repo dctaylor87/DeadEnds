@@ -137,7 +137,7 @@ void showNameIndex(NameIndex* index) {
 }
 
 // getSetKey gets the key of a Set element.
-static CString getSetKey(void* element) {
+static CString getSetKey(const void* element) {
 	return (CString) element;
 }
 

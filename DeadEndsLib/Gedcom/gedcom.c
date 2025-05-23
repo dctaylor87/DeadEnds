@@ -58,7 +58,7 @@ bool validSexString(String s) {
 
 // keyToKey takes a "lazy" key (may omit @-signs and have lower case letters), and converts it to a real key.
 // NOTE: Returns static memory form the upper function
-String keyToKey(String userKey) {
+CString keyToKey(CString userKey) {
     static char buffer[MAXSTRINGSIZE];
     if (strlen(userKey) > MAXSTRINGSIZE - 2) return userKey;
     if (userKey[0] != '@') {

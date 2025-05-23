@@ -34,7 +34,7 @@ SexType sexTypeFromString(CString);
 bool validSexString(String);
 
 RecordType recordType(GNode *root);  // Return the type of a Gedcom record tree.
-String keyToKey(String);
+CString keyToKey(CString);
 
 int compareRecordKeys(CString, CString);  // gedcom.c
 
