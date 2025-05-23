@@ -237,7 +237,7 @@ annotate_node (GNode *node, bool expand_refns,
 	       bool annotate_pointers, bool rfmt,
 	       Database *database)
 {
-	String key=0;
+	CString key=0;
 	GNode *rec=0;
 
 	key = value_to_xref(nval(node));

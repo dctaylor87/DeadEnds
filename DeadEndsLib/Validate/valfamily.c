@@ -16,11 +16,11 @@
 #include "errors.h"
 #include "splitjoin.h"
 
-static bool validateFamily(GNode*, String name, RecordIndex*, IntegerTable*, ErrorLog*);
+static bool validateFamily(GNode*, CString name, RecordIndex*, IntegerTable*, ErrorLog*);
 extern bool importDebugging;
 
 // validateFamilies validates the family records in a database.
-void validateFamilies(RecordIndex* index, String name, IntegerTable* keymap, ErrorLog *elog) {
+void validateFamilies(RecordIndex* index, CString name, IntegerTable* keymap, ErrorLog *elog) {
 	int numFamiliesValidated = 0;
 	FORHASHTABLE(index, element)
 		GNode* root = (GNode*) element;
@@ -34,7 +34,7 @@ void validateFamilies(RecordIndex* index, String name, IntegerTable* keymap, Err
 
 // validateFamily validates a family; it checks that all HUSBs, WIFEs and CHILs refer to existing
 // persons, and that the return links exist.
-static bool validateFamily(GNode* family, String name, RecordIndex* index, IntegerTable* keymap,
+static bool validateFamily(GNode* family, CString name, RecordIndex* index, IntegerTable* keymap,
 						   ErrorLog* elog) {
 	normalizeFamily(family);
 	int errorCount = 0;

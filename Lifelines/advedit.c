@@ -165,7 +165,7 @@ static bool
 advedit_expand_traverse (GNode *node, void *param)
 {
 	List *subs = (List *)param;
-	String key = value_to_xref(nval(node));
+	CString key = value_to_xref(nval(node));
 	if (!key) return true;
 	key = strsave(key);
 #ifdef DEBUG

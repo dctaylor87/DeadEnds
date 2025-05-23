@@ -21,13 +21,13 @@
 
 #define LC(line, node) (line + countNodesBefore(node))
 
-static bool validatePerson(GNode*, String name, RecordIndex*, IntegerTable*, ErrorLog*);
+static bool validatePerson(GNode*, CString name, RecordIndex*, IntegerTable*, ErrorLog*);
 static bool hasValidNameGNode(GNode* root, GNode** pname);
 static bool hasValidSexGNode(GNode* root, GNode** psex);
 static bool importDebugging = true;
 
 // validatePersons validates the persons in a Database.
-void validatePersons(RecordIndex* index, String name, IntegerTable* keymap, ErrorLog* elog) {
+void validatePersons(RecordIndex* index, CString name, IntegerTable* keymap, ErrorLog* elog) {
 	int numPersonsValidated = 0;
 	FORHASHTABLE(index, element)
 		GNode* root = (GNode*) element;
@@ -44,7 +44,7 @@ void validatePersons(RecordIndex* index, String name, IntegerTable* keymap, Erro
 //
 // Notes on generating errors. A String buffer, s, exists. The personEl argument links to both
 // the root node and the location of the root node in the original Gedcom file.
-static bool validatePerson(GNode* person, String name, RecordIndex* index, IntegerTable* keymap,
+static bool validatePerson(GNode* person, CString name, RecordIndex* index, IntegerTable* keymap,
 						   ErrorLog* elog) {
 	int line = searchIntegerTable(keymap, person->key); // Used in error messages.
 	ASSERT(line != DeadEndsNAN);

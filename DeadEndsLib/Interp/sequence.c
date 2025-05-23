@@ -29,13 +29,13 @@
 static int numBucketsInSequenceTables = 359;
 
 // keyGetKey is the getKey function that returns the key of a SequenceEl.
-static CString keyGetKey(void* element) {
+static CString keyGetKey(const void* element) {
 	SequenceEl* el = (SequenceEl*) element;
 	return el->root->key;
 }
 
 // nameGetKey is the getKey function that returns the name of a SequenceEl.
-static CString nameGetKey(void* element) {
+static CString nameGetKey(const void* element) {
 	SequenceEl* el = (SequenceEl*) element;
 	return el->name;
 }
@@ -66,7 +66,7 @@ static SequenceEl** sequenceElements(Sequence *sequence) {
 
 // createSequenceEl creates a SequenceEl.
 //SequenceEl* createSequenceEl(Database* database, CString key, void* value) {
-SequenceEl* createSequenceEl(RecordIndex* index, CString key, void* value) {
+SequenceEl* createSequenceEl(RecordIndex* index, CString key, const void* value) {
 	SequenceEl* element = (SequenceEl*) stdalloc(sizeof(SequenceEl));
 	GNode* root = getRecord(key, index);
 	ASSERT(root);
@@ -111,7 +111,7 @@ void emptySequence(Sequence *sequence) {
 }
 
 // appendToSequence creates and appends a SequenceEl to a Sequence.
-void appendToSequence(Sequence* sequence, CString key, void* value) {
+void appendToSequence(Sequence* sequence, CString key, const void* value) {
 	if (!sequence || !key) return;
 	//SequenceEl* element = createSequenceEl(sequence->database, key, value);
 	SequenceEl* element = createSequenceEl(sequence->index, key, value);
@@ -849,7 +849,7 @@ Sequence* keyToSequence(CString key, RecordIndex* index) {
 
 // refnToSequence returns a single element Sequence with the record with given refn value; or null.
 Sequence* refnToSequence(CString value, RecordIndex* index, RefnIndex* findex) {
-	String recordKey = searchRefnIndex(findex, value);
+	CString recordKey = searchRefnIndex(findex, value);
 	if (!recordKey) return null;
 	Sequence* sequence = createSequence(index);
 	appendToSequence(sequence, recordKey, null);

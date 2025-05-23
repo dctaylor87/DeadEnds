@@ -59,7 +59,7 @@ PValue __getindi (PNode *pnode, Context *context, bool* eflg)
       ttl = svalue.value.uString;
     }
     
-    String key = rptui_ask_for_indi_key(ttl, DOASK1);
+    CString key = rptui_ask_for_indi_key(ttl, DOASK1);
     if (!key)
       return nullPValue;
 

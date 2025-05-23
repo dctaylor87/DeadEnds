@@ -40,7 +40,7 @@ PValue *allocPValue(PVType type, VUnion value) {
 }
 
 // createStringPValue creates string PValues; Strings are copied to the help.
-PValue createStringPValue(String string) {
+PValue createStringPValue(CString string) {
     PValue pvalue;
     pvalue.type = PVString;
     pvalue.value.uString = string ? strsave(string) : null;

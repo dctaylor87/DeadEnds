@@ -488,7 +488,7 @@ add_spouse_to_fam (GNode *spouse, GNode *fam, SexType sex)
  * (no user interaction)
  *=======================================*/
 static void
-add_members_to_family (String xref, GNode *spouse1, GNode *spouse2, GNode *child)
+add_members_to_family (CString xref, GNode *spouse1, GNode *spouse2, GNode *child)
 {
 	GNode *refn, *body;
 	GNode *name, *sex, *famc, *fams, *node, *prev, *new, *this;

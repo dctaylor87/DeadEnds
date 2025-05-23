@@ -40,14 +40,14 @@ typedef struct Sequence {
 	RecordIndex* index;
 } Sequence;
 
-SequenceEl* createSequenceEl(RecordIndex*, CString key, void* value);
+SequenceEl* createSequenceEl(RecordIndex*, CString key, const void* value);
 Sequence* createSequence(RecordIndex*);
 void deleteSequence(Sequence*);
 Sequence* copySequence(Sequence*);
 int lengthSequence(Sequence*);
 void emptySequence(Sequence*);
 
-void appendToSequence(Sequence*, CString key, void*);
+void appendToSequence(Sequence*, CString key, const void*);
 void appendSequenceToSequence(Sequence* dst, Sequence* src);
 bool isInSequence(Sequence*, CString key);
 bool removeFromSequence(Sequence*, CString key);
