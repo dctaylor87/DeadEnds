@@ -70,13 +70,13 @@ List* copyList(List* list, void* (*copyFunc)(void*)) {
 }
 
 // appendToList appends an element to the end of a List.
-void appendToList(List* list, void* element) {
+void appendToList(List* list, const void* element) {
 	appendToBlock(&(list->block), element);
 	list->isSorted = false;
 }
 
 // prependToList adds an element to the front of a List.
-void prependToList(List* list, void* element) {
+void prependToList(List* list, const void* element) {
 	prependToBlock(&(list->block), element);
 	list->isSorted = false;
 }

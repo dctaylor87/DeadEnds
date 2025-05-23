@@ -185,7 +185,7 @@ bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
 }
 
 // removeFromSortedBlock removes an element with specific key from a sorted Block's elements.
-bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(void *a),
+bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(const void *a),
 						   int(*compare)(CString, CString), void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from sorted block\n", key);
 	int index = -1;
@@ -195,7 +195,7 @@ bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(void *a),
 }
 
 // removeFromUnsortedBlock removes an element with specific key from an unsorted Block's elements.
-bool removeFromUnsortedBlock(Block* block, CString key, CString(*getKey)(void*),
+bool removeFromUnsortedBlock(Block* block, CString key, CString(*getKey)(const void*),
 							 void(*delete)(void*)) {
 	if (blockDebugging) printf("remove %s from unsorted block\n", key);
 	int index = -1;

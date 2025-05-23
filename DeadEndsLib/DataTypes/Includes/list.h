@@ -39,8 +39,8 @@ void* findInList(List*, CString, int* index);
 void setListElement(List*, void*, int);
 void *getListElement(List *list, int index);
 
-void appendToList(List*, void*);
-void prependToList(List*, void*);
+void appendToList(List*, const void*);
+void prependToList(List*, const void*);
 void insertInList(List*, const void*, int);
 bool isSortedList(List*); // Uses sorted flag.
 bool isListSorted(List*); // Really checks.

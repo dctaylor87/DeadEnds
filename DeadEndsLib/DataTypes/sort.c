@@ -112,7 +112,7 @@ void* binarySearch(void** elements, int length, CString key, CString(*getKey)(co
 }
 
 // insertAtIndex inserts a new element at a specified index. The array must have enough room.
-void insertAtIndex(void** elements, int length, void* element, int index) {
+void insertAtIndex(void** elements, int length, const void* element, int index) {
 	for (int i = length; i > index; i--) {
 		elements[i] = elements[i - 1];
 	}
