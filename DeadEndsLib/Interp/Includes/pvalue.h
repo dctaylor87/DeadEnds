@@ -4,7 +4,7 @@
 // expressions in the DeadEnds script language. They are the values stored in symbol tables.
 //
 // Created by Thomas Wetmore on 15 December 2022.
-// Last changed on 30 April 2025.
+// Last changed on 17 May 2025.
 
 #ifndef pvalue_h
 #define pvalue_h
@@ -53,7 +53,7 @@ typedef struct PValue {
 } PValue;
 
 // User Interface to PValues.
-PValue createStringPValue(String);
+PValue createStringPValue(CString);
 void showPValue(PValue value);
 bool isPValue(PValue value);
 bool isZeroVUnion(PVType type, VUnion vunion);
@@ -65,7 +65,6 @@ extern const PValue nullPValue;
 extern const PValue truePValue;
 extern const PValue falsePValue;
 
-extern FILE *Poutfp;
 extern int Perrors;
 extern int nobuiltins;
 

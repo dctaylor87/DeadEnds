@@ -3,21 +3,25 @@
 // rassa.c handles printing output from DeadEnds script programs.
 //
 // Created by Thomas Wetmore on 10 February 2024.
-// Last changed on 24 October 2024.
+// Last changed on 17 May 2025.
 
 #include <string.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/param.h>		/* MAXPATHLEN */
+
 #include "standard.h"
 #include "hashtable.h"
 #include "gedcom.h"
 #include "interp.h"
 #include "evaluate.h"
 #include "builtintable.h"
+#include "denls.h"
 #include "messages.h"
 #include "ask.h"
 #include "locales.h"		/* CALLBACK_FNC, needed by lloptions.h */
 #include "lloptions.h"		/* getdeoptstr */
+#include "feedback.h"
 
 #define MAXROWS 512
 #define MAXCOLS 512
@@ -43,14 +47,14 @@ void initrassa(void) {
 }
 
 // finishrassa finalizes script program output.
-void finishrassa(void) {
-	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
-		fwrite(linebuffer, linebuflen, 1, Poutfp);
-		linebuflen = 0;
-		bufptr = linebuffer;
-		curcol = 1;
-	}
-}
+//void finishrassa(void) {
+//	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
+//		fwrite(linebuffer, linebuflen, 1, Poutfp);
+//		linebuflen = 0;
+//		bufptr = linebuffer;
+//		curcol = 1;
+//	}
+//}
 
 // __pagemode switches script program output to page mode.
 // usage: pagemode(INT, INT) -> VOID
@@ -102,21 +106,32 @@ PValue __linemode(PNode* pnode ATTRIBUTE_UNUSED,
 // __newfile switches script program output to a new file.
 // usage: newfile(STRING, BOOL) -> VOID
 PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
-	PNode *arg = pnode->arguments;
-	PValue pvalue = evaluate(arg, context, errflg);
-	if (*errflg || pvalue.type != PVString || strlen(pvalue.value.uString) == 0) {
-		*errflg = true;
-		scriptError(pnode, "First argument to newfile must be a string.");
-		return nullPValue;
-	}
-	String name = pvalue.value.uString;
-	arg = arg->next;
-	pvalue = evaluateBoolean(arg, context, errflg);
-	if (*errflg) {
-		scriptError(pnode, "Second argument to newfile must be a boolean.");
-		return nullPValue;
-	}
-	bool aflag = pvalue.value.uBool;
+    PNode *arg = pnode->arguments;
+    PValue pvalue = evaluate(arg, context, errflg);
+    if (*errflg) return nullPValue;
+    if (pvalue.type != PVString || strlen(pvalue.value.uString) == 0) {
+        *errflg = true;
+        scriptError(pnode, "first argument to newfile must be a string");
+        return nullPValue;
+    }
+    String name = pvalue.value.uString;
+    arg = arg->next;
+    pvalue = evaluateBoolean(arg, context, errflg);
+    if (*errflg) {
+        scriptError(pnode, "second argument to newfile must be a boolean");
+	return nullPValue;
+    }
+    bool aflag = pvalue.value.uBool;
+#if 1
+    closeFile(context->file);
+    File *file = openFile(name, aflag ? "a" : "w");
+    if (!file) {
+      *errflg = true;
+      scriptError(pnode, "could not open file %s", name);
+      return nullPValue;
+    }
+    context->file = file;
+#else
 #if 1
 	CString errorMessage = null;
 	bool success = setScriptOutputFile (name, aflag, &errorMessage);
@@ -136,9 +151,11 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
 		return nullPValue;
 	}
 #endif
+#endif
 	return nullPValue;
 }
 
+#if 0
 bool
 setScriptOutputFile (CString filename, bool append, CString *errorMessage)
 {
@@ -158,11 +175,13 @@ setScriptOutputFile (CString filename, bool append, CString *errorMessage)
 
   return true;
 }
+#endif
 
 // __print prints a list of expresseion values to the stdout window.
 // usage: print([STRING]+,) -> VOID
 PValue __print (PNode *pnode, Context *context, bool *errflg)
 {
+#if 0
   // __outfile does this, so we do it for consistency
   if (! Poutfp) {
     String dereports = getdeoptstr ("DEREPORTS", ".");
@@ -174,6 +193,7 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
     }
     setbuf(Poutfp, NULL);
   }
+#endif
 
   int count = 0;
   for (PNode *arg = pnode->arguments; arg; arg = arg->next)
@@ -187,7 +207,11 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
 	  scriptError (pnode, "argument number %d to print is not a string", count);
 	  return nullPValue;
 	}
+#if 1
+      llwprintf ("%s", str.value.uString);
+#else
       fprintf (Poutfp, "%s", str.value.uString);
+#endif
   }
   return nullPValue;
 }
@@ -196,19 +220,67 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
 // usage: outfile() -> STRING
 PValue __outfile(PNode* pnode, Context* context, bool* errflg)
 {
-  if (! Poutfp) {
-    String dereports = getdeoptstr ("DEREPORTS", ".");
-    Poutfp = ask_for_output_file("w", qSwhtout, &outfilename, dereports, NULL);
-    if (! Poutfp) {
-      *errflg = true;
-      scriptError (pnode, noreport);
-      return nullPValue;
+  if (context->file->isStdout)
+    {
+      CString dereports = getdeoptstr ("DEREPORTS", ".");
+      char fname[MAXPATHLEN];
+      CString ttl = _(qSoutarc); /* Enter name of output archive file. */
+      CString prompt = _(qSwhtfname); /* enter file name:  */
+      bool rtn = ask_for_output_filename (ttl, dereports, prompt, fname, sizeof(fname));
+      if (! rtn)
+	{
+	  *errflg = true;
+	  scriptError(pnode, "???");
+	  return nullPValue;
+	}
+      File *file = openFile(fname, DEREADTEXT);
+      if (! file)
+	{
+	  *errflg = true;
+	  scriptError(pnode, noreport);
+	  return nullPValue;
+	}
+      context->file = file;
+      setbuf(file->fp, NULL);
     }
-    setbuf(Poutfp, NULL);
-  }
   *errflg = false;
-  return createStringPValue(outfilename);
+  return createStringPValue(context->file->name);
 }
+
+#if 0
+/* request_file -- Prompt user for file name
+   returns open file pointer, or NULL if error
+   handles error message.  */
+
+static bool
+request_file (bool *eflg)
+{
+  String rptdir = getlloptstr("DEREPORTS", ".");
+  String fullpath=0;
+  char fname[MAXPATHLEN];
+  fname[0] = 0;
+  bool rtn = rptui_ask_for_output_filename(_(qSwhtout), rptdir, _(qSwhtfname),
+					   fname, sizeof (fname));
+  if (! fname || ! fname[0])  {
+    if (fname)
+      prog_error(0, _("Report stopping due to error opening output file"));
+    else
+      prog_error(0, _("Report stopping due to lack of output file"));
+    /* set error flag to stop interpreter */
+    *eflg = true;
+    /* set cancel flag to suppress traceback */
+    rpt_cancelled = TRUE;
+    strfree(&fname);
+    return false;
+  }
+  if (outfilename)
+    stdfree(outfilename);
+  outfilename = fullpath;
+  strfree(&fname);
+  prefix_file_for_report(Poutfp);
+  return true;
+}
+#endif
 
 // __pos positions page output to a row and column.
 // usage: pos(INT, INT) -> VOID
@@ -273,21 +345,13 @@ PValue __col (PNode *pnode, Context *context, bool *errflg)
 // __pageout outputs the current page and clears the page buffer.
 // usage: pageout() -> VOID
 PValue __pageout(PNode* pnode ATTRIBUTE_UNUSED,
-		 Context* context ATTRIBUTE_UNUSED,
+		 Context* context,
 		 bool* errflg) {
 	char scratch[MAXCOLS+2];
 	String p;
 	int row, i;
 	*errflg = true;
 	if (outputmode != PAGEMODE) return nullPValue;
-//	if (!Poutfp) {
-//		Poutfp = ask_for_file("w", whtout, &outfilename, llreports);
-//		if (!Poutfp)  {
-//			message(noreport);
-//			return;
-//		}
-//		setbuf(Poutfp, NULL);
-//	}
 	*errflg = false;
 	scratch[__cols] = '\n';
 	scratch[__cols+1] = 0;
@@ -298,7 +362,7 @@ PValue __pageout(PNode* pnode ATTRIBUTE_UNUSED,
 			;
 		scratch[i+1] = '\n';
 		scratch[i+2] = 0;
-		fputs(scratch, Poutfp);
+		fputs(scratch, context->file->fp);
 		p += __cols;
 	}
 	memset(pagebuffer, ' ', __rows*__cols);
@@ -317,62 +381,63 @@ static void adjustCols(String string) {
 }
 
 // poutput outputs a string in the current mode.
-void poutput(String string) {
-	String p;
-	int c, len;
-	if (!string || *string == 0 || (len = (int) strlen(string)) <= 0) return;
-//	if (!Poutfp) {
-//		Poutfp = ask_for_file("w", whtout, &name, llreports);
-//		if (!Poutfp)  {
-//			message(noreport);
+//void poutput(String string) {
+//	String p;
+//	int c, len;
+//	if (!string || *string == 0 || (len = (int) strlen(string)) <= 0) return;
+////	if (!Poutfp) {
+////		Poutfp = ask_for_file("w", whtout, &name, llreports);
+////		if (!Poutfp)  {
+////			message(noreport);
+////			return;
+////		}
+////		setbuf(Poutfp, NULL);
+////		outfilename = strsave(name);
+////	}
+//	switch (outputmode) {
+//	case UNBUFFERED:
+//		fwrite(string, len, 1, Poutfp);
+//		adjustCols(string);
+//		return;
+//	case BUFFERED:
+//		if (len > 1024) {
+//			fwrite(linebuffer, linebuflen, 1, Poutfp);
+//			fwrite(string, len, 1, Poutfp);
+//			linebuflen = 0;
+//			bufptr = linebuffer;
+//			adjustCols(string);
 //			return;
 //		}
-//		setbuf(Poutfp, NULL);
-//		outfilename = strsave(name);
+//		if (len + linebuflen > 1024) {
+//			fwrite(linebuffer, linebuflen, 1, Poutfp);
+//			linebuflen = 0;
+//			bufptr = linebuffer;
+//		}
+//		linebuflen += len;
+//		while ((c = *bufptr++ = *string++)) {
+//			if (c == '\n')
+//				curcol = 1;
+//			else
+//				curcol++;
+//		}
+//		--bufptr;
+//		return;
+//	case PAGEMODE:
+//		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
+//		while ((c = *string++)) {
+//			if (c == '\n') {
+//				curcol = 1;
+//				currow++;
+//				p = pagebuffer + (currow - 1)*__cols;
+//			} else {
+//				if (curcol <= __cols && currow <= __rows)
+//					*p++ = c;
+//				curcol++;
+//			}
+//		}
+//		return;
+//	default:
+//		FATAL();
 //	}
-	switch (outputmode) {
-	case UNBUFFERED:
-		fwrite(string, len, 1, Poutfp);
-		adjustCols(string);
-		return;
-	case BUFFERED:
-		if (len > 1024) {
-			fwrite(linebuffer, linebuflen, 1, Poutfp);
-			fwrite(string, len, 1, Poutfp);
-			linebuflen = 0;
-			bufptr = linebuffer;
-			adjustCols(string);
-			return;
-		}
-		if (len + linebuflen > 1024) {
-			fwrite(linebuffer, linebuflen, 1, Poutfp);
-			linebuflen = 0;
-			bufptr = linebuffer;
-		}
-		linebuflen += len;
-		while ((c = *bufptr++ = *string++)) {
-			if (c == '\n')
-				curcol = 1;
-			else
-				curcol++;
-		}
-		--bufptr;
-		return;
-	case PAGEMODE:
-		p = pagebuffer + (currow - 1)*__cols + curcol - 1;
-		while ((c = *string++)) {
-			if (c == '\n') {
-				curcol = 1;
-				currow++;
-				p = pagebuffer + (currow - 1)*__cols;
-			} else {
-				if (curcol <= __cols && currow <= __rows)
-					*p++ = c;
-				curcol++;
-			}
-		}
-		return;
-	default:
-		FATAL();
-	}
-}
+//}
+
