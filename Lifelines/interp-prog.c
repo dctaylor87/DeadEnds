@@ -167,8 +167,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
 
   programRunning = false;
   finishInterpreter(); /* includes 5 sec delay if errors on-screen */
-  if (Poutfp) fclose(Poutfp);
-  Poutfp = NULL;
+  closeFile (context->file);
 
  interp_program_exit:
 
