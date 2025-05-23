@@ -29,7 +29,7 @@ extern FunctionTable *functionTable; // User functions.
 extern List *pendingFiles; // Pending list of included files.
 extern int curLine; // Line number in current file.
 
-static PNode *this, *prev, *tnode;;
+static PNode *this, *prev;
 
 // Functions defined in the third section.
 static void join(PNode* list, PNode* last);
