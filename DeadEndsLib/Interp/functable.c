@@ -10,6 +10,7 @@
 
 #include "standard.h"
 #include "refnindex.h"
+#include "errors.h"
 #include "symboltable.h"
 #include "gedcom.h"
 
@@ -174,6 +175,7 @@ BuiltIn builtIns[] = {
   { "setel",        3,    3,    __setel },
   { "sex",          1,    1,    __sex },
   { "short",        1,    1,    __short },  // Short form of an event.
+  { "showstack",    0,    0,    __SHOWSTACK },
   { "sibling",      1,    1,    __sibling },
   { "siblingset",   1,    1,    __siblingset },
   { "soundex",      1,    1,    __soundex },
@@ -195,6 +197,7 @@ BuiltIn builtIns[] = {
   { "title",        1,    1,    __title },
   { "trim",         2,    2,    __trim },
   { "trimname",     2,    2,    __trimname },
+  { "typeof",       1,    1,    __TYPEOF },
   { "union",        2,    2,    __union },
   { "uniqueset",    1,    1,    __uniqueset },
   { "unlock",       1,    1,    __noop },

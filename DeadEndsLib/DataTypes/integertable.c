@@ -4,7 +4,7 @@
 // to integers.
 //
 // Created by Thomas Wetmore on 23 April 2023.
-// Last changed on 26 November 2024.
+// Last changed on 20 May 2025.
 
 #include "integertable.h"
 

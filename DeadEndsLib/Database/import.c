@@ -90,7 +90,7 @@ void checkKeysAndReferences(RootList* records, CString name, IntegerTable* keyma
 	FORLIST(records, element)
 		recordsVisited++;
 		GNode* root = (GNode*) element;
-		nodesCounted += countNodes(root);
+		nodesCounted += countGNodes(root);
 		FORTRAVERSE(root, node)
 			nodesTraversed++;
 			if (isKey(node->value)) numReferences++;

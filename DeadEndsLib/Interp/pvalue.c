@@ -4,7 +4,7 @@
 // DeadEnds scripts.
 //
 // Created by Thomas Wetmore on 15 December 2022.
-// Last changed on 13 May 2025.
+// Last changed on 22 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -383,8 +383,8 @@ PValue negPValue(PValue value, bool* eflg) {
     return nullPValue;
 }
 
-// pvalueToString returns a String representation of a PValue. Caller must free the String.
-char* pvalueToString(PValue value, bool debug) {
+// pvalueToString returns a string representation of a PValue. Caller must free the string.
+char* pvalueToString(PValue value, bool showtype) {
     char* buffer = stdalloc(1024);  // Fixed-size buffer; adjust if needed
     char* p = buffer;
 
@@ -407,7 +407,11 @@ char* pvalueToString(PValue value, bool debug) {
         else
             sprintf(p, "\"\"");
         break;
-    case PVPerson:
+    case PVPerson: {
+        GNode* gnode = value.value.uGNode;
+        sprintf(p, "%s %s %s", gnode->key, gnode->tag, gnode->child->value);
+        break;
+    }
     case PVFamily:
     case PVGNode:
     case PVSource:
@@ -443,6 +447,5 @@ char* pvalueToString(PValue value, bool debug) {
         sprintf(p, "<unknown PValue type %d>", value.type);
         break;
     }
-
     return buffer;
 }

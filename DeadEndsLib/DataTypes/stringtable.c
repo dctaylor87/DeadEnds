@@ -1,10 +1,11 @@
 //
-// DeadEnds
+//  DeadEnds
 //
-// stringtable.c holds the StringTable data type, a HashTable whose keys and values are Strings.
+//  stringtable.c holds the StringTable data type, a HashTable whose keys and values are Strings.
 //
-// Created by Thomas Wetmore on 23 April 2023.
-// Last changed on 17 April 2024.
+//  Created by Thomas Wetmore on 23 April 2023.
+//  Last changed on 20 May 2025.
+//
 
 #include "standard.h"
 #include "stringtable.h"

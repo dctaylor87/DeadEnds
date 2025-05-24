@@ -3,7 +3,7 @@
 // intrpfamily.c
 //
 // Created by Thomas Wetmore on 17 March 2023.
-// Last changed on 8 May 2025.
+// Last changed on 21 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -15,6 +15,7 @@
 #include "evaluate.h"
 #include "lineage.h"
 #include "database.h"
+#include "context.h"
 #include "builtintable.h"
 
 // __marriage returns the first marriage event of a family.

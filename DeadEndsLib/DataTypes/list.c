@@ -4,7 +4,7 @@
 // needed. Lists can be sorted or unsorted. Sorted lists require a compare function.
 //
 // Created by Thomas Wetmore on 22 November 2022.
-// Last changed on 15 October 2024.
+// Last changed on 20 May 2025.
 
 #include <stdlib.h>
 #include "list.h"

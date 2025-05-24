@@ -1,10 +1,11 @@
-// DeadEnds
+//  DeadEnds
 //
-// writenode.c has the functions that write GNodes and GNode trees and forests to Strings and
-// FILEs.
+//  writenode.c has the functions that write GNodes and GNode trees and forests to Strings and
+//  FILEs.
 //
-// Created by Thomas Wetmore on 2 May 2023.
-// Last changed on 3 October 2024.
+//  Created by Thomas Wetmore on 2 May 2023.
+//  Last changed on 20 May 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>

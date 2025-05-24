@@ -4,13 +4,14 @@
 // language this datatype is called an indiset. Each builtin calls one of the Sequence functions.
 //
 // Created by Thomas Wetmore on 4 March 2023.
-// Last changed on 3 May 2024.
+// Last changed on 23 May 2024.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
 #include "refnindex.h"
+#include "errors.h"
 #include "symboltable.h"
 #include "gedcom.h"
 #include "pnode.h"
@@ -31,7 +32,8 @@ PValue __indiset(PNode* pnode, Context* context, bool* errorFlag) {
         return nullPValue;
     }
     *errorFlag = false;
-    assignValueToSymbol(context->symbolTable, argument->identifier,
+    SymbolTable* table = context->frame->table;
+    assignValueToSymbol(table, argument->identifier,
                         PVALUE(PVSequence, uSequence, createSequence(context->database->recordIndex)));
     return nullPValue;
 }
@@ -90,12 +92,12 @@ PValue __lengthset(PNode* pnode, Context* context, bool* errorFlag) {
 
 // __inset checks if a person is in a sequence.
 // usage: inset(SET, INDI) -> BOOL
-PValue __inset(PNode* programNode, Context* context, bool* eflg) {
-    PNode *arg1 = programNode->arguments;
+PValue __inset(PNode* pnode, Context* context, bool* eflg) {
+    PNode *arg1 = pnode->arguments;
     PValue value1 = evaluate(arg1, context, eflg); // Sequence.
     if (*eflg || value1.type != PVSequence) {
         *eflg = true;
-        scriptError(programNode, "first argument to inset() must be a set.");
+        scriptError(pnode, "first argument to inset() must be a set.");
         return nullPValue;
     }
     Sequence *seq = value1.value.uSequence;
@@ -104,7 +106,7 @@ PValue __inset(PNode* programNode, Context* context, bool* eflg) {
     PValue value2 = evaluate(arg2, context, eflg);
     if (*eflg || value2.type != PVPerson) {
         *eflg = true;
-        scriptError(programNode, "second argument to inset() must be a person.");
+        scriptError(pnode, "second argument to inset() must be a person.");
         return nullPValue;
     }
     GNode *indi = value2.value.uGNode;
@@ -180,12 +182,12 @@ PValue __keysort(PNode* pnode, Context* context, bool* eflg)
 // __valuesort sort a sequence by its value.
 // usage: valuesort(SET) -> VOID
 //--------------------------------------------------------------------------------------------------
-PValue __valuesort(PNode* node, Context* context, bool* eflg)
+PValue __valuesort(PNode* pnode, Context* context, bool* eflg)
 {
-	scriptError(node, "valuesort has been removed from the script language");
+	scriptError(pnode, "valuesort has been removed from the script language");
     //PValue value = evaluate(node->arguments, context, eflg);
     //if (*eflg || value.type != PVSequence) {
-        //scriptError(node, "the arg to valuesort must be a set.");
+        //scriptError(pnode, "the arg to valuesort must be a set.");
         //return nullPValue;
     //}
     //Sequence *sequence = value.value.uSequence;
@@ -345,19 +347,18 @@ PValue __descendentset(PNode* pnode, Context* context, bool* eflg) {
     }
     return PVALUE(PVSequence, uSequence, descendentSequence(val.value.uSequence, false));
 }
-//  __gengedcom -- Generate Gedcom output from a sequence.
-//    usage: gengedcom(SET) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __gengedcom(PNode *programNode, Context *context, bool *eflg)
-{
+
+// __gengedcom -- Generate Gedcom output from a sequence.
+// usage: gengedcom(SET) -> VOID
+PValue __gengedcom(PNode *pnode, Context *context, bool *eflg) {
     printf("Inside __gengedcom\n");
-    ASSERT(programNode && programNode->arguments && !programNode->arguments->next && context);
+    ASSERT(pnode && pnode->arguments && !pnode->arguments->next && context);
 
     //  The argument must evaluate to a sequence.
-    PValue val = evaluate(programNode->arguments, context, eflg);
+    PValue val = evaluate(pnode->arguments, context, eflg);
     if (*eflg || val.type != PVSequence) {
         *eflg = true;
-        scriptError(programNode, "the argument to gengedcom must be a set");
+        scriptError(pnode, "the argument to gengedcom must be a set");
         return nullPValue;
     }
 

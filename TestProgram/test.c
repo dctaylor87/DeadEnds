@@ -145,18 +145,16 @@ void parseAndRunProgramTest(Database *database, int testNumber) {
 	//parseProgram("scriptindiseq", REPORTS_DIR);
 	//parseProgram("llprogram", SCRIPTS_DIR");
 	ErrorLog *errorLog = createErrorLog();
-	parseProgram("llprogram", SCRIPTS_DIR, errorLog);
-	printf("Finished parsing: %2.3f\n", getMseconds());
-	if (Perrors > 0)
-		showErrorLog (errorLog);
-	deleteErrorLog (errorLog);
-	curFileName = "internal";
-	curLine = 1;
-	PNode *pnode = procCallPNode("main", null); // PNode to call main proc.
-	SymbolTable *symbolTable = createSymbolTable();
-	Context *context = createContext(symbolTable, database);
-	PValue returnPvalue;
-	interpret(pnode, context, &returnPvalue); // Call main proc.
+//	parseProgram("llprogram", "/Users/ttw4/Desktop/DeadEnds/Scripts");
+//	printf("Finished parsing: %2.3f\n", getMseconds());
+//
+//	curFileName = "internal";
+//	curLine = 1;
+//	PNode *pnode = procCallPNode("main", null); // PNode to call main proc.
+//	SymbolTable *symbolTable = createSymbolTable();
+//	Context *context = createContext(symbolTable, database);
+//	PValue returnPvalue;
+//	interpret(pnode, context, &returnPvalue); // Call main proc.
 	printf("END OF PARSE AND RUN PROGRAM TEST: %s\n", gms);
 }
 

@@ -3,7 +3,7 @@
 // testgedcomstrings.c
 //
 // Created by Thomas Wetmore on 27 May 2024.
-// Last changed on 8 July 2024.
+// Last changed on 20 May 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>

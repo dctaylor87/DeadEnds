@@ -10,8 +10,10 @@ noinst_LIBRARIES = libinterp.a
 libinterp_a_SOURCES = \
 	builtin.c \
 	builtintable.c \
+	context.c \
 	evaluate.c \
 	extra.c \
+	frame.c \
 	functable.c \
 	functiontable.c \
 	interp.c \

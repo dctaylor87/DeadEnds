@@ -67,17 +67,17 @@ String eventToPlace(GNode*, bool);
 void showGNodeTree(GNode*);
 void showGNodes(int, GNode*);
 void showGNode(int level, GNode*);
-int gNodesLength(GNode*);
+int lengthGNodes(GNode*);
 String shortenDate(String);
 String shortenPlace(String);
 //static bool allDigits(String)
-GNode* copyNode(GNode*);
-GNode* copyNodes(GNode*, bool, bool);
+GNode* copyGNode(GNode*);
+GNode* copyGNodes(GNode*, bool, bool);
 void traverseNodes (GNode* node, int level, bool (*func)(GNode*, int));
 int num_spouses_of_indi(GNode*);
 GNode* findNode(GNode*, String, String, GNode**);
 
-int countNodes(GNode* node);
+int countGNodes(GNode* node);
 int countNodesBefore(GNode*);
 
 bool isKey(CString);
@@ -86,8 +86,8 @@ SexType valueToSex(GNode*);
 String full_value(GNode*);
 String recordKey(GNode* node);
 
-int numNodeAllocs(void);
-int numNodeFrees(void);
+int numGNodeAllocs(void);
+int numGNodeFrees(void);
 
 // import.c
 extern GNode *normalizeNodeTree (GNode*);

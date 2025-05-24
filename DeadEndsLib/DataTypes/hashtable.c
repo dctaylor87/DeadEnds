@@ -4,7 +4,7 @@
 // customiziing the compare, delete and getKey functions.
 //
 // Created by Thomas Wetmore on 29 November 2022.
-// Last changed on 5 December 2024.
+// Last changed on 20 May 2025.
 
 #include "standard.h"
 #include "hashtable.h"

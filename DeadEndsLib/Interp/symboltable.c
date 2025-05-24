@@ -3,12 +3,13 @@
 // symboltable.c holds the functions that implement SymbolTables.
 //
 // Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 11 May 2025.
+// Last changed on 22 May 2025.
 
 #include <stdint.h>
 
 #include "standard.h"
 #include "refnindex.h"
+#include "errors.h"
 #include "symboltable.h"
 
 // globalTable holds the Symbols defined in the global scope.
@@ -19,10 +20,12 @@ static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
 
-// delete deletes a Symbol.
+// delete deletes a Symbol. It frees both PValue and the identifier before deleting the Symbol itself.
 static void delete(void* a) {
 	Symbol* symbol = (Symbol*) a;
 	stdfree(symbol->value);
+    stdfree(symbol->ident);
+    stdfree(symbol);
 }
 
 // getKey returns the Symbol's identifier.
@@ -47,6 +50,11 @@ SymbolTable* createSymbolTable(void) {
 	return createHashTable(getKey, compare, delete, numBucketsInSymbolTable);
 }
 
+// deleteSymbolTable deletes a SymbolTable.
+void deleteSymbolTable(SymbolTable* table) {
+    deleteHashTable(table);
+}
+
 // assignValueToSymbol assigns a value to a Symbol. If the Symbol isn't in the local table, check
 // the global table.
 void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
@@ -64,7 +72,7 @@ void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
         symbol->value = copy;
     // Else add a new symbol with the new value.
     } else {
-        addToHashTable(table, createSymbol(ident, copy), true);
+        addToHashTable(table, createSymbol(strsave(ident), copy), true);
     }
 }
 
@@ -79,8 +87,8 @@ PValue getValueOfSymbol(SymbolTable* symtab, CString ident) {
 }
 
 // showSymbolTable shows the contents of a SymbolTable. For debugging.
+// Assumes caller has provided a title if desired.
 void showSymbolTable(SymbolTable* table) {
-	printf("Symbol Table contents:\n");
 	for (int i = 0; i < table->numBuckets; i++) {
 		Bucket *bucket = table->buckets[i];
 		if (!bucket) continue;
