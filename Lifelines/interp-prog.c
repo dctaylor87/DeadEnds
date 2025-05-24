@@ -152,8 +152,8 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   curLine = 1;
   PNode *pnode = procCallPNode ("main", null);
 
-  stab = createSymbolTable ();
-  Context *context = createContext (stab, database);
+  //stab = createSymbolTable ();
+  Context *context = createContext (database);
 
   /* Interpret top procedure */
   ranit = 1;

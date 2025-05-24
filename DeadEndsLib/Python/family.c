@@ -156,7 +156,7 @@ static PyObject *llpy_nchildren (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 {
   LLINES_PY_RECORD *fam = (LLINES_PY_RECORD *) self;
   GNode *fam_record = fam->llr_record;
-  int count = gNodesLength (CHIL (nztop (fam_record)));
+  int count = lengthGNodes (CHIL (nztop (fam_record)));
 
   return (Py_BuildValue ("i", count));
 }

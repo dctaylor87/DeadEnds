@@ -114,8 +114,8 @@ execute_script (CString report_name, Database *database)
   PNode *pnode = procCallPNode("main", null);
 
   //  Call the main procedure.
-  SymbolTable *symbolTable = createSymbolTable();
-  Context *context = createContext (symbolTable, database);
+  //SymbolTable *symbolTable = createSymbolTable();
+  Context *context = createContext (database);
 
   PValue returnPvalue;
   interpret(pnode, context, &returnPvalue);

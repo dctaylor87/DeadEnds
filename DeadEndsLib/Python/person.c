@@ -549,7 +549,7 @@ static PyObject *llpy_nfamilies (PyObject *self, PyObject *args ATTRIBUTE_UNUSED
 {
   LLINES_PY_RECORD *indi = (LLINES_PY_RECORD *) self;
   GNode *indi_node = nztop (indi->llr_record);
-  int count = gNodesLength (FAMS (indi_node));
+  int count = lengthGNodes (FAMS (indi_node));
   return (Py_BuildValue ("I", count));
 }
 
