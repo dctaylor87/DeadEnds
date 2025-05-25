@@ -144,7 +144,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
       goto interp_program_exit;
     }
   }
-  if (Poutfp) setbuf(Poutfp, NULL);
+  //if (Poutfp) setbuf(Poutfp, NULL);
 
   /* Link arguments to parameters in symbol table */
 

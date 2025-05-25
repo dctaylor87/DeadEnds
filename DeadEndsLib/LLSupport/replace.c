@@ -74,13 +74,13 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 
 	/* Move indi1 data into indi0 & delete it (saving names & refns */
 	splitPerson(indi1, &name1, &refn1, &sex, &body, &famc, &fams);
-	indi0 = copyNode(indi1);
+	indi0 = copyGNode(indi1);
 	joinPerson(indi0, NULL, NULL, sex, body, famc, fams);
 	freeGNodes(indi0);
 	/* Move indi2 data into indi1, also copy out lists of names & refns */
 	splitPerson(indi2, &name2, &refn2, &sex, &body, &famc, &fams);
-	namen = copyNodes(name2, true, true);
-	refnn = copyNodes(refn2, true, true);
+	namen = copyGNodes(name2, true, true);
+	refnn = copyGNodes(refn2, true, true);
 	joinPerson(indi1, name2, refn2, sex, body, famc, fams);
 	freeGNode(indi2);
 #if !defined(DEADENDS)
@@ -131,12 +131,12 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 
 	/* Move fam1 data into fam0 & delete it (saving refns) */
 	splitFamily(fam1, &refn1, &husb, &wife, &chil, &body);
-	fam0 = copyNode(fam1);
+	fam0 = copyGNode(fam1);
 	joinFamily(fam0, NULL, husb, wife, chil, body);
 	freeGNodes(fam0);
 	/* Move fam2 data into fam1, also copy out list of refns */
 	splitFamily(fam2, &refn2, &husb, &wife, &chil, &body);
-	refnn = copyNodes(refn2, true, true);
+	refnn = copyGNodes(refn2, true, true);
 	joinFamily(fam1, refn2, husb, wife, chil, body);
 	freeGNode(fam2);
 

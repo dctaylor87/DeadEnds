@@ -459,7 +459,7 @@ mergeDatabases_1 (Database *database, Database *oldDatabase, bool copy)
   FORHASHTABLE(database->recordIndex, element)
     GNode *root = (GNode *)element;
     if (copy)
-      root = copyNodes (root, true, true);
+      root = copyGNodes (root, true, true);
     switch (recordType (root))
       {
       case GRPerson:

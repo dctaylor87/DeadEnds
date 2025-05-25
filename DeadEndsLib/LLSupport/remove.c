@@ -286,7 +286,7 @@ num_fam_xrefs (GNode *fam)
 	GNode *fref, *husb, *wife, *chil, *rest;
 
 	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
-	num = gNodesLength(husb) + gNodesLength(wife) + gNodesLength(chil);
+	num = lengthGNodes(husb) + lengthGNodes(wife) + lengthGNodes(chil);
 	joinFamily(fam, fref, husb, wife, chil, rest);
 	return num;
 }

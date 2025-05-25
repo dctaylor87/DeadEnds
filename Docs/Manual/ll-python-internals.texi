@@ -419,7 +419,7 @@ we return NULL.
 Defined in @file{gnode.c}, declared in @file{gnode.h}.
 @end deftypefun
 
-@deftypefun GNode* copyNodes (GNode *node, bool kids, bool sibs)
+@deftypefun GNode* copyGNodes (GNode *node, bool kids, bool sibs)
 A copy of @code{node} is made and returned.  If @code{kids} is true,
 then the copy has copies of the children as well.  If @code{sibs} is
 true, then the copy has copies of the siblings as well.
@@ -464,7 +464,7 @@ If @code{temp} is true, sets @code{node}'s @code{ND_TEMP} flag.
 Otherwise clears the flag.
 @end deftypefun
 
-@deftypefun int gNodesLength (GNode* node)
+@deftypefun int lengthGNodes (GNode* node)
 Returns the length of the sibling chain of @code{node}.
 @end deftypefun
 

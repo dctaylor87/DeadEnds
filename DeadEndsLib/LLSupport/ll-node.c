@@ -374,7 +374,7 @@ event_to_date_place (GNode *node, String * date, String * plac)
 GNode *
 copy_node_subtree (GNode *node)
 {
-	return copyNodes(node, true, false);
+	return copyGNodes(node, true, false);
 }
 
 /*===============================================================
