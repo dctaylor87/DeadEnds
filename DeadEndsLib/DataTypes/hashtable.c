@@ -117,7 +117,7 @@ void* searchHashTableWithElement(HashTable* table, void* element) {
 
 // searchBucket searches a Bucket for an element by key. Depending on Bucket size either linear or
 // binary search is used.
-void* searchBucket(Bucket* bucket, CString key, CString(*getKey)(void*),
+void* searchBucket(Bucket* bucket, CString key, CString(*getKey)(const void*),
 				   int(*compare)(CString, CString), int* index) { //PH;
 	return searchBlock(&(bucket->block), key, getKey, index);
 }

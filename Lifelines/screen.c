@@ -154,7 +154,9 @@ static void deactivate_uiwin(void);
 static void delete_uiwindow_impl(UIWINDOW uiw);
 static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
+#if !defined(DEADENDS)
 static void disp_trans_table_choice(UIWINDOW uiwin, int row, int col, int indx);
+#endif
 static void display_status(String text);
 #if !defined(DEADENDS)
 static bool does_match(void *param, void *el);
@@ -238,7 +240,7 @@ static llchtype gr_llx='*', gr_lrx='*', gr_ulx='*', gr_urx='*';
  * local & exported function definitions
  * body of module
  *********************************************/
-static CString getKey (void * win)
+static CString getKey (const void * win)
 {
   return (((UIWINDOW) win)->name);
 }
@@ -1279,6 +1281,7 @@ chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selecting
 	return rv;
 }
 
+#if !defined(DEADENDS)
 /*==============================
  * draw_tt_win -- Draw menu for edit translations
  *============================*/
@@ -1302,6 +1305,7 @@ draw_tt_win (String prompt)
 	disp_trans_table_choice(uiwin, row++, 4, MINRP);
 	mvccwaddstr(win, row++, 4, _(qSmn_ret));
 }
+
 /*==============================
  * disp_trans_table_choice -- Display line in
  * translation table menu, & show current info
@@ -1327,6 +1331,8 @@ disp_trans_table_choice (UIWINDOW uiwin, int row, int col, int trnum)
 	mvccuwaddstr(uiwin, row, col, zs_str(zstr));
 	zs_free(&zstr);
 }
+#endif
+
 /*============================
  * invoke_add_menu -- Handle add menu
  * returns addref'd record

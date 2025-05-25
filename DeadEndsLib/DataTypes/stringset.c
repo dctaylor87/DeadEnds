@@ -8,7 +8,7 @@
 #include "stringset.h"
 
 // getKey is the getKey function for StringSets.
-static CString getKey(void* element) {
+static CString getKey(const void* element) {
 	return (CString) element;
 }
 

@@ -30,7 +30,7 @@ typedef struct Bucket {
 typedef struct HashTable {
 	int refcount;	//  Number of references to the table.
 	int numBuckets; // Should be a prime number.
-	CString (*getKey)(void*);
+	CString (*getKey)(const void*);
 	int (*compare)(CString, CString);
 	void (*delete)(void*);
 	Bucket** buckets;
