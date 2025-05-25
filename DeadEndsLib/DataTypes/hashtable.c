@@ -13,7 +13,7 @@
 bool debuggingHash = false;
 bool sortChecking = false;
 
-static void* searchBucket(Bucket*, CString key, CString(*g)(void*), int(*c)(CString, CString), int* index);
+static void* searchBucket(Bucket*, CString key, CString(*g)(const void*), int(*c)(CString, CString), int* index);
 
 // createHashTable creates and returns a HashTable. getKey is a function that returns the key of
 // an element, and delete is an optional function that frees an element.

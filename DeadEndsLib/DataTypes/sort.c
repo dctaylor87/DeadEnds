@@ -24,7 +24,7 @@ static CString (*lgetKey)(void*); // static getKey function.
 static int (*lcompare)(CString, CString); // static compare function.
 
 // sortElements is the external interface for sorting an array of elements.
-void sortElements(void** elements, int length, CString(*getKey)(void*), int(*compare)(CString, CString))
+void sortElements(void** elements, int length, CString(*getKey)(const void*), int(*compare)(CString, CString))
 {
 	lelements = elements;
 	lcompare = compare;
