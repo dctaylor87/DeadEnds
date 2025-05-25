@@ -175,6 +175,7 @@ BuiltIn builtIns[] = {
   { "setel",        3,    3,    __setel },
   { "sex",          1,    1,    __sex },
   { "short",        1,    1,    __short },  // Short form of an event.
+  { "showframe",    0,    0,    __SHOWFRAME },
   { "showstack",    0,    0,    __SHOWSTACK },
   { "sibling",      1,    1,    __sibling },
   { "siblingset",   1,    1,    __siblingset },

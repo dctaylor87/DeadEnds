@@ -157,6 +157,7 @@ extern PValue __set(PNode*, Context*, bool*);
 extern PValue __setel(PNode*, Context*, bool*);
 extern PValue __sex(PNode*, Context*, bool*);
 extern PValue __short(PNode*, Context*, bool*);
+extern PValue __SHOWFRAME(PNode*, Context*, bool*);
 extern PValue __SHOWSTACK(PNode*, Context*, bool*);
 extern PValue __sibling(PNode*, Context*, bool*);
 extern PValue __siblingset(PNode*, Context*, bool*);
