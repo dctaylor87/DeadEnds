@@ -758,7 +758,7 @@ xlat_get_description (XLAT xlat)
   next = stpcpy (next, str);
 
 end_get_desc:
-	free(str);
+	stdfree(str);
 	return rtn;
 }
 #else
