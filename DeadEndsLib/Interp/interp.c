@@ -6,7 +6,7 @@
 //  or may call a specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 24 May 2025.
+//  Last changed on 25 May 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -47,6 +47,7 @@ bool programDebugging = false;
 // Interface between the lexer, parser, and interpreter.
 int Perrors = 0;      // Number of errors.
 
+
 // initializeInterpreter initializes the interpreter.
 void initializeInterpreter(Database* database) {
     Perrors = 0;
@@ -56,16 +57,28 @@ void initializeInterpreter(Database* database) {
 void finishInterpreter(void) { }
 
 //  remove_tables - Remove the interpreter's tables when no longer needed.
-//--------------------------------------------------------------------------------------------------
 //static void remove_tables(void)
 //{
-//    // The node block cleaner will free pnodes in procedureTable. TODO: FIGURE OUT WHAT THAT MEANS.
 //    deleteHashTable(procedureTable);
-//    // TODO: The lexer saved global names so they need to be freed.
 //    deleteHashTable(globalTable);
-//    // TODO: Are local variable IDENs leaking.
 //    deleteHashTable(functionTable);
 //}
+
+extern String curFileName;
+extern int curLine;
+
+// interpScript interprets a DeadEnds script.
+void interpScript(Database* database, String scriptfile) {
+    // Create a PNProcCall PNode to call the main proc.
+    curFileName = "..synthetic..";
+    curLine = 1;
+    PNode* pnode = procCallPNode("main", null);
+    // Create the Context for running the main procedure.
+    Context* context = createContext(database, stdOutputFile());
+    // Run the script by interpreting the main procedure.
+    interpret(pnode, context, null);
+    deleteContext(context);
+}
 
 // interpret interprets a list of PNodes. If a return statement is found it returns the return
 // value through the last parameter. The language allows expressions at the statement level, so
@@ -81,9 +94,10 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             printf("interpret:%d: ", pnode->lineNumber);
             showPNode(pnode);
         }
+	FILE *fp = (context->file) ? context->file->fp : stdout;
         switch (pnode->type) {
         case PNSCons: // Strings are written.
-            fprintf(context->file->fp, "%s", (String) pnode->stringCons);
+            fprintf(fp, "%s", (String) pnode->stringCons);
             break;
         case PNICons: // Numbers are ignored.
         case PNFCons:
@@ -91,7 +105,7 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
         case PNIdent: // Idents with String values are written.
             pvalue = evaluateIdent(pnode, context);
             if (pvalue.type == PVString && pvalue.value.uString)
-                fprintf(context->file->fp, "%s", pvalue.value.uString);
+                fprintf(fp, "%s", pvalue.value.uString);
             break;
         case PNBltinCall: // Call builtin and write return value if a String.
             pvalue = evaluateBuiltin(pnode, context, &errorFlag);
@@ -100,7 +114,7 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
                 return InterpError;
             }
             if (pvalue.type == PVString && pvalue.value.uString) {
-                fprintf(context->file->fp, "%s", pvalue.value.uString);
+                fprintf(fp, "%s", pvalue.value.uString);
                 stdfree(pvalue.value.uString);
             }
             break;
@@ -108,7 +122,7 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             switch (returnCode = interpProcCall(pnode, context, returnValue)) {
             case InterpOkay:
                 if (returnValue && returnValue->type == PVString && returnValue->value.uString) {
-                    fprintf(context->file->fp, "%s", returnValue->value.uString);
+                    fprintf(fp, "%s", returnValue->value.uString);
                     stdfree(returnValue->value.uString);
                 }
                 break;
@@ -121,7 +135,7 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             pvalue = evaluateUserFunc(pnode, context, &errorFlag);
             if (errorFlag) return InterpError;
             if (pvalue.type == PVString && pvalue.value.uString) {
-                fprintf(context->file->fp, "%s", pvalue.value.uString);
+                fprintf(fp, "%s", pvalue.value.uString);
                 stdfree(pvalue.value.uString);  // The pvalue's string is in the heap.
             }
             break;
