@@ -63,7 +63,8 @@ void parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog) {
     if (Perrors) { printf("The program contains errors.\n"); }
 }
 
-// parseFile parses a single script file with the yacc-generated parser.
+// parseFile parses a single script file with the yacc-generated parser. This function is static because it should
+// only be called by parseProgram.
 static void parseFile(CString fileName, CString searchPath, ErrorLog *errorLog) {
     if (!fileName || *fileName == 0) return;
     curFileName = fileName;
