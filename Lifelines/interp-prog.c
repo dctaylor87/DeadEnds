@@ -137,12 +137,14 @@ interp_program (String proc, int nargs, void **args, CString sfile,
 
   /* Open output file if name is provided */
 
+  File *file = null;
   if (ofile) {
-    String errorMessage = null;
-    if (! setScriptOutputFile (ofile, false, &errorMessage)) {
-      msg_error ("%s %s", errorMessage, ofile);
-      goto interp_program_exit;
-    }
+    file = openFile (ofile, "w"); /* XXX need to use reports dir */
+    if (! file)
+      {
+	msg_error ("cannot open file: %s", ofile);
+	goto interp_program_exit;
+      }
   }
   //if (Poutfp) setbuf(Poutfp, NULL);
 
@@ -153,7 +155,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   PNode *pnode = procCallPNode ("main", null);
 
   //stab = createSymbolTable ();
-  Context *context = createContext (database);
+  Context *context = createContext (database, file);
 
   /* Interpret top procedure */
   ranit = 1;
