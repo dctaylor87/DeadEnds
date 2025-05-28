@@ -24,5 +24,5 @@ Frame* createFrame(PNode* pnode, PNode* routine, SymbolTable* table, Frame* call
 // deleteFrame frees the memory of a frame. Deletes only the SymbolTable.
 void deleteFrame(Frame* frame) {
     deleteSymbolTable(frame->table);
-    free(frame);
+    stdfree(frame);
 }
