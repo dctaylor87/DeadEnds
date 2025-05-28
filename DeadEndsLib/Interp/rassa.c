@@ -38,6 +38,8 @@ String outfilename;
 String noreport = (String) "No report was generated.";
 //String whtout = (String) "What is the name of the output file?";
 
+static void pageout_1 (FILE *);
+
 // initrassa initializes script program output.
 void initrassa(void) {
 	outputmode = BUFFERED;
@@ -47,14 +49,17 @@ void initrassa(void) {
 }
 
 // finishrassa finalizes script program output.
-//void finishrassa(void) {
-//	if (outputmode == BUFFERED && linebuflen > 0 && Poutfp) {
-//		fwrite(linebuffer, linebuflen, 1, Poutfp);
-//		linebuflen = 0;
-//		bufptr = linebuffer;
-//		curcol = 1;
-//	}
-//}
+void finishrassa(File *file) {
+  if (outputmode == PAGEMODE) {
+    pageout_1 (file->fp);
+  } else if ((outputmode == BUFFERED) && (linebuflen > 0) && file) {
+    fwrite(linebuffer, linebuflen, 1, file->fp);
+    linebuflen = 0;
+    bufptr = linebuffer;
+    curcol = 1;
+  }
+  fflush (file->fp);
+}
 
 // __pagemode switches script program output to page mode.
 // usage: pagemode(INT, INT) -> VOID
@@ -104,55 +109,50 @@ PValue __linemode(PNode* pnode ATTRIBUTE_UNUSED,
 }
 
 // __newfile switches script program output to a new file.
-// usage: newfile(STRING, BOOL) -> VOID
+// usage: newfile() -> VOID
+// usage: newfile(STRING[, BOOL]) -> VOID
 PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
-    PNode *arg = pnode->arguments;
+    PNode* arg = pnode->arguments;
+    // Revert to standard output if there are no arguments.
+    if (!arg) {
+        closeFile(context->file);
+        context->file = stdOutputFile();
+        return nullPValue;
+    }
+    // The first argument must be a non-empty string (file name).
     PValue pvalue = evaluate(arg, context, errflg);
     if (*errflg) return nullPValue;
-    if (pvalue.type != PVString || strlen(pvalue.value.uString) == 0) {
+    if (pvalue.type != PVString || !pvalue.value.uString || strlen(pvalue.value.uString) == 0) {
         *errflg = true;
-        scriptError(pnode, "first argument to newfile must be a string");
+        scriptError(pnode, "first argument to newfile must be a non-empty string");
         return nullPValue;
     }
     String name = pvalue.value.uString;
+    // Default mode is write
+    char* mode = "w";
+    // The optional second argument can specify append mode.
     arg = arg->next;
-    pvalue = evaluateBoolean(arg, context, errflg);
-    if (*errflg) {
-        scriptError(pnode, "second argument to newfile must be a boolean");
-	return nullPValue;
+    if (arg) {
+        pvalue = evaluateBoolean(arg, context, errflg);
+        if (*errflg) {
+            scriptError(pnode, "second argument to newfile() must be a boolean");
+            return nullPValue;
+        }
+        if (pvalue.value.uBool) mode = "a";
     }
-    bool aflag = pvalue.value.uBool;
-#if 1
-    closeFile(context->file);
-    File *file = openFile(name, aflag ? "a" : "w");
+
+    finishrassa (context->file); /* needed for page mode */
+    // Open the new file.
+    File* file = openFile(name, mode);
     if (!file) {
       *errflg = true;
-      scriptError(pnode, "could not open file %s", name);
+      scriptError(pnode, "could not open file: %s", name);
       return nullPValue;
     }
+    // Close the previous file and switch.
+    closeFile(context->file);
     context->file = file;
-#else
-#if 1
-	CString errorMessage = null;
-	bool success = setScriptOutputFile (name, aflag, &errorMessage);
-	if (! success) {
-	  scriptError (pnode, "%s %s", errorMessage, name);
-	  return nullPValue;
-	}
-#else
-	if (Poutfp) {
-		finishrassa();
-		fclose(Poutfp);
-		Poutfp = null;
-	}
-	outfilename = strsave(name);
-	if (!(Poutfp = fopenPath(name, aflag?"a":"w", "." /*llprograms*/))) {
-		scriptError(pnode, "Could not open file %s", name);
-		return nullPValue;
-	}
-#endif
-#endif
-	return nullPValue;
+    return nullPValue;
 }
 
 #if 0
@@ -183,7 +183,7 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
 {
 #if 0
   // __outfile does this, so we do it for consistency
-  if (! Poutfp) {
+  if (! context->file) {
     String dereports = getdeoptstr ("DEREPORTS", ".");
     Poutfp = ask_for_output_file("w", qSwhtout, &outfilename, dereports, NULL);
     if (! Poutfp) {
@@ -388,12 +388,23 @@ PValue __SHOWFRAME(PNode* pnode, Context* context, bool* errflg) {
 PValue __pageout(PNode* pnode ATTRIBUTE_UNUSED,
 		 Context* context,
 		 bool* errflg) {
-	char scratch[MAXCOLS+2];
-	String p;
-	int row, i;
 	*errflg = true;
 	if (outputmode != PAGEMODE) return nullPValue;
 	*errflg = false;
+	pageout_1 (context->file->fp);
+	return nullPValue;
+}
+
+/* pageout_1 -- pageout helper.  Needs to be called by finishrassa if
+   we are in pagemode -- if we are closing the output file, we need
+   write out the current page.  */
+
+static void pageout_1 (FILE *fp)
+{
+	char scratch[MAXCOLS+2];
+	String p;
+	int row, i;
+
 	scratch[__cols] = '\n';
 	scratch[__cols+1] = 0;
 	p = pagebuffer;
@@ -403,11 +414,10 @@ PValue __pageout(PNode* pnode ATTRIBUTE_UNUSED,
 			;
 		scratch[i+1] = '\n';
 		scratch[i+2] = 0;
-		fputs(scratch, context->file->fp);
+		fputs(scratch, fp);
 		p += __cols;
 	}
 	memset(pagebuffer, ' ', __rows*__cols);
-	return nullPValue;
 }
 
 // adjustCols adjusts the column after printing a string

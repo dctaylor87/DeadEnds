@@ -34,12 +34,10 @@ void initset(void);
 void initrassa(void);
 void parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
 void finishInterpreter(void);
-void finishrassa(void);
+void finishrassa(File*);
 void progmessage(int, CString);
 
-//Context *createContext(SymbolTable*, Database*);
-//void deleteContext(Context*);
-
+void interpScript(Database*, String);
 InterpType interpret(PNode*, Context*, PValue*);
 InterpType interpChildren(PNode*, Context*, PValue*);
 InterpType interpSpouses(PNode*, Context*, PValue*);
