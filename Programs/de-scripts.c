@@ -14,6 +14,8 @@
 #include "functiontable.h"
 #include "recordindex.h"
 #include "database.h"
+#include "file.h"
+#include "context.h"
 
 #include "deadends.h"
 
@@ -115,7 +117,7 @@ execute_script (CString report_name, Database *database)
 
   //  Call the main procedure.
   //SymbolTable *symbolTable = createSymbolTable();
-  Context *context = createContext (database);
+  Context *context = createContext (database, stdOutputFile());
 
   PValue returnPvalue;
   interpret(pnode, context, &returnPvalue);
