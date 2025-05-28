@@ -964,7 +964,15 @@ pick_remove_spouse_from_family (GNode *frec)
 	joinFamily(fam, fref, husb, wife, chil, rest);
 	i = chooseFromArray(_(qSidsrmv), i, spstrings);
 	if (i == -1) return;
+#if defined(DEADENDS)
+	node = spnodes[i];
+	while (node->parent)
+	  node = node->parent;
+
+	chooseAndRemoveSpouse(node, frec, true);
+#else
 	chooseAndRemoveSpouse(_llpy_node_to_record(spnodes[i], currentDatabase), frec, true);
+#endif
 }
 /*===============================================
  * prompt_add_spouse_with_candidate -- 

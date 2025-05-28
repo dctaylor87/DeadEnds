@@ -452,7 +452,13 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 /* sanity check lineage links */
 	check_indi_lineage_links(indi02);
 
+#if defined(DEADENDS)
+	while (indi02->parent)
+	  indi02 = indi02->parent;
+	return (indi02);
+#else
 	return node_to_record(indi02);   /* this is the updated indi2 */
+#endif
 }
 /*=================================================================
  * merge_two_fams -- Merge first family into second; data from both
@@ -587,8 +593,13 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 
 /* sanity check lineage links */
 	check_fam_lineage_links(fam2);
-	
+#if defined(DEADENDS)
+	while (fam2->parent)
+	  fam2 = fam2->parent;
+	return (fam2);
+#else
 	return node_to_record(fam2);
+#endif
 }
 /*================================================================
  * merge_fam_links -- Shift links of persons in list1 from fam1 to
