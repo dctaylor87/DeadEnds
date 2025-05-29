@@ -290,6 +290,7 @@ static PyObject *llpy_detach_node (PyObject *self, PyObject *args ATTRIBUTE_UNUS
   /* whether it was permanent before or not, it is now temporary */
   setTempGNode (node, true);
 
+  ((LLINES_PY_NODE *) self)->lnn_database = 0; /* no longer part of any database */
   return (self);
 }
 

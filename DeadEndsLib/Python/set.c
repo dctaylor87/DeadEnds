@@ -374,6 +374,7 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
 	}
       new_indi->llr_type = LLINES_TYPE_INDI;
       new_indi->llr_record = record;
+      new_indi->llr_database = database;
       if (PySet_Add (working_set, (PyObject *)new_indi) < 0)
 	return (-3);
 #if 0
@@ -399,6 +400,7 @@ static int add_parents (PyObject *obj, PyObject *working_set, PyObject *output_s
 	}
       new_indi->llr_type = LLINES_TYPE_INDI;
       new_indi->llr_record = record;
+      new_indi->llr_database = database;
       if (PySet_Add (working_set, (PyObject *)new_indi) < 0)
 	return (-6);
 #if 0

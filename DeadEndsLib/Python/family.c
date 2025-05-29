@@ -405,6 +405,7 @@ static PyObject *llpy_choosechild_f (PyObject *self, PyObject *args ATTRIBUTE_UN
 
   indi->llr_type = LLINES_TYPE_INDI;
   indi->llr_record = record;
+  indi->llr_database = database;
 
   return (PyObject *)indi;
 }
@@ -432,6 +433,7 @@ static PyObject *llpy_choosespouse_f (PyObject *self, PyObject *args ATTRIBUTE_U
 
   py_indi->llr_type = LLINES_TYPE_INDI;
   py_indi->llr_record = record;
+  py_indi->llr_database = fam->llr_database;
   return ((PyObject *)py_indi);
 }
 
