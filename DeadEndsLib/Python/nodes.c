@@ -171,6 +171,7 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
   PyObject *prev = Py_None;
   GNode *parent_node = NULL;
   GNode *prev_node = NULL;
+  Database *database;
 
   if (! PyArg_ParseTupleAndKeywords (args, kw, "|OO", keywords, &parent, &prev))
     return NULL;
@@ -186,6 +187,11 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
       PyErr_SetString (PyExc_TypeError, "add_node: parent must be a NODE or None");
       return NULL;
     }
+  if (parent_node)
+    database = ((LLINES_PY_NODE *)parent)->lnn_database;
+  else
+    database = 0;
+
   if (prev == Py_None)
     /* either we are first in line or our preceding sibling will be added later... */
     prev_node = NULL;
@@ -208,6 +214,9 @@ static PyObject *llpy_add_node (PyObject *self, PyObject *args, PyObject *kw)
 
   nparent (orig_node) = parent_node;
   setTempGNode (orig_node, isTempGNode (parent_node));
+
+  /* self is now part of parent's tree, set database to that of parent */
+  orig->lnn_database = database;
 
   /* if both prev_node and parent_node are NULL, then there is nothing to do */
   if (! prev_node)
