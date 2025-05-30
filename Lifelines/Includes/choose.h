@@ -6,19 +6,19 @@
    header file. */
 
 extern GNode *chooseChild(GNode *irec, GNode *frec,
-			  CString msg0, CString msgn, ASK1Q ask1);
+			  CString msg0, CString msgn, ASK1Q ask1, Database *database);
 extern void chooseAndRemoveFamily(void);
 extern GNode *chooseFather(GNode *irec, GNode *frec,
-			   CString msg0, CString msgn, ASK1Q ask1);
+			   CString msg0, CString msgn, ASK1Q ask1, Database *database);
 extern GNode *chooseFamily(GNode *irec, CString msg0,
 			   CString msgn, bool fams, Database *database);
 extern GNode *chooseMother(GNode *indi, GNode *fam,
-			   CString msg0, CString msgn, ASK1Q ask1);
+			   CString msg0, CString msgn, ASK1Q ask1, Database *database);
 extern GNode *chooseNote(GNode *current, CString msg0,
-			 CString msgn);
+			 CString msgn, Database *database);
 extern GNode *choosePointer(GNode *current, CString msg0,
-			    CString msgn);
+			    CString msgn, Database *database);
 extern GNode *chooseSource(GNode *current, CString msg0,
-			   CString msgn);
+			   CString msgn, Database *database);
 extern GNode *chooseSpouse(GNode *irec, CString msg0,
-			   CString msgn);
+			   CString msgn, Database *database);

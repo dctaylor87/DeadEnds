@@ -120,9 +120,9 @@ gotfam:
 		GNode *chil1, *chil2;
 		String key1, key2;
 		/* Identify children to swap */
-		chil1 = chooseChild(NULL, frec, "e", _(qSid1csw), NOASK1);
+		chil1 = chooseChild(NULL, frec, "e", _(qSid1csw), NOASK1, currentDatabase);
 		if (!chil1) return false;
-		chil2 = chooseChild(NULL, frec, "e", _(qSid2csw), NOASK1);
+		chil2 = chooseChild(NULL, frec, "e", _(qSid2csw), NOASK1, currentDatabase);
 		if (!chil2) return false;
 		if (chil1 == chil2) return false;
 		key1 = nxref(nztop(chil1));
@@ -231,7 +231,7 @@ gotfam:
 	}
 
 	/* Identify children to swap */
-	child = nztop(chooseChild(NULL, frec, "e", _(qSidcrdr), NOASK1));
+	child = nztop(chooseChild(NULL, frec, "e", _(qSidcrdr), NOASK1, currentDatabase));
 	if (!child) return false;
 
 	prevorder = child_index(child, fam);

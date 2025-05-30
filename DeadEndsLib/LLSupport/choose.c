@@ -55,7 +55,7 @@
 #include "ll-sequence.h"
 
 /* everything in this file assumes we are dealing with the current database */
-#define database	currentDatabase
+//#define database	currentDatabase
 
 /*=================================================
  * chooseChild -- Choose child of person or family
@@ -66,7 +66,7 @@
  *  ask1: [IN] whether to prompt if only one child
  *===============================================*/
 GNode *
-chooseChild (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
+chooseChild (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1, Database *database)
 {
   GNode *rec=0;
   Sequence *seq=0;
@@ -74,12 +74,12 @@ chooseChild (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
   if (irec)
     {
       ASSERT (! irec->parent);
-      seq = personToChildren(nztop(irec), currentDatabase->recordIndex);
+      seq = personToChildren(nztop(irec), database->recordIndex);
     }
   if (! irec && frec)
     {
       ASSERT (! frec->parent);
-      seq = familyToChildren(nztop(frec), currentDatabase->recordIndex);
+      seq = familyToChildren(nztop(frec), database->recordIndex);
     }
   if (!seq)
     {
@@ -98,14 +98,14 @@ chooseChild (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
  *  asks if multiple
  *======================================*/
 GNode *
-chooseSpouse (GNode *irec, CString msg0, CString msgn)
+chooseSpouse (GNode *irec, CString msg0, CString msgn, Database *database)
 {
   GNode *rec=0;
   Sequence *seq=0;
 
   if (!irec) return NULL;
   ASSERT (! irec->parent);
-  if (!(seq = personToSpouses(nztop(irec), currentDatabase->recordIndex)))
+  if (!(seq = personToSpouses(nztop(irec), database->recordIndex)))
     {
       msg_error("%s", msg0);
       return NULL;
@@ -120,14 +120,14 @@ chooseSpouse (GNode *irec, CString msg0, CString msgn)
  *  always asks
  *======================================*/
 GNode *
-chooseSource (GNode *current, CString msg0, CString msgn)
+chooseSource (GNode *current, CString msg0, CString msgn, Database *database)
 {
   Sequence *seq;
   GNode *rec;
   if (! current)
     return NULL;
   ASSERT (! current->parent);
-    if (!(seq = GNodeToSources(nztop(current), currentDatabase)))
+    if (!(seq = GNodeToSources(nztop(current), database)))
       {
 	msg_error("%s", msg0);
 	return NULL;
@@ -144,7 +144,7 @@ chooseSource (GNode *current, CString msg0, CString msgn)
  * Created: 2001/02/11, Perry Rapp
  *======================================*/
 GNode *
-chooseNote (GNode *current, CString msg0, CString msgn)
+chooseNote (GNode *current, CString msg0, CString msgn, Database *database)
 {
   Sequence *seq;
   GNode *rec;
@@ -152,7 +152,7 @@ chooseNote (GNode *current, CString msg0, CString msgn)
     return NULL;
 
   ASSERT (! current->parent);
-  if (!(seq = GNodeToNotes(nztop(current), currentDatabase)))
+  if (!(seq = GNodeToNotes(nztop(current), database)))
     {
       msg_error("%s", msg0);
       return NULL;
@@ -170,14 +170,14 @@ chooseNote (GNode *current, CString msg0, CString msgn)
  * Returns addref'd record
  *======================================*/
 GNode *
-choosePointer (GNode *current, CString msg0, CString msgn)
+choosePointer (GNode *current, CString msg0, CString msgn, Database *database)
 {
   Sequence *seq;
   GNode *rec;
   if (! current)
     return NULL;
   ASSERT (! current->parent);
-  if (!(seq = GNodeToPointers(nztop(current), currentDatabase)))
+  if (!(seq = GNodeToPointers(nztop(current), database)))
     {
       msg_error("%s", msg0);
       return NULL;
@@ -221,7 +221,7 @@ chooseFamily (GNode *irec, CString msg0, CString msgn, bool fams, Database *data
  * ask1: [IN]  whether or not to prompt if only one father found
  *=================================================*/
 GNode *
-chooseFather (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
+chooseFather (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1, Database *database)
 {
   GNode *rec=0;
   Sequence *seq=0;
@@ -229,12 +229,12 @@ chooseFather (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
   if (irec)
     {
       ASSERT (! irec->parent);
-      seq = personToFathers(nztop(irec), currentDatabase->recordIndex);
+      seq = personToFathers(nztop(irec), database->recordIndex);
     }
   if (!irec && frec)
     {
       ASSERT (! frec->parent);
-	seq = familyToFathers(nztop(frec), currentDatabase->recordIndex);
+	seq = familyToFathers(nztop(frec), database->recordIndex);
     }
   if (!seq)
     {
@@ -255,7 +255,7 @@ chooseFather (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
  * ask1: [IN]  whether or not to prompt if only one mother found
  *=================================================*/
 GNode *
-chooseMother (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
+chooseMother (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1, Database *database)
 {
   GNode *rec=0;
   Sequence *seq=0;
@@ -263,12 +263,12 @@ chooseMother (GNode *irec, GNode *frec, CString msg0, CString msgn, ASK1Q ask1)
   if (irec)
     {
       ASSERT (! irec->parent);
-	seq = personToMothers(nztop(irec), currentDatabase->recordIndex);
+	seq = personToMothers(nztop(irec), database->recordIndex);
     }
   if (!irec && frec)
     {
       ASSERT (! frec->parent);
-	seq = familyToMothers(nztop(frec), currentDatabase->recordIndex);
+	seq = familyToMothers(nztop(frec), database->recordIndex);
     }
   if (!seq)
     {

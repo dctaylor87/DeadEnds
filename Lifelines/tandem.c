@@ -143,23 +143,23 @@ int browse_tandem (GNode **prec1, GNode **prec2, Sequence **pseq)
 			return BROWSE_INDI;
 		case CMD_FATHER: 	/* browse top person's father */
 			if ((tmp = chooseFather(current1, NULL, _(qSnofath),
-				_(qSidhbrs), NOASK1)) != 0) {
+				_(qSidhbrs), NOASK1, currentDatabase)) != 0) {
 				current1 = tmp;
 			}
 			break;
 		case CMD_MOTHER: 	/* browse top person's mother */
 			if ((tmp = chooseMother(current1, NULL, _(qSnomoth),
-				_(qSidwbrs), NOASK1)) != 0) {
+				_(qSidwbrs), NOASK1, currentDatabase)) != 0) {
 				current1 = tmp;
 			}
 			break;
 		case CMD_SPOUSE: 	/* browse top person's spouse/s */
-			if ((tmp = chooseSpouse(current1, _(qSnospse), _(qSidsbrs))) != 0)
+			if ((tmp = chooseSpouse(current1, _(qSnospse), _(qSidsbrs), currentDatabase)) != 0)
 				current1 = tmp;
 			break;
 		case CMD_CHILDREN: 	/* browse top person's children */
 			if ((tmp = chooseChild(current1, NULL, _(qSnocofp),
-				_(qSidcbrs), NOASK1)) != 0)
+				_(qSidcbrs), NOASK1, currentDatabase)) != 0)
 				current1 = tmp;
 			break;
 		case CMD_MERGE_BOTTOM_TO_TOP: 	/* merge two persons */
@@ -294,9 +294,9 @@ int browse_2fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 			break;
 		case CMD_BOTH_MOTHERS:	/* browse to wives/moths */
 			if ((tmp = chooseMother(NULL, current1, _(qSnowife),
-				_(qSid1wbr), NOASK1)) != 0) {
+				_(qSid1wbr), NOASK1, currentDatabase)) != 0) {
 				if ((tmp2 = chooseMother(NULL, current2, _(qSnowife), 
-					_(qSid2wbr), NOASK1)) != 0) {
+					_(qSid2wbr), NOASK1, currentDatabase)) != 0) {
 					*prec1 = tmp;
 					*prec2 = tmp2;
 					return BROWSE_TAND;
