@@ -282,7 +282,7 @@ prompt_add_child (GNode *child, GNode *fam, bool rfmt)
 /* Identify child if caller did not */
 
 	if (!child) {
-		GNode *rec = ask_for_indi(_(qSidchld), DOASK1);
+		GNode *rec = ask_for_indi(_(qSidchld), DOASK1, currentDatabase);
 		child = nztop(rec);
 		releaseRecord(rec);
 	}
@@ -390,7 +390,7 @@ prompt_add_spouse (GNode *sprec, GNode *frec, bool conf)
 
 	/* Identify spouse to add to family */
 
-	if (!sprec) sprec = ask_for_indi(_(qSidsadd), DOASK1);
+	if (!sprec) sprec = ask_for_indi(_(qSidsadd), DOASK1, currentDatabase);
 	if (!sprec) return false;
 	spouse = nztop(sprec);
 	if ((sex = SEXV(spouse)) == sexUnknown) {
@@ -562,7 +562,7 @@ add_family_by_edit (GNode *sprec1, GNode *sprec2,
 /* Identify first spouse */
 
 	if (!sprec1) 
-		sprec1 = ask_for_indi(_(qSidsps1), NOASK1);
+		sprec1 = ask_for_indi(_(qSidsps1), NOASK1, currentDatabase);
 	if (!sprec1) 
 		return NULL;
 	if ((sex1 = SEXV(nztop(sprec1))) == sexUnknown)
@@ -574,7 +574,7 @@ add_family_by_edit (GNode *sprec1, GNode *sprec2,
 	/* Identify optional spouse */
 
 	if (!sprec2)
-		sprec2 = ask_for_indi(_(qSidsps2), DOASK1);
+		sprec2 = ask_for_indi(_(qSidsps2), DOASK1, currentDatabase);
 	if (sprec2) {
 		if ((sex2 = SEXV(nztop(sprec2))) == sexUnknown || 
 			(traditional && sex1 == sex2))

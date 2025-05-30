@@ -92,31 +92,31 @@ rptui_ask_for_fam (CString s1, CString s2, Database *database)
 }
 
 Sequence *
-rptui_ask_for_indi_list (CString ttl, bool reask)
+rptui_ask_for_indi_list (CString ttl, bool reask, Database *database)
 {
 	Sequence *seq;
 	begin_rptui();
-	seq = ask_for_indi_list(ttl, reask);
+	seq = ask_for_indi_list(ttl, reask, database);
 	end_rptui();
 	return seq;
 }
 
 GNode *
-rptui_ask_for_indi (CString ttl, ASK1Q ask1)
+rptui_ask_for_indi (CString ttl, ASK1Q ask1, Database *database)
 {
 	GNode *rec;
 	begin_rptui();
-	rec = ask_for_indi(ttl,ask1);
+	rec = ask_for_indi(ttl,ask1, database);
 	end_rptui();
 	return rec;
 }
 
 CString
-rptui_ask_for_indi_key (CString ttl, ASK1Q ask1)
+rptui_ask_for_indi_key (CString ttl, ASK1Q ask1, Database *database)
 {
 	CString s;
 	begin_rptui();
-	s = ask_for_indi_key(ttl, ask1);
+	s = ask_for_indi_key(ttl, ask1, database);
 	end_rptui();
 	return s;
 }

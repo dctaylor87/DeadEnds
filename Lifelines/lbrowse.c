@@ -245,7 +245,7 @@ browse_list (GNode **prec1, GNode **prec2, Sequence **pseq)
 			}
 		}
 		case 'b':        /* Browse new persons */
-			newseq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+			newseq = ask_for_indiseq(_(qSidplst), 'I', &rc, currentDatabase);
 			/* If no new indiseq was created, then the previous indiseq is still in effect. */
 			if (!newseq) break;
 			/* Otherwise, if a new indiseq was created, then the previous indiseq must be freed. */
@@ -266,7 +266,7 @@ browse_list (GNode **prec1, GNode **prec2, Sequence **pseq)
 		case 'a':        /* Add persons to current list */
 		{
 			CString skey=0, snam=0;
-			newseq = ask_for_indiseq(_(qSlstpad), 'I', &rc);
+			newseq = ask_for_indiseq(_(qSlstpad), 'I', &rc, currentDatabase);
 			if (!newseq) {
 				message("%s", _(qSlstnad));
 				break;

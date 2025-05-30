@@ -1,7 +1,7 @@
 GNode *rptui_ask_for_fam(CString s1, CString s2, Database *);
-Sequence *rptui_ask_for_indi_list(CString ttl, bool reask);
-GNode *rptui_ask_for_indi (CString ttl, ASK1Q ask1);
-CString rptui_ask_for_indi_key(CString ttl, ASK1Q ask1);
+Sequence *rptui_ask_for_indi_list(CString ttl, bool reask, Database *database);
+GNode *rptui_ask_for_indi (CString ttl, ASK1Q ask1, Database *database);
+CString rptui_ask_for_indi_key(CString ttl, ASK1Q ask1, Database *database);
 bool rptui_ask_for_int(CString, int *);
 FILE * rptui_ask_for_output_file(CString mode, CString ttl, String *pfname,
 				 CString path, CString ext);

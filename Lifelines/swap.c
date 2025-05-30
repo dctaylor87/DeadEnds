@@ -89,7 +89,7 @@ swap_children (GNode *prnt, GNode *frec)
 
 /* Identify parent if need be */
 	if (frec) goto gotfam;
-	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
+	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1, currentDatabase);
 	if (!prnt) return false;
 	nfam = numberOfFamilies(nztop(prnt));
 	if (nfam <= 0) {
@@ -102,7 +102,7 @@ swap_children (GNode *prnt, GNode *frec)
 		frec = keyToFamilyRecord(nval(FAMS(nztop(prnt))), currentDatabase);
 		goto gotfam;
 	}
-	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true)))
+	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true, currentDatabase)))
 		return false;
 gotfam:
 	fam = nztop(frec);
@@ -197,7 +197,7 @@ reorder_child (GNode *prnt, GNode *frec, bool rfmt)
 
 /* Identify parent if need be */
 	if (frec) goto gotfam;
-	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1);
+	if (!prnt) prnt = ask_for_indi(_(qSidcswp), NOASK1, currentDatabase);
 	if (!prnt) return false;
 	nfam = numberOfFamilies(nztop(prnt));
 	if (nfam <= 0) {
@@ -210,7 +210,7 @@ reorder_child (GNode *prnt, GNode *frec, bool rfmt)
 		frec = keyToFamilyRecord(nval(FAMS(nztop(prnt))), currentDatabase);
 		goto gotfam;
 	}
-	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true))) 
+	if (!(frec = chooseFamily(prnt, _(qSntprnt), _(qSidfbys), true, currentDatabase))) 
 		return false;
 gotfam:
 	fam = nztop(frec);
@@ -289,7 +289,7 @@ swap_families (GNode *irec)
 	String str;
 
 /* Find person and assure has >= 2 families */
-	if (!irec) irec = ask_for_indi(_(qSidfswp), NOASK1);
+	if (!irec) irec = ask_for_indi(_(qSidfswp), NOASK1, currentDatabase);
 	if (!irec) return false;
 	indi = nztop(irec);
 	if (!(fams = FAMS(indi))) {
@@ -312,9 +312,9 @@ swap_families (GNode *irec)
 		GNode *fam1, *fam2;
 		String key1, key2;
 		/* prompt for families */
-		fam1 = nztop(chooseFamily(irec, _(qSparadox), _(qSid1fsw), true));
+		fam1 = nztop(chooseFamily(irec, _(qSparadox), _(qSid1fsw), true, currentDatabase));
 		if (!fam1) return false;
-		fam2 = nztop(chooseFamily(irec, _(qSparadox), _(qSid2fsw), true));
+		fam2 = nztop(chooseFamily(irec, _(qSparadox), _(qSid2fsw), true, currentDatabase));
 		if (!fam2) return false;
 		if (fam1 == fam2) return false;
 		key1 = nxref(fam1);

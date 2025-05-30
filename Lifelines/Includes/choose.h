@@ -11,7 +11,7 @@ extern void chooseAndRemoveFamily(void);
 extern GNode *chooseFather(GNode *irec, GNode *frec,
 			   CString msg0, CString msgn, ASK1Q ask1);
 extern GNode *chooseFamily(GNode *irec, CString msg0,
-			   CString msgn, bool fams);
+			   CString msgn, bool fams, Database *database);
 extern GNode *chooseMother(GNode *indi, GNode *fam,
 			   CString msg0, CString msgn, ASK1Q ask1);
 extern GNode *chooseNote(GNode *current, CString msg0,

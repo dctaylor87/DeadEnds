@@ -206,7 +206,7 @@ prompt_for_browse (GNode ** prec, int * code, Sequence ** pseq)
 
 	if (*code == BROWSE_INDI) {
 		/* ctype of 'B' means any type but check persons first */
-		*pseq = ask_for_indiseq(_(qSidplst), 'B', &rc);
+		*pseq = ask_for_indiseq(_(qSidplst), 'B', &rc, currentDatabase);
 		if (!*pseq) return;
 		if ((len = lengthSequence(*pseq)) < 1) return;
 		if (len == 1) {
@@ -460,8 +460,8 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			edit_indi(current, false);
 			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
-			if ((tmp = chooseFamily(current, _(qSntprnt)
-				,  _(qSidfbrs), true))) {
+			if ((tmp = chooseFamily(current, _(qSntprnt),
+						_(qSidfbrs), true, currentDatabase))) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
 				goto exitbrowse;
@@ -469,9 +469,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_TANDEM_FAMILIES:
 			if ((tmp = chooseFamily(current, _(qSntprnt),
-				_(qSid1fbr), true)) != 0) {
+						_(qSid1fbr), true, currentDatabase)) != 0) {
 				if ((tmp2 = chooseFamily(current, _(qSntprnt),
-					_(qSid2fbr), true)) != 0) {
+					_(qSid2fbr), true, currentDatabase)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
 					rtn = BROWSE_2FAM;
@@ -519,11 +519,11 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse another person */
-			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1)) != 0)
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1, currentDatabase)) != 0)
 				setrecord(&current, &tmp);
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
+			if ((tmp = ask_for_any(_(qSidnxt), NOASK1, currentDatabase)) != 0) {
 				if (nztype(tmp) != GRPerson) {
 					setrecord(prec1, &tmp);
 					rtn = BROWSE_UNK;
@@ -613,7 +613,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_PARENTS:	/* Browse to parents' family */
 			if ((tmp = chooseFamily(current, _(qSnoprnt),
-				_(qSidfbrs), false)) != 0) {
+				_(qSidfbrs), false, currentDatabase)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_FAM;
 				goto exitbrowse;
@@ -621,9 +621,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_TANDEM_PARENTS:	/* tandem browse to two parents families*/
 			if ((tmp = chooseFamily(current, _(qSnoprnt),
-				_(qSid1fbr), false)) != 0) {
+						_(qSid1fbr), false, currentDatabase)) != 0) {
 				if ((tmp2 = chooseFamily(current, _(qSnoprnt),
-					_(qSid2fbr), false)) != 0) {
+					_(qSid2fbr), false, currentDatabase)) != 0) {
 					setrecord(prec1, &tmp);
 					setrecord(prec2, &tmp2);
 					rtn = BROWSE_2FAM;
@@ -633,7 +633,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_BROWSE: 	/* Browse new list of persons */
-			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'B', &rc, currentDatabase);
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
 				elementFromSequence(seq, 0, &key, &name);
@@ -688,7 +688,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			}
 			break;
 		case CMD_TANDEM:	/* Switch to tandem browsing */
-			if ((tmp = ask_for_indi(_(qSidp2br), NOASK1)) != 0) {
+			if ((tmp = ask_for_indi(_(qSidp2br), NOASK1, currentDatabase)) != 0) {
 				setrecord(prec1, &current);
 				setrecord(prec2, &tmp);
 				rtn = BROWSE_TAND;
@@ -867,14 +867,14 @@ reprocess_aux_cmd:
 			}
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1)) != 0) {
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1, currentDatabase)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
+			if ((tmp = ask_for_any(_(qSidnxt), NOASK1, currentDatabase)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;
@@ -1237,7 +1237,7 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			setrecord(&save, 0);
 			break;
 		case CMD_BROWSE: 	/* Browse to new list of persons */
-			seq = ask_for_indiseq(_(qSidplst), 'B', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'B', &rc, currentDatabase);
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
 				elementFromSequence(seq, 0, &key, &name);
@@ -1257,14 +1257,14 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			goto exitbrowse;
 			break;
 		case CMD_BROWSE_ZIP_INDI:	/* Zip browse to new person */
-			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1)) != 0) {
+			if ((tmp = ask_for_indi(_(qSidpnxt), NOASK1, currentDatabase)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_INDI;
 				goto exitbrowse;
 			}
 			break;
 		case CMD_BROWSE_ZIP_ANY:	/* Zip browse any record */
-			if ((tmp = ask_for_any(_(qSidnxt), NOASK1)) != 0) {
+			if ((tmp = ask_for_any(_(qSidnxt), NOASK1, currentDatabase)) != 0) {
 				setrecord(prec1, &tmp);
 				rtn = BROWSE_UNK;
 				goto exitbrowse;

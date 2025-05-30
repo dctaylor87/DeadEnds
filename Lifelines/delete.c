@@ -149,7 +149,7 @@ void
 chooseAndRemovePerson (GNode *indi, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
-	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), DOASK1))))
+	if (!indi && !(indi = nztop(ask_for_indi(_(qSidpdel), DOASK1, currentDatabase))))
 		return;
 	/* confirm if caller desired */
 	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfpdel))) return;
@@ -167,7 +167,7 @@ bool
 chooseAndRemoveAnyRecord (GNode *record, CONFIRMQ confirmq)
 {
 	/* prompt if needed */
-	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1)))
+	if (!record && !(record = ask_for_any(_(qSidodel), DOASK1, currentDatabase)))
 		return false;
 	/* confirm if caller desired */
 	if (confirmq==DOCONFIRM && !ask_yes_or_no(_(qScfodel)))
@@ -188,7 +188,7 @@ chooseAndRemoveSpouse (GNode *irec, GNode *frec, bool nolast)
 	GNode *fam;
 
 /* Identify spouse to remove */
-	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1);
+	if (!irec) irec = ask_for_indi(_(qSidsrmv), NOASK1, currentDatabase);
 	if (!irec) return false;
 	if (!FAMS(nztop(irec))) {
 		msg_error("%s", _(qSntprnt));
@@ -196,7 +196,7 @@ chooseAndRemoveSpouse (GNode *irec, GNode *frec, bool nolast)
 	}
 
 /* Identify family to remove spouse from */
-	if (!frec) frec = chooseFamily(irec, _(qSparadox), _(qSidsrmf), true);
+	if (!frec) frec = chooseFamily(irec, _(qSparadox), _(qSidsrmf), true, currentDatabase);
 	if (!frec) return false;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {
@@ -225,7 +225,7 @@ chooseAndRemoveChild (GNode *irec, GNode *frec, bool nolast)
 	GNode *fam;
 
 /* Identify child and check for FAMC nodes */
-	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1);
+	if (!irec) irec = ask_for_indi(_(qSidcrmv), NOASK1, currentDatabase);
 	if (!irec) return false;
 	if (!FAMC(nztop(irec))) {
 		msg_error("%s", _(qSntchld));
@@ -233,7 +233,7 @@ chooseAndRemoveChild (GNode *irec, GNode *frec, bool nolast)
 	}
 
 /* Identify family to remove child from */
-	if (!frec) frec = chooseFamily(irec, _(qSparadox), _(qSidcrmf), false);
+	if (!frec) frec = chooseFamily(irec, _(qSparadox), _(qSidcrmf), false, currentDatabase);
 	if (!frec) return false;
 	fam = nztop(frec);
 	if (nolast && num_fam_xrefs(fam) < 2) {

@@ -59,7 +59,7 @@ PValue __getindi (PNode *pnode, Context *context, bool* eflg)
       ttl = svalue.value.uString;
     }
     
-    CString key = rptui_ask_for_indi_key(ttl, DOASK1);
+    CString key = rptui_ask_for_indi_key(ttl, DOASK1, currentDatabase); /* XXX */
     if (!key)
       return nullPValue;
 
@@ -76,11 +76,29 @@ PValue __choosechild (PNode *pnode, Context *context, bool* eflg)
 {
 }
 
+
 /* __chooseindi -- have user choose person from a set
    usage: chooseindi (SET) --> INDI.  */
 
 PValue __chooseindi (PNode *pnode, Context *context, bool* eflg)
 {
+#if 0
+  PNODE argvar = builtin_args(node);
+  NODE indi=0;
+  INDISEQ seq=0;
+  PVALUE val = eval_and_coerce(PSET, argvar, stab, eflg);
+  if (*eflg) {
+    prog_var_error(node, stab, argvar, val, nonset1, "chooseindi");
+    delete_pvalue_ptr(&val);
+    return NULL;
+  }
+  seq = pvalue_to_seq(val);
+  delete_pvalue_ptr(&val);
+  if (!seq || length_indiseq(seq) < 1) return NULL;
+  indi = nztop(choose_from_indiseq(seq, DOASK1, _(qSifonei), _(qSnotonei)));
+  if (!indi) return NULL;
+  return create_pvalue_from_indi(indi);
+#endif
 }
 
 /* __choosespouse -- have user choose spouse of person.

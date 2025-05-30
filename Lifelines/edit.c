@@ -87,7 +87,7 @@ edit_indi (GNode *irec1, bool rfmt)
 	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Identify indi if necessary */
-	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOASK1)))
+	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOASK1, currentDatabase)))
 		return false;
 	indi1 = nztop(irec1);
 
@@ -171,13 +171,13 @@ edit_family (GNode *frec1, bool rfmt)
 
 /* Identify family if necessary */
 	if (!frec1) {
-		irec = ask_for_indi(_(qSidspse), NOASK1);
+		irec = ask_for_indi(_(qSidspse), NOASK1, currentDatabase);
 		if (!irec) return false;
 		if (!FAMS(nztop(irec))) {
 			msg_error("%s", _(qSntprnt));
 			goto end_edit_fam;
 		} 
-		frec1 = chooseFamily(irec, _(qSparadox), _(qSidfbys), true);
+		frec1 = chooseFamily(irec, _(qSparadox), _(qSidfbys), true, currentDatabase);
 		if (!frec1) return false; 
 	}
 	fam1 = nztop(frec1);

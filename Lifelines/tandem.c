@@ -184,7 +184,7 @@ int browse_tandem (GNode **prec1, GNode **prec2, Sequence **pseq)
 			}
 			break;
 		case CMD_BROWSE: 	/* browse to new person list */
-			seq = ask_for_indiseq(_(qSidplst), 'I', &rc);
+			seq = ask_for_indiseq(_(qSidplst), 'I', &rc, currentDatabase);
 			if (!seq) break;
 			if (lengthSequence(seq) == 1) {
 				elementFromSequence(seq, 0, &key, &name);

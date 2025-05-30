@@ -11,7 +11,9 @@ extern void new_name_browse_list(String, String);
 extern void update_browse_list(String, Sequence *);
 extern void remove_from_browse_lists(String);
 extern void rename_from_browse_lists(String);
+#if !defined(DEADENDS)		/* DeadEnds decclares this in sequence.h */
 extern Sequence *stringToSequence (CString name, Database *database);
+#endif
 extern Sequence *find_named_seq(CString);
 
 /* lbrowse.c */

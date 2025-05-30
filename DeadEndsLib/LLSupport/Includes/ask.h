@@ -8,9 +8,9 @@ enum SequenceType { chooseTypeSpouse, chooseTypeFamily, chooseTypeDefault };
 
 extern GNode *ask_for_fam (CString pttl, CString sttl, Database *);
 extern GNode *ask_for_fam_by_key(CString fttl, CString pttl, CString sttl, Database *database);
-extern GNode *ask_for_indi (CString ttl, ASK1Q ask1);
-extern String ask_for_indi_key (CString ttl, ASK1Q ask1);
-extern Sequence *ask_for_indi_list (CString ttl, bool reask);
+extern GNode *ask_for_indi (CString ttl, ASK1Q ask1, Database *database);
+extern String ask_for_indi_key (CString ttl, ASK1Q ask1, Database *database);
+extern Sequence *ask_for_indi_list (CString ttl, bool reask, Database *database);
 extern bool ask_for_int (CString ttl, int *prtn);
 extern FILE *ask_for_input_file (CString mode,
 				 CString ttl,

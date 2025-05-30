@@ -75,7 +75,7 @@
  * local function prototypes
  *********************************************/
 
-static GNode *ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, int *prc);
+static GNode *ask_for_any_once(CString ttl, char ctype, ASK1Q ask1, int *prc, Database *database);
 static void make_fname_prompt(String fnamebuf, int len, CString ext);
 
 /*=====================================================
@@ -104,11 +104,11 @@ ask_for_fam (CString pttl, CString sttl, Database *database)
 	if (! database)
 	  database = currentDatabase;
 
-	prn = ask_for_indi(pttl, DOASK1);
+	prn = ask_for_indi(pttl, DOASK1, database);
 	if (!prn)  {
 		GNode *fam=0;
 		GNode *frec=0;
-		sib = ask_for_indi(sttl, DOASK1);
+		sib = ask_for_indi(sttl, DOASK1, database);
 		if (!sib) return NULL;
 		fam = FAMC(nztop(sib));
 		if (!fam) {
@@ -122,7 +122,7 @@ ask_for_fam (CString pttl, CString sttl, Database *database)
 		msg_error("%s", _(qSntprnt));
 		return NULL;
 	}
-	return chooseFamily(prn, _(qSparadox), _(qSidfbrs), true);
+	return chooseFamily(prn, _(qSparadox), _(qSidfbrs), true, database);
 }
 /*===========================================
  * ask_for_int -- Ask user to provide integer
@@ -289,7 +289,7 @@ ask_for_output_file (CString mode,
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 Sequence *
-ask_for_indiseq (CString ttl, char ctype, int *prc)
+ask_for_indiseq (CString ttl, char ctype, int *prc, Database *database)
 {
 	while (1)
 	{
@@ -306,7 +306,7 @@ ask_for_indiseq (CString ttl, char ctype, int *prc)
 				continue; /* fallback to main question above */
 			*prc = RC_SELECT;
 		} else {
-			seq = stringToSequence(name, currentDatabase);
+			seq = stringToSequence(name, database);
 			if (seq) {
 				*prc = RC_SELECT;
 			} else {
@@ -325,10 +325,10 @@ ask_for_indiseq (CString ttl, char ctype, int *prc)
  *  prc:   [OUT] result (RC_DONE, RC_SELECT, RC_NOSELECT)
  *==========================================================*/
 static GNode *
-ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
+ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc, Database *database)
 {
 	GNode *indi = 0;
-	Sequence *seq = ask_for_indiseq(ttl, ctype, prc);
+	Sequence *seq = ask_for_indiseq(ttl, ctype, prc, database);
 	if (*prc == RC_DONE || *prc == RC_NOSELECT) return NULL;
 	ASSERT(*prc == RC_SELECT);
 	/* user chose a set of possible answers */
@@ -350,10 +350,10 @@ ask_for_any_once (CString ttl, char ctype, ASK1Q ask1, int *prc)
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
 GNode *
-ask_for_indi (CString ttl, ASK1Q ask1)
+ask_for_indi (CString ttl, ASK1Q ask1, Database *database)
 {
 	int rc = 0;
-	GNode *indi = ask_for_any_once(ttl, 'I', ask1, &rc);
+	GNode *indi = ask_for_any_once(ttl, 'I', ask1, &rc, database);
 	return indi;
 }
 /*=================================================================
@@ -364,12 +364,12 @@ ask_for_indi (CString ttl, ASK1Q ask1)
  * ask1:     [in] whether to present list if only one matches
  *===============================================================*/
 GNode *
-ask_for_any (CString ttl, ASK1Q ask1)
+ask_for_any (CString ttl, ASK1Q ask1, Database *database)
 {
 	char ctype = 0; /* code for any type */
 	while (true) {
 		int rc;
-		GNode *record = ask_for_any_once(ttl, ctype, ask1, &rc);
+		GNode *record = ask_for_any_once(ttl, ctype, ask1, &rc, database);
 		if (rc == RC_DONE || rc == RC_SELECT)
 			return record;
 		return NULL;
@@ -382,11 +382,11 @@ ask_for_any (CString ttl, ASK1Q ask1)
  * used by both reports & interactive use
  *=================================================================*/
 Sequence *
-ask_for_indi_list (CString ttl, bool reask)
+ask_for_indi_list (CString ttl, bool reask, Database *database)
 {
 	while (true) {
 		int rc = RC_DONE;
-		Sequence *seq = ask_for_indiseq(ttl, 'I', &rc);
+		Sequence *seq = ask_for_indiseq(ttl, 'I', &rc, database);
 		if (rc == RC_DONE)
 			return NULL;
 		if (rc == RC_NOSELECT) {
@@ -409,9 +409,9 @@ ask_for_indi_list (CString ttl, bool reask)
  * ask_for_indi_key -- Have user identify person; return key
  *========================================================*/
 String
-ask_for_indi_key (CString ttl, ASK1Q ask1)
+ask_for_indi_key (CString ttl, ASK1Q ask1, Database *database)
 {
-	GNode *indi = ask_for_indi(ttl, ask1);
+	GNode *indi = ask_for_indi(ttl, ask1, database);
 	if (!indi) return NULL;
 	GNode *node = nztop(indi);
 	releaseRecord(indi);

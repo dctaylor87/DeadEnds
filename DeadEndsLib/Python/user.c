@@ -39,17 +39,26 @@ static PyObject *llpy_getindi (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, 
 {
   String prompt = _("Identify person for program:");
   GNode *rec;
-  static char *keywords[] = { "prompt", NULL };
+  LLINES_PY_DATABASE *py_database = 0;
+  Database *database;
+  static char *keywords[] = { "prompt", "database", NULL };
   LLINES_PY_RECORD *indi;
 
-  if (! PyArg_ParseTupleAndKeywords (args, kw, "|s", keywords, &prompt))
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|sO!", keywords, &prompt,
+				     &llines_database_type, &py_database))
     return NULL;
 
-  rec = rptui_ask_for_indi (prompt, DOASK1);
+  if (py_database)
+    database = py_database->lld_database;
+  else
+    database = currentDatabase;
+
+  rec = rptui_ask_for_indi (prompt, DOASK1, database);
 
   indi = PyObject_New(LLINES_PY_RECORD, &llines_individual_type);
   indi->llr_type = LLINES_TYPE_INDI;
   indi->llr_record = rec;
+  indi->llr_database = database;
   return (PyObject *)indi;
 }
 
@@ -83,6 +92,7 @@ static PyObject *llpy_getfam (PyObject *self ATTRIBUTE_UNUSED, PyObject *args , 
 
   family->llr_record = record;
   family->llr_type = LLINES_TYPE_FAM;
+  family->llr_database = database;
   return (PyObject *)family;
 }
 
@@ -122,18 +132,26 @@ static PyObject *llpy_getstr (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, P
   return Py_BuildValue ("s", buffer);
 }
 
-/* llpy_getindiset ([prompt]) --> SET */
+/* llpy_getindiset ([prompt], [database]) --> SET */
 
 static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *args, PyObject *kw)
 {
-  static char *keywords[] = { "prompt", NULL };
+  static char *keywords[] = { "prompt", "database", NULL };
   String prompt = _("Identify list of persons for program:");
   Sequence *seq = 0;
+  LLINES_PY_DATABASE *py_database = 0;
+  Database *database;
 
-  if (! PyArg_ParseTupleAndKeywords (args, kw, "|s", keywords, &prompt))
+  if (! PyArg_ParseTupleAndKeywords (args, kw, "|sO!", keywords, &prompt,
+				     &llines_database_type, &py_database))
     return NULL;
 
-  seq = rptui_ask_for_indi_list (prompt, true);
+  if (py_database)
+    database = py_database->lld_database;
+  else
+    database = currentDatabase;
+
+  seq = rptui_ask_for_indi_list (prompt, true, database);
   abort ();			/* XXX */
 }
 

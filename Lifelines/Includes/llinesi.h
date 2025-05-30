@@ -42,8 +42,8 @@ void advanced_person_edit(GNode *);
 void advanced_family_edit(GNode *);
 
 /* ask.c */
-GNode *ask_for_any(CString ttl, ASK1Q ask1);
-Sequence *ask_for_indiseq(CString ttl, char ctype, int *prc);
+GNode *ask_for_any(CString ttl, ASK1Q ask1, Database *database);
+Sequence *ask_for_indiseq(CString ttl, char ctype, int *prc, Database *database);
 
 /* browse.c */
 GNode *chooseAnyEvent(void);

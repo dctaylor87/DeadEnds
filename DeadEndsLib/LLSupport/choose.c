@@ -196,11 +196,11 @@ choosePointer (GNode *current, CString msg0, CString msgn)
  * fams: [IN]  want spousal families of indi ? (or families indi is child in)
  *========================================================*/
 GNode *
-chooseFamily (GNode *irec, CString msg0, CString msgn, bool fams)
+chooseFamily (GNode *irec, CString msg0, CString msgn, bool fams, Database *database)
 {
   GNode *rec=0;
   ASSERT (irec && ! irec->parent);
-  Sequence *seq = personToFamilies(nztop(irec), fams, currentDatabase->recordIndex);
+  Sequence *seq = personToFamilies(nztop(irec), fams, database->recordIndex);
   if (!seq)
     {
       if (msg0)
