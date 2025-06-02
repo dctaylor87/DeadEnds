@@ -3,7 +3,7 @@
 //  test.c holds test functions used during development.
 //
 //  Created by Thomas Wetmore on 5 October 2023.
-//  Last changed on 7 December 2024.
+//  Last changed on 1 June 2025.
 
 #include <stdio.h>
 #include <stdint.h>
@@ -33,7 +33,7 @@
 #define gms getMsecondsStr()
 
 static bool debugging = false;
-extern FunctionTable *procedureTable;
+extern FunctionTable *procedures;
 
 extern void testSequence(Database*, int);
 static Database *createDatabaseTest(String, int, ErrorLog*);

@@ -5,14 +5,15 @@
 //    DeadEnds programs. Symbol tables are implented with hash tables.
 //
 // Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 24 May 2025.
+// Last changed on 1 June 2025.
 //
 
 #ifndef symboltable_h
 #define symboltable_h
 
-typedef struct PValue PValue; // Forward reference.
-typedef struct PNode PNode; // Forward reference.
+typedef struct PValue PValue;
+typedef struct PNode PNode;
+typedef struct Frame Frame;
 
 #include "standard.h"
 #include "hashtable.h"
@@ -20,11 +21,10 @@ typedef struct PNode PNode; // Forward reference.
 #include "pvalue.h"
 #include "frame.h"
 
-// A SymbolTable holds DeadEnds script variables and their values.
+// A SymbolTable holds DeadEnds script variables and their Pvalues.
 typedef HashTable SymbolTable;
 
-// A Symbol is an element of a SymbolTable. ident is the name of a variable/identifier, and
-// value is its PValue.
+// A Symbol is an element in a SymbolTable; ident is the name of a variable/identifier, and value is its PValue.
 typedef struct Symbol {
 	CString ident;
 	PValue *value;
@@ -33,8 +33,10 @@ typedef struct Symbol {
 //  Interface to SymbolTable.
 SymbolTable *createSymbolTable(void);
 void deleteSymbolTable(SymbolTable*);
-void assignValueToSymbol(SymbolTable*, CString, PValue);
-PValue getValueOfSymbol(SymbolTable*, CString);
+void assignValueToSymbol(Context*, CString, PValue);
+void assignValueToSymbolTable(SymbolTable*, CString, PValue);
+PValue getValueOfSymbol(Context*, CString);
+PValue getValueFromSymbolTable(SymbolTable*, CString);
 void showSymbolTable(SymbolTable*); // Debug.
 
 #endif // symboltable_h

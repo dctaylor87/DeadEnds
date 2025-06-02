@@ -3,7 +3,7 @@
 // intrpmath.c has the built-in script functions for math and logic.
 //
 // Created by Thomas Wetmore on 17 March 2023.
-// Last changed on 24 May 2025.
+// Last changed on 31 May 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -168,12 +168,11 @@ PValue __incr(PNode* pnode, Context* context, bool* errflg) {
     if (pnode->type != PNIdent) return nullPValue;
     String ident = pnode->identifier;
     if (!ident)  return nullPValue;
-    SymbolTable* table = context->frame->table;
-    PValue pvalue = getValueOfSymbol(table, ident);
+    PValue pvalue = getValueOfSymbol(context, ident);
     if (pvalue.type != PVInt) return nullPValue;
     *errflg = false;
     pvalue.value.uInt += 1;
-    assignValueToSymbol(table, ident, pvalue);
+    assignValueToSymbol(context, ident, pvalue);
     return nullPValue;
 }
 
@@ -185,12 +184,11 @@ PValue __decr(PNode* pnode, Context* context, bool* errflg) {
     if (pnode->type != PNIdent) return nullPValue;
     String ident = pnode->identifier;
     if (!ident) return nullPValue;
-    SymbolTable* table = context->frame->table;
-    PValue pvalue = getValueOfSymbol(table, ident);
+    PValue pvalue = getValueOfSymbol(context, ident);
     if (pvalue.type != PVInt) return nullPValue;
     *errflg = false;
     pvalue.value.uInt -= 1;
-    assignValueToSymbol(table, ident, pvalue);
+    assignValueToSymbol(context, ident, pvalue);
     return nullPValue;
 }
 

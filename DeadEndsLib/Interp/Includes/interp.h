@@ -3,7 +3,7 @@
 // interp.h is the header file for the DeadEnds script interpreter.
 //
 // Created by Thomas Wetmore on 8 December 2022.
-// Last changed on 22 May 2025.
+// Last changed on 31 May 2025.
 
 #ifndef interp_h
 #define interp_h
@@ -17,6 +17,7 @@
 #include "database.h"
 
 // Forward references.
+typedef struct Script Script;
 typedef struct PNode PNode;
 typedef struct HashTable SymbolTable;
 typedef struct Frame Frame;
@@ -32,12 +33,13 @@ typedef enum InterpType {
 void initializeInterpreter(Database*);
 void initset(void);
 void initrassa(void);
-void parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
+Context* parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
 void finishInterpreter(void);
 void finishrassa(File*);
-void progmessage(int, CString);
+//void progmessage(int, CString);
 
-void interpScript(Database*, String);
+//void interpScript(Database*, String);
+void interpScript(Context*, File*);
 InterpType interpret(PNode*, Context*, PValue*);
 InterpType interpChildren(PNode*, Context*, PValue*);
 InterpType interpSpouses(PNode*, Context*, PValue*);
@@ -72,16 +74,11 @@ PNode *iden_node(String);
 bool iistype(PNode*, PNType);
 int num_params(PNode*);
 void scriptError(PNode*, String, ...);
-//void show_pnode(PNode*);
-//void show_pnodes(PNode*);
-PNode* string_node(String);
 int yylex(void);
 int yyparse(ErrorLog *errorLog);
 
 bool setScriptOutputFile (CString filename, bool append, CString *errorMessage);
 void poutput(String);
-//void interp_main(void);
-
 // Program running state flags.
 extern bool programParsing;
 extern bool programRunning;
@@ -92,6 +89,8 @@ extern bool callTracing;
 extern bool returnTracing;
 extern bool symbolTableTracing;
 
+extern SymbolTable *globals;
+extern FunctionTable *functions;
 extern void adjust_cols (String str);
 
 #endif // interp_h

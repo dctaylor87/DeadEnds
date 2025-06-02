@@ -235,7 +235,7 @@ static struct {
     { "func",     FUNC_TOK },
     { "if",       IF },
     { "mothers",  MOTHERS },
-    { "Parents",  PARENTS },
+    { "parents",  PARENTS },
     { "proc",     PROC },
     { "return",   RETURN },
     { "spouses",  SPOUSES },

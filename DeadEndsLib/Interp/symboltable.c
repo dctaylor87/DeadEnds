@@ -1,9 +1,16 @@
-// DeadEnds
 //
-// symboltable.c holds the functions that implement SymbolTables.
+//  DeadEnds Library
+//  symboltable.c holds the functions that implement SymbolTables.
 //
-// Created by Thomas Wetmore on 23 March 2023.
-// Last changed on 22 May 2025.
+//  Symbols own their own memeory. When a Symbol is looked up a copy is returned, including a copy of a string
+//  if the Symbol is a string. The functions that look up Symbols (getSymbol...) return copies of the Symbols.
+//
+//  There are two versions of the assign and get functions, one that takes a SymbolTable, and one that takes
+//  a Context.
+//
+//  Created by Thomas Wetmore on 23 March 2023.
+//  Last changed on 1 June 2025.
+//
 
 #include <stdint.h>
 
@@ -11,11 +18,10 @@
 #include "refnindex.h"
 #include "errors.h"
 #include "symboltable.h"
+#include "frame.h"
+#include "context.h"
 
-// globalTable holds the Symbols defined in the global scope.
-extern SymbolTable* globalTable;
-
-// compare compares two Symbols by ident fields.
+// compare compares two Symbols by their ident fields.
 static int compare(CString a, CString b) {
 	return strcmp(a, b);
 }
@@ -55,13 +61,28 @@ void deleteSymbolTable(SymbolTable* table) {
     deleteHashTable(table);
 }
 
-// assignValueToSymbol assigns a value to a Symbol. If the Symbol isn't in the local table, check
-// the global table.
-void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
+// assignValueToSymbolTable assigns a value to a Symbol.
+void assignValueToSymbolTable(SymbolTable* table, CString ident, PValue pvalue) {
+    // Prepare the value to put in the symbol table.
+    PValue* copy = clonePValue(&pvalue);
+    // If the symbol exists free its old value.
+    Symbol* symbol = searchHashTable(table, ident);
+    if (symbol) {
+        freePValue(symbol->value);
+        symbol->value = copy;
+    // Else add a new symbol with the new value.
+    } else {
+        addToHashTable(table, createSymbol(strsave(ident), copy), true);
+    }
+}
+
+// assignValueToSymbol assigns a PValue to a Symbol in a Context. If the Symbol isn't in the current Frame's
+// table, check the global table.
+void assignValueToSymbol(Context* context, CString ident, PValue pvalue) {
    // Determine symbol table to use.
-    SymbolTable* table = symtab;
-    if (!isInHashTable(symtab, ident) && isInHashTable(globalTable, ident)) {
-        table = globalTable;
+    SymbolTable* table = context->frame->table;
+    if (!isInHashTable(table, ident) && isInHashTable(context->globals, ident)) {
+        table = context->globals;
     }
     // Prepare the value to put in the symbol table.
     PValue* copy = clonePValue(&pvalue);
@@ -76,18 +97,23 @@ void assignValueToSymbol(SymbolTable* symtab, CString ident, PValue pvalue) {
     }
 }
 
-// getValueOfSymbol gets the value of a Symbol from a SymbolTable; PValue is returned on stack..
-PValue getValueOfSymbol(SymbolTable* symtab, CString ident) {
+// getValueFromSymbolTable gets the value of a Symbol from a SymbolTable; PValue is returned on stack.
+PValue getValueFromSymbolTable(SymbolTable* symtab, CString ident) {
     Symbol *symbol = searchHashTable(symtab, ident);
-    if (!symbol) symbol = searchHashTable(globalTable, ident);
     if (!symbol || !symbol->value) return nullPValue;
-
-    // Return a clone of the PValue (deep enough)
     return cloneAndReturnPValue(symbol->value);
 }
 
+// getValueOfSymbol gets the value of a symbol from a Context; the PValue is returned on the stack.
+PValue getValueOfSymbol(Context* context, CString ident) {
+    SymbolTable* locals = context->frame->table;
+    Symbol* symbol = searchHashTable(locals, ident);
+    if (!symbol) symbol = searchHashTable(context->globals, ident);
+    if (!symbol || !symbol->value) return nullPValue;
+     return cloneAndReturnPValue(symbol->value);
+}
+
 // showSymbolTable shows the contents of a SymbolTable. For debugging.
-// Assumes caller has provided a title if desired.
 void showSymbolTable(SymbolTable* table) {
 	for (int i = 0; i < table->numBuckets; i++) {
 		Bucket *bucket = table->buckets[i];
