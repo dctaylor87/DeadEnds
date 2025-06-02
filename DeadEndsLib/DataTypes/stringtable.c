@@ -57,7 +57,7 @@ void addToStringTable(HashTable *table, CString key, CString value) {
 
 // fixString adds an element to a StringTable that maps a String to itself; key and value
 // point to different Strings.
-String fixString(StringTable *table, CString string) {
+CString fixString(StringTable *table, CString string) {
 	String saved = searchStringTable(table, string);
 	if (saved) return saved;
 	addToStringTable(table, string, string);

@@ -375,7 +375,7 @@ PValue __indi(PNode* pnode, Context* context, bool* errflg) {
         *errflg = true;
         return nullPValue;
     }
-    String key = keyToKey(value.value.uString);
+    CString key = keyToKey(value.value.uString);
     GNode* person = keyToPerson(key, context->database->recordIndex);
     if (person == null) {
         scriptError(pnode, "could not find a person with the key '%s'", key);

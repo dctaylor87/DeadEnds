@@ -37,7 +37,7 @@ typedef struct HashTable {
 } HashTable;
 
 // User interface to HashTable.
-HashTable* createHashTable(CString(*g)(void*), int(*c)(CString, CString), void(*d)(void*), int numBuckets);
+HashTable* createHashTable(CString(*g)(const void*), int(*c)(CString, CString), void(*d)(void*), int numBuckets);
 void deleteHashTable(HashTable*);
 bool isInHashTable(HashTable*, CString key);
 void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex);

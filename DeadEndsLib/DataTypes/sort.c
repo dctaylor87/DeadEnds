@@ -20,7 +20,7 @@ static int partition(int left, int right, void *pivot);
 
 // State variables used by the sort functions.
 static void** lelements;  // lelements is the array of elements.
-static CString (*lgetKey)(void*); // static getKey function.
+static CString (*lgetKey)(const void*); // static getKey function.
 static int (*lcompare)(CString, CString); // static compare function.
 
 // sortElements is the external interface for sorting an array of elements.
@@ -118,4 +118,3 @@ void insertAtIndex(void** elements, int length, const void* element, int index) 
 	}
 	elements[index] = element;
 }
-

@@ -136,12 +136,11 @@ bool isZeroVUnion(PVType type, VUnion vunion) {
 //}
 //#endif
 // * __getfam -- Have user identify family
-// *   usage: getfam(IDEN [,STRING]) --> VOID
+// *   usage: getfam(IDEN) --> VOID
 // *=======================================*/
 
 PValue __getfam (PNode *pnode, Context *context, bool *eflg) {
   PNode *iden = pnode->arguments;
-  PNode *expr = iden->next;
 
   if (iden->type != PNIdent) {
     *eflg = true;
@@ -151,8 +150,7 @@ PValue __getfam (PNode *pnode, Context *context, bool *eflg) {
   GNode *fam = ask_for_fam (_("Enter a spouse from family."),
 			    _("Enter a sibling from family."),
 			    null);
-  assignValueToSymbol(context->frame->table, iden->identifier,
-		      PVALUE(PVGNode, uGNode, fam));
+  assignValueToSymbol(context, iden->identifier, PVALUE(PVGNode, uGNode, fam));
   return nullPValue;
 }
 
@@ -469,16 +467,16 @@ PValue __extractdate(PNode *pnode, Context *context, bool* errflg) {
     else
         str = gnode->value;
     if (!str || *str == 0) {
-	assignValueToSymbol(context->frame->table, dvar->identifier, PVALUE(PVInt, uInt, 0));
-	assignValueToSymbol(context->frame->table, mvar->identifier, PVALUE(PVInt, uInt, 0));
-	assignValueToSymbol(context->frame->table, yvar->identifier, PVALUE(PVInt, uInt, BAD_YEAR));
+	assignValueToSymbol(context, dvar->identifier, PVALUE(PVInt, uInt, 0));
+	assignValueToSymbol(context, mvar->identifier, PVALUE(PVInt, uInt, 0));
+	assignValueToSymbol(context, yvar->identifier, PVALUE(PVInt, uInt, BAD_YEAR));
         return nullPValue;  // Not considered an error.
     }
     String stryear;
     extractDate(str, &daormo, &day, &month, &year, &stryear);
     assignValueToSymbol(context, dvar->identifier, PVALUE(PVInt, uInt, day));
-	assignValueToSymbol(context, mvar->identifier, PVALUE(PVInt, uInt, month));
-	assignValueToSymbol(context, yvar->identifier, PVALUE(PVInt, uInt, year));
+    assignValueToSymbol(context, mvar->identifier, PVALUE(PVInt, uInt, month));
+    assignValueToSymbol(context, yvar->identifier, PVALUE(PVInt, uInt, year));
     *errflg = false;
     return nullPValue;
 }

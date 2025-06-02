@@ -12,7 +12,6 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	choose.c \
 	codesets.c \
-	datei.c \
 	errlog.c \
 	expandvars.c \
 	gstrings.c \

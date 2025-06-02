@@ -49,7 +49,7 @@ struct GNode {
 #define get_nrefcnt(node)	((node)->refcount)
 
 // Application programming interface to this type.
-GNode* createGNode(CString key, String tag, String value, GNode* parent);
+GNode* createGNode(CString key, CString tag, CString value, GNode* parent);
 void freeGNode(GNode*);
 void freeGNodes(GNode*);
 int gnodeLevel(GNode* node);

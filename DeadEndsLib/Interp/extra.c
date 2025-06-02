@@ -63,7 +63,7 @@ PValue __getindi (PNode *pnode, Context *context, bool* eflg)
     if (!key)
       return nullPValue;
 
-    assignValueToSymbol(context->frame->table, iden->identifier,
+    assignValueToSymbol(context, iden->identifier,
 			PVALUE (PVPerson, uGNode,
 				keyToPerson (key, context->database->recordIndex)));
     return nullPValue;
@@ -160,8 +160,7 @@ PValue __getint (PNode *pnode, Context *context, bool* eflg)
       /* should we call scriptError?  LL is silent, no message */
       return nullPValue;
     }
-  assignValueToSymbol (context->frame->table, iden->identifier,
-		       PVALUE (PVInt, uInt, (long)num));
+  assignValueToSymbol (context, iden->identifier, PVALUE (PVInt, uInt, (long)num));
   return nullPValue;
 }
 
@@ -195,8 +194,7 @@ PValue __getstr (PNode *pnode, Context *context, bool* eflg)
       /* should we call scriptError?  LL is silent, no message */
       return nullPValue;
     }
-  assignValueToSymbol (context->frame->table, iden->identifier,
-		       createStringPValue (buffer));
+  assignValueToSymbol (context, iden->identifier, createStringPValue (buffer));
   return nullPValue;
 }
 

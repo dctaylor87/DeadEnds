@@ -11,6 +11,7 @@
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"
+#include "operations.h"
 
 // removeChildFromFamily removes an existing child from an existing family.
 bool removeChildFromFamily(GNode* child, GNode* family) {

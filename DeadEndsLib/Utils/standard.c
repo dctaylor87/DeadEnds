@@ -31,7 +31,7 @@
 #define ALLOCLOGFILE "./alloc.log"
 
 static FILE *allocLogFile = null;  // The logging file.
-static bool logopen = false;       // The logging file is open for writing.
+//static bool logopen = false;       // The logging file is open for writing.
 static bool loggingAllocs = false; // Whether currently logging.
 static long bytesAllocated = 0;
 static long bytesFreed = 0;

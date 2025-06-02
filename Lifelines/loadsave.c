@@ -107,7 +107,7 @@ load_gedcom (bool picklist, Database *database)
 {
 	String srcdir=NULL;
 	String filename = 0;
-	String fullpath=0;
+	CString fullpath=0;
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
 

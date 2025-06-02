@@ -33,7 +33,7 @@ int numGNodeFrees(void) { return gnodeFrees; }
 
 // getFromTagTable returns the persistent tag value from the tag table.
 static int numBucketsInTagTable = 67;
-static String getFromTagTable(String tag) {
+static String getFromTagTable(CString tag) {
 	if (tagTable) return fixString(tagTable, tag);
 	tagTable = createStringTable(numBucketsInTagTable);
 	return fixString(tagTable, tag);
@@ -57,7 +57,7 @@ void freeGNode(GNode* node) {
 // createGNode creates a GNode from a key, tag, value, and pointer to parent. When a GNode is
 // created the key and value, if there, are allocated in the heap, and the tag pointer is taken
 // from the tag table. This is the only time that memory for these fields is handled.
-GNode* createGNode(CString key, String tag, String value, GNode* parent) {
+GNode* createGNode(CString key, CString tag, CString value, GNode* parent) {
 	gnodeAllocs++;
 	GNode* node = (GNode*) stdalloc(sizeof(GNode));;
 	if (! node)

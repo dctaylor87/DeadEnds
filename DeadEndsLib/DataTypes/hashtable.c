@@ -17,7 +17,7 @@ static void* searchBucket(Bucket*, CString key, CString(*g)(const void*), int(*c
 
 // createHashTable creates and returns a HashTable. getKey is a function that returns the key of
 // an element, and delete is an optional function that frees an element.
-HashTable* createHashTable(CString(*getKey)(void*), int(*compare)(CString, CString),
+HashTable* createHashTable(CString(*getKey)(const void*), int(*compare)(CString, CString),
 						   void(*delete)(void*), int numBuckets) {
 	HashTable *table = (HashTable*) stdalloc(sizeof(HashTable));
 	if (! table)

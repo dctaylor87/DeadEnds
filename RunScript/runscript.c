@@ -22,7 +22,7 @@
 static void usage(void);
 static void getArguments(int, char**, CString*, CString*);
 static void getEnvironment(CString*, CString*);
-static void runScript(Database*, CString);
+//static void runScript(Database*, CString);
 
 Database *currentDatabase = 0;
 

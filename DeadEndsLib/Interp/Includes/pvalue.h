@@ -83,7 +83,7 @@ return NULL;\
 // PValue Arithmetic and Logic Functions.
 //PValue addPValues(PValue, PValue, bool* eflag);
 PValue subPValues(PValue, PValue, bool* eflag);
-//PValue mulPValues(PValue, PValue, bool* eflag);
+PValue mulPValues(PValue, PValue, bool* eflag);
 PValue divPValues(PValue, PValue, bool* eflag);
 PValue modPValues(PValue, PValue, bool* eflag);
 PValue negPValue(PValue, bool* eflag);

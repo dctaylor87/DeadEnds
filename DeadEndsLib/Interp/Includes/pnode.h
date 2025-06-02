@@ -36,10 +36,10 @@ typedef PValue (*BIFunc)(PNode *node, Context *context, bool* errflag);
 // PNode is the structure of the program nodes.
 struct PNode {
 	// Fields found in all program nodes.
-	PNType type;        // Type of this program node.
-	PNode  *parent;     // Parent of this node; null in root nodes.
-	int    lineNumber;  // Line number of this node from its program file.
-	String fileName;    // Program file this node is from.
+	PNType  type;       // Type of this program node.
+	PNode   *parent;    // Parent of this node; null in root nodes.
+	int     lineNumber; // Line number of this node from its program file.
+	CString fileName;   // Program file this node is from.
 
 	PNode  *next;       // Next node in a list (e.g., statement blocks, arguments).
 	long   intCons;     // Integer (C long) constant.

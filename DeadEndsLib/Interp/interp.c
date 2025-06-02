@@ -855,8 +855,8 @@ void showRuntimeStack(Context* context, PNode* pnode) {
     }
     printf("Global symbols:\n");
     FORHASHTABLE(context->globals, element)
-    Symbol* symbol = (Symbol*) element;
-    String ident = symbol->ident;
+        Symbol* symbol = (Symbol*) element;
+        //String ident = symbol->ident;
         String svalue = pvalueToString(*(symbol->value), false);
         String type = typeOf(*(symbol->value));
         printf("    %s: %s: %s\n", symbol->ident, svalue, type);
