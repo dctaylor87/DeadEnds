@@ -44,20 +44,42 @@ DeadEnds in some fashion.
 Those two audiences have vastly different needs and interests.
 
 This document concerns itself with the @b{use} of the Python DeadEnds
-module, called llines.  If you wish to @b{modify} the C code that
+module, called @code{llines}.  If you wish to @b{modify} the C code that
 implements it, please consult the document ``DeadEnds Python Internals''.
 
 @section Function Names And Arguments
 
+It should be obvious, but to be clear, the Python Extension runs a
+full Python interpreter with an embedded Python module that allows
+access to the DeadEnds database.  The names and arguments of the
+functions within the extension module generally mirror those of the
+DeadEnds Report writing language.
+
 If you are already familiar with the DeadEnds Report Writing language
 or the LifeLines Report Writing language, you will have an easier time
-learning the Python Extension Language as there is a fair bit of
+learning the Python Extension Language module as there is a fair bit of
 similarity in the function names and their behavior.
 
 Many of the function names are the same and take the same arguments in
 the same order as those in the DeadEnds Report Writing language.
 
-Three immediate differences --
+While some of the functions described herein are module functions,
+most are instance methods of a particular type.  The @code{llines}
+module defines Python types for each type of RECORD and for NODEs
+
+The distinction in the @code{llines} Python module between NODEs and
+RECORDs is largely historical.  In LifeLines, they are different data
+structures.  In DeadEnds, in the C code, they are the same struct.
+
+Someday Python RECORDs might become a specialization of Python NODEs.
+Until then, you will need to ``convert'' when appropriate.
+
+For example, you cannot call @code{nodeiter} on a RECORD.  But, you
+can call @code{top_node}, and the use the result -- a NODE -- to call
+it.
+
+Here are three immediate differences between the embedded Python
+module and the DeadEnds script writing functions --
 
 @itemize
 @item
@@ -69,7 +91,7 @@ If the function operates on an instance of a particular DeadEnds
 The variables, if any, to be set are not passed to the function.
 
 @item
-All arguments have keyword names and as a result they can be given
+@b{All} arguments have keyword names and as a result they can be given
 either by name or by position.  And -- where reasonable -- they are
 optional.
 @end itemize
@@ -159,10 +181,79 @@ module name.
 If it becomes clear that backwards compatibility is not an issue, then
 the name could change.  For now, it is @code{llines}.
 
+@section Tutorial Ahnentafel Report
+
+Those who have read either the LifeLines or the DeadEnds Report
+writing manuals may recall the tutorial ahnentafel report presented
+there.
+
+Here is that tutorial ahnentafel report translated to Python and using
+the @code{llines} extension module.
+
+@example
+import llines
+import sys
+
+def main ():
+    indi = llines.getindi()
+
+    # list of people needing to be displayed
+    ilist = []
+
+    # ancestor numbers for people on ilist
+    alist = []
+
+    ilist.append(indi)
+    alist.append(1)
+
+    # Our basic loop is we take the next person who needs to be
+    # displayed, display them, and then record their parents as
+    # needing to be displayed.
+
+    for indi in ilist:
+        # display person we just pulled off ilist
+
+        ahnen = alist.pop(0)
+
+        print(ahnen, ". ", indi.name())
+        e = indi.birth()
+        if e:
+            print(" b. ", e.long())
+        e = indi.death()
+        if e:
+            print(" d. ", e.long())
+        # add person’s parents to list to display
+        par = indi.father()
+        if par:
+            ilist.append(par)
+            alist.append(2*ahnen)
+
+        par = indi.mother()
+        if par:
+            ilist.append(par)
+            alist.append(1 + 2*ahnen)
+
+if __name__ == '__main__':
+    main()
+    sys.stdout.flush()
+@end example
+
 @chapter RECORDS
-@section Individual Records
+In DeadEnds there a couple of differences between a RECORD and a NODE.
+A RECORD, by its nature, is always part of a database, whereas a NODE
+can exist without being part of a database.
+
+A NODE can be anywhere within a node tree.  It can point to a parent
+node, a sibling node, and a child node.  By contrast, a RECORD has no
+parent, no siblings, and usually has children.  Further, it always has
+a key.
+
+There are several types of RECORDs each with its own type.  The two
+most important RECORD types are Individual Records and Family Records.
+
+@section Individual Record Functions
 @subsection Name related
-The following functions are instance methods.
+@subsubsection Instance Methods
 
 @deftypefun INDI name ([caps]) @arrow{} STRING or @code{None}
 @findex name
@@ -285,7 +376,7 @@ are used.
 @end deftypefun
 
 @subsection Event NODE related
-The following functions are instance methods.
+@subsubsection Instance Methods
 @deftypefun INDI birth (void) @arrow{} NODE or @code{None}
 @findex birth
 
@@ -307,7 +398,7 @@ Returns the first burial event of INDI; @code{None} if no burial event is found.
 
 @end deftypefun
 @subsection Family related
-The following functions are instance methods.
+@subsubsection Instance Methods
 @deftypefun INDI father (void) @arrow{} INDI or @code{None}
 @findex father
 
@@ -388,8 +479,7 @@ Selects and returns a family that INDI is in.  Returns @code{None} if
 INDI is not in any families or if the user cancels.
 
 @end deftypefun
-The following function is part of the module but is not an instance
-method:
+@subsubsection Module Functions
 @defun spouseset (SET) @arrow{} SET
 @findex spouseset
 
@@ -397,8 +487,8 @@ Returns the set of INDIs that are spouses of the input INDIs.
 
 @end defun
 @subsection Individual related
-The following functions are instance methods.
-@deftypefun INDI sex (void) @arrow{} "M", "F", "U"
+@subsubsection Instance Methods
+@deftypefun INDI sex (void) @arrow{} "M", "F", or "U"
 @findex sex
 
 Returns the sex of INDI ("M", "F", or "U")
@@ -427,7 +517,7 @@ have a value of ``U'' or ``X'', it is possible for @code{male} and
 @code{female} to both return False.
 
 @subsection Database related
-The following functions are instance methods.
+@subsubsection Instance Methods
 @deftypefun INDI key ([strip_prefix]) @arrow{} STRING.
 @findex key
 
@@ -451,8 +541,7 @@ Returns the previous INDI in the database (in key order).  Returns
 
 @end deftypefun
 
-The following functions are part of the module but are not instance
-methods:
+@subsubsection Module Functions
 
 @defun firstindi (void) @arrow{} INDI or @code{None}
 @findex firstindi
@@ -479,10 +568,10 @@ Returns an iterator that when called produces all the INDI records in
 the database in database order.
 @end defun
 
-@section Family Records
+@section Family Record Functions
 
 @subsection Event related
-The following functions are instance methods.
+@subsubsection Instance Methods
 
 @deftypefun FAM marriage (void) @arrow{} NODE or @code{None}
 @findex marriage
@@ -492,7 +581,7 @@ is found.
 @end deftypefun
 
 @subsection Person related
-The following functions are instance methods.
+@subsubsection Instance Methods
 
 @deftypefun FAM husband (void) @arrow{} INDI or @code{None}
 @findex husband
@@ -553,7 +642,7 @@ Returns @code{None} if FAM has no spouses or if the user cancels.
 @end deftypefun
 
 @subsection Database related
-The following functions are instance methods.
+@subsubsection Instance Methods
 
 @deftypefun FAM key ([strip_prefix]) @arrow{} STRING
 @findex key
@@ -577,8 +666,7 @@ Returns the previous family (in key order) in the database.
 Returns @code{None} if the beginning has been reached.
 
 @end deftypefun
-The following functions are part of the module but are not instance
-methods:
+@subsubsection Module Functions
 
 @defun firstfam (void) @arrow{} FAM or @code{None}
 @findex firstfam
@@ -606,13 +694,13 @@ Returns an iterator that when called produces all the FAM records in the
 database in key order.
 @end defun
 
-@section Event Records
+@section Event Record Functions
 
 When exchanging @acronym{GEDCOM} files with other researchers, please
 be aware that event records are a LifeLines / DeadEnds extension.
 They are not part of standard @acronym{GEDCOM}.
 
-The following function is an instance method.
+@subsection Instance Methods
 
 @deftypefun EVEN key ([strip_prefix]) @arrow{} STRING
 @findex key
@@ -623,8 +711,7 @@ stripped.
 
 @end deftypefun
 
-The following function is part of the module but is not an instance
-method:
+@subsection Module Functions
 
 @defun events (void) @arrow{} Iterator
 @findex events
@@ -633,9 +720,8 @@ Returns an iterator that when called produces all EVEN records in the
 database in key order.
 @end defun
 
-@section Source Records
-
-The following function is an instance method.
+@section Source Record Functions
+@subsection Instance Methods
 
 @deftypefun SOUR key ([strip_prefix]) @arrow{} STRING
 @findex key
@@ -645,8 +731,7 @@ Returns the database key of the record.  If @code{strip_prefix} is
 stripped.
 @end deftypefun
 
-The following function is part of the module but is not an instance
-method:
+@subsection Module Functions
 
 @defun sources (void) @arrow{} Iterator
 @findex sources
@@ -655,9 +740,8 @@ Returns an iterator that when called produces all the SOUR records in the
 database in key order.
 @end defun
 
-@section Other Records
-
-The following function is an instance method.
+@section Other Record Functions
+@subsection Instance Methods
 
 @deftypefun OTHR key ([strip_prefix]) @arrow{} STRING
 @findex key
@@ -666,8 +750,7 @@ Returns the database key of the record.  If @code{strip_prefix} is
 stripped.
 @end deftypefun
 
-The following function is part of the module but is not an instance
-method:
+@subsection Module Functions
 
 @defun others (void) @arrow{} Iterator
 @findex others
@@ -678,8 +761,9 @@ database in key order.
 
 @section Person Set Functions
 
+@subsection Module Functions
 The functions in this section operate on sets of INDI Records.  They
-are not instance methods.
+are module functions, not instance methods.
 
 Note further, that while they are documented as taking a SET as input,
 the input need only be an iterable Python collection of INDIs -- for
@@ -723,6 +807,7 @@ Returns the set of INDIs that are children of the input INDIs.
 @end defun
 
 @section Record Agnostic
+@subsection Instance Methods
 The following functions are instance functions that apply to all types of RECORDs.
 @deftypefun INDI top_node (void) @arrow{} NODE
 @deftypefunx FAM top_node (void) @arrow{} NODE
@@ -733,7 +818,7 @@ Returns the NODE that is the top of the NODE tree associated with the RECORD.
 Works for each kind of RECORD.
 @end deftypefun
 
-The following functions are not instance methods:
+@subsection Module Functions
 
 @defun key_to_record (key, [type]) @arrow{} RECORD or None
 @findex key_to_record
@@ -772,8 +857,7 @@ the function @code{key_to_record}, above.
 
 @chapter NODES
 @section @acronym{GEDCOM} Node Functions
-
-The following functions are instance methods.
+@subsection Instance Methods
 
 @deftypefun NODE xref (void) @arrow{} STRING or @code{None}
 @findex xref
@@ -838,7 +922,7 @@ tree.
 
 Adds NODE into the @acronym{GEDCOM} tree with specified parent and
 specified previous sibling.  Returns the modified NODE.  Node
-@code{prev} MUST be a child of @code{parent}.  IF @code{prev} is None,
+@code{prev} MUST be a child of @code{parent}.  If @code{prev} is None,
 then NODE becomes the first child of parent.
 
 @end deftypefun
@@ -870,7 +954,7 @@ a matching tag will be returned.  If @code{tag} is omitted, is
 @end deftypefun
 
 @sp 1
-The following functions are not instance methods.
+@subsection Module Functions
 
 @defun create_node (tag, [value]) @arrow{} NODE
 Creates a node having the specified tag @code{tag} and value
@@ -879,9 +963,8 @@ strings.  The created node is returned.  NOTE: This CANNOT be used to
 create a reference, use @code{create_reference} for that.
 @end defun
 
-@section Event Nodes and Date Nodes
-
-The following functions are instance methods.
+@section Event Node and Date Node Functions
+@subsection Instance Methods
 
 @deftypefun NODE date (void) @arrow{} STRING or @code{None}
 @findex date
@@ -931,8 +1014,8 @@ the resulting string.
 NOTE: There is a non-instance version that takes a string.
 @end deftypefun
 
-The following functions affect how dates are presented.  They are not
-instance methods.
+@subsection Module Functions
+The following functions affect how dates are presented.
 
 @defun dayformat ([format]) @arrow{} INT.
 Sets the day format for stddate calls.  Returns the previous format.
@@ -1171,7 +1254,7 @@ to return the previous custom complex pic.
 @end defun
 
 @section Value Extraction Functions
-The following function is an instance function:
+@subsection Instance Methods
 
 @deftypefun NODE extractdate
 @findex extractdate
@@ -1179,7 +1262,7 @@ The following function is an instance function:
 XXX not yet implemented XXX
 @end deftypefun
 
-The following function is NOT an instance function:
+@subsection Module Functions
 
 @defun extractdatestr
 @findex extractdatestr
@@ -1188,8 +1271,7 @@ XXX not yet implemented XXX
 @end defun
 
 @chapter User Interaction Functions
-
-The following functions are instance methods.
+@section Instance Methods
 
 @deftypefun INDI choosechild (void) @arrow{} INDI
 @deftypefunx FAM choosechild (void) @arrow{} INDI
@@ -1212,7 +1294,7 @@ Select spouse of Individual.
 
 @end deftypefun
 
-The following functions are not instance methods.
+@section Module Functions
 
 @defun getindi ([prompt]) @arrow{} INDI
 @findex getindi
@@ -1319,6 +1401,7 @@ would first create a list of persons and then iterate through it.
 There are two sets of RECORD iterators.  Method iterators and Function
 iterators.
 
+@subsection Instance Methods
 The RECORD instance iterator methods are:
 @deftypefun Database individuals (void) @arrow{} Iterator
 Returns an iterator for individuals in Database.
@@ -1336,6 +1419,7 @@ Returns an iterator for events in Database.
 Returns an iterator for Others in Database.
 @end deftypefun
 
+@subsection Module Functions
 The RECORD function iterators are:
 @defun individuals ([database]) @arrow{} Iterator
 @defunx families ([database]) @arrow{} Iterator
@@ -1368,7 +1452,7 @@ Here @code{type} is one of @code{ITER_CHILDREN} or
 @end deftypefun
 @chapter Miscellaneous Functions
 
-The following functions are not instance methods.
+@section Module Functions
 
 @defun version (void) @arrow{} STRING
 Returns the version of DeadEnds
@@ -1526,10 +1610,12 @@ The functions @code{sin}, @code{cos}, @code{tan}, @code{arcsin},
 @findex arcsin
 @findex arccos
 @findex arctan
+@end itemize
 
 The functions mentioned in the aforementioned sections will not be
 implemented as Python provides equivalent functionality natively.
 
+@itemize
 @item Deprecated Functions
 
 The functions
@@ -1806,7 +1892,7 @@ There are two ways to invoke the Python embedding.
 
 One is to specify on the command line that you want to run a Python
 report.  To do this, instead of saying @code{-x reportname.ll} as you
-would to run a DE script, instead say @code{-p reportname.py}.
+would to run a DeadEnds script, instead say @code{-p reportname.py}.
 
 The other way is to specify @code{-P} on the command line.  This will
 invoke the interactive Python interpreter with the DeadEnds extensions
@@ -1816,11 +1902,11 @@ Like the DeadEnds report language, the DeadEnds Python interpreter has
 access to the full database.
 
 Use of the interactive interpreter is especially useful for speeding
-up the test-edit cycle.  It is also useful for small tests, for
+up the test-debug-edit cycle.  It is also useful for small tests, for
 resolving documentation ambiguities and errors, and for getting your
 feet wet.  It also allows you to run your script -- as that
 functionality is part of the core Python interpreter!  At the
-interactive interpreter prompt, just type:
+interactive interpreter prompt, you could, for example, type:
 @example
 exec(open("/path/to/script.py").read())
 @end example
@@ -1856,8 +1942,7 @@ These are, at some level, thoughts about possible future enhancements.
 They are not in any sense a commitment.
 
 @section RECORD or NODE Related
-
-The following functions are instance methods.
+@subsection Instance Methods
 
 @deftypefun INDI add_family (family, role, [position]) @arrow{} INDI
 @deftypefunx FAM add_individual (individual, role, [position]) @arrow{} FAM
@@ -1888,7 +1973,7 @@ it must be the top of its node tree) and have no siblings.  There
 would probably be other restrictions, yet to be determined, as well.
 @end deftypefun
 
-The following functions are not instance methods.
+@subsection Module Functions
 
 @defun create_reference (tag, RECORD) @arrow{} NODE
 Creates and returns a NODE having the specified @code{tag} that
