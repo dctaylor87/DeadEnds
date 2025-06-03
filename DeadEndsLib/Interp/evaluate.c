@@ -29,9 +29,7 @@
 
 static bool debugging = false;
 static bool builtInDebugging = false;
- bool symbolTableDebugging = false;
-extern FunctionTable *functionTable;
-extern bool programDebugging;
+bool symbolTableDebugging = false;
 static bool pvalueToBoolean(PValue pvalue);
 
 // evaluate is the generic evaluator. It evaluates a PNode expression into a PValue. Evaluation

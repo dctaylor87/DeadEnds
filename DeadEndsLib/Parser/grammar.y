@@ -23,13 +23,10 @@
 #if defined(DEBUGALLOCS)
 #include "remap-allocs.h"
 #endif
+#include "parse.h"
 
 // Global variables that form the interface between the lexer, parser and interpreter.
-extern SymbolTable *globals; // Global variables.
-extern FunctionTable *procedures;// User procedures.
-extern FunctionTable *functions; // User functions.
 extern List *pendingFiles; // Pending list of included files.
-extern int curLine; // Line number in current file.
 
 static PNode *this, *prev;
 
@@ -323,7 +320,6 @@ void join(PNode* list, PNode* last) {
 }
 
 void yyerror(ErrorLog *errorLog, const char *str) {
-	extern String curFileName;
 	Error *error = createError (syntaxError, curFileName, curLine, str);
 	addErrorToLog (errorLog, error);
 	Perrors++;

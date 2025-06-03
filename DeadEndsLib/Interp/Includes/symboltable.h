@@ -30,6 +30,8 @@ typedef struct Symbol {
 	PValue *value;
 } Symbol;
 
+extern bool symbolTableDebugging;
+
 //  Interface to SymbolTable.
 SymbolTable *createSymbolTable(void);
 void deleteSymbolTable(SymbolTable*);

@@ -15,6 +15,7 @@
 #include "lineage.h"
 #include "errors.h"
 #include "splitjoin.h"
+#include "import.h"
 
 static bool validateFamily(GNode*, CString name, RecordIndex*, IntegerTable*, ErrorLog*);
 extern bool importDebugging;

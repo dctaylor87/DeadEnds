@@ -22,6 +22,7 @@
 #include "locales.h"		/* CALLBACK_FNC, needed by lloptions.h */
 #include "lloptions.h"		/* getdeoptstr */
 #include "feedback.h"
+#include "frame.h"
 
 #define MAXROWS 512
 #define MAXCOLS 512
@@ -399,7 +400,6 @@ PValue __SHOWSTACK(PNode* pnode, Context* context, bool *errflg) {
 
 // __SHOWFRAME prints the current frame.
 // usage: showframe()
-extern void showFrame(Frame*);
 PValue __SHOWFRAME(PNode* pnode, Context* context, bool* errflg) {
     showFrame(context->frame);
     return nullPValue;

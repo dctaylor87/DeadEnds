@@ -14,13 +14,13 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "standard.h"
+#include "errors.h"
 #include "pnode.h"
 #include "functiontable.h"
+#include "interp.h"
 
 // Global tables filled by the by parseProgram() function.
-extern SymbolTable* globals; // Global variables.
-extern FunctionTable* functions; // User functions.
-extern FunctionTable* procedures; // User procedures.
 extern void printPNodeTreeAsSExpr(FILE *out, PNode *root);
 
 // Local functions.
@@ -44,7 +44,8 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "scriptFile is %s\n", scriptFile);
     fprintf(stderr, "scriptPath is %s\n", scriptPath);
 	// Parse the script into PNode trees.
-	parseProgram(scriptFile, scriptPath);
+        ErrorLog *errorLog = createErrorLog ();
+	parseProgram(scriptFile, scriptPath, errorLog);
 	fprintf(stderr, "%s: Script parsed.\n", getMsecondsStr());
 	// Generate S-Expressions from the PNode trees.
 	genSExpressions();

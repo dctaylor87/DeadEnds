@@ -28,18 +28,12 @@
 #include "sequence.h"
 #include "context.h"
 #include "stringset.h"
+#include "parse.h"
 
 bool callTracing = false;
 bool returnTracing = false;
 bool symbolTableTracing = false;
 bool frameTracing = false;
-
-extern FunctionTable *procedures; // User-defined procedures.
-extern FunctionTable *functions;  // User-defined functions.
-extern SymbolTable *globals;      // Global symbol table.
-extern String pnodeTypes[];
-extern String curFileName;
-extern int curLine;
 
 void showRuntimeStack(Context*, PNode*); // Move elsewhere?
 
@@ -707,7 +701,6 @@ InterpType interpWhileStatement (PNode* pnode, Context* context, PValue* pval) {
 }
 
 // interpProcCall interprets a user-defined procedure call.
-extern void showFrame(Frame*);
 InterpType interpProcCall(PNode* pnode, Context* context, PValue* pval) {
     // Get the procedure from the procedure table.
     String name = pnode->procName;
@@ -840,7 +833,6 @@ void scriptError(PNode* pnode, String fmt, ...) {
 
 // showRuntimeStack shows the contents of the run time stack. If pnode is not null its line number is shown;
 static StringSet* getParameterSet(PNode*);
-void showFrame(Frame*);
 void showRuntimeStack(Context* context, PNode* pnode) {
     // Get the bottom frame.
     Frame* frame = context->frame;

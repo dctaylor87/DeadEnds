@@ -22,7 +22,6 @@
 #include <unistd.h>  // sleep.
 
 static bool debugging = false;
-extern bool programParsing;
 
 // Shared global variables. Memory ownership of the first four are taken over by the Script object.
 SymbolTable* globals; // Global symbol table.

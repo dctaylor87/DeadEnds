@@ -33,7 +33,6 @@
 #define gms getMsecondsStr()
 
 static bool debugging = false;
-extern FunctionTable *procedures;
 
 extern void testSequence(Database*, int);
 static Database *createDatabaseTest(String, int, ErrorLog*);

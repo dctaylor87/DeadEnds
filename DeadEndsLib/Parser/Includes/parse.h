@@ -19,5 +19,6 @@ Context* parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
 extern CString curFileName;  // Name of file being parsed.
 extern int curLine;   // Current line number in file being parsed.
 extern FILE *currentFile;
+extern List* pendingFiles; // Files to be parsed.
 
 #endif // parse_h

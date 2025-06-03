@@ -26,5 +26,6 @@ typedef struct Frame {
 // Interface to Frame.
 Frame* createFrame(PNode*, PNode*, SymbolTable*, Frame*);
 void deleteFrame(Frame*);
+extern void showFrame(Frame* frame);
 
 #endif // frame_h

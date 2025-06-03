@@ -39,7 +39,6 @@ typedef struct Context Context;
 const PValue nullPValue = {PVNull, PV()};
 const PValue truePValue = PVALUE(PVBool, uBool, true);
 const PValue falsePValue = PVALUE(PVBool, uBool, false);
-extern bool symbolTableDebugging;
 
 static bool debugging = false;
 

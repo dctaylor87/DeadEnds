@@ -36,6 +36,8 @@ struct ImportFeedback
 
 typedef struct ImportFeedback ImportFeedback;
 
+extern bool importDebugging;
+
 List *getDatabasesFromFiles(List*, int vcodes, ErrorLog*);
 Database* getDatabaseFromFile(CString, int vcodes, ErrorLog*);
 RootList* getRecordListFromFile(CString, IntegerTable*, ErrorLog*);

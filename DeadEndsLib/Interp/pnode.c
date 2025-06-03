@@ -27,8 +27,6 @@ String pnodeTypes[] = {
     "Fathers", "Mothers", "FamsAsChild", "Notes"
 };
 
-extern FunctionTable *functions;  // parse.c
-
 // showPNode shows a PNode useful for debugging.
 void showPNode(PNode* pnode) {
     printf("%s ", pnodeTypes[pnode->type]);

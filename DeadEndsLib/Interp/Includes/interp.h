@@ -91,6 +91,7 @@ extern bool symbolTableTracing;
 
 extern SymbolTable *globals;
 extern FunctionTable *functions;
+extern FunctionTable *procedures;
 extern void adjust_cols (String str);
 
 #endif // interp_h
