@@ -1,17 +1,20 @@
-// DeadEnds
 //
-// gnodelist.c implements the GNodeList data type.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 27 May 2024.
-// Last changed on 12 December 2024.
+//  gnodelist.c implements the GNodeList data type.
+//
+//  Created by Thomas Wetmore on 27 May 2024.
+//  Last changed on 3 June 2025.
+//
 
 #include <stdint.h>
 
-#include "gnodelist.h"
-#include "readnode.h"
-#include "writenode.h"
-#include "integertable.h"
 #include "file.h"
+#include "gnodelist.h"
+#include "integertable.h"
+#include "readnode.h"
+#include "rootlist.h"
+#include "writenode.h"
 
 static bool debugging = true;
 

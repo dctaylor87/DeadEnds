@@ -1,20 +1,22 @@
-// DeadEnds
+//  DeadEnds Library
 //
-// recordindex.c holds the functions that implement RecordIndex, a HashTable that maps Gedcom
-// record keys to the roots of the GNode trees with those keys.
+//  recordindex.c holds the functions that implement RecordIndex, a HashTable that maps Gedcom
+//  record keys to the roots of the GNode trees with those keys.
 //
-// Created by Thomas Wetmore on 29 November 2022.
-// Last changed on 11 December 2024.
+//  Created by Thomas Wetmore on 29 November 2022.
+//  Last changed on 3 June 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "recordindex.h"
 #include "list.h"
 #include "sort.h"
-#include "gedcom.h"
+#include "gnode.h"
+//#include "gedcom.h"
 
 #define numRecordIndexBuckets 2047
 #define brownnose false
@@ -25,7 +27,7 @@ static int compare(CString left, CString right) {
 }
 
 // getKey returns the key of a RecordIndex element.
-static CString getKey(void* element) {
+static CString getKey(const void* element) {
 	return ((GNode*) element)->key;
 }
 

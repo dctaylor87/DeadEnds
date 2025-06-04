@@ -20,7 +20,7 @@ typedef struct IntegerElement {
 } IntegerElement;
 
 // User interface.
-extern CString integerGetKey(Word element);
+extern CString integerGetKey(void* element);
 IntegerTable *createIntegerTable(int numBuckets);
 void insertInIntegerTable(IntegerTable*, CString key, int value);
 int searchIntegerTable(IntegerTable*, CString key); // Returns NAN if key not there.

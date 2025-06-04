@@ -30,7 +30,7 @@
  * local types
  *********************************************/
 
-struct callback_info { CALLBACK_FNC fnc; Word uparm; };
+struct callback_info { CALLBACK_FNC fnc; void* uparm; };
 
 /*********************************************
  * local function prototypes
@@ -45,7 +45,7 @@ struct callback_info { CALLBACK_FNC fnc; Word uparm; };
  * add_listener -- add new listener to collection (no dup check)
  *=============================================*/
 void
-add_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
+add_listener (List **notifiees, CALLBACK_FNC fncptr, void* uparm)
 {
 	struct callback_info * info = 
 		(struct callback_info *)stdalloc(sizeof(*info));
@@ -54,7 +54,7 @@ add_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 	info->uparm = uparm;
 	if (!*notifiees)
 		*notifiees = createList (NULL, NULL, free, false);
-	enqueueList(*notifiees, (Word)info);
+	enqueueList(*notifiees, (void*)info);
 }
 /*===============================================
  * remove_listeners -- Empty & remove list
@@ -72,7 +72,7 @@ remove_listeners (List **notifiees)
  *  (removes first instance)
  *=============================================*/
 void
-delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
+delete_listener (List **notifiees, CALLBACK_FNC fncptr, void* uparm)
 {
 	/* Our lists don't have remove from middle, so we just make a new copy */
 	List *lold = 0;
@@ -88,7 +88,7 @@ delete_listener (List **notifiees, CALLBACK_FNC fncptr, Word uparm)
 			info->fnc = NULL;
 			stdfree(info);
 		} else {
-			enqueueList(*notifiees, (Word)info);
+			enqueueList(*notifiees, (void*)info);
 		}
 	}
 	deleteList(lold);

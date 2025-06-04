@@ -18,6 +18,7 @@
 
 #include "rfmt.h"
 #include "recordindex.h"
+#include "database.h"
 #include "sequence.h"
 #include "ask.h"
 #include "refnindex.h"

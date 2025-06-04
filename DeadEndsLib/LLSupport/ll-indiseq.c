@@ -43,6 +43,7 @@
 #include "porting.h"
 //#include "ll-porting.h"
 #include "standard.h"
+#include "database.h"
 #include "sequence.h"
 #include "gnode.h"
 #include "zstr.h"

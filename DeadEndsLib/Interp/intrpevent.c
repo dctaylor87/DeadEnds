@@ -1,18 +1,23 @@
-// DeadEnds
 //
-// intrpevent.c has the built-in functions for events, dates and places.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 17 March 2023.
-// Last changed on 30 April 2025.
+//  intrpevent.c has the built-in functions for events, dates and places.
+//
+//  Created by Thomas Wetmore on 17 March 2023.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
-#include "refnindex.h"
+//#include "refnindex.h"
+#include "gnode.h"
+#include "functiontable.h"
 #include "pnode.h"
+#include "interp.h"
 #include "pvalue.h"
-#include "evaluate.h"
+//#include "evaluate.h"
 #include "builtintable.h"
 #include "date.h"
 

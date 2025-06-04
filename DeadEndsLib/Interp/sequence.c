@@ -1,29 +1,34 @@
-// DeadEnds
 //
-// sequence.c holds the functions that implement the Sequence data type that handles sets of
-// persons and other record types. It underlies the indiseq data type of DeadEnds Script.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 1 March 2023.
-// Last changed on 20 May 2025.
+//  sequence.c holds the functions that implement the Sequence data type that handles sets of
+//  persons and other record types. It underlies the indiseq data type of DeadEnds Script.
+//
+//  Created by Thomas Wetmore on 1 March 2023.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
-#include "refnindex.h"
-#include "sequence.h"
-#include "gnode.h"
-#include "lineage.h"
 #include "gedcom.h"
+#include "gnode.h"
+#include "functiontable.h"
 #include "pnode.h"
 #include "interp.h"
-#include "name.h"
+#include "lineage.h"
 #include "list.h"
+#include "name.h"
+#include "refnindex.h"
+#include "sequence.h"
 #include "splitjoin.h"
-#include "stringtable.h"
 #include "sort.h"
-#include "database.h"
+#include "stringtable.h"
 #include "writenode.h"
+
+//#include "pnode.h"
+//#include "database.h"
 
 //static bool debugging = false;
 static int numBucketsInSequenceTables = 359;

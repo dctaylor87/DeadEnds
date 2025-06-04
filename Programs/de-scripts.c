@@ -8,14 +8,16 @@
 
 #include "standard.h"
 #include "parse.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "pnode.h"
-#include "interp.h"
 #include "functiontable.h"
+#include "interp.h"
 #include "recordindex.h"
 #include "database.h"
 #include "file.h"
 #include "context.h"
+#include "pvalue.h"
 
 #include "deadends.h"
 

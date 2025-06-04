@@ -47,6 +47,7 @@
 #include "translat.h"
 #include "feedback.h"
 #include "uiio.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"

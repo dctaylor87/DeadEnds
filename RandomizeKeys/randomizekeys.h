@@ -10,12 +10,13 @@
 #define randomizekeys_h
 
 #include <stdio.h>
+#include "file.h"
+#include "gedcom.h"
 #include "import.h"
 #include "gnodelist.h"
 #include "utils.h"
 #include "stringtable.h"
 #include "generatekey.h"
 #include "writenode.h"
-#include "file.h"
 
 #endif // randomizekeys_h

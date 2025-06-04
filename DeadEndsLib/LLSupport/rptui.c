@@ -21,6 +21,7 @@
 
 #include "standard.h"
 #include "recordindex.h"
+#include "database.h"
 #include "sequence.h"
 #include "locales.h"
 #include "ui.h"

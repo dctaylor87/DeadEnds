@@ -13,6 +13,8 @@
 #include "utils.h"
 #include "list.h"
 #include "database.h"
+#include "gedcom.h"
+#include "file.h"
 #include "import.h"
 #include "errors.h"
 

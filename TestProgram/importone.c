@@ -8,10 +8,15 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "database.h"
+#include "errors.h"
+#include "list.h"
+#include "nameindex.h"
 #include "standard.h"
 #include "errors.h"
 
 #include "file.h"
+#include "gedcom.h"
 #include "import.h"
 #include "utils.h"
 

@@ -1,21 +1,25 @@
-// DeadEnds
 //
-// functable.c has the table of built-in functions in the DeadEnds scripting language.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 10 January 2023.
-// Last changed on 26 May 2025.
+//  functable.c has the table of built-in functions in the DeadEnds scripting language.
+//
+//  Created by Thomas Wetmore on 10 January 2023.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
-#include "refnindex.h"
-#include "errors.h"
 #include "symboltable.h"
 #include "gedcom.h"
-
+#include "functiontable.h"
 #include "pnode.h"
 #include "interp.h"
+#include "refnindex.h"
+#include "errors.h"
+
+#include "pnode.h"
 
 #include "builtintable.h"
 

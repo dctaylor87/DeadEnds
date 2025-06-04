@@ -9,17 +9,21 @@
 //  a Context.
 //
 //  Created by Thomas Wetmore on 23 March 2023.
-//  Last changed on 1 June 2025.
+//  Last changed on 3 June 2025.
 //
 
 #include <stdint.h>
 
+#include "block.h"
 #include "standard.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "errors.h"
 #include "symboltable.h"
-#include "frame.h"
+#include "hashtable.h"
+#include "pvalue.h"
 #include "context.h"
+#include "frame.h"
 
 // compare compares two Symbols by their ident fields.
 static int compare(CString a, CString b) {

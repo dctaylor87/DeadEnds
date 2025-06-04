@@ -17,10 +17,10 @@
 
 #include "zstr.h"
 #include "list.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
-#include "hashtable.h"
 
 /* createTempGNode -- Create GNode for temporary use
    (not to be connected to a record)

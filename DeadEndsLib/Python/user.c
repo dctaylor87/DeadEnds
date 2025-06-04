@@ -13,9 +13,11 @@
 
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
+#include "database.h"
 #include "sequence.h"
 
 #include "denls.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "errors.h"

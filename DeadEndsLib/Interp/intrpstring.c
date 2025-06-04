@@ -1,17 +1,21 @@
 //
+//  DeadEnds Library
 //  intrpstring.c
-//  CloneOne
 //
 //  Created by Thomas Wetmore on 14 February 2024.
-//  Last changed on 30 April 2025.
+//  Last changed on 3 June 2025.
 //
 
 #include <stdio.h>
 #include <stdint.h>
 
 #include "standard.h"
-#include "interp.h"
 #include "evaluate.h"
+#include "errors.h"
+#include "functiontable.h"
+#include "pnode.h"
+#include "interp.h"
+#include "pvalue.h"
 #include "utils.h"
 #include "builtintable.h"
 

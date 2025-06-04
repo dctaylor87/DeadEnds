@@ -8,7 +8,6 @@
 #ifndef standard_h
 #define standard_h
 
-typedef void* Word; // Deprecated.
 typedef char* String;
 typedef const char* CString;
 

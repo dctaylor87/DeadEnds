@@ -11,10 +11,15 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "hashtable.h"
 #include "refnindex.h"
 #include "pvalue.h"
 #include "standard.h"
 #include "gedcom.h"
+#include "pnode.h"
+#include "frame.h"
+#include "symboltable.h"
+#include "context.h"
 #include "builtintable.h"
 
 // isPVGNodeType return true if a PVType is one of the GNode types.
@@ -22,10 +27,10 @@ bool isGNodeType(PVType type) {
     return type >= PVGNode && type <= PVOther;
 }
 
-// pvalueTypes is the array of PValue type names for debugging.
-static char *pvalueTypes[] = {
-    "PVNull", "PVInt", "PVFloat", "PVBool", "PVString", "PVGNode", "PVPerson",
-    "PVFamily", "PVSource", "PVEvent", "PVOther", "PVList", "PVTable", "PVSequence"};
+// pvalueTypes is the array of PValue type names for debugging. NOT CURRENTLY USED.
+//static char *pvalueTypes[] = {
+//    "PVNull", "PVInt", "PVFloat", "PVBool", "PVString", "PVGNode", "PVPerson",
+//    "PVFamily", "PVSource", "PVEvent", "PVOther", "PVList", "PVTable", "PVSequence"};
 
 static bool isZero(PValue);
 
@@ -82,6 +87,29 @@ PValue cloneAndReturnPValue(const PValue* original) {
     PValue result = *heapCopy;
     stdfree(heapCopy);
     return result;
+}
+
+// typeOf returns the 'type' of a PValue as a String.
+String typeOf(PValue pvalue) {
+    String typename;
+    switch (pvalue.type) {
+        case PVNull:     typename = "null"; break;
+        case PVInt:      typename = "int"; break;
+        case PVFloat:    typename = "float"; break;
+        case PVBool:     typename = "bool"; break;
+        case PVString:   typename = "string"; break;
+        case PVGNode:    typename = "gnode"; break;
+        case PVPerson:   typename = "person"; break;
+        case PVFamily:   typename = "family"; break;
+        case PVSource:   typename = "source"; break;
+        case PVEvent:    typename = "event"; break;
+        case PVOther:    typename = "other"; break;
+        case PVList:     typename = "list"; break;
+        case PVTable:    typename = "table"; break;
+        case PVSequence: typename = "sequence"; break;
+        default:         typename = "unknown"; break;
+    }
+    return typename;
 }
 
 // freePValue frees an allocated PValue.

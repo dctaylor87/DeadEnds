@@ -30,6 +30,7 @@
 #include "feedback.h"
 #include "messages.h"
 #include "codesets.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "xlat.h"

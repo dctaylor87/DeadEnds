@@ -11,6 +11,7 @@
 #include <stdint.h>
 
 #include "standard.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "writenode.h"

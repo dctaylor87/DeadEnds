@@ -41,12 +41,15 @@
 #include "sys_inc.h"
 
 #include "rfmt.h"
+#include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
 #include "sequence.h"
 #include "database.h"
 #include "errors.h"
 #include "ask.h"
 #include "feedback.h"
+#include "gedcom.h"
 #include "liflines.h"
 #include "fpattern.h"
 #include "messages.h"
@@ -54,6 +57,7 @@
 #include "refns.h"
 #include "de-strings.h"
 #include "name.h"
+#include "gnode.h"
 
 /* everything in this file assumes we are dealing with the current database */
 //#define database	currentDatabase

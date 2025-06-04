@@ -1,20 +1,26 @@
-// DeadEnds
 //
-// intrpmath.c has the built-in script functions for math and logic.
+//  DeadEnds
 //
-// Created by Thomas Wetmore on 17 March 2023.
-// Last changed on 31 May 2025.
+//  intrpmath.c has the built-in script functions for math and logic.
+//
+//  Created by Thomas Wetmore on 17 March 2023.
+//  Last changed on 3 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "standard.h"
+//#include "standard.h"
+#include "hashtable.h"
 #include "refnindex.h"
-#include "pnode.h"
-#include "pvalue.h"
+#include "context.h"
 #include "evaluate.h"
+#include "errors.h"
+#include "pnode.h"
 #include "interp.h"
+#include "pvalue.h"
+#include "standard.h"
+#include "symboltable.h"
 #include "builtintable.h"
 
 // evalBinary is a local function that ...

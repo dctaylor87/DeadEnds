@@ -1,20 +1,25 @@
-// DeadEnds
 //
-// pnode.c holds the functions that manage PNodes (program nodes).
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 14 December 2022.
-// Last changed on 1 June 2025.
+//  pnode.c holds the functions that manage PNodes (program nodes).
+//
+//  Created by Thomas Wetmore on 14 December 2022.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "hashtable.h"
 #include "refnindex.h"
+#include "errors.h"
 #include "pnode.h"
 #include "standard.h"
 #include "hashtable.h"
 #include "functiontable.h"
 #include "gedcom.h"
 #include "interp.h"
+#include "pvalue.h"
 #include "parse.h"
 
 static bool debugging = false;

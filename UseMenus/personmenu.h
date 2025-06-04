@@ -8,6 +8,7 @@
 #define personmenu_h
 
 #include "standard.h"
+#include "database.h"
 #include "sequence.h"
 #include "gnode.h"
 #include "lineage.h"

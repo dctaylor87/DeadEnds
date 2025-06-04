@@ -1,15 +1,20 @@
-// DeadEnds
 //
-// pvaluetable.c holds the functions that operate on PValueTables.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 21 April 2023.
-// Last changed on 5 May 2024.
+//  pvaluetable.c holds the functions that operate on PValueTables.
+//
+//  Created by Thomas Wetmore on 21 April 2023.
+//  Last changed on 2 June 2025.
+//
 
 #include <ansidecl.h>
 #include <stdint.h>
 
 #include "standard.h"
+#include "hashtable.h"
 #include "refnindex.h"
+#include "hashtable.h"
+#include "pvalue.h"
 #include "pvaluetable.h"
 
 // getKey gets the key from a program value element.

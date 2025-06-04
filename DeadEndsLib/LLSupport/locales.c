@@ -518,7 +518,7 @@ win32_setlocale (ATTRIBUTE_UNUSED int category, ATTRIBUTE_UNUSED char * locale)
  * register_uilang_callback -- 
  *========================================*/
 void
-register_uilang_callback (CALLBACK_FNC fncptr, Word uparm)
+register_uilang_callback (CALLBACK_FNC fncptr, void* uparm)
 {
 	add_listener(&f_uilang_callbacks, fncptr, uparm);
 }
@@ -526,7 +526,7 @@ register_uilang_callback (CALLBACK_FNC fncptr, Word uparm)
  * unregister_uilang_callback -- 
  *========================================*/
 void
-unregister_uilang_callback (CALLBACK_FNC fncptr, Word uparm)
+unregister_uilang_callback (CALLBACK_FNC fncptr, void* uparm)
 {
 	delete_listener(&f_uilang_callbacks, fncptr, uparm);
 }
@@ -544,7 +544,7 @@ send_uilang_callbacks (void)
  * register_uicodeset_callback -- 
  *========================================*/
 void
-register_uicodeset_callback (CALLBACK_FNC fncptr, Word uparm)
+register_uicodeset_callback (CALLBACK_FNC fncptr, void* uparm)
 {
 	add_listener(&f_uicodeset_callbacks, fncptr, uparm);
 }
@@ -552,7 +552,7 @@ register_uicodeset_callback (CALLBACK_FNC fncptr, Word uparm)
  * unregister_uicodeset_callback -- 
  *========================================*/
 void
-unregister_uicodeset_callback (CALLBACK_FNC fncptr, Word uparm)
+unregister_uicodeset_callback (CALLBACK_FNC fncptr, void* uparm)
 {
 	delete_listener(&f_uicodeset_callbacks, fncptr, uparm);
 }

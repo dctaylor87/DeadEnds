@@ -1,20 +1,24 @@
-// DeadEnds
 //
-// name.c has the functions that deal with Gedcom names. Several functions return pointers to
-// static memory. Callers beware.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 7 November 2022.
-// Last changed on 8 May 2024.
+//  name.c has the functions that deal with Gedcom names. Several functions return pointers to
+//  static memory. Callers beware.
+//
+//  Created by Thomas Wetmore on 7 November 2022.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "standard.h"
+//#include "standard.h"
 #include "gnode.h"
 #include "name.h"
-#include "refnindex.h"
 #include "nameindex.h"
-#include "database.h"
+#include "set.h"
+#include "standard.h"
+//#include "refnindex.h"
+//#include "database.h"
 
 static int old = 0;
 

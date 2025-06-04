@@ -10,6 +10,7 @@
 #include "denls.h"
 #include "sys_inc.h"
 
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "database.h"

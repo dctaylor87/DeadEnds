@@ -22,6 +22,7 @@
 #include "refnindex.h"
 #include "database.h"
 #include "recordindex.h"
+#include "gnode.h"
 
 #include "llpy-externs.h"
 

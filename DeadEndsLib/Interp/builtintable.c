@@ -1,20 +1,25 @@
-// DeadEnds
 //
-// builtintable.c holds the three built-in functions that provide the table data type for the
-// DeadEnds script language. It is implemented using PValueTable.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 19 April 2023.
-// Last changed on 31 May 2025.
+//  builtintable.c holds the built-in functions that provide the table data type for the DeadEnds script
+//  language. It is implemented using PValueTable.
+//
+//  Created by Thomas Wetmore on 19 April 2023.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>
 #include <stdint.h>
 
-#include "refnindex.h"
-#include "pvaluetable.h"
-#include "builtintable.h"
+#include "context.h"
+#include "errors.h"
 #include "pnode.h"
 #include "interp.h"
-#include "context.h"
+#include "symboltable.h"
+#include "pvalue.h"
+#include "pvaluetable.h"
+#include "refnindex.h"
+#include "builtintable.h"
 
 // __table creates a DeadEnds script value table.
 // usage: table(IDENT) -> VOID

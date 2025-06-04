@@ -16,6 +16,7 @@
 #include "standard.h"		/* String */
 #include "denls.h"
 #include "path.h"		/* fopenPath */
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"

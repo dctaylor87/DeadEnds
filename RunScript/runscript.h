@@ -9,6 +9,7 @@
 #define runscript_h
 
 #include "errors.h"
+#include "gedcom.h"
 #include "import.h"
 #include "parse.h"
 #include "path.h"

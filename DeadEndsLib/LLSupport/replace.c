@@ -42,6 +42,7 @@
 
 #include "list.h"
 #include "zstr.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "rfmt.h"

@@ -56,6 +56,8 @@
 #include "sequence.h"
 #include "errors.h"
 #include "writenode.h"
+#include "hashtable.h"
+
 #include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
@@ -64,6 +66,7 @@
 #include "screen.h"
 #include "lloptions.h"
 #include "de-strings.h"
+#include "file.h"
 #include "import.h"
 #include "codesets.h"
 #include "version.h"

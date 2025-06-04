@@ -12,6 +12,7 @@
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"
+#include "errors.h"
 #include "operations.h"
 
 // addChildToFamily adds an existing child to an existing family in a Database; index can be used

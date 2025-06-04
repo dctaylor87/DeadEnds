@@ -1,15 +1,19 @@
 //
-//  DeadEnds
+//  DeadEnds Library
 //
 //  functiontable.c -- The DeadEnds function and procedure table datatype.
 //
 //  Created by Thomas Wetmore on 9 April 2023.
-//  Last changed on 20 May 2025.
+//  Last changed on 3 June 2025.
+//
 
 #include <stdint.h>
 
-#include "refnindex.h"
+//#include "refnindex.h"
 #include "functiontable.h"
+#include "errors.h"
+#include "pnode.h"
+#include "hashtable.h"
 
 static bool debugging = false;
 
@@ -19,8 +23,7 @@ static int compare(CString a, CString b) {
 }
 
 // getKey is the getKey function for FunctionTables.
-static CString getKey(void* element)
-{
+static CString getKey(void* element) {
 	FunctionElement* funcEl = (FunctionElement*) element;
 	return funcEl->name;
 }

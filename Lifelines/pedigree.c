@@ -27,6 +27,7 @@
 #include "standard.h"
 #include "denls.h"
 
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
@@ -42,7 +43,6 @@
 #include "gstrings.h"
 #include "de-strings.h"
 #include "locales.h"
-#include "hashtable.h"
 #include "lloptions.h"
 
 /* everything in this file assumes we are dealing with the current database */

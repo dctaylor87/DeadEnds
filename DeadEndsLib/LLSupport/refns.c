@@ -396,7 +396,7 @@ getRefn (CString refn, Database *database)
    each with arguments (key, refn, param, database).  */
 
 void
-traverseRefns (TRAV_REFNS_FUNC func, Word param, Database *database)
+traverseRefns (TRAV_REFNS_FUNC func, void* param, Database *database)
 {
   int bucket = 0;
   int element = 0;

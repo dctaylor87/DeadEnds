@@ -44,6 +44,7 @@
 #include "list.h"
 #include "zstr.h"
 #include "translat.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "xlat.h"

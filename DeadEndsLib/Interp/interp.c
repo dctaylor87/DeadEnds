@@ -1,33 +1,37 @@
 //
-//  C DeadEnds
+//  DeadEnds Library
 //
 //  interp.c holds functions that interpret DeadEnds scripts. The main function is interpret,
 //  which is called on a PNode. Depending on the PNode's type, interpret may handle it directly,
 //  or may call a specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 1 June 2025.
+//  Last changed on 3 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include <stdarg.h>
+#include "hashtable.h"
 #include "refnindex.h"
 #include "errors.h"
-#include "symboltable.h"
+#include "context.h"
+#include "database.h"
+#include "evaluate.h"
+#include "file.h"
+#include "frame.h"
 #include "functiontable.h"
+#include "hashtable.h"
 #include "pnode.h"
 #include "interp.h"
-#include "evaluate.h"
 #include "lineage.h"
-#include "pvalue.h"
-#include "database.h"
 #include "list.h"
-#include "utils.h"
+#include "pvalue.h"
 #include "sequence.h"
-#include "context.h"
 #include "stringset.h"
+#include "symboltable.h"
+#include "utils.h"
 #include "parse.h"
 
 bool callTracing = false;

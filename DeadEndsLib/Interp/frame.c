@@ -1,12 +1,14 @@
 //
+//  DeadEnds Library
 //  frame.c
-//  Library
 //
 //  Created by Thomas Wetmore on 20 May 2025.
-//  Last changed on 20 May 2025.
+//  Last changed on 2 June 2025.
 //
 
 #include <stdio.h>
+#include "standard.h"
+#include "symboltable.h"
 #include "errors.h"
 #include "frame.h"
 
@@ -21,7 +23,7 @@ Frame* createFrame(PNode* pnode, PNode* routine, SymbolTable* table, Frame* call
 }
 
 
-// deleteFrame frees the memory of a frame. Deletes only the SymbolTable.
+// deleteFrame frees the memory of a frame. Deletes the SymbolTable and the shell.
 void deleteFrame(Frame* frame) {
     deleteSymbolTable(frame->table);
     stdfree(frame);

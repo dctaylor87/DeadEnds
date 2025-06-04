@@ -7,7 +7,9 @@
 
 #include <stdint.h>
 
+#include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
 #include "validate.h"
 #include "gnode.h"
 #include "gedcom.h"

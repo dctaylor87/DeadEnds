@@ -32,6 +32,7 @@
 
 #include "zstr.h"
 #include "list.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "recordindex.h"
@@ -384,7 +385,7 @@ copy_node_subtree (GNode *node)
  * param:        opaque pointer for client use, passed thru to callback
  *=============================================================*/
 bool
-traverse_nodes (GNode *node, bool (*func)(GNode *, Word), Word param)
+traverse_nodes (GNode *node, bool (*func)(GNode *, void*), void* param)
 {
 	while (node) {
 		if (!(*func)(node, param)) return false;

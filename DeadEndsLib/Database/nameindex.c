@@ -1,21 +1,24 @@
-// DeadEnds Project
 //
-// nameindex.c implements the NameIndex, an index that maps Gedcom name keys to the Sets of person
-// record keys that have the names.
+//  DeadEnds Library
 //
-// Created by Thomas Wetmore on 26 November 2022.
-// Last changed on 7 December 2024.
+//  nameindex.c implements the NameIndex, an index that maps Gedcom name keys to the Sets of person
+//  record keys that have the names.
+//
+//  Created by Thomas Wetmore on 26 November 2022.
+//  Last changed on 3 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "gnode.h"
-#include "refnindex.h"
-#include "nameindex.h"
+#include "gedcom.h"
+#include "hashtable.h"
 #include "name.h"
 #include "sort.h"
+#include "nameindex.h"
 #include "set.h"
-#include "gedcom.h"
+//#include "gnode.h"
+//#include "refnindex.h"
 
 // Local functions
 static NameIndexEl* createNameIndexEl(CString nameKey);

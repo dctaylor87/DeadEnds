@@ -7,6 +7,7 @@
 //
 #include <stdint.h>
 
+#include "errors.h"
 #include "stdlib.h"
 #include "splitjoin.h"
 #include "gnode.h"

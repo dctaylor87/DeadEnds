@@ -8,6 +8,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gedcom.h"
 

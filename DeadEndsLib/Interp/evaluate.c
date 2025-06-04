@@ -15,15 +15,18 @@
 #include <ansidecl.h>
 #include <stdint.h>
 
+#include "hashtable.h"
 #include "refnindex.h"
 #include "errors.h"
 #include "evaluate.h"
+#include "frame.h"
+#include "gnode.h"
 #include "standard.h"
 #include "symboltable.h"
 #include "functiontable.h"
+#include "pnode.h"
 #include "interp.h"
 #include "pvalue.h"
-#include "pnode.h"
 #include "utils.h"
 #include "context.h"
 

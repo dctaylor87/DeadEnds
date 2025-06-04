@@ -42,6 +42,7 @@
 #include "ll-porting.h"
 #include "standard.h"
 #include "denls.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "zstr.h"
@@ -71,6 +72,8 @@
 #include "locales.h"
 #include "database.h"
 //#include "readindex.h"
+#include "pnode.h"
+#include "functiontable.h"
 #include "interp.h"		/* interpret, programRunning */
 #include "charprops.h"
 #include "llgettext.h"

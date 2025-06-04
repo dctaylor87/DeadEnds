@@ -42,8 +42,11 @@
 #include "denls.h"
 
 #include "rfmt.h"
+#include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
 #include "sequence.h"
+#include "gedcom.h"
 #include "ask.h"
 #include "llinesi.h"
 #include "errors.h"

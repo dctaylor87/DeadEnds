@@ -38,6 +38,7 @@
 
 #include "standard.h"
 #include "denls.h"
+#include "database.h"
 #include "sequence.h"
 #include "errors.h"
 #include "feedback.h"

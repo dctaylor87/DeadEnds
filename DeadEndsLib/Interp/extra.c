@@ -3,12 +3,14 @@
 #include <limits.h>		/* PATH_MAX */
 
 #include "standard.h"
+#include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"    // GNode.
 #include "lineage.h"
 #include "pvalue.h"   // PValue.
 #include "pnode.h"    // PNode.
 #include "name.h"     // getSurname, manipulateName.
+#include "functiontable.h"
 #include "interp.h"
 #include "recordindex.h" // searchRecordIndex.
 #include "database.h"    // personIndex, familyIndex.
@@ -16,6 +18,7 @@
 #include "evaluate.h"  // evaluate.
 #include "path.h"      // fopenPath.
 #include "symboltable.h"
+#include "context.h"
 #include "date.h"
 #include "place.h"
 #include "builtintable.h"
