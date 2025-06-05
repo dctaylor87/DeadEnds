@@ -142,7 +142,7 @@ main (int argc, char **argv)
 	//	TABLE exargs=NULL;
 	//	String progout=NULL;
 	String configfile=0;
-	String crashlog=NULL;
+	CString crashlog=NULL;
 	//	bool have_python_scripts = false;
 
 	current_uiio = uiio_stdio;

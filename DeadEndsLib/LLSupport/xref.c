@@ -14,6 +14,7 @@
 #include "refnindex.h"
 #include "gnode.h"
 #include "database.h"
+#include "list.h"
 #include "xref.h"
 
 static GNode *genericGetNextRecord (CString key, RecordIndex *index, RecordType type);

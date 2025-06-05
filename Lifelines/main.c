@@ -79,6 +79,7 @@
 #include "version.h"
 #include "init.h"
 #include "parse-args.h"
+#include "screen.h"		/* XXX main_menu, term_show_module XXX */
 #include "selectdb.h"
 
 /* for parser debugging */
@@ -142,7 +143,7 @@ main (int argc, char **argv)
 	//	TABLE exargs=NULL;
 	//	String progout=NULL;
 	String configfile=0;
-	String crashlog=NULL;
+	CString crashlog=NULL;
 	int i=0;
 	//	bool have_python_scripts = false;
 	UIIO *saved_uiio = NULL;

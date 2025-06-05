@@ -10,9 +10,11 @@
 #define randomizekeys_h
 
 #include <stdio.h>
+#include "errors.h"
 #include "file.h"
 #include "gedcom.h"
 #include "import.h"
+#include "integertable.h"
 #include "gnode.h"
 #include "gnodelist.h"
 #include "list.h"

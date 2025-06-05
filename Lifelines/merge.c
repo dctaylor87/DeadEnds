@@ -42,7 +42,9 @@
 #include "standard.h"
 #include "denls.h"
 #include "stringtable.h"
+#include "gnode.h"
 #include "list.h"
+#include "nameindex.h"
 #include "errors.h"
 #include "options.h"
 

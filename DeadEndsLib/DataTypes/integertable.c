@@ -11,7 +11,7 @@
 #include "hashtable.h"
 #include "integertable.h"
 
-static CString getKey(void* element) { return ((IntegerElement*) element)->key; }
+static CString getKey(const void* element) { return ((IntegerElement*) element)->key; }
 
 // createIntegerTable creates and returns an IntegerTable.
 IntegerTable* createIntegerTable(int numBuckets) {

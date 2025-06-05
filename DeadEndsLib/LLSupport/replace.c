@@ -46,6 +46,7 @@
 #include "refnindex.h"
 #include "database.h"
 #include "gnode.h"
+#include "nameindex.h"
 #include "rfmt.h"
 #include "translat.h"
 #include "xlat.h"

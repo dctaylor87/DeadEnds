@@ -14,6 +14,7 @@
 #include "gnode.h"
 #include "recordindex.h"
 #include "database.h"
+#include "nameindex.h"
 #include "denls.h"
 
 #include "python-to-c.h"

@@ -883,7 +883,7 @@ void showFrame(Frame* frame) {
     printf("  automatics:\n");
     FORHASHTABLE(table, element)
         Symbol* symbol = (Symbol*) element;
-        String ident = symbol->ident;
+        CString ident = symbol->ident;
         if (!isInSet(params, ident)) {
             String svalue = pvalueToString(*(symbol->value), false);
             printf("    %s: %s\n", symbol->ident, svalue);

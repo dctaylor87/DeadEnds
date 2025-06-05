@@ -39,7 +39,7 @@ static void delete(void* a) {
 }
 
 // getKey returns the Symbol's identifier.
-static CString getKey(void *symbol) {
+static CString getKey(const void *symbol) {
 	return ((Symbol*) symbol)->ident;
 }
 

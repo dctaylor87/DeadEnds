@@ -26,7 +26,7 @@ static bool nameIndexDebugging = false;
 static int numNameIndexBuckets = 2048;
 
 // getKey gets the name key of a NameIndex element.
-static CString getKey(void* element) {
+static CString getKey(const void* element) {
 	return ((NameIndexEl*) element)->nameKey;
 }
 

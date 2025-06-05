@@ -12,6 +12,7 @@
 #include "standard.h"		/* String */
 #include "denls.h"
 #include "hashtable.h"
+#include "recordindex.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "recordindex.h"

@@ -19,6 +19,7 @@
 
 #include "gedcom.h"
 #include "gnode.h"
+#include "hashtable.h"
 #include "recordindex.h"
 #include "refnindex.h"
 #include "database.h"

@@ -10,6 +10,7 @@
 #include <stdint.h>
 
 #include "standard.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "hashtable.h"
 #include "refnindex.h"

@@ -46,7 +46,7 @@ static int compare (CString a, CString b) {
 }
 
 // getKey returns the key of a RefnIndexEl, a 1 REFN value.
-static CString getKey(void* a) {
+static CString getKey(const void* a) {
 	return ((RefnIndexEl*) a)->key;
 }
 

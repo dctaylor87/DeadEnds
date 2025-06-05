@@ -22,6 +22,7 @@
 #include "gnode.h"		/* GNode */
 #include "database.h"
 #include "lineage.h"
+#include "recordindex.h"
 #include "set.h"
 #include "name.h"
 #include "py-messages.h"

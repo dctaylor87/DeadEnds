@@ -169,7 +169,8 @@ save_gedcom (Database *database)
 {
 	FILE *fp=NULL;
 	//struct tag_export_feedback efeed;
-	String srcdir=NULL, fname=0, fullpath=0;
+	String srcdir=NULL, fname=0;
+	CString fullpath=0;
 
 	if (! database)
 		database = currentDatabase;

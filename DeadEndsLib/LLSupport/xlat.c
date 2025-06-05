@@ -120,7 +120,7 @@ int num_dyntts_buckets = NUMBER_DYNTTS_BUCKETS;
  * body of module
  *********************************************/
 
-static CString getKey(void *element)
+static CString getKey(const void *element)
 {
   return ((DYNTT)element)->key;
 }

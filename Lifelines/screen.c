@@ -430,7 +430,7 @@ repaint_main_menu (UIWINDOW uiwin)
 	int row;
 	char title[80];
 	int width=sizeof(title);
-	String str;
+	CString str;
 
 	uierase(uiwin);
 	draw_win_box(win);

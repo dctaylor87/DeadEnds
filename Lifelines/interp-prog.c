@@ -9,7 +9,9 @@
 #include "list.h"
 #include "database.h"
 #include "sequence.h"
+#include "file.h"
 #include "gnode.h"
+#include "hashtable.h"
 #include "parse.h"
 #include "path.h"
 #include "pnode.h"
@@ -97,7 +99,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   if (! programsdir)		/* fall back, most LL scripts work with DE */
     programsdir = getdeoptstr("LLPROGRAMS", ".");
 
-  String fullpath = 0;
+  CString fullpath = 0;
   if (sfile)
     {
       fullpath = findProgram (sfile, programsdir);

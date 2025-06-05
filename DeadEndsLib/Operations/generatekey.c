@@ -13,6 +13,7 @@
 #include "stdlib.h"
 #include "time.h"
 #include "gedcom.h"
+#include "generatekey.h"
 #include "set.h"
 #include "stringtable.h"
 #include "stringset.h"

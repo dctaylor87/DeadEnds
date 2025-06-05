@@ -61,6 +61,7 @@
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
+#include "nameindex.h"
 #include "readwrite.h"
 #include "stringtable.h"
 #include "options.h"

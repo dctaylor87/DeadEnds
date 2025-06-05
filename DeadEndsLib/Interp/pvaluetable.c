@@ -18,7 +18,7 @@
 #include "pvaluetable.h"
 
 // getKey gets the key from a program value element.
-static CString getKey(void* element) { return ((PValueElement*) element)->key; }
+static CString getKey(const void* element) { return ((PValueElement*) element)->key; }
 
 // compare compares two program value elements.
 static int compare(CString a, CString b) { return strcmp(a, b); }

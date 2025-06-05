@@ -46,6 +46,7 @@
 #include "database.h"
 #include "gedcom.h"
 #include "gnode.h"
+#include "nameindex.h"
 #include "sequence.h"
 #include "errors.h"
 #include "feedback.h"

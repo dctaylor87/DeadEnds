@@ -25,7 +25,7 @@ static int compare(CString left, CString right) {
 }
 
 // getKey returns the key of a GNode index element.
-static CString getKey(void* element) {
+static CString getKey(const void* element) {
 	return ((GNodeIndexEl*) element)->root->key;
 }
 

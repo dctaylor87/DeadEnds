@@ -34,7 +34,7 @@ int numGNodeFrees(void) { return gnodeFrees; }
 
 // getFromTagTable returns the persistent tag value from the tag table.
 static int numBucketsInTagTable = 67;
-static String getFromTagTable(CString tag) {
+static CString getFromTagTable(CString tag) {
 	if (tagTable) return fixString(tagTable, tag);
 	tagTable = createStringTable(numBucketsInTagTable);
 	return fixString(tagTable, tag);

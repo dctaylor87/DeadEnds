@@ -21,6 +21,8 @@
 #include "file.h"
 #include "import.h"
 #include "nameindex.h"
+#include "recordindex.h"
+#include "rootlist.h"
 #include "stringtable.h"
 #include "errors.h"
 #include "set.h"

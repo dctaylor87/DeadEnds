@@ -23,7 +23,7 @@ static int compare(CString a, CString b) {
 }
 
 // getKey is the getKey function for FunctionTables.
-static CString getKey(void* element) {
+static CString getKey(const void* element) {
 	FunctionElement* funcEl = (FunctionElement*) element;
 	return funcEl->name;
 }

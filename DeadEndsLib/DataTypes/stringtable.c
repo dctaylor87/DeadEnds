@@ -12,7 +12,7 @@
 #include "stringtable.h"
 
 // getKey is the getKey function for StringTable.
-static CString getKey(void *element) {
+static CString getKey(const void *element) {
 	return ((StringElement*) element)->key;
 }
 

@@ -17,7 +17,7 @@
 #include "lineage.h"
 #include "recordindex.h"
 #include "validate.h"
-//#include "refnindex.h"
+#include "refnindex.h"
 //#include "name.h"
 
 static bool validateSource(GNode*, Database*, ErrorLog*);
