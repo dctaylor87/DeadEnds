@@ -49,6 +49,7 @@
 #include "uiio.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
 #include "gnode.h"
 #include "recordindex.h"
 #include "rfmt.h"

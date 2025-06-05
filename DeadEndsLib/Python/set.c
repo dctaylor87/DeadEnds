@@ -21,6 +21,7 @@
 #include "denls.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "gedcom.h"
 #include "gnode.h"		/* GNode */
 #include "database.h"
 #include "recordindex.h"

@@ -155,6 +155,20 @@ static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 
   seq = rptui_ask_for_indi_list (prompt, true, database);
   abort ();			/* XXX */
+  PyObject *set = PySet_New (NULL);
+  if (! set)
+    return NULL;
+
+  int len = lengthSequence (seq);
+  if (len == 0)
+    Py_RETURN_NONE;
+
+  for (int ndx = 0; ndx < len; ndx++)
+    {
+      CString key;
+      CString name;
+      bool found = elementFromSequence (seq, ndx, &key, &name);
+    }
 }
 
 /* llpy_menuchoose (choices, [prompt]) --> INT; Select from a collection of choices. */

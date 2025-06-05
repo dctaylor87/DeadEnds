@@ -16,6 +16,7 @@
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "denls.h"
+#include "gedcom.h"
 #include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */

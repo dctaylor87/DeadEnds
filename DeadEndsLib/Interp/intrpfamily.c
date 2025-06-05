@@ -4,7 +4,7 @@
 //  intrpfamily.c
 //
 //  Created by Thomas Wetmore on 17 March 2023.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -16,9 +16,12 @@
 #include "context.h"
 #include "database.h"
 #include "evaluate.h"
+#include "gedcom.h"
+#include "gnode.h"
 #include "pnode.h"
 #include "interp.h"
 #include "lineage.h"
+#include "list.h"
 #include "pvalue.h"
 #include "builtintable.h"
 

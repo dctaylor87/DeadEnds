@@ -9,6 +9,7 @@
 #include "denls.h"
 #include "sys_inc.h"
 
+#include "gedcom.h"
 #include "hashtable.h"
 #include "refnindex.h"
 #include "gnode.h"

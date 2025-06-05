@@ -4,18 +4,23 @@
 //  import.c has functions that import Gedcom files into internal structures.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-
 #include "database.h"
+#include "errors.h"
 #include "file.h"
 #include "gedcom.h"
+#include "gnode.h"
+#include "gnodelist.h"
+#include "hashtable.h"
 #include "import.h"
+#include "integertable.h"
 #include "rootlist.h"
+#include "set.h"
 #include "stringset.h"
 #include "validate.h"
 #include "utils.h"

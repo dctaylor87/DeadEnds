@@ -5,8 +5,10 @@
 #include "standard.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "errors.h"
 #include "gnode.h"    // GNode.
 #include "lineage.h"
+#include "list.h"
 #include "pvalue.h"   // PValue.
 #include "pnode.h"    // PNode.
 #include "name.h"     // getSurname, manipulateName.

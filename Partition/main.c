@@ -5,22 +5,28 @@
 //  into closed sets of persons and families.
 //
 //  Created by Thomas Wetmore on 4 October 2024.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <stdio.h>
 #include <stdint.h>
 
 #include "connect.h"
+#include "database.h"
+#include "errors.h"
 #include "file.h"
+#include "gedcom.h"
 #include "generatekey.h"
+#include "gnode.h"
 #include "gnodelist.h"
+#include "hashtable.h"
 #include "import.h"
+#include "integertable.h"
 #include "partition.h"
 #include "rootlist.h"
 #include "stringtable.h"
-#include "utils.h"
-#include "writenode.h"
+//#include "utils.h"
+//#include "writenode.h"
 
 #define gms getMsecondsStr()
 

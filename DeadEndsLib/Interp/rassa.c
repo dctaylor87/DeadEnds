@@ -13,6 +13,7 @@
 
 #include "standard.h"
 #include "context.h"
+#include "errors.h"
 #include "evaluate.h"
 #include "file.h"
 #include "gedcom.h"

@@ -43,6 +43,8 @@
 
 #include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "sequence.h"
 #include "errors.h"

@@ -25,7 +25,9 @@
 #include "porting.h"
 #include "standard.h"
 #include "path.h"
+#include "errors.h"
 #include "file.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "database.h"
 #include "import.h"
@@ -60,7 +62,7 @@ main (int argc, char *argv[])
   int opt;
   int longindex = 0;
   CString cmd_line_db;
-  ErrorLog error_log;
+  ErrorLog *error_log;
 
   ProgName = argv[0];
 
@@ -135,7 +137,8 @@ main (int argc, char *argv[])
     }
 
   //currentDatabase = gedcomFileToDatabase (cmd_line_db, &error_log);
-  currentDatabase = getDatabaseFromFile (cmd_line_db, 0, &error_log);
+  error_log = createErrorLog ();
+  currentDatabase = getDatabaseFromFile (cmd_line_db, 0, error_log);
 
   if (have_python_scripts)
     {

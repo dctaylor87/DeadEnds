@@ -1,9 +1,11 @@
-// DeadEnds
 //
-// gedcom.c has basic Gedcom functions.
+// DeadEnds Library
 //
-// Created by Thomas Wetmore on 29 November 2022.
-// Last changed on 3 April 2025.
+//  gedcom.c has basic Gedcom functions.
+//
+//  Created by Thomas Wetmore on 29 November 2022.
+//  Last changed on 4 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -11,6 +13,7 @@
 #include "hashtable.h"
 #include "refnindex.h"
 #include "gedcom.h"
+#include "gnode.h"
 
 // recordType returns the type of a Gedcom record.
 RecordType recordType(GNode* root) {

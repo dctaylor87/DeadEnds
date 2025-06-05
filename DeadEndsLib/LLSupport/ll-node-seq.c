@@ -13,6 +13,7 @@
 
 #include "database.h"
 #include "sequence.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "zstr.h"
 #include "de-strings.h"

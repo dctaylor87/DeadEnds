@@ -12,6 +12,7 @@
 
 #include "standard.h"
 //#include "refnindex.h"
+#include "errors.h"
 #include "gnode.h"
 #include "functiontable.h"
 #include "pnode.h"

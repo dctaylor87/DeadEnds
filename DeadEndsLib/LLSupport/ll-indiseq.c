@@ -45,6 +45,7 @@
 #include "standard.h"
 #include "database.h"
 #include "sequence.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "zstr.h"
 #include "rfmt.h"

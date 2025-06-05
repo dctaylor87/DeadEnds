@@ -23,6 +23,8 @@
 
 #include <stdint.h>
 
+#include "database.h"
+#include "gedcom.h"
 #include "personmenu.h"
 
 static int indiBrowse(GNode*);

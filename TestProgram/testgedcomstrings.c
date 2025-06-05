@@ -8,6 +8,8 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "errors.h"
+#include "gnode.h"
 #include "standard.h"
 #include "readnode.h"
 #include "gnodelist.h"

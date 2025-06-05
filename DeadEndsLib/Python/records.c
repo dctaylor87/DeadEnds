@@ -16,6 +16,7 @@
 #include "denls.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
 #include "gnode.h"		/* GNode */
 
 #include "python-to-c.h"

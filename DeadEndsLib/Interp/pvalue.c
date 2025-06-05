@@ -5,17 +5,20 @@
 //  DeadEnds scripts.
 //
 //  Created by Thomas Wetmore on 15 December 2022.
-//  Last changed on 1 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
+#include "errors.h"
+#include "gedcom.h"
+#include "gnode.h"
+#include "list.h"
 #include "hashtable.h"
 #include "refnindex.h"
 #include "pvalue.h"
 #include "standard.h"
-#include "gedcom.h"
 #include "pnode.h"
 #include "frame.h"
 #include "symboltable.h"

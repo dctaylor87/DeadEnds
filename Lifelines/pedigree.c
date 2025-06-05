@@ -29,6 +29,8 @@
 
 #include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "recordindex.h"
 #include "rfmt.h"

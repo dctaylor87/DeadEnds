@@ -3,7 +3,7 @@
 //  lineage.c holds functions that peform genealogical operations on GNodes.
 //
 //  Created by Thomas Wetmore on 17 February 2023.
-//  Last changed on 2 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -11,10 +11,11 @@
 
 #include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
+#include "gedcom.h"
 #include "lineage.h"
 #include "gnode.h"
 #include "name.h"
-#include "database.h"
 
 static bool debugging = false;
 

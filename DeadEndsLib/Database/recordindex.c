@@ -4,18 +4,18 @@
 //  record keys to the roots of the GNode trees with those keys.
 //
 //  Created by Thomas Wetmore on 29 November 2022.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
+#include "gnode.h"
 #include "hashtable.h"
 #include "refnindex.h"
 #include "recordindex.h"
 #include "list.h"
 #include "sort.h"
-#include "gnode.h"
 //#include "gedcom.h"
 
 #define numRecordIndexBuckets 2047

@@ -44,6 +44,7 @@
 #include "zstr.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "database.h"
 #include "gnode.h"
 #include "rfmt.h"
 #include "translat.h"

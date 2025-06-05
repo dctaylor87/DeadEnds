@@ -41,6 +41,8 @@
 #include "porting.h"
 #include "ll-porting.h"
 #include "standard.h"
+#include "hashtable.h"
+#include "database.h"
 #include "denls.h"
 #include "stringtable.h"
 #include "list.h"

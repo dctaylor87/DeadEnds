@@ -6,7 +6,7 @@
 //  or may call a specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -22,6 +22,8 @@
 #include "file.h"
 #include "frame.h"
 #include "functiontable.h"
+#include "gedcom.h"
+#include "gnode.h"
 #include "hashtable.h"
 #include "pnode.h"
 #include "interp.h"
@@ -29,6 +31,7 @@
 #include "list.h"
 #include "pvalue.h"
 #include "sequence.h"
+#include "set.h"
 #include "stringset.h"
 #include "symboltable.h"
 #include "utils.h"

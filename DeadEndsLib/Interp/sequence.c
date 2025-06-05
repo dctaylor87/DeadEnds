@@ -5,16 +5,18 @@
 //  persons and other record types. It underlies the indiseq data type of DeadEnds Script.
 //
 //  Created by Thomas Wetmore on 1 March 2023.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "standard.h"
+#include "database.h"
 #include "gedcom.h"
 #include "gnode.h"
 #include "functiontable.h"
+#include "hashtable.h"
 #include "pnode.h"
 #include "interp.h"
 #include "lineage.h"

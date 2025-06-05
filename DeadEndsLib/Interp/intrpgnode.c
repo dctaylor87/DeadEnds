@@ -14,6 +14,7 @@
 #include "standard.h"
 #include "gnode.h"
 #include "refnindex.h"
+#include "errors.h"
 #include "functiontable.h"
 #include "pnode.h"
 #include "interp.h"

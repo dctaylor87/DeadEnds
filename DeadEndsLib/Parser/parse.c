@@ -4,7 +4,7 @@
 //  parse.c contains two functions, parseProgram and parseFile, which parse DeadEnds scripts.
 //
 //  Created by Thomas Wetmore on 4 January 2023.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include "context.h"
+#include "errors.h"
 #include "functiontable.h"
 #include "gedcom.h"
 #include "integertable.h"
@@ -22,6 +23,7 @@
 #include "parse.h"
 #include "path.h"
 #include "pvalue.h"
+#include "set.h"
 #include "stringset.h"
 #include "symboltable.h"
 //#include "refnindex.h"

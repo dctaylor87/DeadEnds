@@ -5,19 +5,19 @@
 //  record keys that have the names.
 //
 //  Created by Thomas Wetmore on 26 November 2022.
-//  Last changed on 3 June 2025.
+//  Last changed on 4 June 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
 #include "gedcom.h"
+#include "gnode.h"
 #include "hashtable.h"
 #include "name.h"
 #include "sort.h"
 #include "nameindex.h"
 #include "set.h"
-//#include "gnode.h"
 //#include "refnindex.h"
 
 // Local functions

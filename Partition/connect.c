@@ -6,7 +6,10 @@
 
 #include <stdint.h>
 #include "connect.h"
+#include "gnode.h"
 #include "gnodeindex.h"
+#include "hashtable.h"
+#include "list.h"
 
 static int getNumAncestors(GNode*, GNodeIndex*);
 static int getNumDescendents(GNode*, GNodeIndex*);

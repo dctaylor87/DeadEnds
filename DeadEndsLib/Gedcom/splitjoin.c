@@ -1,10 +1,11 @@
-// DeadEnds
 //
-// splitjoin.c has the functions that split persons and families into parts and join them back
-// together. Calling split and join formats GNode trees into standard form.
+// DeadEnds Library
 //
-// Created by Thomas Wetmore on 7 November 2022.
-// Last changed on 19 May 2024.
+//  splitjoin.c has the functions that split persons and families into parts and join them back
+//  together. Calling split and join formats GNode trees into standard form.
+//
+//  Created by Thomas Wetmore on 7 November 2022.
+//  Last changed on 4 June 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
@@ -12,6 +13,7 @@
 #include "standard.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "splitjoin.h"
 

@@ -17,6 +17,7 @@
 #include "standard.h"
 #include "denls.h"
 
+#include "gedcom.h"
 #include "gnode.h"
 #include "recordindex.h"
 #include "refnindex.h"

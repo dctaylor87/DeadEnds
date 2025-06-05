@@ -67,6 +67,7 @@
 #include "lloptions.h"
 #include "de-strings.h"
 #include "file.h"
+#include "gedcom.h"
 #include "import.h"
 #include "codesets.h"
 #include "version.h"

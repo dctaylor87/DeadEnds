@@ -25,6 +25,7 @@
 #include "zstr.h"
 #include "hashtable.h"
 #include "refnindex.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "errors.h"
 #include "translat.h"
