@@ -177,7 +177,7 @@ errlog_out (CString title, CString msg, CString file, int line)
 
 /* crash_setcrashlog -- specify where to log alloc messages.  */
 void
-crash_setcrashlog (String crashlog)
+crash_setcrashlog (CString crashlog)
 {
   if (!crashlog)
     crashlog = "";

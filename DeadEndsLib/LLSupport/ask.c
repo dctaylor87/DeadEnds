@@ -292,7 +292,8 @@ ask_for_output_file (CString mode,
  *  prc:   [OUT] result code (RC_DONE, RC_SELECT, RC_NOSELECT)
  *===============================================*/
 Sequence *
-ask_for_indiseq (CString ttl, char ctype, int *prc, Database *database)
+ask_for_indiseq (CString ttl, char ctype ATTRIBUTE_UNUSED,
+		 int *prc, Database *database)
 {
 	while (1)
 	{
@@ -477,7 +478,7 @@ chooseFromSequence (Sequence *seq, ASK1Q ask1, CString titl1, CString titln,
  *  letr:  [IN]  letter to possibly prepend to key (ie, I/F/S/E/X)
  *=============================================*/
 GNode *
-ask_for_record (CString idstr, int letr, Database *database)
+ask_for_record (CString idstr, int letr ATTRIBUTE_UNUSED, Database *database)
 {
 	GNode *rec;
 	char answer[MAXPATHLEN];

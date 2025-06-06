@@ -154,21 +154,30 @@ static PyObject *llpy_getindiset (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
     database = currentDatabase;
 
   seq = rptui_ask_for_indi_list (prompt, true, database);
-  abort ();			/* XXX */
+  if (! seq)			/* user cancelled */
+    Py_RETURN_NONE;
+
   PyObject *set = PySet_New (NULL);
   if (! set)
     return NULL;
 
   int len = lengthSequence (seq);
   if (len == 0)
-    Py_RETURN_NONE;
+    Py_RETURN_NONE;		/* XXX should this be an empty set instead? XXX */
 
-  for (int ndx = 0; ndx < len; ndx++)
-    {
-      CString key;
-      CString name;
-      bool found = elementFromSequence (seq, ndx, &key, &name);
-    }
+  FORSEQUENCE (seq, element, count)
+    LLINES_PY_RECORD *pyobj = PyObject_New (LLINES_PY_RECORD, &llines_record_type);
+    if (! pyobj)
+      {
+	/* XXX need code to clean up XXX */
+	return NULL;
+      }
+    pyobj->llr_type = LLINES_TYPE_INDI;
+    pyobj->llr_record = element->root;
+    pyobj->llr_database = database;
+    PySet_Add (set, (PyObject *)pyobj);
+  ENDSEQUENCE
+  return (set);
 }
 
 /* llpy_menuchoose (choices, [prompt]) --> INT; Select from a collection of choices. */
@@ -217,9 +226,11 @@ static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
 static struct PyMethodDef Lifelines_User_Functions[] =
   {
    { "getindi",		(PyCFunction)llpy_getindi, METH_VARARGS | METH_KEYWORDS,
-     "getindi([prompt]) --> INDI; Identify person through user interface." },
+     "getindi([prompt],[database]) --> INDI; Identify person through user interface." },
+   { "getindiset",		(PyCFunction)llpy_getindiset, METH_VARARGS | METH_KEYWORDS,
+     "getindiset([prompt],[database]) --> SET; Identify set of persons through user interface." },
    { "getfam",		(PyCFunction)llpy_getfam, METH_NOARGS,
-     "getfam(void) --> FAM; Identify family through user interface." },
+     "getfam([database]) --> FAM; Identify family through user interface." },
    { "getint",		(PyCFunction)llpy_getint, METH_VARARGS | METH_KEYWORDS,
      "getint([prompt]) --> INT; Get integer through user interface." },
    { "getstr",		(PyCFunction)llpy_getstr, METH_VARARGS | METH_KEYWORDS,

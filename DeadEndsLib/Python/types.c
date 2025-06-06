@@ -11,6 +11,7 @@
 #include "porting.h"		/* LifeLines --> DeadEnds */
 #include "standard.h"		/* String */
 #include "denls.h"
+#include "gedcom.h"
 #include "hashtable.h"
 #include "recordindex.h"
 #include "refnindex.h"

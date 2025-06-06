@@ -373,7 +373,7 @@ GNode *key_possible_to_record (String str, /* string that may be a key */
 
 GNode *
 refn_to_record (String ukey,    /* user refn key */
-                int letr,       /* type of record */
+                int letr ATTRIBUTE_UNUSED,       /* type of record */
 		Database *database)
 {
   CString key = getRefn (ukey, database);

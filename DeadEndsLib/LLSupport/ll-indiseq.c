@@ -195,7 +195,7 @@ famseq_print_el (Sequence *seq, int i, int len, RFMT rfmt, Database *database)
 	GNode *fam=0;
 	CString key=0, name=0;
 	CString str=0;
-	int val=0, num1=0;
+	int val=0;
 	int spkeynum=0;
 	Sequence *spseq = createSequence (database->recordIndex);
 	GNode *indi=0;
