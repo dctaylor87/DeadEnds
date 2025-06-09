@@ -249,11 +249,24 @@ int evaluateInteger(PNode *pnode, Context *context, bool *errflg) {
 String evaluateString(PNode* pnode, Context* context, bool *errflg) {
 	ASSERT(pnode && context);
 	PValue pvalue = evaluate(pnode, context, errflg);
+#if 0
 	if (*errflg || pvalue.type != PVString) {
 		*errflg = true;
 		return "";
 	}
 	return pvalue.value.uString;
+#else
+	String string;
+	if (pvalue.type == PVString)
+		string = pvalue.value.uString;
+	else if (pvalue.type == PVNull)
+		string = "";
+	else {
+		*errflg = true;
+		string = "";
+	}
+	return string;
+#endif
 }
 
 // iistype checks that a PNode has a specified type.
