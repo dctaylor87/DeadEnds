@@ -92,7 +92,6 @@ static int
 interp_program (String proc, int nargs, void **args, CString sfile,
 		Database *database, String ofile, bool picklist)
 {
-  SymbolTable *stab = NULL;
   int ranit=0;
   String programsdir = getdeoptstr("DEPROGRAMS", NULL);
 
@@ -128,8 +127,9 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   initializeInterpreter(database);
 
   ErrorLog *errorLog = createErrorLog ();
-  parseProgram (sfile, programsdir, errorLog);
   //programParsing = true;
+  Context *context = parseProgram (sfile, programsdir, errorLog);
+  context->database = database;
 
   if (Perrors)
     {
@@ -155,15 +155,13 @@ interp_program (String proc, int nargs, void **args, CString sfile,
       }
   }
   //if (Poutfp) setbuf(Poutfp, NULL);
+  context->file = file;
 
   /* Link arguments to parameters in symbol table */
 
   curFileName = "internal";
   curLine = 1;
   PNode *pnode = procCallPNode ("main", null);
-
-  //stab = createSymbolTable ();
-  Context *context = createContext (database, file);
 
   /* Interpret top procedure */
   ranit = 1;
@@ -177,15 +175,12 @@ interp_program (String proc, int nargs, void **args, CString sfile,
 
   programRunning = false;
   finishInterpreter(); /* includes 5 sec delay if errors on-screen */
-  closeFile (context->file);
+
+  /* context->file is likely file, but the script can change it... */
+  if (context->file)
+    closeFile (context->file);
 
  interp_program_exit:
-
-  if (stab) {
-    //remove_symtab(stab);
-    deleteHashTable (stab);
-    stab = NULL;
-  }
 
   xl_free_adhoc_xlats();
 

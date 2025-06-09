@@ -42,7 +42,8 @@ PYTHON_LIBS = @PYTHON_LIBS@
 llines_LDADD = ../DeadEndsLib/Python/libpyllines.a \
 	../DeadEndsLib/LLSupport/libllsupport.a \
 	../DeadEndsLib/UI/libui.a \
-	../DeadEndsLib/Interp/libinterp.a ../DeadEndsLib/Parser/libparser.a \
+	 ../DeadEndsLib/Parser/libparser.a \
+	../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
@@ -52,7 +53,8 @@ llines_LDADD = ../DeadEndsLib/Python/libpyllines.a \
 llexec_LDADD = ../DeadEndsLib/Python/libpyllines.a \
 	../DeadEndsLib/UI/libuicli.a \
 	../DeadEndsLib/LLSupport/libllsupport.a \
-	../DeadEndsLib/Interp/libinterp.a ../DeadEndsLib/Parser/libparser.a \
+	../DeadEndsLib/Parser/libparser.a \
+	../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \

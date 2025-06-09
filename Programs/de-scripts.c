@@ -104,7 +104,9 @@ execute_script (CString report_name, Database *database)
   ErrorLog *errorLog = createErrorLog ();
 
   // parse a DeadEnds script
-  parseProgram (report_name, DEADENDS_search_path, errorLog);
+  Context *context = parseProgram (report_name, DEADENDS_search_path, errorLog);
+  context->database = database;
+  context->file = stdOutputFile ();
 
   if (Perrors > 0)
     {
@@ -118,12 +120,13 @@ execute_script (CString report_name, Database *database)
   PNode *pnode = procCallPNode("main", null);
 
   //  Call the main procedure.
-  //SymbolTable *symbolTable = createSymbolTable();
-  Context *context = createContext (database, stdOutputFile());
-
   PValue returnPvalue;
   interpret(pnode, context, &returnPvalue);
 
+  /* unfortunately, main is a procedure, not a function.  And
+     procedures do not return values, only functions do.  So, there is
+     currently no way for the script to return success or failure to
+     us.  */
   return (0);			/* XXX should interpret returnPvalue XXX */
 }
 
