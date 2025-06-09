@@ -79,7 +79,7 @@ proc main ()
     }
   }
   print(nl())
-  set(count, length(results))
+  set(count, lengthset(results))
   if (gt(chc, 3)) { set(count, length(marriages)) }
   print("Sorting ", d(count), " results")
   print(nl())
