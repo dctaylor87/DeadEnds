@@ -20,6 +20,7 @@ runscript_LDADD = \
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
+	-I$(top_srcdir)/DeadEndsLib/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \

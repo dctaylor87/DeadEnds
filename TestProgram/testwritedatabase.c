@@ -8,8 +8,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "database.h"
-#include "utils.h"
+#include "deadends.h"
 
 void testWriteDatabase(String fileName, Database* database) {
 	printf("START WRITE DATABASE TEST: %2.3f\n", getMseconds());

@@ -10,6 +10,7 @@ testprogram_SOURCES = \
 
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
+	-I$(top_srcdir)/DeadEndsLib/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \

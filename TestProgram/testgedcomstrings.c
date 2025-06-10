@@ -1,19 +1,16 @@
 // DeadEnds
 //
-// testgedcomstrings.c
+//  DeadEnds (Test Program)
 //
-// Created by Thomas Wetmore on 27 May 2024.
-// Last changed on 20 May 2025.
+//  testgedcomstrings.c
+//
+//  Created by Thomas Wetmore on 27 May 2024.
+//  Last changed on 5 June 2025.
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "errors.h"
-#include "gnode.h"
-#include "standard.h"
-#include "readnode.h"
-#include "gnodelist.h"
-#include "utils.h"
+#include "deadends.h"
 
 char* readFileIntoString(const char *filename);
 

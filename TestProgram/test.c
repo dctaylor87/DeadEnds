@@ -4,39 +4,21 @@
 //  test.c holds test functions used during development.
 //
 //  Created by Thomas Wetmore on 5 October 2023.
-//  Last changed on 4 June 2025.
+//  Last changed on 5 June 2025.
+//
 
-#include <stdio.h>
 #include <stdint.h>
 
-#include "standard.h"
-#include "hashtable.h"
-#include "refnindex.h"
-#include "database.h"
-#include "file.h"
-#include "functiontable.h"
-#include "gedcom.h"
-#include "gnode.h"
-#include "hashtable.h"
-#include "pnode.h"
-#include "import.h"
-#include "interp.h"
-#include "errors.h"
-#include "list.h"
-#include "nameindex.h"
-#include "parse.h"
-#include "path.h"
-#include "readnode.h"
-#include "recordindex.h"
-#include "sequence.h"
-#include "stringtable.h"
+//#include "hashtable.h"
+//#include "refnindex.h"
 //#include "file.h"
-#include "utils.h"
-#include "validate.h"
+//#include "pnode.h"
+//#include "file.h"
+#include "deadends.h"
 
 #define gms getMsecondsStr()
 
-static bool debugging = false;
+//static bool debugging = false;
 
 extern void testSequence(Database*, int);
 static Database *createDatabaseTest(String, int, ErrorLog*);

@@ -11,19 +11,17 @@
 //  If DE_GEDCOM_PATH and/or DE_SCRIPTS_PATH are defined, they may be used as search paths.
 //
 //  Created by Thomas Wetmore on 21 July 2024
-//  Last changed on 3 June 2025.
+//  Last changed on 5 June 2025.
 //
 
-#include "file.h"
-#include "errors.h"
-#include "functiontable.h"
-#include "pnode.h"
-#include "interp.h"
+//#include "errors.h"
+//#include "functiontable.h"
+//#include "pnode.h"
 #include <stdint.h>
 
-#include "runscript.h"
-#include "gedcom.h"
-#include "parse.h"
+//#include "gedcom.h"
+//#include "parse.h"
+#include "deadends.h"
 
 // Local functions.
 static void usage(void);
