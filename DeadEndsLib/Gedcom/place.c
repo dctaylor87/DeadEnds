@@ -24,8 +24,8 @@ bool placeToList(String place, List *list) {
 // Each phrase is trimmed of leading/trailing whitespace and added to the list.
 // Returns true on success.
 bool valueToList(String str, List* list, String dlm) {
-    if (!str || *str == 0 || !list) return false;
     emptyList(list); // Empty list before use.
+    if (!str || *str == 0 || !list) return true;
     // Create heap buffer to hold copy of string.
     int len = (int) strlen(str);
     String buf = (String) stdalloc(len + 2);
