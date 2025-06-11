@@ -309,7 +309,7 @@ InterpType interpForList(PNode* pnode, Context* context, PValue* pval) {
         if (copy.type == PVString && copy.value.uString)
             copy.value.uString = strsave(copy.value.uString);  // deep copy
         assignValueToSymbol(context, pnode->elementIden, copy);
-        assignValueToSymbol(context, pnode->countIden, PVALUE(PVInt, uInt, count++));
+        assignValueToSymbol(context, pnode->countIden, PVALUE(PVInt, uInt, ++count));
         switch (irc = interpret(pnode->loopState, context, pval)) {
             case InterpContinue:
             case InterpOkay: goto i;
