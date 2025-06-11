@@ -9,7 +9,7 @@
 //  identifiers to PValue pointers.
 
 //  Created by Thomas Wetmore on 15 December 2022.
-//  Last changed on 1 June 2025.
+//  Last changed on 10 June 2025.
 //
 
 #include <ansidecl.h>
@@ -245,6 +245,15 @@ int evaluateInteger(PNode *pnode, Context *context, bool *errflg) {
 	return (int) pvalue.value.uInt;
 }
 
+//String oldevaluateString(PNode* pnode, Context* context, bool *errflg) { // DEPRECATED
+//	ASSERT(pnode && context);
+//	PValue pvalue = evaluate(pnode, context, errflg);
+//	if (*errflg || pvalue.type != PVString) {
+//		*errflg = true;
+//		return "";
+//	}
+//	return pvalue.value.uString;
+//}
 //  evaluateString evaluates an expression that should resolve to a String.
 String evaluateString(PNode* pnode, Context* context, bool *errflg) {
 	ASSERT(pnode && context);
@@ -256,6 +265,10 @@ String evaluateString(PNode* pnode, Context* context, bool *errflg) {
 	}
 	return pvalue.value.uString;
 #else
+	if (*errflg) {
+	  scriptError(pnode, "error evaluating argument");
+	  return "";
+	}
 	String string;
 	if (pvalue.type == PVString)
 		string = pvalue.value.uString;
