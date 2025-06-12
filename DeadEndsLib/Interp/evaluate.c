@@ -39,10 +39,10 @@ static bool pvalueToBoolean(PValue pvalue);
 // begins in this function. Based on PNode type, more specialied functions may be called.
 PValue evaluate(PNode* pnode, Context* context, bool* errflg) {
     ASSERT(pnode && context);
-	if (programDebugging) {
-		printf("evaluate:%d ", pnode->lineNumber);
-		showPNode(pnode);
-	}
+    if (programDebugging) {
+        printf("evaluate:%d ", pnode->lineNumber);
+        showPNode(pnode);
+    }
     if (pnode->type == PNIdent) return evaluateIdent(pnode, context);
     if (pnode->type == PNBltinCall) return evaluateBuiltin(pnode, context, errflg);
     if (pnode->type == PNFuncCall) return evaluateUserFunc(pnode, context, errflg);
@@ -96,7 +96,7 @@ bool evaluateConditional(PNode* pnode, Context* context, bool* errflg) {
 
 // evaluateBuiltin evaluates a built-in function call by calling its C code function.
 PValue evaluateBuiltin(PNode* pnode, Context* context, bool* errflg) {
-	if (builtInDebugging) printf("%s %2.3f\n", pnode->stringOne, getMseconds());
+    if (builtInDebugging) printf("%s %2.3f\n", pnode->stringOne, getMseconds());
     return (*(BIFunc) pnode->builtinFunc)(pnode, context, errflg);
 }
 
@@ -106,7 +106,7 @@ PValue evaluateBuiltin(PNode* pnode, Context* context, bool* errflg) {
 // 3. Evaluate the arguments and bind them to the parameters in the SymbolTable.
 PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
     String name = pnode->funcName;
-	if (debugging) printf("evaulateUserFunc: %s\n", name);
+    if (debugging) printf("evaulateUserFunc: %s\n", name);
     PNode *func = searchFunctionTable(context->functions, name);
     if (!func) {
         scriptError(pnode, "function %s is undefined", name);
@@ -136,7 +136,7 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
         *errflg = true;
         return nullPValue;
     }
-	if (symbolTableDebugging) showSymbolTable(table);
+    if (symbolTableDebugging) showSymbolTable(table);
     // Create the frame for the called function. Call it. Delete the frame.
     Frame* frame = createFrame(pnode, func, table, context->frame);
     context->frame = frame;
@@ -144,18 +144,18 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
     InterpType irc = interpret((PNode*) func->funcBody, context, &value);
     context->frame = frame->caller;
     deleteFrame(frame);
-    
+
     switch (irc) {
-        case InterpReturn:
-        case InterpOkay:
-            *errflg = false;
-            return value;
-        case InterpBreak:
-        case InterpContinue:
-        case InterpError:
-        default:
-            *errflg = true;
-            return nullPValue;
+    case InterpReturn:
+    case InterpOkay:
+        *errflg = false;
+        return value;
+    case InterpBreak:
+    case InterpContinue:
+    case InterpError:
+    default:
+        *errflg = true;
+        return nullPValue;
     }
 }
 
@@ -169,21 +169,21 @@ PValue evaluateBoolean(PNode* pnode, Context* context, bool* errflg) {
 // pvalueToBoolean converts a program value to a boolean using C like rules.
 static bool pvalueToBoolean(PValue pvalue) {
     switch (pvalue.type) {
-        case PVNull: return false;
-        case PVBool: return pvalue.value.uBool;
-        case PVInt: return pvalue.value.uInt != 0;
-        case PVFloat: return pvalue.value.uFloat != 0.0;
-        case PVString: return strlen(pvalue.value.uString) > 0;
-        case PVPerson:
-        case PVFamily:
-        case PVSource:
-        case PVEvent:
-        case PVOther:
-        case PVGNode: return pvalue.value.uGNode;
-        case PVSequence: return pvalue.value.uSequence;
+    case PVNull: return false;
+    case PVBool: return pvalue.value.uBool;
+    case PVInt: return pvalue.value.uInt != 0;
+    case PVFloat: return pvalue.value.uFloat != 0.0;
+    case PVString: return strlen(pvalue.value.uString) > 0;
+    case PVPerson:
+    case PVFamily:
+    case PVSource:
+    case PVEvent:
+    case PVOther:
+    case PVGNode: return pvalue.value.uGNode;
+    case PVSequence: return pvalue.value.uSequence;
         //case PVTable: return pvalue.pvValue.uTable ? truePValue : falsePValue;
-        case PVList: return pvalue.value.uList;
-        default: return false;
+    case PVList: return pvalue.value.uList;
+    default: return false;
     }
 }
 
@@ -238,48 +238,32 @@ int evaluateInteger(PNode *pnode, Context *context, bool *errflg) {
 	ASSERT(pnode && context);
 	PValue pvalue = evaluate(pnode, context, errflg);
 	if (*errflg || pvalue.type != PVInt) {
-        scriptError(pnode, "expression must be an integer");
+        	scriptError(pnode, "expression must be an integer");
 		*errflg = true;
 		return 0;
 	}
 	return (int) pvalue.value.uInt;
 }
 
-//String oldevaluateString(PNode* pnode, Context* context, bool *errflg) { // DEPRECATED
-//	ASSERT(pnode && context);
-//	PValue pvalue = evaluate(pnode, context, errflg);
-//	if (*errflg || pvalue.type != PVString) {
-//		*errflg = true;
-//		return "";
-//	}
-//	return pvalue.value.uString;
-//}
 //  evaluateString evaluates an expression that should resolve to a String.
 String evaluateString(PNode* pnode, Context* context, bool *errflg) {
-	ASSERT(pnode && context);
-	PValue pvalue = evaluate(pnode, context, errflg);
-#if 0
-	if (*errflg || pvalue.type != PVString) {
-		*errflg = true;
-		return "";
-	}
-	return pvalue.value.uString;
-#else
-	if (*errflg) {
-	  scriptError(pnode, "error evaluating argument");
-	  return "";
-	}
-	String string;
-	if (pvalue.type == PVString)
-		string = pvalue.value.uString;
-	else if (pvalue.type == PVNull)
-		string = "";
-	else {
-		*errflg = true;
-		string = "";
-	}
-	return string;
-#endif
+    ASSERT(pnode && context);
+    PValue pvalue = evaluate(pnode, context, errflg);
+    if (*errflg) {
+        scriptError(pnode, "error evaluating argument");
+	return "";
+    }
+    String string;
+    if (pvalue.type == PVString)
+        string = pvalue.value.uString ? pvalue.value.uString : "";
+    else if (pvalue.type == PVNull)
+        string = "";
+    else {
+        *errflg = true;
+        scriptError(pnode, "argument is not a string");
+	string = "";
+    }
+    return string;
 }
 
 // iistype checks that a PNode has a specified type.
