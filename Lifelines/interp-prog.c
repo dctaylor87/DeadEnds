@@ -129,7 +129,6 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   ErrorLog *errorLog = createErrorLog ();
   //programParsing = true;
   Context *context = parseProgram (sfile, programsdir, errorLog);
-  context->database = database;
 
   if (Perrors)
     {
@@ -143,6 +142,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
       goto interp_program_exit;
     }
 
+  context->database = database;
   /* Open output file if name is provided */
 
   File *file = null;
