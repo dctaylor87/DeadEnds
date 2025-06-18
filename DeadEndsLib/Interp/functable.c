@@ -119,7 +119,7 @@ BuiltIn builtIns[] = {
   { "le",           2,    2,    __le },
   { "length",       1,    1,    __length },
   { "lengthset",    1,    1,    __lengthset }, // DEPRECATED
-//{ "linemode",     0,    0,    __linemode },
+  { "linemode",     0,    0,    __linemode },
   { "list",         1,    1,    __list },
   { "lock",         1,    1,    __noop },
   { "long",         1,    1,    __long },

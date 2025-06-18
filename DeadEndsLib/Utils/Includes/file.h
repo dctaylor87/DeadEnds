@@ -1,23 +1,45 @@
 // DeadEnds
 //
-// file.h
+// file.h holds the functions for File data types. These are the output files used for script output.
 //
 // Created by Thomas Wetmore on 1 July 2024.
-// Last changed on 17 May 2025.
+// Last changed on 17 June 2025.
+//
 
 #ifndef file_h
 #define file_h
 
 #include "standard.h"
 
+// Page is a page buffer if program output is in PageMode.
+typedef struct Page {
+    int nrows;
+    int ncols;
+    int currow;
+    int curcol;
+    String buffer;
+} Page;
+
+// FileType is an enum that defines the types of Files, now restricted to lineMode and pageMode.
+typedef enum FileMode {
+    lineMode = 0,
+    pageMode,
+} FileMode;
+
 // File is a structure that holds a file's name and Unix FILE pointer.
 typedef struct File {
     FILE* fp;       // Unix file pointer.
     String path;    // Path to file.
     String name;    // Name of file.
-    bool isStdout;  // New flag
+    bool isStdout;  // True if file is standard out.
+    FileMode mode;  // Mode of file -- line mode or page mode.
+    Page* page;     // Page if in page mode.
 } File;
 
+extern Page* createPage(int rows, int cols);
+extern void deletePage(Page *page);
+
+// Public API to File.
 File* openFile(CString path, CString mode);
 File* stdOutputFile(void);
 void closeFile(File*);
