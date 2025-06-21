@@ -367,7 +367,15 @@ PValue __save (PNode *pnode, Context *context, bool *errflg) {
 //  usage: strlen(STRING) -> INT
 PValue __strlen (PNode *node, Context *context, bool* eflg) {
 	PValue value = evaluate(node->arguments, context, eflg);
-	if (*eflg || value.type != PVString) return nullPValue;
+	if (*eflg)
+	  return nullPValue;
+	else if (value.type == PVNull)
+	  return PVALUE(PVInt, uInt, (long) 0);
+	else if (value.type != PVString) {
+	  *eflg = true;
+	  scriptError (node, "argument to strlen must be a string.");
+	  return nullPValue;
+	}
 	return PVALUE(PVInt, uInt, (long) strlen(value.value.uString));
 }
 
