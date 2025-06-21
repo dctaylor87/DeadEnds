@@ -34,6 +34,9 @@
 #define MAXROWS 512
 #define MAXCOLS 512
 
+/* forward references */
+static bool request_file (Context *context, CString *msg);
+
 // XXX do we need this? XXX
 void finishrassa (File *file ATTRIBUTE_UNUSED)
 {
@@ -45,29 +48,39 @@ void finishrassa (File *file ATTRIBUTE_UNUSED)
 // usage: pagemode(INT, INT) -> VOID
 // First parameter is number of rows, second is number of columns.
 PValue __pagemode(PNode* pnode, Context* context, bool* errflg) {
-	PNode* arg = pnode->arguments;
-	PValue pvalue = evaluate(arg, context, errflg);
-	if (*errflg || pvalue.type != PVInt) {
-		*errflg = true;
-		scriptError(pnode, "the rows argument to pagemode must be an integer.");
-		return nullPValue;
-	}
-	int rows = (int) pvalue.value.uInt;
-	arg = arg->next;
-	pvalue = evaluate(arg, context, errflg);
-	if (*errflg || pvalue.type != PVInt) {
-		*errflg = true;
-		scriptError(pnode, "the columns argument to pagemode must be an integer.");
-		return nullPValue;
-	}
-	int cols = (int) pvalue.value.uInt;
+    PNode* arg = pnode->arguments;
+    PValue pvalue = evaluate(arg, context, errflg);
+    if (*errflg || pvalue.type != PVInt) {
 	*errflg = true;
-	if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS) {
-		scriptError(pnode, "the value of rows or cols to pagemode is out of range.");
-		return nullPValue;
-	}
-	*errflg = false;
+	scriptError(pnode, "the rows argument to pagemode must be an integer.");
+	return nullPValue;
+    }
+    int rows = (int) pvalue.value.uInt;
+    arg = arg->next;
+    pvalue = evaluate(arg, context, errflg);
+    if (*errflg || pvalue.type != PVInt) {
+	*errflg = true;
+	scriptError(pnode, "the columns argument to pagemode must be an integer.");
+	return nullPValue;
+    }
+    int cols = (int) pvalue.value.uInt;
+    if (cols < 1 || cols > MAXCOLS || rows < 1 || rows > MAXROWS) {
+	*errflg = true;
+	scriptError(pnode, "the value of rows or cols to pagemode is out of range.");
+	return nullPValue;
+    }
     File* file = context->file;
+    if (! file) {
+      /* we do not have an output file, get one! */
+      CString msg = 0;
+      bool rtn = request_file (context, &msg);
+      if (! rtn) {
+	*errflg =- true;
+	scriptError (pnode, msg);
+	return nullPValue;
+      }
+      file = context->file;
+    }
     // If in page mode remove the old Page before creating a new one.
     if (file->mode == pageMode) deletePage(file->page);
     file->mode = pageMode;
@@ -77,15 +90,25 @@ PValue __pagemode(PNode* pnode, Context* context, bool* errflg) {
 
 // __linemode switches script program output to line mode.
 // usage: linemode() -> VOID
-PValue __linemode(PNode* pnode ATTRIBUTE_UNUSED,
-		  Context* context ATTRIBUTE_UNUSED,
-		  bool* errflg) {
+PValue __linemode(PNode* pnode, Context* context, bool* errflg) {
     File* file = context->file;
+    if (! file) {
+      /* we do not have an output file, get one! */
+      CString msg = 0;
+      bool rtn = request_file (context, &msg);
+      if (! rtn) {
+	*errflg = true;
+	scriptError (pnode, msg);
+	return nullPValue;
+      }
+      file = context->file;
+    }
     // Do nothing if already in line mode.
     if (file->mode == lineMode) return nullPValue;
     // Switch to line mode; assume the last page has been written by a pageout().
 	file->mode = lineMode;
     deletePage(file->page);
+    file->page = null;
     return nullPValue;
 }
 
@@ -96,6 +119,7 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
     PNode* arg = pnode->arguments;
     // Revert to standard output if there are no arguments.
     if (!arg) {
+        finishrassa (context->file); /* needed for page mode */
         closeFile(context->file);
         context->file = stdOutputFile();
         return nullPValue;
@@ -201,67 +225,48 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
 // usage: outfile() -> STRING
 PValue __outfile(PNode* pnode, Context* context, bool* errflg)
 {
-  if (context->file->isStdout)
+  if (! context->file || context->file->isStdout)
     {
-      CString dereports = getdeoptstr ("DEREPORTS", ".");
-      char fname[MAXPATHLEN];
-      CString ttl = _(qSoutarc); /* Enter name of output archive file. */
-      CString prompt = _(qSwhtfname); /* enter file name:  */
-      bool rtn = ask_for_output_filename (ttl, dereports, prompt, fname, sizeof(fname));
+      /* we do not have an output file, get one! */
+      CString msg = 0;
+      bool rtn = request_file (context, &msg);
       if (! rtn)
 	{
 	  *errflg = true;
-	  scriptError(pnode, "???");
+	  scriptError (pnode, msg);
 	  return nullPValue;
 	}
-      File *file = openFile(fname, DEREADTEXT);
-      if (! file)
-	{
-	  *errflg = true;
-	  scriptError(pnode, "No report was generated.");
-	  return nullPValue;
-	}
-      context->file = file;
-      setbuf(file->fp, NULL);
     }
-  *errflg = false;
   return createStringPValue(context->file->name);
 }
 
-#if 0
-/* request_file -- Prompt user for file name
-   returns open file pointer, or NULL if error
-   handles error message.  */
+/* request_file -- Prompt user for report output file name.
+   Returns success or failure.  */
 
 static bool
-request_file (bool *eflg)
+request_file (Context *context, CString *msg)
 {
-  String rptdir = getlloptstr("DEREPORTS", ".");
-  String fullpath=0;
+  CString dereports = getdeoptstr ("DEREPORTS", ".");
   char fname[MAXPATHLEN];
-  fname[0] = 0;
-  bool rtn = rptui_ask_for_output_filename(_(qSwhtout), rptdir, _(qSwhtfname),
-					   fname, sizeof (fname));
-  if (! fname || ! fname[0])  {
-    if (fname)
-      prog_error(0, _("Report stopping due to error opening output file"));
-    else
-      prog_error(0, _("Report stopping due to lack of output file"));
-    /* set error flag to stop interpreter */
-    *eflg = true;
-    /* set cancel flag to suppress traceback */
-    rpt_cancelled = TRUE;
-    strfree(&fname);
-    return false;
-  }
-  if (outfilename)
-    stdfree(outfilename);
-  outfilename = fullpath;
-  strfree(&fname);
-  prefix_file_for_report(Poutfp);
+  CString ttl = _(qSoutarc); /* Enter name of output archive file. */
+  CString prompt = _(qSwhtfname); /* enter file name:  */
+  bool rtn = ask_for_output_filename (ttl, dereports, prompt, fname, sizeof(fname));
+  if (! rtn)
+    {
+      *msg = "error asking user for output file name";
+      return false;
+    }
+  File *file = openFile(fname, DEWRITETEXT);
+  if (! file)
+    {
+      *msg = "Error opening output file.  No report was generated.";
+      return false;
+    }
+  context->file = file;
+  setbuf(file->fp, NULL);
+  //prefix_file_for_report(context->file->fp);
   return true;
 }
-#endif
 
 // __pos positions page output to a row and column.
 // usage: pos(INT, INT) -> VOID
@@ -464,8 +469,20 @@ void oldpoutput(String string, Context* context) {
 }
 
 // poutput outputs a string to the current program output file in the current mode.
-void poutput(String string, Context* context) {
+void poutput(PNode *pnode, String string, Context* context, bool *errflg) {
     File* file = context->file;
+
+    if (! file) {
+      /* we do not have an output file, get one! */
+      CString msg = 0;
+      bool rtn = request_file (context, &msg);
+      if (! rtn) {
+	*errflg = true;
+	scriptError (pnode, msg);
+	return;
+      }
+      file = context->file;
+    }
 
     // Handle line mode.
     if (file->mode == lineMode) {

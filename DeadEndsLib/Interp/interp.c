@@ -43,7 +43,7 @@ bool symbolTableTracing = false;
 bool frameTracing = false;
 
 void showRuntimeStack(Context*, PNode*); // Move elsewhere?
-extern void poutput(String, Context*);
+//extern void poutput(String, Context*);
 
 bool programParsing = false;
 bool programRunning = false;
@@ -95,7 +95,11 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
         }
         switch (pnode->type) {
         case PNSCons: // Strings are written.
-            poutput(pnode->stringCons, context);
+	    poutput(pnode, pnode->stringCons, context, &errorFlag);
+	    if (errorFlag) {
+	      scriptError (pnode, "Error outputing string.");
+	      return InterpError;
+	    }
             //fprintf(context->file->fp, "%s", (String) pnode->stringCons);
             break;
         case PNICons: // Numbers are ignored.
@@ -105,8 +109,12 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             pvalue = evaluateIdent(pnode, context);
             if (pvalue.type == PVString && pvalue.value.uString) {
                 //fprintf(context->file->fp, "%s", pvalue.value.uString);
-                poutput(pvalue.value.uString, context);
+	        poutput(pnode, pvalue.value.uString, context, &errorFlag);
                 stdfree(pvalue.value.uString);
+		if (errorFlag) {
+		    scriptError (pnode, "Error outputing string.");
+		    return InterpError;
+		}
             }
             break;
         case PNBltinCall: // Call builtin and write return value if a String.
@@ -117,8 +125,12 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             }
             if (pvalue.type == PVString && pvalue.value.uString) {
                 //fprintf(context->file->fp, "%s", pvalue.value.uString);
-                poutput(pvalue.value.uString, context);
+                poutput(pnode, pvalue.value.uString, context, &errorFlag);
                 stdfree(pvalue.value.uString);
+		if (errorFlag) {
+		    scriptError (pnode, "Error outputing string.");
+		    return InterpError;
+		}
             }
             break;
         case PNProcCall: {
@@ -126,8 +138,12 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             case InterpOkay:
                 if (returnValue && returnValue->type == PVString && returnValue->value.uString) {
                     //fprintf(context->file->fp, "%s", returnValue->value.uString);
-                    poutput(returnValue->value.uString, context);
+                    poutput(pnode, returnValue->value.uString, context, &errorFlag);
                     stdfree(returnValue->value.uString);
+		    if (errorFlag) {
+			scriptError (pnode, "Error outputing string.");
+			return InterpError;
+		    }
                 }
                 break;
             case InterpError: return InterpError;
@@ -139,9 +155,13 @@ InterpType interpret(PNode* pnode, Context* context, PValue* returnValue) {
             pvalue = evaluateUserFunc(pnode, context, &errorFlag);
             if (errorFlag) return InterpError;
             if (pvalue.type == PVString && pvalue.value.uString) {
-                poutput(pvalue.value.uString, context);
+                poutput(pnode, pvalue.value.uString, context, &errorFlag);
                 //fprintf(context->file->fp, "%s", pvalue.value.uString);
                 stdfree(pvalue.value.uString);  // The pvalue's string is in the heap.
+		if (errorFlag) {
+		    scriptError (pnode, "Error outputing string.");
+		    return InterpError;
+		}
             }
             break;
         case PNNotes: // Iterate NOTEs.
