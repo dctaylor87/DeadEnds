@@ -218,6 +218,7 @@ static struct {
     char* rword;
     int val;
 } rwordtable[] = {
+    { "Parents",  PARENTS },
     { "break",    BREAK },
     { "call",     CALL },
     { "children",  CHILDREN },
@@ -238,7 +239,6 @@ static struct {
     { "func",     FUNC_TOK },
     { "if",       IF },
     { "mothers",  MOTHERS },
-    { "parents",  PARENTS },
     { "proc",     PROC },
     { "return",   RETURN },
     { "spouses",  SPOUSES },
