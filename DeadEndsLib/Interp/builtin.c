@@ -1,40 +1,40 @@
 //
-//  DeadEnds
-//
+//  DeadEndsLib
 //  builtin.c contains many built-in functions of the DeadEnds script language.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 31 May 2025.
+//  Last changed on 21 June 2025.
 //
 
 #include <ansidecl.h>
 #include <stdint.h>
 
-#include "standard.h"
-#include "hashtable.h"
-#include "refnindex.h"
-#include "gedcom.h"
+#include "context.h"
+#include "database.h"
+#include "date.h"
+#include "evaluate.h"
+#include "frame.h"
 #include "gnode.h"
+#include "hashtable.h"
+#include "interp.h"
 #include "lineage.h"
 #include "list.h"
-#include "pvalue.h"
-#include "errors.h"
-#include "pnode.h"
 #include "name.h"
+#include "pnode.h"
+#include "pvalue.h"
+#include "recordindex.h"
+#include "sequence.h"
+#include "standard.h"
+#include "symboltable.h"
+
+#include "refnindex.h"
+#include "gedcom.h"
+#include "errors.h"
 #include "functiontable.h"
 #include "errors.h"
-#include "interp.h"
-#include "recordindex.h"
-#include "database.h"
 #include "hashtable.h"
-#include "evaluate.h"
 #include "path.h"
-#include "symboltable.h"
-#include "date.h"
 #include "place.h"
-#include "context.h"
-#include "sequence.h"
-#include "frame.h"
 #include "builtintable.h"
 #include "denls.h"
 #include "ask.h"
@@ -367,14 +367,12 @@ PValue __save (PNode *pnode, Context *context, bool *errflg) {
 //  usage: strlen(STRING) -> INT
 PValue __strlen (PNode *node, Context *context, bool* eflg) {
 	PValue value = evaluate(node->arguments, context, eflg);
-	if (*eflg)
-	  return nullPValue;
-	else if (value.type == PVNull)
-	  return PVALUE(PVInt, uInt, (long) 0);
+	if (*eflg) return nullPValue;
+	else if (value.type == PVNull) return PVALUE(PVInt, uInt, (long) 0);
 	else if (value.type != PVString) {
-	  *eflg = true;
-	  scriptError (node, "argument to strlen must be a string.");
-	  return nullPValue;
+	    *eflg = true;
+	    scriptError (node, "argument to strlen must be a string.");
+	    return nullPValue;
 	}
 	return PVALUE(PVInt, uInt, (long) strlen(value.value.uString));
 }

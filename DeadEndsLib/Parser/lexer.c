@@ -1,9 +1,10 @@
-//  DeadEnds
 //
-// lexer.c has the lexer functions for the DeadEnds script programs.
+//  DeadEnds Library
+//  lexer.c has the lexer functions for DeadEnds script programs.
 //
-// Created by Thomas Wetmore on 27 December 2022.
-// Last changed on 26 June 2024.
+//  Created by Thomas Wetmore on 27 December 2022.
+//  Last changed on 18 June 2025.
+//
 
 #include <stdint.h>
 
