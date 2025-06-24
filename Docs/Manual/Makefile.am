@@ -13,6 +13,8 @@ MANUALS =	$(MANUALS_en) $(MANUALS_sv)
 MANUALSSRC_en = ll-python-api.texi \
 		ll-python-internals.texi
 
+info_TEXINFOS = ll-python-api.texi ll-python-internals.texi
+
 MANUALSSRC_sv =
 
 MANUALSSRC =	$(MANUALSSRC_en) $(MANUALSSRC_sv)
@@ -44,8 +46,6 @@ CLEANFILES =
 if BUILD_DOCS
 CLEANFILES += $(MANUALS)
 
-TEXI2PDF = texi2pdf
-
 .xml.pdf:
 	@TOOL_DBLATEX@ $^
 
@@ -55,6 +55,4 @@ TEXI2PDF = texi2pdf
 .xml.txt:
 	@TOOL_XMLTO@ --skip-validation txt $^
 
-.texi.pdf:
-	$(TEXI2PDF) $^
 endif
