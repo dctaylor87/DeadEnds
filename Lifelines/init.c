@@ -444,7 +444,7 @@ check_installation_path (void)
 	and we should read it here */
 	strncpy(global_conf_path, "C:\\Program Files\\lifelines", maxlen);
 #else
-	/* SYS_CONF_DIR was passed to make in src/gedlib/Makefile.am */
+	/* SYS_CONF_DIR was passed to make in Lifelines/Makefile.am */
 	strncpy(global_conf_path, SYS_CONF_DIR, maxlen);
 #endif
 	global_conf_path[maxlen] = 0;
