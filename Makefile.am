@@ -4,4 +4,4 @@
 SUBDIRS = \
 	DeadEndsLib PatchSex TestProgram RandomizeKeys RunScript \
 	Programs Lifelines MenuLibrary UseMenus Partition MultiBases \
-	GenerateSExpressions TestDates
+	GenerateSExpressions TestDates Docs
