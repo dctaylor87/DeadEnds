@@ -456,6 +456,7 @@ extern ZST qSiddefpath;   /* "Default path: " */
 extern ZST qSmisskeys;    /* "WARNING: missing keys" */
 extern ZST qSbadkeyptr;   /* "This does not point to another record in the database!" */
 extern ZST qSwhtfname;    /* "enter file name" */
+extern ZST qSwhtfname2;   /* "enter file name: " */
 extern ZST qSwhtfnameext; /* "enter file name (*%s)" */
 extern ZST qSnosuchrec;   /* "There is no record with that key or reference." */
 extern ZST qSbaddb;       /* "Database was corrupt." */

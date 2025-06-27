@@ -58,9 +58,13 @@ Page* createPage(int rows, int cols) {
     page->nrows = rows;
     page->ncols = cols;
     page->currow = 1;
-    page->grid = (int32_t*) stdalloc(rows * cols * sizeof(int32_t));
-    for (int i = 0; i < page->nrows * page->ncols; i++) {
-        page->grid[i] = 0x20; // U+0020 = space
+    if ((rows == 0) || (cols == 0))
+        page->grid = null;
+    else {
+        page->grid = (int32_t*) stdalloc(rows * cols * sizeof(int32_t));
+        for (int i = 0; i < page->nrows * page->ncols; i++) {
+            page->grid[i] = 0x20; // U+0020 = space
+        }
     }
     return page;
 }

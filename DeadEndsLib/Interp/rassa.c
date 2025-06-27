@@ -253,7 +253,7 @@ request_file (Context *context, CString *msg)
   CString dereports = getdeoptstr ("DEREPORTS", ".");
   char fname[MAXPATHLEN];
   CString ttl = _(qSoutarc); /* Enter name of output archive file. */
-  CString prompt = _(qSwhtfname); /* enter file name:  */
+  CString prompt = _(qSwhtfname2); /* enter file name:  */
   bool rtn = ask_for_output_filename (ttl, dereports, prompt, fname, sizeof(fname));
   if (! rtn)
     {
@@ -277,8 +277,9 @@ request_file (Context *context, CString *msg)
 PValue __pos(PNode* pnode, Context* context, bool* errflg) {
     // The file must be in page mode.
     File* file = context->file;
-    if (file->mode != pageMode) {
-        scriptError(pnode, "The output file must in page mode");
+
+    if (! file || file->mode != pageMode) {
+        scriptError(pnode, "The output file must be in page mode");
         *errflg = true;
         return nullPValue;
     }
@@ -311,8 +312,8 @@ PValue __pos(PNode* pnode, Context* context, bool* errflg) {
 PValue __row(PNode* pnode, Context* context, bool* errflg) {
     // The file must be in page mode.
     File* file = context->file;
-    if (file->mode != pageMode) {
-        scriptError(pnode, "The output file must in page mode");
+    if (! file || file->mode != pageMode) {
+        scriptError(pnode, "The output file must be in page mode");
         *errflg = true;
         return nullPValue;
     }
@@ -337,6 +338,17 @@ PValue __row(PNode* pnode, Context* context, bool* errflg) {
 // usage: col(INT) -> VOID
 PValue __col (PNode *pnode, Context *context, bool *errflg) {
     File* file = context->file;
+    if (! file) {
+      /* we do not have an output file, get one! */
+      CString msg = 0;
+      bool rtn = request_file (context, &msg);
+      if (! rtn) {
+	*errflg = true;
+	scriptError (pnode, msg);
+	return nullPValue;
+      }
+      file = context->file;
+    }
 	int col = evaluateInteger(pnode->arguments, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "the argument to col must be an integer");
@@ -394,7 +406,7 @@ PValue __SHOWFRAME(PNode* pnode, Context* context, bool* errflg) {
 PValue __pageout(PNode* pnode, Context* context, bool* errflg) {
     // Make sure the output file is in page mode.
     File* file = context->file;
-    if (file->mode != pageMode) {
+    if (! file || file->mode != pageMode) {
         scriptError(pnode, "the output file must be in page mode");
         *errflg = true;
         return nullPValue;

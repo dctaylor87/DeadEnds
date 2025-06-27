@@ -480,6 +480,7 @@ ZST qSiddefpath   = N_("Default path: ");
 ZST qSmisskeys    = N_("WARNING: missing keys");
 ZST qSbadkeyptr   = N_("This does not point to another record in the database!");
 ZST qSwhtfname    = N_("enter file name");
+ZST qSwhtfname2   = N_("enter file name: ");
 ZST qSwhtfnameext = N_("enter file name (*%s)");
 ZST qSnosuchrec   = N_("There is no record with that key or reference.");
 ZST qSbaddb       = N_("Database was corrupt.");
