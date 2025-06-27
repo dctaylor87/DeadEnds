@@ -134,9 +134,9 @@ proc main ()
         set(linnum, 1)
         set(linpos, 1)
         list(plist)
-        while (eq(indi, NULL)) {
-            getindi(indi)
-        }
+	while (not (indi)) {
+	        getindi(indi)
+	}
         while (and(ne(gra,1), ne(gra,2))) {
                 getint(gra,"Select timeline (1) graph, (2) chart:")
         }
