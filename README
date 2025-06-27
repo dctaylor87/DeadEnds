@@ -4,3 +4,40 @@ genealogical information.  It is under development.
 This repository is a fork (obviously) of the TomWetmore/DeadEnds
 repository.  The main branch is identical to that in the TomWetmore
 repository.  The activity in this repository is on the branches.
+
+Currently there is one branch -- dct-experiment -- which is badly in
+need of a rename.
+
+On the branch in addition to the directories that are part of Tom's
+DeadEnds, you will find the following directories:
+
+Lifelines
+
+    Contains a port of the Lifelines programs llines and llexec.
+
+Reports
+
+    Most of the LL reports.  Written in the LL script language.  These
+    differ from the files in Scripts in that they were NOT written to
+    test DeadEnds.  They were written as reports for LifeLines.  Some
+    were modified for DeadEnds.  Most were taken verbatim from
+    LifeLines.  In the future some will be new to DeadEnds.
+
+DeadEndsLib/LLSupport
+
+    Support code for the LL programs.  It isn't always clear whether a file
+    belongs here or in Lifelines.  Further, some existing files should likely
+    be split in two with pieces in each.  It and Lifelines both need clean up.
+
+DeadEndsLib/Python
+
+    Python embedding for DeadEnds.  If Python and its development files
+    are installed on the build system, then Python can be configured as
+    a second extension language.
+
+DeadEndsLib/UI
+
+    User interface stuff.  Incomplete.  Work in progress.  A partial
+    attempt to factor our user interface stuff from the Lifelines and
+    LLSupport directories to more easily support multiple user
+    interfaces.
