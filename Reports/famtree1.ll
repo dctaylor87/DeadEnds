@@ -808,9 +808,7 @@ proc dates1(person)
          set(curfam, savfam)
      }
      else {
- /*        if (eq(mod(d(id), 2), 0)) {*/
          if (eq(mod(id, 2), 0)) {
-/*             set(curfam, parents(getel(chart, div(id, 2))))*/
              set(curfam, parents(lookup(chart, d(div(id, 2)))))
          }
      }
