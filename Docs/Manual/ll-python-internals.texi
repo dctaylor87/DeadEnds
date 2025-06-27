@@ -1,5 +1,5 @@
 \input texinfo
-@setfilename python-internals
+@setfilename python-internals.info
 @titlepage
 @settitle DeadEnds Python Extension Internals Manual
 @setchapternewpage odd
