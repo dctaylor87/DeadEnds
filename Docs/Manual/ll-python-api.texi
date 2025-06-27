@@ -1,5 +1,5 @@
 \input texinfo
-@setfilename python-api
+@setfilename python-api.info
 @titlepage
 @titlefont{DeadEnds Python Extension Reference}
 @settitle DeadEnds Python Extension Reference Manual
@@ -122,13 +122,13 @@ or
 
     @code{husb.name(True)}
 
-The @code{caps} parameter to the method @code{husb} is optional.
-Thus, the first returns @code{husb}'s name as a string using the
-default capitalization for the last name.  The second, specifies the
-@code{caps} parameter by name, and returns the surname using the
-capitalization as found in the database, and the third specifies the
-@code{caps} parameter by position and puts the surname in all capital
-letters.
+The @code{caps} parameter to the method @code{husb} is optional and
+affects the capitalization of the last name.  Thus, the first returns
+@code{husb}'s name as a string using the default capitalization for
+the last name.  The second, specifies the @code{caps} parameter by
+name, and returns the surname using the capitalization as found in the
+database, and the third specifies the @code{caps} parameter by
+position and puts the surname in all capital letters.
 
 This is because '@code{name}' is a instance method for Individual
 Records.  It takes one argument, @code{caps}, which is optional.
@@ -190,9 +190,9 @@ there.
 Here is that tutorial ahnentafel report translated to Python and using
 the @code{llines} extension module.
 
+First, a fairly straight translation:
 @example
 import llines
-import sys
 
 def main ():
     indi = llines.getindi()
@@ -235,8 +235,51 @@ def main ():
 
 if __name__ == '__main__':
     main()
-    sys.stdout.flush()
 @end example
+
+The above Python script can be found in the file @file{tutorial.py}.
+Next, a more Pythonic version:
+
+@example
+import llines
+
+def main ():
+    indi = llines.getindi()
+
+    # list of tuples of people needing to be displayed and their
+    # ancestor numbers
+    anclist = []
+
+    anclist.append((indi, 1))
+
+    # Our basic loop is we take the next person who needs to be
+    # displayed, display them, and then record their parents as
+    # needing to be displayed.
+
+    for indi, ahnen in anclist:
+        # display person we just pulled off ilist
+
+        print(ahnen, ". ", indi.name())
+        e = indi.birth()
+        if e:
+            print(" b. ", e.long())
+        e = indi.death()
+        if e:
+            print(" d. ", e.long())
+        # add person’s parents to list to display
+        par = indi.father()
+        if par:
+            anclist.append((par, 2*ahnen))
+
+        par = indi.mother()
+        if par:
+            anclist.append((par, 1 + 2*ahnen))
+
+if __name__ == '__main__':
+    main()
+@end example
+
+The above Python script is in the file @file{tutorial2.py}.
 
 @chapter RECORDS
 In DeadEnds there a couple of differences between a RECORD and a NODE.
@@ -365,14 +408,8 @@ himself, herself, itself
 Reflective
 @end multitable
 
-QUESTION: Should we allow / implement an it/its/itself column as a
-possible return value?  If yes, when should we return one of those
-pronouns?  My inclination is to go with tradition and return the
-masculine if the gender is unknown.  Neuter / None / error all feel
-wrong...
-
-Currently, if the SEX is neither 'M' nor 'F', the masculine choices
-are used.
+The feminine pronoun is returned if the INDI has a @code{SEX} value of
+@code{F}.  The masculine is returned in all other cases.
 @end deftypefun
 
 @subsection Event NODE related
@@ -472,7 +509,7 @@ Selects and returns spouse of person through user interface.
 Returns @code{None} if INDI has no spouses or if the user cancels.
 
 @end deftypefun
-@deftypefun INDI choosefam (void)
+@deftypefun INDI choosefam (void) @arrow() FAM or @code{None}
 @findex choosefam
 
 Selects and returns a family that INDI is in.  Returns @code{None} if
@@ -814,6 +851,7 @@ The following functions are instance functions that apply to all types of RECORD
 @deftypefunx EVEN top_node (void) @arrow{} NODE
 @deftypefunx SOUR top_node (void) @arrow{} NODE
 @deftypefunx OTHR top_node (void) @arrow{} NODE
+@findex top_node
 Returns the NODE that is the top of the NODE tree associated with the RECORD.
 Works for each kind of RECORD.
 @end deftypefun
@@ -935,10 +973,12 @@ It is (currently) an error for it to be the top-node of the tree.
 @end deftypefun
 
 @deftypefun NODE copy_node_tree (void) @arrow{} NODE
+@findex copy_node_tree
 Returns a copy of the tree from the current node on down.
 @end deftypefun
 
 @deftypefun NODE nodeiter (type, [tag]) @arrow{} Iterator
+@findex nodeiter
 @anchor{nodeiter} Returns an iterator that performs the specified
 iteration upon the @code{NODE} tree.
 
@@ -957,6 +997,7 @@ a matching tag will be returned.  If @code{tag} is omitted, is
 @subsection Module Functions
 
 @defun create_node (tag, [value]) @arrow{} NODE
+@findex create_node
 Creates a node having the specified tag @code{tag} and value
 @code{value}.  Both @code{tag} and (if specified) @code{value} are
 strings.  The created node is returned.  NOTE: This CANNOT be used to
@@ -1007,6 +1048,7 @@ abbreviation table.
 @end deftypefun
 
 @deftypefun NODE stddate (void) @arrow{} STRING
+@findex stddate
 Takes the given NODE @code{event}, finds the date, breaks it apart,
 formats it according to the previously specified formats, and returns
 the resulting string.
@@ -1018,6 +1060,7 @@ NOTE: There is a non-instance version that takes a string.
 The following functions affect how dates are presented.
 
 @defun dayformat ([format]) @arrow{} INT.
+@findex dayformat
 Sets the day format for stddate calls.  Returns the previous format.
 
 @table @asis
@@ -1033,6 +1076,7 @@ No space or leading 0 before single digit days.
 @end defun
 
 @defun monthformat ([format]) @arrow{} INT.
+@findex monthformat
 Sets the month format for stddate calls.  Returns the previous format.
 
 @table @asis
@@ -1066,6 +1110,7 @@ Upper case roman letter (e.g., I, II).
 @end defun
 
 @defun yearformat ([format]) @arrow{} INT.
+@findex yearformat
 Sets the year format for stddate calls.  Returns the previous format.
 
 @table @asis
@@ -1081,6 +1126,7 @@ No space or leading 0 before years.
 @end defun
 
 @defun eraformat ([format]) @arrow{} INT.
+@findex eraformat
 Sets the era format for stddate calls.  Returns the previous format.
 
 @table @asis
@@ -1108,6 +1154,7 @@ Trailing CE or BCE.
 @end defun
 
 @defun dateformat ([format]) @arrow{} INT.
+@findex dateformat
 Sets the date format for stddate calls.  Returns the previous format.
 
 @table @asis
@@ -1147,6 +1194,7 @@ As in @acronym{GEDCOM}.
 @end defun
 
 @defun complexformat (INT format) @arrow{} INT
+@findex complexformat
 The value @code{format} must be either @code{-1} or in the range
 @code{[3,8]}.  The value @code{-1} just returns the current value
 without changing it.  Values in the range @code{[3,8]} get set and
@@ -1173,6 +1221,7 @@ accompany the date.  Format values:
 @end multitable
 @end defun
 @defun stddate (STRING date) @arrow{} STRING
+@findex stddate
 Takes the given date, breaks it apart, formats it according to the
 previously specified formats, and returns the resulting string.
 
@@ -1180,6 +1229,7 @@ NOTE: There is an instance version that takes a NODE.
 @end defun
 
 @defun complexpic (int which, [STRING format]) @arrow{} BOOLEAN
+@findex complexpic
 Parameter @code{which} must be one of the constants listed in the
 @code{which} column of table below which shows the default lower case
 strings for both abbreviation and full word formats.  The upper case
@@ -1256,16 +1306,26 @@ to return the previous custom complex pic.
 @section Value Extraction Functions
 @subsection Instance Methods
 
-@deftypefun NODE extractdate
+@deftypefun NODE extractdate (void) @arrow{} (day, month, year)
 @findex extractdate
+
+Extracts date value from either a @code{DATE} node or, if the argument
+is not a @code{DATE} node, then the first @code{DATE} node one level below
+the argument node.
+
+Returns a tuple of the integer day, month, and year.  For any that are
+unavailable, @code{None} is returned.
 
 XXX not yet implemented XXX
 @end deftypefun
 
 @subsection Module Functions
 
-@defun extractdatestr
+@defun extractdatestr (STRING date) @arrow{} (day, month, year)
 @findex extractdatestr
+
+Returns a tuple of the integer day, month, and year.  For any that are
+unavailable, @code{None} is returned.
 
 XXX not yet implemented XXX
 @end defun
@@ -1296,23 +1356,21 @@ Select spouse of Individual.
 
 @section Module Functions
 
-@defun getindi ([prompt]) @arrow{} INDI
+@defun getindi ([prompt],[database]) @arrow{} INDI
 @findex getindi
 
 Identify individual through user interface.
 Returns INDI (or @code{None} if user cancels).
 
 @end defun
-@defun getindiset ([prompt]) @arrow{} SET
+@defun getindiset ([prompt],[database]) @arrow{} SET
 @findex getindiset
 
 Identify set of persons through user interface.
 Returns SET (or @code{None} if user cancels).
 
-XXX not yet implemented XXX
-
 @end defun
-@defun getfam (void) @arrow{} FAM
+@defun getfam ([database]) @arrow{} FAM
 @findex getfam
 
 Identify family through user interface.
@@ -1352,7 +1410,9 @@ XXX not yet implemented XXX
 
 Select from a list of options.
 
-XXX not yet implemented XXX
+The LIST items are strings.  Conventionally, they are numbered
+sequentially starting at one.  The prompt, a string, is optional.  If
+omitted, a prompt is supplied.
 @end defun
 @chapter Iterators
 @section RECORD Iterators
@@ -1404,28 +1464,38 @@ iterators.
 @subsection Instance Methods
 The RECORD instance iterator methods are:
 @deftypefun Database individuals (void) @arrow{} Iterator
+@findex individuals
 Returns an iterator for individuals in Database.
 @end deftypefun
 @deftypefun Database families (void) @arrow{} Iterator
+@findex families
 Returns an iterator for families in Database.
 @end deftypefun
 @deftypefun Database sources (void) @arrow{} Iterator
+@findex sources
 Returns an iterator for sources in Database.
 @end deftypefun
 @deftypefun Database events (void) @arrow{} Iterator
+@findex events
 Returns an iterator for events in Database.
 @end deftypefun
 @deftypefun Database others (void) @arrow{} Iterator
+@findex others
 Returns an iterator for Others in Database.
 @end deftypefun
 
 @subsection Module Functions
 The RECORD function iterators are:
 @defun individuals ([database]) @arrow{} Iterator
+@findex individuals
 @defunx families ([database]) @arrow{} Iterator
+@findex families
 @defunx sources ([database]) @arrow{} Iterator
+@findex sources
 @defunx events ([database]) @arrow{} Iterator
+@findex events
 @defunx others ([database]) @arrow{} Iterator
+@findex others
 @end defun
 
 Returns an iterator of the given type for the specified database.  If
@@ -1446,6 +1516,7 @@ To get an iterator for a NODE, call the instance function @code{nodeiter}.
 Its signature is:
 
 @deftypefun NODE nodeiter (type, [tag]) @arrow{} Iterator
+@findex nodeiter
 Here @code{type} is one of @code{ITER_CHILDREN} or
 @code{ITER_TRAVERSE} and @code{tag} is a tag to search for.
 @xref{nodeiter} for details.
@@ -1455,16 +1526,19 @@ Here @code{type} is one of @code{ITER_CHILDREN} or
 @section Module Functions
 
 @defun version (void) @arrow{} STRING
+@findex version
 Returns the version of DeadEnds
 @end defun
 
 @chapter What is not here
 @section Functions definitely NOT being implemented
 
+The following functions will @b{NOT} be implemented as Python provides
+all of their functionality, and more, natively.
+
 @itemize
 @item Arithmetic and Logic Functions
 
-The functions
  @code{add},
 @findex add
  @code{sub},
@@ -1495,21 +1569,19 @@ The functions
 @findex not
  @code{eq},
 @findex eq
- @code{ge}
+ @code{ge},
 @findex ge
- @code{gt}
+ @code{gt},
 @findex gt
- @code{le}
+ @code{le},
 @findex le
- @code{lt}
+ @code{lt},
 @findex lt
  @code{ne}
 @findex ne
-will not be implemented.
 
 @item List Functions
 
-The functions
 @code{list},
 @findex list
 @code{clear},
@@ -1540,13 +1612,11 @@ The functions
 @findex rsort
 @code{dup},
 @findex dup
-@code{forlist},
+@code{forlist}
 @findex forlist
-will not be implemented.
 
 @item Table Functions
 
-The functions
 @code{table},
 @findex table
 @code{insert},
@@ -1555,13 +1625,11 @@ The functions
 @findex lookup
 @code{length},
 @findex length
-@code{empty},
+@code{empty}
 @findex empty
-will not be implemented.
 
 @item String Functions
 
-The functions
 @code{lower},
 @findex lower
 @code{upper},
@@ -1596,20 +1664,37 @@ The functions
 @findex strcmp
 @code{eqstr},
 @findex eqstr
-@code{nestr},
+@code{nestr}
 @findex nestr
-will not be implemented.
 
 @item Trigonometric and Spherical Calculations
 
-The functions @code{sin}, @code{cos}, @code{tan}, @code{arcsin},
-@code{arccos}, and @code{arctan} will not be implemented.
+@code{sin},
 @findex sin
+@code{cos},
 @findex cos
+@code{tan},
 @findex tan
+@code{arcsin},
 @findex arcsin
+@code{arccos},
 @findex arccos
+@code{arctan}
 @findex arctan
+
+@item Output Mode Functions
+
+@code{test},
+@findex test
+@code{nl},
+@findex nl
+@code{sp},
+@findex sp
+@code{qt},
+@findex qt
+@code{print}
+@findex print
+
 @end itemize
 
 The functions mentioned in the aforementioned sections will not be
@@ -1636,17 +1721,6 @@ The functions
 @code{lengthset}
 @findex lengthset
 will not be implemented.
-
-@item Output Mode Functions
-
-The functions @code{test}, @code{nl}, @code{sp}, @code{qt}, and
-@code{print} will not be implemented.  The others are yet to be
-decided.
-@findex test
-@findex nl
-@findex sp
-@findex qt
-@findex print
 
 @item Person Set Functions and @acronym{GEDCOM} Extraction
 
@@ -1945,7 +2019,9 @@ They are not in any sense a commitment.
 @subsection Instance Methods
 
 @deftypefun INDI add_family (family, role, [position]) @arrow{} INDI
+@findex add_family
 @deftypefunx FAM add_individual (individual, role, [position]) @arrow{} FAM
+@findex add_individual
 
 Adds the indicated family to the individual (for @code{add_family}) or
 the indicated family to the individual (for @code{add_individual}).
@@ -1964,18 +2040,24 @@ known)?  Should there be two @code{position} arguments -- one each for
 the family and the individual?
 @end deftypefun
 
-@deftypefun NODE create_record (type) @arrow{} RECORD
+@deftypefun NODE create_record ([type],[database]) @arrow{} RECORD
+@findex create_record
 Takes the current node and makes a record of the specified type with
 the current node as the top node.  The created record is returned.
 
 NOTE: The current node must be a temp node and have no parent (i.e.,
 it must be the top of its node tree) and have no siblings.  There
 would probably be other restrictions, yet to be determined, as well.
+
+The @code{type}, if specified, must be consistent with the current
+node's @code{tag}.  If @code{database} is not specified, the current
+default database is used.
 @end deftypefun
 
 @subsection Module Functions
 
 @defun create_reference (tag, RECORD) @arrow{} NODE
+@findex create_reference
 Creates and returns a NODE having the specified @code{tag} that
 references @code{RECORD}.
 
@@ -1988,6 +2070,7 @@ this function.  Instead, see the functions @code{add_family} and
 @end defun
 
 @defun find_record (search, type) @arrow{} Collection of some flavor
+@findex find_record
 
 Searches records of type @code{type} for @code{search}.  For ``INDI''
 records, would search the @code{NAME}.  For ``FAM'' records, would
@@ -2013,6 +2096,7 @@ Given a @code{record}, return the collection of @{ NODEs | RECORDs @}
 that reference that record.  Whether it is @code{NODEs} or
 @code{RECORDs} might be determined by @code{options}.  What sort of
 ``collection'' also needs to be decided.
+@findex find_references
 @end defun
 
 @section Other @acronym{GEDCOM} Records
@@ -2049,6 +2133,7 @@ unknown.  How to resolve issues such as how to @{ close | drop |
 unmount | whatever @} a database is unknown.
 
 @defun database_open (pathname, [access], [cache_sizes], [locking]) @arrow{} DataBase
+@findex database_open
 
 Attempts to open @code{pathname} as a DeadEnds database.  If
 successful, the database object is returned.
@@ -2079,6 +2164,7 @@ But, what is the right paradigm?
 @end defun
 
 @defun create_database (pathname) @arrow{} DataBase
+@findex create_database
 
 Creates a new empty database at the specified path.  Returns the newly
 created empty database.
@@ -2087,6 +2173,7 @@ Does not change which database is the current database.
 @end defun
 
 @deftypefun DataBase import (gedcom_file, [keys = {keys_keep|keys_new|keys_auto}]) @arrow{} Something
+@findex import
 
 Imports the specified @acronym{GEDCOM} file.  The integer argument
 @code{keys}, if specified, must have one of three values.
@@ -2118,6 +2205,7 @@ success or failure indication, something else?  Needs thought.
 @end deftypefun
 
 @deftypefun DataBase export (pathname) @arrow{} Something
+@findex export
 
 QUESTIONS:
 
@@ -2137,6 +2225,7 @@ exported is a valid database -- no broken pointers.
 @end deftypefun
 
 @deftypefun DataBase merge (database) @arrow{} DataBase
+@findex merge
 Merge the specified database into our database.  The records and nodes
 of the database merged in become part of this database.
 
@@ -2145,6 +2234,7 @@ QUESTION: Is old database closed?  Discarded?  Something else?
 @end deftypefun
 
 @deftypefun DataBase statistics (void) @arrow{} tuple
+@findex statistics
 
 Tentative interface: Returns a tuple of tuples of two elements.  Each
 two element tuple is of the form
@@ -2170,11 +2260,13 @@ XXX Need to think more about what this interface should be. XXX
 @end deftypefun
 
 @deftypefun DataBase sync (void) @arrow{} BOOLEAN
+@findex sync
 Writes out (backs up) the Database if it is dirty and the backup path
 has been set.  On success, it returns True.
 @end deftypefun
 
 @defun current_database (void) @arrow{} DataBase
+@findex current_database
 
 Returns an object that represents the current database.
 
@@ -2182,11 +2274,13 @@ Long term goal: allow multiple concurrent databases in use.
 @end defun
 
 @deftypefun DataBase set_current (void) @arrow{} DataBase
+@findex set_current
 Makes this database the current database.  Returns the previous
 database.  Returns None if there is no previous database.
 @end deftypefun
 
 @deftypefun DataBase pathname (void) @arrow{} STRING
+@findex pathname
 
 Returns the pathname of the database.
 @end deftypefun
