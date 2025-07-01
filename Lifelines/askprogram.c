@@ -223,12 +223,12 @@ set_programs_d0 (HashTable ** fileprops)
  *  pfname: [OUT]  allocated on heap (name we tried to open)
  *=================================================*/
 bool
-ask_for_program (CString mode,
-                 CString ttl,
-                 String *pfname,
-                 CString path,
-                 CString ext,
-                 bool picklist)
+curses_ask_for_program (CString mode,
+			CString ttl,
+			String *pfname,
+			CString path,
+			CString ext,
+			bool picklist)
 {
 	int choice;
 	int nfiles, i;

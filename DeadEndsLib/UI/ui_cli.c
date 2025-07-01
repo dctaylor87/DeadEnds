@@ -51,6 +51,7 @@
 #include "de-strings.h"
 #include "ask.h"
 #include "ui.h"
+#include "stdio-ui.h"
 
 /*********************************************
  * external variables (no header)
@@ -74,7 +75,7 @@ chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selectable);
  *===========================================================*/
 
 void
-llvwprintf (CString fmt, va_list args)
+stdio_llvwprintf (CString fmt, va_list args)
 {
 	vprintf(fmt, args);
 }
@@ -140,19 +141,19 @@ call_system_cmd (CString cmd)
  *===========================================================*/
 
 bool
-ask_for_program (ATTRIBUTE_UNUSED CString mode,
-                 ATTRIBUTE_UNUSED CString ttl,
-                 ATTRIBUTE_UNUSED String *pfname,
-                 ATTRIBUTE_UNUSED CString path,
-                 ATTRIBUTE_UNUSED CString ext,
-                 ATTRIBUTE_UNUSED bool picklist)
+stdio_ask_for_program (ATTRIBUTE_UNUSED CString mode,
+		       ATTRIBUTE_UNUSED CString ttl,
+		       ATTRIBUTE_UNUSED String *pfname,
+		       ATTRIBUTE_UNUSED CString path,
+		       ATTRIBUTE_UNUSED CString ext,
+		       ATTRIBUTE_UNUSED bool picklist)
 {
 	/* TODO: We probably want to use the real implementation in askprogram.c */
 	return false;
 }
 
 bool
-ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
+stdio_ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
 {
 	char *rtn=NULL;
 	int len=0;
@@ -170,14 +171,14 @@ ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
 }
 
 bool
-ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen)
+stdio_ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen)
 {
 	outputln(ttl1);
-	return ask_for_string(ttl2, prmpt, buffer, buflen);
+	return stdio_ask_for_string(ttl2, prmpt, buffer, buflen);
 }
 
 int
-ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
+stdio_ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 {
 	int rv;
 	if (msg) outputln(msg);
@@ -188,7 +189,7 @@ ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 }
 
 bool
-ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, int buflen)
+stdio_ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
@@ -199,7 +200,7 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
 	destrapps(curpath, len, uu8, _(qSiddefpath));
 	destrapps(curpath, len, uu8, compressPath(path, len-strlen(curpath)-1));
 
-	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
+	return stdio_ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
 
 /*=============================================================
@@ -207,24 +208,24 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
  *===========================================================*/
 
 int
-chooseFromArray (CString ttl, int no, String *pstrngs)
+stdio_chooseFromArray (CString ttl, int no, String *pstrngs)
 {
 	bool selectable = true;
 	return chooseOrViewArray(ttl, no, pstrngs, selectable);
 }
 
 void
-view_array (CString ttl, int no, String *pstrngs)
+stdio_view_array (CString ttl, int no, String *pstrngs)
 {
 	bool selectable = false;
 	chooseOrViewArray(ttl, no, pstrngs, selectable);
 }
 
 int
-chooseOneOrListFromSequence (ATTRIBUTE_UNUSED CString ttl,
-			     ATTRIBUTE_UNUSED Sequence *seq,
-			     ATTRIBUTE_UNUSED bool multi,
-			     ATTRIBUTE_UNUSED enum SequenceType type)
+stdio_chooseOneOrListFromSequence (ATTRIBUTE_UNUSED CString ttl,
+				   ATTRIBUTE_UNUSED Sequence *seq,
+				   ATTRIBUTE_UNUSED bool multi,
+				   ATTRIBUTE_UNUSED enum SequenceType type)
 {
 #if !defined(DEADENDS)	 /* DEADENDS always fills in names for a person sequence */
 	calc_indiseq_names(seq); /* we certainly need the names */
@@ -303,14 +304,14 @@ chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selectable)
  *===========================================================*/
 
 int
-prompt_stdout (CString prompt)
+stdio_prompt_stdout (CString prompt)
 {
 	return ask_for_char(NULL, prompt, NULL);
 }
 
 /* called from ask.c, curses version in searchui.c */
 Sequence *
-invoke_search_menu (void)
+stdio_invoke_search_menu (void)
 {
 	return NULL;
 }

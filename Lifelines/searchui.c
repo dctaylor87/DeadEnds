@@ -88,11 +88,11 @@ static UIWINDOW search_source_menu_win=NULL;
  *********************************************/
 
 /*==============================
- * invoke_search_menu -- Handle search menu
+ * curses_invoke_search_menu -- Handle search menu
  * If return set has one element, it has already been confirmed
  *============================*/
 Sequence *
-invoke_search_menu (void)
+curses_invoke_search_menu (void)
 {
 	UIWINDOW uiwin=0;
 	Sequence *seq=0;

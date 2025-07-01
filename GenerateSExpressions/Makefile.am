@@ -10,7 +10,7 @@ gensexpr_LDADD = \
 	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/LLSupport/libllsupport.a \
-	../DeadEndsLib/UI/libuicli.a \
+	../DeadEndsLib/UI/libui.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \

@@ -239,7 +239,7 @@ resize_win: /* we come back here if we resize the window */
  * Localizes ttl
  *===========================================================*/
 int
-chooseOneOrListFromSequence (CString ttl, Sequence *seq, bool multi, enum SequenceType type)
+curses_chooseOneOrListFromSequence (CString ttl, Sequence *seq, bool multi, enum SequenceType type)
 {
 	WINDOW *win=0;
 	int row, done;

@@ -20,6 +20,8 @@
 #include "messages.h"
 #include "feedback.h"
 
+#include "database.h"
+#include "sequence.h"
 #include "uiio.h"
 #include "uiioi.h"
 

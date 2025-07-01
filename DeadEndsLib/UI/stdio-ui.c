@@ -16,8 +16,11 @@
 #include "feedback.h"
 #include "messages.h"
 
+#include "database.h"
+#include "sequence.h"
 #include "uiio.h"
 #include "uiioi.h"
+#include "stdio-ui.h"
 
 /* forward references */
 
@@ -30,14 +33,16 @@ stdio_output (void *data, const char *buffer, char **err_msg);
 static void
 stdio_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args);
 
+/* local functions */
+
 /* local variables */
 
 static struct uiio _uiio_stdio =
   {
     "STDIO",			/* name */
-    0,				/* input data */
-    0,				/* output data */
-    0,				/* error data */
+    0,				/* input data -- stdin */
+    0,				/* output data -- stdout */
+    0,				/* error data -- stderr */
     uiio_stdio_init,		/* early initialization */
     0,				/* pre database init */
     0,				/* post database init */
@@ -46,7 +51,18 @@ static struct uiio _uiio_stdio =
     stdio_input,		/* input func */
     stdio_output,		/* output func */
     stdio_output,		/* error func */
-    stdio_outputv		/* outputv func */
+    stdio_outputv,		/* outputv func */
+    stdio_ask_for_char_msg,
+    stdio_ask_for_filename_impl,
+    stdio_ask_for_string,
+    stdio_ask_for_string2,
+    stdio_chooseFromArray,
+    stdio_invoke_search_menu,
+    stdio_prompt_stdout,
+    stdio_llvwprintf,
+    stdio_view_array,
+    stdio_ask_for_program,
+    stdio_chooseOneOrListFromSequence,
   };
 
 UIIO *uiio_stdio = &_uiio_stdio;

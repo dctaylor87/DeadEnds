@@ -18,7 +18,7 @@ testpython_SOURCES = testpython.c
 #
 LDADD = ../DeadEndsLib/Python/libpyllines.a \
 	../DeadEndsLib/LLSupport/libllsupport.a \
-	../DeadEndsLib/UI/libuicli.a \
+	../DeadEndsLib/UI/libui.a \
 	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/Operations/liboperations.a \

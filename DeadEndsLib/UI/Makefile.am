@@ -1,10 +1,12 @@
 # Makefile for the LifeLines report interpreter subsystem
 
-noinst_LIBRARIES = libuicli.a libui.a
+noinst_LIBRARIES = libui.a
 #noinst_LIBRARIES = libui.a
 
 libui_core_SOURCES = \
+	generic.c \
 	ui.c \
+	ui_cli.c \
 	uiio.c \
 	print.c \
 	curses-ui.c \
@@ -12,8 +14,6 @@ libui_core_SOURCES = \
 	uiioi.h
 
 libui_a_SOURCES = $(libui_core_SOURCES)
-
-libuicli_a_SOURCES = ui_cli.c $(libui_core_SOURCES)
 
 # $(top_builddir)          for config.h
 # $(top_srcdir)/...        for headers

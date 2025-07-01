@@ -3,7 +3,15 @@
 
 /* This is for the *INTERNALS*.  For the API, please see hdrs/uiio.h instead */
 
+/* WARNING: EVERYTHING about this interface is subject to change at
+   ANY time and without notice.  I do not LIKE this interface.  It
+   needs to change.  The problem is, I don't know what to change it
+   to.  It WILL eventually change.  When and how is yet to be
+   determined.  YOU HAVE BEEN WARNED.  */
+
 /* XXX we might want to rethink how to do i/o here! XXX */
+
+enum SequenceType;		/* forward reference */
 
 struct uiio
 {
@@ -55,6 +63,17 @@ struct uiio
      for status and info we use uiio_output_data */
   void (*uiio_outputv_func)(void *data,
 			    MSG_LEVEL level, CString fmt, va_list args);
+  int (*uiio_ask_for_char_msg) (CString msg, CString ttl, CString prmpt, CString ptrn);
+  bool (*uiio_ask_for_filename_impl) (CString ttl, CString path, CString prmpt, String buffer, int buflen);
+  bool (*uiio_ask_for_string) (CString ttl, CString prmpt, String buffer, int buflen);
+  bool (*uiio_ask_for_string2) (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen);
+  int (*uiio_chooseFromArray) (CString ttl, int no, String *pstrngs);
+  Sequence *(*uiio_invoke_search_menu) (void);
+  int (*uiio_prompt_stdout) (CString prompt);
+  void (*uiio_llvwprintf) (CString fmt, va_list args);
+  void (*uiio_view_array) (CString ttl, int no, String *pstrngs);
+  bool (*uiio_ask_for_program) (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist);
+  int (*uiio_chooseOneOrListFromSequence) (CString ttl, Sequence *seq, bool multi, enum SequenceType type);
 };
 
 extern const char *ui_prompt;

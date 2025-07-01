@@ -18,6 +18,7 @@
 
 #include "feedback.h"
 #include "recordindex.h"
+#include "database.h"
 #include "sequence.h"
 
 #include "screen.h"
@@ -79,7 +80,18 @@ static struct uiio _uiio_curses =
     curses_input,		/* input func */
     curses_output,		/* output func */
     curses_error,		/* error func */
-    curses_outputv		/* outputv func */
+    curses_outputv,		/* outputv func */
+    curses_ask_for_char_msg,
+    curses_ask_for_filename_impl,
+    curses_ask_for_string,
+    curses_ask_for_string2,
+    curses_chooseFromArray,
+    curses_invoke_search_menu,
+    curses_prompt_stdout,
+    curses_llvwprintf,
+    curses_view_array,
+    curses_ask_for_program,
+    curses_chooseOneOrListFromSequence,
   };
 
 UIIO *uiio_curses = &_uiio_curses;

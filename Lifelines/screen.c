@@ -135,7 +135,7 @@ static UIWINDOW extra_menu_win=NULL;
 static void add_shims_info(List *list);
 static void add_uiwin(UIWINDOW uiwin);
 static void append_to_msg_list(String msg);
-//static bool ask_for_filename_impl(String ttl, String path, String prmpt
+//static bool curses_ask_for_filename_impl(String ttl, String path, String prmpt
 //	, String buffer, int buflen);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
@@ -719,13 +719,13 @@ check_stdout (void)
 }
 
 /*=====================================
- * prompt_stdout -- Prompt user in stdout
+ * curses_prompt_stdout -- Prompt user in stdout
  * This is like check_stdout, except it always
  * prompts, and it returns the response char,
  * and it doesn't clear stdout
  *===================================*/
 int
-prompt_stdout (CString prompt)
+curses_prompt_stdout (CString prompt)
 {
 	int i;
 	if (active_uiwin != stdout_win)
@@ -1109,7 +1109,7 @@ list_browse (Sequence *seq, int top, int * cur, int mark)
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, int buflen)
+curses_ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, int buflen)
 {
 	/* display current path (truncated to fit) */
 	char curpath[120];
@@ -1120,7 +1120,7 @@ ask_for_filename_impl (CString ttl, CString path, CString prmpt, String buffer, 
 	destrapps(curpath, len, uu8, _(qSiddefpath));
 	destrapps(curpath, len, uu8, compressPath(path, len-strlen(curpath)-1));
 
-	return ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
+	return curses_ask_for_string2(ttl, curpath, prmpt, buffer, buflen);
 }
 /*======================================
  * refresh_main -- touch & refresh main or stdout
@@ -1133,7 +1133,7 @@ refresh_main (void)
 	wrefresh(win);
 }
 /*======================================
- * ask_for_string -- Ask user for string
+ * curses_ask_for_string -- Ask user for string
  *  returns static buffer
  *  ttl:     [IN]  title of question (1rst line)
  *  prmpt:   [IN]  prompt of question (2nd line)
@@ -1141,7 +1141,7 @@ refresh_main (void)
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
+curses_ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
 {
 	UIWINDOW uiwin = ask_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1156,7 +1156,7 @@ ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
 	return rtn;
 }
 /*======================================
- * ask_for_string2 -- Ask user for string
+ * curses_ask_for_string2 -- Ask user for string
  * Two lines of title
  *  returns static buffer
  *  ttl1:    [IN]  title of question (1rst line)
@@ -1166,7 +1166,7 @@ ask_for_string (CString ttl, CString prmpt, String buffer, int buflen)
  *  buflen:  [IN]  max size of response
  *====================================*/
 bool
-ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen)
+curses_ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen)
 {
 	UIWINDOW uiwin = ask_msg_win;
 	WINDOW *win = uiw_win(uiwin);
@@ -1184,14 +1184,14 @@ ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int b
 }
 
 /*===========================================
- * ask_for_char_msg -- Ask user for character
+ * curses_ask_for_char_msg -- Ask user for character
  *  msg:   [IN]  top line displayed (optional)
  *  ttl:   [IN]  2nd line displayed
  *  prmpt: [IN]  3rd line text before cursor
  *  ptrn:  [IN]  List of allowable character responses
  *=========================================*/
 int
-ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
+curses_ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 {
 	UIWINDOW uiwin = (msg ? ask_msg_win : ask_win);
 	WINDOW *win = uiw_win(uiwin);
@@ -1209,14 +1209,14 @@ ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
 	return rv;
 }
 /*============================================
- * chooseFromArray -- Choose from string list
+ * curses_chooseFromArray -- Choose from string list
  *  ttl:      [IN] title for choice display
  *  no:       [IN] number of choices
  *  pstrngs:  [IN] array of choices
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 int
-chooseFromArray (CString ttl, int no, String *pstrngs)
+curses_chooseFromArray (CString ttl, int no, String *pstrngs)
 {
 	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
@@ -1253,14 +1253,14 @@ chooseFromArray_x (CString ttl, int no, String *pstrngs, DETAILFNC detfnc
 	return chooseOrViewArray(ttl, no, pstrngs, selecting, detfnc, param);
 }
 /*============================================
- * view_array -- Choose from string list
+ * curses_view_array -- Choose from string list
  *  ttl:      [IN] title for choice display
  *  no:       [IN] number of choices
  *  pstrngs:  [IN] array of choices
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 void
-view_array (CString ttl, int no, String *pstrngs)
+curses_view_array (CString ttl, int no, String *pstrngs)
 {
 	bool selecting = false;
 	chooseOrViewArray(ttl, no, pstrngs, selecting, 0, 0);
@@ -2007,7 +2007,7 @@ rpt_print (CString str)
  * llvwprintf -- Called as wprintf(fmt, argp)
  *===============================================*/
 void
-llvwprintf (CString fmt, va_list args)
+curses_llvwprintf (CString fmt, va_list args)
 {
 	UIWINDOW uiwin = stdout_win;
 	if (uiwin) {
@@ -2520,7 +2520,7 @@ void end_action (void)
 			strngs[i++] = el;
 		ENDLIST
 		viewing_msgs = true; /* suppress msg generation */
-		view_array(_(qSerrlist), lengthList(msg_list), strngs);
+		curses_view_array(_(qSerrlist), lengthList(msg_list), strngs);
 		viewing_msgs = false;
 		stdfree(strngs);
 		clear_msgs();

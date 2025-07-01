@@ -39,3 +39,16 @@ extern bool uiio_curses_init (void);
 extern UIIO *uiio_curses;
 extern UIIO *uiio_stdio;
 extern UIIO *current_uiio;
+
+#if 0
+extern int uiio_ask_for_char_msg(UIIO *uiio, CString msg, CString ttl, CString prmpt, CString ptrn);
+extern bool uiio_ask_for_filename_impl(UIIO *uiio, CString ttl, CString path, CString prmpt, String buffer, int buflen);
+extern bool uiio_ask_for_string(UIIO *uiio, CString ttl, CString prmpt, String buffer, int buflen);
+extern bool uiio_ask_for_string2(UIIO *uiio, CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen);
+extern int uiio_chooseFromArray(UIIO *uiio, CString ttl, int no, String *pstrngs);
+extern Sequence *uiio_invoke_search_menu(UIIO *uiio);
+extern void uiio_llwprintf();
+extern void uiio_view_array(UIIO *uiio, CString ttl, int no, String *pstrngs);
+extern bool uiio_ask_for_program(UIIO *uiio, CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist);
+extern int uiio_chooseOneOrListFromSequence(UIIO *uiio, CString ttl, Sequence *seq, bool multi, enum SequenceType type);
+#endif

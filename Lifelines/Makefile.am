@@ -51,7 +51,7 @@ llines_LDADD = ../DeadEndsLib/Python/libpyllines.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a ../DeadEndsLib/Utils/libutils.a
 
 llexec_LDADD = ../DeadEndsLib/Python/libpyllines.a \
-	../DeadEndsLib/UI/libuicli.a \
+	../DeadEndsLib/UI/libui.a \
 	../DeadEndsLib/LLSupport/libllsupport.a \
 	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Interp/libinterp.a \
