@@ -71,6 +71,7 @@ PValue evaluateUserFunc(PNode*, Context*, bool*);
 GNode* evaluateGNode(PNode*, Context*, bool*);
 //String formatDate(String, int, int, int, int, bool); // declared in date.h
 PNode *iden_node(String);
+enum PNType;			// forward reference
 bool iistype(PNode*, PNType);
 int num_params(PNode*);
 void scriptError(PNode*, String, ...);
