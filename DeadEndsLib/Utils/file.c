@@ -27,6 +27,7 @@ File* openFile(CString path, CString mode) {
 	file->fp = fp;
 	file->isStdout = false;
 	file->mode = lineMode;
+	file->curcol = 1;
 	file->page = null;
 	return file;
 }
