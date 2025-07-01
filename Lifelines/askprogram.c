@@ -48,7 +48,9 @@
 #include "codesets.h"
 #include "proptbls.h"
 #include "de-strings.h"
+#include "feedback.h"
 #include "ui.h"
+#include "curses-ui.h"
 #include "path.h"
 
 /*********************************************

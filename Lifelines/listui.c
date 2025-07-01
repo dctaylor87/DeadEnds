@@ -65,6 +65,7 @@
 #include "codesets.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "curses-ui.h"
 #include "locales.h"
 #include "lloptions.h"
 #include "ll-indiseq.h"		/* preprint_indiseq, print_indiseq_element */

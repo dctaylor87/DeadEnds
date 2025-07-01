@@ -69,6 +69,7 @@
 #include "de-strings.h"
 #include "llpy-externs.h"
 #include "ui.h"
+#include "generic.h"
 
 /*********************************************
  * external/imported variables

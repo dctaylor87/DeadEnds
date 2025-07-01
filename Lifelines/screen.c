@@ -82,6 +82,8 @@
 #include "ll-list.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "generic.h"
+#include "curses-ui.h"
 #include "lloptions.h"
 #include "version.h"
 #include "feedback.h"

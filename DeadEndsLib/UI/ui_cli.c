@@ -51,6 +51,7 @@
 #include "de-strings.h"
 #include "ask.h"
 #include "ui.h"
+#include "generic.h"
 #include "stdio-ui.h"
 
 /*********************************************

@@ -74,6 +74,7 @@
 #include "locales.h"
 #include "lloptions.h"
 #include "xref.h"
+#include "curses-ui.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
