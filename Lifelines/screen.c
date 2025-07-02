@@ -823,11 +823,12 @@ void
 run_report (bool picklist)
 {
 	CString progfile = NULL; /* will prompt for report */
-	String ofile = NULL; /* will prompt for output file */
+	//String ofile = NULL; /* will prompt for output file */
 	bool timing = true;
 	begin_action();
-	interp_main(progfile, currentDatabase, ofile, picklist, timing);
+	interp_main(progfile, currentDatabase, progout, picklist, timing);
 	end_action(); /* displays any errors that happened */
+	progout = NULL;		/* any output file set on command line is only for first report */
 }
 /*=========================================
  * update_browse_menu -- redraw menu if needed
