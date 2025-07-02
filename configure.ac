@@ -622,7 +622,7 @@ PYTHON_LIBS=`echo $PYTHON_LIBS | sed -e 's/-Xlinker -export-dynamic//'`
 
 if test "${have_libpython}" != "no"; then
   LIBPYLLINES="../DeadEndsLib/Python/libpyllines.a"
-  PYTHON_DIR="python"
+  PYTHON_DIR="Python"
 else
   LIBPYLLINES=""
   PYTHON_DIR=""
