@@ -23,44 +23,46 @@ The following options are some of the options available for \fIde\-llexec\fR.
 Specify configuration file location.
 .TP
 .BI \-I
-Specify a user property (e.g. -ILLEDITOR=gvim)
+Specify a user property (e.g. -ILLEDITOR=gvim).
 .TP
 .BI \-P
-Invoke the Python interactive interpreter (if configured in)
+Invoke the Python interactive interpreter (if configured in).
 .TP
 .BI \-a
-Log dynamic memory operation (for debugging)
+Log dynamic memory operation (for debugging).
 .TP
 .BI \-s \fIseconds\fP
-Sleep for \fIseconds\fR when processed (for debugging, allowing the user to attach a debugger)
+Sleep for \fIseconds\fR when processed (for debugging, allowing the user to attach a debugger).
 .TP
 .BI \-d
-Developmental/debug mode (signals are not caught)
+Developmental/debug mode (signals are not caught).
 .TP
 .BI \-k
-Always show key values (normally key is not shown if a REFN is shown)
+Always show key values (normally key is not shown if a REFN is shown).
 .TP
 .BI \-n
-Do not use traditional family rules
+Do not use traditional family rules.
 .TP
 .BI \-o
-Specify program output filename (eg, -o/tmp/mytests)
+Specify program output filename (eg, -o/tmp/mytests).
+Note that this is only used for the FIRST DE script program that
+is run as each output file is truncated when first opened.
 .TP
 .BI \-p \fIscript.py\fP
-Execute a single LifeLines Python script directly (if configured in)
+Execute a single LifeLines Python script directly (if configured in).
 .TP
 .BI \-u \fICOLS\fP,\fIROWS\fR
-Specify window size (eg, -u120,34 specifies 120 columns by 34 rows)
+Specify window size (eg, -u120,34 specifies 120 columns by 34 rows).
 .TP
 .BI \-x
-Execute a single DE LifeLines report program directly
+Execute a single DE LifeLines report program directly.
 .TP
 .BI \-z
 Use normal ASCII characters for drawing lines in user
-interface rather than the vt100 special characters
+interface rather than the vt100 special characters.
 .TP
 .BI \-?
-Display options summary, (on UNIX or Linux use the \-h option)
+Display options summary, (on UNIX or Linux use the \-h option).
 .SH FILES
 de\-llexec looks for a configuration file for various settings, in
 exactly the same manner as \fIde\-llines\fR. See the DE LifeLines userguide
@@ -71,7 +73,7 @@ and may also be viewed at the project site: https://lifelines.github.io/lifeline
 Look for ll-userguide and ll-reportmanual (with appropriate extensions for
 text, html and pdf formats).
 The normal installation process includes a large number of sample report
-programs that you can customize to suit your needs.  In the directory
+programs that you can customize to suit your needs.  In the directory.
 containing these reports you should find a file named index.html which gives a
 very brief summary of each report.
 .SH "SEE ALSO"
