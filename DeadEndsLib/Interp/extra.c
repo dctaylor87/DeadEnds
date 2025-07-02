@@ -127,8 +127,35 @@ PValue __choosefam (PNode *pnode, Context *context, bool* eflg)
 {
 }
 
-PValue __getindiset (PNode *pnode, Context *context, bool* eflg)
+/* __getindiset -- have user identify set of persons
+   usage: getindiset (IDEN, [,STRING]) --> VOID */
+
+PValue __getindiset (PNode *pnode, Context *context, bool* errflg)
 {
+  PNode *iden = pnode->arguments;
+  if (iden->type != PNIdent)
+    {
+      *errflg = true;
+      scriptError (pnode, "First argument to getindiset must be an identifier.");
+      return nullPValue;
+    }
+  String msg = _("Identify list of persons for program:");
+  if (iden->next)
+    {
+      msg = evaluateString (iden->next, context, errflg);
+      if (*errflg || (! msg) || (*msg == 0))
+	{
+	  scriptError (pnode, "The second argument to getindiset, if supplied, must be a non-empty string.");
+	  *errflg = true;
+	  return nullPValue;
+	}
+    }
+  Sequence *seq = rptui_ask_for_indi_list (msg, true, currentDatabase);
+  if (seq)
+    nameSortSequence (seq);
+  assignValueToSymbol (context, iden->identifier,
+		       PVALUE (PVSequence, uSequence, seq));
+  return nullPValue;
 }
 
 /* getint (variable [,string]) --> void

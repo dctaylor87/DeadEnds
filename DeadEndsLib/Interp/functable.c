@@ -91,7 +91,7 @@ BuiltIn builtIns[] = {
   { "getfam",       1,    1,    __getfam },
   { "getindi",      1,    2,    __getindi },
 //{ "getindimsg",   2,    2,    __getindi },
-//{ "getindiset",   1,    2,    __getindiset },
+  { "getindiset",   1,    2,    __getindiset },
   { "getint",       1,    2,    __getint },
 //{ "getintmsg",    2,    2,    __getint },
   { "getproperty",  1,    1,    __getproperty },
