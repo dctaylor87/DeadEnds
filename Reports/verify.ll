@@ -602,9 +602,11 @@ proc main ()
 	set(prev_sdyear,0)
 	set(prev_spouse,0)
 	families(person,fam,spouse,fnum) {
-	    if (eqstr(sex(person),sex(spouse))) {
-		hommarstr idstr familynostr d(fnum)
-		namestr name(spouse) nl
+	    if (spouse) {
+	        if (eqstr(sex(person),sex(spouse))) {
+		    hommarstr idstr familynostr d(fnum)
+		    namestr name(spouse) nl
+	        }
 	    }
 	    if (and(eq(person,husband(fam)),female(person))) {
 		femhusstr idstr familynostr d(fnum) nl
