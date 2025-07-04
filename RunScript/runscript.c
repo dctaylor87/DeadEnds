@@ -11,16 +11,12 @@
 //  If DE_GEDCOM_PATH and/or DE_SCRIPTS_PATH are defined, they may be used as search paths.
 //
 //  Created by Thomas Wetmore on 21 July 2024
-//  Last changed on 5 June 2025.
+//  Last changed on 3 July 2025.
 //
 
-//#include "errors.h"
-//#include "functiontable.h"
-//#include "pnode.h"
 #include <stdint.h>
 
-//#include "gedcom.h"
-//#include "parse.h"
+#include "context.h"
 #include "deadends.h"
 
 // Local functions.
@@ -53,6 +49,7 @@ int main(int argc, char* argv[]) {
     // Parse and run the script.
     fprintf(stderr, "%s: Script parsed.\n", getMsecondsStr());
     Context* context = parseProgram(scriptFile, scriptPath, errorLog);
+    validateCalls(context);
     context->database = database;
     context->file = stdOutputFile();
     // Try out the file feature.

@@ -10,20 +10,21 @@
 //  usage: gensexpr -s scriptfile
 //
 //  Created by Thomas Wetmore on 4 March 2025.
-//  Last changed on 1 June 2025.
+//  Last changed on 3 July 2025.
 //
 
 #include <stdint.h>
 #include <stdio.h>
-#include "standard.h"
-#include "errors.h"
-#include "pnode.h"
-#include "functiontable.h"
-#include "interp.h"
-#include "symboltable.h"
-#include "frame.h"
 #include "context.h"
 #include "hashtable.h"
+#include "parse.h"
+#include "pnode.h"
+#include "functiontable.h"
+#include "symboltable.h"
+#include "standard.h"
+#include "errors.h"
+#include "interp.h"
+#include "frame.h"
 
 // Global tables filled by the by parseProgram() function.
 extern void printPNodeTreeAsSExpr(FILE *out, PNode *root);

@@ -4,7 +4,7 @@
 // file.c
 //
 // Created by Thomas Wetmore on 1 July 2024.
-// Last changed on 26 June 2025.
+// Last changed on 1 July 2025.
 //
 
 #include <stdio.h>
@@ -49,6 +49,7 @@ File* stdOutputFile(void) {
     file->fp = stdout;
     file->isStdout = true;
     file->mode = lineMode;
+    file->curcol = 1;
     file->page = null;
     return file;
 }
