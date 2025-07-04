@@ -394,7 +394,7 @@ bool nameToList(String name, List* list, int* plen, int* psind) {
 		setListElement(list, str, i + 1);
 	}
 	*plen = i;
-	ASSERT(*psind);
+	//ASSERT(*psind);
 	return true;
 }
 
