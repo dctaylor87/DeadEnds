@@ -2,7 +2,7 @@
 #include "uiio.h"
 
 /* options recognized by getopt */
-CString optString = "adkntx:o:C:I:p:Pvh?";
+CString optString = "adkns:tx:o:C:I:p:Pvh?";
 
 /* program name for messages */
 CString ProgName = "llexec";
