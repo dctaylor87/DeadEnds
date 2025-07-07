@@ -51,9 +51,11 @@ PValue *allocPValue(PVType type, VUnion value) {
 
 // createStringPValue creates string PValues; Strings are copied to the help.
 PValue createStringPValue(CString string) {
+  if (! string) string = "";
     PValue pvalue;
     pvalue.type = PVString;
-    pvalue.value.uString = string ? strsave(string) : null;
+    //pvalue.value.uString = string ? strsave(string) : null;
+    pvalue.value.uString = strsave(string);
     return pvalue; // Returned on stack.
 }
 
