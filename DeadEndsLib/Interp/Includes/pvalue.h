@@ -6,7 +6,7 @@
 //  returned by script functions.
 //
 //  Created by Thomas Wetmore on 15 December 2022.
-//  Last changed on 3 July 2025.
+//  Last changed on 7 July 2025.
 //
 
 #ifndef pvalue_h
@@ -95,7 +95,6 @@ void coercePValue(PValue* pvalue, int newType, bool* errorFlag);
 PValue* clonePValue(const PValue* original);
 PValue cloneAndReturnPValue(const PValue* original);
 String typeOf(PValue);
-//PValue copyPValue(PValue);
 //void deletePValue(PValue);
 //bool eqv_pvalues(PValue, PValue);
 
@@ -114,6 +113,7 @@ extern bool numericPValue(PValue value); // See if a PValue is numeric.
 String pvalueToString(PValue pvalue, bool showType);
 
 // Functions that allocate and free PValues.
+PValue copyPValue(PValue);
 PValue* allocPValue(PVType type, VUnion value);
 void freePValue(PValue* pvalue);
 extern PValue copyPValue(PValue pvalue);

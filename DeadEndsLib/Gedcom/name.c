@@ -5,7 +5,7 @@
 //  static memory. Callers beware.
 //
 //  Created by Thomas Wetmore on 7 November 2022.
-//  Last changed on 4 June 2025.
+//  Last changed on 7 July 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -373,19 +373,19 @@ static void nameToParts(CString name, String* parts) {
 }
 
 // nameToList converts a name to a List of Strings; List must exist; uses static memory. plen
-// is the number of strings; psind is the index relative one of the surname.
+// is the number of strings; psind is the (pointer to the) index of the surname (zero indexed).
+// If there is no surname psind will point to -1.
 bool nameToList(String name, List* list, int* plen, int* psind) {
 	int i;
 	String str;
 	String parts[MAXPARTS];
-	if (!name || *name == 0 || !list) return false;
-	emptyList(list);
-	*psind = 0;
+	emptyList(list); // The list must exist.
+	*psind = -1;
 	nameToParts(name, parts);
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) break;
 		if (*parts[i] == '/') {
-			*psind = i + 1;
+			*psind = i;
 			str = strsave(parts[i] + 1);
 			if (str[strlen(str) - 1] == '/')
 				str[strlen(str) - 1] = 0;
@@ -394,7 +394,6 @@ bool nameToList(String name, List* list, int* plen, int* psind) {
 		appendToList (list, str);
 	}
 	*plen = i;
-	//ASSERT(*psind);
 	return true;
 }
 

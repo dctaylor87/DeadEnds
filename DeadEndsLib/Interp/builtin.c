@@ -3,7 +3,7 @@
 //  builtin.c contains many built-in functions of the DeadEnds script language.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 21 June 2025.
+//  Last changed on 7 July 2025.
 //
 
 #include <ansidecl.h>
@@ -496,6 +496,7 @@ PValue __extractdate(PNode *pnode, Context *context, bool* errflg) {
 
 //  __extractnames tries to extract name parts from person or NAME node.
 //  usage: extractnames(NODE, LIST, VARB, VARB) -> VOID
+static void sdelete(void* element) { stdfree(element); } // The elements are Strings that are freed.
 PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	PNode *nexp = pnode->arguments;
 	PNode *lexp = nexp->next;
@@ -503,14 +504,14 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	PNode *svar = lvar->next;
 	GNode *name = evaluateGNode(nexp, context, errflg);
 	if (*errflg) {
-		scriptError(pnode, "The first argument to extractnames must be a NAME node or an INDI node.");
+		scriptError(pnode, "the first argument to extractnames must be a NAME node or an INDI node");
 		return nullPValue;
 	}
 	if (nestr(name->tag, "NAME"))
 		name = NAME(name);
 	if (! name) {
 		*errflg = true;
-		scriptError(pnode, "The first argument to extractnames must be a NAME node or an INDI node.");
+		scriptError(pnode, "the first argument to extractnames must be a NAME node or an INDI node");
 		return nullPValue;
 	}
 	// Get the list to put the names in.
@@ -520,7 +521,10 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 		scriptError(pnode, "The second argument to extractnames must be a list.");
 		return nullPValue;
 	}
+     // list is the List that will be filled with the name parts as PVStrings. It is a List in a symbol table
+     // that was created earlier in the script with a list(x) builtin.
 	List *list = pvalue.value.uList;
+    if (list) emptyList(list);
 	bool error = false;
 	if (!iistype(lvar, PNIdent)) error = true;
 	if (!iistype(svar, PNIdent)) error = true;
@@ -530,7 +534,6 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 		return nullPValue;
 	}
 	String str = name->value;
-    //SymbolTable* table = context->frame->table;
 	if (!str || *str == 0) {
 		assignValueToSymbol(context, lvar->identifier, PVALUE(PVInt, uInt, 0));
 		assignValueToSymbol(context, svar->identifier, PVALUE(PVInt, uInt, 0));
@@ -538,20 +541,21 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	}
 	int len, sind;
 	*errflg = false;
-	List *tempList = createList(null, null, null, false);
-	nameToList(str, tempList, &len, &sind);
-	emptyList (list);
-	/* tempList is a list of strings; we need a list of PVALUEs,  */
-	for (int ndx = 0; ndx < len; ndx++)
-	  {
-	    void *elt = getFromList (tempList, ndx);
-	    PValue pvalue = PVALUE (PVString, uString, elt);
-	    appendToList (list, clonePValue (&pvalue));
-	    stdfree (elt);	/* clonePValue copied the string */
-	  }
-	assignValueToSymbol(context, lexp->identifier, PVALUE(PVList, uList, list));
+	List *parts = createList(null, null, null, false);
+	nameToList(str, parts, &len, &sind);
+    // The Strings in parts must be converted to PVStrings.
+    for (int i = 0; i < len; i++) {
+        String part = (String) getListElement(parts, i);
+        PValue pvalue = PVALUE(PVString, uString, part); // transfer ownership
+        PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue)); // allocate on heap
+        *ppvalue = copyPValue(pvalue);
+        appendToList(list, ppvalue);  // copy onto heap, insert into list
+    }
+    deleteList(parts);
+    //assignValueToSymbol(context, lexp->identifier, PVALUE(PVList, uList, list));
 	assignValueToSymbol(context, lvar->identifier, PVALUE(PVInt, uInt, len));
-	assignValueToSymbol(context, svar->identifier, PVALUE(PVInt, uInt, sind));
+	// nameToList is zero-based, extractnames is one-based
+	assignValueToSymbol(context, svar->identifier, PVALUE(PVInt, uInt, sind + 1));
 	return nullPValue;
 }
 

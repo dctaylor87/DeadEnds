@@ -5,7 +5,7 @@
 //  DeadEnds scripts.
 //
 //  Created by Thomas Wetmore on 15 December 2022.
-//  Last changed on 4 June 2025.
+//  Last changed on 7 July 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -59,7 +59,7 @@ PValue createStringPValue(CString string) {
     return pvalue; // Returned on stack.
 }
 
-// In case we ever need it. Thanks, ChatGPT.
+// In case we need it
 PValue copyPValue(PValue orig) {
     if (orig.type == PVString && orig.value.uString) {
         return createStringPValue(orig.value.uString);
@@ -124,9 +124,15 @@ void freePValue(PValue* ppvalue) {
         if (ppvalue->value.uString) stdfree(ppvalue->value.uString);
         break;
     case PVSequence:
+        printf("We are supposed to be freeing a PVSequence. What should we do?\n");
         //deleteSequence(ppvalue->value.uSequence);
         // MNOTE: Possible memory leak, but fixes subtle bug.
         break;
+    case PVList:
+        printf("We are supposed to be freeing a PVList. What should we do?\n");
+        break;
+    case PVTable:
+        printf("We are supposed to be freeing a PVTable. What should we do?\n");
     default:
         break;
     }
