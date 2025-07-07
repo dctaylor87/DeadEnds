@@ -641,7 +641,7 @@ dnl **************************************************************
 
 echo Checking for replacement functions
 dnl Standard libraries
-AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
+AC_REPLACE_FUNCS( sleep scandir alphasort getopt getopt_long snprintf vsnprintf )
 dnl Standard libraries - internationalization / wchar
 AC_REPLACE_FUNCS( nl_langinfo wcslen )
 dnl Standard libraries - curses
