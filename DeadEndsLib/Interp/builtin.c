@@ -502,7 +502,6 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	PNode *lvar = lexp->next;
 	PNode *svar = lvar->next;
 	GNode *name = evaluateGNode(nexp, context, errflg);
-#if 1
 	if (*errflg) {
 		scriptError(pnode, "The first argument to extractnames must be a NAME node or an INDI node.");
 		return nullPValue;
@@ -514,13 +513,6 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 		scriptError(pnode, "The first argument to extractnames must be a NAME node or an INDI node.");
 		return nullPValue;
 	}
-#else
-	if (*errflg || nestr(name->tag, "NAME")) {
-		*errflg = true;
-		scriptError(pnode, "The first argument to extractnames must be a NAME node.");
-		return nullPValue;
-	}
-#endif
 	// Get the list to put the names in.
 	PValue pvalue = evaluate(lexp, context, errflg);
 	if (*errflg || pvalue.type != PVList) {
@@ -546,7 +538,18 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	}
 	int len, sind;
 	*errflg = false;
-	nameToList(str, list, &len, &sind);
+	List *tempList = createList(null, null, null, false);
+	nameToList(str, tempList, &len, &sind);
+	emptyList (list);
+	/* tempList is a list of strings; we need a list of PVALUEs,  */
+	for (int ndx = 0; ndx < len; ndx++)
+	  {
+	    void *elt = getFromList (tempList, ndx);
+	    PValue pvalue = PVALUE (PVString, uString, elt);
+	    appendToList (list, clonePValue (&pvalue));
+	    stdfree (elt);	/* clonePValue copied the string */
+	  }
+	assignValueToSymbol(context, lexp->identifier, PVALUE(PVList, uList, list));
 	assignValueToSymbol(context, lvar->identifier, PVALUE(PVInt, uInt, len));
 	assignValueToSymbol(context, svar->identifier, PVALUE(PVInt, uInt, sind));
 	return nullPValue;
