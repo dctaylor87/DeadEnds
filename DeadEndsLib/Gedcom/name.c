@@ -391,7 +391,7 @@ bool nameToList(String name, List* list, int* plen, int* psind) {
 				str[strlen(str) - 1] = 0;
 		} else
 			str = strsave(parts[i]);
-		setListElement(list, str, i + 1);
+		appendToList (list, str);
 	}
 	*plen = i;
 	//ASSERT(*psind);
