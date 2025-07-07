@@ -7,7 +7,7 @@ CString optString = "adkns:tu:x:o:zC:I:p:Pvh?";
 /* program name for messages */
 #if defined(WIN32)
 CString ProgName = "Lines";
-CString usage_summary =
+CString usage_summary = "Lines [-{adkns:tu:x:o:zC:I:p:Pvh?}] [database]";
 #else
 CString ProgName = "llines";
 CString usage_summary = "llines [-{adkns:tu:x:o:zC:I:p:Pvh?}] [database]";
