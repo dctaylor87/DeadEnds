@@ -567,11 +567,17 @@ PValue __extractplaces(PNode *pnode, Context *context, bool *errflg) {
     PNode *cvar = lexp->next;
     GNode *node = evaluateGNode(nexp, context, errflg); // First arg is a Gedcom node.
     if (*errflg) return nullPValue; // Error will have been reported.
+    if (! node) {
+        // arguably this is should be an error, but be nice to the user.
+        assignValueToSymbol(context, cvar->identifier, PVALUE(PVInt, uInt, 0));
+	return nullPValue;
+    }
     if (nestr(node->tag, "PLAC")) {
         node = PLAC(node);
         if (!node) {
-            *errflg = true;
-            scriptError(pnode, "the first arg to extractplaces must be a PLAC node or a parent of one");
+            //*errflg = true;
+            //scriptError(pnode, "the first arg to extractplaces must be a PLAC node or a parent of one");
+	    assignValueToSymbol(context, cvar->identifier, PVALUE(PVInt, uInt, 0));
             return nullPValue;
         }
     }
