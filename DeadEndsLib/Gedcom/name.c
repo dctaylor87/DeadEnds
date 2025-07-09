@@ -376,16 +376,17 @@ static void nameToParts(CString name, String* parts) {
 // is the number of strings; psind is the (pointer to the) index of the surname (zero indexed).
 // If there is no surname psind will point to -1.
 bool nameToList(String name, List* list, int* plen, int* psind) {
+    if (!name || *name == 0 || !list) return false;
 	int i;
 	String str;
 	String parts[MAXPARTS];
-	emptyList(list); // The list must exist.
-	*psind = -1;
+	emptyList(list);
+	if (psind) *psind = -1;
 	nameToParts(name, parts);
 	for (i = 0; i < MAXPARTS; i++) {
 		if (!parts[i]) break;
 		if (*parts[i] == '/') {
-			*psind = i;
+		  if (psind) *psind = i;
 			str = strsave(parts[i] + 1);
 			if (str[strlen(str) - 1] == '/')
 				str[strlen(str) - 1] = 0;
@@ -393,7 +394,7 @@ bool nameToList(String name, List* list, int* plen, int* psind) {
 			str = strsave(parts[i]);
 		appendToList (list, str);
 	}
-	*plen = i;
+	if (plen) *plen = i;
 	return true;
 }
 

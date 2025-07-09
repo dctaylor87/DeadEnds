@@ -3,7 +3,7 @@
 //  builtin.c contains many built-in functions of the DeadEnds script language.
 //
 //  Created by Thomas Wetmore on 14 December 2022.
-//  Last changed on 7 July 2025.
+//  Last changed on 9 July 2025.
 //
 
 #include <ansidecl.h>
@@ -14,6 +14,7 @@
 #include "date.h"
 #include "evaluate.h"
 #include "frame.h"
+#include "gedcom.h"
 #include "gnode.h"
 #include "hashtable.h"
 #include "interp.h"
@@ -502,56 +503,55 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	PNode *lexp = nexp->next;
 	PNode *lvar = lexp->next;
 	PNode *svar = lvar->next;
-	GNode *name = evaluateGNode(nexp, context, errflg);
-	if (*errflg) {
-		scriptError(pnode, "the first argument to extractnames must be a NAME node or an INDI node");
-		return nullPValue;
-	}
-	if (nestr(name->tag, "NAME"))
-		name = NAME(name);
-	if (! name) {
+	GNode *node = evaluateGNode(nexp, context, errflg); // First arg is a Gedcom node.
+    if (*errflg) return nullPValue; // Error will have been reported.
+    if (nestr(node->tag, "NAME")) {
+		node = NAME(node);
+	if (! node) {
 		*errflg = true;
-		scriptError(pnode, "the first argument to extractnames must be a NAME node or an INDI node");
+		scriptError(pnode, "the first arg to extractnames must be a NAME node or a parent of one");
 		return nullPValue;
 	}
-	// Get the list to put the names in.
+    }
+	// Get the list to put the name parts in.
 	PValue pvalue = evaluate(lexp, context, errflg);
 	if (*errflg || pvalue.type != PVList) {
 		*errflg = true;
-		scriptError(pnode, "The second argument to extractnames must be a list.");
+		scriptError(pnode, "The second arg to extractnames must be a list.");
 		return nullPValue;
 	}
-     // list is the List that will be filled with the name parts as PVStrings. It is a List in a symbol table
-     // that was created earlier in the script with a list(x) builtin.
+    // list will be filled with the name parts as PVStrings.
 	List *list = pvalue.value.uList;
-    if (list) emptyList(list);
+    if (list) emptyList(list); // Frees any contents but keeps list.
 	bool error = false;
 	if (!iistype(lvar, PNIdent)) error = true;
 	if (!iistype(svar, PNIdent)) error = true;
 	if (error) {
 		*errflg = true;
-		scriptError(pnode, "The third and fourth arguments to extract names must be identifiers.");
+		scriptError(pnode, "The third and fourth args to extract names must be identifiers.");
 		return nullPValue;
 	}
-	String str = name->value;
-	if (!str || *str == 0) {
+	String str = node->value;
+	if (!str || *str == 0) { // Return an empty list.
 		assignValueToSymbol(context, lvar->identifier, PVALUE(PVInt, uInt, 0));
 		assignValueToSymbol(context, svar->identifier, PVALUE(PVInt, uInt, 0));
 		return nullPValue;
 	}
 	int len, sind;
 	*errflg = false;
-	List *parts = createList(null, null, null, false);
-	nameToList(str, parts, &len, &sind);
-    // The Strings in parts must be converted to PVStrings.
+    List *parts = createList(null, null, null, false);
+    // Use a temporaray list to get the name parts.
+    nameToList(str, parts, &len, &sind);
+    // Convert the Strings in the temporary parts list to PValues and append them to list.
     for (int i = 0; i < len; i++) {
         String part = (String) getListElement(parts, i);
-        PValue pvalue = PVALUE(PVString, uString, part); // transfer ownership
-        PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue)); // allocate on heap
-        *ppvalue = copyPValue(pvalue);
-        appendToList(list, ppvalue);  // copy onto heap, insert into list
+        PValue pvalue = PVALUE(PVString, uString, part); // transfer String ownership.
+        PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue)); // Create PValue* in the heap.
+        //*ppvalue = copyPValue(pvalue);
+        *ppvalue = pvalue;
+        appendToList(list, ppvalue);  // Add the PValue* to the list.
     }
-    deleteList(parts);
+    deleteList(parts); // Free temporary list.
     //assignValueToSymbol(context, lexp->identifier, PVALUE(PVList, uList, list));
 	assignValueToSymbol(context, lvar->identifier, PVALUE(PVInt, uInt, len));
 	// nameToList is zero-based, extractnames is one-based
@@ -559,60 +559,62 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	return nullPValue;
 }
 
-// __extractplaces extracts the place phrases from an event or PLAC GNode.
+// __extractplaces tries to extract the place parts from an event or PLAC GNode.
 // usage: extractplaces(NODE, LIST, VARB) -> VOID
 PValue __extractplaces(PNode *pnode, Context *context, bool *errflg) {
     PNode *nexp = pnode->arguments;
+    PNode *lexp = nexp->next;
+    PNode *cvar = lexp->next;
     GNode *node = evaluateGNode(nexp, context, errflg); // First arg is a Gedcom node.
-    if (*errflg || !node) {
-        scriptError(pnode, "first argument to extractplaces() must evaluate to a Gedcom node");
+    if (*errflg) return nullPValue; // Error will have been reported.
+    if (nestr(node->tag, "PLAC")) {
+        node = PLAC(node);
+        if (!node) {
+            *errflg = true;
+            scriptError(pnode, "the first arg to extractplaces must be a PLAC node or a parent of one");
+            return nullPValue;
+        }
+    }
+    // Get the list to put the name parts in
+    PValue pvalue = evaluate(lexp, context, errflg);
+    if (*errflg || pvalue.type != PVList) {
+        *errflg = true;
+        scriptError(pnode, "the second arg to extractplaces must be a list");
         return nullPValue;
     }
-    GNode *placeNode = eqstr(node->tag, "PLAC") ? node : findTag(node->child, "PLAC"); // Find PLAC node.
-    if (!placeNode || !placeNode->value) return nullPValue;
-
-    PNode *listVar = nexp->next; // List identifier.
-    if (listVar->type != PNIdent) {
-        scriptError(pnode, "second argument to extractplaces() must be a list identifier");
+    // list will be filled with the place parts as PVStrings.
+    List* list = pvalue.value.uList;
+    if (list) emptyList(list); // Free any contents but keeps list
+    bool error = false;
+    if (!iistype(cvar, PNIdent)) error = true;
+    if (error) {
         *errflg = true;
+        scriptError(pnode, "the third arg to extractplaces must be an identifier");
         return nullPValue;
     }
-    SymbolTable* table = context->frame->table;
-    String listName = listVar->identifier;
-    PValue listVal = getValueOfSymbol(context, listName);
-    List* list = listVal.value.uList;
-    if (listVal.type != PVList || !list) {
-        scriptError(pnode, "second argument to extractplaces() must identify a valid list");
-        *errflg = true;
-        return nullPValue;
-    }
-    emptyList(list); // Frees all strings but keeps the shell.
-    PNode *countVar = listVar->next; // Counter identifier.
-    if (countVar->type != PNIdent) {
-        scriptError(pnode, "third argument to extractplaces() must be an integer identifier");
-        *errflg = true;
-        return nullPValue;
+    String str = node->value;
+    if (!str || *str == 0) { // Return an empty list.
+        assignValueToSymbol(context, cvar->identifier, PVALUE(PVInt, uInt, 0));
     }
     // Use placeToList to separate a PLAC value into list of string parts.
-    List* strings = createList(null, null, null, false);
-    if (!placeToList(placeNode->value, strings)) {
+    List* parts = createList(null, null, null, false); // No delete function.
+    if (!placeToList(str, parts)) {
         scriptError(pnode, "place value could not be split into parts");
         *errflg = true;
         return nullPValue;
     }
-    // Transform the list of strings into a list of pvalues.
-    FORLIST(strings, element)
+    // Transform the list of Strings into a list of PValues.
+    FORLIST(parts, element)
         String string = (String) element;
         PValue* svalue = stdalloc(sizeof(PValue));
         svalue->type = PVString;
-        svalue->value.uString = string; // Take ownership of heap memory.
+        svalue->value.uString = string; // Transfers memory ownership.
         appendToList(list, svalue);
     ENDLIST
-    deleteList(strings); // Do not free the strings.
+    deleteList(parts); // Does not free the strings.
 
     // Assign the count to the symbol table
-    assignValueToSymbol(context, countVar->identifier, PVALUE(PVInt, uInt, lengthList(list)));
-    if (localDebugging) showSymbolTable(table); // Debug.
+    assignValueToSymbol(context, cvar->identifier, PVALUE(PVInt, uInt, lengthList(list)));
     return nullPValue;
 }
 

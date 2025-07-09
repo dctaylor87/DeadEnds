@@ -184,6 +184,7 @@ extern PValue __uniqueset(PNode*, Context*, bool*);
 extern PValue __unlock(PNode*, Context*, bool*);
 extern PValue __upper(PNode*, Context*, bool*);
 extern PValue __value(PNode*, Context*, bool*);
+extern PValue __VALUEOF(PNode*, Context*, bool*);
 extern PValue __valuesort(PNode*, Context*, bool*);
 extern PValue __version(PNode*, Context*, bool*);
 extern PValue __wife(PNode*, Context*, bool*);
