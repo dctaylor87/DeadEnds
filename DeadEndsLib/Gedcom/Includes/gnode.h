@@ -95,4 +95,4 @@ extern void freeTempGNodeTree (GNode *node);
 extern bool isTempGNode (GNode *node);
 extern void setTempGNode (GNode *node, bool temp);
 
-#endif // node_h
+#endif // gnode_h

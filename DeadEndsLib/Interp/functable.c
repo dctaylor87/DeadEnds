@@ -210,6 +210,7 @@ BuiltIn builtIns[] = {
   { "unlock",       1,    1,    __noop },
   { "upper",        1,    1,    __upper },
   { "value",        1,    1,    __value },
+  { "valueof",      1,    1,    __VALUEOF },
   { "valuesort",    1,    1,    __valuesort },
   { "version",      0,    0,    __version },
   { "wife",         1,    1,    __wife },

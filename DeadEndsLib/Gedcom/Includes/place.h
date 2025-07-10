@@ -8,7 +8,7 @@
 #ifndef place_h
 #define place_h
 
-bool placeToList(String place, List *list);
-bool valueToList (String str, List *list, String dlm); // TODO: Should be elsewhere.
+void placeToList(String place, List *list);
+void valueToList (String str, List *list, String dlm); // TODO: Should be elsewhere.
 
 #endif // place_h
