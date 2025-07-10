@@ -235,7 +235,7 @@ PValue __getstr (PNode *pnode, Context *context, bool* eflg)
    returns the 1-based index of the 'occurrence'th instance of sub
    within str; 0 means not found.  */
 
-PValue __index (PNode *pnode, Context *context, bool* errflg)
+PValue __dctindex (PNode *pnode, Context *context, bool* errflg)
 {
   PNode *args = pnode->arguments;
   CString str = evaluateString (args, context, errflg);
