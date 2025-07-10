@@ -1,0 +1,152 @@
+@section date.h
+
+@defun formatDate (CString str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx) @arrow{} String
+@end defun
+
+@section gedcom.h
+
+@defun recordType (GNode *root) @arrow{} RecordType
+Return the type of a Gedcom record tree.
+@end defun
+
+@section gnode.h
+
+@defun createGNode (CString key, CString tag, CString value, GNode* parent) @arrow{} GNode*
+@end defun
+@defun freeGNode (GNode*) @arrow{} void
+@end defun
+@defun freeGNodes (GNode*) @arrow{} void
+@end defun
+@defun personToFamilyAsChild (GNode *person, RecordIndex*) @arrow{} GNode*
+@end defun
+@defun personToEvent (GNode*, String, String, int, bool) @arrow{} String
+@end defun
+@defun familyToEvent (GNode*, String, String, int, bool) @arrow{} String
+@end defun
+@defun eventToString (GNode*, bool) @arrow{} String
+@end defun
+@defun eventToDate (GNode*, bool) @arrow{} String
+@end defun
+@defun eventToPlace (GNode*, bool) @arrow{} String
+@end defun
+@defun lengthGNodes (GNode*) @arrow{} int
+@end defun
+@defun copyGNode (GNode*) @arrow{} GNode*
+@end defun
+@defun copyGNodes (GNode*, bool, bool) @arrow{} GNode*
+@end defun
+@defun findNode (GNode*, String, String, GNode**) @arrow{} GNode*
+@end defun
+@defun isKey (CString) @arrow{} bool
+@end defun
+@defun findTag (GNode* node, CString tag) @arrow{} GNode*
+Looks at @code{node} and its subsequent sibling nodes for a tag of
+@code{tag}.  If found, it is returned, otherwise null is returned.
+@end defun
+@defun valueToSex (GNode*) @arrow{} SexType
+@end defun
+@defun createTempGNode (String xref, String tag, String val, GNode *prnt) @arrow{} GNode*
+@end defun
+@defun isTempGNode (GNode *node) @arrow{} bool
+@end defun
+@defun setTempGNode (GNode *node, bool temp) @arrow{} void
+@end defun
+
+@section lineage.h
+
+@defun personToFather (GNode*, RecordIndex*) @arrow{} GNode*
+Return first father of a person.
+@end defun
+@defun personToMother (GNode*, RecordIndex*) @arrow{} GNode*
+Return first wife of a person.
+@end defun
+@defun personToPreviousSibling (GNode*, RecordIndex*) @arrow{} GNode*
+Return previous sibling of a person.
+@end defun
+@defun personToNextSibling (GNode*, RecordIndex*) @arrow{} GNode*
+Return next sibling of a person.
+@end defun
+@defun familyToHusband (GNode*, RecordIndex*) @arrow{} GNode*
+Return first husband of a family.
+@end defun
+@defun familyToWife (GNode*, RecordIndex*) @arrow{} GNode*
+Return first wife of a family.
+@end defun
+@defun familyToFirstChild (GNode*, RecordIndex*) @arrow{} GNode*
+Return first child of family.
+@end defun
+@defun personToName (GNode*, int) @arrow{} String
+Return the first name of a person.
+@end defun
+@defun personToTitle (GNode*, int) @arrow{} String
+Return the first title of a person.
+@end defun
+@defun numberOfFamilies (GNode*) @arrow{} int
+Return the number of families a person is a spouse in.
+@end defun
+
+@section name.h
+
+@defun manipulateName (CString, bool caps, bool reg, int maxlen) @arrow{} String
+Manipulate a name.
+@end defun
+@defun getSurname (CString) @arrow{} String
+Get the surname of a Gedcom name.
+@end defun
+@defun getGivenNames (CString) @arrow{} String
+Get the given names of a Gedcom name.
+@end defun
+@defun soundex (CString surname) @arrow{} String
+Get the Soundex code of a Gedcom surname.
+@end defun
+@defun nameToNameKey (CString name) @arrow{} String
+Convert a partial or full Gedcom name to a name key.
+@end defun
+@defun nameString (CString name) @arrow{} String
+Remove slashes from a name.
+@end defun
+@defun trimName (CString name, int len) @arrow{} CString
+Trim name to specific length.
+@end defun
+
+@section nodeutils.h
+
+@defun unionNodes (GNode* node1, GNode* node2, bool kids, bool copy) @arrow{} GNode*
+@end defun
+@defun classifyNodes (GNode**, GNode**, GNode**) @arrow{} void
+@end defun
+@defun equalTree (GNode*, GNode*) @arrow{} bool
+@end defun
+@defun isoGNodes (GNode*, GNode*, bool, bool) @arrow{} bool
+@end defun
+
+@section rootlist.h
+
+@defun insertInRootList (RootList*, GNode*) @arrow{} void
+@end defun
+
+@section splitjoin.h
+
+@defun splitPerson (GNode* indi, GNode** pname, GNode** prefn, GNode** psex, GNode** pbody, GNode** pfamc, GNode** pfams) @arrow{} void
+@defunx joinPerson (GNode* indi, GNode* name, GNode* refn, GNode* sex, GNode* body, GNode* famc, GNode* fams) @arrow{} void
+@defunx splitFamily (GNode* fam, GNode** prefn, GNode** phusb, GNode** pwife, GNode** pchil, GNode** prest) @arrow{} void
+@defunx joinFamily (GNode* fam, GNode* refn, GNode* husb, GNode* wife, GNode* chil, GNode* rest) @arrow{} void
+@defunx splitOther (GNode *root, GNode **prefn, GNode **pbody) @arrow{} void
+@defunx joinOther  (GNode *root, GNode *refn, GNode *body) @arrow{} void
+
+These functions are used to place the nodes within a record into
+canonical order.  These functions are usually called in two
+circumstances.  First, when a GEDCOM file is first read in to create a
+database.  And second, when a record is edited.
+@end defun
+
+@defun normalizeRecord (GNode*) @arrow{} GNode*
+@end defun
+
+@section writenode.h
+
+@defun writeGNodeRecord (FILE* fp, GNode* root, bool indent) @arrow{} void
+Write the record rooted at @code{root} to the stdio stream @code{fp}.
+If @code{index} is true, then each level is indented relative to the
+the previous level.  This is visually useful when editing.
+@end defun

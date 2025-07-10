@@ -1,0 +1,149 @@
+@section hashtable.h
+
+@defun createHashTable (CString(*g)(const void*), int(*c)(CString, CString), void(*d)(void*), int numBuckets) @arrow{} HashTable*
+@end defun
+@defun deleteHashTable (HashTable*) @arrow{} void
+@end defun
+@defun detailSearchHashTable (HashTable* table, CString key, int* phash, int* pindex) @arrow{} void*
+@end defun
+@defun searchHashTable (HashTable* table, CString key) @arrow{} void*
+Searches HashTable @code{table} for @code{key}.  If found, the element
+is returned.  Otherwise, @code{null} is returned.
+@end defun
+@defun addToHashTable (HashTable*, void* element, bool replace) @arrow{} void
+@end defun
+@defun firstInHashTable (HashTable*, int* bucketIndex, int* elementIndex) @arrow{} void*
+Returns the first element in a hash table.  It works with
+@code{nextInHashTable} to iterate the table, returning each element in
+turn.
+@end defun
+@defun nextInHashTable (HashTable* table, int* bucketIndex, int* elementIndex) @arrow{} void*
+Returns the next element in the HashTable @code{table}, using the
+in/out state variables @code{bucketIndex} and @code{elementIndex} to
+keep track of the state of the iteration.  If there are no more
+elements, then @code{null} is returned.
+@end defun
+@defun lastInHashTable (HashTable* table, int* bucketIndex, int* elementIndex) @arrow{} void*
+Returns the last element in the hash table @code{table}.  It works with
+@code{previousInHashTable} to iterate the table.
+@end defun
+@defun previousInHashTable (HashTable*, int*, int*) @arrow{} void*
+Returns the previous element in the hash table @code{table}, using the
+in/out state variables @code{bucketIndex} and @code{elementIndex} to
+keep track of the state of the iteration.  If there is no previous
+element, then @code{null} is returned.
+@end defun
+@defun removeFromHashTable (HashTable* table, CString key) @arrow{} void
+Remove the element having @code{key} from the HashTable @code{table}.
+@end defun
+@defun addrefHashTable (HashTable *table) @arrow{} void
+increment ref. count of table
+@end defun
+@defun releaseHashTable (HashTable *table) @arrow{} void
+decrement ref. count of table, free if zero
+@end defun
+
+@section integeertable.h
+
+@defun createIntegerTable (int numBuckets) @arrow{} IntegerTable*
+@end defun
+@defun incrIntegerTable (IntegerTable*, CString key) @arrow{} void
+@end defun
+
+@section list.h
+
+@defun createList (CString(*g)(const void*), int(*c)(CString, CString), void (*d)(void*), bool sorted) @arrow{} List*
+@end defun
+@defun deleteList (List*) @arrow{} void
+@end defun
+@defun lengthList (List*) @arrow{} int
+@end defun
+@defun isEmptyList (List*) @arrow{} bool
+@end defun
+@defun findInList (List*, CString, int* index) @arrow{} void*
+@end defun
+@defun getListElement (List *list, int index) @arrow{} void*
+@end defun
+@defun appendToList (List*, const void*) @arrow{} void
+@end defun
+@defun prependToList (List*, const void*) @arrow{} void
+@end defun
+@defun sortList (List*) @arrow{} void
+@end defun
+@defun searchList (List* list, CString key, int* index) @arrow{} void*
+@end defun
+@defun removeFromList (List*, int) @arrow{} bool
+@end defun
+@defun getAndRemoveFirstListElement (List*) @arrow{} void*
+@end defun
+
+@section set.h
+
+@defun lengthSet (Set*) @arrow{} int
+@end defun
+
+@section stringtable.h
+
+@defun createStringTable (int numBuckets) @arrow{} HashTable*
+A StringTable is created with the specified number of buckets.
+@end defun
+@defun searchStringTable (StringTable* table, CString key) @arrow{} String
+The StringTable @code{table} is searched; if @code{key} is found, its
+value is returned.  Otherwise, null is returned.
+@end defun
+@defun addToStringTable (StringTable* table, CString key, CString value) @arrow{} void
+The StringTable @code{table} is searched for @code{key}.  If found, it
+is removed.  Then, regardless, @code{key} is added with a value of
+@code{value}.
+@end defun
+
+@section zstr.h
+The functions in this section are present because the LifeLines user
+interface used them and it was considered too much work to remove them
+during the port effort.  They should not be used in new code as they
+@b{might} be removed in the future.
+
+@defun zs_new (void) @arrow{} ZSTR
+@end defun
+@defun zs_newn (unsigned int min) @arrow{} ZSTR
+@end defun
+@defun zs_news (const char * str) @arrow{} ZSTR
+@end defun
+@defun zs_newf (const char * fmt, ...) @arrow{} ZSTR
+@end defun
+@defun zs_newvf (const char * fmt, va_list args) @arrow{} ZSTR
+@end defun
+@defun zs_newsubs (const char * str, unsigned int len) @arrow{} ZSTR
+@end defun
+@defun zs_free (ZSTR * pzstr) @arrow{} void
+@end defun
+@defun zs_move (ZSTR zstr, ZSTR * pzsrc) @arrow{} void
+@end defun
+@defun zs_str (ZCSTR) @arrow{} char*
+@end defun
+@defun int zs_len (ZCSTR zstr) @arrow{} unsigned
+@end defun
+@defun int zs_allocsize (ZCSTR zstr) @arrow{} unsigned
+@end defun
+@defun zs_chop (ZSTR zstr, unsigned int len) @arrow{} void
+@end defun
+@defun zs_set_len (ZSTR zstr, unsigned int len) @arrow{} char*
+@end defun
+@defun zs_sets (ZSTR zstr, const char *) @arrow{} char*
+@end defun
+@defun zs_setz (ZSTR zstr, ZCSTR zsrc) @arrow{} char*
+@end defun
+@defun zs_apps (ZSTR zstr, const char *) @arrow{} char*
+@end defun
+@defun zs_appz (ZSTR zstr, ZCSTR zrc) @arrow{} char*
+@end defun
+@defun zs_appc (ZSTR zstr, char) @arrow{} char*
+@end defun
+@defun zs_setf (ZSTR zstr, const char * fmt, ...) @arrow{} char*
+@end defun
+@defun zs_appf (ZSTR zstr, const char * fmt, ...) @arrow{} char*
+@end defun
+@defun zs_clear (ZSTR zstr) @arrow{} char*
+@end defun
+@defun zs_reserve (ZSTR zstr, unsigned int min) @arrow{} char*
+@end defun

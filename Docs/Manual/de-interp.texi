@@ -1,0 +1,91 @@
+@section interp.h
+
+@defun initializeInterpreter (Database*) @arrow{} void
+@end defun
+@defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Context*
+Searches for @code{fileName} along @code{searchPath}.  If found, it is
+parsed.  If there are no errors, a @code{Context *} is returned.
+Otherwise, @code{null} is returned.  Errors are returned in
+@code{errorLog}.
+@end defun
+@defun finishInterpreter (void) @arrow{} void
+When the parse of the program is no longer needed,
+@code{finishInterpreter} should be called.
+@end defun
+@defun interpret (PNode*, Context*, PValue*) @arrow{} InterpType
+The function @code{interpret} is called to interpret the previously
+parsed program.
+@end defun
+@defvar bool programParsing;
+@end defvar
+@defvar bool programRunning;
+@end defvar
+@defvar bool programDebugging;
+@end defvar
+
+@section pnode.h
+
+@defun procCallPNode (String, PNode*) @arrow{} PNode*
+@end defun
+
+@section pvalue.h
+
+int Perrors;
+
+@section sequence.h
+
+@defun createSequence (RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun deleteSequence (Sequence* sequence) @arrow{} void
+Deletes @code{sequence}, freeing its memory.
+@end defun
+@defun copySequence (Sequence*) @arrow{} Sequence*
+@end defun
+@defun lengthSequence (Sequence*) @arrow{} int
+@end defun
+@defun appendToSequence (Sequence*, CString key, const void*) @arrow{} void
+@end defun
+@defun isInSequence (Sequence* sequence, CString key) @arrow{} bool
+Checks to see if @code{key} is present in @code{sequence}.  If found,
+returns @code{true}, otherwise, returns @code{false}.
+@end defun
+@defun removeFromSequence (Sequence* sequence, CString key) @arrow{} bool
+Removes @code{key} from @code{sequence}.  Returns @code{true} if it
+was successfully removed.  Returns @code{false} otherwise.
+@end defun
+@defun removeFromSequenceByIndex  (Sequence *sequence, int index) @arrow{} bool
+Removes the sequence element having index @code{code}.  Returns
+@code{true} on success, @#code{false} on failure.
+@end defun
+@defun nameSortSequence (Sequence*) @arrow{} void
+@end defun
+@defun personToChildren (GNode* person, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun personToFathers (GNode* person, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun personToMothers (GNode* person, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun familyToChildren (GNode* family, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun familyToFathers (GNode* family, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun familyToMothers (GNode* family, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun personToSpouses (GNode* person, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun personToFamilies (GNode* person, bool, RecordIndex*) @arrow{} Sequence*
+@end defun
+@defun refnToSequence (CString value, RecordIndex*, RefnIndex*) @arrow{} Sequence*
+@end defun
+@defun stringToSequence (CString name, Database* database) @arrow{} Sequence*
+@end defun
+@defun ancestorSequence (Sequence*, bool close) @arrow{} Sequence*
+@end defun
+@defun descendentSequence (Sequence*, bool close) @arrow{} Sequence*
+@end defun
+@defun siblingSequence (Sequence*, bool close) @arrow{} Sequence*
+@end defun
+@defun elementFromSequence (Sequence* sequence, int index, CString* key, CString* name) @arrow{} bool
+@end defun
+@defun renameElementInSequence (Sequence* sequence, CString key) @arrow{} void
+@end defun

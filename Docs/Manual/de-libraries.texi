@@ -1,0 +1,31 @@
+\input texinfo
+@setfilename de-libraries.info
+@titlepage
+@titlefont{DeadEnds Library Reference}
+@settitle DeadEnds Library Reference Manual
+@setchapternewpage odd
+@author David Cole Taylor
+@today{}
+@page
+@end titlepage
+@page
+@contents
+
+@chapter Database
+@include de-database.texi
+@chapter Gedcom
+@include de-gedcom.texi
+@chapter Parser
+@include de-parser.texi
+@chapter Interpreter
+@include de-interp.texi
+
+@chapter DataTypes
+@include de-datatypes.texi
+@chapter Utilities
+@include de-utils.texi
+@chapter User Interface
+@include de-ui.texi
+@unnumbered Function Index
+@printindex fn
+@bye

@@ -1,0 +1,8 @@
+@section parse.h
+
+@defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Context*
+Parse fileName found in searchPath.
+@end defun
+
+CString curFileName;  // Name of file being parsed.
+int curLine;   // Current line number in file being parsed.

@@ -5,13 +5,15 @@
 ###################
 
 MANUALS_en =	ll-python-api.pdf \
-		ll-python-internals.pdf
+		ll-python-internals.pdf \
+		de-libraries.pdf
 
 MANUALS_sv =
 MANUALS =	$(MANUALS_en) $(MANUALS_sv)
 
 MANUALSSRC_en = ll-python-api.texi \
-		ll-python-internals.texi
+		ll-python-internals.texi \
+		de-libraries.texi
 
 info_TEXINFOS = ll-python-api.texi ll-python-internals.texi
 

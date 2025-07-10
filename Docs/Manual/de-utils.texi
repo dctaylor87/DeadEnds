@@ -1,0 +1,125 @@
+@section de-strings.h
+
+@defun chartype (int c) @arrow{} int
+@end defun
+@defun iswhite (int c) @arrow{} bool
+@end defun
+@defun islinebreak (int c) @arrow{} bool
+@end defun
+@defun ll_toupper (int c) @arrow{} int
+@end defun
+@defun ll_tolower (int c) @arrow{} int
+@end defun
+@defun eqstr_ex (CString s1, CString s2) @arrow{} bool
+@end defun
+@defun destrncpy (char *dest, const char *src, size_t n, int utf8) @arrow{} char*
+@end defun
+@defun destrncpyf (char *dest, size_t n, int utf8, const char * fmt, ...) @arrow{} char*
+@end defun
+@defun destrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args) @arrow{} char*
+@end defun
+@defun ll_atoi (CString str, int defval) @arrow{} int
+@end defun
+@defun stdstring_hardfail (void) @arrow{} void
+@end defun
+@defun destrapps (char *dest, size_t limit, int utf8, const char *src) @arrow{} char*
+@end defun
+@defun destrappf (char * dest, int limit, int utf8, const char * fmt, ...) @arrow{} char*
+@end defun
+@defun destrsets (char *dest, size_t limit, int utf8, const char *src) @arrow{} char*
+@end defun
+@defun destrsetf (char * dest, int limit, int utf8, const char * fmt, ...) @arrow{} char*
+@end defun
+@defun utf8len (char ch) @arrow{} int
+@end defun
+@defun str8chlen (CString str) @arrow{} size_t
+@end defun
+@defun find_prev_char (String ptr, int * width, String limit, int utf8) @arrow{} String
+@end defun
+@defun unicode_to_utf8 (int wch, char * utf8) @arrow{} void
+@end defun
+@defun limit_width (String str, size_t width, bool utf8) @arrow{} void
+@end defun
+@defun chomp (String str) @arrow{} void
+@end defun
+@defun appendstr(String * pdest, int * len, int utf8, CString src) @arrow{} void
+@end defun
+@defun strfree (String *str) @arrow{} void
+@end defun
+@defun strupdate (String *str, CString value) @arrow{} void
+@end defun
+@defun allocsubbytes (String s, int start, int num) @arrow{} String
+@end defun
+@defun ll_what_collation (void) @arrow{} CString
+@end defun
+
+@section file.h
+
+@defun openFile (CString path, CString mode) @arrow{} File*
+@end defun
+@defun closeFile (File*) @arrow{} void
+@end defun
+
+@section errors.h
+
+@defun createErrorLog (void) @arrow{} ErrorLog*
+@end defun
+@defun deleteErrorLog (ErrorLog*) @arrow{} void
+@end defun
+@defun createError (ErrorType type, CString fileName, int lineNumber, CString message) @arrow{} Error*
+@end defun
+@defun setSeverityError (Error *error, ErrorSeverity severity) @arrow{} void
+@end defun
+@defun addErrorToLog (ErrorLog*, Error*) @arrow{} void
+@end defun
+@defun showErrorLog (ErrorLog*) @arrow{} void
+@end defun
+@defun saveErrorLog (String filename, ErrorLog *errorLog) @arrow{} bool
+@end defun
+
+@section standard.h
+
+@defun strsave (CString) @arrow{} String
+Save String in heap.
+@end defun
+@defun iswhite (int) @arrow{} bool
+Is character white space?
+@end defun
+@defun striptrail (String) @arrow{} void
+Strip trailing white space.
+@end defun
+@defun chartype (int) @arrow{} int
+Return type of a character.
+@end defun
+@defun _alloc (size_t, CString, int) @arrow{} void*
+@end defun
+@defun _free (void* ptr, String, int) @arrow{} void
+@end defun
+@defun _realloc (void* ptr, size_t, CString, int) @arrow{} void*
+@end defun
+@defun _logAllocations (bool) @arrow{} void
+Turn allocation logging on and off.
+@end defun
+@defun _fatal (CString, int, CString, CString) @arrow{} void
+@end defun
+
+@section path.h
+
+@defun fopenPath (CString fileName, CString mode, CString searchPath) @arrow{} FILE*
+@end defun
+@defun resolveFile (CString fileName, CString searchPath) @arrow{} CString
+@end defun
+@defun pathMatch  (CString path1, CString path2) @arrow{} bool
+@end defun
+@defun pathConcatAllocate (CString dir, CString file) @arrow{} String
+@end defun
+@defun pathConcat (CString dir, CString file, int utf8, String buffer, int buflen) @arrow{} String
+@end defun
+@defun isDirSep (char c) @arrow{} bool
+@end defun
+@defun compressPath (CString path, int len) @arrow{} String
+@end defun
+@defun chopPath (CString path, String dirs) @arrow{} int
+@end defun
+@defun expandSpecialFilenameChars (String buffer, int buflen, int utf8) @arrow{} bool
+@end defun
