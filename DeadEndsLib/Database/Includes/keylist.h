@@ -20,6 +20,5 @@ KeyList *createKeyList(Database*);  // Create a KeyList with its compare and get
 void insertInKeyList(KeyList*, String);  // Insert a key into a KeyList.
 
 RootList *createRootList(void);  // Create a RootList with its compare and getkey functions.
-void insertInRootList(RootList*, GNode*);  // Insert a new root GNode* into a RootList.
 
 #endif /* keylist_h */

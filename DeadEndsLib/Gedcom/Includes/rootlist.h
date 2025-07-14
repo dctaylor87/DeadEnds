@@ -21,7 +21,7 @@ typedef List RootList;
 
 RootList *createRootList(void);  // Create a root list.
 void deleteRootList(RootList*);
-void insertInRootList(RootList*, GNode*);
+void insertInRootList(RootList*, GNode*);  // Insert a new root GNode* into a RootList.
 //RootList* getRootListFromFile(File*, IntegerTable*, ErrorLog*);
 RootList* getRootListFromGNodeList(GNodeList*, String file, ErrorLog*);
 void showRootList(RootList*);
