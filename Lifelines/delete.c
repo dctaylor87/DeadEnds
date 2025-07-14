@@ -83,7 +83,8 @@ chooseAndRemoveFamily (void)
 {
 	GNode *fam, *node, *indi;
 	Sequence *spseq, *chseq;
-	String tag, key;
+	CString tag;
+	String key;
 	char confirm[512]="", members[64];
 	char spouses[32], children[32];
 	int n;

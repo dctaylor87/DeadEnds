@@ -261,7 +261,7 @@ do_fields_scan (SCANNER * scanner, GNode *rec, Database *database ATTRIBUTE_UNUS
 	/* NB: Only scanning top-level nodes right now */
 	GNode *node = nztop(rec);
 	for (node = nchild(node); node; node = nsibling(node)) {
-		String tag = ntag(node);
+		CString tag = ntag(node);
 		if (tag && eqstr(tag, scanner->field)) {
 			String val = nval(node);
 			if (val && scanner_does_pattern_match(scanner, val)) {
@@ -272,7 +272,7 @@ do_fields_scan (SCANNER * scanner, GNode *rec, Database *database ATTRIBUTE_UNUS
 			if (scanner->conts) {
 				GNode *node2 = 0;
 				for (node2 = nchild(node); node2; node2 = nsibling(node2)) {
-					String tag2 = ntag(node2);
+					CString tag2 = ntag(node2);
 					if (tag2 && (eqstr(tag2, "CONC") || eqstr(tag2, "CONT"))) {
 						String val2 = nval(node2);
 						if (val2 && scanner_does_pattern_match(scanner, val2)) {

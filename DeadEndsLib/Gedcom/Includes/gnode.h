@@ -21,7 +21,7 @@ typedef HashTable RecordIndex;
 typedef struct GNode GNode;
 struct GNode {
 	String key;     // Record key; only root nodes use this field.
-	String tag;     // Line tag; all nodes use this field.
+	CString tag;    // Line tag; all nodes use this field.
 	String value;   // Line value; values are optional.
 	GNode *parent;  // Parent node; all nodes except roots use this field.
 	GNode *child;   // First child none of this node, if any.

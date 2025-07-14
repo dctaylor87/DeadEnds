@@ -52,7 +52,7 @@ static List* createPartition(GNode* person, GNodeIndex* index, StringSet* visite
 		// If curr is a person add its FAMS and FAMC families to the queue.
 		if (recordType(curr) == GRPerson) {
 			for (GNode* child = curr->child; child; child = child->sibling) {
-				String tag = child->tag;
+				CString tag = child->tag;
 				if (eqstr(tag, "FAMS") || eqstr(tag, "FAMC")) {
 					String value = child->value;
 					GNode* node = searchGNodeIndex(index, value);
@@ -66,7 +66,7 @@ static List* createPartition(GNode* person, GNodeIndex* index, StringSet* visite
 		// If curr is a family add its HUSB, WIFE, and CHIL persons to the queue.
 		} else if (recordType(curr) == GRFamily) {
 			for (GNode* child = curr->child; child; child = child->sibling) {
-				String tag = child->tag;
+				CString tag = child->tag;
 				if (eqstr(tag, "HUSB") || eqstr(tag, "WIFE") || eqstr(tag, "CHIL")) {
 					String value = child->value;
 					GNode* node = searchGNodeIndex(index, value);

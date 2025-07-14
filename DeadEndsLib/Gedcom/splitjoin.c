@@ -28,7 +28,7 @@ void splitPerson(GNode* indi, GNode** pname, GNode** prefn, GNode** psex, GNode*
     node = indi->child;
     indi->child = indi->sibling = null;
     while (node) {
-        String tag = node->tag;
+        CString tag = node->tag;
         if (eqstr("NAME", tag)) {
             if (!name) name = lnam = node;
             else lnam = lnam->sibling = node;
@@ -100,7 +100,7 @@ void splitFamily(GNode* fam, GNode** prefn, GNode** phusb, GNode** pwife, GNode*
                   GNode** prest) {
     GNode *node, *rest, *last, *husb, *lhsb, *wife, *lwfe, *chil, *lchl;
     GNode *prev, *refn, *lref;
-    String tag;
+    CString tag;
     rest = last = husb = wife = chil = lchl = lhsb = lwfe = null;
     prev = refn = lref = null;
     node = fam->child;
@@ -194,7 +194,7 @@ void splitSource(GNode *root, GNode **prefn, GNode **pbody)
   root->child = null;  // Disconnect the root from its child
 
   while (node) {  // Iterate through the children of the SOUR Node.
-    String tag = node->tag;
+    CString tag = node->tag;
 
     if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
       if (!refn)
@@ -260,7 +260,7 @@ void splitEvent(GNode *root, GNode **prefn, GNode **pbody)
   root->child = null;  // Disconnect the root from its child
 
   while (node) {  // Iterate through the children of the SOUR Node.
-    String tag = node->tag;
+    CString tag = node->tag;
 
     if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
       if (!refn)
@@ -326,7 +326,7 @@ void splitOther(GNode *root, GNode **prefn, GNode **pbody)
   root->child = null;  // Disconnect the root from its child
 
   while (node) {  // Iterate through the children of the SOUR Node.
-    String tag = node->tag;
+    CString tag = node->tag;
 
     if (eqstr("REFN", tag)) {  // Handle the 1 REFN Nodes.
       if (!refn)
@@ -374,7 +374,7 @@ void joinOther (GNode *root, GNode *refn, GNode *body)
 static void splitTree(GNode* root, GNode** prefn, GNode** prest) {
 	GNode *node, *rest, *last;
 	GNode *prev, *refn, *lref;
-	String tag;
+	CString tag;
 	rest = last = null;
 	prev = refn = lref = null;
 	node = root->child;
