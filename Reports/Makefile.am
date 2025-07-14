@@ -82,4 +82,4 @@ CLEANFILES = index.html
 
 PERL = perl
 index.html: $(LL_REPORTS) $(LL_SUBREPORTS)
-	-$(PERL) $(top_srcdir)/reports/gen_index $^
+	-$(PERL) $(top_srcdir)/Reports/gen_index $^
