@@ -91,16 +91,35 @@ Strip trailing white space.
 @defun chartype (int) @arrow{} int
 Return type of a character.
 @end defun
-@defun _alloc (size_t, CString, int) @arrow{} void*
+@defun _alloc (size_t len, CString file, int line) @arrow{} void*
+Allocates memory.  Wrapper around @code{malloc}.  When allocations are
+being logged, the file @code{file}, line number @code{likne}, and
+length @code{len} will be logged.  Called by @code{stdalloc} if
+@code{DEBUGALLOCS} is defined.
 @end defun
-@defun _free (void* ptr, String, int) @arrow{} void
+@defun _free (void* ptr, String file, int line) @arrow{} void
+Frees memory.  Wrapper around @code{free}.  When allocations are
+being logged, the file @code{file}, line number @code{likne}, and
+length @code{len} will be logged.  Called by @code{stdfree} if
+@code{DEBUGALLOCS} is defined.
 @end defun
-@defun _realloc (void* ptr, size_t, CString, int) @arrow{} void*
+@defun _realloc (void* ptr, size_t len, CString file, int line) @arrow{} void*
+Reallocates memory.  Wrapper around @code{realloc}.  When allocations are
+being logged, the file @code{file}, line number @code{likne}, and
+length @code{len} will be logged.  Called by @code{stdrealloc} if
+@code{DEBUGALLOCS} is defined.
 @end defun
-@defun _logAllocations (bool) @arrow{} void
-Turn allocation logging on and off.
+@defun _logAllocations (bool onOrOff) @arrow{} void
+Turn allocation logging on and off.  If @code{onOrOff} is @code{true},
+then logging of allocations is turned on.  Otherwise, it is turned
+off.
 @end defun
-@defun _fatal (CString, int, CString, CString) @arrow{} void
+@defun _fatal (CString file, int line, CString msg, CString function) @arrow{} void
+Called by the @code{fatal}, @code{FATAL}, and @code{ASSERT} macros.
+
+Terminates the program with a message that includes the file name
+@code{file}, the line number @code{line}, the function name
+@code{function}, and a message @code{msg}.
 @end defun
 
 @section path.h

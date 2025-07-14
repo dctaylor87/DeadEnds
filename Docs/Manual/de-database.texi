@@ -3,10 +3,12 @@
 @defun getDatabaseFromFile (CString path, int vcodes, ErrorLog* errlog) @arrow{} Database*
 Reads the @code{GEDCOM} file found in @code{path}, creates a database
 and returns it.  If errors occur, null is returned and the errors are
-logs in @code{errlog}.
+logged in @code{errlog}.
 @end defun
 
 @defun getRecordListFromFile (CString path, IntegerTable* keymap, ErrorLog* elog) @arrow{} RootList*
+This is used by the @acronym{GEDCOM} import code and when editing a
+database, whether to modify existing records or to add new records.
 @end defun
 
 @section keylist.h

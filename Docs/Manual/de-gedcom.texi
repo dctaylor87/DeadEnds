@@ -12,44 +12,81 @@ Return the type of a Gedcom record tree.
 @section gnode.h
 
 @defun createGNode (CString key, CString tag, CString value, GNode* parent) @arrow{} GNode*
+Creates a GNode from a @code{key}, @code{tag}, @code{value}, and
+pointer to a parent @code{GNode}.  When a @code{GNode} is created, the
+@code{key} and @code{value}, if present, are allocated on the heap,
+and the @code{tag} pointer points into the tag table.
 @end defun
 @defun freeGNode (GNode*) @arrow{} void
 @end defun
-@defun freeGNodes (GNode*) @arrow{} void
+@defun freeGNodes (GNode* node) @arrow{} void
+Frees all GNodes in a tree or a forest of GNodes.
 @end defun
 @defun personToFamilyAsChild (GNode *person, RecordIndex*) @arrow{} GNode*
 @end defun
-@defun personToEvent (GNode*, String, String, int, bool) @arrow{} String
+@defun personToEvent (GNode* person, String tag, String head, int len, bool shorten) @arrow{} String
+Searches the immediate children of @code{person} for event @code{tag},
+returns the event subtree as a string using a static buffer.
 @end defun
-@defun familyToEvent (GNode*, String, String, int, bool) @arrow{} String
+@defun familyToEvent (GNode* node, String tag, String head, int len, bool shorten) @arrow{} String
+Searches the immediate children of @code{node} for event @code{tag},
+returns the event subtree as a string using a static buffer.
 @end defun
-@defun eventToString (GNode*, bool) @arrow{} String
+@defun eventToString (GNode* node, bool shorten) @arrow{} String
 @end defun
-@defun eventToDate (GNode*, bool) @arrow{} String
+@defun eventToDate (GNode* node, bool shorten) @arrow{} String
+Returns the value of the @code{DATE} line of an event as a string.  If
+@code{shorten} is @code{true}, then the string is shortened before
+being returned.
 @end defun
-@defun eventToPlace (GNode*, bool) @arrow{} String
+@defun eventToPlace (GNode* node, bool shorten) @arrow{} String
+Returns the value of the @code{PLAC} line of an event as a string.  If
+@code{shorten} is @code{true}, then the string is shortened before
+being returned.
 @end defun
-@defun lengthGNodes (GNode*) @arrow{} int
+@defun lengthGNodes (GNode* node) @arrow{} int
+Counts @code{node} and its siblings.  Returns the number of nodes.
 @end defun
-@defun copyGNode (GNode*) @arrow{} GNode*
+@defun copyGNode (GNode* node) @arrow{} GNode*
+Creates a new @code{GNode} having the same @code{key}, @code{tag}, and
+@code{value} as @code{node}.  The copy's @code{parent} is set to
+@code{null}.
 @end defun
-@defun copyGNodes (GNode*, bool, bool) @arrow{} GNode*
+@defun copyGNodes (GNode* node, bool kids, bool sibs) @arrow{} GNode*
+Copies a @code{GNode} tree.  if @code{kids} is @code{true}, children
+are copied as well.  If @code{sibs} is @code{true}, siblings are
+copied as well.
 @end defun
-@defun findNode (GNode*, String, String, GNode**) @arrow{} GNode*
+@defun findNode (GNode* parent, String tag, String value, GNode** plast) @arrow{} GNode*
+Finds the first child node with a specific tag @code{tag} and/or value
+@code{value}.  One or both of @code{tag} and @code{value} must be
+non-null.  The @code{plast} pointer can be used to point to the GNode
+before the returned GNode.
 @end defun
-@defun isKey (CString) @arrow{} bool
+@defun isKey (CString str) @arrow{} bool
+Returns @code{true} if a string has the a @acronym{GEDCOM} key format.
 @end defun
 @defun findTag (GNode* node, CString tag) @arrow{} GNode*
 Looks at @code{node} and its subsequent sibling nodes for a tag of
 @code{tag}.  If found, it is returned, otherwise null is returned.
 @end defun
-@defun valueToSex (GNode*) @arrow{} SexType
+@defun valueToSex (GNode* node) @arrow{} SexType
+Converts the @code{value} of node @code{node} having tag @code{SEX} to
+a @code{SexType} enumerated value.
 @end defun
 @defun createTempGNode (String xref, String tag, String val, GNode *prnt) @arrow{} GNode*
+Creates and returns a @code{GNode} having xref @code{xref}, tag
+@code{tag}, value @code{val}, and parent @code{prnt}.  The resulting
+@code{Gnode} is marked as a temporary @code{Gnode}.
 @end defun
 @defun isTempGNode (GNode *node) @arrow{} bool
+Returns @code{true} if GNode @code{node} is a temporary node and
+@code{false} otherwise.
 @end defun
 @defun setTempGNode (GNode *node, bool temp) @arrow{} void
+If @code{temp} is @code{true}, GNode @code{node}, its children, and
+its siblings are marked as temporary nodes.  Otherwise they are marked
+as non-temporary.
 @end defun
 
 @section lineage.h

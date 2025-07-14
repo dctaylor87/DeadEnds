@@ -1,3 +1,7 @@
+The names of the current user interface header files, their locations,
+and which functions are declared in each of them is likely to change
+and should not be relied upon.
+
 @section uiio.h
 
 @defun uiio_pre_database_init (UIIO *uiio, bool runningInterpreter) @arrow{} bool
@@ -15,9 +19,19 @@ UIIO *current_uiio;
 
 @section screen.h
 
-int ll_lines; /* number of lines used by LifeLines (usually LINES) */
-int ll_cols;  /* number of columns used by LifeLines (usually COLSREQ) */
-UIWINDOW main_win;
+Many of the functions declared in this header are defined in the
+@file{Lifelines} directory.  Others are defined in the @file{UI}
+directory.  This header needs to be split into two or three pieces
+each declaring the appropriate functions.
+
+@defvar int ll_lines
+Number of lines used by LifeLines (usually LINES)
+@end defvar
+@defvar int ll_cols
+Number of columns used by LifeLines (usually COLSREQ)
+@end defvar
+@defvar UIWINDOW main_win
+@end defvar
 
 @defun load_gedcom (bool picklist, Database *database) @arrow{} void
 @end defun

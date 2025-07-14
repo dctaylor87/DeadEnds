@@ -121,9 +121,9 @@ during the port effort.  They should not be used in new code as they
 @end defun
 @defun zs_str (ZCSTR) @arrow{} char*
 @end defun
-@defun int zs_len (ZCSTR zstr) @arrow{} unsigned
+@defun zs_len (ZCSTR zstr) @arrow{} unsigned int
 @end defun
-@defun int zs_allocsize (ZCSTR zstr) @arrow{} unsigned
+@defun zs_allocsize (ZCSTR zstr) @arrow{} unsigned int
 @end defun
 @defun zs_chop (ZSTR zstr, unsigned int len) @arrow{} void
 @end defun
