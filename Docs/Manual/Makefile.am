@@ -1,4 +1,4 @@
-# This makefile creates the docs/manual directory
+# This makefile creates the Docs/Manual directory
 
 ###################
 # Manuals
@@ -14,6 +14,18 @@ MANUALS =	$(MANUALS_en) $(MANUALS_sv)
 MANUALSSRC_en = ll-python-api.texi \
 		ll-python-internals.texi \
 		de-libraries.texi
+
+de_libraries_INPUTS = \
+	de-database.texi \
+	de-datatypes.texi \
+	de-gedcom.texi \
+	de-interp.texi \
+	de-parser.texi \
+	de-ui.texi \
+	de-utils.texi
+
+de-libraries.pdf:	de-libraries.texi
+de-libraries.pdf:	$(de_libraries_INPUTS)
 
 info_TEXINFOS = ll-python-api.texi ll-python-internals.texi
 
