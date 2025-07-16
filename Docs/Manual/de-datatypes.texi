@@ -43,36 +43,58 @@ increment ref. count of table
 decrement ref. count of table, free if zero
 @end defun
 
-@section integeertable.h
+@section integertable.h
 
 @defun createIntegerTable (int numBuckets) @arrow{} IntegerTable*
+Creates a hash table having the specified number of buckets.  The hash
+table keys are strings, the values are integers.
 @end defun
-@defun incrIntegerTable (IntegerTable*, CString key) @arrow{} void
+@defun incrIntegerTable (IntegerTable* table, CString key) @arrow{} void
+Retrieves the HashTable @code{table} entry having key @code{key},
+increments its value, and stores it back into the table.  If the
+element is not found, a new element is added having having a key of
+@code{key} and a value of @code{1}.
 @end defun
 
 @section list.h
 
 @defun createList (CString(*g)(const void*), int(*c)(CString, CString), void (*d)(void*), bool sorted) @arrow{} List*
+Creates an empty List having the specified getKey @code{g}, compare
+@code{c}, and delete @code{d} functions.  If @code{sorted} is
+@code{true}, the list is a sorted list.
 @end defun
-@defun deleteList (List*) @arrow{} void
+@defun deleteList (List* list) @arrow{} void
+Deletes the elements in List @code{list}.  Also frees @code{list}.
 @end defun
-@defun lengthList (List*) @arrow{} int
+@defun lengthList (List* list) @arrow{} int
+Returns the number of elements in @code{list}
 @end defun
-@defun isEmptyList (List*) @arrow{} bool
+@defun isEmptyList (List* list) @arrow{} bool
+Returns @code{true} if List @code{list} is empty, @code{false}
+otherwise.
 @end defun
-@defun findInList (List*, CString, int* index) @arrow{} void*
+@defun findInList (List* list, CString key, int* index index) @arrow{} void*
+Searches @code{list} for @code{key}.  If found, it is returned and
+@code{*index} is set to its index.  Otherwise, @code{null} is
+returned.
 @end defun
 @defun getListElement (List *list, int index) @arrow{} void*
 @end defun
-@defun appendToList (List*, const void*) @arrow{} void
+@defun appendToList (List* list, const void* element) @arrow{} void
+Appends @code{element} to the end of @code{list}, extending the list
+by one element.
 @end defun
-@defun prependToList (List*, const void*) @arrow{} void
+@defun prependToList (List* list, const void* element) @arrow{} void
+Prepends @code{element} to the start of @code{list}, pushing all other
+elements down by one index.
 @end defun
 @defun sortList (List*) @arrow{} void
 @end defun
 @defun searchList (List* list, CString key, int* index) @arrow{} void*
 @end defun
-@defun removeFromList (List*, int) @arrow{} bool
+@defun removeFromList (List* list, int index) @arrow{} bool
+Remove element having index @code{index} from List @code{list}.  All
+subsequent elements are moved up by one.P
 @end defun
 @defun getAndRemoveFirstListElement (List*) @arrow{} void*
 @end defun

@@ -33,99 +33,9 @@ Number of columns used by LifeLines (usually COLSREQ)
 @defvar UIWINDOW main_win
 @end defvar
 
-@defun load_gedcom (bool picklist, Database *database) @arrow{} void
-@end defun
-@defun save_gedcom (Database *database) @arrow{} bool
-@end defun
-@defun activate_uiwin (UIWINDOW uiwin) @arrow{} void
-@end defun
-@defun adjust_browse_menu_cols (int delta) @arrow{} void
-@end defun
-@defun adjust_browse_menu_height (int delta) @arrow{} void
-@end defun
-@defun aux_browse (GNode *rec, int mode, bool reuse) @arrow{} int
-@end defun
 @defun clear_hseg (WINDOW *, int row, int x1, int x2) @arrow{} void
 @end defun
-@defun create_newwin2 (UIWINDOW * puiw, CString name, int rows, int cols) @arrow{} void
-@end defun
-@defun cycle_browse_menu (void) @arrow{} void
-@end defun
-@defun deactivate_uiwin_and_touch_all (void) @arrow{} void
-@end defun
-@defun display_2fam (GNode *frec1, GNode *frec2, int mode) @arrow{} void
-@end defun
-@defun display_2indi (GNode *irec1, GNode *irec2, int mode) @arrow{} void
-@end defun
-@defun display_fam (GNode *fam, int mode, bool reuse) @arrow{} void
-@end defun
-@defun display_indi (GNode *indi, int mode, bool reuse) @arrow{} void
-@end defun
-@defun draw_win_box (WINDOW * win) @arrow{} void
-@end defun
-@defun get_gr_ttee (void) @arrow{} llchtype
-@end defun
-@defun get_main_screen_width (void) @arrow{} int
-@end defun
-@defun get_uitime (void) @arrow{} int
-@end defun
-@defun interact_2fam (void) @arrow{} int
-@end defun
-@defun interact_2indi (void) @arrow{} int
-@end defun
-@defun interact_fam (void) @arrow{} int
-@end defun
-@defun interact_indi (void) @arrow{} int
-@end defun
-@defun interact_popup (UIWINDOW uiwin, String str) @arrow{} int
-@end defun
-@defun list_browse (Sequence *seq, int top, int *cur, int mark) @arrow{} int
-@end defun
-@defun lock_status_msg (bool lock) @arrow{} void
-@end defun
 @defun main_menu (void) @arrow{} void
-@end defun
-@defun show_horz_line (UIWINDOW, int, int, int) @arrow{} void
-@end defun
-@defun show_indi_vitals (UIWINDOW uiwin, GNode *irec, LLRECT, int *scroll, bool reuse) @arrow{} void
-@end defun
-@defun show_record (UIWINDOW uiwin, CString key, int mode, LLRECT, int * scroll, bool reuse) @arrow{} bool
-@end defun
-@defun show_vert_line (UIWINDOW, int, int, int) @arrow{} void
-@end defun
-@defun toggle_browse_menu (void) @arrow{} void
-@end defun
-@defun uierase (UIWINDOW uiwin) @arrow{} void
-@end defun
-@defun wfield (int, int, CString) @arrow{} void
-@end defun
-@defun wipe_window_rect (UIWINDOW uiwin, LLRECT rect) @arrow{} void
-@end defun
-@defun wpos (int, int) @arrow{} void
-@end defun
-@defun show_ancestors (UIWINDOW uiwin, GNode *irec, LLRECT, int * scroll, bool reuse) @arrow{} void
-@end defun
-@defun show_aux (UIWINDOW uiwin, GNode *rec, int mode, LLRECT, int * scroll, bool reuse) @arrow{} void
-@end defun
-@defun show_big_list (Sequence *, int, int, int) @arrow{} void
-@end defun
-@defun show_childnumbers (void) @arrow{} void
-@end defun
-@defun show_descendants (UIWINDOW uiwin, GNode *rec, LLRECT, int * scroll, bool reuse) @arrow{}void
-@end defun
-@defun show_fam_vitals (UIWINDOW uiwin, GNode *frec, int row, int hgt, int width, int *scroll, bool reuse) @arrow{} void
-@end defun
-@defun show_gedcom (UIWINDOW uiwin, GNode *rec, int gdvw, LLRECT void, int * scroll, bool reuse) @arrow{} void
-@end defun
-@defun show_reset_scroll (void) @arrow{} void
-@end defun
-@defun show_scroll (int delta) @arrow{} void
-@end defun
-@defun show_scroll2 (int delta) @arrow{} void
-@end defun
-@defun switch_scrolls (void) @arrow{} void
-@end defun
-@defun term_show_module (void) @arrow{} void
 @end defun
 
 @section ui.h

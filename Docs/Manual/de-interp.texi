@@ -30,20 +30,24 @@ parsed program.
 
 @section pvalue.h
 
-int Perrors;
+@defvar int Perrors;
+@end defvar
 
 @section sequence.h
 
-@defun createSequence (RecordIndex*) @arrow{} Sequence*
+@defun createSequence (RecordIndex* index) @arrow{} Sequence*
+Creates an empty sequence and returns it.  The @code{index} is
+recorded in the sequence header.
 @end defun
 @defun deleteSequence (Sequence* sequence) @arrow{} void
 Deletes @code{sequence}, freeing its memory.
 @end defun
 @defun copySequence (Sequence*) @arrow{} Sequence*
 @end defun
-@defun lengthSequence (Sequence*) @arrow{} int
+@defun lengthSequence (Sequence* sequence) @arrow{} int
+Returns the length of sequence @code{sequence}.
 @end defun
-@defun appendToSequence (Sequence*, CString key, const void*) @arrow{} void
+@defun appendToSequence (Sequence* sequence, CString key, const void* element) @arrow{} void
 @end defun
 @defun isInSequence (Sequence* sequence, CString key) @arrow{} bool
 Checks to see if @code{key} is present in @code{sequence}.  If found,
@@ -57,23 +61,33 @@ was successfully removed.  Returns @code{false} otherwise.
 Removes the sequence element having index @code{code}.  Returns
 @code{true} on success, @#code{false} on failure.
 @end defun
-@defun nameSortSequence (Sequence*) @arrow{} void
+@defun nameSortSequence (Sequence* sequence) @arrow{} void
+Sorts #@code{sequence} by name.  Assumes it is a sequence of person records.
 @end defun
-@defun personToChildren (GNode* person, RecordIndex*) @arrow{} Sequence*
+@defun personToChildren (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Iterates over all the families @code{person} is a spouse in and adds
+all the children of each family to a sequence.  Returns the sequence.
+If there are no children, returns @code{null}.
 @end defun
-@defun personToFathers (GNode* person, RecordIndex*) @arrow{} Sequence*
+@defun personToFathers (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Iterates over all the families that @code{person} is a child in and
+adds the husbands to a sequence.  Returns the sequence if it is
+non-empty.  Otherwise it returns @code{null}.
 @end defun
-@defun personToMothers (GNode* person, RecordIndex*) @arrow{} Sequence*
+@defun personToMothers (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Iterates over all the families that @code{person} is a child in and
+adds the wives to a sequence.  Returns the sequence if it is
+non-empty.  Otherwise it returns @code{null}.
 @end defun
-@defun familyToChildren (GNode* family, RecordIndex*) @arrow{} Sequence*
+@defun familyToChildren (GNode* family, RecordIndex* index) @arrow{} Sequence*
 @end defun
-@defun familyToFathers (GNode* family, RecordIndex*) @arrow{} Sequence*
+@defun familyToFathers (GNode* family, RecordIndex* index) @arrow{} Sequence*
 @end defun
-@defun familyToMothers (GNode* family, RecordIndex*) @arrow{} Sequence*
+@defun familyToMothers (GNode* family, RecordIndex* index) @arrow{} Sequence*
 @end defun
-@defun personToSpouses (GNode* person, RecordIndex*) @arrow{} Sequence*
+@defun personToSpouses (GNode* person, RecordIndex* index) @arrow{} Sequence*
 @end defun
-@defun personToFamilies (GNode* person, bool, RecordIndex*) @arrow{} Sequence*
+@defun personToFamilies (GNode* person, bool, RecordIndex* index) @arrow{} Sequence*
 @end defun
 @defun refnToSequence (CString value, RecordIndex*, RefnIndex*) @arrow{} Sequence*
 @end defun

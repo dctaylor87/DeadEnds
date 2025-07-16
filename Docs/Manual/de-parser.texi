@@ -1,8 +1,16 @@
 @section parse.h
 
 @defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Context*
-Parse fileName found in searchPath.
+Search along @code{searchPath} for @code{fileName}.  If found, it
+parses it a DeadEnds script.  If found and the parse is successful,
+then it returns a @code{Context *}, otherwise it returns @code{null}.
+If any errors occurs, they are logged in @code{errorLog}.
 @end defun
 
-CString curFileName;  // Name of file being parsed.
-int curLine;   // Current line number in file being parsed.
+@defvar CString curFileName
+Name of the file currently being parsed.
+@end defvar
+
+@defvar int curLine
+The line number in the file currently being parsed.
+@end defvar

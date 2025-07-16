@@ -1,6 +1,73 @@
 @section date.h
 
 @defun formatDate (CString str, int dfmt, int mfmt, int yfmt, int sfmt, bool cmplx) @arrow{} String
+The arguments @code{dfmt} @code{mfmt} @code{yfmt} @code{sfmt}
+@code{cmplx} say how to format the different parts of string @code{str} containing a
+date.
+
+The argument @code{dfmt} says how to format the day @code{day} part of the date..
+@itemize @bullet
+@item 0
+number, with a leading space for single digits
+@item 1
+number, with a leading zero for single digits
+@item 2
+number as is, no leading space, no leading zero
+@end itemize
+The argument @code{mfmt}, says how to format the @code{month} part of the date..
+@itemize @bullet
+@item 0
+month number, with a leading space for single digits
+@item 1
+month number, with a leading zero for single digits
+@item 2
+month number, as is, no leading space, no leading zero
+@item 3
+month name, three letter abbreviation, all capitals
+@item 4
+month name, three letter abbreviation, first letter capitalized
+@item 5
+month name, spelled out, all capitals
+@item 6
+month name, spelled out, first letter capitalize
+@end itemize
+
+The argument @code{yfmt}, says how to tofmrat the @code{year} part of the date.
+Currently, no formats are specified and it is ignored.
+
+The argument @code{sfmt}, says how to arrange the @code{day},
+@code{month}, and @code{year} pieces.
+
+@itemize @bullet
+@item 0
+@code{day} @code{month} @code{year}
+@item 1
+@code{month} @code{day} @code{year}
+@item 2
+@code{month}/@code{day}/@code{year}
+@item 3
+@code{day}/@code{month}/@code{year}
+@item 4
+@code{month}-@code{day}-@code{year}
+@item 5
+@code{day}-@code{month}-@code{year}
+@item 6
+@code{month} @code{day} @code{year} with no spaces
+@item 7
+@code{day} @code{month} @code{year} with no spaces
+@item 8
+@code{year} @code{month} @code{day}
+@item 9
+@code{year}/@code{month}/@code{day}
+@item 10
+@code{year}-@code{month}-@code{day}
+@item 11
+@code{year} @code{month} @code{day} with no spaces
+@end itemize
+
+The argument @code{cmplx}, a boolean, if @code{true}, says to treat
+the string @code{str} as a complex date, including date modifiers,
+ranges, and/or double-dating.
 @end defun
 
 @section gedcom.h
@@ -23,6 +90,10 @@ and the @code{tag} pointer points into the tag table.
 Frees all GNodes in a tree or a forest of GNodes.
 @end defun
 @defun personToFamilyAsChild (GNode *person, RecordIndex*) @arrow{} GNode*
+Returns the (first) family in which @code{person} is a child.
+
+Most individuals are a child in at most one family.  Exceptions might
+include persons who were adopted.
 @end defun
 @defun personToEvent (GNode* person, String tag, String head, int len, bool shorten) @arrow{} String
 Searches the immediate children of @code{person} for event @code{tag},
@@ -65,6 +136,7 @@ before the returned GNode.
 @end defun
 @defun isKey (CString str) @arrow{} bool
 Returns @code{true} if a string has the a @acronym{GEDCOM} key format.
+Does @b{NOT} verify that the key is present in any database.
 @end defun
 @defun findTag (GNode* node, CString tag) @arrow{} GNode*
 Looks at @code{node} and its subsequent sibling nodes for a tag of
@@ -127,8 +199,9 @@ Return the number of families a person is a spouse in.
 @defun manipulateName (CString, bool caps, bool reg, int maxlen) @arrow{} String
 Manipulate a name.
 @end defun
-@defun getSurname (CString) @arrow{} String
+@defun getSurname (CString name) @arrow{} String
 Get the surname of a Gedcom name.
+If no surname is present in @code{name}, then @code{____} is returned.
 @end defun
 @defun getGivenNames (CString) @arrow{} String
 Get the given names of a Gedcom name.
@@ -177,7 +250,10 @@ circumstances.  First, when a GEDCOM file is first read in to create a
 database.  And second, when a record is edited.
 @end defun
 
-@defun normalizeRecord (GNode*) @arrow{} GNode*
+@defun normalizeRecord (GNode* node) @arrow{} GNode*
+Simplified interface to the split / join functions.  It looks at the
+@code{tag} of the GNode @code{node}, calls the appropriate pair of
+split / join functions, and returns the result.
 @end defun
 
 @section writenode.h
@@ -186,4 +262,10 @@ database.  And second, when a record is edited.
 Write the record rooted at @code{root} to the stdio stream @code{fp}.
 If @code{index} is true, then each level is indented relative to the
 the previous level.  This is visually useful when editing.
+
+When exporting a database, this function would typically be called
+iteratively on all the @code{root} nodes within the database.  When
+exporting, @code{indent} should be @code{false}.
+
+When exporting, you'll also need to write a header and a trailer.
 @end defun
