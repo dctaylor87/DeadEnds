@@ -164,7 +164,6 @@ void draw_win_box(WINDOW * win);
 llchtype get_gr_ttee(void);
 int get_main_screen_width(void);
 int get_uitime(void);
-int init_screen(char * errmsg, int errsize);
 int interact_2fam(void);
 int interact_2indi(void);
 int interact_fam(void);
@@ -172,11 +171,9 @@ int interact_indi(void);
 int interact_popup(UIWINDOW uiwin, String str);
 int list_browse(Sequence *seq, int top, int *cur, int mark);
 void lock_status_msg(bool lock);
-void main_menu(void);
 String message_string (void);
 void paint_main_screen(void);
 void paint_two_fam_screen(void);
-void set_screen_graphical(bool graphical);
 void show_horz_line(UIWINDOW, int, int, int);
 void show_indi(UIWINDOW uiwin, GNode *indi, int mode, LLRECT
 	, int * scroll, bool reuse);
@@ -185,7 +182,6 @@ void show_indi_vitals(UIWINDOW uiwin, GNode *irec, LLRECT,
 bool show_record(UIWINDOW uiwin, CString key, int mode, LLRECT
 	, int * scroll, bool reuse);
 void show_vert_line(UIWINDOW, int, int, int);
-void term_screen(void);
 void toggle_browse_menu(void);
 int twofam_browse(GNode *, GNode *, int mode);
 int twoindi_browse(GNode *, GNode *, int mode);
@@ -197,7 +193,6 @@ void wpos (int, int);
 
 /* show.c (curses specific) */
 extern int Scroll1;
-void init_show_module(void);
 void show_ancestors (UIWINDOW uiwin, GNode *irec, LLRECT
 	, int * scroll, bool reuse);
 void show_aux(UIWINDOW uiwin, GNode *rec, int mode, LLRECT

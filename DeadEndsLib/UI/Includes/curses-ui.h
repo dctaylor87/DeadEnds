@@ -20,3 +20,12 @@ extern int curses_chooseOneOrListFromSequence (CString ttl, Sequence *seq,
 
 extern void
 curses_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args);
+
+/* defn: screen.c, used: curses-ui.c */
+extern int init_screen(char * errmsg, int errsize);
+extern void set_screen_graphical(bool graphical);
+extern void main_menu(void);
+extern void term_screen(void);
+
+/* defn: show.c, used: curses-ui.c */
+extern void init_show_module(void);
