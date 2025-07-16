@@ -35,6 +35,7 @@ libinterp_a_SOURCES = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
+	-I$(top_srcdir)/DeadEndsLib/UI/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
