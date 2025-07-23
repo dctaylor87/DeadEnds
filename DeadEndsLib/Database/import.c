@@ -144,7 +144,7 @@ RootList* getRecordListFromFile(CString path, IntegerTable* keymap, ErrorLog* el
         return null;
     }
     // Convert GNode list to RootList (records)
-    RootList* roots = getRootListFromGNodeList(nodes, file->name, elog);
+    RootList* roots = getRootListFromGNodeList(nodes, lastPathSegment(path), elog);
     if (lengthList(elog) > initialErrorCount || !roots) {
         deleteGNodeList(nodes, null);
         deleteHashTable(keymap);
