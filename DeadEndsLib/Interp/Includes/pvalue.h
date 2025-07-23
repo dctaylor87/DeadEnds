@@ -21,7 +21,8 @@ typedef struct List List;
 
 // Macros that simplify creating union value and program value constants.
 #define PV(x) ((VUnion) { x })
-#define PVALUE(type, ufield, uvalue) (PValue){type, PV(.ufield = uvalue)}
+//#define PVALUE(type, ufield, uvalue) (PValue){type, PV(.ufield = uvalue)}
+#define PVALUE(typ, ufield, uvalue) (PValue){.type = typ, .value.ufield = uvalue}
 
 // PVType enumerates the types of PValues.
 typedef enum {
