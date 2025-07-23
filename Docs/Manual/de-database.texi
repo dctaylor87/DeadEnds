@@ -30,8 +30,8 @@ returns its key, otherwise it returns null.
 
 @section database.h / database.c
 
-@defvar Database *currentDatabase
-@end defvar
+@deftypevar Database* currentDatabase
+@end deftypevar
 
 @defun deleteDatabase (Database* database) @arrow{} void
 Delete a database, freeeing its memory.  It is the the caller's

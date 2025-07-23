@@ -24,14 +24,14 @@ Many of the functions declared in this header are defined in the
 directory.  This header needs to be split into two or three pieces
 each declaring the appropriate functions.
 
-@defvar int ll_lines
+@deftypevar int ll_lines
 Number of lines used by LifeLines (usually LINES)
-@end defvar
-@defvar int ll_cols
+@end deftypevar
+@deftypevar int ll_cols
 Number of columns used by LifeLines (usually COLSREQ)
-@end defvar
-@defvar UIWINDOW main_win
-@end defvar
+@end deftypevar
+@deftypevar UIWINDOW main_win
+@end deftypevar
 
 @defun clear_hseg (WINDOW *, int row, int x1, int x2) @arrow{} void
 @end defun

@@ -1,6 +1,11 @@
 @section interp.h
 
 @defun initializeInterpreter (Database*) @arrow{} void
+Currently sets Perrors to zero; does nothing else.
+
+@b{Should} be modified to take two arguments -- a @code{Database*} and a
+@code{Context*}, then it could set the database field of the context to the
+supplied database.
 @end defun
 @defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Context*
 Searches for @code{fileName} along @code{searchPath}.  If found, it is
@@ -9,19 +14,25 @@ Otherwise, @code{null} is returned.  Errors are returned in
 @code{errorLog}.
 @end defun
 @defun finishInterpreter (void) @arrow{} void
-When the parse of the program is no longer needed,
-@code{finishInterpreter} should be called.
+Should be called When the parse of the script program is no longer
+needed, Currently does nothing.  @b{Should} be modified to take a
+@code{Context*} argument and free the memory.
 @end defun
 @defun interpret (PNode*, Context*, PValue*) @arrow{} InterpType
 The function @code{interpret} is called to interpret the previously
 parsed program.
 @end defun
-@defvar bool programParsing;
-@end defvar
-@defvar bool programRunning;
-@end defvar
-@defvar bool programDebugging;
-@end defvar
+@deftypevar bool programParsing
+A boolean, @code{true} when a script is being parsed, @code{false}
+otherwise.
+@end deftypevar
+@deftypevar bool programRunning
+A boolean, @code{true} when a script is running, @code{false}
+otherwise.
+@end deftypevar
+@deftypevar bool programDebugging
+When @code{true} some debugging information is printed.
+@end deftypevar
 
 @section pnode.h
 
@@ -30,8 +41,11 @@ parsed program.
 
 @section pvalue.h
 
-@defvar int Perrors;
-@end defvar
+@deftypevar int Perrors
+Counts the errors encountered while parsing the program.  For the
+errors themselves, consult the @code{errorLog} argument to
+@code{parseProgram}
+@end deftypevar
 
 @section sequence.h
 

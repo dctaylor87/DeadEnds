@@ -7,10 +7,10 @@ then it returns a @code{Context *}, otherwise it returns @code{null}.
 If any errors occurs, they are logged in @code{errorLog}.
 @end defun
 
-@defvar CString curFileName
+@deftypevar CString curFileName
 Name of the file currently being parsed.
-@end defvar
+@end deftypevar
 
-@defvar int curLine
+@deftypevar int curLine
 The line number in the file currently being parsed.
-@end defvar
+@end deftypevar
