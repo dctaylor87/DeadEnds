@@ -53,7 +53,7 @@ add_listener (List **notifiees, CALLBACK_FNC fncptr, void* uparm)
 	info->fnc = fncptr;
 	info->uparm = uparm;
 	if (!*notifiees)
-		*notifiees = createList (NULL, NULL, free, false);
+		*notifiees = createList (NULL, NULL, llFreeListElement, false);
 	enqueueList(*notifiees, (void*)info);
 }
 /*===============================================
@@ -80,7 +80,7 @@ delete_listener (List **notifiees, CALLBACK_FNC fncptr, void* uparm)
 	if (!*notifiees || isEmptyList(*notifiees))
 		return;
 	lold = *notifiees;
-	*notifiees = createList (NULL, NULL, free, false);
+	*notifiees = createList (NULL, NULL, llFreeListElement, false);
 	while (!isEmptyList(lold)) {
 		struct callback_info * info = (struct callback_info *)getAndRemoveFirstListElement(lold);
 		if (!found && info->fnc == fncptr && info->uparm == uparm) {

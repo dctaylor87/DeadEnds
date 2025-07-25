@@ -19,6 +19,7 @@ libllsupport_a_SOURCES = \
 	listener.c \
 	ll-addoperations.c \
 	ll-indiseq.c \
+	ll-list.c \
 	ll-node.c \
 	ll-node-seq.c \
 	ll-sequence.c \

@@ -58,6 +58,7 @@
 #include "llinesi.h"
 #include "version.h"
 #include "parse-args.h"
+#include "ll-list.h"
 
 #if defined(HAVE_PYTHON)
 #include "llpy-externs.h"
@@ -137,7 +138,7 @@ parseArguments (int argc, char *argv[], CString optString)
       break;
     case 'x': /* execute program */
       if (!exprogs) {
-	exprogs = createList (NULL, NULL, free, false);
+	exprogs = createList (NULL, NULL, llFreeListElement, false);
       }
       pushList(exprogs, strdup(optarg ? optarg : ""));
       break;
