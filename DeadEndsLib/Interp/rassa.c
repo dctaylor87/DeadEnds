@@ -133,7 +133,7 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
     if (*errflg) return nullPValue;
     if (pvalue.type != PVString || !pvalue.value.uString || strlen(pvalue.value.uString) == 0) {
         *errflg = true;
-        scriptError(pnode, "first argument to newfile must be a non-empty string");
+        scriptError(pnode, "first argument to newfile() must be a non-empty string");
         return nullPValue;
     }
     String name = pvalue.value.uString;

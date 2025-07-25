@@ -43,7 +43,6 @@ bool symbolTableTracing = false;
 bool frameTracing = false;
 
 void showRuntimeStack(Context*, PNode*); // Move elsewhere?
-//extern void poutput(String, Context*);
 
 bool programParsing = false;
 bool programRunning = false;

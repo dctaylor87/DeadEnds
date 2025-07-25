@@ -159,7 +159,7 @@ PValue evaluateUserFunc(PNode *pnode, Context *context, bool* errflg) {
     }
 }
 
-// evaluateBoolean evaluates an expression and converts it to a boolean PValue using C like rules
+// evaluateBoolean evaluates a PNode expression and converts it to a boolean PValue using C like rules
 PValue evaluateBoolean(PNode* pnode, Context* context, bool* errflg) {
     PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg) return nullPValue;

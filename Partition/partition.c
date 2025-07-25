@@ -1,10 +1,10 @@
 // DeadEnds
 //
-// partition.c contains functions that partitions persons from a GNodeList into a List of
-// RootLists of persons in closed sets based on FAMS, FAMC, HUSB, WIFE & CHIL relationships.
+//  partition.c contains functions that partitions persons from a GNodeList into a List of
+//  RootLists of persons in closed sets based on FAMS, FAMC, HUSB, WIFE & CHIL relationships.
 //
-// Created by Thomas Wetmore on 11 December 2024.
-// Last changed on 5 June 2025
+//  Created by Thomas Wetmore on 11 December 2024.
+//  Last changed on 5 June 2025
 //
 
 #include <stdio.h>

@@ -19,9 +19,8 @@
 #include "utils.h"
 #include "builtintable.h"
 
-//  __substring finds a substring of a string.
-//    usage: substring(STRING, INT, INT) -> STRING
-//--------------------------------------------------------------------------------------------------
+// __substring finds a substring of a string.
+//  usage: substring(STRING, INT, INT) -> STRING
 PValue __substring (PNode *pnode, Context *context, bool *errflg)
 {
 	PNode *arg = pnode->arguments;

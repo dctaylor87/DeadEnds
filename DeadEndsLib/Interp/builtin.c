@@ -517,7 +517,7 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	PValue pvalue = evaluate(lexp, context, errflg);
 	if (*errflg || pvalue.type != PVList) {
 		*errflg = true;
-		scriptError(pnode, "The second arg to extractnames must be a list.");
+		scriptError(pnode, "the second arg to extractnames must be a list");
 		return nullPValue;
 	}
     // list will be filled with the name parts as PVStrings.
@@ -528,7 +528,7 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
 	if (!iistype(svar, PNIdent)) error = true;
 	if (error) {
 		*errflg = true;
-		scriptError(pnode, "The third and fourth args to extract names must be identifiers.");
+		scriptError(pnode, "the third and fourth args to extract names must be identifiers");
 		return nullPValue;
 	}
 	String str = node->value;
@@ -545,9 +545,8 @@ PValue __extractnames (PNode *pnode, Context *context, bool *errflg) {
     // Convert the Strings in the temporary parts list to PValues and append them to list.
     for (int i = 0; i < len; i++) {
         String part = (String) getListElement(parts, i);
-        PValue pvalue = PVALUE(PVString, uString, part); // transfer String ownership.
+        PValue pvalue = PVALUE(PVString, uString, part); // Transfer String ownership.
         PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue)); // Create PValue* in the heap.
-        //*ppvalue = copyPValue(pvalue);
         *ppvalue = pvalue;
         appendToList(list, ppvalue);  // Add the PValue* to the list.
     }

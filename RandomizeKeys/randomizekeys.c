@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 	// Parse the Gedcom file and build a GNodeList of its records.
 	IntegerTable* keymap = createIntegerTable(4097);
 	RootList* roots = getRecordListFromFile(gedcomFile, keymap, log);
-	printf("ramdomize keys: %s: read gedcom file.\n", getMsecondsStr());
+	printf("randomize keys: %s: read gedcom file.\n", getMsecondsStr());
 	if (lengthList(log) > 0) goAway(log);
 
 	// Validate the keys.
@@ -88,14 +88,17 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-// getFileArguments gets the file names from the command line. They are mandatory.
+// getFileArguments gets the file name from the command line.
 static void getArguments(int argc, char* argv[], CString* gedcomFile) {
 	int ch;
-	while ((ch = getopt(argc, argv, "g:")) != -1) {
+	while ((ch = getopt(argc, argv, "g:v")) != -1) {
 		switch(ch) {
 		case 'g':
 			*gedcomFile = strsave(optarg);
 			break;
+		case 'v':
+			printf("version 1.0\n");
+			exit(1);
 		case '?':
 		default:
 			usage();

@@ -9,11 +9,6 @@
 
 #include <stdint.h>
 
-//#include "hashtable.h"
-//#include "refnindex.h"
-//#include "file.h"
-//#include "pnode.h"
-//#include "file.h"
 #include "deadends.h"
 
 #define gms getMsecondsStr()

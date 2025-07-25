@@ -1,4 +1,3 @@
-// DeadEnds
 //
 //  DeadEnds (Test Program)
 //
@@ -45,7 +44,7 @@ char* readFileIntoString(const char* filename) {
 		fseek(file, 0, SEEK_END); // Get length.
 		length = ftell(file);
 		fseek(file, 0, SEEK_SET);
-		buffer = (char*)stdalloc((length + 1) * sizeof(char));
+		buffer = (char*) stdalloc((length + 1) * sizeof(char));
 		if (buffer) {
 			fread(buffer, 1, length, file);
 			buffer[length] = '\0';

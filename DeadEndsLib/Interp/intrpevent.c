@@ -11,14 +11,12 @@
 #include <stdint.h>
 
 #include "standard.h"
-//#include "refnindex.h"
 #include "errors.h"
 #include "gnode.h"
 #include "functiontable.h"
 #include "pnode.h"
 #include "interp.h"
 #include "pvalue.h"
-//#include "evaluate.h"
 #include "builtintable.h"
 #include "date.h"
 
