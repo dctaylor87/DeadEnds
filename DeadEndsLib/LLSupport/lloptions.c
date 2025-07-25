@@ -41,7 +41,6 @@
 #include "xlat.h"
 #include "readwrite.h"
 #include "hashtable.h"
-#include "list.h"
 #include "lloptions.h"
 #include "de-strings.h"
 #include "messages.h"

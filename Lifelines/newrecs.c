@@ -49,7 +49,6 @@
 #include "translat.h"
 #include "xlat.h"
 #include "readwrite.h"
-#include "list.h"
 #include "stringtable.h"
 #include "options.h"
 

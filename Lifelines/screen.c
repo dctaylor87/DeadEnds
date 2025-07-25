@@ -50,7 +50,6 @@
 #include "translat.h"
 #include "xlat.h"
 #include "readwrite.h"
-#include "list.h"
 #include "stringtable.h"
 #include "options.h"
 
@@ -1418,7 +1417,7 @@ invoke_del_menu (void)
 static void
 invoke_cset_display (void)
 {
-	List *list = createList (NULL, NULL, free, false);
+	List *list = createList (NULL, NULL, llFreeListElement, false);
 	ZSTR zstr=zs_newn(80);
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
@@ -2494,7 +2493,7 @@ static void
 append_to_msg_list (String msg)
 {
 		if (!msg_list)
-			msg_list = createList (NULL, NULL, free, false);
+			msg_list = createList (NULL, NULL, llFreeListElement, false);
 		enqueueList(msg_list, strsave(msg));
 }
 #endif
