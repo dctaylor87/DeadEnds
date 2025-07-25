@@ -138,11 +138,6 @@ static GNode* keyToRecordOfType(CString key, RecordIndex* index, RecordType recT
 	return gnode;
 }
 
-//// keyToRecord returns the GNode with the given key
-//GNode *keyToRecord (CString key, Database *database) {
-//	return ((GNode *) searchHashTable (database->recordIndex, key));
-//}
-  
 // keyToPerson gets a person record from a database.
 GNode* keyToPerson(CString key, RecordIndex* index) {
 	return keyToRecordOfType(key, index, GRPerson);

@@ -1,3 +1,4 @@
+//
 //  DeadEnds Library
 //
 //  recordindex.c holds the functions that implement RecordIndex, a HashTable that maps Gedcom
@@ -5,6 +6,7 @@
 //
 //  Created by Thomas Wetmore on 29 November 2022.
 //  Last changed on 4 June 2025.
+//
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
