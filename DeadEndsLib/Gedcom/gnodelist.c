@@ -4,7 +4,7 @@
 //  gnodelist.c implements the GNodeList data type.
 //
 //  Created by Thomas Wetmore on 27 May 2024.
-//  Last changed on 4 June 2025.
+//  Last changed on 25 July 2025.
 //
 
 #include <stdint.h>
@@ -19,7 +19,7 @@
 #include "rootlist.h"
 #include "writenode.h"
 
-static bool debugging = true;
+//static bool debugging = true;
 
 // createNodeListEl creates a GNodeList element. gnode is the GNode, and data is arbitrary.
 GNodeListEl* createGNodeListEl(GNode* gnode, void* data) {

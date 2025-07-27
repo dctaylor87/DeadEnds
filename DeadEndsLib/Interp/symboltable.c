@@ -2,14 +2,18 @@
 //  DeadEnds Library
 //  symboltable.c holds the functions that implement SymbolTables.
 //
-//  Symbols own their own memeory. When a Symbol is looked up a copy is returned, including a copy of a string
+//  Symbols own their own memory. When a Symbol is looked up a copy is returned, including a copy of a string
 //  if the Symbol is a string. The functions that look up Symbols (getSymbol...) return copies of the Symbols.
+//
+//  However, when Lists, Tables and Sequences are returned from a SymbolTable they are not deep copied. If they
+//  are to be retained they should be copied. This is not done, so in consequence they are not freed when
+//  replaced in SymbolTables. For the most part this is reasonable, but pathological scripts could cause problems.
 //
 //  There are two versions of the assign and get functions, one that takes a SymbolTable, and one that takes
 //  a Context.
 //
 //  Created by Thomas Wetmore on 23 March 2023.
-//  Last changed on 3 June 2025.
+//  Last changed on 25 July 2025.
 //
 
 #include <stdint.h>
@@ -24,6 +28,8 @@
 #include "pvalue.h"
 #include "context.h"
 #include "frame.h"
+
+#undef LISTBUG
 
 // compare compares two Symbols by their ident fields.
 static int compare(CString a, CString b) {
@@ -91,6 +97,11 @@ void assignValueToSymbol(Context* context, CString ident, PValue pvalue) {
     // Prepare the value to put in the symbol table.
     PValue* copy = clonePValue(&pvalue);
     // If the symbol exists free its old value.
+#ifdef LISTBUG
+    if (pvalue.type == PVList) {
+        printf("Assigning to list %s: %s\n", ident, valueOfPValue(pvalue));
+    }
+#endif
     Symbol* symbol = searchHashTable(table, ident);
     if (symbol) {
         freePValue(symbol->value);
@@ -105,6 +116,11 @@ void assignValueToSymbol(Context* context, CString ident, PValue pvalue) {
 PValue getValueFromSymbolTable(SymbolTable* symtab, CString ident) {
     Symbol *symbol = searchHashTable(symtab, ident);
     if (!symbol || !symbol->value) return nullPValue;
+#ifdef LISTBUG
+    if (symbol->value->type == PVList) {
+        printf("Retrieving list %s: %s\n", ident, valueOfPValue(*(symbol->value)));
+    }
+#endif
     return cloneAndReturnPValue(symbol->value);
 }
 

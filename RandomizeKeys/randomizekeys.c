@@ -9,6 +9,8 @@
 
 #include <stdint.h>
 
+#include "errors.h"
+#include "integertable.h"
 #include "randomizekeys.h"
 
 static void getArguments(int, char**, CString*);
