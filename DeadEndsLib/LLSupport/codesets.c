@@ -121,7 +121,8 @@ init_codesets (void)
 	defval = norm_charmap(defval);
 	if (!defval || !defval[0])
 		defval = "ASCII";
-	stdfree (defcodeset);
+	if (defcodeset)
+	  stdfree (defcodeset);
 	if (defval)
 	  defcodeset = strsave (defval);
 	/*
