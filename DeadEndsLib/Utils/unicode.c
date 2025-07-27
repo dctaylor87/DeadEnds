@@ -24,7 +24,7 @@ char* normalizeDType(const char* input) {
     size_t inputLength = strlen(input);
 
     // Allocate memory for the normalized output
-    char* normalized = (char*)stdalloc(sizeof(char) * (inputLength + 1));
+    char* normalized = (char*) stdalloc(sizeof(char) * (inputLength + 1));
     if (normalized == NULL) {
         // Handle memory allocation error
         return NULL;
