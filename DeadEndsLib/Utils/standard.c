@@ -27,7 +27,6 @@
 #include "standard.h"
 #include "path.h"
 
-//#define ALLOCLOGFILE "~/alloc.log"
 #define ALLOCLOGFILE "./alloc.log"
 
 static FILE *allocLogFile = null;  // The logging file.
@@ -65,10 +64,27 @@ void _logAllocations(bool onOrOff) {
     }
 }
 
+/* logRefCountChange -- logs a reference count change.
+ element -- the element who's reference count changed
+ eltName -- a string for the type of element, e.g. "Sequence" or "List",
+ refCount -- the element's new reference count,
+ file -- the file we were called from,
+ line -- the line number we were called from,
+ function -- the function we were called from.  */
+
+void logRefCountChange (void *element, CString eltName, int refCount,
+			CString file, int line, CString function)
+{
+  if (loggingAllocs) {
+    fprintf(allocLogFile, "RC %s\t%d\t%s\t%s\t%p\t%d\n",
+	    file, line, function, eltName, element, refCount);
+  }
+}
+
 // _alloc allocates memory; called by stdalloc.
 void* _alloc(size_t len, CString file, int line) {
 	char* p;
-	if (len == 0) return null;
+	//if (len == 0) return null;
 	ASSERT(p = malloc(len));
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
@@ -104,6 +120,15 @@ void* _realloc(void* ptr, size_t len, CString file, int line) {
 
 // _free deallocates memory; called by sdtfree.
 void _free (void* ptr, String file, int line) {
+  if (ptr == 0) {
+      //fprintf(stderr, "_free called with a null ptr: %s:%d.\n", file, line);
+      if (loggingAllocs) {
+	fprintf(allocLogFile, "F  %s\t%d\t%zu\t%p\n",
+		lastPathSegment(file), line, 0, 0);
+      }
+      return;
+  }
+
 #if defined(HAVE_MALLOC_SIZE) || defined(HAVE_MALLOC_USABLE_SIZE)
 	if (loggingAllocs) {
 		fprintf(allocLogFile, "F  %s\t%d\t%zu\t%p\n",
@@ -116,6 +141,10 @@ void _free (void* ptr, String file, int line) {
 
 // strsave returns a copy of a String on the heap. If the string is null, null is returned.
 String strsave(CString string) {
+	if (string == null) {
+		//fprintf (stderr, "strsave called with a null string.\n");
+		//string = "";
+	}
 	if (string == null) return null;
 	return strcpy(stdalloc(strlen(string) + 1), string);
 }
