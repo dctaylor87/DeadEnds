@@ -5,11 +5,13 @@
 // randomized Gedcom file to standard output.
 //
 // Created by Thomas Wetmore on 14 July 2024.
-// Last changed on 25 November 2024.
+// Last changed on 26 July 2025.
 
 #include <stdint.h>
 
 #include "errors.h"
+#include "gedcom.h"
+#include "gnode.h"
 #include "integertable.h"
 #include "randomizekeys.h"
 
@@ -30,7 +32,6 @@ int main(int argc, char** argv) {
 	gedcomFile = resolveFile(gedcomFile, searchPath);
 	if (debugging) printf("Resolved file: %s\n", gedcomFile);
 	// Get the Gedcom records from a file.
-	//File* file = openFile(gedcomFile, "r");
 	ErrorLog* log = createErrorLog();
 
 	// Parse the Gedcom file and build a GNodeList of its records.
@@ -49,7 +50,6 @@ int main(int argc, char** argv) {
 
 	// Create a table to map existing keys to random keys.
 	StringTable* keyTable = createStringTable(1025);
-	initRecordKeyGenerator();
 	FORLIST(roots, element)
 		GNode* root = (GNode*) element;
 		String key = root->key;

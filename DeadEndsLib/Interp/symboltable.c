@@ -39,7 +39,7 @@ static int compare(CString a, CString b) {
 // delete deletes a Symbol. It frees both PValue and the identifier before deleting the Symbol itself.
 static void delete(void* a) {
 	Symbol* symbol = (Symbol*) a;
-	stdfree(symbol->value);
+	stdfree(symbol->value); // CURRENT: Must call deletePValue here.
     stdfree(symbol->ident);
     stdfree(symbol);
 }
@@ -144,8 +144,11 @@ void showSymbolTable(SymbolTable* table) {
 		if (block->length <= 0) continue;
 		for (int j = 0; j < block->length; j++) {
 			Symbol *symbol = (Symbol*) block->elements[j];
-			String pvalue = pvalueToString(*(symbol->value), false);
-			printf("  %s = %s\n", symbol->ident, pvalue);
+			String pvalue = valueOfPValue(*(symbol->value));
+            String type = typeOfPValue(*(symbol->value));
+			printf("  %s = %s: %s\n", symbol->ident, pvalue, type);
 		}
 	}
 }
+
+
