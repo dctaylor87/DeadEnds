@@ -19,6 +19,7 @@
 // List defines the stucture and typedef for Lists.
 typedef struct List {
 	Block block; // Block of elements.
+	int refCount; // how man references to the List exist
 	bool sorted; // Is a sorted list.
 	bool isSorted; // Is currently sorted.
 	void (*delete)(void*);
@@ -65,6 +66,8 @@ void* getAndRemoveFirstListElement(List*);
 Block* blockOfList(List*);
 void showList(List *list, String(*describe)(void*));
 
+extern void incrReferenceCountList (List *list, CString file, int line, CString function);
+
 #define FORLIST(list, value)\
 {\
 	void* value;\
@@ -77,5 +80,7 @@ void showList(List *list, String(*describe)(void*));
 		}\
 	}\
 }
+
+#define INCRLISTREFCOUNT(list)	incrReferenceCountList (list, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__)
 
 #endif

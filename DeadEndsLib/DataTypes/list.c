@@ -25,6 +25,7 @@ void initList(List *list, CString(*getKey)(const void*), int(*compare)(CString, 
 			  void (*delete)(void*), bool sorted) {
 	memset(list, 0, sizeof(List));
 	initBlock(&(list->block));
+	list->refCount = 1;
 	list->compare = compare;
 	list->delete = delete;
 	list->getKey = getKey;
@@ -35,6 +36,9 @@ void initList(List *list, CString(*getKey)(const void*), int(*compare)(CString, 
 void deleteList(List *list) {
 	if (! list)
 		return;
+	list->refCount--;
+	if (list->refCount > 0)
+	  return;
 	deleteBlock(&(list->block), list->delete);
 	stdfree(list);
 }
@@ -228,4 +232,12 @@ void* findInList(List* list, CString key, int* index) {
 		return findInSortedBlock(&(list->block), key, list->getKey, list->compare, index);
 	}
 	return findInBlock(&(list->block), key, list->getKey, index);
+}
+
+void incrReferenceCountList (List *list,
+			     CString file, int line, CString function)
+{
+  list->refCount++;
+  logRefCountChange ((void *)list, "List", list->refCount,
+		     file, line, function);
 }
