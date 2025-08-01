@@ -77,6 +77,7 @@ void assignValueToSymbolTable(SymbolTable* table, CString ident, PValue pvalue) 
     PValue* copy = clonePValue(&pvalue);
     // If the symbol exists free its old value.
     Symbol* symbol = searchHashTable(table, ident);
+    AddReferenceToPValue (copy);
     if (symbol) {
         freePValue(symbol->value);
         symbol->value = copy;
@@ -102,6 +103,7 @@ void assignValueToSymbol(Context* context, CString ident, PValue pvalue) {
         printf("Assigning to list %s: %s\n", ident, valueOfPValue(pvalue));
     }
 #endif
+    AddReferenceToPValue (copy);
     Symbol* symbol = searchHashTable(table, ident);
     if (symbol) {
         freePValue(symbol->value);
