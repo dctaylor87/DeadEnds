@@ -149,12 +149,11 @@ PValue __trimname(PNode* pnode, Context* context, bool *eflg) {
         scriptError(pnode, "the first argument to trimname must be a person");
         return nullPValue;
     }
-    *eflg = true;
     if (!(indi = NAME(indi)) || !indi->value) {
+        *eflg = true;
         scriptError(pnode, "the person must have a name");
         return nullPValue;
     }
-    *eflg = false;
     PValue length = evaluate(arg->next, context, eflg); // Field width.
     if (*eflg || length.type != PVInt) {
         *eflg = true;
@@ -389,7 +388,7 @@ PValue __indi(PNode* pnode, Context* context, bool* errflg) {
     CString key = keyToKey(value.value.uString);
     GNode* person = keyToPerson(key, context->database->recordIndex);
     if (person == null) {
-        scriptError(pnode, "could not find a person with the key '%s'", key);
+      //scriptError(pnode, "could not find a person with the key '%s'", key);
         return nullPValue;
     }
     return PVALUE(PVPerson, uGNode, person);
