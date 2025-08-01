@@ -118,6 +118,5 @@ String pvalueToString(PValue pvalue, bool showType);
 PValue copyPValue(PValue);
 PValue* allocPValue(PVType type, VUnion value);
 void freePValue(PValue* pvalue);
-extern PValue copyPValue(PValue pvalue);
 
 #endif // pvalue_h
