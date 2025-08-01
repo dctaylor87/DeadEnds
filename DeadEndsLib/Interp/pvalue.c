@@ -26,6 +26,7 @@ A couple solutions are possible -- this singles out the List case -- the others 
 #include "gedcom.h"
 #include "gnode.h"
 #include "list.h"
+#include "sequence.h"
 #include "hashtable.h"
 #include "refnindex.h"
 #include "pvalue.h"
@@ -155,6 +156,7 @@ String valueOfPValue(PValue pvalue) {
 
 // freePValue frees an allocated PValue.
 void freePValue(PValue* ppvalue) {
+    releasePValue (ppvalue);
     switch (ppvalue->type) {
     case PVString:
         if (ppvalue->value.uString) stdfree(ppvalue->value.uString);
@@ -499,4 +501,76 @@ char* pvalueToString(PValue value, bool showtype) {
         break;
     }
     return buffer;
+}
+
+void
+AddReferenceToPValue (PValue *pvalue)
+{
+  switch (pvalue->type)
+    {
+    case PVNull:
+    case PVInt:
+    case PVFloat:
+    case PVBool:
+    case PVString:
+      break;			/* nothing to do -- no reference to count */
+    case PVGNode:
+    case PVPerson:
+    case PVFamily:
+    case PVSource:
+    case PVEvent:
+    case PVOther:
+      GNode *node = pvalue->value.uGNode;
+      node->refcount++;
+      break;
+    case PVList:
+      List *list = pvalue->value.uList;
+      INCRLISTREFCOUNT(list);
+      break;
+    case PVTable:
+      break;			/* for now */
+    case PVSequence:
+      Sequence *seq = pvalue->value.uSequence;
+      INCRSEQREFCOUNT(seq);
+      break;
+    default:
+      fatal("unknown PValue type");
+      break;			/* not reached */
+    }
+}
+
+void
+releasePValue (PValue *pvalue)
+{
+ switch (pvalue->type)
+    {
+    case PVNull:
+    case PVInt:
+    case PVFloat:
+    case PVBool:
+    case PVString:
+      break;			/* nothing to do -- no reference to count */
+    case PVGNode:
+    case PVPerson:
+    case PVFamily:
+    case PVSource:
+    case PVEvent:
+    case PVOther:
+      GNode *node = pvalue->value.uGNode;
+      node->refcount++;
+      break;
+    case PVList:
+      List *list = pvalue->value.uList;
+      deleteList (list);
+      break;
+    case PVTable:
+      break;			/* for now */
+    case PVSequence:
+      Sequence *seq = pvalue->value.uSequence;
+      deleteSequence (seq);
+      break;
+    default:
+      fatal("unknown PValue type");
+      break;			/* not reached */
+    }
 }
