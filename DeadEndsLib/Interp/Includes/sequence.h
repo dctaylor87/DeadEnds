@@ -40,6 +40,7 @@ typedef struct SequenceEl {
 // Sequence is a data type that holds sequences/sets/arrays of records.
 typedef struct Sequence {
 	Block block;
+	int refCount; // Number of references to the sequence
 	SortType sortType;
 	bool unique;
 	RecordIndex* index;
@@ -93,6 +94,7 @@ void showSequence(Sequence*, String title);
 bool limitPersonNode(GNode *node, int level);
 
 extern void baseFree(void *word);
+extern void incrReferenceCountSequence (Sequence *seq, CString file, int line, CString function);
 
 // FORSEQUENCE and ENDSEQUENCE iterate a Sequence.
 #define FORSEQUENCE(sequence, element, count) {\
@@ -105,5 +107,7 @@ extern void baseFree(void *word);
 		count = __i + 1;
 
 #define ENDSEQUENCE }}
+
+#define INCRSEQREFCOUNT(seq)	incrReferenceCountSequence (seq, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__)
 
 #endif // sequence_h

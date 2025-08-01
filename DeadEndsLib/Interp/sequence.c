@@ -877,3 +877,11 @@ Sequence* stringToSequence(CString name, Database* database) {
 	if (!sequence) sequence = nameToSequence(name, database->recordIndex, database->nameIndex);
 	return sequence;
 }
+
+void incrReferenceCountSequence (Sequence *seq,
+				 CString file, int line, CString function)
+{
+  seq->refCount++;
+  logRefCountChange ((void *)seq, "Sequence", seq->refCount,
+		     file, line, function);
+}
