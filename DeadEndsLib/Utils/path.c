@@ -43,6 +43,7 @@ FILE *fopenPath(CString name, CString mode, CString path) {
 
 // lastPathSegment returns the last componenet of a path. Returns static memory.
 String lastPathSegment (CString path) {
+#if 0
 	static unsigned char scratch[MAXPATHBUFFER];
 	if (!path || *path == 0) return NULL;
 	int len = (int) strlen(path);
@@ -58,6 +59,13 @@ String lastPathSegment (CString path) {
 		if (c == '/') q = p;
 	}
 	return q;
+#else
+	char *lastSlash = strrchr (path, '/');
+	if (lastSlash)
+	  return (lastSlash + 1);
+	else
+	  return path;
+#endif
 }
 
 /* pathMatch -- are paths the same?
