@@ -26,6 +26,7 @@ libinterp_a_SOURCES = \
 	intrpstring.c \
 	pnode.c \
 	pvalue.c \
+	pvaluelist.c \
 	pvaluetable.c \
 	sequence.c \
 	symboltable.c \
