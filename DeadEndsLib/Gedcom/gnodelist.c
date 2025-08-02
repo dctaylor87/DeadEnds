@@ -91,7 +91,7 @@ GNodeList* getGNodeListFromFile(File* file, IntegerTable* keymap, ErrorLog* elog
 		rc = fileToLine(fp, &line, &level, &key, &tag, &value, &errstr);
 	}
 	if (lengthList(nodeList) > 0) return nodeList;
-	deleteList(nodeList);
+	deleteGNodeList(nodeList, basicDelete);
 	return null;
 }
 

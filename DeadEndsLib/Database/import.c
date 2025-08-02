@@ -49,11 +49,15 @@ Database* getDatabaseFromFile(CString path, int vcodes, ErrorLog* errlog) {
 	IntegerTable* keymap = createIntegerTable(4097); // Map keys to lines; for error messages.
     int numErrors = lengthList(errlog);
 	RootList* records = getRecordListFromFile(path, keymap, errlog);
-    if (lengthList(errlog) != numErrors) return null;
+	if (lengthList(errlog) != numErrors) {
+	  deleteHashTable (keymap);
+	  return null;
+	}
     if (timing) printf("%s: getDatabaseFromFile: record list created\n", gms);
     checkKeysAndReferences(records, path, keymap, errlog);
     if (lengthList(errlog) != numErrors) {
         deleteRootList(records);
+	deleteHashTable (keymap);
         return null;
     }
     if (timing) printf("%s: getDatabaseFromFile: checkKeysAndReferences called\n", gms);
@@ -61,16 +65,20 @@ Database* getDatabaseFromFile(CString path, int vcodes, ErrorLog* errlog) {
 	Database* database = createDatabase(path, records, keymap, errlog);
 	if (lengthList(errlog)) {
 		deleteDatabase(database);
+		deleteHashTable (keymap);
 		return null;
 	}
     validatePersons(database->recordIndex, database->name, keymap, errlog);
     validateFamilies(database->recordIndex, database->name, keymap, errlog);
     if (lengthList(errlog)) {
         deleteDatabase(database);
+	deleteHashTable (keymap);
         return null;
     }
     if (timing) printf("%s: getDatabaseFromFile: database created.\n", gms);
-	return database;
+
+    deleteHashTable (keymap);
+    return database;
 }
 
 // checkKeysAndReferences checks record keys and their references. Creates a table of all keys
@@ -153,5 +161,6 @@ RootList* getRecordListFromFile(CString path, IntegerTable* keymap, ErrorLog* el
     }
     if (timing) printf("%s: getRecordIndexFromFile: got list of records.\n", gms);
     if (importDebugging) printf("rootList contains %d records.\n", lengthList(roots));
+    deleteGNodeList(nodes, basicDelete);
     return roots;
 }
