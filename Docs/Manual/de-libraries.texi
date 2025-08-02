@@ -11,6 +11,8 @@
 @page
 @contents
 
+@chapter Introduction
+@include de-introduction.texi
 @chapter Database
 @include de-database.texi
 @chapter Gedcom
@@ -28,4 +30,6 @@
 @include de-ui.texi
 @unnumbered Function Index
 @printindex fn
+@unnumbered Variable Index
+@printindex vr
 @bye

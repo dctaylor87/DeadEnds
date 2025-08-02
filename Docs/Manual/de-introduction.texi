@@ -1,0 +1,31 @@
+There are many MANY functions that are not documented here.  Currently
+only slightly over one third of the core DeadEnds functions are
+listed.
+
+Currently, only functions found in core DeadEnds libraries are listed.
+The @code{LLSupport}, @code{Python}, and @code{UI} libraries are
+@b{NOT} core DeadEnds libraries.  Descriptions of their functions and
+variables might be added in the future.
+
+While the intent is to document @b{ALL} the functions meant to be
+called by applications, which functions are in that category isn't
+always clear.
+
+In addition to functions meant to be called by applications, there are
+functions meant only to be called from within the same library and
+functions meant only to be called from within other DeadEnds
+libraries.
+
+So, for a first cut, this document concentrates on the functions in
+the core DeadEnds libraries that are called by the port of the
+LifeLines user interface.
+
+It is hoped that it will eventually encompass all of the DeadEnds
+functions meant to be called by applications.
+
+Additionally, its focus is on the @b{interfaces}, not on the
+@b{internals}.  Documentation of the internals is important for
+someone wishing to support, maintain, enhance, or extend the
+libraries, but is not the focus of this document.  The focus of this
+document is on @b{using} the libraries.  Hence the emphasis on the
+interfaces.
