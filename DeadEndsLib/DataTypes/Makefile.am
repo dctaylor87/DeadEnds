@@ -21,3 +21,4 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes
 
 AM_CFLAGS = -fanalyzer
+DEFS = -DDEADENDS @DEFS@
