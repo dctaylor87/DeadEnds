@@ -207,7 +207,7 @@ add_new_indi_to_db (GNode *indi0)
 
 	splitPerson(indi, &name, &refn, &sex, &body, &dumb, &dumb);
 	key = getNewPersonKey (currentDatabase);
-	indi0->key = strdup(key);
+	indi0->key = strsave(key);
 	for (node = name; node; node = nsibling(node)) {
 		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
 	}

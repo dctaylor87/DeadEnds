@@ -20,15 +20,15 @@ static bool isPathSeparator (char c);
 // resolveFile tries to find a file within a sequence of paths.
 CString resolveFile(CString name, CString path) {
 	if (!name || *name == 0) return null;
-	if (!path || *path == 0) return strdup(name);
-	if (strchr(name, '/') != null) return strdup(name);
+	if (!path || *path == 0) return strsave(name);
+	if (strchr(name, '/') != null) return strsave(name);
 	char buf1[MAXPATHBUFFER];
 	strcpy(buf1, path);
 	char buf2[MAXPATHBUFFER];
 	char* p = strtok(buf1, ":");
 	while (p) {
 		snprintf(buf2, sizeof(buf2), "%s/%s", p, name);
-		if (access(buf2, F_OK) == 0) return strdup(buf2);
+		if (access(buf2, F_OK) == 0) return strsave(buf2);
 		p = strtok(null, ":");
 	}
 	return null;

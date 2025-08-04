@@ -22,7 +22,7 @@ static bool traverseDebug = true;
 GedPath* buildGedPath(CString string) {
 	GedPath* first = null;
 	GedPath* prev = null;
-	char *expression = strdup(string);
+	char *expression = strsave(string);
 	String token = strtok(expression, "->"); // First component.
 	while (token) {
 		GedPath* path = createGedPath();
@@ -35,7 +35,7 @@ GedPath* buildGedPath(CString string) {
 			path->tag = null; // Any tag component.
 			path->any = true;
 		} else {
-			path->tag = strdup(token);
+			path->tag = strsave(token);
 		}
 		path->next = null;
 		if (!first) first = path;

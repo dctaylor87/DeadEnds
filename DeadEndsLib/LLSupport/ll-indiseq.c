@@ -225,7 +225,7 @@ famseq_print_el (Sequence *seq, int i, int len, RFMT rfmt, Database *database)
 	ENDSEQUENCE
 	
 	/* make heap string to return */
-	str = strdup(zs_str(zstr));
+	str = strsave(zs_str(zstr));
 	zs_free(&zstr);
 	return str;
 }

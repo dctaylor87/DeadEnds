@@ -380,7 +380,7 @@ static PyObject *llpy_nodeiter (PyObject *self, PyObject *args, PyObject *kw)
   if ((tag == 0) || (*tag == '\0'))
     iter->ni_tag = 0;
   else
-    iter->ni_tag = strdup (tag);
+    iter->ni_tag = strsave (tag);
 
   return (PyObject *) iter;
 }

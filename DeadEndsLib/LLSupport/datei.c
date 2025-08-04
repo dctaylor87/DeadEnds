@@ -442,29 +442,29 @@ static String
 upper_dup (String s)
 {
 	ZSTR zstr = ll_toupperz(s, uu8);
-	String str = strdup(zs_str(zstr));
+	String str = strsave(zs_str(zstr));
 	zs_free(&zstr);
 	return str;
 }
 /*=============================
- * lower_dup -- Get lowercase & strdup it
+ * lower_dup -- Get lowercase & strsave it
  *===========================*/
 static String
 lower_dup (String s)
 {
 	ZSTR zstr = ll_tolowerz(s, uu8);
-	String str = strdup(zs_str(zstr));
+	String str = strsave(zs_str(zstr));
 	zs_free(&zstr);
 	return str;
 }
 /*=============================
- * title_dup -- Get titlecase & strdup it
+ * title_dup -- Get titlecase & strsave it
  *===========================*/
 static String
 title_dup (String s)
 {
 	ZSTR zstr = ll_totitlecasez(s, uu8);
-	String str = strdup(zs_str(zstr));
+	String str = strsave(zs_str(zstr));
 	zs_free(&zstr);
 	return str;
 }

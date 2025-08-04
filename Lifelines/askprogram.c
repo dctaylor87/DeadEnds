@@ -217,7 +217,7 @@ set_programs_d0 (HashTable ** fileprops)
 			version = "V?.?";
 		snprintf(buf, sizeof(buf), "%s (%s) [%s]"
 			, program, version, output);
-		set_prop_dnum(props, 0, strdup("prompt"), strdup(buf));
+		set_prop_dnum(props, 0, strsave("prompt"), strsave(buf));
 	}
 }
 /*===================================================

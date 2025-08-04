@@ -140,7 +140,7 @@ parseArguments (int argc, char *argv[], CString optString)
       if (!exprogs) {
 	exprogs = createList (NULL, NULL, llFreeListElement, false);
       }
-      pushList(exprogs, strdup(optarg ? optarg : ""));
+      pushList(exprogs, strsave(optarg ? optarg : ""));
       break;
     case 'I': /* program arguments */
       {
@@ -213,7 +213,7 @@ parse_arg (const char * optarg, char ** optname, char **optval)
 			namebuff = (char *)stdalloc(namelen+1);
 			destrncpy(namebuff, optarg, namelen+1, 0);
 			*optname = namebuff;
-			valbuff = strdup(ptr+1);
+			valbuff = strsave(ptr+1);
 			*optval = valbuff;
 			return;
 

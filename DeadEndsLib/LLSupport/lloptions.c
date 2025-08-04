@@ -153,7 +153,7 @@ expand_variables (String valbuf, int max)
 		if (value) {
 			int newlen = strlen(valbuf)-(end-start+1)+strlen(value);
 			if (newlen < max) {
-				String copy = strdup(valbuf);
+				String copy = strsave(valbuf);
 				if (start>valbuf)
 					strncpy(valbuf, copy, start-valbuf);
 				strcpy(start, value);
@@ -172,7 +172,7 @@ expand_variables (String valbuf, int max)
 static String
 dir_from_file (String file)
 {
-	String thisdir = strdup(file);
+	String thisdir = strsave(file);
 	String ptr;
 	for (ptr=thisdir+strlen(thisdir)-1; ptr>thisdir; --ptr) {
 		if (isDirSep(*ptr))

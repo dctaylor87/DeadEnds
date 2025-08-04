@@ -198,7 +198,7 @@ ask_for_file_worker (CString mode,
 	
 	if (pfname) {
 		if (fname[0])
-			*pfname = strdup(fname);
+			*pfname = strsave(fname);
 		else
 			*pfname = 0;
 	}

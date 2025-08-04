@@ -197,7 +197,7 @@ set_gedcom_d0 (HashTable ** fileprops)
 		if (!bytes) bytes="?";
 		snprintf(buf, sizeof(buf), "%s (%s - %s) [%s]"
 			, filename, date, bytes, sour);
-		set_prop_dnum(props, 0, strdup("prompt"), strdup(buf));
+		set_prop_dnum(props, 0, strsave("prompt"), strsave(buf));
 	}
 }
 /*===================================================
