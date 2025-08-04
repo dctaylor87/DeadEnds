@@ -5,7 +5,7 @@
 //  structs that represents a path from a GNode to one or more GNodes in the tree below.
 //
 //  Created by Thomas Wetmore on 13 October 2024.
-//  Last changed on 4 June 2025.
+//  Last changed on 4 August 2025.
 //
 
 #include <stdint.h>

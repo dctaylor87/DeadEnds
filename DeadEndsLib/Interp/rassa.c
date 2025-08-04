@@ -385,14 +385,14 @@ PValue __TYPEOF(PNode* pnode, Context* context, bool *errflg) {
     return createStringPValue(typeOfPValue(pvalue));
 }
 
-// __VALUEOF returns the value its argument PNode. This includes the PNode's type and value.
+/// Returns the value its argument PNode. This includes the PNode's type and value.
 // usage: valueof(PNODE) -> STRING
 PValue __VALUEOF(PNode* pnode, Context* context, bool *errflg) {
     static char scratch[1000];
     PValue pvalue = evaluate(pnode->arguments, context, errflg);
     String type = typeOfPValue(pvalue);
     String value = valueOfPValue(pvalue);
-    sprintf(scratch, "(%s, %s) ", type, value);
+    sprintf(scratch, "%s: %s ", type, value);
     return createStringPValue(scratch);
 }
 
@@ -404,15 +404,14 @@ PValue __SHOWSTACK(PNode* pnode, Context* context, bool *errflg) {
     return nullPValue;
 }
 
-// __SHOWFRAME prints the current frame.
+/// Prints the current frame of the run time stack.
 // usage: showframe()
 PValue __SHOWFRAME(PNode* pnode, Context* context, bool* errflg) {
     showFrame(context->frame);
     return nullPValue;
 }
 
-// __pageout writes the page grid of Unicode codepoints to the current script output file. The
-// codepoints are written as one to four UTF-8 bytes.
+/// Writes the page grid of Unicode codepoints to the script output file in UTF-8 format.
 // usage: pageout() -> VOID
 PValue __pageout(PNode* pnode, Context* context, bool* errflg) {
     // Make sure the output file is in page mode.
@@ -478,7 +477,7 @@ static void adjustCols(String string, File* file) {
 	}
 }
 
-// poutput outputs a string to the current program output file in the current mode,
+/// Outputs a string to the program output file in the current mode,
 // decoding UTF-8 into Unicode codepoints stored in the page grid.
 void poutput(PNode *pnode, String string, Context* context, bool *errflg) {
     File* file = context->file;

@@ -5,7 +5,7 @@
 //  the root GNodes of Gedcom records.
 //
 //  Created by Thomas Wetmore on 2 March 2024.
-//  Last changed on 4 June 2025.
+//  Last changed on 2 August 2025.
 //
 
 #include <stdint.h>
@@ -36,6 +36,7 @@ RootList *createRootList(void) {
 	return createList(getKey, compare, null, true);
 }
 
+// deleteRootList deletes a Rootlist. The GNodes are not deleted.
 void deleteRootList(RootList* rootlist) {
     deleteList(rootlist);
 }
@@ -50,13 +51,17 @@ void insertInRootList(RootList* list, GNode* root) {
 	insertInList(list, root, index);
 }
 
+void appendToRootList(RootList* list, GNode* gnode) {
+    appendToList(list, gnode);
+}
+
 // getNodeTreesFromNodeList processes the GNodeList of all GNodes from a Gedcom source into
 // A RootList of all GNode records. It uses a state machine to track levels and errors, so the
 // data field in the GNodeList must be level numbers. The input GNodeLisit is not deleted.
 RootList* getRootListFromGNodeList(GNodeList *gnodes, String name, ErrorLog *elog) {
 	enum State { InitialState, MainState, ErrorState } state = InitialState;
 	GNodeListEl* el = null;
-	GNodeList* roots = createGNodeList(); // Holds list of roots.
+	GNodeList* roots = createRootList(); // Holds list of roots.
 	GNode* rnode = null; // cur root node
 	GNode* cnode = null; // cur node
 	GNode* pnode; // prev node
@@ -69,7 +74,7 @@ RootList* getRootListFromGNodeList(GNodeList *gnodes, String name, ErrorLog *elo
 		pnode = cnode;
 		cnode = el->node; // TODO: how is this possible; how is the type of el known?
 		plevel = clevel;
-		clevel = ((int)(long)(el->data));
+        clevel = el->level;
 		switch (state) {
 
 		case InitialState: // First element.
@@ -111,12 +116,12 @@ RootList* getRootListFromGNodeList(GNodeList *gnodes, String name, ErrorLog *elo
 			}
 			// Anything else is an error.
 			addErrorToLog(elog, createError(syntaxError, name, i, "Illegal level number."));
-			appendToGNodeList(roots, rnode, null);
+			appendToRootList(roots, rnode);
 			state = ErrorState;
 			continue;
 
 		case ErrorState:
-			if (((int)(long)(el->data)) != 0) continue;
+			if (el->level != 0) continue;
 			state = MainState;
 			continue;
 
