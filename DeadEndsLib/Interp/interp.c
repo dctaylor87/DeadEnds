@@ -56,8 +56,15 @@ void initializeInterpreter(Database* database) {
     Perrors = 0;
 }
 
-// finishInterpreter is called when the interpreter is done; currently a no-op.
-void finishInterpreter(void) { }
+// finishInterpreter is called when the interpreter is done;
+// it reclaims the memory and anything else necessary to restore the previous state.
+void finishInterpreter(Context *context) {
+  deleteFunctionTable (context->procedures);
+  deleteFunctionTable (context->functions);
+  deleteSymbolTable (context->globals);
+  deleteList (context->fileNames);
+  //deleteContext (context);
+}
 
 // interpScript interprets a DeadEnds script. A script must contain a main procedure (named "main"). interpScript
 // arranges to call that procedure. The function creates a procedure call PNode to call main procecure, updates
@@ -848,7 +855,7 @@ cleanup:
 }
 
 // scriptError reports a run time script error.
-void scriptError(PNode* pnode, String fmt, ...) {
+void scriptError(PNode* pnode, CString fmt, ...) {
     va_list args;
     printf("\nError in \"%s\" at line %d: ", pnode->fileName, pnode->lineNumber);
     va_start(args, fmt);
@@ -858,7 +865,7 @@ void scriptError(PNode* pnode, String fmt, ...) {
 }
 
 // showRuntimeStack shows the contents of the run time stack. If pnode is not null its line number is shown;
-static StringSet* getParameterSet(PNode*);
+//static StringSet* getParameterSet(PNode*);
 void showRuntimeStack(Context* context, PNode* pnode) {
     // Get the bottom frame.
     Frame* frame = context->frame;

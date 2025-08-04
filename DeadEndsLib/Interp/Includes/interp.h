@@ -34,7 +34,7 @@ void initializeInterpreter(Database*);
 void initset(void);
 void initrassa(void);
 Context* parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog);
-void finishInterpreter(void);
+void finishInterpreter(Context*);
 void finishrassa(File*);
 //void progmessage(int, CString);
 
@@ -74,7 +74,7 @@ PNode *iden_node(String);
 enum PNType;			// forward reference
 bool iistype(PNode*, enum PNType);
 int num_params(PNode*);
-void scriptError(PNode*, String, ...);
+void scriptError(PNode*, CString, ...);
 int yylex(void);
 int yyparse(ErrorLog *errorLog);
 
