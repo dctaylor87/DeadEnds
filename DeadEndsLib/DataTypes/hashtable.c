@@ -35,7 +35,7 @@ HashTable* createHashTable(CString(*getKey)(const void*), int(*compare)(CString,
 	  return NULL;
 	}
 	for (int i = 0; i < table->numBuckets; i++) table->buckets[i] = null;
-	table->refcount = 1;
+	table->refCount = 1;
 	return table;
 }
 
@@ -57,14 +57,20 @@ void deleteHashTable(HashTable *table) { //PH;
 	/* normally this would be in releaseHashTable, but DeadEnds
 	   has enough calls to deleteHashTable, that this is
 	   simpler.  */
-	table->refcount--;
-	if (table->refcount)
+	table->refCount--;
+	if (debuggingHash)
+	  {
+	    printf("deleteHashTable: table %p new refCount %d\n",
+		   table, table->refCount);
+	  }
+	if (table->refCount)
 	  return;
 #endif
 	for (int i = 0; i < table->numBuckets; i++) {
 		if (table->buckets[i] == null) continue;
 		deleteBucket(table->buckets[i], table->delete);
 	}
+	stdfree(table->buckets);
 	stdfree(table);
 }
 
@@ -358,7 +364,7 @@ addrefHashTable (HashTable *table)
   if (! table)
     return;
 
-  table->refcount++;
+  table->refCount++;
 }
 
 // releaseHashTable -- decrement reference count of table, free if count is zero
@@ -372,8 +378,8 @@ releaseHashTable (HashTable *table)
 #if defined(DEADENDS)
   deleteHashTable (table);
 #else
-  table->refcount--;
-  if (! table->refcount)
+  table->refCount--;
+  if (! table->refCount)
     deleteHashTable (table);
 #endif
 }

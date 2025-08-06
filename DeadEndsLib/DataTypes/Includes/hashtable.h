@@ -31,7 +31,7 @@ typedef struct Bucket {
 // customize the elements used in specific HashTables. getKey gets the key of an element;
 // compare compares two keys; and delete deletes an element.
 typedef struct HashTable {
-	int refcount;	//  Number of references to the table.
+	int refCount;	//  Number of references to the table.
 	int numBuckets; // Should be a prime number.
 	CString (*getKey)(const void*);
 	int (*compare)(CString, CString);
