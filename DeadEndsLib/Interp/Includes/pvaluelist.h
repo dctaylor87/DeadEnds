@@ -14,5 +14,6 @@
 typedef List PValueList;
 
 PValueList* createPValueList(void);
+void deletePValueList (PValueList*);
 
 #endif // pvaluelist_h
