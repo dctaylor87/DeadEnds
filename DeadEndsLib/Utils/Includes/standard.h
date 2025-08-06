@@ -66,6 +66,8 @@ void* _realloc(void* ptr, size_t, CString, int) __attribute__ ((__malloc__)) __a
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
 void _logAllocations(bool);  // Turn allocation logging on and off.
+void logRefCountChange (void *element, CString eltName, int refCount,
+			CString file, int line, CString function);
 
 // Turn on alloc and free debugging.
 #ifdef DEBUGALLOCS // Debugging allocs and free.
