@@ -536,7 +536,9 @@ releasePValue (PValue *pvalue)
       deleteList (list);
       break;
     case PVTable:
-      break;			/* for now */
+      HashTable *table = pvalue->value.uTable;
+      deleteHashTable (table);
+      break;
     case PVSequence:
       Sequence *seq = pvalue->value.uSequence;
       deleteSequence (seq);
