@@ -260,8 +260,8 @@ curses_ask_for_program (CString mode,
 	if (choice > 0) {
 		HashTable *props = fileprops[choice-1];
 		String fname = searchStringTable(props, "filename");
-		String dir = searchStringTable(props, "dir");
-		String filepath = pathConcatAllocate(dir, fname);
+		//String dir = searchStringTable(props, "dir");
+		//String filepath = pathConcatAllocate(dir, fname);
 		*pfname = strsave(fname);
 	}
 	free_proparray(&fileprops);

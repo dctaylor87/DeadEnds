@@ -240,8 +240,8 @@ ask_for_gedcom (CString mode,
 	if (choice > 0) {
 		HashTable *props = fileprops[choice-1];
 		String fname = searchStringTable(props, "filename");
-		String dir = searchStringTable(props, "dir");
-		String filepath = pathConcatAllocate(dir, fname);
+		//String dir = searchStringTable(props, "dir");
+		//String filepath = pathConcatAllocate(dir, fname);
 		if (pfname)
 			*pfname = strsave(fname);
 	}
