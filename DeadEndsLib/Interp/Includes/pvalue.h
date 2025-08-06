@@ -117,4 +117,7 @@ PValue copyPValue(PValue);
 PValue* allocPValue(PVType type, VUnion value);
 void freePValue(PValue* pvalue);
 
+void AddReferenceToPValue (PValue *pvalue);
+void releasePValue (PValue *pvalue);
+
 #endif // pvalue_h
