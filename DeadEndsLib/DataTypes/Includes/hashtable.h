@@ -56,6 +56,7 @@ void* previousInHashTable(HashTable*, int*, int*);
 
 int sizeHashTable(HashTable*);
 void showHashTable(HashTable*, void(*show)(void*));
+void dumpHashTable(HashTable*, void(*show)(void*));
 /*static*/ int getHash(CString, int);
 void removeFromHashTable(HashTable*, CString key);
 void iterateHashTable(HashTable*, void (*)(void*));

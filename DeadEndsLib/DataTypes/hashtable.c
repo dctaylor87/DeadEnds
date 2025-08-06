@@ -4,7 +4,7 @@
 // customiziing the compare, delete and getKey functions.
 //
 // Created by Thomas Wetmore on 29 November 2022.
-// Last changed on 20 May 2025.
+// Last changed on 6 August 2025.
 
 #include "block.h"
 #include "standard.h"
@@ -40,14 +40,10 @@ HashTable* createHashTable(CString(*getKey)(const void*), int(*compare)(CString,
 }
 
 // deleteBucket deletes a Bucket. If there is a delete function it is called on the elements.
-static void deleteBucket(Bucket* bucket, void(*delete)(void*)) { //PH;
-	if (delete) {
-		Block* block = &(bucket->block);
-		for (int j = 0; j < block->length; j++) {
-			delete(block->elements[j]);
-		}
-	}
-	stdfree(bucket);
+static void deleteBucket(Bucket* bucket, void(*delete)(void*)) {
+  if (!bucket) return;
+  deleteBlock (&bucket->block, delete);
+  stdfree(bucket);
 }
 
 // deleteHashTable deletes a HashTable. If there is a delete function it is called on the elements.
@@ -88,8 +84,6 @@ Bucket *createBucket(void) { //PH;
 int lengthBucket(Bucket* bucket) {
 	return lengthBlock(&(bucket->block));
 }
-
-
 
 // getHash returns the hash code of a Strings; found on the internet.
 int getHash(CString key, int maxHash) { //PH;
@@ -150,7 +144,6 @@ bool isInHashTable(HashTable* table, CString key) {
 
 // addToHashTable adds a new element to a HashTable.
 void addToHashTable(HashTable* table, void* element, bool replace) { //PH;
-	//printf("addToHashTable called element with key %s\n", table->getKey(element)); // DEBUG
 	CString key = table->getKey(element);
 	int hash, index;
 	Bucket* bucket = null;
@@ -161,7 +154,6 @@ void addToHashTable(HashTable* table, void* element, bool replace) { //PH;
 		return;
 	}
 	if (found) {
-		//printf("Duplicate key: %s found when adding to hash table\n", table->getKey(element)); // DEBUG
 		return; // Element exists, but don't replace.
 	}
 	bucket = table->buckets[hash]; // Add it; be sure Bucket exists.
@@ -382,4 +374,22 @@ releaseHashTable (HashTable *table)
   if (! table->refCount)
     deleteHashTable (table);
 #endif
+}
+
+// Dumps a hash table to standard error.
+void dumpHashTable(HashTable* table, void (*show)(void*)) {
+    fprintf(stderr, "Dumping Hash Table with %d buckets\n", table->numBuckets);
+    int numElements = 0;
+    for (int i = 0; i < table->numBuckets; i++) {
+        fprintf(stderr, "Bucket %d: ", i);
+        Bucket* bucket = table->buckets[i];
+        if (bucket == null) {
+            fprintf(stderr, "empty\n");
+        } else {
+            Block* block = &bucket->block;
+            fprintf(stderr, "size: %d  max: %d\n", block->length, block->maxLength);
+            numElements += block->length;
+        }
+    }
+    fprintf(stderr, "Hash Table contains %d elements in %d buckets\n", numElements, table->numBuckets);
 }
