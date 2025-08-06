@@ -174,7 +174,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   /* Clean up and return */
 
   programRunning = false;
-  finishInterpreter(); /* includes 5 sec delay if errors on-screen */
+  finishInterpreter(context); /* includes 5 sec delay if errors on-screen */
 
   /* context->file is likely file, but the script can change it... */
   if (context->file)
