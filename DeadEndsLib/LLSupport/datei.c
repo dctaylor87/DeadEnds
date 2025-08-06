@@ -207,7 +207,7 @@ static void
 init_keywordtbl (void)
 {
 	int i, j;
-	keywordtbl = createIntegerTable(20); /* XXX is this a good value? XXX */
+	keywordtbl = createIntegerTable(23); /* XXX is this a good value? XXX */
 	/* Load GEDCOM keywords & values into keyword table */
 	for (i=0; i<(int)ARRAYSIZE(gedkeys); ++i) {
 		j = gedkeys[i].value;
