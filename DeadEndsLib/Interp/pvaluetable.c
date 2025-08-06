@@ -30,6 +30,7 @@ static void delete(void* a) {
     stdfree(element->key);
     PValue* pvalue = element->value;
     if (pvalue->type == PVString) stdfree(pvalue->value.uString);
+    releasePValue (pvalue);
     stdfree(pvalue);
 }
 
