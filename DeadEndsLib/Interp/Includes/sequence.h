@@ -33,7 +33,7 @@ typedef enum {
 // SequenceEl is the type of Sequence elements.
 typedef struct SequenceEl {
 	GNode* root; // Root of record. MNOTE: do not free on delete.
-	String name; // If element is a person. MNOTE: do not free on delete.
+	CString name; // If element is a person. MNOTE: do not free on delete.
 	PValue* value; // MNOTE: what do we do with this? Scenarios exists for do or not do free.
 } SequenceEl;
 

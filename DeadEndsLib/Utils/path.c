@@ -36,7 +36,7 @@ CString resolveFile(CString name, CString path) {
 
 // fopenPath attempta to open a file using a path variable.
 FILE *fopenPath(CString name, CString mode, CString path) {
-    String str;
+    CString str;
     if (!(str = resolveFile(name, path))) return null;
     return fopen(str, mode);
 }
