@@ -118,13 +118,13 @@ void* _realloc(void* ptr, size_t len, CString file, int line) {
 	return p;
 }
 
-// _free deallocates memory; called by sdtfree.
+// _free deallocates memory; called by stdfree.
 void _free (void* ptr, String file, int line) {
   if (ptr == 0) {
       //fprintf(stderr, "_free called with a null ptr: %s:%d.\n", file, line);
       if (loggingAllocs) {
 	fprintf(allocLogFile, "F  %s\t%d\t%zu\t%p\n",
-		lastPathSegment(file), line, 0, 0);
+		lastPathSegment(file), line, (size_t)0, (void *)0);
       }
       return;
   }
