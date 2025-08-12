@@ -32,6 +32,7 @@ PValue __table(PNode* pnode, Context* context, bool* errflg) {
     }
     PValueTable *pvtable = createPValueTable();
     assignValueToSymbol(context, var->identifier, PVALUE(PVTable, uTable, pvtable));
+    releaseHashTable (pvtable);	/* we are not keeping a reference */
     return nullPValue;
 }
 
