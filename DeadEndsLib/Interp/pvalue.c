@@ -195,24 +195,50 @@ String valueOfPValue(PValue pvalue) {
     return scratch; // safe because caller owns memory
 }
 
+int
+pvalueReferenceCount (PValue *pvalue)
+{
+  int refcount = 0;
+  switch (pvalue->type)
+    {
+    case PVNull:
+    case PVInt:
+    case PVFloat:
+    case PVBool:
+    case PVString:
+      refcount = 0;		/* these types don't have reference counts */
+      break;
+    case PVGNode:
+    case PVPerson:
+    case PVFamily:
+    case PVSource:
+    case PVEvent:
+    case PVOther:
+      GNode *gnode = pvalue->value.uGNode;
+      refcount = gnode->refcount;
+      break;
+    case PVList:
+      List *list = pvalue->value.uList;
+      refcount = list->refCount;
+      break;
+    case PVTable:
+      HashTable *table = pvalue->value.uTable;
+      refcount = table->refCount;
+      break;
+    case PVSequence:
+      Sequence *seq = pvalue->value.uSequence;
+      refcount = seq->refCount;
+      break;
+    default:			/* should never happen */
+      refcount = 0;
+      break;
+    }
+  return refcount;
+}
+
 /// Frees the memory of an allocated PValue.
 void freePValue(PValue* ppvalue) {
     releasePValue (ppvalue);
-    switch (ppvalue->type) {
-    case PVString:
-        if (ppvalue->value.uString) stdfree(ppvalue->value.uString);
-        break;
-    case PVSequence: // Cannot delete Sequences until more memory management added.
-        //deleteSequence(ppvalue->value.uSequence);
-        break;
-    case PVList: // Cannot delete lists until more memory management added.
-        //deleteList(ppvalue->value.uList);
-        break;
-    case PVTable: // Cannot delete tables until more memory management added.
-        break;
-    default:
-        break;
-    }
     stdfree(ppvalue);
 }
 
@@ -476,7 +502,7 @@ PValue negPValue(PValue value, bool* eflg) {
 }
 
 void
-AddReferenceToPValue (PValue *pvalue)
+addReferenceToPValue (PValue *pvalue)
 {
   switch (pvalue->type)
     {
@@ -500,7 +526,9 @@ AddReferenceToPValue (PValue *pvalue)
       INCRLISTREFCOUNT(list);
       break;
     case PVTable:
-      break;			/* for now */
+      HashTable *table = pvalue->value.uTable;
+      INCRTABLEREFCOUNT(table);
+      break;
     case PVSequence:
       Sequence *seq = pvalue->value.uSequence;
       INCRSEQREFCOUNT(seq);
@@ -520,8 +548,10 @@ releasePValue (PValue *pvalue)
     case PVInt:
     case PVFloat:
     case PVBool:
-    case PVString:
       break;			/* nothing to do -- no reference to count */
+    case PVString:
+      stdfree(pvalue->value.uString);
+      break;
     case PVGNode:
     case PVPerson:
     case PVFamily:
@@ -529,7 +559,7 @@ releasePValue (PValue *pvalue)
     case PVEvent:
     case PVOther:
       GNode *node = pvalue->value.uGNode;
-      node->refcount++;
+      node->refcount--;
       break;
     case PVList:
       List *list = pvalue->value.uList;

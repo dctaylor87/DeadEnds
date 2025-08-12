@@ -97,6 +97,7 @@ PValue* clonePValue(const PValue* original);
 PValue cloneAndReturnPValue(const PValue* original);
 String typeOfPValue(PValue);
 String valueOfPValue(PValue);
+int pvalueReferenceCount (PValue *pvalue);
 //void deletePValue(PValue);
 //bool eqv_pvalues(PValue, PValue);
 
@@ -117,7 +118,7 @@ PValue copyPValue(PValue);
 PValue* allocPValue(PVType type, VUnion value);
 void freePValue(PValue* pvalue);
 
-void AddReferenceToPValue (PValue *pvalue);
+void addReferenceToPValue (PValue *pvalue);
 void releasePValue (PValue *pvalue);
 
 #endif // pvalue_h
