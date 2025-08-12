@@ -278,7 +278,7 @@ static void
 destroy_blel (BLEL blel)
 {
 	stdfree(blel->bl_name);
-	deleteSeqeunce(blel->bl_seq, false);
+	deleteSequence(blel->bl_seq, false);
 	stdfree(blel);
 }
 */
