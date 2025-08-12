@@ -44,6 +44,7 @@ PValue __list(PNode* pnode, Context* context, bool* errflg) {
     ASSERT(ident);
     List *list = createPValueList();
     assignValueToSymbol(context, ident, PVALUE(PVList, uList, list));
+    deleteList (list);		/* misnamed; we are not keeping a reference */
     if (localDebugging) showSymbolTable(context->frame->table);
     return nullPValue;
 }
