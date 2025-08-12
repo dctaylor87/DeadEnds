@@ -70,6 +70,7 @@ extern Bucket *createBucket (void);
 extern int lengthBucket (Bucket* bucket);
 void appendToBucket(Bucket*, void* element);
 void removeElement(HashTable*, void* element);
+extern void incrReferenceCountTable (HashTable *table, CString file, int line, CString function);
 
 // FORHASHTABLE and ENDHASHTABLE iterate the elements in a HashTable.
 #define FORHASHTABLE(table, element) {\
@@ -80,5 +81,7 @@ void removeElement(HashTable*, void* element);
 		for(; __element; __element = nextInHashTable(__table, &__i, &__j)) {\
 			element = __element;
 #define ENDHASHTABLE }}
+
+#define INCRTABLEREFCOUNT(table)	incrReferenceCountTable (table, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__)
 
 #endif // hashtable_h

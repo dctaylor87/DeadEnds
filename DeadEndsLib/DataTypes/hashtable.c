@@ -348,15 +348,15 @@ void showHashTable(HashTable* table, void (*show)(void*)) {
 	printf("showHashTable showed %d elements\n", count);
 }
 
-// addrefHashTable -- increment reference count of a HashTable
 
-void
-addrefHashTable (HashTable *table)
+// incrReferenceCountTable -- increment reference count of a HashTable
+
+void incrReferenceCountTable (HashTable *table,
+			      CString file, int line, CString function)
 {
-  if (! table)
-    return;
-
   table->refCount++;
+  logRefCountChange ((void *)table, "Table", table->refCount,
+		     file, line, function);
 }
 
 // releaseHashTable -- decrement reference count of table, free if count is zero
