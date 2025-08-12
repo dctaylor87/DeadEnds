@@ -177,8 +177,8 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   finishInterpreter(context); /* includes 5 sec delay if errors on-screen */
 
   /* context->file is likely file, but the script can change it... */
-  if (context->file)
-    closeFile (context->file);
+  //if (context->file)
+  //closeFile (context->file);
 
  interp_program_exit:
 
