@@ -300,7 +300,7 @@ set_cmd_options (HashTable *opts)
 	ASSERT(opts);
 	releaseHashTable(f_cmd);
 	f_cmd = opts;
-	addrefHashTable(f_cmd);
+	INCRTABLEREFCOUNT(f_cmd);
 	send_notifications();
 }
 
@@ -314,7 +314,7 @@ set_db_options (HashTable *opts)
 	ASSERT(opts);
 	releaseHashTable(f_db);
 	f_db = opts;
-	addrefHashTable(f_db);
+	INCRTABLEREFCOUNT(f_db);
 	send_notifications();
 }
 
