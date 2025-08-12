@@ -190,20 +190,6 @@ setScriptOutputFile (CString filename, bool append, CString *errorMessage)
 // usage: print([STRING]+,) -> VOID
 PValue __print (PNode *pnode, Context *context, bool *errflg)
 {
-#if 0
-  // __outfile does this, so we do it for consistency
-  if (! context->file) {
-    String dereports = getdeoptstr ("DEREPORTS", ".");
-    Poutfp = ask_for_output_file("w", qSwhtout, &outfilename, dereports, NULL);
-    if (! Poutfp) {
-      *errflg = true;
-      scriptError (pnode, noreport);
-      return nullPValue;
-    }
-    setbuf(Poutfp, NULL);
-  }
-#endif
-
   int count = 0;
   for (PNode *arg = pnode->arguments; arg; arg = arg->next)
     {
@@ -216,12 +202,8 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
 	  scriptError (pnode, "argument number %d to print is not a string", count);
 	  return nullPValue;
 	}
-#if 1
       llwprintf ("%s", str.value.uString);
-#else
-      fprintf (Poutfp, "%s", str.value.uString);
-#endif
-  }
+    }
   return nullPValue;
 }
 
