@@ -3,7 +3,7 @@
 //  context.c
 //
 //  Created by Thomas Wetmore on 21 May 2025.
-//  Last changed on 3 July 2025.
+//  Last changed on 11 August 2025.
 //
 
 #include <stdio.h>
@@ -32,7 +32,7 @@ Context* createEmptyContext(void) {
 //    return context;
 //}
 
-// deleteContext deletes a Context; it deletes the run time stack and closes the file, but leaves the database.
+// deleteContext deletes a Context; it deletes the run time stack and closes the file, but leaves everything else.
 void deleteContext(Context *context) {
     Frame* frame = context->frame;
     while (frame) {
@@ -41,6 +41,9 @@ void deleteContext(Context *context) {
         frame = parent;
     }
     if (context->file) closeFile(context->file);
+    deleteFunctionTable (context->procedures);
+    deleteFunctionTable (context->functions);
+    deleteSymbolTable (context->globals);
     stdfree(context);
 }
 
@@ -64,7 +67,7 @@ void validateCalls(Context* context) {
     ENDHASHTABLE
 }
 
-// validatePNode validates that individual PNodes that call modules call defined modules.
+// validatePNodeCalls validates that individual PNodes that call modules call defined modules.
 static void validatePNodeCalls(PNode* node, Context* context) {
     while (node) {
         switch (node->type) {

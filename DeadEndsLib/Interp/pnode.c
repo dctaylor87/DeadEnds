@@ -178,7 +178,6 @@ PNode* funcCallPNode(String name, PNode* alist, ErrorLog *errorLog) {
         PNode *node = allocPNode(PNFuncCall);
         node->funcName = name;
         node->arguments = alist;
-        //node->funcBody = searchFunctionTable(functionTable, name); // DEPRECATED -- NOT NEEDED
         return node;
     }
 
@@ -339,9 +338,7 @@ PNode *forothrPNode (String ovar, String nvar, PNode *body) {
 }
 
 // forlistPNode creates a list PNode loop that iterates every element in a list.
-PNode *forlistPNode (PNode *lexpr, String evar, String nvar, PNode *body)
-// iexpr -- PNode expression that evaluates to a List.
-{
+PNode *forlistPNode (PNode *lexpr, String evar, String nvar, PNode *body) {
     PNode *node = allocPNode(PNList);
     node->listExpr = lexpr;
     node->elementIden = (void*) evar;
@@ -363,8 +360,8 @@ PNode *forindisetPNode(PNode *iexpr, String ivar, String vvar, String nvar, PNod
     return node;
 }
 
-// fornotesPNode creates fornotes loop node. nexpr evaluates to a GNode. vvar is the variable that will hold NOTE
-// values; body is the loop.
+// fornotesPNode creates fornotes loop node. nexpr evaluates to a GNode. vvar is the variable
+// that will hold NOTE values; body is the loop.
 PNode *fornotesPNode(PNode *nexpr, String vvar, PNode *body) {
     PNode *pnode = allocPNode(PNNotes);
     pnode->gnodeExpr = nexpr;
@@ -375,7 +372,7 @@ PNode *fornotesPNode(PNode *nexpr, String vvar, PNode *body) {
 }
 
 // iden_node -- Create an identifier PNode.
-// TODO: FIGURE OUTWHAT TO DO WITH THIS.
+// TODO: FIGURE OUT WHAT TO DO WITH THIS.
 PNode *iden_node(String identifier) {
     PNode *pnode = allocPNode(PNIdent);
     pnode->identifier = identifier;
