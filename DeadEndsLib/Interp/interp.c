@@ -59,11 +59,7 @@ void initializeInterpreter(Database* database) {
 // finishInterpreter is called when the interpreter is done;
 // it reclaims the memory and anything else necessary to restore the previous state.
 void finishInterpreter(Context *context) {
-  deleteFunctionTable (context->procedures);
-  deleteFunctionTable (context->functions);
-  deleteSymbolTable (context->globals);
-  deleteList (context->fileNames);
-  //deleteContext (context);
+  deleteContext (context);
 }
 
 // interpScript interprets a DeadEnds script. A script must contain procedure named "main". interpScript calls
