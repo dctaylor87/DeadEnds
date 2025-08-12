@@ -29,9 +29,10 @@ static void delete(void* a) {
     PValueElement *element = (PValueElement*) a;
     stdfree(element->key);
     PValue* pvalue = element->value;
-    if (pvalue->type == PVString) stdfree(pvalue->value.uString);
+    //if (pvalue->type == PVString) stdfree(pvalue->value.uString);
     releasePValue (pvalue);
     stdfree(pvalue);
+    stdfree(element);
 }
 
 // createPValueTable creates and returns a PValueTable.
@@ -56,6 +57,7 @@ void insertInPValueTable(PValueTable* table, String key, PValue pvalue) {
     PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
     memcpy(ppvalue, &pvalue, sizeof(PValue));
     PValueElement *element = searchHashTable(table, key);
+    addReferenceToPValue (ppvalue);
     if (element) {
         freePValue(element->value);
         element->value = ppvalue;
