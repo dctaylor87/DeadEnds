@@ -27,5 +27,6 @@ FunctionTable *createFunctionTable(void);
 void deleteFunctionTable(FunctionTable*);
 PNode *searchFunctionTable(FunctionTable *table, String name);
 void addToFunctionTable(FunctionTable *table, String name, PNode *pnode);
+int sizeFunctionTable(FunctionTable* table);
 
 #endif // functiontable_h

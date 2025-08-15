@@ -20,6 +20,7 @@
 #include "pvaluetable.h"
 #include "refnindex.h"
 #include "builtintable.h"
+#include "hashtable.h"
 
 // __table creates a DeadEnds script value table.
 // usage: table(IDENT) -> VOID

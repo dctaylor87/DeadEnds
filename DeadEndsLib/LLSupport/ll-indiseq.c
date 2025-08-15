@@ -55,6 +55,7 @@
 #include "readwrite.h"
 #include "codesets.h"
 #include "gstrings.h"
+#include "pvalue.h"
 
 #include "ll-sequence.h"
 #include "ask.h"

@@ -63,7 +63,7 @@ void showFrame(Frame* frame) {
     printf("  automatics:\n");
     FORHASHTABLE(table, element)
         Symbol* symbol = (Symbol*) element;
-        String ident = symbol->ident;
+        CString ident = symbol->ident;
         if (!isInSet(params, ident)) {
             PValue pvalue = getValueFromSymbolTable(table, ident);
             String type = typeOfPValue(pvalue);
