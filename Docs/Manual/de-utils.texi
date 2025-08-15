@@ -42,7 +42,7 @@
 @end defun
 @defun chomp (String str) @arrow{} void
 @end defun
-@defun appendstr(String * pdest, int * len, int utf8, CString src) @arrow{} void
+@defun appendstr (String * pdest, int * len, int utf8, CString src) @arrow{} void
 @end defun
 @defun strfree (String *str) @arrow{} void
 @end defun
