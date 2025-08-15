@@ -108,6 +108,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
 	  return false;
 	}
       /* findProgram found it!  */
+      stdfree(fullpath);
     }
   else
     {
@@ -176,6 +177,15 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   programRunning = false;
   finishInterpreter(context); /* includes 5 sec delay if errors on-screen */
 
+  if (pnode)
+    {
+      if (pnode->procName)
+	{
+	  stdfree (pnode->procName);
+	  pnode->procName = 0;
+	}
+      stdfree (pnode);
+    }
   /* context->file is likely file, but the script can change it... */
   //if (context->file)
   //closeFile (context->file);

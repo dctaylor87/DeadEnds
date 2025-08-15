@@ -38,7 +38,9 @@ CString resolveFile(CString name, CString path) {
 FILE *fopenPath(CString name, CString mode, CString path) {
     CString str;
     if (!(str = resolveFile(name, path))) return null;
-    return fopen(str, mode);
+    FILE *file = fopen(str, mode);
+    stdfree(str);
+    return file;
 }
 
 // lastPathSegment returns the last componenet of a path. Returns static memory.
