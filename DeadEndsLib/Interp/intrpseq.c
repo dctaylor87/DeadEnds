@@ -5,7 +5,7 @@
 //  language this datatype is called an indiset. Each builtin calls one of the Sequence functions.
 //
 //  Created by Thomas Wetmore on 4 March 2023.
-//  Last changed on 4 June 2025.
+//  Last changed on 15 August 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -186,10 +186,10 @@ PValue __keysort(PNode* pnode, Context* context, bool* eflg)
 
 // __valuesort sort a sequence by its value.
 // usage: valuesort(SET) -> VOID
-//--------------------------------------------------------------------------------------------------
-PValue __valuesort(PNode* pnode, Context* context, bool* eflg)
-{
+PValue __valuesort(PNode* pnode, Context* context, bool* eflg) {
 	scriptError(pnode, "valuesort has been removed from the script language");
+    *eflg = true;
+    return nullPValue;
     //PValue value = evaluate(node->arguments, context, eflg);
     //if (*eflg || value.type != PVSequence) {
         //scriptError(pnode, "the arg to valuesort must be a set.");
@@ -197,7 +197,6 @@ PValue __valuesort(PNode* pnode, Context* context, bool* eflg)
     //}
     //Sequence *sequence = value.value.uSequence;
     //valueSortSequence(sequence);
-    return nullPValue;
 }
 
 // __uniqueset removes duplicates from a sequence.
