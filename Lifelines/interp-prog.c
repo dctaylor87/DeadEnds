@@ -129,7 +129,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
 
   ErrorLog *errorLog = createErrorLog ();
   //programParsing = true;
-  Context *context = parseProgram (sfile, programsdir, errorLog);
+  Program *program = parseProgram (sfile, programsdir, errorLog);
 
   if (Perrors)
     {
@@ -143,7 +143,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
       goto interp_program_exit;
     }
 
-  context->database = database;
+  //context->database = database;
   /* Open output file if name is provided */
 
   File *file = null;
@@ -156,10 +156,11 @@ interp_program (String proc, int nargs, void **args, CString sfile,
       }
   }
   //if (Poutfp) setbuf(Poutfp, NULL);
-  context->file = file;
+  //context->file = file;
 
   /* Link arguments to parameters in symbol table */
 
+#if 0
   curFileName = "internal";
   curLine = 1;
   PNode *pnode = procCallPNode ("main", null);
@@ -171,10 +172,16 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   Perrors = 0;
   msg_output(MSG_STATUS, _("Program is running..."));
   ranit = interpret(pnode, context, null);
+#else
+  programParsing = false;
+  programRunning = true;
 
+  runProgram (program, database, file);
+#endif
   /* Clean up and return */
 
   programRunning = false;
+#if 0
   finishInterpreter(context); /* includes 5 sec delay if errors on-screen */
 
   if (pnode)
@@ -189,6 +196,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   /* context->file is likely file, but the script can change it... */
   //if (context->file)
   //closeFile (context->file);
+#endif
 
  interp_program_exit:
 

@@ -105,6 +105,7 @@ execute_script (CString report_name, Database *database)
 
   // parse a DeadEnds script
   Program *program = parseProgram (report_name, DEADENDS_search_path, errorLog);
+#if 0
   context->database = database;
   context->file = stdOutputFile ();
 
@@ -122,6 +123,9 @@ execute_script (CString report_name, Database *database)
   //  Call the main procedure.
   PValue returnPvalue;
   interpret(pnode, context, &returnPvalue);
+#else
+  runProgram (program, database, stdOutputFile ());
+#endif
 
   /* unfortunately, main is a procedure, not a function.  And
      procedures do not return values, only functions do.  So, there is

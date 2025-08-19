@@ -59,7 +59,7 @@ void initializeInterpreter(Database* database) {
 // finishInterpreter is called when the interpreter is done;
 // it reclaims the memory and anything else necessary to restore the previous state.
 void finishInterpreter(Context *context) {
-  deleteContext (context);
+  //deleteContext (context);
 }
 
 /// Runs a DeadEnds script program.
