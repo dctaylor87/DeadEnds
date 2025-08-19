@@ -11,23 +11,21 @@
 //  If DE_GEDCOM_PATH and/or DE_SCRIPTS_PATH are defined, they may be used as search paths.
 //
 //  Created by Thomas Wetmore on 21 July 2024
-//  Last changed on 17 August 2025.
+//  Last changed on 18 August 2025.
 //
 
 #include <stdint.h>
 
-#include "context.h"
 #include "deadends.h"
 
 // Local functions.
 static void usage(void);
 static void getArguments(int, char**, CString*, CString*);
 static void getEnvironment(CString*, CString*);
-//static void runScript(Database*, CString);
 
 Database *currentDatabase = 0;
 
-// main is the main program of the RunScript program.
+// Main program of the RunScript program.
 int main(int argc, char* argv[]) {
     // Get the files.
     fprintf(stderr, "%s: RunScript started.\n", getMsecondsStr());

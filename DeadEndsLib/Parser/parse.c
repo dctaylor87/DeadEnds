@@ -25,7 +25,6 @@
 #include "path.h"
 #include "pvalue.h"
 #include "set.h"
-//#include "stringlist.h"
 #include "stringset.h"
 #include "symboltable.h"
 //#include "refnindex.h"
