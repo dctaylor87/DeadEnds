@@ -6,7 +6,7 @@
 //  or call a more specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 15 August 2025.
+//  Last changed on 18 August 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -62,22 +62,36 @@ void finishInterpreter(Context *context) {
   deleteContext (context);
 }
 
-// interpScript interprets a DeadEnds script. A script must contain procedure named "main". interpScript calls
-// that procedure. This function creates a procedure call PNode to call main procecure, updates the script
-// output file in the Context if the caller provides one, and then calls the PNode with the Context.
-void interpScript(Context* context, File* outfile) {
-    // Create a PNProcCall PNode to call the main procedure.
+/// Runs a DeadEnds script program.
+void runProgram(Program* program, Database* database, File* outfile) {
+
+    // Create the Context.
+    Context* context = createContext(program, database, outfile);
+
+    // Call the main function.
+    InterpType itype = interpScript(context, outfile);
+
+    // Free the Context.
+    deleteContext(context);
+}
+
+// Interprets a DeadEnds script. A script must contain procedure named "main" which interpScript
+// calls. Creates a PNProcCall PNode to call "main" and inteprets it.
+InterpType interpScript(Context* context, File* outfile) {
+
+    // Create a PNProcCall PNode to call "main".
     curFileName = "deadends";
     curLine = 1;
     PNode* pnode = procCallPNode("main", null);
+
     // If there is an output file use it.
     if (outfile && context->file != outfile) {
         closeFile(context->file);
         context->file = outfile;
     }
+
     // Run the script by interpreting the main procedure.
-    // TODO: Should look at the return code.
-    (void) interpret(pnode, context, null);
+    return interpret(pnode, context, null);
 }
 
 // interpret interprets a list of PNodes. If a return statement is found it returns the return value through the
@@ -736,7 +750,7 @@ InterpType interpProcCall(PNode* pnode, Context* context, PValue* pval) {
     // Get the procedure from the procedure table.
     String name = pnode->procName;
     if (callTracing) printf("calling: %s (line %d)\n", name, pnode->lineNumber);
-    PNode* proc = searchFunctionTable(context->procedures, name);
+    PNode* proc = searchFunctionTable(context->program->procedures, name);
     if (!proc) {
         scriptError(pnode, "procedure %s is undefined", name);
         return InterpError;

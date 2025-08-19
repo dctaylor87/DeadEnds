@@ -6,7 +6,7 @@
 //  I do not like the code that bison produces, and this is the 'version' of yacc supported by Apple.
 //
 //  Created by Thomas Wetmore on 8 December 2022.
-//  Last changed 3 June 2025.
+//  Last changed 16 August 2025.
 //
 
 %{
@@ -31,6 +31,7 @@
 
 // Global variables that form the interface between the lexer, parser and interpreter.
 extern List *pendingFiles; // Pending list of included files.
+extern List* globalIdents; // List of global identifiers.
 
 static PNode *this, *prev;
 
@@ -72,7 +73,8 @@ static void yyerror(ErrorLog *errorLog, const char *str);
     |	func
     |	IDEN '(' IDEN ')' {  // Interested in "global".
         if (eqstr("global", $1))
-            assignValueToSymbolTable(globals, $3, (PValue) {PVNull});
+            //assignValueToSymbolTable(globals, $3, (PValue) {PVNull});
+            appendToList(globalIdents, $3);
     }
     |	IDEN '(' SCONS ')' {  // Interested in "include".
         if (eqstr("include", $1))

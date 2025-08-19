@@ -5,7 +5,7 @@
 //  TODO: The string functions aren't here yet.
 //
 //  Created by Thomas Wetmore on 13 November 2022.
-//  Last changed on 3 June 2025.
+//  Last changed on 16 August 2025.
 //
 
 #ifndef import_h
@@ -43,8 +43,8 @@ typedef struct ImportFeedback ImportFeedback;
 
 extern bool importDebugging;
 
-List *getDatabasesFromFiles(List*, int vcodes, ErrorLog*);
-Database* getDatabaseFromFile(CString, int vcodes, ErrorLog*);
+List *getDatabasesFromFiles(List*, ErrorLog*);
+Database* getDatabaseFromFile(CString, ErrorLog*);
 RootList* getRecordListFromFile(CString, IntegerTable*, ErrorLog*);
 void checkKeysAndReferences(GNodeList*, CString name, IntegerTable*, ErrorLog*);
 extern Database *importFromFileFP(File* file, CString path, ErrorLog *log);
