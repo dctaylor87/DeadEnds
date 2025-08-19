@@ -138,7 +138,7 @@ main (int argc, char *argv[])
 
   //currentDatabase = gedcomFileToDatabase (cmd_line_db, &error_log);
   error_log = createErrorLog ();
-  currentDatabase = getDatabaseFromFile (cmd_line_db, 0, error_log);
+  currentDatabase = getDatabaseFromFile (cmd_line_db, error_log);
 
   if (have_python_scripts)
     {

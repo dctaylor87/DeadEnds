@@ -104,7 +104,7 @@ execute_script (CString report_name, Database *database)
   ErrorLog *errorLog = createErrorLog ();
 
   // parse a DeadEnds script
-  Context *context = parseProgram (report_name, DEADENDS_search_path, errorLog);
+  Program *program = parseProgram (report_name, DEADENDS_search_path, errorLog);
   context->database = database;
   context->file = stdOutputFile ();
 

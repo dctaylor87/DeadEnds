@@ -86,7 +86,7 @@ selectAndOpenDatabase(CString *dbFilename,
 
   /* newName has the resolved name */
   //  database = gedcomFileToDatabase (newName, errorLog);
-  database = getDatabaseFromFile (newName, 0, errorLog);
+  database = getDatabaseFromFile (newName, errorLog);
 
   if (! database)
     {

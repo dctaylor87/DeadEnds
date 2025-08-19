@@ -176,7 +176,7 @@ main (int argc, char *argv[])
       exit (1);
     }
 
-  currentDatabase = getDatabaseFromFile (resolved_file, 0, error_log);
+  currentDatabase = getDatabaseFromFile (resolved_file, error_log);
 #else
   File *db_file = openFile (cmd_line_db, "r");
   if (! db_file)
