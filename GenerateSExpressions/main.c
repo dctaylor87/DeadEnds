@@ -56,6 +56,7 @@ int main(int argc, char* argv[]) {
 	fprintf(stderr, "%s: Script parsed.\n", getMsecondsStr());
 	// Generate S-Expressions from the PNode trees.
 	genSExpressions(program);
+    deleteProgram(program);
 }
 
 // getArguments gets the arguments from the command line.
