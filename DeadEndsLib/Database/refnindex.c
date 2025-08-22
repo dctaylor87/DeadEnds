@@ -35,9 +35,15 @@ RefnIndexEl *createRefnIndexEl(CString refn, CString key) {
 	return el;
 }
 
+// showRefnIndexEl shows a single RefnIndexEl, for debugging
+static void showRefnIndexEl(void *element) {
+  RefnIndexEl *elt = (RefnIndexEl *)element;
+  printf("refn: %s, key: %s\n", elt->refn, elt->key);
+}
+
 // showRefnIndex show a RefnIndex, for debugging.
 void showRefnIndex(RefnIndex* index) {
-	printf("showRefnIndex: Write me\n");
+    showHashTable (index, showRefnIndexEl);
 }
 
 // compare compares two record keys.
@@ -47,12 +53,15 @@ static int compare (CString a, CString b) {
 
 // getKey returns the key of a RefnIndexEl, a 1 REFN value.
 static CString getKey(const void* a) {
-	return ((RefnIndexEl*) a)->key;
+  return ((RefnIndexEl*) a)->refn;
 }
 
 // delete frees a RefnIndexEl.
 static void delete(void* element) {
-	stdfree(element);
+    RefnIndexEl* el = (RefnIndexEl*) element;
+    stdfree(el->key);
+	stdfree(el->refn);
+    stdfree(el);
 }
 
 // createRefnIndex creates a RefnIndex.

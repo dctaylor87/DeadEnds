@@ -165,9 +165,10 @@ void addToHashTable(HashTable* table, void* element, bool replace) { //PH;
 }
 
 bool addToHashTableIfNew(HashTable* table, void* element) { //PH;
-	// See if it is there and if not where it should go if the bucket is sorted.
-	// If there return false, meaning didn't add it.
-	// Put the element into the right place.
+	if (searchHashTableWithElement(table, element))
+	  return false;
+
+	addToHashTable(table, element, false);
 	return true;
 }
 
