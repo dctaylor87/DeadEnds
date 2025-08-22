@@ -54,7 +54,6 @@ NameIndex *createNameIndex(void) {
 // deleteNameIndex deletes a name index.
 void deleteNameIndex(NameIndex *nameIndex) {
 	deleteHashTable(nameIndex);
-	stdfree(nameIndex);
 }
 
 // getNameIndex returns the NameIndex of all persons in a RootList.
