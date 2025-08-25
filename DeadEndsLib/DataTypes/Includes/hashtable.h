@@ -7,7 +7,7 @@
 //  use to keep the elements in a Bucket sorted.
 //
 //  Created by Thomas Wetmore 29 November 2022.
-//  Last changed on 4 June 2025.
+//  Last changed on 23 August 2025.
 //
 
 #ifndef hashtable_h
@@ -40,7 +40,7 @@ typedef struct HashTable {
 } HashTable;
 
 // User interface to HashTable.
-HashTable* createHashTable(CString(*g)(const void*), int(*c)(CString, CString), void(*d)(void*), int numBuckets);
+HashTable* createHashTable(CString(*)(const void*), int(*)(CString, CString), void(*)(void*), int);
 void deleteHashTable(HashTable*);
 bool isInHashTable(HashTable*, CString key);
 void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex);
@@ -48,7 +48,7 @@ void* searchHashTable(HashTable*, CString key);
 void* searchHashTableWithElement(HashTable* table, void* element);
 
 void addToHashTable(HashTable*, void*, bool);
-bool addToHashTableIfNew(HashTable*, void*); // WARNING: NOT IMPLEMENTED YET.
+bool addToHashTableIfNew(HashTable*, void*);
 void *firstInHashTable(HashTable*, int*, int*);
 void* nextInHashTable(HashTable*, int*, int*);
 void *lastInHashTable(HashTable*, int*, int*);
