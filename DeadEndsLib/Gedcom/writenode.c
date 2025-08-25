@@ -45,7 +45,7 @@ void writeGNode(FILE* fp, int level, GNode* gnode, bool indent) {
     fprintf(fp, "%d", level);
     if (gnode->key) fprintf(fp, " %s", gnode->key);
     fprintf(fp, " %s", gnode->tag);
-    if (gnode->value) fprintf(fp, " %s", gnode->value);
+    if ((gnode->value) && (*gnode->value)) fprintf(fp, " %s", gnode->value);
     fprintf(fp, "\n");
 }
 
