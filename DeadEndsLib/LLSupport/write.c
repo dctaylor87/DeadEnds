@@ -28,6 +28,7 @@
 #include "gedcom.h"
 #include "gnode.h"
 #include "errors.h"
+#include "integertable.h"
 #include "translat.h"
 #include "feedback.h"
 #include "date.h"
@@ -42,6 +43,8 @@
 #include "file.h"
 #include "path.h"
 #include "import.h"
+#include "locales.h"
+#include "lloptions.h"
 
 /*********************************************
  * local function prototypes, alphabetical
@@ -70,21 +73,35 @@ file_to_node (String fname,
 	      String *pmsg, bool *pemp)
 {
   ErrorLog *errorLog = createErrorLog ();
-  RootList *rootList = getRecordListFromFile (fname, NULL, errorLog);
+  IntegerTable *keymap = createIntegerTable(4097);
+  RootList *rootList = getRecordListFromFile (fname, keymap, errorLog);
+
+  /* On error, getRecordListFromFile will delete keymap.  We have no
+     need of it, so on success we need to delete it.  */
+  if (rootList)
+    deleteHashTable (keymap);
+  keymap = 0;
 
   *pemp = false;		/* XXX should this be an argument? XXX */
   if (! rootList)
     {
       /* XXX insert code to convert errorLog to a string *OR*
        take an errorLog as an argument instead of pmsg.  XXX */
+      CString errorFile = getdeoptstr ("ImportLog", "errs.log");
+      static char errorMessage[MAXPATHLENGTH + 100];
+      snprintf (errorMessage, sizeof(errorMessage),
+		"Errors occurred; for details see %s\n", errorFile);
+      *pmsg = errorMessage;
+      saveErrorLog (errorFile, errorLog);
+      deleteErrorLog (errorLog);
       return NULL;
     }
+  deleteErrorLog (errorLog);
   int len = lengthList (rootList);
   if (len <= 0)
     {
-      /* Should never happen -- length should never be < 0 and if 0,
-	 getRootListFromFile is supposed to return NULL.  */
-      *pmsg = "Internal Error: fileToNode: getRootListFromFile returned bad list";
+      /* Empty list -- the user probably deleted the contents to abort edit.  */
+      *pemp = true;
       return NULL;
     }
   else if (len > 1)
@@ -170,7 +187,7 @@ write_node (int levl, FILE *fp, XLAT ttm, GNode *node,
 	fprintf(fp, FMT_INT, levl);
 	if (nxref(node)) fprintf(fp, " %s", nxref(node));
 	fprintf(fp, " %s", ntag(node));
-	if ((p = nval(node))) {
+	if ((p = nval(node)) && *p) {
 		if (ttm) {
 			translate_string(ttm, nval(node), out, MAXLINELEN+1);
 			p = out;
