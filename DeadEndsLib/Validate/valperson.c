@@ -79,9 +79,15 @@ static bool validatePerson(GNode* person, CString name, RecordIndex* index, Inte
 			if (person == child) numOccurrences++;
 		ENDCHILDREN
 		if (numOccurrences == 0) {
-			addErrorToLog(elog, createError(linkageError, name, 0, "Child not found"));
+			sprintf(s, "Person %s (line %d) has FAMC link to family %s (line %d) but family has no CHIL link",
+				person->key, rootLine (person, keymap),
+				family->key, rootLine (family, keymap));
+			addErrorToLog(elog, createError(linkageError, name, 0, s));
 			errorCount++;
 		} else if (numOccurrences > 1) {
+			sprintf(s, "Person %s (line %d) has multiple CHIL links in family %s (line %d)",
+				person->key, rootLine (person, keymap),
+				family->key, rootLine (family, keymap));
 			addErrorToLog(elog, createError(linkageError, name, 0, "Too many children found"));
 			errorCount++;
 		}
@@ -89,20 +95,22 @@ static bool validatePerson(GNode* person, CString name, RecordIndex* index, Inte
 	if (errorCount) return false;
 	SexType sex = SEXV(person);
 	FORFAMSS(person, family, key, index) // Check FAMS links back to person.
+		bool found = false;
 		GNode *parent = null;
-		if (sex == sexMale) {
-			parent = familyToHusband(family, index);
-		} else if (sex == sexFemale) {
-			parent = familyToWife(family, index);
-		} else {
-			int lineNumber = rootLine(person, keymap);
-			sprintf(s, "INDI %s (line %d) with FAMS %s (line %d) link has no sex value.",
-                    person->key, lineNumber, key, LC(lineNumber, __node));
-			addErrorToLog(elog, createError(linkageError, name, 0, s));
-			errorCount++;
-			goto a;
-		}
-		if (person != parent) {
+		FORHUSBS(family, parent, key, index)
+		  if (parent == person) {
+		    found = true;
+		    break;
+		  }
+		ENDHUSBS
+		if (! found)
+		  FORWIFES(family, parent, key, index)
+		    if (parent == person) {
+		      found = true;
+		      break;
+		    }
+		  ENDWIFES
+		    if (! found) {
 			sprintf(s, "FAM %s (line %d) should have %s link to INDI %s (line %d).",
 					key,
 					rootLine(family, keymap),
@@ -114,7 +122,6 @@ static bool validatePerson(GNode* person, CString name, RecordIndex* index, Inte
 		}
 a:;
 	ENDFAMSS
-
 	//  Validate NAME and SEX lines.
 	GNode* nnode = null;
 	if (!hasValidNameGNode(person, &nnode)) {

@@ -91,8 +91,17 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 			if (family == fam) numOccurences++;
 		ENDFAMSS
 		if (numOccurences != 1) {
-			addErrorToLog(elog, createError(linkageError, name, 111, "Husband married to same wife in multiple families"));
-			errorCount++;
+		  if (numOccurences == 0)
+		    sprintf (s, "Husband %s (line %d) lacks a FAMS link to family %s (line %d).",
+			     husband->key, rootLine (husband, keymap),
+			     family->key, rootLine (family, keymap));
+		  else
+		    sprintf (s, "Husband %s (line %d) has multiple FAMS links to family %s (line %d).",
+			     husband->key, rootLine (husband, keymap),
+			     family->key, rootLine (family, keymap));
+
+		  addErrorToLog (elog, createError (linkageError, name, 0, s));
+		  errorCount++;
 		}
 	ENDHUSBS
 
@@ -102,10 +111,19 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 		FORFAMSS(wife, fam, fkey, index)
 			if (family == fam) numOccurences++;
 		ENDFAMSS
-        if (numOccurences != 1) {
-            addErrorToLog(elog, createError(linkageError, name, 111, "Wife married to same husband in multiple families"));
-            errorCount++;
-        }
+		if (numOccurences != 1) {
+		  if (numOccurences == 0)
+		    sprintf (s, "Wife %s (line %d) lacks a FAMS link to family %s (line %d).",
+			     wife->key, rootLine (wife, keymap),
+			     family->key, rootLine (family, keymap));
+		  else
+		    sprintf (s, "Wife %s (line %d) has multiple FAMS links to family %s (line %d).",
+			     wife->key, rootLine (wife, keymap),
+			     family->key, rootLine (family, keymap));
+
+		  addErrorToLog (elog, createError (linkageError, name, 0, s));
+		  errorCount++;
+		}
 	} ENDWIFES
 
 	//  For each CHIL node in the family.
@@ -114,11 +132,14 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 		FORFAMCS(child, fam, key, index)
 			if (family == fam) numOccurences++;
 		ENDFAMCS
-    if (numOccurences != 1) {
-        addErrorToLog(elog, createError(linkageError, name, 111, "Person is a child in multiple families"));
-        errorCount++;
-    }
-	ENDFAMCS
+		if (numOccurences == 0) {
+		    sprintf(s, "Person %s (line %d) has no FAMC link to family %s (line %d)",
+			    child->key, rootLine (child, keymap),
+			    family->key, rootLine (family, keymap));
+		    addErrorToLog(elog, createError(linkageError, name, 0, s));
+		    errorCount++;
+		}
+	ENDCHILDREN
 
 	bool hasHusb = HUSB(family) != null;
 	bool hasWife = WIFE(family) != null;
