@@ -121,10 +121,10 @@ execute_script (CString report_name)
   String mode = "r";
 #else
   String mode = DEREADTEXT;	/* "r" on POSIX, on M$ systems this is "rt" */
-  String ext = ".py";
   int utf8 = uu8;
   String report_pathname;
 #endif
+  String ext = ".py";
   char *path;
   int status = 0;
   PyGILState_STATE py_gil;	/* python's GIL */
@@ -135,7 +135,7 @@ execute_script (CString report_name)
 
   path = getdeoptstr ("DEPROGRAMS", ".");
 #if defined(DEADENDS)
-  report_fp = fopenPath (report_name, mode, path);
+  report_fp = fopenPath (report_name, mode, path, ext);
 #else
   report_fp = fopenpath (report_name, mode, path, ext, utf8, &report_pathname);
 #endif

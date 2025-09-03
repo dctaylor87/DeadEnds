@@ -120,7 +120,7 @@ load_gedcom (bool picklist, Database *database)
 		strfree(&filename);
 		return;
 	}
-	fullpath = resolveFile (filename, srcdir);
+	fullpath = resolveFile (filename, srcdir, ".ged");
 
 	ErrorLog *errorLog = createErrorLog ();
 	Database *newDB = selectAndOpenDatabase (&fullpath, srcdir, database, errorLog);
@@ -183,7 +183,7 @@ save_gedcom (Database *database)
 		return false; 
 	}
 
-	fullpath = resolveFile (fname, srcdir);
+	fullpath = resolveFile (fname, srcdir, ".ged");
 	llwprintf(_("Saving database `%s' in file `%s'."), database->name, fullpath);
 
 	write_header (fp);

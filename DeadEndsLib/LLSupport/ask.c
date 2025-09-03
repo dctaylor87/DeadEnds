@@ -212,7 +212,7 @@ ask_for_file_worker (CString mode,
 ask_for_file_try:
 
 	/* try name as given */
-	fp = fopenPath (fname, mode, path);
+	fp = fopenPath (fname, mode, path, ext);
 	if (fp)
 		return fp;
 

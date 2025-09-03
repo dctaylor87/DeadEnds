@@ -168,7 +168,7 @@ main (int argc, char *argv[])
 
   error_log = createErrorLog ();
 #if 1
-  CString resolved_file = resolveFile (cmd_line_db, GEDCOM_search_path);
+  CString resolved_file = resolveFile (cmd_line_db, GEDCOM_search_path, ".ged");
   if (! resolved_file)
     {
       fprintf (stderr, "%s: resolveFile failed to find '%s'\n",

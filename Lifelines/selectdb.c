@@ -55,7 +55,16 @@ selectAndOpenDatabase(CString *dbFilename,
   Database *database;
 
   /* first, we need to find the file */
-  newName = resolveFile (*dbFilename, searchPath);
+  newName = resolveFile (*dbFilename, searchPath, ".ged");
+#if 1
+  if (! newName)
+    {
+      Error *error = createError (systemError, *dbFilename, 0,
+				  "file not found anywhere along search path");
+      addErrorToLog (errorLog, error);
+      return NULL;
+    }
+#else  /* resolveFile now takes a suiffix argument */
   if (! newName)
     {
       /* not found, try adding '.ged', if not present, and searching again */
@@ -83,7 +92,7 @@ selectAndOpenDatabase(CString *dbFilename,
 	  return NULL;
 	}
     }
-
+#endif
   /* newName has the resolved name */
   //  database = gedcomFileToDatabase (newName, errorLog);
   database = getDatabaseFromFile (newName, errorLog);

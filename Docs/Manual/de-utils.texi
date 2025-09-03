@@ -124,9 +124,9 @@ Terminates the program with a message that includes the file name
 
 @section path.h
 
-@defun fopenPath (CString fileName, CString mode, CString searchPath) @arrow{} FILE*
+@defun fopenPath (CString fileName, CString mode, CString searchPath, CString suffix) @arrow{} FILE*
 @end defun
-@defun resolveFile (CString fileName, CString searchPath) @arrow{} CString
+@defun resolveFile (CString fileName, CString searchPath, CString suffix) @arrow{} CString
 @end defun
 @defun pathMatch  (CString path1, CString path2) @arrow{} bool
 @end defun

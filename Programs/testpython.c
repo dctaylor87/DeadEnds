@@ -128,7 +128,7 @@ main (int argc, char *argv[])
     }
   /* XXX insert code to open cmd_line_db XXX */
 
-  cmd_line_db = resolveFile (cmd_line_db, searchpath);
+  cmd_line_db = resolveFile (cmd_line_db, searchpath, ".py");
   if (! cmd_line_db)
     {
       fprintf (stderr, "%s: database not found along search path: '%s'\n",
