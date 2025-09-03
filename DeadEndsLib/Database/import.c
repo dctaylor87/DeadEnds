@@ -26,7 +26,7 @@
 #include "utils.h"
 
 #define gms getMsecondsStr()
-static bool timing = true;
+static bool timing = false;
 bool importDebugging = false;
 
 // getDatabasesFromFiles imports a list of Gedcom files into a List of Databases, one per file.
