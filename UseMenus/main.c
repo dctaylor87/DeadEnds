@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 	if (!gedcomFile) askForString("Enter name of Gedcom file with database", 0, &gedcomFile);
 	if (debugging) fprintf(stderr, "gedcomFile = %s\n", gedcomFile);
 	// Build the Database from the Gedcom file.
-	gedcomFile = resolveFile(gedcomFile, gedcomPath);
+	gedcomFile = resolveFile(gedcomFile, gedcomPath, ".ged");
 	if (debugging) fprintf(stderr, "resolved gedcomFile = %s\n", gedcomFile);
 	ErrorLog* errorLog = createErrorLog();
 	int vcodes = VCclosedKeys | VClineageLinking | VCnamesAndSex;

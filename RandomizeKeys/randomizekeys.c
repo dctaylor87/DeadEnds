@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 	printf("%s: RandomizeKeys begin.\n", getMsecondsStr());
 	getArguments(argc, argv, &gedcomFile);
 	getEnvironment(&searchPath);
-	gedcomFile = resolveFile(gedcomFile, searchPath);
+	gedcomFile = resolveFile(gedcomFile, searchPath, ".ged");
 	if (debugging) printf("Resolved file: %s\n", gedcomFile);
 	// Get the Gedcom records from a file.
 	ErrorLog* log = createErrorLog();
