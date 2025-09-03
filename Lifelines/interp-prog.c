@@ -176,6 +176,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   programParsing = false;
   programRunning = true;
 
+  msg_output(MSG_STATUS, _("Program is running..."));
   runProgram (program, database, file);
 #endif
   /* Clean up and return */
@@ -261,8 +262,9 @@ static
 CString findProgram (CString script, CString searchPath)
 {
   /* first, try script file name as provided */
-  CString fullpath = resolveFile (script, searchPath);
+  CString fullpath = resolveFile (script, searchPath, ".ll");
 
+#if 0				/* resolveFile now takes a suffix argument */
   if (! fullpath)
     {
       /* script file not found as given, check for ".ll" suffix
@@ -280,5 +282,6 @@ CString findProgram (CString script, CString searchPath)
       if (! fullpath)
 	return null;
     }
+#endif
   return (fullpath);
 }
