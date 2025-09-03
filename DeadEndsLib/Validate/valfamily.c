@@ -4,7 +4,7 @@
 //  valfamily.c has the functions that validate family records.
 //
 //  Created by Thomas Wetmore on 18 December 2023.
-//  Last changed on 3 July 2025.
+//  Last changed on 29 August 2025.
 //
 
 #include <stdint.h>
@@ -56,6 +56,7 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 			errorCount++;
 		}
 	ENDHUSBS
+
 	FORWIFES(family, wife, key, index)
 		if (!wife) {
 			int lineNumber = rootLine(family, keymap);
@@ -68,6 +69,7 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 			errorCount++;
 		}
 	ENDWIFES
+
 	FORCHILDREN(family, child, key, n, index)
 	if (!child) {
 			int lineNumber = rootLine(family, keymap);
@@ -81,7 +83,7 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 		}
 	ENDCHILDREN
 
-	// If there were errors above then the following code should not run.
+	// If there are errors the following code should not run.
 	if (errorCount) return false;
 
 	FORHUSBS(family, husband, hkey, index)
@@ -90,18 +92,19 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 		FORFAMSS(husband, fam, fkey, index)
 			if (family == fam) numOccurences++;
 		ENDFAMSS
-		if (numOccurences != 1) {
-		  if (numOccurences == 0)
+		  if (numOccurences == 0) {
 		    sprintf (s, "Husband %s (line %d) lacks a FAMS link to family %s (line %d).",
 			     husband->key, rootLine (husband, keymap),
 			     family->key, rootLine (family, keymap));
-		  else
+		    addErrorToLog (elog, createError (linkageError, name, 0, s));
+		    errorCount++;
+		  } else if (numOccurences > 1) {
 		    sprintf (s, "Husband %s (line %d) has multiple FAMS links to family %s (line %d).",
 			     husband->key, rootLine (husband, keymap),
 			     family->key, rootLine (family, keymap));
 
-		  addErrorToLog (elog, createError (linkageError, name, 0, s));
-		  errorCount++;
+		    addErrorToLog (elog, createError (linkageError, name, 0, s));
+		    errorCount++;
 		}
 	ENDHUSBS
 
@@ -111,12 +114,13 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 		FORFAMSS(wife, fam, fkey, index)
 			if (family == fam) numOccurences++;
 		ENDFAMSS
-		if (numOccurences != 1) {
-		  if (numOccurences == 0)
+		  if (numOccurences == 0) {
 		    sprintf (s, "Wife %s (line %d) lacks a FAMS link to family %s (line %d).",
 			     wife->key, rootLine (wife, keymap),
 			     family->key, rootLine (family, keymap));
-		  else
+		  addErrorToLog (elog, createError (linkageError, name, 0, s));
+		  errorCount++;
+		  } else if (numOccurences > 1) {
 		    sprintf (s, "Wife %s (line %d) has multiple FAMS links to family %s (line %d).",
 			     wife->key, rootLine (wife, keymap),
 			     family->key, rootLine (family, keymap));
@@ -146,11 +150,7 @@ static bool validateFamily(GNode* family, CString name, RecordIndex* index, Inte
 	bool hasChild = CHIL(family) != null;
 	if (!(hasHusb || hasWife || hasChild)) {
 		addErrorToLog(elog, createError(linkageError, name, 0, "Family has no HUSB, WIFE or CHIL links"));
+		errorCount++;
 	}
-	//printf("validate family: %s\n", family->gKey);
-	//  Validate existance of at least one of HUSB, WIFE, CHIL.
-	//  Validate that the HUSBs are male.
-	//  Validate that the WIFEs are female.
-	//  Validate all other links.
-	return true;  // TODO: Deal with the errors properly.
+	return errorCount;
 }

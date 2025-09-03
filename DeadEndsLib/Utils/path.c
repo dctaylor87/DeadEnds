@@ -3,7 +3,7 @@
 // path.c has functions to manipulate UNIX file paths.
 //
 // Created by Thomas Wetmore on 14 December 2022.
-// Last changed on 4 August 2025.
+// Last changed on 2 September 2025.
 
 #include <sys/types.h>
 #include <pwd.h>
@@ -18,7 +18,7 @@
 static bool isPathSeparator (char c);
 
 // resolveFile tries to find a file within a sequence of paths.
-CString resolveFile(CString name, CString path) {
+CString oldResolveFile(CString name, CString path) {
     if (!name || *name == 0) return null;
     if (!path || *path == 0) return strsave(name);
     if (strchr(name, '/') != null) return strsave(name);
@@ -34,10 +34,38 @@ CString resolveFile(CString name, CString path) {
     return null;
 }
 
+/// resolveFile tries to find a file within a colon-separated path list.
+/// If not found, and a suffix is provided, tries again with the suffix appended.
+CString resolveFile(CString name, CString path, CString suffix) {
+
+    if (!name || *name == 0) return null;  // No file name.
+    if (!path || *path == 0) return strsave(name);  // No path.
+    if (strchr(name, '/')) return strsave(name);  // File name is absolute.
+    char buf1[MAXPATHBUFFER];
+    char fullPath[MAXPATHBUFFER];
+
+    // Search path list for original name
+    strcpy(buf1, path);
+    for (char* dir = strtok(buf1, ":"); dir; dir = strtok(NULL, ":")) {
+        snprintf(fullPath, sizeof(fullPath), "%s/%s", dir, name);
+        if (access(fullPath, F_OK) == 0) return strsave(fullPath);
+    }
+    // Try with suffix if provided
+    if (suffix && *suffix != 0) {
+        strcpy(buf1, path);  // Reset buf1 because strtok modifies it
+        String fmt = (*suffix == '.') ? "%s/%s%s" : "%s/%s.%s";
+        for (char* dir = strtok(buf1, ":"); dir; dir = strtok(NULL, ":")) {
+            snprintf(fullPath, sizeof(fullPath), fmt, dir, name, suffix);
+            if (access(fullPath, F_OK) == 0) return strsave(fullPath);
+        }
+    }
+    return null;
+}
+
 // fopenPath attempta to open a file using a path variable.
-FILE *fopenPath(CString name, CString mode, CString path) {
+FILE *fopenPath(CString name, CString mode, CString path, CString suffix) {
     CString str;
-    if (!(str = resolveFile(name, path))) return null;
+    if (!(str = resolveFile(name, path, suffix))) return null;
     FILE *file = fopen(str, mode);
     stdfree(str);
     return file;

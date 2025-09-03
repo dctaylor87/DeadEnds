@@ -3,7 +3,7 @@
 // path.h
 //
 // Created by Thomas Wetmore on 14 December 2022.
-// Last changed 26 July 2024.
+// Last changed 2 September 2024.
 
 #ifndef path_h
 #define path_h
@@ -49,8 +49,8 @@
 
 #endif
 
-FILE *fopenPath(CString fileName, CString mode, CString searchPath);
-CString resolveFile(CString fileName, CString searchPath);
+FILE *fopenPath(CString fileName, CString mode, CString searchPath, CString suffix);
+CString resolveFile(CString fileName, CString searchPath, CString suffix);
 String lastPathSegment(CString fileName);
 bool pathMatch (CString path1, CString path2);
 String pathConcatAllocate (CString dir, CString file);
