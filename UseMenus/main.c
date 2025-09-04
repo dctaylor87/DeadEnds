@@ -4,7 +4,7 @@
 //  main.c is the main program of the UseMenus test program.
 //
 //  Created by Thomas Wetmore on 31 July 2024.
-//  Last changed on 18 August 2025.
+//  Last changed on 2 September 2025.
 //
 
 #include <stdio.h>
