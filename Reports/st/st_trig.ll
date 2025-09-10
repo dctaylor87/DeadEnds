@@ -1,5 +1,5 @@
 /*
- * @progname       st_trig.li
+ * @progname       st_trig.ll
  * @version        0.9 (2008-01-05)
  * @author         Perry Rapp
  * @category       self-test

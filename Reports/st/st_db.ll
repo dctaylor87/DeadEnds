@@ -1,5 +1,5 @@
 /*
- * @progname       st_db.li
+ * @progname       st_db.ll
  * @version        1.26 [of 2005-02-01]
  * @author         Perry Rapp
  * @category       self-test

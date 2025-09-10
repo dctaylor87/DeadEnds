@@ -1,5 +1,5 @@
 /*
- * @progname       st_string_UTF-8.li
+ * @progname       st_string_UTF-8.ll
  * @version        1.1
  * @author         Perry Rapp
  * @category       self-test

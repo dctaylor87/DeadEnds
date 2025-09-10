@@ -1,5 +1,5 @@
 /*
- * @progname       st_string.li
+ * @progname       st_string.ll
  * @version        1.2 of 2005-01-12
  * @author         Perry Rapp
  * @category       self-test

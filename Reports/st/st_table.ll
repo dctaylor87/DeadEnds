@@ -1,5 +1,5 @@
 /*
- * @progname       st_table.li
+ * @progname       st_table.ll
  * @version        1.0 (2005-02-01)
  * @author         Perry Rapp
  * @category       self-test

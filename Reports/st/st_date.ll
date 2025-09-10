@@ -1,5 +1,5 @@
 /*
- * @progname       st_date.li
+ * @progname       st_date.ll
  * @version        1.42 (2007-12-24)
  * @author         Perry Rapp
  * @category       self-test

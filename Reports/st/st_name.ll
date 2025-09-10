@@ -1,5 +1,5 @@
 /*
- * @progname       st_name.li
+ * @progname       st_name.ll
  * @version        1.0
  * @author         Perry Rapp
  * @category       self-test
