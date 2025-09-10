@@ -660,7 +660,7 @@ InterpType interpForeven (PNode* node, Context* context, PValue *pvalue) {
 InterpType interpForothr(PNode *node, Context *context, PValue *pval) {
     SymbolTable* table = context->frame->table;
     RootList* roots = context->database->otherRoots;
-    for (int i = 0; i <= lengthList(roots); i++) {
+    for (int i = 0; i < lengthList(roots); i++) {
         GNode* othr = getListElement(roots, i);
         assignValueToSymbol(context, node->otherIden, PVALUE(PVEvent, uGNode, othr));
         assignValueToSymbol(context, node->countIden, PVALUE(PVInt, uInt, i + 1));
