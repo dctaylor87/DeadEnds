@@ -17,6 +17,7 @@ SELFTEST_REPORTS = st_all.ll  \
 	st_string.li          \
 	st_string_UTF-8.li    \
 	st_table.li           \
+	st_trig.li            \
 	trigtest.ll
 SELFTEST_REFERENCE = st_all.ref st_all_stdout.ref trigtest.ref
 SELFTEST_OUTPUTS =   st_all.out st_all.stdout
