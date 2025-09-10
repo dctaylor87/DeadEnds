@@ -58,10 +58,10 @@ String empstr71 = SS "                                                          
 
 
 ZST qSiddbse      = N_("You must identify a database.");
-ZST qSidldir      = N_("Which file holds the DeadEnds database? (? to list, <return> to cancel.)");
-ZST qSidldrp      = N_("enter path: ");
-ZST qSnodbse      = N_("No DeadEnds database found.");
-ZST qScrdbse      = N_("Do you want to create a database at '%s'?");
+//ZST qSidldir      = N_("Which file holds the DeadEnds database? (? to list, <return> to cancel.)");
+//ZST qSidldrp      = N_("enter path: ");
+//ZST qSnodbse      = N_("No DeadEnds database found.");
+//ZST qScrdbse      = N_("Do you want to create a database at '%s'?");
 //ZST qSbdlkar      = N_("Argument to lock (-l) must be y or n.");
 ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as optional) */
@@ -69,7 +69,7 @@ ZST qSnormls      = N_("Cannot remove last person from family.");
 	/* summary of options (compiled with Finnish as mandatory) */
 //ZST qSusgFinnAlw  = N_("lines [-adklntcuxoCzI] [database]   # Finnish database");
 	/* summary of options (normal compile -- no Finnish support) */
-ZST qSusgNorm     = N_("lines [-adklntcuxoCzI] [database]");
+//ZST qSusgNorm     = N_("lines [-adklntcuxoCzI] [database]");
 
 //ZST qSronlya      = N_("The database is read only; you may not add records.");
 //ZST qSronlye      = N_("The database is read only; you may not change records.");
@@ -111,7 +111,7 @@ ZST qSidcswp      = N_("Identify a parent in the family having children swapped.
 ZST qSidfswp      = N_("Whose families/spouses are to be swapped?");
 ZST qSidprnt      = N_("Identify one of the child's parents, if known.");
 
-ZST qSscnrfn      = N_("Enter pattern to match against refn.");
+//ZST qSscnrfn      = N_("Enter pattern to match against refn.");
 
 ZST qSnotonei     = N_("Please choose from among these people.");
 ZST qSnotonex     = N_("Please choose from among these records.");
@@ -143,7 +143,7 @@ ZST qSnocinf      = N_("There are no children in the database for this family.")
 ZST qSnocofp      = N_("This person has no children in the database.");
 ZST qSnochil      = N_("No such child.");
 ZST qSnopers      = N_("No such person.");
-ZST qSnorec       = N_("No such record.");
+//ZST qSnorec       = N_("No such record.");
 ZST qSnofam       = N_("No such family.");
 ZST qSnosour      = N_("No sources present.");
 ZST qSidsour      = N_("Please choose the source to view.");
@@ -246,11 +246,11 @@ ZST qSdwife       = N_("The families have different wives/mothers; cannot merge.
 ZST qSidpdel      = N_("Who do you want to remove from the database?");
 ZST qSidodel      = N_("What record do you want to remove from the database?");
 ZST qSmklast      = N_("Place the child last in the family.");
-ZST qSabverr      = N_("Error in abbreviations file.");
-ZST qSuoperr      = N_("Error in user options file.");
-ZST qScmperr      = N_("Error in character mapping file.");
-ZST qSsepch       = N_("(Separator is %s)");
-ZST qSaredit      = N_("Do you want to re-edit it?");
+//ZST qSabverr      = N_("Error in abbreviations file.");
+//ZST qSuoperr      = N_("Error in user options file.");
+//ZST qScmperr      = N_("Error in character mapping file.");
+//ZST qSsepch       = N_("(Separator is %s)");
+//ZST qSaredit      = N_("Do you want to re-edit it?");
 
 ZST qSgdpadd      = N_("%s was added to the database.");
 ZST qSgdcadd      = N_("%s was added as a child.");
@@ -276,31 +276,31 @@ ZST qSlstbot      = N_("You are at the bottom of the list.");
 ZST qSlsttop      = N_("You are at the top of the list.");
 ZST qSlstnew      = N_("New persons were added to the current list.");
 
-ZST qSbadttnum    = N_("System error: illegal map code");
-ZST qSnosuchtt    = N_("No such translation table in this database");
+//ZST qSbadttnum    = N_("System error: illegal map code");
+//ZST qSnosuchtt    = N_("No such translation table in this database");
 
 /* GEDCOM file */
 ZST qSgdnadd      = N_("Because of errors the GEDCOM file was not loaded.\n");
-ZST qSdboldk      = N_("No errors; adding records with original keys...");
-ZST qSdbnewk      = N_("No errors; adding records with new keys...");
-ZST qScfoldk      = N_("Use original keys from GEDCOM file?");
-ZST qSproceed     = N_("Proceed?");
+//ZST qSdboldk      = N_("No errors; adding records with original keys...");
+//ZST qSdbnewk      = N_("No errors; adding records with new keys...");
+//ZST qScfoldk      = N_("Use original keys from GEDCOM file?");
+//ZST qSproceed     = N_("Proceed?");
 ZST qSoutarc      = N_("Enter name of output archive file.");
 ZST qSoutfin      = N_("Database `%s' has been saved in `%s'.");
-ZST qSmouttt      = N_("Enter name of translation table file to write");
-ZST qSmintt       = N_("Enter name of translation table file to read");
-ZST qSmisixr      = N_("Line %d: The person defined here has no key: skipped.");
-ZST qSmisfxr      = N_("Line %d: The family defined here has no key.");
+//ZST qSmouttt      = N_("Enter name of translation table file to write");
+//ZST qSmintt       = N_("Enter name of translation table file to read");
+//ZST qSmisixr      = N_("Line %d: The person defined here has no key: skipped.");
+//ZST qSmisfxr      = N_("Line %d: The family defined here has no key.");
 ZST qSmulper      = N_("Lines %d and %d: Person %s is multiply defined: skipped.");
-ZST qSmulfam      = N_("Lines %d and %d: Family %s is multiply defined.");
-ZST qSmatper      = N_("Line %d: Person %s has an incorrect key: skipped.");
-ZST qSmatfam      = N_("Line %d: Family %s has an incorrect key.");
-ZST qSundper      = N_("Person %s is referred to but not defined.");
-ZST qSundfam      = N_("Family %s is referred to but not defined.");
-ZST qSundsrc      = N_("Source %s is referred to but not defined.");
-ZST qSundevn      = N_("Event %s is referred to but not defined.");
-ZST qSbadlev      = N_("Line %d: This line has a level number that is too large.");
-ZST qSnoname      = N_("Line %d: Person defined here has no name.");
+//ZST qSmulfam      = N_("Lines %d and %d: Family %s is multiply defined.");
+//ZST qSmatper      = N_("Line %d: Person %s has an incorrect key: skipped.");
+//ZST qSmatfam      = N_("Line %d: Family %s has an incorrect key.");
+//ZST qSundper      = N_("Person %s is referred to but not defined.");
+//ZST qSundfam      = N_("Family %s is referred to but not defined.");
+//ZST qSundsrc      = N_("Source %s is referred to but not defined.");
+//ZST qSundevn      = N_("Event %s is referred to but not defined.");
+//ZST qSbadlev      = N_("Line %d: This line has a level number that is too large.");
+//ZST qSnoname      = N_("Line %d: Person defined here has no name.");
 #if 0
 String noxref = SS "Line %d: This record has no cross reference value.";
 #endif
@@ -311,10 +311,10 @@ ZST qSextchoos     = N_("<Choose outside this list>");
 ZST qSwhatrpt     = N_("What is the name of the program?");
 ZST qSwhatgedc    = N_("Please enter the name of the GEDCOM file.");
 
-ZST qSwhtout      = N_("What is the name of the output file?");
+//ZST qSwhtout      = N_("What is the name of the output file?");
 ZST qSopt2long    = N_("Malformed configuration file: line too long.");
-ZST qSunsupunix   = N_("Unsupported file encoding (no multibyte encodings except UTF-8).");
-ZST qSunsupuniv    = N_("Unsupported file encoding: %s.");
+//ZST qSunsupunix   = N_("Unsupported file encoding (no multibyte encodings except UTF-8).");
+//ZST qSunsupuniv    = N_("Unsupported file encoding: %s.");
 
 /* misc prompts */
 ZST qSchoostrttl  = N_("Enter string for program");
@@ -331,19 +331,19 @@ ZST qSdefothr     = N_("0 XXXX\n1 REFN");
 /* end new record prototypes */
 
 /* node.c errors */
-ZST qSfileof      = N_("The file is as positioned at EOF.");
-ZST qSreremp      = N_("Line %d: This line is empty; EOF?");
-ZST qSrerlng      = N_("Line %d: This line is too long.");
-ZST qSrernlv      = N_("Line %d: This line has no level number.");
-ZST qSrerinc      = N_("Line %d: This line is incomplete.");
-ZST qSrerbln      = N_("Line %d: This line has a bad link.");
-ZST qSrernwt      = N_("Line %d: This line needs white space before tag.");
-ZST qSrerilv      = N_("Line %d: This line has an illegal level.");
-ZST qSrerwlv      = N_("The record begins at wrong level.");
+//ZST qSfileof      = N_("The file is as positioned at EOF.");
+//ZST qSreremp      = N_("Line %d: This line is empty; EOF?");
+//ZST qSrerlng      = N_("Line %d: This line is too long.");
+//ZST qSrernlv      = N_("Line %d: This line has no level number.");
+//ZST qSrerinc      = N_("Line %d: This line is incomplete.");
+//ZST qSrerbln      = N_("Line %d: This line has a bad link.");
+//ZST qSrernwt      = N_("Line %d: This line needs white space before tag.");
+//ZST qSrerilv      = N_("Line %d: This line has an illegal level.");
+//ZST qSrerwlv      = N_("The record begins at wrong level.");
 
 /* &&begin signals */
 ZST qScoredump    = N_("\nAborting now. Core dump? [y/n]");
-ZST qSprogsig     = N_("Looks like a program was running.\nCheck file %1 around line %2.\n");
+//ZST qSprogsig     = N_("Looks like a program was running.\nCheck file %1 around line %2.\n");
 ZST qSsignal      = N_("signal %d: %s");
 	/* system signal#0 name */
 ZST qSsig00       = N_("SIGNAL 0");
@@ -373,7 +373,7 @@ ZST qSsigunk      = N_("Unknown signal");
 
 /* browse display stuff */
 ZST qSdspl_indi   = N_("person");
-ZST qSdspa_resi   = N_(", of ");
+//ZST qSdspa_resi   = N_(", of ");
 ZST qSdspl_fath   = N_("father");
 ZST qSdspl_moth   = N_("mother");
 ZST qSdspl_spouse = N_("spouse");
@@ -402,10 +402,10 @@ ZST qSdspa_chbr   = N_("cb. ");
 ZST qSdspl_mar    = N_("married: ");
 ZST qSdspl_eng    = N_("engaged: ");
 ZST qSdspl_marc   = N_("marr.ct: ");
-ZST qSdspl_bir    = N_("born: ");
-ZST qSdspl_chr    = N_("bapt: ");
-ZST qSdspl_dea    = N_("died: ");
-ZST qSdspl_bur    = N_("buri: ");
+//ZST qSdspl_bir    = N_("born: ");
+//ZST qSdspl_chr    = N_("bapt: ");
+//ZST qSdspl_dea    = N_("died: ");
+//ZST qSdspl_bur    = N_("buri: ");
 /* &&end display long forms */
 
 /* editing errors */
@@ -469,15 +469,15 @@ ZST qSstaycur     = N_("Return to current record (without adding xref).");
 /* misc */
 ZST qSunksps      = N_("Spouse unknown");
 ZST qSnohist      = N_("No more history");
-ZST qSbadhistcnt  = N_("Bad history count");
-ZST qSbadhistcnt2 = N_("Bad backup history count");
-ZST qSbadhistlen  = N_("Bad history length");
+//ZST qSbadhistcnt  = N_("Bad history count");
+//ZST qSbadhistcnt2 = N_("Bad backup history count");
+//ZST qSbadhistlen  = N_("Bad history length");
 ZST qShistclr     = N_("Delete history (%d entries)?");
-ZST qSdataerr     = N_("Error accessing data");
+//ZST qSdataerr     = N_("Error accessing data");
 ZST qSidhist      = N_("Choose from history");
-ZST qSnofandl     = N_("Cannot combine forceopen (-f) and lock (-l) flags.");
+//ZST qSnofandl     = N_("Cannot combine forceopen (-f) and lock (-l) flags.");
 ZST qSiddefpath   = N_("Default path: ");
-ZST qSmisskeys    = N_("WARNING: missing keys");
+//ZST qSmisskeys    = N_("WARNING: missing keys");
 ZST qSbadkeyptr   = N_("This does not point to another record in the database!");
 ZST qSwhtfname    = N_("enter file name");
 ZST qSwhtfname2   = N_("enter file name: ");
@@ -517,10 +517,10 @@ ZST qSmn_utsave   = N_("s  Save the database in a GEDCOM file");
 ZST qSmn_utread   = N_("r  Read in data from a GEDCOM file");
 ZST qSmn_utgdchoo = N_("R  Pick a GEDCOM file and read in");
 ZST qSmn_utkey    = N_("k  Find a person's key value");
-ZST qSmn_utkpers  = N_("i  Identify a person from key value");
+//ZST qSmn_utkpers  = N_("i  Identify a person from key value");
 ZST qSmn_utdbstat = N_("d  Show database statistics");
 ZST qSmn_utmemsta = N_("m  Show memory statistics");
-ZST qSmn_utplaces = N_("e  Edit the place abbreviation file");
+//ZST qSmn_utplaces = N_("e  Edit the place abbreviation file");
 ZST qSmn_utusropt = N_("o  Edit the user options file");
 
 /* &&end utility menu, begin extra menu */
@@ -536,20 +536,20 @@ ZST qSmn_xxaothr  = N_("5  Add an other record to the database");
 ZST qSmn_xxeothr  = N_("6  Edit other record from the database");
 
 /* &&end utility menu, &&begin translation table menu */
-ZST qSmn_tt_ttl   = N_("Translation Tables");
-ZST qSmn_tt_edit  = N_("e  edit individual tables (in db)");
-ZST qSmn_tt_load  = N_("l  load a table from a file (into db)");
-ZST qSmn_tt_save  = N_("s  save a table to a file (from db)");
-ZST qSmn_tt_exp   = N_("x  export all tables (from db to files)");
-ZST qSmn_tt_imp   = N_("i  import all tables (from files into db)");
-ZST qSmn_tt_dir   = N_("export/import directory:");
+//ZST qSmn_tt_ttl   = N_("Translation Tables");
+//ZST qSmn_tt_edit  = N_("e  edit individual tables (in db)");
+//ZST qSmn_tt_load  = N_("l  load a table from a file (into db)");
+//ZST qSmn_tt_save  = N_("s  save a table to a file (from db)");
+//ZST qSmn_tt_exp   = N_("x  export all tables (from db to files)");
+//ZST qSmn_tt_imp   = N_("i  import all tables (from files into db)");
+//ZST qSmn_tt_dir   = N_("export/import directory:");
 
 /* menus for translation tables */
 ZST qSmn_edttttl  = N_("Which character mapping do you want to edit?");
-ZST qSmn_svttttl  = N_("Which character mapping do you want to save?");
+//ZST qSmn_svttttl  = N_("Which character mapping do you want to save?");
 
 /* not yet implemented choices */
-ZST qSmn_notimpl  = N_("Not implemented yet");
+//ZST qSmn_notimpl  = N_("Not implemented yet");
 
 /* &&begin add menu */
 ZST qSmn_add_ttl  = N_("What do you want to add?");
@@ -577,130 +577,130 @@ ZST qSsts_sca_src = N_("Performing source scan");
 ZST qSsts_sca_non = N_("No records found in scan");
 
 /* &&complex date strings (A=abbrev, B=full)*/
-ZST qSdatea_abtA  = N_("abt %1");
-ZST qSdatea_abtB  = N_("about %1");
-ZST qSdatea_estA  = N_("est %1");
-ZST qSdatea_estB  = N_("estimated %1");
-ZST qSdatea_calA  = N_("cal %1");
-ZST qSdatea_calB  = N_("calculated %1");
-ZST qSdatep_fromA = N_("fr %1");
-ZST qSdatep_fromB = N_("from %1");
-ZST qSdatep_toA   = N_("to %1");
-ZST qSdatep_toB   = N_("to %1");
-ZST qSdatep_frtoA = N_("fr %1 to %2");
-ZST qSdatep_frtoB = N_("from %1 to %2");
-ZST qSdater_befA  = N_("bef %1");
-ZST qSdater_befB  = N_("before %1");
-ZST qSdater_aftA  = N_("aft %1");
-ZST qSdater_aftB  = N_("after %1");
-ZST qSdater_betA  = N_("bet %1 and %2");
-ZST qSdater_betB  = N_("between %1 and %2");
+//ZST qSdatea_abtA  = N_("abt %1");
+//ZST qSdatea_abtB  = N_("about %1");
+//ZST qSdatea_estA  = N_("est %1");
+//ZST qSdatea_estB  = N_("estimated %1");
+//ZST qSdatea_calA  = N_("cal %1");
+//ZST qSdatea_calB  = N_("calculated %1");
+//ZST qSdatep_fromA = N_("fr %1");
+//ZST qSdatep_fromB = N_("from %1");
+//ZST qSdatep_toA   = N_("to %1");
+//ZST qSdatep_toB   = N_("to %1");
+//ZST qSdatep_frtoA = N_("fr %1 to %2");
+//ZST qSdatep_frtoB = N_("from %1 to %2");
+//ZST qSdater_befA  = N_("bef %1");
+//ZST qSdater_befB  = N_("before %1");
+//ZST qSdater_aftA  = N_("aft %1");
+//ZST qSdater_aftB  = N_("after %1");
+//ZST qSdater_betA  = N_("bet %1 and %2");
+//ZST qSdater_betB  = N_("between %1 and %2");
 	/* &&origin/era trailers */
 	/* B.C. = Before Christ (calendar) */
-ZST qSdatetrl_bcA = N_("B.C.");
+//ZST qSdatetrl_bcA = N_("B.C.");
 	/* BC = Before Christ (calendar) */
-ZST qSdatetrl_bcB = N_("BC");
+//ZST qSdatetrl_bcB = N_("BC");
 	/* B.C.E. = Before Common Era (calendar) */
-ZST qSdatetrl_bcC = N_("B.C.E.");
+//ZST qSdatetrl_bcC = N_("B.C.E.");
 	/* BCE. = Before Common Era (calendar) */
-ZST qSdatetrl_bcD = N_("BCE");
+//ZST qSdatetrl_bcD = N_("BCE");
 	/* A.D. = Anno Domini (calendar) */
-ZST qSdatetrl_adA = N_("A.D.");
+//ZST qSdatetrl_adA = N_("A.D.");
 	/* AD = Anno Domini (calendar) */
-ZST qSdatetrl_adB = N_("AD");
+//ZST qSdatetrl_adB = N_("AD");
 	/* C.E. = Common Era (calendar) */
-ZST qSdatetrl_adC = N_("C.E.");
+//ZST qSdatetrl_adC = N_("C.E.");
 	/* CE = Common Era (calendar) */
-ZST qSdatetrl_adD = N_("CE");
+//ZST qSdatetrl_adD = N_("CE");
 	/* &&calendar pics */
 	/* Julian calendar year */
-ZST qScaljul      = N_("%1J");
+//ZST qScaljul      = N_("%1J");
 	/* Hebrew calendar year */
-ZST qScalheb      = N_("%1 HEB");
+//ZST qScalheb      = N_("%1 HEB");
 	/* French Republic calendar year */
-ZST qScalfr       = N_("%1 FR");
+//ZST qScalfr       = N_("%1 FR");
 	/* Roman calendar year -- Anno Urbe Condite ? */
-ZST qScalrom      = N_("%1 AUC");
+//ZST qScalrom      = N_("%1 AUC");
 	/* &&Gregorian/Julian months */
-ZST qSmon_gj1A    = N_("jan");
-ZST qSmon_gj1B    = N_("january");
-ZST qSmon_gj2A    = N_("feb");
-ZST qSmon_gj2B    = N_("february");
-ZST qSmon_gj3A    = N_("mar");
-ZST qSmon_gj3B    = N_("march");
-ZST qSmon_gj4A    = N_("apr");
-ZST qSmon_gj4B    = N_("april");
+//ZST qSmon_gj1A    = N_("jan");
+//ZST qSmon_gj1B    = N_("january");
+//ZST qSmon_gj2A    = N_("feb");
+//ZST qSmon_gj2B    = N_("february");
+//ZST qSmon_gj3A    = N_("mar");
+//ZST qSmon_gj3B    = N_("march");
+//ZST qSmon_gj4A    = N_("apr");
+//ZST qSmon_gj4B    = N_("april");
 /* Put short form for may (don't use **) */
-ZST qSmon_gj5A    = N_("**may");
-ZST qSmon_gj5B    = N_("may");
-ZST qSmon_gj6A    = N_("jun");
-ZST qSmon_gj6B    = N_("june");
-ZST qSmon_gj7A    = N_("jul");
-ZST qSmon_gj7B    = N_("july");
-ZST qSmon_gj8A    = N_("aug");
-ZST qSmon_gj8B    = N_("august");
-ZST qSmon_gj9A    = N_("sep");
-ZST qSmon_gj9B    = N_("september");
-ZST qSmon_gj10A   = N_("oct");
-ZST qSmon_gj10B   = N_("october");
-ZST qSmon_gj11A   = N_("nov");
-ZST qSmon_gj11B   = N_("november");
-ZST qSmon_gj12A   = N_("dec");
-ZST qSmon_gj12B   = N_("december");
+//ZST qSmon_gj5A    = N_("**may");
+//ZST qSmon_gj5B    = N_("may");
+//ZST qSmon_gj6A    = N_("jun");
+//ZST qSmon_gj6B    = N_("june");
+//ZST qSmon_gj7A    = N_("jul");
+//ZST qSmon_gj7B    = N_("july");
+//ZST qSmon_gj8A    = N_("aug");
+//ZST qSmon_gj8B    = N_("august");
+//ZST qSmon_gj9A    = N_("sep");
+//jZST qSmon_gj9B    = N_("september");
+//ZST qSmon_gj10A   = N_("oct");
+//ZST qSmon_gj10B   = N_("october");
+//ZST qSmon_gj11A   = N_("nov");
+//ZST qSmon_gj11B   = N_("november");
+//ZST qSmon_gj12A   = N_("dec");
+//ZST qSmon_gj12B   = N_("december");
 	/* &&Hebrew months */
-ZST qSmon_heb1A   = N_("tsh");
-ZST qSmon_heb1B   = N_("tishri");
-ZST qSmon_heb2A   = N_("csh");
-ZST qSmon_heb2B   = N_("cheshvan");
-ZST qSmon_heb3A   = N_("ksl");
-ZST qSmon_heb3B   = N_("kislev");
-ZST qSmon_heb4A   = N_("tvt");
-ZST qSmon_heb4B   = N_("tevet");
-ZST qSmon_heb5A   = N_("shv");
-ZST qSmon_heb5B   = N_("shevat");
-ZST qSmon_heb6A   = N_("adr");
-ZST qSmon_heb6B   = N_("adar");
-ZST qSmon_heb7A   = N_("ads");
-ZST qSmon_heb7B   = N_("adar sheni");
-ZST qSmon_heb8A   = N_("nsn");
-ZST qSmon_heb8B   = N_("nisan");
-ZST qSmon_heb9A   = N_("iyr");
-ZST qSmon_heb9B   = N_("iyar");
-ZST qSmon_heb10A  = N_("svn");
-ZST qSmon_heb10B  = N_("sivan");
-ZST qSmon_heb11A  = N_("tmz");
-ZST qSmon_heb11B  = N_("tamuz");
-ZST qSmon_heb12A  = N_("aav");
-ZST qSmon_heb12B  = N_("av");
-ZST qSmon_heb13A  = N_("ell");
-ZST qSmon_heb13B  = N_("elul");
+//ZST qSmon_heb1A   = N_("tsh");
+//ZST qSmon_heb1B   = N_("tishri");
+//ZST qSmon_heb2A   = N_("csh");
+//ZST qSmon_heb2B   = N_("cheshvan");
+//ZST qSmon_heb3A   = N_("ksl");
+//ZST qSmon_heb3B   = N_("kislev");
+//ZST qSmon_heb4A   = N_("tvt");
+//ZST qSmon_heb4B   = N_("tevet");
+//ZST qSmon_heb5A   = N_("shv");
+//ZST qSmon_heb5B   = N_("shevat");
+//ZST qSmon_heb6A   = N_("adr");
+//ZST qSmon_heb6B   = N_("adar");
+//ZST qSmon_heb7A   = N_("ads");
+//ZST qSmon_heb7B   = N_("adar sheni");
+//ZST qSmon_heb8A   = N_("nsn");
+//ZST qSmon_heb8B   = N_("nisan");
+//ZST qSmon_heb9A   = N_("iyr");
+//ZST qSmon_heb9B   = N_("iyar");
+//ZST qSmon_heb10A  = N_("svn");
+//ZST qSmon_heb10B  = N_("sivan");
+//ZST qSmon_heb11A  = N_("tmz");
+//ZST qSmon_heb11B  = N_("tamuz");
+//ZST qSmon_heb12A  = N_("aav");
+//ZST qSmon_heb12B  = N_("av");
+//ZST qSmon_heb13A  = N_("ell");
+//ZST qSmon_heb13B  = N_("elul");
 	/* &&French Republic months */
-ZST qSmon_fr1A    = N_("vend");
-ZST qSmon_fr1B    = N_("vendemiaire");
-ZST qSmon_fr2A    = N_("brum");
-ZST qSmon_fr2B    = N_("brumaire");
-ZST qSmon_fr3A    = N_("frim");
-ZST qSmon_fr3B    = N_("frimaire");
-ZST qSmon_fr4A    = N_("nivo");
-ZST qSmon_fr4B    = N_("nivose");
-ZST qSmon_fr5A    = N_("pluv");
-ZST qSmon_fr5B    = N_("pluviose");
-ZST qSmon_fr6A    = N_("vent");
-ZST qSmon_fr6B    = N_("ventose");
-ZST qSmon_fr7A    = N_("germ");
-ZST qSmon_fr7B    = N_("germinal");
-ZST qSmon_fr8A    = N_("flor");
-ZST qSmon_fr8B    = N_("floreal");
-ZST qSmon_fr9A    = N_("prai");
-ZST qSmon_fr9B    = N_("prairial");
-ZST qSmon_fr10A   = N_("mess");
-ZST qSmon_fr10B   = N_("messidor");
-ZST qSmon_fr11A   = N_("ther");
-ZST qSmon_fr11B   = N_("thermidor");
-ZST qSmon_fr12A   = N_("fruc");
-ZST qSmon_fr12B   = N_("fructidor");
-ZST qSmon_fr13A   = N_("comp");
-ZST qSmon_fr13B   = N_("jour_complementairs");
+//ZST qSmon_fr1A    = N_("vend");
+//ZST qSmon_fr1B    = N_("vendemiaire");
+//ZST qSmon_fr2A    = N_("brum");
+//ZST qSmon_fr2B    = N_("brumaire");
+//ZST qSmon_fr3A    = N_("frim");
+//ZST qSmon_fr3B    = N_("frimaire");
+//ZST qSmon_fr4A    = N_("nivo");
+//ZST qSmon_fr4B    = N_("nivose");
+//ZST qSmon_fr5A    = N_("pluv");
+//ZST qSmon_fr5B    = N_("pluviose");
+//ZST qSmon_fr6A    = N_("vent");
+//ZST qSmon_fr6B    = N_("ventose");
+//ZST qSmon_fr7A    = N_("germ");
+//ZST qSmon_fr7B    = N_("germinal");
+//ZST qSmon_fr8A    = N_("flor");
+//ZST qSmon_fr8B    = N_("floreal");
+//ZST qSmon_fr9A    = N_("prai");
+//ZST qSmon_fr9B    = N_("prairial");
+//ZST qSmon_fr10A   = N_("mess");
+//ZST qSmon_fr10B   = N_("messidor");
+//ZST qSmon_fr11A   = N_("ther");
+//ZST qSmon_fr11B   = N_("thermidor");
+//ZST qSmon_fr12A   = N_("fruc");
+//ZST qSmon_fr12B   = N_("fructidor");
+//ZST qSmon_fr13A   = N_("comp");
+//ZST qSmon_fr13B   = N_("jour_complementairs");
 
 /* Copyright, warranty, contact information, etc. */
 ZST qSgen_copyright = N_("Copyright (C) 1991-2024 Thomas T. Wetmore IV and contributors.");
