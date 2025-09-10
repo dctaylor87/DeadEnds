@@ -28,7 +28,7 @@
 static bool validatePerson(GNode*, CString name, RecordIndex*, IntegerTable*, ErrorLog*);
 static bool hasValidNameGNode(GNode* root, GNode** pname);
 static bool hasValidSexGNode(GNode* root, GNode** psex);
-static bool importDebugging = true;
+static bool importDebugging = false;
 
 // validatePersons validates the persons in a Database.
 void validatePersons(RecordIndex* index, CString name, IntegerTable* keymap, ErrorLog* elog) {
