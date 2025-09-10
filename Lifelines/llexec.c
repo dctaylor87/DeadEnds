@@ -34,6 +34,7 @@
 #include "config.h"
 #endif
 
+//#include <mcheck.h>
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -144,6 +145,9 @@ main (int argc, char **argv)
 	String configfile=0;
 	CString crashlog=NULL;
 	//	bool have_python_scripts = false;
+
+	//	if (mcheck_pedantic(0) != 0)
+	//	  fprintf(stderr, "mcheck_pedantic failed\n");
 
 	current_uiio = uiio_stdio;
 

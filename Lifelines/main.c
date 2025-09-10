@@ -35,6 +35,7 @@
 #include "config.h"
 #endif
 
+//#include <mcheck.h>
 #include <ansidecl.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -144,9 +145,12 @@ main (int argc, char **argv)
 	//	String progout=NULL;
 	String configfile=0;
 	CString crashlog=NULL;
-	int i=0;
+	//int i=0;
 	//	bool have_python_scripts = false;
 	UIIO *saved_uiio = NULL;
+
+	//	if (mcheck_pedantic(0) != 0)
+	//	  fprintf(stderr, "mcheck_pedantic failed\n");
 
 	current_uiio = uiio_curses;
 
@@ -265,10 +269,12 @@ prompt_for_db:
 	if (! currentDatabase)
 	  {
 	    showErrorLog (errorLog);
-	    deleteList ((List *)errorLog);
+	    deleteErrorLog (errorLog);
 	    alldone = 0;
 	    goto finish;
 	  }
+	deleteErrorLog (errorLog);
+	errorLog = 0;
 
 	if (! dbrequested || (*dbrequested == 0))
 	  goto finish;
