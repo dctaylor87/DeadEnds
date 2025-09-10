@@ -149,7 +149,7 @@ stdio_outputv (void *data, MSG_LEVEL level, CString fmt, va_list args)
     }
   vfprintf (file, fmt, args);
   /* over 99% of messages do not have a trailing newline! */
-  fputc ('\n', file);
+  //fputc ('\n', file);
 }
 
 bool
