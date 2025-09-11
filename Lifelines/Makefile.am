@@ -39,7 +39,7 @@ llexec_SOURCES = llexec.c \
 
 PYTHON_LIBS = @PYTHON_LIBS@
 
-llines_LDADD = ../DeadEndsLib/Python/libpyllines.a \
+llines_LDADD = @LIBPYLLINES@ \
 	../DeadEndsLib/LLSupport/libllsupport.a \
 	../DeadEndsLib/UI/libui.a \
 	 ../DeadEndsLib/Parser/libparser.a \
@@ -50,7 +50,7 @@ llines_LDADD = ../DeadEndsLib/Python/libpyllines.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a ../DeadEndsLib/Utils/libutils.a
 
-llexec_LDADD = ../DeadEndsLib/Python/libpyllines.a \
+llexec_LDADD = @LIBPYLLINES@ \
 	../DeadEndsLib/UI/libui.a \
 	../DeadEndsLib/LLSupport/libllsupport.a \
 	../DeadEndsLib/Parser/libparser.a \
