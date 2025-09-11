@@ -48,7 +48,6 @@
 #include "messages.h"
 #include "gedcom.h"
 #include "lineage.h"
-#include "llpy-externs.h"	/* XXX need to move __llpy_key_to_record elsewhere XXX */
 #include "ll-node.h"
 #include "de-strings.h"
 
