@@ -279,9 +279,9 @@ int browse_2fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 				node1 = familyToHusband (nztop(current1), currentDatabase->recordIndex);
 				node2 = familyToHusband (nztop(current2), currentDatabase->recordIndex);
 #if defined(DEADENDS)
-				for (fam1 = node1; fam1; fam1 = fam1->parent)
+				for (fam1 = node1; fam1 && fam1->parent; fam1 = fam1->parent)
 				  ;
-				for (fam2 = node2; fam2; fam2 = fam2->parent)
+				for (fam2 = node2; fam2 && fam2->parent; fam2 = fam2->parent)
 				  ;
 #else
 				fam1 = _llpy_node_to_record (node1, currentDatabase);
