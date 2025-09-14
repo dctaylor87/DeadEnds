@@ -6,7 +6,7 @@
 //  or call a more specific function.
 //
 //  Created by Thomas Wetmore on 9 December 2022.
-//  Last changed on 2 September 2025.
+//  Last changed on 10 September 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
