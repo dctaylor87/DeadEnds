@@ -31,6 +31,7 @@
 
 static bool debugging = false;
 static void parseFile(CString file, CString path, ErrorLog *errorLog); // Private function defined below.
+static bool skipBOM (FILE *file, ErrorLog *errorLog, CString fileName); // Skip BOM if present
 
 // Shared global variables. Memory ownership of the first four are taken over by a Program object.
 SymbolTable* globals; // Global symbol table.
@@ -111,8 +112,29 @@ static void parseFile(CString fileName, CString searchPath, ErrorLog *errorLog) 
       Perrors++;
       return;
     }
+    if (! skipBOM (currentFile, errorLog, fileName))
+      return;
+
     if (debugging) printf("Parsing %s.\n", fileName);
     curLine = 1;
     yyparse(errorLog); // Call the Yacc parser.
     fclose(currentFile);
+}
+
+static bool skipBOM (FILE *file, ErrorLog *errorLog, CString fileName)
+{
+  unsigned char bom[3];
+  if (fread (bom, 1, 3, file) != 3)
+    {
+      Error *error = createError (systemError, fileName, 0,
+				  "cannot read three bytes from file");
+      addErrorToLog (errorLog, error);
+      Perrors++;
+      return false;
+    }
+  if ((bom[0] != 0xef) || (bom[1] != 0xbb) || (bom[2] != 0xbf))
+    /* not bom, seek back */
+    fseek (file, -3, SEEK_CUR);
+
+  return true;
 }
