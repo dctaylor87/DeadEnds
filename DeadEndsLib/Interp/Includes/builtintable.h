@@ -84,6 +84,7 @@ extern PValue __incr(PNode*, Context*, bool*);
 extern PValue __index(PNode*, Context*, bool*);
 extern PValue __indi(PNode*, Context*, bool*);
 extern PValue __indiset(PNode*, Context*, bool*);
+extern PValue __inlist(PNode*, Context*, bool*);
 extern PValue __inode(PNode*, Context*, bool*);
 extern PValue __insert(PNode*, Context*, bool*);
 extern PValue __inset(PNode*, Context*, bool*);
