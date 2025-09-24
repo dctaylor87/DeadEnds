@@ -11,6 +11,7 @@ libdatatypes_a_SOURCES = \
 	hashtable.c \
 	sort.c \
 	set.c \
+	sequence.c \
 	stringset.c \
 	stringtable.c \
 	integertable.c \
@@ -18,6 +19,7 @@ libdatatypes_a_SOURCES = \
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes
 
 AM_CFLAGS = -fanalyzer

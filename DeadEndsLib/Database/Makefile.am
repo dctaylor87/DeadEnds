@@ -10,7 +10,6 @@ noinst_LIBRARIES = libdatabase.a
 
 libdatabase_a_SOURCES = \
 	database.c \
-	nameindex.c \
 	recordindex.c \
 	import.c \
 	removeops.c \

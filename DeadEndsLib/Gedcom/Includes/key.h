@@ -1,0 +1,10 @@
+extern GNode *keyToEventRecord(CString key, Database *database);
+extern GNode *keyToOtherRecord(CString key, Database *database);
+extern GNode *keyToSourceRecord(CString key, Database *database);
+extern GNode* keyToEvent(CString key, RecordIndex* index);
+extern GNode* keyToFamily(CString key, RecordIndex* index);
+extern GNode* keyToFamilyRecord(CString key, Database *database);
+extern GNode* keyToOther(CString key, RecordIndex* index);
+extern GNode* keyToPerson(CString key, RecordIndex* index);
+extern GNode* keyToPersonRecord(CString key, Database *database);
+extern GNode* keyToSource(CString key, RecordIndex* index);

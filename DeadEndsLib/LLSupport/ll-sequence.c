@@ -110,27 +110,3 @@ getAllRefns (Database *database)
 
   return seq;
 }
-
-/* familyToSpouses -- Create sequence of spouses of family */
-
-Sequence *
-familyToSpouses (GNode *fam, Database *database)
-{
-  Sequence *seq=0;
-  int len = 0;
-
-  if (!fam)
-    return NULL;
-  seq = createSequence (database->recordIndex);
-
-  FORFAMSPOUSES(fam, spouse, database->recordIndex)
-    len++;
-    appendToSequence(seq, __key, spouse);
-  ENDFAMSPOUSES
-
-  if (! len) {
-    deleteSequence(seq);
-    seq=NULL;
-  }
-  return seq;
-}

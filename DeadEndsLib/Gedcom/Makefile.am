@@ -12,12 +12,15 @@ libgedcom_a_SOURCES = \
 	gnode.c \
 	gnodeindex.c \
 	gnodelist.c \
+	key.c \
 	lineage.c \
 	name.c \
+	nameindex.c \
 	nodeutls.c \
 	place.c \
 	readnode.c \
 	rootlist.c \
+	seqlineage.c \
 	splitjoin.c \
 	temp-nodes.c \
 	writenode.c

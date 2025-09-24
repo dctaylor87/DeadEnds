@@ -28,7 +28,6 @@ libinterp_a_SOURCES = \
 	pvalue.c \
 	pvaluelist.c \
 	pvaluetable.c \
-	sequence.c \
 	symboltable.c \
 	builtinlist.c \
 	rassa.c

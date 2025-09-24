@@ -94,6 +94,7 @@
 		__node = nsibling(__node);\
 	}}
 
+#if 0  /* moved to gedcom.h */
 /* FORFAMSPOUSES -- iterate over all spouses in one family (All
    husbands and wives).  */
 
@@ -118,3 +119,4 @@
 		}\
 		__node = nsibling(__node);\
 	}}
+#endif

@@ -153,6 +153,31 @@ int compareRecordKeys(CString, CString);  // gedcom.c
     }\
 }
 
+// FORFAMSPOUSES -- iterate over all spouses in one family (All
+// husbands and wives).
+
+#define FORFAMSPOUSES(fam,spouse,index)	\
+	{\
+	GNode *__node = nchild(fam);	\
+	GNode *spouse=0;\
+	CString __key=0;\
+	while (__node) {\
+		if (!eqstr(ntag(__node), "HUSB") && !eqstr(ntag(__node), "WIFE")) {\
+			__node = nsibling(__node);\
+			continue;\
+		}\
+		__key = nval(__node);\
+		if (!__key || !(spouse = keyToPerson(__key, index))) {	\
+			__node = nsibling(__node);\
+			continue;\
+		}\
+		{
+
+#define ENDFAMSPOUSES \
+		}\
+		__node = nsibling(__node);\
+	}}
+
 // FORSPOUSES / ENDSPOUSES iterates over a person's spouses.
 #define FORSPOUSES(indi, spouse, fam, num, index)\
 {\
