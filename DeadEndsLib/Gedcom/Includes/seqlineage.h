@@ -8,6 +8,7 @@ Sequence* personToMothers(GNode* person, RecordIndex*);
 Sequence* familyToChildren(GNode* family, RecordIndex*);
 Sequence* familyToFathers(GNode* family, RecordIndex*);
 Sequence* familyToMothers(GNode* family, RecordIndex*);
+Sequence* familyToSpouses (GNode *fam, Database *database);
 Sequence* personToSpouses(GNode* person, RecordIndex*);
 Sequence* personToFamilies(GNode* person, bool, RecordIndex*);
 Sequence* nameToSequence(CString name, RecordIndex*, NameIndex*);
