@@ -27,6 +27,7 @@
 #include "name.h"
 #include "py-messages.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "nodeutils.h"
 #include "ui.h"
 #include "xref.h"

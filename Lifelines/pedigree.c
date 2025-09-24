@@ -35,6 +35,7 @@
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "ask.h"
 #include "llinesi.h"
 #include "errors.h"

@@ -25,6 +25,7 @@
 #include "place.h"
 #include "builtintable.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "gedcom.h"
 
 #include "ask.h"

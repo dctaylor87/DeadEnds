@@ -16,6 +16,7 @@
 #include "integertable.h"
 #include "list.h"
 #include "set.h"
+#include "sequence.h"
 #include "stringset.h"
 #include "stringtable.h"
 
@@ -27,13 +28,13 @@
 #include "gnodelist.h"
 #include "import.h"
 #include "parse.h"
+#include "seqlineage.h"
 
 // Programming language engine
 #include "pnode.h"
 #include "functiontable.h"
 #include "interp.h"
 #include "pvalue.h"
-#include "sequence.h"
 
 // Context and database
 #include "context.h"

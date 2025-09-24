@@ -48,6 +48,7 @@
 #include "rfmt.h"
 #include "database.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "errors.h"
 #include "ask.h"
 #include "feedback.h"

@@ -22,6 +22,7 @@
 #include "import.h"
 #include "name.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "validate.h"
 
 #define gms getMsecondsStr()

@@ -12,25 +12,14 @@
 #include <stdint.h>
 
 #include "standard.h"
-//#include "database.h"
 #include "gedcom.h"
 #include "gnode.h"
-//#include "functiontable.h"
 #include "hashtable.h"
-//#include "pnode.h"
-//#include "interp.h"
-//#include "lineage.h"
 #include "list.h"
-//#include "name.h"
-//#include "refnindex.h"
+#include "name.h"
 #include "sequence.h"
-//#include "splitjoin.h"
 #include "sort.h"
 #include "stringtable.h"
-//#include "writenode.h"
-
-//#include "pnode.h"
-//#include "database.h"
 
 //static bool debugging = false;
 // keyGetKey is the getKey function that returns the key of a SequenceEl.

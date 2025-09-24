@@ -26,6 +26,7 @@
 #include "py-messages.h"
 #include "ll-node.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "ui.h"
 #include "xref.h"
 #include "ll-sequence.h"

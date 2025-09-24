@@ -25,6 +25,7 @@
 #include "pvalue.h"
 #include "recordindex.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "standard.h"
 #include "symboltable.h"
 

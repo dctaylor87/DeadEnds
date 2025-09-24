@@ -62,6 +62,7 @@
 #include "codesets.h"
 #include "de-strings.h"
 #include "ui.h"
+#include "curses-ui.h"
 
 /*********************************************
  * local function prototypes
