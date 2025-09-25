@@ -194,15 +194,14 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
   for (PNode *arg = pnode->arguments; arg; arg = arg->next)
     {
       count++;
-      PValue str = evaluate (arg, context, errflg);
-      if (*errflg || (str.type != PVString))
+      String str = evaluateString (arg, context, errflg);
+      if (*errflg)
 	{
 	  *errflg = true;
-	  printf("arg %d is of type %d\n", count, str.type);
 	  scriptError (pnode, "argument number %d to print is not a string", count);
 	  return nullPValue;
 	}
-      llwprintf ("%s", str.value.uString);
+      llwprintf ("%s", str);
     }
   return nullPValue;
 }
