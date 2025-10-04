@@ -213,7 +213,10 @@ static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
     {
       PyObject *item = PyList_GetItem(choices, ndx);
       if (! item)
-	return NULL;
+	{
+	  stdfree (strings);
+	  return NULL;
+	}
       PyTuple_SetItem (tuple, 0, item);
       PyArg_ParseTuple (tuple, "s", &c_string);
       strings[ndx] = c_string;

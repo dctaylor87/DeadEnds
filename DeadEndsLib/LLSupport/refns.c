@@ -25,7 +25,6 @@
 #include "locales.h"
 #include "lloptions.h"
 #include "xref.h"
-#include "llpy-externs.h"	/* XXX */
 
 struct tag_node_iter {
   GNode *start;

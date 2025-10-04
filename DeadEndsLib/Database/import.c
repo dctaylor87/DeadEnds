@@ -55,6 +55,13 @@ Database* getDatabaseFromFile(CString path, ErrorLog* errlog) {
 	  deleteHashTable (keymap);
 	  return null;
 	}
+	if (! records) {
+	  Error *error = createError (systemError, path, 0,
+				      "getRecordListFromFile return null without creating an error entry");
+	  addErrorToLog (errlog, error);
+	  deleteHashTable (keymap);
+	  return null;
+	}
     if (timing) printf("%s: getDatabaseFromFile: record list created\n", gms);
     checkKeysAndReferences(records, path, keymap, errlog);
     if (lengthList(errlog) != numErrors) {

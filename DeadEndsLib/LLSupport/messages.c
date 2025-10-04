@@ -301,9 +301,7 @@ ZST qSmulper      = N_("Lines %d and %d: Person %s is multiply defined: skipped.
 //ZST qSundevn      = N_("Event %s is referred to but not defined.");
 //ZST qSbadlev      = N_("Line %d: This line has a level number that is too large.");
 //ZST qSnoname      = N_("Line %d: Person defined here has no name.");
-#if 0
-String noxref = SS "Line %d: This record has no cross reference value.";
-#endif
+//String noxref = SS "Line %d: This record has no cross reference value.";
 
 	/* Option at bottom of list, if none in list are desired */
 ZST qSextchoos     = N_("<Choose outside this list>");

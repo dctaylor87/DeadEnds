@@ -61,6 +61,8 @@ bool isEmptyList(List *list) {
 // copyList creates a copy of a List; requires a copy function to make copies of elements.
 List* copyList(List* list, void* (*copyFunc)(void*)) {
 	List* copy = createList(list->getKey, list->compare, list->delete, list->sorted);
+	if (! copy)
+	  fatal ("call to createList failed");
 	copy->isSorted = list->isSorted;
 	Block* oblock = &list->block;
 	Block* nblock = &copy->block;

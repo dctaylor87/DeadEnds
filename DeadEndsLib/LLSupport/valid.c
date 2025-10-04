@@ -155,7 +155,8 @@ bad2:
  * Should be replaced by valid_fam(RECORD,...) ?
  *=============================*/
 bool
-valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0, Database *database)
+valid_fam_tree (GNode *fam1, String *pmsg, GNode *fam0,
+		Database *database ATTRIBUTE_UNUSED)
 {
 	GNode *refn0, *husb0, *wife0, *chil0, *body0;
 	GNode *refn1, *husb1, *wife1, *chil1, *body1;
@@ -243,7 +244,8 @@ valid_node_type (GNode *node, char ntype, String *pmsg, GNode *node0, Database *
  *  orig:  [IN]  SOUR node to match 
  *====================================*/
 bool
-valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Database *database)
+valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig,
+		 Database *database ATTRIBUTE_UNUSED)
 {
 	*pmsg = NULL;
 	if (!node) {
@@ -271,7 +273,8 @@ valid_sour_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Databa
  *  orig:  [IN]  EVEN node to match
  *====================================*/
 bool
-valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Database *database)
+valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig,
+		 Database *database ATTRIBUTE_UNUSED)
 {
 	*pmsg = NULL;
 	if (!node) {
@@ -299,7 +302,8 @@ valid_even_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Databa
  *  orig:  [IN]  OTHR node to match
  *====================================*/
 bool
-valid_othr_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig, Database *database)
+valid_othr_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig,
+		 Database *database ATTRIBUTE_UNUSED)
 {
 	*pmsg = NULL;
 	if (!node) {

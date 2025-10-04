@@ -119,6 +119,8 @@ bool isInSortedBlock(Block* block, CString key, CString(*getKey)(const void*),
 // copyBlock creates and returns a copy of a Block.
 Block *copyBlock(Block *block, void*(*copyfunc)(void*)) {
 	Block* copy = createBlock();
+	if (! copy)
+	  fatal ("call to createBlock failed");
 	void** els = block->elements;
 	for (int i = 0; i < block->length; i++) {
 		appendToBlock(copy, copyfunc(els[i]));

@@ -276,9 +276,7 @@ extern ZST qSundsrc;      /* "Source %s is referred to but not defined." */
 extern ZST qSundevn;      /* "Event %s is referred to but not defined." */
 extern ZST qSbadlev;      /* "Line %d: This line has a level number that is too large." */
 extern ZST qSnoname;      /* "Line %d: Person defined here has no name." */
-#if 0
-String noxref = SS "Line %d: This record has no cross reference value.";
-#endif
+//String noxref = SS "Line %d: This record has no cross reference value.";
 
 	/* Option at bottom of list, if none in list are desired */
 extern ZST qSextchoos;     /* "<Choose outside this list>" */

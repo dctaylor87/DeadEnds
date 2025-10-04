@@ -380,14 +380,17 @@ PValue __VALUEOF(PNode* pnode, Context* context, bool *errflg) {
 // __SHOWSTACK prints the runtime stack.
 // usage: showstack()
 extern void showRuntimeStack(Context*, PNode*);
-PValue __SHOWSTACK(PNode* pnode, Context* context, bool *errflg) {
+PValue __SHOWSTACK(PNode* pnode, Context* context,
+		   bool *errflg ATTRIBUTE_UNUSED) {
     showRuntimeStack(context, pnode);
     return nullPValue;
 }
 
 /// Prints the current frame of the run time stack.
 // usage: showframe()
-PValue __SHOWFRAME(PNode* pnode, Context* context, bool* errflg) {
+PValue __SHOWFRAME(PNode* pnode ATTRIBUTE_UNUSED,
+		   Context* context,
+		   bool* errflg ATTRIBUTE_UNUSED) {
     showFrame(context->frame);
     return nullPValue;
 }

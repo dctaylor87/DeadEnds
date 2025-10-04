@@ -26,9 +26,15 @@ GedPath* buildGedPath(CString string) {
 	String token = strtok(expression, "->"); // First component.
 	while (token) {
 		GedPath* path = createGedPath();
+		if (! path)
+		  fatal ("call to createGedPath failed");
 		int length = (int) strlen(token);
 		if (token[length - 1] == '*') { // All component
+			String oldToken = token;
 			token = strndup(token, length - 1);
+			if (! token)
+			  fatal ("call to strndup failed");
+			stdfree(oldToken);
 			path->all = true;
 		}
 		if (eqstr("ANY", token)) {
