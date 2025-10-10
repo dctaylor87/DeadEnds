@@ -10,12 +10,13 @@
 //  usage: gensexpr -s scriptfile
 //
 //  Created by Thomas Wetmore on 4 March 2025.
-//  Last changed on 18 August 2025.
+//  Last changed on 10 October 2025.
 //
 
 #include <stdint.h>
 #include <stdio.h>
 #include "context.h"
+#include "errors.h"
 #include "hashtable.h"
 #include "list.h"
 #include "parse.h"
@@ -23,7 +24,6 @@
 #include "functiontable.h"
 #include "symboltable.h"
 #include "standard.h"
-#include "errors.h"
 #include "interp.h"
 #include "frame.h"
 

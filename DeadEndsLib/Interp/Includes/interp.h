@@ -4,7 +4,7 @@
 //  interp.h is the header file for the DeadEnds script interpreter.
 //
 //  Created by Thomas Wetmore on 8 December 2022.
-//  Last changed on 2 September 2025.
+//  Last changed on 10 October 2025.
 //
 
 #ifndef interp_h
@@ -18,6 +18,8 @@ typedef struct File File;
 typedef struct Frame Frame;
 typedef struct GNode GNode;
 typedef struct HashTable SymbolTable;
+typedef struct List List;
+typedef List ErrorLog;
 typedef struct PNode PNode;
 typedef struct PValue PValue;
 typedef struct Script Script;

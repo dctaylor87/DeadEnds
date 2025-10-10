@@ -4,7 +4,7 @@
 //  parse.c contains two functions, parseProgram and parseFile, which parse DeadEnds scripts.
 //
 //  Created by Thomas Wetmore on 4 January 2023.
-//  Last changed on 13 September 2025.
+//  Last changed on 10 October 2025.
 //
 
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
@@ -30,7 +30,7 @@
 //#include "refnindex.h"
 
 static bool debugging = false;
-static void parseFile(CString file, CString path, ErrorLog *errorLog); // Private function defined below.
+static void parseFile(CString file, CString path, ErrorLog *errorLog);
 static bool skipBOM (FILE *file, ErrorLog *errorLog, CString fileName); // Skip BOM if present
 
 // Shared global variables. Memory ownership of the first four are taken over by a Program object.
@@ -121,6 +121,7 @@ static void parseFile(CString fileName, CString searchPath, ErrorLog *errorLog) 
     fclose(currentFile);
 }
 
+// Handle the rare case where a Gedcom
 static bool skipBOM (FILE *file, ErrorLog *errorLog, CString fileName)
 {
   unsigned char bom[3];
