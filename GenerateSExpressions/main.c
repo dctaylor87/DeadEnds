@@ -10,11 +10,12 @@
 //  usage: gensexpr -s scriptfile
 //
 //  Created by Thomas Wetmore on 4 March 2025.
-//  Last changed on 18 August 2025.
+//  Last changed on 10 October 2025.
 //
 
 #include <stdio.h>
 #include "context.h"
+#include "errors.h"
 #include "hashtable.h"
 #include "list.h"
 #include "parse.h"
@@ -44,7 +45,8 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "scriptFile is %s\n", scriptFile);
     fprintf(stderr, "scriptPath is %s\n", scriptPath);
 	// Parse the script into PNode trees.
-	Program* program = parseProgram(scriptFile, scriptPath);
+    ErrorLog* errorLog = createErrorLog();
+	Program* program = parseProgram(scriptFile, scriptPath, errorLog);
 	fprintf(stderr, "%s: Script parsed.\n", getMsecondsStr());
 	// Generate S-Expressions from the PNode trees.
 	genSExpressions(program);

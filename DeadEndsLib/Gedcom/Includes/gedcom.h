@@ -49,7 +49,7 @@ int compareRecordKeys(String, String);  // gedcom.c
 	String key = null;\
 	while (__node) {\
 		key = __node->value;\
-		childd = keyToPerson(__node->value, index);\
+		childd = keyToPerson(key, index);\
 		ASSERT(childd);\
 		num++;\
 		{

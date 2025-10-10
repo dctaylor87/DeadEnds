@@ -4,12 +4,13 @@
 //  parse.c contains two functions, parseProgram and parseFile, which parse DeadEnds scripts.
 //
 //  Created by Thomas Wetmore on 4 January 2023.
-//  Last changed on 13 September 2025.
+//  Last changed on 10 October 2025.
 //
 
 #include <stdarg.h>
 #include <unistd.h>
 #include "context.h"
+#include "errors.h"
 #include "functiontable.h"
 #include "gedcom.h"
 #include "hashtable.h"
@@ -26,7 +27,7 @@
 
 static bool debugging = false;
 extern bool programParsing;
-static void parseFile(String, String);
+static void parseFile(String, String, ErrorLog*);
 
 // Shared global variables. Memory ownership of the first four are taken over by a Program object.
 SymbolTable* globals; // Global symbol table.
@@ -42,7 +43,7 @@ int curLine = 1; // Line number in current file.
 
 // parseProgram parses a DeadEnds program and returns a Program object to be interpreted.
 static void delete(void* a) { stdfree(a); }
-Program* parseProgram(String fileName, String searchPath) {
+Program* parseProgram(String fileName, String searchPath, ErrorLog* errorLog) {
 
     parsedFiles = createList(null, null, delete, false);  // Parsed file names.
     pendingFiles = createList(null, null, delete, false); // Queue of pending files.
@@ -61,7 +62,7 @@ Program* parseProgram(String fileName, String searchPath) {
         if (!isInSet(included, nextFile)) {
             addToSet(included, nextFile);
             appendToList(parsedFiles, nextFile);
-            parseFile(nextFile, searchPath); // May add to queue.
+            parseFile(nextFile, searchPath, errorLog); // May add to queue.
         }
     }
     // Delete structures no longer needed.
@@ -95,7 +96,8 @@ Program* parseProgram(String fileName, String searchPath) {
 }
 
 // parseFile parses a single script file with the yacc-generated parser.
-static void parseFile(String fileName, String searchPath) {
+static bool skipBOM (FILE*, ErrorLog*, String);
+static void parseFile(String fileName, String searchPath, ErrorLog *errorLog) {
     if (!fileName || *fileName == 0) return;
     curFileName = fileName;
     currentFile = fopenPath(fileName, "r", searchPath, "ll");
@@ -105,8 +107,38 @@ static void parseFile(String fileName, String searchPath) {
         Perrors++;
         return;
     }
+    if (!skipBOM (currentFile, errorLog, fileName))
+      return;
     if (debugging) printf("Parsing %s.\n", fileName);
     curLine = 1;
     yyparse(); // Call the Yacc parser.
     fclose(currentFile);
+}
+
+/*
+ curFileName = null;
+       Perrors++;
+       return;
+     }
+     if (! skipBOM (currentFile, errorLog, fileName))
+       return;
+
+     if (debugging) printf("Parsing %s.\n", fileName);
+     curLine = 1;
+     yyparse(errorLog); // Call the Yacc parser.
+     fclose(currentFile);
+ }
+ */
+
+// Handle the rare case where a Gedcom
+static bool skipBOM (FILE *file, ErrorLog *errorLog, String fileName) {
+    unsigned char bom[3];
+    if (fread(bom, 1, 3, file) != 3) {
+        Error *error = createError(systemError, fileName, 0, "cannot read three bytes from file");
+        addErrorToLog(errorLog, error);
+        Perrors++;
+        return false;
+    }
+    if ((bom[0] != 0xef) || (bom[1] != 0xbb) || (bom[2] != 0xbf)) fseek(file, -3, SEEK_CUR);
+    return true;
 }

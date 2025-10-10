@@ -235,6 +235,7 @@ PValue __length(PNode* pnode, Context* context, bool* errflg) {
 }
 
 // __inlist checks whether a specific PValue is found in a List of PValues.
+// usage: inlist(LIST,ANY)
 PValue __inlist(PNode* pnode, Context* context, bool* errflg) {
     PNode* arg = pnode->arguments;
     PValue plist = evaluate(arg, context, errflg);
