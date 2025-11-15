@@ -110,7 +110,8 @@ PValue __stddate(PNode *node, Context *context, bool* eflg) {
 
 //  __gettoday -- Create today's event
 //    usage: gettoday() --> EVENT
-PValue __gettoday(PNode *expr, Context *context, bool* eflg) {
+PValue __gettoday(PNode *expr ATTRIBUTE_UNUSED,
+		  Context *context ATTRIBUTE_UNUSED, bool* eflg) {
 	GNode *prnt = createGNode(null, "EVEN", null, null);
 	GNode *chil = createGNode(null, "DATE", get_date(), prnt);
 	prnt->child = chil;
