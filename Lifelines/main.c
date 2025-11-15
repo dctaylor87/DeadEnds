@@ -82,6 +82,7 @@
 #include "parse-args.h"
 #include "screen.h"		/* XXX main_menu, term_show_module XXX */
 #include "selectdb.h"
+#include "curses-ui.h"
 
 /* for parser debugging */
 extern int yydebug;
@@ -295,7 +296,7 @@ prompt_for_db:
 		bool timing = false;
 		int len = lengthList (exprogs);
 		for (int ndx = 0; ndx < len; ndx++) {
-		  CString prog = getListElement (exprogs, ndx);
+		  CString prog = getAndRemoveFirstListElement (exprogs);
 		  interp_main (prog, currentDatabase, progout, picklist, timing);
 		}
 		//interp_main(exprogs, currentDatabase, progout, picklist, timing);
