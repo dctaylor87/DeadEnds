@@ -217,8 +217,8 @@ bool equalTree(GNode* root1, GNode* root2) {
         if (nestr(root1->tag, root2->tag)) return false;
         str1 = root1->value;
         str2 = root2->value;
-        if (str1 && !str2) return false;
-        if (str2 && !str1) return false;
+        if (str1 && *str1 && !str2) return false;
+        if (str2 && *str2 && !str1) return false;
         if (str1 && str2 && nestr(str1, str2)) return false;
         if (!equalTree(root1->child, root2->child)) return false;
         root1 = root1->sibling;
@@ -235,8 +235,8 @@ bool equalNode (GNode* node1, GNode* node2) {
     if (nestr(node1->tag, node2->tag)) return false;
     str1 = node1->value;
     str2 = node2->value;
-    if (str1 && !str2) return false;
-    if (str2 && !str1) return false;
+    if (str1 && *str1 && !str2) return false;
+    if (str2 && *str2 && !str1) return false;
     if (str1 && str2 && nestr(str1, str2)) return false;
     return true;
 }
