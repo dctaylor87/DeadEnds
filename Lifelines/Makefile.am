@@ -42,7 +42,7 @@ PYTHON_LIBS = @PYTHON_LIBS@
 llines_LDADD = @LIBPYLLINES@ \
 	../DeadEndsLib/LLSupport/libllsupport.a \
 	../DeadEndsLib/UI/libui.a \
-	 ../DeadEndsLib/Parser/libparser.a \
+	../DeadEndsLib/Parser/libparser.a \
 	../DeadEndsLib/Interp/libinterp.a \
 	../DeadEndsLib/Operations/liboperations.a \
 	../DeadEndsLib/Database/libdatabase.a \
