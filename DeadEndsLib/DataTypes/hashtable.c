@@ -48,7 +48,6 @@ static void deleteBucket(Bucket* bucket, void(*delete)(void*)) {
 // deleteHashTable deletes a HashTable. If there is a delete function it is called on the elements.
 void deleteHashTable(HashTable *table) { //PH;
 	if (!table) return;
-#if defined(DEADENDS)
 	/* normally this would be in releaseHashTable, but DeadEnds
 	   has enough calls to deleteHashTable, that this is
 	   simpler.  */
@@ -62,7 +61,7 @@ void deleteHashTable(HashTable *table) { //PH;
 #endif
 	if (table->refCount)
 	  return;
-#endif
+
 	for (int i = 0; i < table->numBuckets; i++) {
 		if (table->buckets[i] == null) continue;
 		deleteBucket(table->buckets[i], table->delete);
