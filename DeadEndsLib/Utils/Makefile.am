@@ -8,6 +8,7 @@ noinst_LIBRARIES = libutils.a
 libutils_a_SOURCES = \
 	appendstr.c \
 	errors.c \
+	fatal.c \
 	fpattern.c \
 	standard.c \
 	stdstrng.c \

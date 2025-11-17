@@ -190,21 +190,6 @@ int chartype(int c) {
 	return c;
 }
 
-// _fatal is the fatal error function. file and line are the file and line number of the call.
-void _fatal (CString file, int line, CString msg, CString function)
-// String file -- Name of file calling __fatal.
-// int line -- Line number of file calling __fatal.
-{
-	printf ("FATAL ERROR!\n");
-	if (msg)
-		printf("%s, file: %s: line: %d, function: %s\n",
-		       msg, file, line, function);
-	else
-		printf("file: %s: line: %d, function: %s\n",
-		       file, line, function);
-	abort();
-}
-
 #if 0				/* no callers & calls _fatal with too few arguments */
 // _assert makes an assertion.
 void _assert (bool exp, String file, int line) {
