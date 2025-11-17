@@ -2,11 +2,11 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # what are we going to build?
-bin_PROGRAMS = gensexpr
+bin_PROGRAMS = testdate
 
-gensexpr_SOURCES = main.c
+testdate_SOURCES = main.c
 
-gensexpr_LDADD = \
+testdate_LDADD = \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
