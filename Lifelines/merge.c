@@ -416,10 +416,16 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	classifyNodes(&refn2, &refn3, &refn24);
 
 	key = nxref(indi4);
-	for (node = name2; node; node = nsibling(node))
-		removeFromNameIndex (currentDatabase->nameIndex, nval(node), key); 
-	for (node = name3; node; node = nsibling(node))
-		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
+	for (node = name2; node; node = nsibling(node)) {
+		if (nval(node))
+			removeFromNameIndex (currentDatabase->nameIndex,
+					     nameToNameKey(nval(node)), key);
+	}
+	for (node = name3; node; node = nsibling(node)) {
+		if (nval(node))
+			insertInNameIndex (currentDatabase->nameIndex,
+					   nameToNameKey(nval(node)), key);
+	}
 	rename_from_browse_lists(key);
 	for (node = refn2; node; node = nsibling(node))
 		if (nval(node)) removeRefn(nval(node), key, currentDatabase);

@@ -99,10 +99,16 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 	/* Note: classify eliminates duplicates */
 	classifyNodes(&name1, &namen, &name1n);
 	classifyNodes(&refn1, &refnn, &refn1n);
-	for (node = name1; node; node = nsibling(node))
-		removeFromNameIndex(database->nameIndex, nval(node), key);
-	for (node = namen; node; node = nsibling(node))
-		insertInNameIndex(database->nameIndex, nval(node), key);
+	for (node = name1; node; node = nsibling(node)) {
+		if (nval(node))
+			removeFromNameIndex(database->nameIndex,
+					    nameToNameKey(nval(node)), key);
+	}
+	for (node = namen; node; node = nsibling(node)) {
+		if (nval(node))
+			insertInNameIndex(database->nameIndex,
+					  nameToNameKey(nval(node)), key);
+	}
 	rename_from_browse_lists(key);
 	for (node = refn1; node; node = nsibling(node))
 		if (nval(node)) removeRefn(nval(node), key, database);

@@ -209,7 +209,9 @@ add_new_indi_to_db (GNode *indi0)
 	key = getNewPersonKey (currentDatabase);
 	indi0->key = strsave(key);
 	for (node = name; node; node = nsibling(node)) {
-		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
+		if (nval(node))
+			insertInNameIndex (currentDatabase->nameIndex,
+					   nameToNameKey(nval(node)), key);
 	}
 	for (node = refn; node; node = nsibling(node)) {
 		if (nval(node))
@@ -236,8 +238,11 @@ add_indi_no_cache (GNode *indi)
 	key = strsave(nxref(indi));
 
 	splitPerson(indi, &name, &refn, &sex, &body, &famc, &fams);
-	for (node = name; node; node = nsibling(node))
-		insertInNameIndex (currentDatabase->nameIndex, nval(node), key);
+	for (node = name; node; node = nsibling(node)) {
+		if (nval(node))
+			insertInNameIndex (currentDatabase->nameIndex,
+					   nameToNameKey(nval(node)), key);
+	}
 	for (node = refn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi, name, refn, sex, body, famc, fams);
