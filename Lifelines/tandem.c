@@ -141,6 +141,9 @@ int browse_tandem (GNode **prec1, GNode **prec2, Sequence **pseq)
 		case CMD_EDIT: 	/* edit top person */
 			edit_indi(current1, false);
 			break;
+		case CMD_SAVE_GEDCOM: /* save the database */
+			save_gedcom(currentDatabase);
+			break;
 		case CMD_TOP: 	/* browse top person */
 			*prec1 = current1;
 			return BROWSE_INDI;
@@ -263,6 +266,9 @@ int browse_2fam (GNode **prec1, GNode **prec2, Sequence **pseq)
 		{
 		case CMD_EDIT:	/* edit top fam */
 			edit_family(current1, false);
+			break;
+		case CMD_SAVE_GEDCOM: /* save the database */
+			save_gedcom(currentDatabase);
 			break;
 		case CMD_TOP:	/* browse top fam */
 			*prec1 = current1;
