@@ -59,7 +59,6 @@ static char f_currentdb[MAXPATHLEN]="";
 static void vcrashlog(int newline, const char * fmt, va_list args);
 static void get_current_lldate (char *creation);
 
-#if !defined(DEADENDS)
 /*
  2002/10/05
  These routines do not depend on curses (llwprintf can be implemented w/o curses)
@@ -68,7 +67,7 @@ static void get_current_lldate (char *creation);
 
 /* __fatal -- Fatal error routine.  Handles null or empty details input.  */
 void
-__fatal (String file, int line, CString details)
+__fatal (CString file, int line, CString details, CString function)
 {
   /* avoid reentrancy */
   static bool failing=false;
@@ -77,25 +76,25 @@ __fatal (String file, int line, CString details)
       failing=true;
 
       /* send to error log if one is specified */
-      errlog_out(_("Fatal Error"), details, file, line);
+      errlog_out(_("Fatal Error"), details, file, line, function);
 
       /* send to screen */
       llwprintf("%s\n", _("FATAL ERROR"));
       if (details && details[0]) {
 	llwprintf("  %s\n", details);
       }
-      llwprintf(_("  in file <%s> at line %d\n"), file, line);
+      llwprintf(_("  in file <%s> at line %d, function %s\n"),
+		file, line, function);
 
       /* offer crash dump before closing database */
       ll_optional_abort(_("ASSERT failure"));
       close_lifelines();
-      uiio_shutdown_ui(true); /* pause */
+      uiio_shutdown_ui(current_uiio, true); /* pause */
 
       failing=false;
     }
   exit(1);
 }
-#endif
 
 /* vcrashlog -- Send crash info to crash log and screen. */
 static void
@@ -111,7 +110,7 @@ vcrashlog (int newline, const char * fmt, va_list args)
   }
 
   /* send to error log if one is specified */
-  errlog_out(NULL, buffer, NULL, -1);
+  errlog_out(NULL, buffer, NULL, -1, NULL);
 
   /* send to screen */
   llwprintf("%s", buffer);
@@ -140,7 +139,7 @@ crashlogn (String fmt, ...)
 
 /* errlog_out -- Send message to log file (if one exists). */
 void
-errlog_out (CString title, CString msg, CString file, int line)
+errlog_out (CString title, CString msg, CString file, int line, CString function)
 {
   /* avoid reentrancy */
   static bool failing=false;
@@ -166,7 +165,8 @@ errlog_out (CString title, CString msg, CString file, int line)
 	}
       }
       if (line>=1 && file && file[0])
-	fprintf(fp, _("    in file <%s> at line %d\n"), file, line);
+	fprintf(fp, _("    in file <%s> at line %d, function %s\n"),
+		file, line, function);
       if (f_currentdb[0])
 	fprintf(fp, "    %s: %s\n", _("Current database"), f_currentdb);
       fclose(fp);

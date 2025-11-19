@@ -2,6 +2,6 @@
 
 extern void crashlog (String fmt, ...);
 extern void crashlogn (String fmt, ...);
-extern void errlog_out(CString title, CString msg, CString file, int line);
+extern void errlog_out(CString title, CString msg, CString file, int line, CString function);
 extern void crash_setcrashlog (CString crashlog);
 extern void crash_setdb (String dbname);
