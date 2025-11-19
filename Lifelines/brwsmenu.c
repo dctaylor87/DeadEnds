@@ -174,6 +174,7 @@ static MenuItem f_MenuItemChHistoryBack = { N_("^xb  ChngHist/back"), 0, CMD_CHI
 static MenuItem f_MenuItemChHistoryFwd = { N_("^xf  ChngHist/fwd"), 0, CMD_CHISTORY_FWD, 0 };
 static MenuItem f_MenuItemChHistoryList = { N_("^xl  ChngHist list"), 0, CMD_CHISTORY_LIST, 0 };
 static MenuItem f_MenuItemChHistoryClean = { N_("^xc Clear ChngHist"), 0, CMD_CHISTORY_CLEAR, 0 };
+static MenuItem f_MenuItemSaveGedcom  = { N_("S Save GEDCOM"), 0, CMD_SAVE_GEDCOM, 0 };
 /* xgettext:no-c-format */
 static MenuItem f_MenuItemAddSour = { N_("%s  Add source"), 0, CMD_ADD_SOUR, 0 };
 /* xgettext:no-c-format */
@@ -252,6 +253,7 @@ static MenuItem * f_MenuPerson[] =
 	&f_MenuItemChHistoryFwd,
 	&f_MenuItemChHistoryList,
 	&f_MenuItemChHistoryClean,
+	&f_MenuItemSaveGedcom,
 	0
 };
 
@@ -302,6 +304,7 @@ static MenuItem * f_MenuFamily[] =
 	&f_MenuItemHistoryFwd,
 	&f_MenuItemHistoryList,
 	&f_MenuItemHistoryClean,
+	&f_MenuItemSaveGedcom,
 	0
 };
 
@@ -346,6 +349,7 @@ static MenuItem * f_Menu2Person[] =
 	&f_MenuItemMoreCols,
 	&f_MenuItemLessCols,
 	&f_MenuItemBrowse,
+	&f_MenuItemSaveGedcom,
 	0
 };
 
@@ -375,6 +379,7 @@ static MenuItem * f_Menu2Family[] =
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemMoreCols,
 	&f_MenuItemLessCols,
+	&f_MenuItemSaveGedcom,
 	0
 };
 
@@ -403,6 +408,7 @@ static MenuItem * f_MenuAux[] =
 	&f_MenuItemHistoryFwd,
 	&f_MenuItemHistoryList,
 	&f_MenuItemHistoryClean,
+	&f_MenuItemSaveGedcom,
 	0
 };
 
@@ -423,6 +429,7 @@ static MenuItem * f_MenuListPersons[] =
 	&f_MenuItemShrinkMenu,
 	&f_MenuItemMoreCols,
 	&f_MenuItemLessCols,
+	&f_MenuItemSaveGedcom,
 	0
 };
 
