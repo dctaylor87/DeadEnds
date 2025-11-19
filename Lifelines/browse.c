@@ -462,6 +462,9 @@ reprocess_indi_cmd: /* so one command can forward to another */
 		case CMD_EDIT:	/* Edit this person */
 			edit_indi(current, false);
 			break;
+		case CMD_SAVE_GEDCOM: /* save the database */
+			save_gedcom(currentDatabase);
+			break;
 		case CMD_FAMILY: 	/* Browse to person's family */
 			if ((tmp = chooseFamily(current, _(qSntprnt),
 						_(qSidfbrs), true, currentDatabase))) {
@@ -854,6 +857,9 @@ reprocess_aux_cmd:
 				break;
 			}
 			break;
+		case CMD_SAVE_GEDCOM: /* save the database */
+			save_gedcom(currentDatabase);
+			break;
 		case CMD_ADD_SOUR: /* add source */
 		case CMD_ADD_EVEN: /* add event */
 		case CMD_ADD_OTHR: /* add other */
@@ -1138,6 +1144,9 @@ reprocess_fam_cmd: /* so one command can forward to another */
 			break;
 		case CMD_EDIT:	/* Edit family's record */
 			edit_family(current, false);
+			break;
+		case CMD_SAVE_GEDCOM: /* save the database */
+			save_gedcom(currentDatabase);
 			break;
 		case CMD_FATHER:	/* Browse to family's father */
 			if ((tmp = chooseFather(NULL, current, _(qSnohusb),
