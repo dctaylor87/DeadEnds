@@ -765,8 +765,8 @@ main_menu (void)
 	WINDOW * win = uiw_win(uiwin);
 	repaint_main_menu(uiwin);
 	display_screen(MAIN_SCREEN);
-	//c = interact_choice_string(uiwin, "bsadprtuxqQ");
-	c = interact_choice_string(uiwin, "bsadpruxqQ");
+	//c = interact_choice_string(uiwin, "bsadprtuxSqQ");
+	c = interact_choice_string(uiwin, "bsadpruxSqQ");
 	place_std_msg();
 	wrefresh(win);
 	switch (c) {
@@ -806,6 +806,9 @@ main_menu (void)
 				main_browse(rec, c);
 			/* main_browse consumed rec */
 		}
+		break;
+	case 'S':
+		save_gedcom(currentDatabase);
 		break;
 	case 'q': alldone = 1; break;
 	case 'Q':
@@ -1364,7 +1367,7 @@ invoke_add_menu (void)
 
 	activate_uiwin(uiwin);
 	wmove(win, 1, 27);
-	code = interact_choice_string(uiwin, "pfcsq");
+	code = interact_choice_string(uiwin, "pfcsSq");
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
@@ -1374,6 +1377,7 @@ invoke_add_menu (void)
 	case 'f': add_family_by_edit(NULL, NULL, NULL, false); break;
 	case 'c': my_prompt_add_child(NULL, NULL); break;
 	case 's': prompt_add_spouse(NULL, NULL, true); break;
+	case 'S': save_gedcom(currentDatabase); break;
 	case 'q': break;
 	}
 	return rec;
@@ -1399,7 +1403,7 @@ invoke_del_menu (void)
 
 	activate_uiwin(uiwin);
 	wmove(win, 1, 30);
-	code = interact_choice_string(uiwin, "csifoq");
+	code = interact_choice_string(uiwin, "csifoSq");
 	deactivate_uiwin_and_touch_all();
 
 	switch (code) {
@@ -1408,6 +1412,7 @@ invoke_del_menu (void)
 	case 'i': chooseAndRemovePerson(NULL, DOCONFIRM); break;
 	case 'f': chooseAndRemoveFamily(); break;
 	case 'o': chooseAndRemoveAnyRecord(NULL, DOCONFIRM); break;
+	case 'S': save_gedcom(currentDatabase); break;
 	case 'q': break;
 	}
 }
@@ -1765,12 +1770,13 @@ invoke_utils_menu (void)
 	activate_uiwin(uiwin);
 
 	wmove(win, 1, strlen(_(qSmn_uttl))+3);
-	code = interact_choice_string(uiwin, "srRkidmeocq");
+	code = interact_choice_string(uiwin, "sSrRkidmeocq");
 	deactivate_uiwin_and_touch_all();
 
 	begin_action();
 	switch (code) {
 	case 's': save_gedcom(currentDatabase); break;
+	case 'S': save_gedcom(currentDatabase); break;
 	case 'r': load_gedcom(false, currentDatabase); break;
 	case 'R': load_gedcom(true, currentDatabase); break;
 	case 'k': key_util(); break;
