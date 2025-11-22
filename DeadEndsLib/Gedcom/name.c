@@ -19,8 +19,6 @@
 #include "nameindex.h"
 #include "set.h"
 #include "standard.h"
-//#include "refnindex.h"
-//#include "database.h"
 
 static int old = 0;
 
