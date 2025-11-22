@@ -181,5 +181,6 @@ bool storeRecord (Database *database, GNode *root)
     default:
       fatal ("unkown record type");
     }
+  database->dirty = true;
   return true;
 }

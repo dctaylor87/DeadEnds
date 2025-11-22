@@ -219,6 +219,7 @@ add_new_indi_to_db (GNode *indi0)
 	}
 	joinPerson(indi, name, refn, sex, body, NULL, NULL);
 	resolveRefnLinks(indi, currentDatabase);
+	currentDatabase->dirty = true;
 	indi_to_dbase(indi);
 }
 /*================================================================
@@ -247,6 +248,7 @@ add_indi_no_cache (GNode *indi)
 		if (nval(node)) addRefn(nval(node), key, database);
 	joinPerson(indi, name, refn, sex, body, famc, fams);
 	resolveRefnLinks(indi, currentDatabase);
+	currentDatabase->dirty = true;
 	return storeRecord (database, indi);
 }
 /*========================================================
@@ -728,6 +730,8 @@ add_new_fam_to_db (GNode *fam2, GNode *spouse1, GNode *spouse2, GNode *child)
 	if (spouse1) indi_to_dbase(spouse1);
 	if (spouse2) indi_to_dbase(spouse2);
 	if (child) indi_to_dbase(child);
+
+	currentDatabase->dirty = true;
 }
 #ifdef ETHEL
 /*=========================================

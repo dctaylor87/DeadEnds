@@ -464,6 +464,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	check_indi_lineage_links(indi02);
 
 #if defined(DEADENDS)
+	currentDatabase->dirty = true;
 	while (indi02->parent)
 	  indi02 = indi02->parent;
 	return (indi02);
@@ -605,6 +606,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 /* sanity check lineage links */
 	check_fam_lineage_links(fam2);
 #if defined(DEADENDS)
+	currentDatabase->dirty = true;
 	while (fam2->parent)
 	  fam2 = fam2->parent;
 	return (fam2);

@@ -115,6 +115,8 @@ replace_indi (GNode *indi1, GNode *indi2, Database *database)
 	for (node = refnn; node; node = nsibling(node))
 		if (nval(node)) addRefn(nval(node), key, database);
 
+	database->dirty = true;
+
 /* now cleanup (indi1 tree is now composed of indi2 data) */
 	freeGNodes(name1);
 	freeGNodes(namen);
@@ -164,4 +166,6 @@ replace_fam (GNode *fam1, GNode *fam2, Database *database)
 	freeGNodes(refn1);
 	freeGNodes(refnn);
 	freeGNodes(refn1n);
+
+	database->dirty = true;
 }

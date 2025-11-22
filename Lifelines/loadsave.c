@@ -196,7 +196,8 @@ save_gedcom (Database *database)
 	wpos(7,0);
 	msg_info(_(qSoutfin), database->name, fname);
 	strfree(&fname);
-	
+	database->dirty = false;
+
 	return true;
 }
 

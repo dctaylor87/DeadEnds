@@ -155,6 +155,7 @@ addRefn (CString refn, CString key, Database *database)
     }
   /* it does not already exist */
   addToRefnIndex (database->refnIndex, refn, key);
+  database->dirty = true;
   return true;
 }
 
@@ -173,6 +174,7 @@ removeRefn (CString refn, CString key, Database *database)
   /* we found the REFN and it maps to our key */
   removeFromHashTable (database->refnIndex, refn);
 
+  database->dirty = true;
   return true;
 }
 
@@ -203,7 +205,10 @@ indexByRefn (GNode *node, Database *database)
 	      success = false;	/* it's not us */
 	  }
 	else
-	  addToRefnIndex (database->refnIndex, new_node->value, key);
+	  {
+	    addToRefnIndex (database->refnIndex, new_node->value, key);
+	    database->dirty = true;
+	  }
       }
   return success;
 }

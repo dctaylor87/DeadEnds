@@ -118,6 +118,8 @@ remove_indi_by_root (GNode *indi, Database *database)
 
 /* Remove any entries in existing browse lists */
 	remove_from_browse_lists(key);
+
+	database->dirty = true;
 }
 /*==========================================
  * remove_empty_fam -- Delete family from database
