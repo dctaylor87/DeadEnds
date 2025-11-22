@@ -64,7 +64,6 @@
 #include "lineage.h"
 #include "gnode.h"
 //#include "readindex.h"
-#include "database.h"
 #include "ll-addoperations.h"
 #include "llpy-externs.h"
 

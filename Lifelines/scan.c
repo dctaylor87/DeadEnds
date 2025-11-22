@@ -45,7 +45,6 @@
 #include "refnindex.h"
 #include "database.h"
 #include "sequence.h"
-#include "database.h"
 #include "errors.h"
 #include "ask.h"
 #include "feedback.h"

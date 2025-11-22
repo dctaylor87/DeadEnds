@@ -12,7 +12,6 @@
 #include "hashtable.h"
 #include "refnindex.h"
 #include "database.h"
-#include "database.h"
 #include "errors.h"
 #include "gedcom.h"
 #include "gnode.h"

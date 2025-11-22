@@ -59,7 +59,6 @@
 #include "menuitem.h"
 #include "messages.h"
 #include "gnode.h"
-#include "database.h"
 #include "recordindex.h"
 #include "ll-sequence.h"
 #include "browse.h"
