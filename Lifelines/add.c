@@ -80,6 +80,7 @@
 #include "splitjoin.h"
 #include "codesets.h"
 #include "lineage.h"
+#include "name.h"
 #include "xref.h"
 #include "de-strings.h"
 #include "ui.h"
