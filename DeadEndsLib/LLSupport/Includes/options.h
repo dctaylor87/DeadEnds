@@ -24,6 +24,7 @@ extern bool python_interactive;
 extern bool have_python_scripts;
 
 //extern CString usageSummary;
+extern CString optString;
 
 extern int alldone;		/* completion flag */
 #endif
