@@ -1,5 +1,8 @@
 #include "standard.h"
 #include "uiio.h"
+#include "list.h"
+#include "stringtable.h"
+#include "options.h"
 
 /* options recognized by getopt */
 CString optString = "adkns:tu:x:o:zC:I:p:Pvh?";
