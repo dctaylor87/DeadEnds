@@ -60,8 +60,8 @@ int display_list(CString ttl, List *list);
 /* selectdb.c */
 //bool open_or_create_database(String *dbused);
 //bool select_database(String * dbrequested, String * perrmsg);
-Database *selectAndOpenDatabase (CString *dbFilename, CString searchPath,
-				 Database *oldDatabase, ErrorLog *errorLog);
+//Database *selectAndOpenDatabase (CString *dbFilename, CString searchPath,
+//				 Database *oldDatabase, ErrorLog *errorLog);
 
 /* interp-prog.c */
 void interp_main (CString sfile, Database *database, String ofile,
