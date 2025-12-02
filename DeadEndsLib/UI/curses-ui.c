@@ -253,6 +253,7 @@ static void curses_ui_post_db_init (void)
 static void
 curses_ui_main_loop (void)
 {
+  alldone = 0;
   while (! alldone)
     main_menu ();
 }
