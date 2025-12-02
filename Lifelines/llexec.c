@@ -100,8 +100,6 @@ extern int yydebug;
 //#endif
 //int num_exargs_buckets = NUMBER_EXARGS_BUCKETS;
 
-static CString optString = "adkns:tx:o:C:I:p:Pvh?";
-
 /*********************************************
  * required global variables
  *********************************************/
