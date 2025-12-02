@@ -1,16 +1,25 @@
 The names of the current user interface header files, their locations,
-and which functions are declared in each of them is likely to change
-and should not be relied upon.
+and which functions are declared in each of them is likely to change.
+This is an attempt to document the current state.
 
 @section uiio.h
 
+This file declares the public interface to the user interface abstraction.
+
+@defun uiio_init (UIIO *uiio) @arrow{} bool
+Responsible for early initialization of the current user interface routines.
+@b{MUST} be called before @b{any} other @code{uiio_} routines.
+@end defun
 @defun uiio_pre_database_init (UIIO *uiio, bool runningInterpreter) @arrow{} bool
 @end defun
 @defun uiio_post_database_init (UIIO *uiio) @arrow{} void
+Responsible for any user interface initialization that is to be done @b{after}
+a database is successfully opened.
 @end defun
 @defun uiio_shutdown_ui (UIIO *uiio, bool pause) @arrow{} void
-@end defun
-@defun uiio_init (UIIO *uiio) @arrow{} bool
+Called when a user interface is being shutdown.  Examples would be
+when the user interface is changing to a different interface or the
+program is about to exit.
 @end defun
 
 UIIO *uiio_curses;
