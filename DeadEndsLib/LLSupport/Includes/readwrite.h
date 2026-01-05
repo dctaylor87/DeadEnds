@@ -27,7 +27,7 @@ extern String editfile;
 extern String editstr;
 
 /* valid.c */
-extern bool pointer_value(String);
+//extern bool pointer_value(String);
 extern bool valid_indi_tree(GNode *, String*, GNode *, Database *database);
 extern bool valid_fam_tree(GNode *, String*, GNode *, Database *database);
 extern bool valid_name(String);
