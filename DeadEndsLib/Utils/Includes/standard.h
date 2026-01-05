@@ -60,9 +60,16 @@ void basicDelete(void*);
 #endif
 
 // User interface to the standard functions.
-void* _alloc(size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 void _free(void* ptr, String, int);
-void* _realloc(void* ptr, size_t, CString, int) __attribute__ ((__malloc__)) __attribute__ ((alloc_size (2))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
+/* tried using __GNUC__, but CLANG defines that even though it isn't GCC */
+#if defined(__clang__)
+void* _alloc(size_t, CString, int) __attribute__ ((malloc)) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
+#elif defined(__GNUC__)
+void* _alloc(size_t, CString, int) __attribute__ ((malloc (_free, 1))) __attribute__ ((alloc_size (1))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
+#else
+void* _alloc(size_t, CString, int);
+#endif
+void* _realloc(void* ptr, size_t, CString, int) __attribute__ ((alloc_size (2))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 bool isLetter(int);  // Is character is an Ascii letter?
 String trim(String, int); // Trim String to size.
 void _logAllocations(bool);  // Turn allocation logging on and off.
