@@ -161,21 +161,29 @@ indi_to_list_string (GNode *indi, GNode *fam, int len, bool rfmt, bool appkey)
 		p += strlen(p);
 	}
 	if (appkey && indi && displaykeys) {
+#if defined(DEADENDS)
+		snprintf(p, linelen, " (%s)", nxref(indi));
+#else
 		if (getdeoptint("DisplayKeyTags", 0) > 0) {
 			snprintf(p, linelen, " (i%s)", nxref(indi));
 		} else {
 			snprintf(p, linelen, " (%s)", nxref(indi));
 		}
+#endif
 		linelen -= strlen(p);
 		ASSERT(linelen > 0);
 		p += strlen(p);
 	}
 	if (appkey && fam && displaykeys) {
+#if defined(DEADENDS)
+		snprintf(p, linelen, " (%s)", nxref(indi));
+#else
 		if (getdeoptint("DisplayKeyTags", 0) > 0) {
 			snprintf(p, linelen, " (f%s)", nxref(fam));
 		} else {
 			snprintf(p, linelen, " (%s)", nxref(fam));
 		}
+#endif
 		linelen -= strlen(p);
 		ASSERT(linelen > 0);
 		p += strlen(p);
