@@ -78,16 +78,17 @@ static struct uiio _uiio_curses =
     curses_input,		/* input func */
     curses_output,		/* output func */
     curses_error,		/* error func */
-    curses_outputv,		/* outputv func */
-    curses_ask_for_char_msg,
-    curses_ask_for_filename_impl,
-    curses_ask_for_string,
-    curses_ask_for_string2,
-    curses_chooseFromArray,
+
+    curses_outputv,		/* outputv func -- screen.c */
+    curses_ask_for_char_msg,	/* screen.c */
+    curses_ask_for_filename_impl, /* screen.c */
+    curses_ask_for_string,	  /* screen.c */
+    curses_ask_for_string2,	  /* screen.c */
+    curses_chooseFromArray,	  /* screen.c */
     curses_invoke_search_menu,
-    curses_prompt_stdout,
-    curses_llvwprintf,
-    curses_view_array,
+    curses_prompt_stdout,	/* screen.c */
+    curses_llvwprintf,		/* screen.c */
+    curses_view_array,		/* screen.c */
     curses_ask_for_program,
     curses_chooseOneOrListFromSequence,
   };
@@ -194,6 +195,7 @@ append_to_msg_list (String msg)
     msg_list = createList (NULL, NULL, free, false);
   enqueueList(msg_list, strsave(msg));
 }
+
 /* display_status -- put string in status line
    We don't touch the status_transitory flag
    That is caller's responsibility. */
