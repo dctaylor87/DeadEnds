@@ -118,7 +118,7 @@ Sequence* personToFathers(GNode* person, RecordIndex* index) {
 	Sequence* fathers = createSequence(index);
 	FORFAMCS(person, family, key, index)  // For each family the person is a child in...
 		FORHUSBS(family, husb, husbKey, index)  // For each husband in that family...
-			appendToSequence(fathers, personToKey(husb), 0);  // Add to sequence.
+			if (husb) appendToSequence(fathers, personToKey(husb), 0);  // Add to sequence.
 		ENDHUSBS
 	ENDFAMCS
 	if (lengthSequence(fathers)) return fathers;
@@ -132,7 +132,7 @@ Sequence* personToMothers (GNode* indi, RecordIndex* index) {
 	Sequence* mothers = createSequence(index);
 	FORFAMCS(indi, fam, key, index)  // For each family the person is a child in...
 		FORWIFES(fam, wife, wifeKey, index)  // For each wife in that family...
-			appendToSequence(mothers, personToKey(wife), 0);  // Add to sequence.
+			if (wife) appendToSequence(mothers, personToKey(wife), 0);  // Add to sequence.
 		ENDWIFES
 	ENDFAMCS
 	if (lengthSequence(mothers)) return mothers;
@@ -176,7 +176,7 @@ Sequence* familyToFathers(GNode* fam, RecordIndex* index) {
 	if (!fam) return null;
 	Sequence* seq = createSequence(index);
 	FORHUSBS(fam, husb, key, index)
-		appendToSequence(seq, personToKey(husb), 0);
+	  if (husb) appendToSequence(seq, personToKey(husb), 0);
 	ENDHUSBS
 	if (lengthSequence(seq)) return seq;
 	deleteSequence(seq);
@@ -188,7 +188,7 @@ Sequence* familyToMothers(GNode* fam, RecordIndex* index) {
 	if (!fam) return null;
 	Sequence* seq = createSequence(index);
 	FORWIFES(fam, wife, key, index)
-		appendToSequence(seq, personToKey(wife), 0);
+	  if (wife) appendToSequence(seq, personToKey(wife), 0);
 	ENDWIFES
 	if (lengthSequence(seq)) return seq;
 	deleteSequence(seq);
