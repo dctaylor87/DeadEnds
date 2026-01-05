@@ -213,7 +213,7 @@ valid_name (String name)
 {
 	int c, n = 0;
 	if (!name) return false;
-	if (pointer_value(name)) return false;
+	if (isKey(name)) return false;
 	while ((c = *name++)) {
 		if (c == NAMESEP) n++;
 	}
@@ -325,6 +325,8 @@ valid_othr_tree (GNode *node, String *pmsg, ATTRIBUTE_UNUSED GNode *orig,
 #endif
 	return true;
 }
+
+#if 0			   /* no longer called -- use isKey instead */
 /*=========================================
  * pointer_value -- See if value is pointer
  *=======================================*/
@@ -334,3 +336,4 @@ pointer_value (String val)
 	if (!val || *val != '@' || strlen(val) < 3) return false;
 	return val[strlen(val)-1] == '@';
 }
+#endif
