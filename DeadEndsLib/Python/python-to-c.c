@@ -95,12 +95,18 @@ static struct PyMethodDef LifelinesMethods[] =
 
    { "gettoday",	llpy_gettoday, METH_NOARGS,
      "doc string" },
+#endif
+#if 0				/* no callers for script language except st/st_date.li */
    { "setdate",		llpy_setdate, METH_VARARGS,
      "doc string" },
    { "datepic",		llpy_datepic, METH_VARARGS,
      "datepic(STRING) --> VOID: set custom date format for stddate calls (what about errors?)." },
+#endif
+#if 0				/* script language: called by related.ll, st/st_date.li */
    { "complexformat",	llpy_complexformat, METH_VARARGS,
      "doc string" },
+#endif
+#if 0				/* no callers for script language except st/st_date.li */
    { "complexpic",	llpy_complexpic, METH_VARARGS,
      "doc string" },
    { "complexdate",	llpy_complexdate, METH_VARARGS,
