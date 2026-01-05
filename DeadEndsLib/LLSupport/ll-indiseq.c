@@ -52,7 +52,6 @@
 #include "de-strings.h"
 #include "translat.h"
 #include "xlat.h"
-#include "readwrite.h"
 #include "codesets.h"
 #include "gstrings.h"
 #include "pvalue.h"

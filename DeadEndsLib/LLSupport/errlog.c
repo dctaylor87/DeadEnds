@@ -44,7 +44,6 @@
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
-#include "readwrite.h"
 #include "errlog.h"
 #include "de-strings.h"
 #include "codesets.h"		/* uu8 */

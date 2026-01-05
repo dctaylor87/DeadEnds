@@ -34,7 +34,6 @@
 #include "date.h"
 #include "xlat.h"
 #include "messages.h"
-#include "readwrite.h"
 #include "editing.h"
 #include "splitjoin.h"
 #include "codesets.h"

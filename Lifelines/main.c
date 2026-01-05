@@ -64,7 +64,6 @@
 #include "liflines.h"
 #include "messages.h"
 #include "xlat.h"
-#include "readwrite.h"
 #include "stringtable.h"
 #include "options.h"
 #include "codesets.h"

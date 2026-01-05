@@ -50,7 +50,6 @@
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
-#include "readwrite.h"
 #include "recordindex.h"
 #include "rfmt.h"
 #include "sequence.h"

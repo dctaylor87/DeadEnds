@@ -43,7 +43,6 @@
 #include "zstr.h"
 #include "translat.h"
 #include "xlat.h"
-#include "readwrite.h"
 #include "proptbls.h"
 #include "de-strings.h"
 #include "path.h"
