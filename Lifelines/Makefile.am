@@ -5,7 +5,7 @@
 bin_PROGRAMS = llines llexec
 
 # what goes into lines?
-# export.c import.c
+# export.c import.c valgdcom.c
 
 common_SOURCES = \
 	environ.c \
@@ -85,6 +85,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Validate/Includes \
 	$(PYTHON_CPPFLAGS)
 
 AM_CLFAGS = -fanalyzer
