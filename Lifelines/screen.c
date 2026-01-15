@@ -50,6 +50,7 @@
 #include "translat.h"
 #include "xlat.h"
 #include "readwrite.h"
+#include "editing.h"
 #include "stringtable.h"
 #include "options.h"
 
