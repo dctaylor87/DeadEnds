@@ -102,7 +102,7 @@ selectAndOpenDatabase(CString *dbFilename,
       /* there were errors */
       msg_errorlog (errorLog);
       if (saveErrorLog (ImportLog, errorLog))
-	msg_error ("Import errors have been saved in %s\n", ImportLog);
+	msg_info ("Import errors have been saved in %s\n", ImportLog);
       else
 	msg_error ("Attempt to save import errors to %s failed\n", ImportLog);
       return NULL;
@@ -115,7 +115,7 @@ selectAndOpenDatabase(CString *dbFilename,
 	  /* there were errors */
 	  msg_errorlog (errorLog);
 	  if (saveErrorLog (ImportLog, errorLog))
-	    msg_error ("Import errors have been saved in %s\n", ImportLog);
+	    msg_info ("Import errors have been saved in %s\n", ImportLog);
 	  else
 	    msg_error ("Attempt to save import errors to %s failed\n", ImportLog);
 	  return NULL;
@@ -135,7 +135,7 @@ selectAndOpenDatabase(CString *dbFilename,
 	  /* there were errors */
 	  msg_errorlog (errorLog);
 	  if (saveErrorLog (ImportLog, errorLog))
-	    msg_error ("Import errors have been saved in %s\n", ImportLog);
+	    msg_info ("Import errors have been saved in %s\n", ImportLog);
 	  else
 	    msg_error ("Attempt to save import errors to %s failed\n", ImportLog);
 	  return NULL;
