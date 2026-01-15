@@ -10,6 +10,7 @@ libutils_a_SOURCES = \
 	errors.c \
 	fatal.c \
 	fpattern.c \
+	messages.c \
 	standard.c \
 	stdstrng.c \
 	strapp.c \

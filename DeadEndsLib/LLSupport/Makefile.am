@@ -2,6 +2,7 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # Makefile for the DeadEnds LLSupport library
+#	valid.c
 
 noinst_LIBRARIES = libllsupport.a
 
@@ -27,7 +28,6 @@ libllsupport_a_SOURCES = \
 	llgettext.c \
 	lloptions.c \
 	locales.c \
-	messages.c \
 	norm_charmap.c \
 	proptbls.c \
 	refns.c \
@@ -37,7 +37,6 @@ libllsupport_a_SOURCES = \
 	sprintpic.c \
 	strcvt.c \
 	translat.c \
-	valid.c \
 	write.c \
 	xlat.c \
 	xref.c

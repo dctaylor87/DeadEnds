@@ -38,16 +38,16 @@
 #include <ansidecl.h>
 #include <stdint.h>
 
-#include "porting.h"
+//#include "porting.h"
 #include "standard.h"
 #include "denls.h"
 #include "hashtable.h"
-#include "refnindex.h"
-#include "gnode.h"
+//#include "refnindex.h"
+//#include "gnode.h"
 #include "list.h"
 #include "zstr.h"
-#include "translat.h"
-#include "xlat.h"
+//#include "translat.h"
+//#include "xlat.h"
 #include "readwrite.h"
 
 #include "messages.h"
