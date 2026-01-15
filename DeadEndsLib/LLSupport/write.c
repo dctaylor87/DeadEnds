@@ -34,6 +34,7 @@
 #include "date.h"
 #include "xlat.h"
 #include "messages.h"
+#include "readwrite.h"
 #include "editing.h"
 #include "splitjoin.h"
 #include "codesets.h"
@@ -68,7 +69,6 @@ static void write_node(int levl, FILE *fp, XLAT ttm,
 
 GNode *
 file_to_node (String fname,
-	      XLAT ttmi ATTRIBUTE_UNUSED,
 	      String *pmsg, bool *pemp)
 {
   ErrorLog *errorLog = createErrorLog ();
@@ -127,7 +127,7 @@ file_to_node (String fname,
 GNode *
 file_to_record (String fname, XLAT ttm, String *pmsg, bool *pemp)
 {
-	GNode *node = file_to_node(fname, ttm, pmsg, pemp);
+	GNode *node = file_to_node(fname, pmsg, pemp);
 	if (!node)
 		return 0;
 	if (nxref(node)) {
