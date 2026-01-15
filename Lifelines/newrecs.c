@@ -51,6 +51,8 @@
 #include "readwrite.h"
 #include "stringtable.h"
 #include "options.h"
+#include "errors.h"
+#include "validate.h"
 
 #include "rfmt.h"
 #include "sequence.h"
@@ -87,9 +89,9 @@
  *********************************************/
 
 /* alphabetical */
-static GNode *edit_add_record(String recstr, String redt, String redtopt
-	, char ntype, String cfrm);
-static bool edit_record(GNode *rec1, String idedt, int letr, String redt,
+static GNode *edit_add_record(String recstr, String redt, String redtopt,
+			      RecordType ntype, String cfrm);
+static bool edit_record(GNode *rec1, String idedt, RecordType letr, String redt,
 			   String redtopt,
 			   bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
 			   bool (*todbase)(GNode *, Database *),
@@ -109,7 +111,7 @@ edit_add_source (void)
 	String str;
 
 	str = getdeoptstr("SOURREC", _(qSdefsour));
-	return edit_add_record(str, _(qSrredit), _(qSrreditopt), 'S', _(qScfradd));
+	return edit_add_record(str, _(qSrredit), _(qSrreditopt), GRSource, _(qScfradd));
 }
 /*==============================================
  * edit_add_event -- Add event to database by editing
@@ -120,7 +122,7 @@ edit_add_event (void)
 	String str;
 
 	str = getdeoptstr("EVENREC", _(qSdefeven));
-	return edit_add_record(str, _(qSeredit), _(qSereditopt), 'E', _(qScfeadd));
+	return edit_add_record(str, _(qSeredit), _(qSereditopt), GREvent, _(qScfeadd));
 }
 /*====================================================
  * edit_add_other -- Add user record to database by editing
@@ -131,18 +133,18 @@ edit_add_other (void)
 	String str;
 
 	str = getdeoptstr("OTHR", _(qSdefothr));
-	return edit_add_record(str, _(qSxredit), _(qSxreditopt), 'X', _(qScfxadd));
+	return edit_add_record(str, _(qSxredit), _(qSxreditopt), GROther, _(qScfxadd));
 }
 /*================================================
  * edit_add_record -- Add record to database by editing
  *  recstr:  [IN] default record
  *  redt:    [IN] re-edit message
  *  redtopt: [IN] re-edit message for non critical faults
- *  ntype,   [IN] S, E, or X
+ *  ntype,   [IN] RecordType -- GRSource, GREvent, or GROther
  *  cfrm:    [IN] confirm message
  *==============================================*/
 static GNode *
-edit_add_record (String recstr, String redt, String redtopt, char ntype, String cfrm)
+edit_add_record (String recstr, String redt, String redtopt, RecordType ntype, String cfrm)
 {
 	FILE *fp;
 	GNode *node=0, *refn;
@@ -153,13 +155,13 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
 	
 	/* set up functions according to type */
-	if (ntype == 'S') {
+	if (ntype == GRSource) {
 		getreffnc = getNewSourceKey;
 		todbasefnc = addOrUpdateSourceInDatabase;
-	} else if (ntype == 'E') {
+	} else if (ntype == GREvent) {
 		getreffnc = getNewEventKey;
 		todbasefnc = addOrUpdateEventInDatabase;
-	} else { /* X */
+	} else {
 		getreffnc = getNewOtherKey;
 		todbasefnc = addOrUpdateOtherInDatabase;
 	}
@@ -177,7 +179,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 	do_edit();
 	while (true) {
 		int cnt;
-		node = file_to_node(editfile, ttmi, &msg, &emp);
+		node = file_to_node(editfile, &msg, &emp);
 		if (!node) {
 			if (ask_yes_or_no_msg(msg, redt)) { /* yes, edit again */
 				do_edit();
@@ -188,7 +190,7 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 		cnt = resolveRefnLinks(node, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_node_type(node, ntype, &msg, NULL, currentDatabase)) {
+		if (!validate_new_record(node, NULL, ntype, &msg, currentDatabase)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
@@ -230,8 +232,8 @@ edit_add_record (String recstr, String redt, String redtopt, char ntype, String 
 bool
 edit_source (GNode *rec, bool rfmt)
 {
-	return edit_record(rec, _(qSidredt), 'S', _(qSrredit), _(qSrreditopt),
-			   valid_sour_tree, _(qScfrupt),
+	return edit_record(rec, _(qSidredt), GRSource, _(qSrredit), _(qSrreditopt),
+			   validateNewSource, _(qScfrupt),
 			   addOrUpdateSourceInDatabase, _(qSgdrmod), rfmt);
 }
 /*=====================================
@@ -240,8 +242,8 @@ edit_source (GNode *rec, bool rfmt)
 bool
 edit_event (GNode *rec, bool rfmt)
 {
-	return edit_record(rec, _(qSideedt), 'E', _(qSeredit), _(qSereditopt),
-			   valid_even_tree, _(qScfeupt),
+	return edit_record(rec, _(qSideedt), GREvent, _(qSeredit), _(qSereditopt),
+			   validateNewEvent, _(qScfeupt),
 			   addOrUpdateEventInDatabase, _(qSgdemod), rfmt);
 }
 /*===========================================
@@ -250,8 +252,8 @@ edit_event (GNode *rec, bool rfmt)
 bool
 edit_other (GNode *rec, bool rfmt)
 {
-	return edit_record(rec, _(qSidxedt), 'X', _(qSxredit), _(qSxreditopt),
-			   valid_othr_tree, _(qScfxupt),
+	return edit_record(rec, _(qSidxedt), GROther, _(qSxredit), _(qSxreditopt),
+			   validateNewOther, _(qScfxupt),
 			   addOrUpdateOtherInDatabase, _(qSgdxmod), rfmt);
 }
 /*=======================================
@@ -290,7 +292,7 @@ write_node_to_editfile (GNode *node)
  * edit_record -- Edit record in database
  *  root1:   [IN]  record to edit (may be NULL)
  *  idedt:   [IN]  user id prompt
- *  letr:    [IN]  record type (E, S, or X)
+ *  letr:    [IN]  RecordType (formerly E, S, or X)
  *  redt:    [IN]  reedit prompt displayed if hard error after editing
  *  redtopt: [IN]  reedit prompt displayed if soft error (unresolved links)
  *  val:     [IN]  callback to validate routine
@@ -301,7 +303,7 @@ write_node_to_editfile (GNode *node)
  *  rfmt:    [IN]  display reformatter
  *=====================================*/
 static bool
-edit_record(GNode *rec1, String idedt, int letr, String redt,
+edit_record(GNode *rec1, String idedt, RecordType letr, String redt,
 	    String redtopt,
 	    bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
 	    bool (*todbase)(GNode *, Database *),
@@ -333,7 +335,7 @@ edit_record(GNode *rec1, String idedt, int letr, String redt,
 
 	while (true) {
 		int cnt;
-		root2 = file_to_node(editfile, ttmi, &msg, &emp);
+		root2 = file_to_node(editfile, &msg, &emp);
 		if (!root2) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
