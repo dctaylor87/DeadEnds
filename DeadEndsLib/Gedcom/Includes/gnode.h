@@ -45,6 +45,46 @@ struct GNode {
 #define nrefcnt_dec(node)	((node)->refcount--)
 #define get_nrefcnt(node)	((node)->refcount)
 
+/* walk a tree executing some code at each node.
+   order: node before children, children before siblings */
+
+#define ITERGNODETREE(node) \
+{ \
+  GNode *_root = node; \
+  while (true) \
+    { \
+      if (! node) \
+	break;			/* done */ \
+ \
+      {
+
+#define ENDITERGNODETEEE \
+      }	\
+ \
+      /* depth first before siblings */ \
+      if (nchild(node)) \
+	{ \
+	  node = nchild(node); \
+	  continue; \
+	} \
+      else if (nsibling(node)) \
+	{ \
+	  node = nsibling(node); \
+	  continue; \
+	} \
+      /* go up the tree looking for siblings */ \
+      for (node = nparent(node); node != _root; node = nparent(node)) \
+	{ \
+	  if (nsibling(node)) \
+	    { \
+	      node = nsibling(node); \
+	      break; \
+	    } \
+	} \
+      break;			/* for loop didn't find anything */ \
+    } \
+}
+
 // Application programming interface to this type.
 GNode* createGNode(CString key, CString tag, CString value, GNode* parent);
 void freeGNode(GNode*);
