@@ -1,5 +1,8 @@
 #define NAMESEP		'/'	/* separates surname from the rest of the name */
 
+extern String editfile;
+extern String editstr;
+
 extern void prefix_file_for_edit (FILE *fp);
 extern void prefix_file_for_gedcom (FILE *fp);
 extern void prefix_file_for_report (FILE *fp);
