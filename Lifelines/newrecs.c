@@ -70,6 +70,7 @@
 #include "locales.h"
 #include "lloptions.h"
 #include "editing.h"
+#include "valid.h"
 
 #include "llpy-externs.h"
 
@@ -93,7 +94,7 @@ static GNode *edit_add_record(String recstr, String redt, String redtopt,
 			      RecordType ntype, String cfrm);
 static bool edit_record(GNode *rec1, String idedt, RecordType letr, String redt,
 			   String redtopt,
-			   bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
+			   String cfrm,
 			   bool (*todbase)(GNode *, Database *),
 			   String gdmsg, bool rfmt);
 
@@ -150,7 +151,6 @@ edit_add_record (String recstr, String redt, String redtopt, RecordType ntype, S
 	GNode *node=0, *refn;
 	String msg, key;
 	bool emp;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	CString (*getreffnc)(Database *) = NULL; /* get next internal key */
 	bool (*todbasefnc)(GNode *, Database *) = NULL;  /* write record to dbase */
 	
@@ -190,7 +190,7 @@ edit_add_record (String recstr, String redt, String redtopt, RecordType ntype, S
 		cnt = resolveRefnLinks(node, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!validate_new_record(node, NULL, ntype, &msg, currentDatabase)) {
+		if (!validate_new_record(node, NULL, ntype, currentDatabase, &msg)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;
@@ -233,7 +233,7 @@ bool
 edit_source (GNode *rec, bool rfmt)
 {
 	return edit_record(rec, _(qSidredt), GRSource, _(qSrredit), _(qSrreditopt),
-			   validateNewSource, _(qScfrupt),
+			   _(qScfrupt),
 			   addOrUpdateSourceInDatabase, _(qSgdrmod), rfmt);
 }
 /*=====================================
@@ -243,7 +243,7 @@ bool
 edit_event (GNode *rec, bool rfmt)
 {
 	return edit_record(rec, _(qSideedt), GREvent, _(qSeredit), _(qSereditopt),
-			   validateNewEvent, _(qScfeupt),
+			   _(qScfeupt),
 			   addOrUpdateEventInDatabase, _(qSgdemod), rfmt);
 }
 /*===========================================
@@ -253,7 +253,7 @@ bool
 edit_other (GNode *rec, bool rfmt)
 {
 	return edit_record(rec, _(qSidxedt), GROther, _(qSxredit), _(qSxreditopt),
-			   validateNewOther, _(qScfxupt),
+			   _(qScfxupt),
 			   addOrUpdateOtherInDatabase, _(qSgdxmod), rfmt);
 }
 /*=======================================
@@ -303,13 +303,12 @@ write_node_to_editfile (GNode *node)
  *  rfmt:    [IN]  display reformatter
  *=====================================*/
 static bool
-edit_record(GNode *rec1, String idedt, RecordType letr, String redt,
+edit_record(GNode *rec1, String idedt, RecordType ntype, String redt,
 	    String redtopt,
-	    bool (*val)(GNode *, String *, GNode *, Database *), String cfrm,
+	    String cfrm,
 	    bool (*todbase)(GNode *, Database *),
 	    String gdmsg, bool rfmt)
 {
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	String msg, key;
 	bool emp;
 	GNode *root0=0, *root1=0, *root2=0;
@@ -318,7 +317,7 @@ edit_record(GNode *rec1, String idedt, RecordType letr, String redt,
 
 /* Identify record if need be */
 	if (!rec1) {
-		rec1 = ask_for_record(idedt, letr, database);
+		rec1 = ask_for_record(idedt, ntype, database);
 	}
 	root1 = nztop(rec1);
 	if (!root1) {
@@ -346,7 +345,7 @@ edit_record(GNode *rec1, String idedt, RecordType letr, String redt,
 		cnt = resolveRefnLinks(root2, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!(*val)(root2, &msg, root1, database)) {
+		if (! validate_new_record (root2, root1, ntype, database, &msg)) {
 			if (ask_yes_or_no_msg(msg, redt)) {
 				do_edit();
 				continue;

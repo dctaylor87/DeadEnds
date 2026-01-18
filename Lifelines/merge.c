@@ -71,11 +71,13 @@
 #include "splitjoin.h"
 #include "remove.h"
 #include "nodeutils.h"
+#include "validate.h"
 #include "ll-addoperations.h"
 #include "browse.h"
 #include "refns.h"
 #include "name.h"
 #include "xref.h"
+#include "valid.h"
 
 #include "llpy-externs.h"
 
@@ -132,7 +134,6 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 	GNode *this, *that, *prev, *next, *node, *head;
 	GNode *fam12;
 	GNode *name24, *refn24;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
 	SexType sx2;
@@ -227,7 +228,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 /* Have user edit merged person */
 	do_edit();
 	while (true) {
-		indi4 = file_to_node(editfile, ttmi, &msg, &emp);
+		indi4 = file_to_node(editfile, &msg, &emp);
 		if (!indi4 && !emp) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -235,7 +236,7 @@ merge_two_indis (GNode *indi1, GNode *indi2, bool conf)
 			} 
 			break;
 		}
-		if (!valid_indi_tree(indi4, &msg, indi3, currentDatabase)) {
+		if (!validate_new_record(indi4, indi3, GRPerson, currentDatabase, &msg)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -490,7 +491,6 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	GNode *fref1, *fref2;
 	GNode *fam3, *husb3, *wife3, *chil3, *rest3, *fref3;
 	GNode *fam4=0, *husb4, *wife4, *chil4, *rest4, *fref4;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	FILE *fp;
 	String msg;
@@ -549,7 +549,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	joinFamily(fam3, fref3, husb3, wife3, rest3, chil3);
 	do_edit();
 	while (true) {
-		fam4 = file_to_node(editfile, ttmi, &msg, &emp);
+		fam4 = file_to_node(editfile, &msg, &emp);
 		if (!fam4 && !emp) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
@@ -559,7 +559,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 		}
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_fam_tree(fam4, &msg, fam3, currentDatabase)) {
+		if (!validate_new_record(fam4, fam3, GRFamily, currentDatabase, &msg)) {
 			if (ask_yes_or_no_msg(_(qSbadata), _(qSiredit))) {
 				do_edit();
 				continue;

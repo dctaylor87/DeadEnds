@@ -52,12 +52,13 @@
 #include "rfmt.h"
 #include "database.h"
 #include "sequence.h"
+#include "gedcom.h"
 #include "errors.h"
+#include "validate.h"
 #include "xlat.h"
 #include "ask.h"
 #include "feedback.h"
 #include "llinesi.h"
-#include "gedcom.h"
 #include "liflines.h"
 #include "messages.h"
 #include "choose.h"
@@ -68,6 +69,7 @@
 #include "editing.h"
 #include "refns.h"
 #include "nodeutils.h"
+#include "valid.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -86,7 +88,6 @@ bool
 edit_indi (GNode *irec1, bool rfmt)
 {
 	GNode *indi1, *indi2=0;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Identify indi if necessary */
 	if (!irec1 && !(irec1 = ask_for_indi(_(qSidpedt), NOASK1, currentDatabase)))
@@ -106,7 +107,7 @@ edit_indi (GNode *irec1, bool rfmt)
 		int cnt;
 		String msg;
 		bool emp;
-		indi2 = file_to_node(editfile, ttmi, &msg, &emp);
+		indi2 = file_to_node(editfile, &msg, &emp);
 		if (!indi2) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -116,7 +117,7 @@ edit_indi (GNode *irec1, bool rfmt)
 		}
 		cnt = resolveRefnLinks(indi2, currentDatabase);
 		/* validate for showstopper errors */
-		if (!valid_indi_tree(indi2, &msg, indi1, currentDatabase)) {
+		if (!validate_new_record(indi2, indi1, GRPerson, currentDatabase, &msg)) {
 			/* if fail a showstopper error, must reedit or abort */
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -126,6 +127,7 @@ edit_indi (GNode *irec1, bool rfmt)
 			indi2 = NULL;
 			break;
 		}
+
 		/* Allow user to reedit if desired if any refn links unresolved */
 		/* this is not a showstopper, so alternative is to continue */
 		if (cnt > 0) {
@@ -167,7 +169,6 @@ edit_family (GNode *frec1, bool rfmt)
 {
 	GNode *fam1=0, *fam2=0;
 	GNode *irec=0;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	String msg;
 	bool changed = false;
 
@@ -192,7 +193,7 @@ edit_family (GNode *frec1, bool rfmt)
 	while (true) {
 		int cnt;
 		bool emp;
-		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
+		fam2 = file_to_node(editfile, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
@@ -203,7 +204,7 @@ edit_family (GNode *frec1, bool rfmt)
 		cnt = resolveRefnLinks(fam2, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_fam_tree(fam2, &msg, fam1, currentDatabase)) {
+		if (!validate_new_record(fam2, fam1, GRFamily, currentDatabase, &msg)) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;

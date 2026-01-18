@@ -81,11 +81,13 @@
 #include "codesets.h"
 #include "lineage.h"
 #include "name.h"
+#include "validate.h"
 #include "xref.h"
 #include "de-strings.h"
 #include "ui.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "valid.h"
 
 /* everything in this file assumes we are dealing with the current database */
 #define database	currentDatabase
@@ -121,7 +123,6 @@ add_indi_by_edit (bool rfmt)
 	GNode *indi=0;
 	String str, msg;
 	bool emp;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 
 /* Create person template for user to edit */
 
@@ -148,7 +149,7 @@ add_indi_by_edit (bool rfmt)
 			releaseRecord(indi0);
 			indi0=0;
 		}
-		indi0 = file_to_node(editfile, ttmi, &msg, &emp);
+		indi0 = file_to_node(editfile, &msg, &emp);
 		if (!indi0) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
@@ -160,7 +161,7 @@ add_indi_by_edit (bool rfmt)
 		cnt = resolveRefnLinks(indi, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_indi_tree(indi, &msg, NULL, currentDatabase)) {
+		if (!validate_new_record(indi, NULL, GRPerson, currentDatabase, &msg)) {
 			if (ask_yes_or_no_msg(msg, _(qSiredit))) {
 				do_edit();
 				continue;
@@ -557,7 +558,6 @@ add_family_by_edit (GNode *sprec1, GNode *sprec2,
 	SexType sex2 = sexUnknown;
 	GNode *spouse1, *spouse2, *child;
 	GNode *fam1, *fam2=0, *husb, *wife, *chil;
-	XLAT ttmi = transl_get_predefined_xlat(MEDIN);
 	XLAT ttmo = transl_get_predefined_xlat(MINED);
 	String msg=0, key=0, str=0;
 	bool emp;
@@ -646,7 +646,7 @@ editfam:
 	do_edit();
 	while (true) {
 		int cnt;
-		fam2 = file_to_node(editfile, ttmi, &msg, &emp);
+		fam2 = file_to_node(editfile, &msg, &emp);
 		if (!fam2) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
@@ -657,7 +657,7 @@ editfam:
 		cnt = resolveRefnLinks(fam2, currentDatabase);
 		/* check validation & allow user to reedit if invalid */
 		/* this is a showstopper, so alternative is to abort */
-		if (!valid_fam_tree(fam2, &msg, fam1, currentDatabase)) {
+		if (!validate_new_record(fam2, fam1, GRFamily, currentDatabase, &msg)) {
 			if (ask_yes_or_no_msg(msg, _(qSfredit))) {
 				do_edit();
 				continue;
@@ -782,7 +782,7 @@ add_family_to_db (GNode *spouse1, GNode *spouse2, GNode *child)
 	fclose(fp);
 	joinFamily(fam1, NULL, husb, wife, chil, NULL);
 
-	fam2 = file_to_node(editfile, tti, &msg, &emp);
+	fam2 = file_to_node(editfile, &msg, &emp);
 
 	freeGNodes(fam1);
 
