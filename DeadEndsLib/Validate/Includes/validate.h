@@ -37,9 +37,7 @@ extern bool validateNewPerson(GNode *new, GNode *old,
 			      Database *database, ErrorLog *errorLog);
 extern bool validateNewFamily(GNode *new, GNode *old,
 			      Database *database, ErrorLog *errorLog);
-#if 0
-extern bool valid_name(String);
-#endif
+//extern bool valid_name(String);
 extern bool validateNewRecord(GNode *newNode, GNode *origNode, RecordType ntype,
 			      Database *database, ErrorLog *errorLog);
 extern bool validateNewSource(GNode *new, GNode *orig,
