@@ -2,7 +2,6 @@
 # (configure will process the resulting Makefile.in to produce Makefile)
 
 # Makefile for the DeadEnds LLSupport library
-#	valid.c
 
 noinst_LIBRARIES = libllsupport.a
 
@@ -37,6 +36,7 @@ libllsupport_a_SOURCES = \
 	sprintpic.c \
 	strcvt.c \
 	translat.c \
+	valid.c \
 	write.c \
 	xlat.c \
 	xref.c
@@ -52,7 +52,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
-	-I$(top_srcdir)/DeadEndsLib/Database/Includes
+	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Validate/Includes
 
 AM_CLFAGS = -fanalyzer
 
