@@ -114,7 +114,7 @@ static void showErrorLog_1 (FILE *file, ErrorLog *errorLog) {
 	ENDLIST
 }
 
-bool saveErrorLog (String filename, ErrorLog *errorLog)
+bool saveErrorLog (CString filename, ErrorLog *errorLog)
 {
   FILE *file = fopen (filename, "w");
 
@@ -124,4 +124,39 @@ bool saveErrorLog (String filename, ErrorLog *errorLog)
   showErrorLog_1 (file, errorLog);
   fclose (file);
   return true;
+}
+
+static CString errorSeverityStrings[] = {
+  "fatal",
+  "severe",
+  "warning",
+  "comment"
+};
+
+CString strErrorSeverity (Error *error)
+{
+  ErrorSeverity severity = error->severity;
+
+  if ((severity < 0) || (severity > commentError))
+    return "UNKNOWN Severity";
+
+  return errorSeverityStrings[severity];
+}
+
+static CString errorTypeStrings[] = {
+  "system",
+  "syntax",
+  "gedcom",
+  "linkage",
+  "usage"
+};
+
+CString strErrorType (Error *error)
+{
+  ErrorType type = error->type;
+
+  if ((type < 0) || (type > usageError))
+    return "UNKNOWN Type";
+
+  return errorTypeStrings[type];
 }

@@ -50,6 +50,8 @@ void deleteError(Error*);
 void addErrorToLog(ErrorLog*, Error*);
 void showErrorLog(ErrorLog*);
 void showError(FILE *, Error*);
-bool saveErrorLog (String filename, ErrorLog *errorLog);
+bool saveErrorLog (CString filename, ErrorLog *errorLog);
+CString strErrorSeverity (Error *error);
+CString strErrorType (Error *error);
 
 #endif // errors_h
