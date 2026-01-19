@@ -10,8 +10,9 @@ noinst_LIBRARIES = libvalidate.a
 
 libvalidate_a_SOURCES = \
 	validate.c \
+	valfamily.c \
 	valperson.c \
-	valfamily.c
+	valrecord.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
