@@ -70,10 +70,65 @@ the string @code{str} as a complex date, including date modifiers,
 ranges, and/or double-dating.
 @end defun
 
+@defun extractDate(CString string, int* pmod, int* pday, int* pmonth, int* pyear, String* pystr) @arrow{} void
+Attempt to extract date from any string.
+@end defun
+
 @section gedcom.h
 
 @defun recordType (GNode *root) @arrow{} RecordType
 Return the type of a Gedcom record tree.
+@end defun
+
+@defun sexTypeToString (SexType) @arrow{} String
+Returns the GEDCOM character for a SeXType.
+@end defun
+
+@defun sexTypeFromString (CString) @arrow{} SexType
+Return the SexType of a string.
+@end defun
+
+@defun validSexString (String) @arrow{} bool
+Validates a string value to be @code{M}, @code{F}, or @code{U}.
+Does not currently know about @code{X} as a value (GEDCOM 7.x).
+@end defun
+
+@defun keyToKey (CString key) @arrow{} CString
+Takes a 'lazy' key (may omit the @code{@@}-signs and have lower case
+letters) and converts it to a real key.
+@b{NOTE:} Returns static memory.
+@end defun
+
+@defun compareRecordKeys (CString, CString) @arrow{} int
+Compares record keys.  Longer keys sort after shorter keys.
+@end defun
+
+@section gedpath.h
+
+@defun createGedPath (void) @arrow{} GedPath*
+Create an empty GedPath.
+@end defun
+
+@defun deleteGedPath (GedPath *path) @arrow{} void
+Returns the memory used by a GedPath list.
+@end defun
+
+@defun buildGedPath (CString) @arrow{} GedPath*
+Build a GedPath from an expression.
+@end defun
+
+@defun traverseGedPath (GNode*, GedPath*, GNodeList*, int*) @arrow{} void
+Traverses a Gedcom path collecting the GNodes at the endpoints.
+@end defun
+
+@defun showGedPath (GedPath*) @arrow{} void
+For debugging.  Show a GedPath on stdout.
+@end defun
+
+@defun showGNodePath (GNode*, int level) @arrow{} int
+Shows the path from root to node.  Prints, on stdout, the path from
+the root of a GNode tree to a given node in the tree.  Intended for
+debubbing the GedPath feature.
 @end defun
 
 @section gnode.h
@@ -84,81 +139,263 @@ pointer to a parent @code{GNode}.  When a @code{GNode} is created, the
 @code{key} and @code{value}, if present, are allocated on the heap,
 and the @code{tag} pointer points into the tag table.
 @end defun
+
 @defun freeGNode (GNode*) @arrow{} void
 @end defun
+
 @defun freeGNodes (GNode* node) @arrow{} void
 Frees all GNodes in a tree or a forest of GNodes.
 @end defun
+
 @defun personToFamilyAsChild (GNode *person, RecordIndex*) @arrow{} GNode*
 Returns the (first) family in which @code{person} is a child.
 
 Most individuals are a child in at most one family.  Exceptions might
 include persons who were adopted.
 @end defun
+
 @defun personToEvent (GNode* person, String tag, String head, int len, bool shorten) @arrow{} String
 Searches the immediate children of @code{person} for event @code{tag},
 returns the event subtree as a string using a static buffer.
 @end defun
+
 @defun familyToEvent (GNode* node, String tag, String head, int len, bool shorten) @arrow{} String
 Searches the immediate children of @code{node} for event @code{tag},
 returns the event subtree as a string using a static buffer.
 @end defun
+
 @defun eventToString (GNode* node, bool shorten) @arrow{} String
 @end defun
+
 @defun eventToDate (GNode* node, bool shorten) @arrow{} String
 Returns the value of the @code{DATE} line of an event as a string.  If
 @code{shorten} is @code{true}, then the string is shortened before
 being returned.
 @end defun
+
 @defun eventToPlace (GNode* node, bool shorten) @arrow{} String
 Returns the value of the @code{PLAC} line of an event as a string.  If
 @code{shorten} is @code{true}, then the string is shortened before
 being returned.
 @end defun
+
 @defun lengthGNodes (GNode* node) @arrow{} int
 Counts @code{node} and its siblings.  Returns the number of nodes.
 @end defun
+
 @defun copyGNode (GNode* node) @arrow{} GNode*
 Creates a new @code{GNode} having the same @code{key}, @code{tag}, and
 @code{value} as @code{node}.  The copy's @code{parent} is set to
 @code{null}.
 @end defun
+
 @defun copyGNodes (GNode* node, bool kids, bool sibs) @arrow{} GNode*
 Copies a @code{GNode} tree.  if @code{kids} is @code{true}, children
 are copied as well.  If @code{sibs} is @code{true}, siblings are
 copied as well.
 @end defun
+
 @defun findNode (GNode* parent, String tag, String value, GNode** plast) @arrow{} GNode*
 Finds the first child node with a specific tag @code{tag} and/or value
 @code{value}.  One or both of @code{tag} and @code{value} must be
 non-null.  The @code{plast} pointer can be used to point to the GNode
 before the returned GNode.
 @end defun
+
 @defun isKey (CString str) @arrow{} bool
 Returns @code{true} if a string has the a @acronym{GEDCOM} key format.
 Does @b{NOT} verify that the key is present in any database.
 @end defun
+
 @defun findTag (GNode* node, CString tag) @arrow{} GNode*
 Looks at @code{node} and its subsequent sibling nodes for a tag of
 @code{tag}.  If found, it is returned, otherwise null is returned.
 @end defun
+
 @defun valueToSex (GNode* node) @arrow{} SexType
 Converts the @code{value} of node @code{node} having tag @code{SEX} to
 a @code{SexType} enumerated value.
 @end defun
+
 @defun createTempGNode (String xref, String tag, String val, GNode *prnt) @arrow{} GNode*
 Creates and returns a @code{GNode} having xref @code{xref}, tag
 @code{tag}, value @code{val}, and parent @code{prnt}.  The resulting
 @code{Gnode} is marked as a temporary @code{Gnode}.
 @end defun
+
 @defun isTempGNode (GNode *node) @arrow{} bool
 Returns @code{true} if GNode @code{node} is a temporary node and
 @code{false} otherwise.
 @end defun
+
 @defun setTempGNode (GNode *node, bool temp) @arrow{} void
 If @code{temp} is @code{true}, GNode @code{node}, its children, and
 its siblings are marked as temporary nodes.  Otherwise they are marked
 as non-temporary.
+@end defun
+
+@defun gnodeLevel (GNode* node) @arrow{} int
+Returns the level of a GNode by counting parent links.
+@end defun
+
+@defun showGNodeTree (GNode*) @arrow{} void
+For debugging.  Shows a tree of GNodes.
+@end defun
+
+@defun showGNodes (int, GNode*) @arrow{} void
+Prints a GNode tree recursively.
+@end defun
+
+@defun showGNode (int level, GNode*) @arrow{} void
+Prints the string (GEDCOM line) form of a GNode to stdout.
+@end defun
+
+@defun shortenDate (String) @arrow{} String
+Returns the short form of a date value.
+@end defun
+
+@defun shortenPlace (String) @arrow{} String
+Returns the short form of a place value.
+@end defun
+
+@defun traverseNodes (GNode* node, int level, bool (*func)(GNode*, int)) @arrow{} void
+Traverse the GNodes of a GEDCOM record calling function @code{func} on
+each passing it the node and the level.
+@end defun
+
+@defun countGNodes (GNode* node) @arrow{} int
+Returns the number of GNodes in a GNode tree or forest.
+@end defun
+
+@defun countNodesBefore (GNode*) @arrow{} int
+Returns the number of GNodes that occur before this one is depth
+first, left-to-right order.  Used in error messages.  This should be
+the number of lines in a GEDCOM file from the root to the node.
+@end defun
+
+@defun recordKey (GNode* node) @arrow{} String
+Returns the key of the record that the node is from.  Can be null if
+the node is part of a detached node tree.
+@end defun
+
+@defun numGNodeAllocs (void) @arrow{} int
+For debugging.  Returns the number of GNodes that have been allocated.
+@end defun
+
+@defun numGNodeFrees (void) @arrow{} int
+For debugging.  Returns the number of GNodes that have been freed.
+@end defun
+
+@section gnodeindex.h
+
+@defun createGNodeIndex (void(*delete)(void*)) @arrow{} GNodeIndex*
+Creates a HashTable that indexes GNode roots with arbitrary data. Set
+@code{delete} to a function if the data should be deleted when the
+table is deleted.
+@end defun
+
+@defun createGNodeIndexEl (GNode* root, void* data) @arrow{} GNodeIndexEl*
+Creates an element for a GNodeIndex hash table.
+@end defun
+
+@defun addToGNodeIndex (GNodeIndex*, GNode*, void* data) @arrow{} void
+Adds a GNode and arbitrary data pair to a GNodeIndex.
+@end defun
+
+@defun showGNodeIndex (GNodeIndex*, void(*show)(void*)) @arrow{} void
+For debugging.  Shows a GNodeIndex.
+@end defun
+
+@defun searchGNodeIndex (GNodeIndex*, String key) @arrow{} GNode*
+Searches a GNodeIndex for the GNode with the given key.
+@end defun
+
+@section gnodelist.h
+
+@defun createGNodeListEl (GNode* gnode, int level) @arrow{} GNodeListEl*
+Creates a GNodeList element. @code{gnode} is the GNode and
+@code{level} is its Gedcom level.
+@end defun
+
+@defun createGNodeList (void) @arrow{} GNodeList*
+Creates a GNodeList.
+@end defun
+
+@defun deleteGNodeList (GNodeList*) @arrow{} void
+Deletes a GNodeList.
+@end defun
+
+@defun getGNodeListFromFile (File* file, IntegerTable* keymap, ErrorLog* elog) @arrow{} GNodeList*
+Uses @code{fileToLine} to get the GNodeList of all GNodes in a GEDCOM file. If
+@code{keymap} is not null it is used to map record keys to the lines where defined. Syntax errors
+are added to the ErrorLog. The file is fully processed regardless of errors. If errors are
+found the list is deleted and null is returned. The data field in the GNodeListEl holds the
+Gedcom level of the GNode. @code{getRootListFromGNodeList} needs the node levels for its state machine.
+@end defun
+
+@defun getGNodeListFromString (String, ErrorLog*) @arrow{} GNodeList*
+Reads a String with Gedcom records and creates and converts them into
+a GNodeList.
+
+TODO: The string functions have not caught up.
+@end defun
+
+@defun getGNodeTreesFromString (String, String, ErrorLog* errorLog) @arrow{} GNodeList*
+Reads a String holding Gedcom records and returns them as a GNodeList.
+
+TODO: The string functions have not caught up!!
+@end defun
+
+@defun appendToGNodeList (GNodeList*, GNode*, int) @arrow{} void
+Adds a new element to a GNodeList.
+@end defun
+
+@defun showGNodeList (GNodeList* nodeList) @arrow{} void
+For debugging.
+@end defun
+
+@section key.h
+
+@defun keyToPersonRecord (CString key, Database *database) @arrow{} GNode*
+@code{key} -- Key of the person record. The @@-signs are not part of the database key.
+@code{index} -- Record index to search for the person.
+@end defun
+
+@defun keyToFamilyRecord (CString key, Database *database) @arrow{} GNode*
+@code{key} -- Key of the family record. The @@-signs are not part of the key.
+@code{index} -- Record index to search for the family.
+@end defun
+
+@defun GNode *keyToSourceRecord (CString key, Database *database) @arrow{} GNode*
+Get a source record from the database.
+@end defun
+
+@defun GNode *keyToEventRecord (CString key, Database *database) @arrow{} GNode*
+Get an event record from a database.
+@end defun
+
+@defun GNode *keyToOtherRecord (CString key, Database *database) @arrow{} GNode*
+Get an other record from a database.
+@end defun
+
+@defun GNode* keyToPerson (CString key, RecordIndex* index) @arrow{} GNode*
+Get a person record from a database.
+@end defun
+
+@defun GNode* keyToFamily (CString key, RecordIndex* index) @arrow{} GNode*
+Get a family record from a database.
+@end defun
+
+@defun GNode* keyToSource (CString key, RecordIndex* index) @arrow{} GNode*
+Get a source record from a database.
+@end defun
+
+@defun GNode* keyToEvent (CString key, RecordIndex* index) @arrow{} GNode*
+Get an event record from a database.
+@end defun
+
+@defun GNode* keyToOther (CString key, RecordIndex* index) @arrow{} GNode*
+Get an other record from a database.
 @end defun
 
 @section lineage.h
@@ -184,14 +421,33 @@ Return first wife of a family.
 @defun familyToFirstChild (GNode*, RecordIndex*) @arrow{} GNode*
 Return first child of family.
 @end defun
+
+@defun familyToLastChild (GNode*, RecordIndex*) @arrow{} GNode*
+Return the last child of family.
+@end defun
+
 @defun personToName (GNode*, int) @arrow{} String
 Return the first name of a person.
 @end defun
+
 @defun personToTitle (GNode*, int) @arrow{} String
 Return the first title of a person.
 @end defun
+
 @defun numberOfFamilies (GNode*) @arrow{} int
 Return the number of families a person is a spouse in.
+@end defun
+
+@defun familyToSpouse (GNode*, SexType, RecordIndex* index) @arrow{} GNode*
+Return first spouse of given sex.
+@end defun
+
+@defun numberOfSpouses (GNode*, Database*) @arrow{} int
+Return the number of spouses of a person.
+@end defun
+
+@defun oppositeSex (SexType) @arrow{} SexType
+Return the opposite sex of a person.
 @end defun
 
 @section name.h
@@ -199,40 +455,330 @@ Return the number of families a person is a spouse in.
 @defun manipulateName (CString, bool caps, bool reg, int maxlen) @arrow{} String
 Manipulate a name.
 @end defun
+
 @defun getSurname (CString name) @arrow{} String
 Get the surname of a Gedcom name.
 If no surname is present in @code{name}, then @code{____} is returned.
 @end defun
+
 @defun getGivenNames (CString) @arrow{} String
 Get the given names of a Gedcom name.
 @end defun
+
 @defun soundex (CString surname) @arrow{} String
 Get the Soundex code of a Gedcom surname.
 @end defun
+
 @defun nameToNameKey (CString name) @arrow{} String
 Convert a partial or full Gedcom name to a name key.
 @end defun
+
 @defun nameString (CString name) @arrow{} String
 Remove slashes from a name.
 @end defun
+
 @defun trimName (CString name, int len) @arrow{} CString
 Trim name to specific length.
+@end defun
+
+@defun upsurname (CString name) @arrow{} String
+Make a GEDCOM name have an all uppercase surname.
+@end defun
+
+@defun getFirstInitial (CString name) @arrow{} int
+Returns the first initial of a GEDCOM name.
+@end defun
+
+@defun compareNames (CString name1, CString name2) @arrow{} int
+Compares two Gedcom names and returns their relationship.
+@end defun
+
+@defun personKeysFromName (CString name, RecordIndex*, NameIndex*, int* pcount) @arrow{} String*
+Finds all persons with a name that matches a given name pattern;
+returns an array of Strings with the record keys; pcount set to number
+of Strings. The strings are the elements in a static block. See MNOTE
+below.
+
+@b{NOTE:} This function uses a static Block to hold record keys. It is
+reused on every call.  Caller must save the returned Strings if they
+are to persist.
+@end defun
+
+@defun nameToList (String name, List*, int *len, int *sind) @arrow{} bool
+Converts a name to a List of Strings; List must exist; uses static
+memory. plen is the number of strings; psind is the (pointer to the)
+index of the surname (zero indexed).  If there is no surname psind
+will point to -1.
+@end defun
+
+@defun exactMatch (CString partial, CString complete) @arrow{} bool
+Checks if a partial name is contained within a complete name.
 @end defun
 
 @section nodeutils.h
 
 @defun unionNodes (GNode* node1, GNode* node2, bool kids, bool copy) @arrow{} GNode*
+Returns the union of two GNode trees.  If @code{kids} is @code{true},
+children matter; if @code{copy} is @code{true}, copy the operands.
 @end defun
-@defun classifyNodes (GNode**, GNode**, GNode**) @arrow{} void
+@defun classifyNodes (GNode** pnode1, GNode** pnode2, GNode** pnode3) @arrow{} void
+Converts two GNode lists to three. The first holds the values that
+were only in the first list. The second holds the values that were
+only in the second list. The third holds all the values that were in
+both original lists. The input lists are modified.
 @end defun
+
 @defun equalTree (GNode*, GNode*) @arrow{} bool
+equalTree Checks if two GNode trees are equal.
 @end defun
-@defun isoGNodes (GNode*, GNode*, bool, bool) @arrow{} bool
+
+@defun isoGNodes (GNode* root1, GNode* root2, bool kids, bool sibs) @arrow{} bool
+Checks if two GNode trees or forests are isomorphic; if @code{kids} and @code{sibs}
+are @code{true} include them in the check.
+@end defun
+
+@defun uniqueNodes (GNode*, bool) @arrow{} GNode*
+Removes duplicates a from list of nodes. If @code{kids} is true children matter.
+@end defun
+
+@defun intersect_nodes (GNode*, GNode*, bool) @arrow{} GNode*
+Return the intersection of two Node trees.
+@end defun
+
+@defun difference_nodes (GNode* node1, GNode* node2, bool kids) @arrow{} GNode*
+Returns the difference of two GNode lists, all in @code{node1} that
+are not in @code{node2}. If @code{kids} is @code{true}, children
+matter.
+@end defun
+
+@defun valueInNodes (GNode*, CString) @arrow{} bool
+Checks if a list of GNodes contains a given value.
+@b{Not currently used.}
+@end defun
+
+@defun equalNode (GNode*, GNode*) @arrow{} bool
+Checks if two GNodes are equal.
+@end defun
+
+@defun isoList (GNode*, GNode*) @arrow{} bool
+Checks if two node lists are isomorphic.
+@end defun
+
+@defun equalNodes (GNode*, GNode*, bool kids, bool sibs) @arrow{} bool
+Checks if two GNode structures are equal; if @code{kids} and
+@code{sibs} are @code{true} include them in the check.
+@end defun
+
+@section place.h
+
+@defun placeToList (String place, List *list) @arrow{} void
+Converts a Gedcom PLAC value to a list of phrases. A phrase is a
+string that occurs before the first comma, after the last comma, or
+between successive commas. White space is trimmed from the phrases.
+@end defun
+
+@defun valueToList (String str, List *list, String dlm) @arrow{} void
+Converts a String to a list of trimmed phrases split by delimiters.
+Each phrase is trimmed of leading/trailing whitespace and added to the list.
+Returns true on success.
+
+TODO: Should be elsewhere.
+@end defun
+
+@section readnode.h
+
+@defun fileToLine (FILE*, int* line, int* lev, String* key, String* tag, String* val, String* err) @arrow{} ReadReturn
+Reads the next Gedcom line from a file. Empty lines are okay.
+@end defun
+
+@defun stringToLine (String* ps, int* line, int* lev, String* key, String* tag, String *val, String* err) @arrow{} ReadReturn
+Gets the next Gedcom line as fields from a String with one or more
+Gedcom lines.  Reads to the next newline, if any, and processes that
+part of the String. Returns updated pointer to next line.
+@end defun
+
+@section refns.h
+
+@defun resolveRefnLinks (GNode *node, Database *database) @arrow{} int
+Attempt to resolve the REFN links within node.  When successful,
+replaces <something> with @@something-else@@.  Returns the number of
+unresolved REFN links.
+@end defun
+
+@defun addRefn (CString refn, CString key, Database *database) @arrow{} bool
+If refn is already present in the refn index,
+ if it maps to key, returns true
+ if it maps to a different key, returns false
+ otherwise, add the mapping refn --> key to the index,
+ and return true.
+@end defun
+
+@defun removeRefn (CString refn, CString key, Database *database) @arrow{} bool
+Searches the refn index within the database, if not found or it maps
+to a different key, then returns false.  Otherwise, removes it and
+returns true.
+@end defun
+
+@defun getRefn (CString refn, Database *database) @arrow{} CString
+Searches the index for a mapping for @code{refn}, if found, returns it.
+If not found, @code{null} is returned.  */
+@end defun
+
+@defun indexByRefn (GNode *node, Database *database) @arrow{} bool
+Scans all immediate children of node for REFNs.
+For each one found, we add a mapping in the REFN index.
+
+If any already exist with a different key, false (failure) is
+returned indicating one or more failures; otherwise true (success)
+is returned.  All that do not currently exist are added.
+
+NOTE: needs a better name!
+@end defun
+
+@defun annotateWithSupplemental (GNode *node, bool rfmt, Database *database) @arrow{} void
+/* should it copy the tree? */
 @end defun
 
 @section rootlist.h
 
+@defun createRootList (void) @arrow{} RootList*
+Create a RootList with its compare and getkey functions.
+@end defun
+
 @defun insertInRootList (RootList*, GNode*) @arrow{} void
+Insert a new root GNode* into a RootList.
+@end defun
+
+@defun deleteRootList (RootList*) @arrow{} void
+Deletes a Rootlist. The GNodes are not deleted.
+@end defun
+
+@defun appendToRootList (RootList*, GNode* gnode) @arrow{} void
+Appends @code{gnode} to the end of the RootList.
+@end defun
+
+@defun getRootListFromGNodeList (GNodeList*, String file, ErrorLog*) @arrow{} RootList*
+Processes the GNodeList of all GNodes from a Gedcom source into a
+RootList of all GNode records.  It uses a state machine to track
+levels and errors, so the data field in the GNodeList must be level
+numbers.  The input GNodeLisit is not deleted.
+@end defun
+
+@defun showRootList (RootList*) @arrow{} void
+For debugging.  Shows on stdout the root GNodes of the trees in the RootList.
+@end defun
+
+@section seqlineage.h
+
+@defun personToChildren (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Iterates over all the families @code{person} is a spouse in and adds
+all the children of each family to a sequence.  Returns the sequence.
+If there are no children, returns @code{null}.
+@end defun
+
+@defun personToFathers (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Iterates over all the families that @code{person} is a child in and
+adds the husbands to a sequence.  Returns the sequence if it is
+non-empty.  Otherwise it returns @code{null}.
+@end defun
+
+@defun personToMothers (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Iterates over all the families that @code{person} is a child in and
+adds the wives to a sequence.  Returns the sequence if it is
+non-empty.  Otherwise it returns @code{null}.
+@end defun
+
+@defun familyToChildren (GNode* family, RecordIndex* index) @arrow{} Sequence*
+Creates a Sequence of a family's children.
+@end defun
+
+@defun familyToFathers (GNode* family, RecordIndex* index) @arrow{} Sequence*
+Creates a Sequence of a family's fathers/husbands.
+@end defun
+
+@defun familyToMothers (GNode* family, RecordIndex* index) @arrow{} Sequence*
+Creates a Sequence of a family's mothers/wives.
+@end defun
+
+n@defun personToSpouses (GNode* person, RecordIndex* index) @arrow{} Sequence*
+Creates a Sequence of a person's spouses; must be male or female;
+spouses must have the opposite sex; if there is more than one sex in a
+family the first is used.
+@end defun
+
+@defun personToFamilies (GNode* person, bool fams, RecordIndex* index) @arrow{} Sequence*
+Creates a Sequence of a person's families. If @code{fams} is
+@code{true} the families are those the person is a spouse in, else
+they are those the person is a child in.
+@end defun
+
+@defun refnToSequence (CString value, RecordIndex*, RefnIndex*) @arrow{} Sequence*
+Returns a single element Sequence with the record with given refn value; or null.
+@end defun
+
+@defun stringToSequence (CString name, Database* database) @arrow{} Sequence*
+Returns a person sequence whose members "match" a string. Order: a)
+named Sequence (don't exist); b) key with or without leading 'I' (if
+used); c) REFN value; d) name.
+@end defun
+
+@defun ancestorSequence (Sequence*, bool close) @arrow{} Sequence*
+Creates a Sequence of all ancestors of the persons in the input Sequence.
+Persons in the input sequence are not in the ancestor sequence unless they are also an
+ancestor of someone in the input Sequence.
+
+TODO: Consider adding a "close" argument as done in siblingSequence.
+@end defun
+
+@defun descendentSequence (Sequence*, bool close) @arrow{} Sequence*
+Creates a descendant Sequence of a Sequence. Those in the input Sequence
+are not in the descendents unless they are a descendent of someone in the input Sequence.
+
+TODO: Consider adding a "close" flag to the interface.
+@end defun
+
+@defun siblingSequence (Sequence*, bool close) @arrow{} Sequence*
+Creates the Sequence of the siblings of the persons in the input
+Sequence.  If @code{close} is @code{true}, persons in the input
+Sequence are added to the sibling Sequence.
+@end defun
+
+@defun childSequence (Sequence*) @arrow{} Sequence*
+Creates a Sequence of the children of the persons in another Sequence.
+@end defun
+
+@defun parentSequence (Sequence*) @arrow{} Sequence*
+Creates a Sequence with the parents of the persons in given Sequence.
+@end defun
+
+@defun spouseSequence (Sequence*) @arrow{} Sequence*
+Creates spouses Sequence of a Sequence.
+@end defun
+
+@defun sequenceToGedcom (Sequence*, FILE*) @arrow{} void
+Generate a Gedcom file from a sequence of persons. Only persons in the
+the sequence are written. Families with links to at least two persons
+in the sequence are also written to the file. Other persons referred
+to in the families are not included, and the links to the other
+persons are removed.
+@end defun
+
+@defun limitPersonNode (GNode *node, int level) @arrow{} bool
+@end defun
+
+@defun familyToSpouses (GNode *fam, Database *database) @arrow{} Sequence*
+Create sequence of spouses of family.
+@end defun
+
+@defun nameToSequence (CString name, RecordIndex* rindex, NameIndex* nindex) @arrow{} Sequence*
+Returns the Sequence of persons who match a Gedcom name. If the first letter of
+the given names is '*', the Sequence will contain all persons who match the surname.
+
+MNOTE: returns a new sequence; caller responsible for its memory.
+@end defun
+
+@defun keyToSequence (CString key, RecordIndex* index) @arrow{} Sequence*
+Returns a single element Sequence with the record with the given key; or null.
 @end defun
 
 @section splitjoin.h
@@ -241,26 +787,40 @@ Trim name to specific length.
 @defunx joinPerson (GNode* indi, GNode* name, GNode* refn, GNode* sex, GNode* body, GNode* famc, GNode* fams) @arrow{} void
 @defunx splitFamily (GNode* fam, GNode** prefn, GNode** phusb, GNode** pwife, GNode** pchil, GNode** prest) @arrow{} void
 @defunx joinFamily (GNode* fam, GNode* refn, GNode* husb, GNode* wife, GNode* chil, GNode* rest) @arrow{} void
+@defunx splitSource (GNode *root, GNode **prefn, GNode **pbody) @arrow{} void
+@defunx joinSource  (GNode *root, GNode *refn, GNode *body) @arrow{} void
+@defunx splitEvent (GNode *root, GNode **prefn, GNode **pbody) @arrow{} void
+@defunx joinEvent (GNode *root, GNode *refn, GNode *body) @arrow{} void
 @defunx splitOther (GNode *root, GNode **prefn, GNode **pbody) @arrow{} void
-@defunx joinOther  (GNode *root, GNode *refn, GNode *body) @arrow{} void
+@defunx joinOther (GNode *root, GNode *refn, GNode *body) @arrow{} void
 
 These functions are used to place the nodes within a record into
 canonical order.  These functions are usually called in two
 circumstances.  First, when a GEDCOM file is first read in to create a
-database.  And second, when a record is edited.
+database.  And second, when a record is edited or added
+@end defun
+
+@defun normalizePerson (GNode*) @arrow{} GNode*
+@defunx normalizeFamily (GNode*) @arrow{} GNode*
+@defunx normalizeSource (GNode*) @arrow{} GNode*
+@defunx normalizeEvent (GNode*) @arrow{} GNode*
+@defunx normalizeOther (GNode*) @arrow{} GNode*
+Simplified interface to the corresponding split / join function.  It
+calls the corresponding split function and then calls the join
+function on the result.
 @end defun
 
 @defun normalizeRecord (GNode* node) @arrow{} GNode*
-Simplified interface to the split / join functions.  It looks at the
-@code{tag} of the GNode @code{node}, calls the appropriate pair of
-split / join functions, and returns the result.
+An even more simplified interface to the split / join functions.  It
+looks at the @code{tag} of the GNode @code{node}, calls the
+appropriate pair of split / join functions, and returns the result.
 @end defun
 
 @section writenode.h
 
 @defun writeGNodeRecord (FILE* fp, GNode* root, bool indent) @arrow{} void
 Write the record rooted at @code{root} to the stdio stream @code{fp}.
-If @code{index} is true, then each level is indented relative to the
+If @code{indent} is true, then each level is indented relative to the
 the previous level.  This is visually useful when editing.
 
 When exporting a database, this function would typically be called
@@ -268,4 +828,23 @@ iteratively on all the @code{root} nodes within the database.  When
 exporting, @code{indent} should be @code{false}.
 
 When exporting, you'll also need to write a header and a trailer.
+@end defun
+
+@defun gnodesToFile (int level, GNode* gnode, CString fileName, bool indent) @arrow{} void
+Writes a GNode tree or forest to a file. Opens the file, calls
+writeGNodes to write the nodes, and closes the file. Returns whether
+the write occurred. @code{level} is level of the top GNode (typically
+zero); @code{gnode} is the root, @code{fileName} is the file name and
+@code{indent} indicates whether the first should be indented.
+@end defun
+
+@defun writeGNodes (FILE*, int level, GNode*, bool indent, bool kids, bool sibs) @arrow{} void
+Writes a GNode tree or forest to a file. @code{level} is the current
+level; @code{indent} specifies indenting; @code{kids} and @code{sibs}
+indicate recursing to children and siblings.
+@end defun
+
+@defun writeGNode (FILE*, int level, GNode*, bool indent) @arrow{} void
+Writes a single GNode to a file. @code{level} is the node's level;
+@code{indent} specifies whether to indent the lines.
 @end defun

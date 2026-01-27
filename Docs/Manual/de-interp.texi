@@ -47,73 +47,98 @@ errors themselves, consult the @code{errorLog} argument to
 @code{parseProgram}
 @end deftypevar
 
-@section sequence.h
+@defun isGNodeType (PVType type) @arrow{} bool
+Returns true if a PVType is one of the GNode types.
+@end defun
 
-@defun createSequence (RecordIndex* index) @arrow{} Sequence*
-Creates an empty sequence and returns it.  The @code{index} is
-recorded in the sequence header.
+@defun createStringPValue (CString) @arrow{} PValue
+Creates a String PValue with the String in the heap.
 @end defun
-@defun deleteSequence (Sequence* sequence) @arrow{} void
-Deletes @code{sequence}, freeing its memory.
+
+@defun isPValue (PValue value) @arrow{} bool
+Checks a PValue for validity by checking its type.
 @end defun
-@defun copySequence (Sequence*) @arrow{} Sequence*
+
+@defun isRecordType (PVType type) @arrow{} bool
+Checks if a PValue is a Gedcom node type.
 @end defun
-@defun lengthSequence (Sequence* sequence) @arrow{} int
-Returns the length of sequence @code{sequence}.
+
+@defun isGNodeType (PVType type) @arrow{} bool
+Returns true if a PVType is one of the GNode types.
 @end defun
-@defun appendToSequence (Sequence* sequence, CString key, const void* element) @arrow{} void
+
+@defun subPValues (PValue, PValue, bool* eflag) @arrow{} PValue
+Subtract two PValues and returns their difference.
 @end defun
-@defun isInSequence (Sequence* sequence, CString key) @arrow{} bool
-Checks to see if @code{key} is present in @code{sequence}.  If found,
-returns @code{true}, otherwise, returns @code{false}.
+
+@defun mulPValues (PValue, PValue, bool* eflag) @arrow{} PValue
+Multiplies two PValues and returns their product.
 @end defun
-@defun removeFromSequence (Sequence* sequence, CString key) @arrow{} bool
-Removes @code{key} from @code{sequence}.  Returns @code{true} if it
-was successfully removed.  Returns @code{false} otherwise.
+
+@defun divPValues (PValue, PValue, bool* eflag) @arrow{} PValue
+Divides two PValues and returns their quotient.
 @end defun
-@defun removeFromSequenceByIndex  (Sequence *sequence, int index) @arrow{} bool
-Removes the sequence element having index @code{code}.  Returns
-@code{true} on success, @#code{false} on failure.
+
+@defun modPValues (PValue, PValue, bool* eflag) @arrow{} PValue
+Takes the modulus of two PValues. Both values must be integers.
 @end defun
-@defun nameSortSequence (Sequence* sequence) @arrow{} void
-Sorts #@code{sequence} by name.  Assumes it is a sequence of person records.
+
+@defun negPValue (PValue, bool* eflag) @arrow{} PValue
+Negates a PValue which must be numeric.
 @end defun
-@defun personToChildren (GNode* person, RecordIndex* index) @arrow{} Sequence*
-Iterates over all the families @code{person} is a spouse in and adds
-all the children of each family to a sequence.  Returns the sequence.
-If there are no children, returns @code{null}.
+
+@defun expPValues (PValue, PValue, bool* eflag) @arrow{} PValue
+Raises the first number to the power of the second. They must be integers.
 @end defun
-@defun personToFathers (GNode* person, RecordIndex* index) @arrow{} Sequence*
-Iterates over all the families that @code{person} is a child in and
-adds the husbands to a sequence.  Returns the sequence if it is
-non-empty.  Otherwise it returns @code{null}.
+
+@defun equalPValues (PValue, PValue) @arrow{} bool
+Returns whether two PValue are equal.
 @end defun
-@defun personToMothers (GNode* person, RecordIndex* index) @arrow{} Sequence*
-Iterates over all the families that @code{person} is a child in and
-adds the wives to a sequence.  Returns the sequence if it is
-non-empty.  Otherwise it returns @code{null}.
+
+@defun coercePValue (PValue* pvalue, int newType, bool* errorFlag) @arrow{} void
 @end defun
-@defun familyToChildren (GNode* family, RecordIndex* index) @arrow{} Sequence*
+
+@defun clonePValue (const PValue* original) @arrow{} PValue*
+Returns a heap-allocated copy of the given PValue.
+If the value is a @code{PVString}, the underlying string is duplicated.
 @end defun
-@defun familyToFathers (GNode* family, RecordIndex* index) @arrow{} Sequence*
+
+@defun cloneAndReturnPValue (const PValue* original) @arrow{} PValue
+Clones a copy of a PValue on the heap, but then makes a stack copy,
+Frees the heap copy and returns the stack copy.
 @end defun
-@defun familyToMothers (GNode* family, RecordIndex* index) @arrow{} Sequence*
+
+@defun typeOfPValue (PValue) @arrow{} String
+Returns the 'type' of a PValue as a String.
 @end defun
-@defun personToSpouses (GNode* person, RecordIndex* index) @arrow{} Sequence*
+
+@defun valueOfPValue (PValue) @arrow{} String
+Returns the value of a `PValue` as a `String`.
+The caller is responsible for freeing the `String`.
 @end defun
-@defun personToFamilies (GNode* person, bool, RecordIndex* index) @arrow{} Sequence*
+
+@defun pvalueReferenceCount (PValue *pvalue) @arrow{} int
+For those @code{PValue}s for which there is a reference count, it
+returns it.  For other @code{PValue}s, it returns zero.
 @end defun
-@defun refnToSequence (CString value, RecordIndex*, RefnIndex*) @arrow{} Sequence*
+
+@defun numericPValue (PValue value) @arrow{} bool
+Checks if a PValue has numeric type.
 @end defun
-@defun stringToSequence (CString name, Database* database) @arrow{} Sequence*
+
+@defun* allocPValue (PVType type, VUnion value) @arrow{} PValue
+Allocates a @code{PValue} in the heap.
+@code{PValue}s are usually value types, but when stored in tables or
+lists they must be in the heap.
 @end defun
-@defun ancestorSequence (Sequence*, bool close) @arrow{} Sequence*
+
+@defun freePValue (PValue* pvalue) @arrow{} void
+Frees the memory of an allocated PValue.
 @end defun
-@defun descendentSequence (Sequence*, bool close) @arrow{} Sequence*
+
+@defun addReferenceToPValue (PValue *pvalue) @arrow{} void
+Increments the reference count for those @code{PValue}s which are countable.
 @end defun
-@defun siblingSequence (Sequence*, bool close) @arrow{} Sequence*
-@end defun
-@defun elementFromSequence (Sequence* sequence, int index, CString* key, CString* name) @arrow{} bool
-@end defun
-@defun renameElementInSequence (Sequence* sequence, CString key) @arrow{} void
+
+@defun releasePValue (PValue *pvalue) @arrow{} void
 @end defun

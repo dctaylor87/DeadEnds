@@ -13,8 +13,12 @@ database, whether to modify existing records or to add new records.
 
 @section keylist.h
 
-@defun insertInRootList (RootList*, GNode*) @arrow{} void
-Insert a new root GNode* into a RootList.
+@defun createKeyList (Database*) @arrow{} KeyList*
+Create a KeyList with its compare and getkey functions.
+@end defun
+
+@defun insertInKeyList (KeyList*, String) @arrow{} void
+Insert a key into a KeyList.
 @end defun
 
 @section refnindex.h
@@ -28,10 +32,26 @@ Searches RefnIndex @code{index} for REFN @code{refn}.  If found, it
 returns its key, otherwise it returns null.
 @end defun
 
+@defun createRefnIndexEl (CString refn, CString key) @arrow{} RefnIndexEl*
+@end defun
+
+@defun createRefnIndex (void) @arrow{} RefnIndex*
+@end defun
+
+@defun deleteRefnIndex (RefnIndex*) @arrow{} void
+@end defun
+
+@defun showRefnIndex (RefnIndex*) @arrow{} void
+@end defun
+
 @section database.h / database.c
 
 @deftypevar Database* currentDatabase
 @end deftypevar
+
+@defun createDatabase (CString fileName, RootList*, IntegerTable*, ErrorLog*) @arrow{} Database*
+Create a database.
+@end defun
 
 @defun deleteDatabase (Database* database) @arrow{} void
 Delete a database, freeeing its memory.  It is the the caller's
@@ -86,6 +106,49 @@ record, it is returned.  Otherwise @code{null} is returned.
 Add a record to the database.
 @end defun
 
+@defun databaseIsDirty (Database *database) @arrow{} bool
+Returns true if the database is dirty;  false if the database is clean.
+@end defun
+
+@defun setDatabaseDirty (Database *database, bool dirty) @arrow{} void
+Sets the database dirty state to value of 'dirty'.
+@end defun
+
+@defun getDatabaseDirty (Database *database) @arrow{} bool
+Gets the database dirty state.
+@end defun
+
+@defun writeDatabase (String fileName, Database*) @arrow{} void
+@end defun
+
+@defun indexNames (Database*) @arrow{} void
+// Index person names after reading the Gedcom file.
+@end defun
+
+@defun bool isEmptyDatabase (Database*) @arrow{} bool
+Return true if the database has no persons or families.
+@end defun
+
+@defun keyToRecord (CString key, Database *) @arrow{} GNode*
+Return a key's record
+@end defun
+
+@defun oldIndexNames (Database* database) @arrow{} void
+Indexes all person names in a database.
+@end defun
+
+@defun summarizeDatabase (Database*) @arrow{} void
+@end defun
+
+@defun getCount (void) @arrow{} int
+@end defun
+
+@defun generateFamilyKey (Database*) @arrow{} String
+@end defun
+
+@defun generatePersonKey (Database*) @arrow{} String
+@end defun
+
 @section recordindex.h
 
 @defun addToRecordIndex (RecordIndex*, GNode* root) @arrow{} void
@@ -94,6 +157,24 @@ Add a record to the database.
 @end defun
 @defun releaseRecord (GNode *element) @arrow{} void
 @end defun
+
+@defun createRecordIndex (void) @arrow{} RecordIndex*
+@end defun
+
+@defun deleteRecordIndex (RecordIndex*) @arrow{} void
+@end defun
+
+@defun searchRecordIndex (RecordIndex*, CString) @arrow{} GNode*
+@end defun
+
+@defun showRecordIndex (RecordIndex*) @arrow{} void
+@end defun
+
+@defmac FORRECORDINDEX (table, gnode, type)
+Iterates a RecordIndex returning only GNode*s of a specific type.
+@end defmac
+@defmac ENDRECORDINDEX
+@end defmac
 
 @section nameindex.h
 
@@ -110,14 +191,30 @@ Called as part of deleting a database.  Unless you created the
 NameIndex @code{nameIndex}, via a call to @code{createNameIndex}, you
 probably don't need to call this.
 @end defun
+
 @defun insertInNameIndex (NameIndex* index, CString nameKey, CString personKey) @arrow{} void
 Adds @code{personKey} to the set of keys returned when @code{index} is
 searched for @code{nameKey}.
 @end defun
+
 @defun removeFromNameIndex (NameIndex *index, CString namekey, CString recordKey) @arrow{} void
 Removes @code{recordKey} from @code{nameKey} in @code{index}.
 @end defun
+
 @defun removeNamesOfPersonFromIndex (NameIndex* index, GNode* person) @arrow{} void
 @end defun
+
 @defun searchNameIndex (NameIndex*, CString) @arrow{} Set*
+@end defun
+
+@defun getNameIndex (RootList*) @arrow{} NameIndex*
+@end defun
+
+@defun showNameIndex (NameIndex*) @arrow{} void
+@end defun
+
+@defun showNameIndexStats (NameIndex*) @arrow{} void
+@end defun
+
+@defun getNameIndexStats (NameIndex*, int*, int*) @arrow{} void
 @end defun

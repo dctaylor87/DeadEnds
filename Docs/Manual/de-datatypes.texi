@@ -43,17 +43,107 @@ increment ref. count of table
 decrement ref. count of table, free if zero
 @end defun
 
+@defun isInHashTable (HashTable*, CString key) @arrow{} bool
+Returns whether an element with the given key is in the HashTable.
+@end defun
+
+@defun searchHashTableWithElement (HashTable* table, void* element) @arrow{} void*
+Searches a HashTable for the element with the same key as the given element.
+@end defun
+
+@defun sizeHashTable (HashTable*) @arrow{} int
+Returns the size (number of elements) in a hash table.
+@end defun
+
+@defun showHashTable (HashTable*, void(*show)(void*)) @arrow{} void
+For debugging.  Shows the contents of a hash table, including bucket
+and element indexes.  The argument @code{show} is a function to show
+an element. Uses variables defined in the FORHASHTABLE macro.
+@end defun
+
+@defun dumpHashTable (HashTable*, void(*show)(void*)) @arrow{} void
+For debugging.  Dumps a hash table to standard error.  The argument
+@code{show} is currently ignored.
+@end defun
+
+@defun getHash (CString, int) @arrow{} int
+Returns the hash code of a String.
+@end defun
+
+@defun iterateHashTable (HashTable*, void (*function)(void*)) @arrow{} void
+Iterates a hash table and performs a function on each element. The elements
+are visited in hash key order.
+@end defun
+
+@defun iterateHashTableWithPredicate (HashTable*, bool(*predicate)(void*)) @arrow{} int
+Like @code{iterateHashTable}, it iterates a hash table. It runs a
+predicate on each element returning the number of elements that match
+the predicate.  Elements are visited in hash key order.
+@end defun
+
+@defun iterateHashTableWithPredicate2 (HashTable*, void *predicateArg, bool(*predicate)(void* element, void* extra)) @arrow{} int
+Like @code{iterateHashTableWithPredicate}, it iterates a hash table,
+running a predicate on each element and returning the number of
+elements that matched the predicate.  But, the predicate takes an
+extra argument -- to avoid the need to extra variables.
+@end defun
+
+@defun createBucket (void) @arrow{} Bucket*
+Creates and returns an empty Bucket.
+@end defun
+
+@defun lengthBucket (Bucket* bucket) @arrow{} int
+Returns the length of a Bucket.
+@end defun
+
+@defun appendToBucket (Bucket*, void* element) @arrow{} void
+Adds a new element to the end of a bucket.
+@end defun
+
+@defun removeElement (HashTable*, void* element) @arrow{} void
+Removes an element from a hash table. It does not use binary search in cases
+where it should.
+@end defun
+
+@defun incrReferenceCountTable (HashTable *table, CString file, int line, CString function) @arrow{} void
+Increments the reference count of a HashTable.  The @code{file},
+@code{line}, and @code{function} arguments are for logging purposes
+when debugging and reflect the file, line, and function of the caller.
+
+Typically not called directly, but instead via the INCRTABLEREFCOUNT
+macro.
+@end defun
+
+@defmac INCRTABLEREFCOUNT (table)
+Calls @code{incrReferenceCountTable} to increment the reference count of @code{table}.
+@end defmac
+
 @section integertable.h
 
 @defun createIntegerTable (int numBuckets) @arrow{} IntegerTable*
 Creates a hash table having the specified number of buckets.  The hash
 table keys are strings, the values are integers.
 @end defun
+
 @defun incrIntegerTable (IntegerTable* table, CString key) @arrow{} void
 Retrieves the HashTable @code{table} entry having key @code{key},
 increments its value, and stores it back into the table.  If the
 element is not found, a new element is added having having a key of
 @code{key} and a value of @code{1}.
+@end defun
+
+@defun insertInIntegerTable (IntegerTable*, CString key, int value) @arrow{} void
+Inserts a string @code{key} into an into the integer table with a value of @code{value}.
+@b{NOTE:} The @code{key} is not saved.
+@end defun
+
+@defun searchIntegerTable (IntegerTable*, CString key) @arrow{} int
+Searches for @code{key} in an integer table and returns its integer value.
+Returns @code{DeadEndsNAN} (== @code{__INT_MAX__}) if @code{key} is not there.
+@end defun
+
+@defun showIntegerTable (IntegerTable*) @arrow{} void
+For debugging.  Shows the contents of an integer table.
 @end defun
 
 @section list.h
@@ -63,45 +153,307 @@ Creates an empty List having the specified getKey @code{g}, compare
 @code{c}, and delete @code{d} functions.  If @code{sorted} is
 @code{true}, the list is a sorted list.
 @end defun
+
 @defun deleteList (List* list) @arrow{} void
 Deletes the elements in List @code{list}.  Also frees @code{list}.
 @end defun
+
 @defun lengthList (List* list) @arrow{} int
 Returns the number of elements in @code{list}
 @end defun
+
 @defun isEmptyList (List* list) @arrow{} bool
 Returns @code{true} if List @code{list} is empty, @code{false}
 otherwise.
 @end defun
+
 @defun findInList (List* list, CString key, int* index index) @arrow{} void*
 Searches @code{list} for @code{key}.  If found, it is returned and
 @code{*index} is set to its index.  Otherwise, @code{null} is
 returned.
 @end defun
+
 @defun getListElement (List *list, int index) @arrow{} void*
+Gets a specific element from a list.  It is not a copy.
 @end defun
+
 @defun appendToList (List* list, const void* element) @arrow{} void
 Appends @code{element} to the end of @code{list}, extending the list
 by one element.
 @end defun
+
 @defun prependToList (List* list, const void* element) @arrow{} void
 Prepends @code{element} to the start of @code{list}, pushing all other
 elements down by one index.
 @end defun
+
 @defun sortList (List*) @arrow{} void
+Sorts a list using the list's compare function.
 @end defun
+
 @defun searchList (List* list, CString key, int* index) @arrow{} void*
+Searches @code{list} for the key @code{key}.  Returns the element and
+sets @code{index} to the location of the element.
 @end defun
+
 @defun removeFromList (List* list, int index) @arrow{} bool
 Remove element having index @code{index} from List @code{list}.  All
 subsequent elements are moved up by one.P
 @end defun
+
 @defun getAndRemoveFirstListElement (List*) @arrow{} void*
+@end defun
+
+@defun initList (List*, CString(*g)(const void*), int(*c)(CString, CString), void(*d)(void*), bool sorted) @arrow{} void
+Intiailizes a list.
+@end defun
+
+@defun emptyList (List*) @arrow{} void
+Removes all elements from a list.
+@end defun
+
+@defun copyList (List*, void*(*c)(void*)) @arrow{} List*
+Creates a copy of a list.  Requires a copy function to make copies of the list elements.
+@end defun
+
+@defun isInList (List*, CString key, int* index) @arrow{} bool
+Checks of an element with key @code{key} is in the list.  If found,
+@code{index} is set to its location.
+@end defun
+
+@defun setListElement (List*, void* element, int index) @arrow{} void
+Sets a specific element in a list.
+@end defun
+
+@defun insertInList (List*, const void* element, int index) @arrow{} void
+Inserts an element into a list at a specified location, moving the
+following elements down.  The isSorted flag is not changed.  If an
+insertion can cause a sorted list to become unsorted, then the caller
+should change the flag to @code{false}.
+@end defun
+
+@defun isSortedList (List*) @arrow{} bool
+Just checks the sorted flag.
+@end defun
+
+@defun isListSorted (List*) @arrow{} bool
+Really checks if the list is sorted.
+@end defun
+
+@defun uniqueList (List*) @arrow{} void
+Removes duplicates from a list.
+@end defun
+
+@defun removeFirstListElement (List*) @arrow{} bool
+Removes the first element for a list.  Uses the list's delete function.
+@end defun
+
+@defun removeLastListElement (List*) @arrow{} bool
+Removes the last element from a list.  Uses the list's delete function.
+@end defun
+
+@defun iterateList (List*, void(*perform)(void*)) @arrow{} void
+Iterates the elements of a list, calling function @code{perform} on
+each element.
+@end defun
+
+@defun isFirstElementInList (List*, void* element) @arrow{} bool
+Checks if @code{element} is the first element of the list.
+@end defun
+
+@defun isLastElementInList (List*, void* element) @arrow{} bool
+Checks if @code{element} is the last element of the list.
+@end defun
+
+@defun getFromList (List*, int index) @arrow{} void*
+Returns an indexed element from a list.  The element is not remove from the list.
+@end defun
+
+@defun getFirstListElement (List*) @arrow{} void*
+Returns the first element from a list.  It is not removed from the list.
+@end defun
+
+@defun getLastListElement (List*) @arrow{} void*
+Returns the last element from a list.  It is not removed from the list.
+@end defun
+
+@defun getAndRemoveLastListElement (List*) @arrow{} void*
+Removes the last element from the list and returns it to the caller.
+The caller must free it when done.
+@end defun
+
+@defun blockOfList (List*) @arrow{} Block*
+@end defun
+
+@defun showList (List *list, String(*describe)(void*)) @arrow{} void
+For debugging.  Shows the contents of a list to stdout.  The function
+@code{describe} is called on each element to print it.
+@end defun
+
+@defun incrReferenceCountList (List *list, CString file, int line, CString function) @arrow{} void
+Increments a list's reference count.  The @code{file}, @code{line},
+and @code{function} arguments are those of the caller and areused for
+debugging reference count issues.
+
+@b{NOTE:} This function is typically not alled directly, but instead
+via the INCRLISTREFCOUNT macro.
+@end defun
+
+@defmac INCRLISTREFCOUNT (list)
+Calls the @code{incrReferenceCountList} function supplying the
+@code{file}, @code{line}, and @code{function} arguments.
+@end defmac
+
+@section sequence.h
+
+@defun createSequence (RecordIndex* index) @arrow{} Sequence*
+Creates an empty sequence and returns it.  The @code{index} is
+recorded in the sequence header.
+@end defun
+
+@defun deleteSequence (Sequence* sequence) @arrow{} void
+Deletes @code{sequence}, freeing its memory.
+@end defun
+
+@defun copySequence (Sequence*) @arrow{} Sequence*
+Creates a copy of the given Sequence.
+@end defun
+
+@defun lengthSequence (Sequence* sequence) @arrow{} int
+Returns the length of sequence @code{sequence}.
+@end defun
+
+@defun appendToSequence (Sequence* sequence, CString key, const void* element) @arrow{} void
+Creates and appends a SequenceEl to a Sequence.
+@end defun
+
+@defun isInSequence (Sequence* sequence, CString key) @arrow{} bool
+Checks to see if @code{key} is present in @code{sequence}.  If found,
+returns @code{true}, otherwise, returns @code{false}.
+@end defun
+
+@defun removeFromSequence (Sequence* sequence, CString key) @arrow{} bool
+Removes @code{key} from @code{sequence}.  Returns @code{true} if it
+was successfully removed.  Returns @code{false} otherwise.
+@end defun
+
+@defun removeFromSequenceByIndex  (Sequence *sequence, int index) @arrow{} bool
+Removes the sequence element having index @code{code}.  Returns
+@code{true} on success, @code{false} on failure.
+@end defun
+
+@defun nameSortSequence (Sequence* sequence) @arrow{} void
+Sorts #@code{sequence} by name.  Assumes it is a sequence of person records.
+@end defun
+
+@defun elementFromSequence (Sequence* sequence, int index, CString* key, CString* name) @arrow{} bool
+@end defun
+
+@defun renameElementInSequence (Sequence* sequence, CString key) @arrow{} void
+Updates an element in a Sequence with a new name.
+@end defun
+
+@defun createSequenceEl (RecordIndex*, CString key, const void* value) @arrow{} SequenceEl*
+@end defun
+
+@defun emptySequence (Sequence*) @arrow{} void
+@end defun
+
+@defun appendSequenceToSequence (Sequence* dst, Sequence* src) @arrow{} void
+Appends a Sequence to another Sequence. The Sequences must be distinct.
+destination changes; source does not.
+@end defun
+
+@defun keySortSequence (Sequence*) @arrow{} void
+@end defun
+
+@defun uniqueSequence (Sequence*) @arrow{} Sequence*
+Returns a Sequence with the unique elements from the given Sequence.
+
+@b{NOTE:} creates a new Sequence, caller is responsible for freeing the original.
+@end defun
+
+@defun uniqueSequenceInPlace (Sequence *sequence) @arrow{} void
+Removes duplicate (have the same key) elements from a Sequence.
+@end defun
+
+@defun unionSequence (Sequence*, Sequence*) @arrow{} Sequence*
+unionSequence returns the union of two Sequences.
+@end defun
+
+@defun intersectSequence (Sequence*, Sequence*) @arrow{} Sequence*
+Returns the intersection of two Sequences.
+@end defun
+
+@defun differenceSequence (Sequence*, Sequence*) @arrow{} Sequence*
+Returns the difference of two Sequences.
+@end defun
+
+@defun showSequence (Sequence*, String title) @arrow{} void
+For debugging.  Shows the contents of a Sequence on stdout.
+@end defun
+
+@defun baseFree (void *word) @arrow{} void
+@end defun
+
+@defun incrReferenceCountSequence (Sequence *seq, CString file, int line, CString function) @arrow{} void
 @end defun
 
 @section set.h
 
+@defun createSet (CString(*getKey)(const void*), int(*compare)(CString, CString), void(*delete)(void*)) @arrow{} Set*
+Creates a set.  The @code{getKey} and @code{compare} functions are
+required; the @code{delete} function is optional.
+@end defun
+
+@defun deleteSet (Set*) @arrow{} void
+Frees a set.
+@end defun
+
 @defun lengthSet (Set*) @arrow{} int
+Returns the number of elements in a set.
+@end defun
+
+@defun isInSet (Set*, CString key) @arrow{} bool
+Checks whether an element with key @code{key} is in the set.
+@end defun
+
+@defun addToSet (Set*, const void*) @arrow{} void
+Adds an element to a set.  If an element with the same key is already
+in the set, the existing element is first removed.
+@end defun
+
+@defun removeFromSet (Set*, CString key) @arrow{} void
+Removes the element having key @code{key} from the set.  If no element
+having key @code{key} is found, does nothing.
+@end defun
+
+@defun iterateSet (Set*, void(*iter)(void*)) @arrow{} void
+Iterates the elements of a set, calling function @code{iter} on each.
+@end defun
+
+@defun showSet (Set*, String(*show)(void*)) @arrow{} void
+For debugging.
+Shows the contents of a set using the the function @code{show}.
+@end defun
+
+@defun listOfSet (Set*) @arrow{} List* // Underlying List.
+Returns the list that holds the set's elements.
+@end defun
+
+@section stringset.h
+
+@defun createStringSet (void) @arrow{} StringSet*
+Creates a stringSet.
+@end defun
+
+@defun deleteStringSet (StringSet*, bool del) @arrow{} void
+Deletes (frees) a string set.  If the boolean @code{del} is
+@code{true}, then the strings are also freed.
+@end defun
+
+@defun showStringSet (StringSet*) @arrow{} void
+For debugging.  Shows the strings in a string set.
 @end defun
 
 @section stringtable.h
@@ -117,6 +469,19 @@ value is returned.  Otherwise, null is returned.
 The StringTable @code{table} is searched for @code{key}.  If found, it
 is removed.  Then, regardless, @code{key} is added with a value of
 @code{value}.
+@end defun
+
+@defun isInStringTable (StringTable *table, CString key) @arrow{} bool
+Returns whether the string table has an element with the given key @code{key}.
+@end defun
+
+@defun fixString (StringTable *table, CString string) @arrow{} CString
+Adds an element to a string table that maps a string to itself.
+Both key and value point to different strings.
+@end defun
+
+@defun showStringTable (StringTable*) @arrow{} void
+For debugging.  Prints the string table keys and values o stdout.
 @end defun
 
 @section zstr.h

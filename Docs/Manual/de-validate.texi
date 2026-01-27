@@ -1,0 +1,99 @@
+@section validate.h
+
+@defun getReferenceIndex (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{}  RefnIndex*
+@end defun
+
+@defun rootLine (GNode*, IntegerTable*) @arrow{} int
+Returns the line number wqhere a root node was located in its GEDCOM file.
+@end defun
+
+@defun validatePersons (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
+Validates the person records in a database.
+@end defun
+
+@defun validateFamilies (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
+Validates the family records in a database
+@end defun
+
+@defun validateSourceIndex (Database* database, ErrorLog* errorLog) @arrow{} bool
+Validates the sources in a datatbase's source index.
+
+@b{NOTE:  Needs to be written.  Currently a stub that just returns true.}
+@end defun
+
+@defun validateEventIndex (Database* database, ErrorLog* errorLog) @arrow{} bool
+Validates the events in a datatbase's event index.
+
+@b{NOTE:  Needs to be written.  Currently a stub that just returns true.}
+@end defun
+
+@defun validateOtherIndex (Database* database, ErrorLog* errorLog) @arrow{} bool
+Validates the records in a datatbase's other index.
+
+@b{NOTE:  Needs to be written.  Currently a stub that just returns true.}
+@end defun
+
+@section validate.h / valrecord.c
+
+These functions are concerned with validating new records and edited
+records against a previously validated database.
+
+@defun validateNewRecord (GNode *newNode, GNode *origNode, RecordType ntype, Database *database, ErrorLog *errorLog) @arrow{} bool
+Main entry point for validating new and edited records.  Calls both
+@code{validateRecord} and the type specific validation function listed
+below.
+@end defun
+
+@defun validateRecord (GNode *, Database *, ErrorLog *) @arrow{} bool
+Does generic record validation.  Validation that is independent of the
+record type, such as ensuring that records that are pointed to actually exist.
+
+This is called by @code{validateNewRecord} for every record.
+
+Should probably be renamed.
+@end defun
+
+@defun validateNewPerson (GNode *new, GNode *old, Database *database, ErrorLog *errorLog) @arrow{} bool
+Validates a person tree.  If @code{old} is @code{null}, then @code{new}
+is a new record, otherwise it is an edit of @code{old}.  If errors
+occur, they are logged in @code{errorLog} and @code{false} is
+returned.  Otherwise, @code{true} is returned.
+
+This is called by @code{validateNewRecord} when @code{ntype} is @code{GRPerson}.
+@end defun
+
+@defun validateNewFamily (GNode *new, GNode *old, Database *database, ErrorLog *errorLog) @arrow{} bool
+Validates a family tree.  If @code{old} is @code{null}, then @code{new}
+is a new record, otherwise it is an edit of @code{old}.  If errors
+occur, they are logged in @code{errorLog} and @code{false} is
+returned.  Otherwise, @code{true} is returned.
+
+This is called by @code{validateNewRecord} when @code{ntype} is @code{GRFamily}
+@end defun
+
+@defun validateNewSource (GNode *new, GNode *orig, Database *database, ErrorLog *errorLog) @arrow{} bool
+Validates a source tree.  If @code{old} is @code{null}, then @code{new}
+is a new record, otherwise it is an edit of @code{old}.  If errors
+occur, they are logged in @code{errorLog} and @code{false} is
+returned.  Otherwise, @code{true} is returned.
+
+This is called by @code{validateNewRecord} when @code{ntype} is @code{GRSource}
+@end defun
+
+@defun validateNewEvent (GNode *new, GNode *orig, Database *database, ErrorLog *errorLog) @arrow{} bool
+Validates an event tree.  If @code{old} is @code{null}, then @code{new}
+is a new record, otherwise it is an edit of @code{old}.  If errors
+occur, they are logged in @code{errorLog} and @code{false} is
+returned.  Otherwise, @code{true} is returned.
+
+This is called by @code{validateNewRecord} when @code{ntype} is @code{GREvent}
+@end defun
+
+@defun validateNewOther (GNode *new, GNode *orig, Database *database, ErrorLog *errorLog) @arrow{} bool
+Validates an other tree.  If @code{old} is @code{null}, then @code{new}
+is a new record, otherwise it is an edit of @code{old}.  If errors
+occur, they are logged in @code{errorLog} and @code{false} is
+returned.  Otherwise, @code{true} is returned.
+
+This is called by @code{validateNewRecord} when @code{ntype} is @code{GROther}
+@end defun
