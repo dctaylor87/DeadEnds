@@ -411,7 +411,7 @@ Given a GNode @code{node}, return its xref.
 Defined in @file{gnode.h}
 @end defmac
 
-@deftypefun GNode* findTag (GNode *node, CString str) @arrow{}
+@deftypefun GNode* findTag (GNode *node, CString str)
 Given a GNode *@code{node}, check its tag and that of each of its
 siblings until either the tag @code{str} is found or we run out of
 siblings.  If we find it, we return a pointer to the node, otherwise
@@ -575,7 +575,7 @@ Checks and attempts to resolve all links in the node tree having
 the number of unresolved links.
 @end deftypefun
 
-@deftypefun bool valid_indi_tree (GNode* indi, String *pmsg, GNode* orig)
+@deftypefun bool validateNewPerson (GNode* indi, String *pmsg, GNode* orig)
 Validates the INDI tree having top-node @code{indi}.  If @code{orig}
 is non-NULL, it is the original version of the individual.  If
 problems are found, false is returned and @code{pmsg} is set to a

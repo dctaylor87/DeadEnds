@@ -509,7 +509,7 @@ Selects and returns spouse of person through user interface.
 Returns @code{None} if INDI has no spouses or if the user cancels.
 
 @end deftypefun
-@deftypefun INDI choosefam (void) @arrow() FAM or @code{None}
+@deftypefun INDI choosefam (void) @arrow{} FAM or @code{None}
 @findex choosefam
 
 Selects and returns a family that INDI is in.  Returns @code{None} if
