@@ -22,12 +22,15 @@ de_libraries_INPUTS = \
 	de-interp.texi \
 	de-parser.texi \
 	de-ui.texi \
-	de-utils.texi
+	de-utils.texi \
+	de-validate.texi
 
 de-libraries.pdf:	de-libraries.texi
 de-libraries.pdf:	$(de_libraries_INPUTS)
 
-info_TEXINFOS = ll-python-api.texi ll-python-internals.texi
+info_TEXINFOS = ll-python-api.texi \
+		ll-python-internals.texi \
+		de-libraries.texi
 
 MANUALSSRC_sv =
 
