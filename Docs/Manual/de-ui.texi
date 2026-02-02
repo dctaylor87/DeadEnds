@@ -10,21 +10,29 @@ This file declares the public interface to the user interface abstraction.
 Responsible for early initialization of the current user interface routines.
 @b{MUST} be called before @b{any} other @code{uiio_} routines.
 @end defun
+
 @defun uiio_pre_database_init (UIIO *uiio, bool runningInterpreter) @arrow{} bool
 @end defun
+
 @defun uiio_post_database_init (UIIO *uiio) @arrow{} void
 Responsible for any user interface initialization that is to be done @b{after}
 a database is successfully opened.
 @end defun
+
 @defun uiio_shutdown_ui (UIIO *uiio, bool pause) @arrow{} void
 Called when a user interface is being shutdown.  Examples would be
 when the user interface is changing to a different interface or the
 program is about to exit.
 @end defun
 
-UIIO *uiio_curses;
-UIIO *uiio_stdio;
-UIIO *current_uiio;
+@defvar uiio_curses @arrow{} UIIO*
+@end defvar
+
+@defvar uiio_stdio @arrow{} UIIO*
+@end defvar
+
+@defvar current_uiio @arrow{} UIIO*
+@end defvar
 
 @section screen.h
 
@@ -44,6 +52,7 @@ Number of columns used by LifeLines (usually COLSREQ)
 
 @defun clear_hseg (WINDOW *, int row, int x1, int x2) @arrow{} void
 @end defun
+
 @defun main_menu (void) @arrow{} void
 @end defun
 
@@ -51,12 +60,16 @@ Number of columns used by LifeLines (usually COLSREQ)
 
 @defun ask_for_program (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist) @arrow{} bool
 @end defun
+
 @defun chooseFromArray (CString ttl, int no, String *pstrngs) @arrow{} int
 @end defun
+
 @defun prompt_stdout (CString prompt) @arrow{} int
 @end defun
+
 @defun view_array (CString ttl, int no, String *pstrngs) @arrow{} void
 @end defun
+
 @defun invoke_search_menu (void) @arrow{} Sequence*
 @end defun
 
@@ -64,7 +77,9 @@ Number of columns used by LifeLines (usually COLSREQ)
 
 @defun chooseFromList (CString ttl, List *list) @arrow{} int
 @end defun
+
 @defun chooseListFromSequence (CString ttl, Sequence *seq, enum SequenceType type) @arrow{} int
 @end defun
+
 @defun chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type) @arrow{} int
 @end defun

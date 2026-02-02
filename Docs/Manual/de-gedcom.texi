@@ -141,6 +141,7 @@ and the @code{tag} pointer points into the tag table.
 @end defun
 
 @defun freeGNode (GNode*) @arrow{} void
+Frees a GNode. Do not free the tag!
 @end defun
 
 @defun freeGNodes (GNode* node) @arrow{} void
@@ -165,6 +166,9 @@ returns the event subtree as a string using a static buffer.
 @end defun
 
 @defun eventToString (GNode* node, bool shorten) @arrow{} String
+Converts an event to a string; returns static memory.  If
+@code{shorten} is @code{true}, then the @code{DATE} and @code{PLAC}
+are shortened.
 @end defun
 
 @defun eventToDate (GNode* node, bool shorten) @arrow{} String
@@ -357,44 +361,53 @@ For debugging.
 @section key.h
 
 @defun keyToPersonRecord (CString key, Database *database) @arrow{} GNode*
+Looks for @code{key} in @code{database}, if found and it is a person
+record, it is returned.  Otherwise @code{null} is returned.
+
 @code{key} -- Key of the person record. The @@-signs are not part of the database key.
 @code{index} -- Record index to search for the person.
 @end defun
 
 @defun keyToFamilyRecord (CString key, Database *database) @arrow{} GNode*
+Looks for @code{key} in @code{database}, if found and it is a family
+record, it is returned.  Otherwise @code{null} is returned.
+
 @code{key} -- Key of the family record. The @@-signs are not part of the key.
 @code{index} -- Record index to search for the family.
 @end defun
 
-@defun GNode *keyToSourceRecord (CString key, Database *database) @arrow{} GNode*
-Get a source record from the database.
+@defun keyToSourceRecord (CString key, Database* database) @arrow{} GNode*
+Looks for @code{key} in @code{database}, if found and it is a source
+record, it is returned.  Otherwise @code{null} is returned.
 @end defun
 
-@defun GNode *keyToEventRecord (CString key, Database *database) @arrow{} GNode*
-Get an event record from a database.
+@defun keyToEventRecord (CString key, Database* database) @arrow{} GNode*
+Looks for @code{key} in @code{database}, if found and it is an event
+record, it is returned.  Otherwise @code{null} is returned.
 @end defun
 
-@defun GNode *keyToOtherRecord (CString key, Database *database) @arrow{} GNode*
-Get an other record from a database.
+@defun keyToOtherRecord (CString Key, Database* database) @arrow{} GNode*
+Looks for @code{key} in @code{database}, if found and it is an other
+record, it is returned.  Otherwise @code{null} is returned.
 @end defun
 
-@defun GNode* keyToPerson (CString key, RecordIndex* index) @arrow{} GNode*
+@defun keyToPerson (CString key, RecordIndex* index) @arrow{} GNode*
 Get a person record from a database.
 @end defun
 
-@defun GNode* keyToFamily (CString key, RecordIndex* index) @arrow{} GNode*
+@defun keyToFamily (CString key, RecordIndex* index) @arrow{} GNode*
 Get a family record from a database.
 @end defun
 
-@defun GNode* keyToSource (CString key, RecordIndex* index) @arrow{} GNode*
+@defun keyToSource (CString key, RecordIndex* index) @arrow{} GNode*
 Get a source record from a database.
 @end defun
 
-@defun GNode* keyToEvent (CString key, RecordIndex* index) @arrow{} GNode*
+@defun keyToEvent (CString key, RecordIndex* index) @arrow{} GNode*
 Get an event record from a database.
 @end defun
 
-@defun GNode* keyToOther (CString key, RecordIndex* index) @arrow{} GNode*
+@defun keyToOther (CString key, RecordIndex* index) @arrow{} GNode*
 Get an other record from a database.
 @end defun
 
@@ -403,21 +416,27 @@ Get an other record from a database.
 @defun personToFather (GNode*, RecordIndex*) @arrow{} GNode*
 Return first father of a person.
 @end defun
+
 @defun personToMother (GNode*, RecordIndex*) @arrow{} GNode*
 Return first wife of a person.
 @end defun
+
 @defun personToPreviousSibling (GNode*, RecordIndex*) @arrow{} GNode*
 Return previous sibling of a person.
 @end defun
+
 @defun personToNextSibling (GNode*, RecordIndex*) @arrow{} GNode*
 Return next sibling of a person.
 @end defun
+
 @defun familyToHusband (GNode*, RecordIndex*) @arrow{} GNode*
 Return first husband of a family.
 @end defun
+
 @defun familyToWife (GNode*, RecordIndex*) @arrow{} GNode*
 Return first wife of a family.
 @end defun
+
 @defun familyToFirstChild (GNode*, RecordIndex*) @arrow{} GNode*
 Return first child of family.
 @end defun
@@ -515,12 +534,63 @@ will point to -1.
 Checks if a partial name is contained within a complete name.
 @end defun
 
+@section nameindex.h
+
+@defun createNameIndex (void) @arrow{} NameIndex*
+Creates a new empty NameIndex and returns it.
+
+Used in creating a new database and for some specialized operations,
+such as rekeying a database.  Most applications will probably not need
+to call this directly.
+@end defun
+
+@defun deleteNameIndex (NameIndex* nameIndex) @arrow{} void
+Called as part of deleting a database.  Unless you created the
+NameIndex @code{nameIndex}, via a call to @code{createNameIndex}, you
+probably don't need to call this.
+@end defun
+
+@defun insertInNameIndex (NameIndex* index, CString nameKey, CString personKey) @arrow{} void
+Adds @code{personKey} to the set of keys returned when @code{index} is
+searched for @code{nameKey}.
+@end defun
+
+@defun removeFromNameIndex (NameIndex *index, CString namekey, CString recordKey) @arrow{} void
+Removes @code{recordKey} from @code{nameKey} in @code{index}.
+@end defun
+
+@defun removeNamesOfPersonFromIndex (NameIndex* index, GNode* person) @arrow{} void
+@end defun
+
+@defun searchNameIndex (NameIndex*, CString) @arrow{} Set*
+Searches NameIndex for a name and returns the record keys that have the name.
+
+@b{NOTE:} The set that is returned is in the NameIndex. It cannot be changed.
+@end defun
+
+@defun getNameIndex (RootList*) @arrow{} NameIndex*
+Returns the NameIndex of all persons in a RootList.
+@end defun
+
+@defun showNameIndex (NameIndex* index) @arrow{} void
+For debugging.  Writes the @code{index} entries to @code{stdout}
+@end defun
+
+@defun showNameIndexStats (NameIndex*) @arrow{} void
+For testing and debugging.  Shows the statistics of a NameIndex on @code{stderr}.
+@end defun
+
+@defun getNameIndexStats (NameIndex*, int*, int*) @arrow{} void
+For testing and debugging.  Returns statistics about the NameIndex.
+@end defun
+
 @section nodeutils.h
 
 @defun unionNodes (GNode* node1, GNode* node2, bool kids, bool copy) @arrow{} GNode*
 Returns the union of two GNode trees.  If @code{kids} is @code{true},
 children matter; if @code{copy} is @code{true}, copy the operands.
 @end defun
+
 @defun classifyNodes (GNode** pnode1, GNode** pnode2, GNode** pnode3) @arrow{} void
 Converts two GNode lists to three. The first holds the values that
 were only in the first list. The second holds the values that were
@@ -636,7 +706,8 @@ NOTE: needs a better name!
 @end defun
 
 @defun annotateWithSupplemental (GNode *node, bool rfmt, Database *database) @arrow{} void
-/* should it copy the tree? */
+
+@b{QUESTION:}  Should it copy the tree?
 @end defun
 
 @section rootlist.h
@@ -700,7 +771,7 @@ Creates a Sequence of a family's fathers/husbands.
 Creates a Sequence of a family's mothers/wives.
 @end defun
 
-n@defun personToSpouses (GNode* person, RecordIndex* index) @arrow{} Sequence*
+@defun personToSpouses (GNode* person, RecordIndex* index) @arrow{} Sequence*
 Creates a Sequence of a person's spouses; must be male or female;
 spouses must have the opposite sex; if there is more than one sex in a
 family the first is used.
@@ -717,9 +788,9 @@ Returns a single element Sequence with the record with given refn value; or null
 @end defun
 
 @defun stringToSequence (CString name, Database* database) @arrow{} Sequence*
-Returns a person sequence whose members "match" a string. Order: a)
-named Sequence (don't exist); b) key with or without leading 'I' (if
-used); c) REFN value; d) name.
+Returns a person sequence whose members "match" a string. Order: (a)
+named Sequence (don't exist); (b) key with or without leading 'I' (if
+used); (c) REFN value; (d) name.
 @end defun
 
 @defun ancestorSequence (Sequence*, bool close) @arrow{} Sequence*
@@ -797,7 +868,7 @@ Returns a single element Sequence with the record with the given key; or null.
 These functions are used to place the nodes within a record into
 canonical order.  These functions are usually called in two
 circumstances.  First, when a GEDCOM file is first read in to create a
-database.  And second, when a record is edited or added
+database.  And second, when a record is edited or added.
 @end defun
 
 @defun normalizePerson (GNode*) @arrow{} GNode*

@@ -1,0 +1,12 @@
+Currently the bulk of the Python functions are @b{static}.  And the
+bulk of the non-static functions are only non-static to allow them to
+be called from other files within the Python library.
+
+There are two variables meant to be accessible outside the library --
+@code{llpy_debug} and @code{Lifelines_Module}.
+
+And there are four functions --
+@code{llpy_python_interactive},
+@code{llpy_register_script},
+@code{llpy_execute_script}, and
+@code{llpy_init}.

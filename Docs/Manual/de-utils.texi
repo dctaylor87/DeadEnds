@@ -2,79 +2,143 @@
 
 @defun chartype (int c) @arrow{} int
 @end defun
+
 @defun iswhite (int c) @arrow{} bool
 @end defun
+
 @defun islinebreak (int c) @arrow{} bool
 @end defun
+
 @defun ll_toupper (int c) @arrow{} int
 @end defun
+
 @defun ll_tolower (int c) @arrow{} int
 @end defun
+
 @defun eqstr_ex (CString s1, CString s2) @arrow{} bool
 @end defun
+
 @defun destrncpy (char *dest, const char *src, size_t n, int utf8) @arrow{} char*
+strncpy that always zero-terminates.
+Handles UTF-8.
 @end defun
+
 @defun destrncpyf (char *dest, size_t n, int utf8, const char * fmt, ...) @arrow{} char*
+@code{snprintf} replacement that handles UTF-8.
 @end defun
+
 @defun destrncpyvf (char *dest, size_t n, int utf8, const char * fmt, va_list args) @arrow{} char*
+@code{vsnprintf} replacement that handles UTF-8.
 @end defun
+
 @defun ll_atoi (CString str, int defval) @arrow{} int
+Wrapper for atoi which handles NULL input.
 @end defun
+
 @defun stdstring_hardfail (void) @arrow{} void
+Set programmer debugging mode to coredump if any wrong characters
+passed to character classification routines.
 @end defun
+
 @defun destrapps (char *dest, size_t limit, int utf8, const char *src) @arrow{} char*
+@code{destrncat} except limit includes existing string
+(i.e., @code{strncat} except it always terminates).  It handles UTF-8,
+and the limit is inclusive of existing contents.
 @end defun
+
 @defun destrappf (char * dest, int limit, int utf8, const char * fmt, ...) @arrow{} char*
+@code{snprintf} style append to string.
+Subject to length limit (including current contents).
+Handles UTF-8.
 @end defun
+
 @defun destrsets (char *dest, size_t limit, int utf8, const char *src) @arrow{} char*
+@code{destrncpy} adopted to strset/strapp API.
+Handles UTF-8.
 @end defun
+
 @defun destrsetf (char * dest, int limit, int utf8, const char * fmt, ...) @arrow{} char*
+@code{snprintf} style assignment to string.  Subject to length limit
+(including current contents).  Handles UTF-8.
 @end defun
+
 @defun utf8len (char ch) @arrow{} int
+Returns the length of a UTF-8 character.  @code{ch} -- starting byte
 @end defun
+
 @defun str8chlen (CString str) @arrow{} size_t
+Length of a UTF-8 string in characters.
 @end defun
+
 @defun find_prev_char (String ptr, int * width, String limit, int utf8) @arrow{} String
 @end defun
+
 @defun unicode_to_utf8 (int wch, char * utf8) @arrow{} void
+Convert UCS-4 (native alignment) to UTF-8.
 @end defun
+
 @defun limit_width (String str, size_t width, bool utf8) @arrow{} void
+Chop a string if longer than specified width.
+Handles UTF-8.
 @end defun
+
 @defun chomp (String str) @arrow{} void
 @end defun
+
 @defun appendstr (String * pdest, int * len, int utf8, CString src) @arrow{} void
 @end defun
+
 @defun strfree (String *str) @arrow{} void
 @end defun
+
 @defun strupdate (String *str, CString value) @arrow{} void
 @end defun
+
 @defun allocsubbytes (String s, int start, int num) @arrow{} String
 @end defun
+
 @defun ll_what_collation (void) @arrow{} CString
 @end defun
 
 @section file.h
 
 @defun openFile (CString path, CString mode) @arrow{} File*
+Creates a File structure and opens the underlying UNIX file.  When a
+File is opened it is given line mode by default.
 @end defun
+
 @defun closeFile (File*) @arrow{} void
+Closes the UNIX file and deletes the File structure.
 @end defun
 
 @section errors.h
 
 @defun createErrorLog (void) @arrow{} ErrorLog*
+Creates an error log, a specialized List.
 @end defun
+
 @defun deleteErrorLog (ErrorLog*) @arrow{} void
+Deletes an ErrorLog.
 @end defun
+
 @defun createError (ErrorType type, CString fileName, int lineNumber, CString message) @arrow{} Error*
+Creates an Error.
 @end defun
+
 @defun setSeverityError (Error *error, ErrorSeverity severity) @arrow{} void
+Changes the severity of an Error.
 @end defun
+
 @defun addErrorToLog (ErrorLog*, Error*) @arrow{} void
+Adds an Error to an ErrorLog.
 @end defun
+
 @defun showErrorLog (ErrorLog*) @arrow{} void
+Shows the contents of an ErrorLog on standard output.
 @end defun
+
 @defun saveErrorLog (String filename, ErrorLog *errorLog) @arrow{} bool
+Writes the @code{errorLog} to @code{filename}.
 @end defun
 
 @section standard.h
@@ -82,38 +146,46 @@
 @defun strsave (CString) @arrow{} String
 Save String in heap.
 @end defun
+
 @defun iswhite (int) @arrow{} bool
 Is character white space?
 @end defun
+
 @defun striptrail (String) @arrow{} void
 Strip trailing white space.
 @end defun
+
 @defun chartype (int) @arrow{} int
 Return type of a character.
 @end defun
+
 @defun _alloc (size_t len, CString file, int line) @arrow{} void*
 Allocates memory.  Wrapper around @code{malloc}.  When allocations are
 being logged, the file @code{file}, line number @code{likne}, and
 length @code{len} will be logged.  Called by @code{stdalloc} if
 @code{DEBUGALLOCS} is defined.
 @end defun
+
 @defun _free (void* ptr, String file, int line) @arrow{} void
 Frees memory.  Wrapper around @code{free}.  When allocations are
 being logged, the file @code{file}, line number @code{likne}, and
 length @code{len} will be logged.  Called by @code{stdfree} if
 @code{DEBUGALLOCS} is defined.
 @end defun
+
 @defun _realloc (void* ptr, size_t len, CString file, int line) @arrow{} void*
 Reallocates memory.  Wrapper around @code{realloc}.  When allocations are
 being logged, the file @code{file}, line number @code{likne}, and
 length @code{len} will be logged.  Called by @code{stdrealloc} if
 @code{DEBUGALLOCS} is defined.
 @end defun
+
 @defun _logAllocations (bool onOrOff) @arrow{} void
 Turn allocation logging on and off.  If @code{onOrOff} is @code{true},
 then logging of allocations is turned on.  Otherwise, it is turned
 off.
 @end defun
+
 @defun _fatal (CString file, int line, CString msg, CString function) @arrow{} void
 Called by the @code{fatal}, @code{FATAL}, and @code{ASSERT} macros.
 
@@ -125,20 +197,46 @@ Terminates the program with a message that includes the file name
 @section path.h
 
 @defun fopenPath (CString fileName, CString mode, CString searchPath, CString suffix) @arrow{} FILE*
+Tries to open a file using a path variable and optional suffix.
 @end defun
+
 @defun resolveFile (CString fileName, CString searchPath, CString suffix) @arrow{} CString
+Tries to find a file within a colon-separated path list.  If not
+found, and a suffix is provided, tries again with suffix appended.
 @end defun
+
 @defun pathMatch  (CString path1, CString path2) @arrow{} bool
+Are paths the same?
+Handles WIN32 filename case insensitivity.
 @end defun
+
 @defun pathConcatAllocate (CString dir, CString file) @arrow{} String
+Add file & directory together into newly alloc'd
+string & return.
+
+@code{dir} -- directory (may be NULL.
+@code{file} -- file (may be NULL.
 @end defun
+
 @defun pathConcat (CString dir, CString file, int utf8, String buffer, int buflen) @arrow{} String
+Add file & directory together.
+Handles trailing / in dir and/or leading / in file.
+Returns no trailing / if file is NULL.
+
+@code{dir}: --  directory (may be NULL)
+@code{file} --  file (may be NULL)
 @end defun
+
 @defun isDirSep (char c) @arrow{} bool
+Is @code{c} a directory separator character?
+Handles WIN32 characters.
 @end defun
+
 @defun compressPath (CString path, int len) @arrow{} String
 @end defun
+
 @defun chopPath (CString path, String dirs) @arrow{} int
 @end defun
+
 @defun expandSpecialFilenameChars (String buffer, int buflen, int utf8) @arrow{} bool
 @end defun

@@ -21,15 +21,16 @@
 @include de-parser.texi
 @chapter Interpreter
 @include de-interp.texi
-
-@chapter DataTypes
-@include de-datatypes.texi
 @chapter Validation
 @include de-validate.texi
+@chapter DataTypes
+@include de-datatypes.texi
 @chapter Utilities
 @include de-utils.texi
 @chapter User Interface
 @include de-ui.texi
+@chapter Python
+@include de-python.texi
 @unnumbered Function Index
 @printindex fn
 @unnumbered Variable Index

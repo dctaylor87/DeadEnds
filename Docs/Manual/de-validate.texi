@@ -1,18 +1,7 @@
 @section validate.h
 
-@defun getReferenceIndex (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{}  RefnIndex*
-@end defun
-
 @defun rootLine (GNode*, IntegerTable*) @arrow{} int
 Returns the line number wqhere a root node was located in its GEDCOM file.
-@end defun
-
-@defun validatePersons (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
-Validates the person records in a database.
-@end defun
-
-@defun validateFamilies (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
-Validates the family records in a database
 @end defun
 
 @defun validateSourceIndex (Database* database, ErrorLog* errorLog) @arrow{} bool
@@ -31,6 +20,18 @@ Validates the events in a datatbase's event index.
 Validates the records in a datatbase's other index.
 
 @b{NOTE:  Needs to be written.  Currently a stub that just returns true.}
+@end defun
+
+@section validate.h / valperson.c
+
+@defun validatePersons (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
+Validates the person records in a database.
+@end defun
+
+@section validate.h / valfamily.c
+
+@defun validateFamilies (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
+Validates the family records in a database
 @end defun
 
 @section validate.h / valrecord.c

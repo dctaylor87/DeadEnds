@@ -11,7 +11,7 @@ This is used by the @acronym{GEDCOM} import code and when editing a
 database, whether to modify existing records or to add new records.
 @end defun
 
-@section keylist.h
+@section keylist.h / DoNotExist
 
 @defun createKeyList (Database*) @arrow{} KeyList*
 Create a KeyList with its compare and getkey functions.
@@ -27,21 +27,31 @@ Insert a key into a KeyList.
 Adds the REFN @code{refn} present in the record having key @code{key} into 
 the RefnIndex @code{index}.
 @end defun
+
 @defun searchRefnIndex (RefnIndex* index, CString refn) @arrow{} CString
 Searches RefnIndex @code{index} for REFN @code{refn}.  If found, it
 returns its key, otherwise it returns null.
 @end defun
 
 @defun createRefnIndexEl (CString refn, CString key) @arrow{} RefnIndexEl*
+Creates a new reference index entry.
 @end defun
 
 @defun createRefnIndex (void) @arrow{} RefnIndex*
+Creates a RefnIndex.
 @end defun
 
 @defun deleteRefnIndex (RefnIndex*) @arrow{} void
+Deletes a RefnIndex.
 @end defun
 
 @defun showRefnIndex (RefnIndex*) @arrow{} void
+For debugging.  Shows a RefnIndex.
+@end defun
+
+@defun getReferenceIndex (RecordIndex* index, CString fname, IntegerTable* keymap, ErrorLog* elog) @arrow{}  RefnIndex*
+Creates a reference index from the records in a Database.  It checks
+that REFN values are defined once.
 @end defun
 
 @section database.h / database.c
@@ -58,53 +68,47 @@ Delete a database, freeeing its memory.  It is the the caller's
 responsibility to ensure that the database is not in use before
 deleting it.
 @end defun
-@defun numberPersons (Database* database) @arrow{} int
-Return the number of person records in the database.
-@end defun
-@defun numberFamilies (Database* database) @arrow{} int
-Return the number of family records in the database.
-@end defun
-@defun numberSources (Database* database) @arrow{} int
-Return the number of source records in the database.
-@end defun
-@defun numberEvents (Database* database) @arrow{} int
-Return the number of event records in the database.
-@end defun
-@defun numberOthers (Database* database) @arrow{} int
-Return the number of other records in the database.
-@end defun
-@defun keyToPerson (CString key, RecordIndex* index) @arrow{} GNode*
-Get a person from record index.
-@end defun
-@defun keyToFamily (CString key, RecordIndex* index) @arrow{} GNode*
-Get a family GNode from a RecordIndex.
-@end defun
+
 @defun getRecord (CString key, RecordIndex* index) @arrow{} GNode*
 Get an arbitraray record from the database.
 @end defun
-@defun keyToPersonRecord (CString key, Database* database) @arrow{} GNode*
-Looks for @code{key} in @code{database}, if found and it is a person
-record, it is returned.  Otherwise @code{null} is returned.
+
+@defun isEmptyDatabase (Database*) @arrow{} bool
+Return true if the database has no persons or families.
 @end defun
-@defun keyToFamilyRecord (CString key, Database* database) @arrow{} GNode*
-Looks for @code{key} in @code{database}, if found and it is a family
-record, it is returned.  Otherwise @code{null} is returned.
+
+@defun numberPersons (Database* database) @arrow{} int
+Return the number of person records in the database.
 @end defun
-@defun keyToSourceRecord (CString key, Database* database) @arrow{} GNode*
-Looks for @code{key} in @code{database}, if found and it is a source
-record, it is returned.  Otherwise @code{null} is returned.
+
+@defun numberFamilies (Database* database) @arrow{} int
+Return the number of family records in the database.
 @end defun
-@defun keyToEventRecord (CString key, Database* database) @arrow{} GNode*
-Looks for @code{key} in @code{database}, if found and it is an event
-record, it is returned.  Otherwise @code{null} is returned.
+
+@defun numberSources (Database* database) @arrow{} int
+Return the number of source records in the database.
 @end defun
-@defun keyToOtherRecord (CString Key, Database* database) @arrow{} GNode*
-Looks for @code{key} in @code{database}, if found and it is an other
-record, it is returned.  Otherwise @code{null} is returned.
+
+@defun numberEvents (Database* database) @arrow{} int
+Return the number of event records in the database.
 @end defun
+
+@defun numberOthers (Database* database) @arrow{} int
+Return the number of other records in the database.
+@end defun
+
 @defun storeRecord (Database*, GNode*) @arrow{} bool
 Add a record to the database.
 @end defun
+
+@defun summarizeDatabase (Database*) @arrow{} void
+@end defun
+
+@defun writeDatabase (String fileName, Database*) @arrow{} void
+Writes the contents of a Database to a Gedcom file.
+@end defun
+
+@section database.h / DoNotExist
 
 @defun databaseIsDirty (Database *database) @arrow{} bool
 Returns true if the database is dirty;  false if the database is clean.
@@ -118,15 +122,8 @@ Sets the database dirty state to value of 'dirty'.
 Gets the database dirty state.
 @end defun
 
-@defun writeDatabase (String fileName, Database*) @arrow{} void
-@end defun
-
 @defun indexNames (Database*) @arrow{} void
-// Index person names after reading the Gedcom file.
-@end defun
-
-@defun bool isEmptyDatabase (Database*) @arrow{} bool
-Return true if the database has no persons or families.
+Index person names after reading the Gedcom file.
 @end defun
 
 @defun keyToRecord (CString key, Database *) @arrow{} GNode*
@@ -137,37 +134,40 @@ Return a key's record
 Indexes all person names in a database.
 @end defun
 
-@defun summarizeDatabase (Database*) @arrow{} void
-@end defun
-
 @defun getCount (void) @arrow{} int
-@end defun
-
-@defun generateFamilyKey (Database*) @arrow{} String
-@end defun
-
-@defun generatePersonKey (Database*) @arrow{} String
 @end defun
 
 @section recordindex.h
 
 @defun addToRecordIndex (RecordIndex*, GNode* root) @arrow{} void
+Adds a GNode record tree to a RecordIndex.
 @end defun
+
 @defun addrefRecord (GNode *element) @arrow{} void
+Increment the reference count of a GNode.
 @end defun
+
 @defun releaseRecord (GNode *element) @arrow{} void
+Decrement the reference count of a GNode.
+If it reaches zero, we do NOT free it.
+If it is zero before we decrement, we ABORT.
 @end defun
 
 @defun createRecordIndex (void) @arrow{} RecordIndex*
+Creates a RecordIndex. The delete function is null to prevent the
+trees themselves from being deleted.
 @end defun
 
 @defun deleteRecordIndex (RecordIndex*) @arrow{} void
+Deletes a RecordIndex.
 @end defun
 
 @defun searchRecordIndex (RecordIndex*, CString) @arrow{} GNode*
+Searches a RecordIndex by key and returns the associated GNode tree.
 @end defun
 
 @defun showRecordIndex (RecordIndex*) @arrow{} void
+For debgugging.  Shows the contents of a RecordIndex on stdout.
 @end defun
 
 @defmac FORRECORDINDEX (table, gnode, type)
@@ -175,46 +175,3 @@ Iterates a RecordIndex returning only GNode*s of a specific type.
 @end defmac
 @defmac ENDRECORDINDEX
 @end defmac
-
-@section nameindex.h
-
-@defun createNameIndex (void) @arrow{} NameIndex*
-Creates a new empty NameIndex and returns it.
-
-Used in creating a new database and for some specialized operations,
-such as rekeying a database.  Most applications will probably not need
-to call this directly.
-
-@end defun
-@defun deleteNameIndex (NameIndex* nameIndex) @arrow{} void
-Called as part of deleting a database.  Unless you created the
-NameIndex @code{nameIndex}, via a call to @code{createNameIndex}, you
-probably don't need to call this.
-@end defun
-
-@defun insertInNameIndex (NameIndex* index, CString nameKey, CString personKey) @arrow{} void
-Adds @code{personKey} to the set of keys returned when @code{index} is
-searched for @code{nameKey}.
-@end defun
-
-@defun removeFromNameIndex (NameIndex *index, CString namekey, CString recordKey) @arrow{} void
-Removes @code{recordKey} from @code{nameKey} in @code{index}.
-@end defun
-
-@defun removeNamesOfPersonFromIndex (NameIndex* index, GNode* person) @arrow{} void
-@end defun
-
-@defun searchNameIndex (NameIndex*, CString) @arrow{} Set*
-@end defun
-
-@defun getNameIndex (RootList*) @arrow{} NameIndex*
-@end defun
-
-@defun showNameIndex (NameIndex*) @arrow{} void
-@end defun
-
-@defun showNameIndexStats (NameIndex*) @arrow{} void
-@end defun
-
-@defun getNameIndexStats (NameIndex*, int*, int*) @arrow{} void
-@end defun

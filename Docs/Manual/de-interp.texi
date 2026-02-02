@@ -1,35 +1,98 @@
+@section builtintable.h
+
+There are over 170 functions having names that start with @code{__},
+that return a @code{PValue} and have an argument list of @code{(PNode*,
+Context*, bool*)} that are declared in this file.
+
+They are, at the time of this writing, defined in the files
+@code{builtinlist.c}, @code{builtin.c}, @code{builtintable.c},
+@code{extra.c}, @code{intrpevent.c}, @code{intrpfamily.c},
+@code{intrpgnode.c}, @code{intrpmath.c}, @code{intrpperson.c},
+@code{intrpseq.c}, @code{intrpstring.c}, and @code{rassa.c}.
+
+The functions starting with @code{__} implement the DeadEnds script
+functions.  To get the name of the script function that it implements,
+remove the @code{__} at the start of the name.  In a handful of cases,
+a script function has an alias.  If you do not find the implementation
+of a script function after adding @code{__} to the start of its name,
+then check the mapping in @code{functable.c}.
+
+That said, an application will typically @b{NOT} call any of these
+functions directly, but instead call them indirectly through the
+script interpreter.
+
+@section context.h
+
+@defun createContext (Program*, Database*, File*) @arrow{} Context*
+Creates a @code{Context} structure.
+@end defun
+
+@defun deleteContext (Context*) @arrow{} void
+Deletes a @code{Context} structure.
+@end defun
+
+@defun createProgram (void) @arrow{} Program*
+Creates a @code{Program} structure.
+
+TODO: Change to take parameters.
+@end defun
+
+@defun deleteProgram (Program*) @arrow{} void
+Deletes a @code{Program} structure.
+@end defun
+
+@defun validateCalls (FunctionTable* procedures, FunctionTable* functions) @arrow{} void
+Checks that the @code{procedures} and @code{functions} to be called by
+a program are defined.
+@end defun
+
 @section interp.h
 
+@defvar Poutfp
+@end defvar
+
+@defun setScriptOutputFile
+@end defun
+
 @defun initializeInterpreter (Database*) @arrow{} void
-Currently sets Perrors to zero; does nothing else.
+Currently sets @code{Perrors} to zero; does nothing else.
 
 @b{Should} be modified to take two arguments -- a @code{Database*} and a
 @code{Context*}, then it could set the database field of the context to the
 supplied database.
 @end defun
+
 @defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Context*
 Searches for @code{fileName} along @code{searchPath}.  If found, it is
 parsed.  If there are no errors, a @code{Context *} is returned.
 Otherwise, @code{null} is returned.  Errors are returned in
 @code{errorLog}.
 @end defun
+
 @defun finishInterpreter (void) @arrow{} void
 Should be called When the parse of the script program is no longer
 needed, Currently does nothing.  @b{Should} be modified to take a
 @code{Context*} argument and free the memory.
 @end defun
+
 @defun interpret (PNode*, Context*, PValue*) @arrow{} InterpType
 The function @code{interpret} is called to interpret the previously
 parsed program.
 @end defun
+
+@defun setScriptOutputFile (CString filename, bool append, CString *errorMessage) @arrow{} bool
+@end defun
+
 @deftypevar bool programParsing
 A boolean, @code{true} when a script is being parsed, @code{false}
 otherwise.
 @end deftypevar
+
 @deftypevar bool programRunning
 A boolean, @code{true} when a script is running, @code{false}
 otherwise.
 @end deftypevar
+
 @deftypevar bool programDebugging
 When @code{true} some debugging information is printed.
 @end deftypevar
@@ -37,6 +100,146 @@ When @code{true} some debugging information is printed.
 @section pnode.h
 
 @defun procCallPNode (String, PNode*) @arrow{} PNode*
+Creates a user-defined proc call node.
+@end defun
+
+@defun iconsPNode (long) @arrow{} PNode*
+Creates an integer PNode with a C long.
+@end defun
+
+@defun fconsPNode (double) @arrow{} PNode*
+Creates a float PNode with a C double.
+@end defun
+
+@defun sconsPNode (String string) @arrow{} PNode*
+Creates a String PNode.
+@end defun
+
+@defun ifPNode (PNode*, PNode*, PNode*) @arrow{} PNode*
+Creates an if statement PNode.
+@end defun
+
+@defun whilePNode (PNode*, PNode*) @arrow{} PNode*
+Creates a while loop PNode.
+@end defun
+
+@defun breakPNode (void) @arrow{} PNode*
+Creates a break PNode.
+@end defun
+
+@defun continuePNode (void) @arrow{} PNode*
+Creates a continue PNode.
+@end defun
+
+@defun returnPNode (PNode*) @arrow{} PNode*
+Creates a return PNode with an optional return expression.
+@end defun
+
+@defun procDefPNode (String, PNode*, PNode*) @arrow{} PNode*
+Creates a user-defined proc definition node.
+@end defun
+
+@defun funcDefPNode (String, PNode*, PNode*) @arrow{} PNode*
+Creates a user-defined function definition node.
+@end defun
+
+@defun funcCallPNode (String, PNode*, ErrorLog*) @arrow{} PNode*
+Creates a builtin or user-defined function call program node.
+@end defun
+
+@defun traversePNode (PNode*, String snode, String levv, PNode* body) @arrow{} PNode*
+Creates a traverse loop PNode to traverses a tree of
+GNodes.  @code{snode} and @code{levv} are the names of the idents
+holding the current node's name and the current level.
+@end defun
+
+@defun fornodesPNode (PNode* nexpr, String nvar, PNode* body) @arrow{} PNode*
+Creates a fornodes loop PNode to iterate the children of a GNode.
+@code{nvar} is the name of the ident holding the current child's name.
+@end defun
+
+@defun familiesPNode (PNode* pexpr, String fvar, String svar, String count, PNode* body) @arrow{} PNode*
+Creates a family loop PNode to loop through the families a person is a
+spouse in.  @code{fvar} is the family ident; @code{svar} is the spouse
+ident; @code{count} is the counter ident.
+@end defun
+
+@defun spousesPNode (PNode* pexpr, String svar, String fvar, String count, PNode* body) @arrow{} PNode*
+Create a spouse loop PNode that loops through the spouses of a person.  @code{svar} is
+the spouse ident; @code{fvar} is the family ident; @code{count} is the counter ident.
+@end defun
+
+@defun childrenPNode (PNode* fexpr, String cvar, String nvar, PNode* body) @arrow{} PNode*
+Creates a children loop PNode that loops through the chidren of a
+family.  Called by yyparse() on rule reduction; @code{fexpr} is the
+family expression; @code{cvar} is the child loop var; @code{nvar} is
+the counter; @code{body} is the root PNode of the loop body.
+@end defun
+
+@defun forindiPNode (String ivar, String nvar, PNode* body) @arrow{} PNode*
+Create a forindi PNode loop to iterate every person in a
+database.  Called by yyparse on rule reduction; @code{ivar} is the
+person identifier; @code{nvar} is the counter identifier; and
+@code{body} is the PNode loop body.
+@end defun
+
+@defun forfamPNode (String fvar, String nvar, PNode* body) @arrow{} PNode*
+Creates a forfam PNode loop to iterate every family in a
+database.  Called by yyparse on rule reduction; @code{fvar} is the
+family identifier; @code{nvar} is the counter identifier, and
+@code{body} is the PNode loop body.
+@end defun
+
+@defun forsourPNode (String svar, String nvar, PNode* body) @arrow{} PNode*
+Creates a forsour PNode loop that iterates every source in a database.
+@code{svar} is the family identifier; @code{nvar} is the counter
+identifier, and @code{body} is the PNode loop body.
+@end defun
+
+@defun forevenPNode (String evar, String nvar, PNode* body) @arrow{} PNode*
+Creates a foreven PNode loop that iterates every event in a database.
+@code{evar} is the family identifier; @code{nvar} is the counter
+identifier, and @code{body} is the PNode loop body.
+@end defun
+
+@defun forothrPNode (String ovar, String nvar, PNode* body) @arrow{} PNode*
+Creates a forothr PNode loop that iterates every other record in a database.
+@code{ovar} is the family identifier; @code{nvar} is the counter
+identifier, and @code{body} is the PNode loop body.
+@end defun
+
+@defun forlistPNode (PNode*, String, String, PNode*) @arrow{} PNode*
+Creates a list PNode loop that iterates every element in a list.
+@end defun
+
+@defun forindisetPNode (PNode*, String, String, String, PNode*) @arrow{} PNode*
+Creates a sequence loop.
+@end defun
+
+@defun fornotesPNode (PNode* nexpr, String vvar, PNode* body) @arrow{} PNode*
+Creates @code{fornotes} loop node. @code{nexpr} evaluates to a GNode;
+@code{vvar} is the variable that will hold @code{NOTE} values;
+@code{body} is the loop.
+@end defun
+
+@defun fathersPNode (PNode* pexpr, String pvar, String fvar, String nvar, PNode* body) @arrow{} PNode*
+Creates fathers loop node.
+@end defun
+
+@defun mothersPNode (PNode* pexpr, String pvar, String fvar, String nvar, PNode* body) @arrow{} PNode*
+Creates mothers loop node.
+@end defun
+
+@defun parentsPNode (PNode* pexpr, String fvar, String nvar, PNode* body) @arrow{} PNode*
+Creates a parents loop node.
+@end defun
+
+@defun freePNodes (PNode* pnode) @arrow{} void 
+Frees the program nodes rooted at the given program node.
+@end defun
+
+@defun showPNode (PNode*) @arrow{} void 
+For debugging.  Shows a PNode on stdout.
 @end defun
 
 @section pvalue.h
@@ -46,6 +249,9 @@ Counts the errors encountered while parsing the program.  For the
 errors themselves, consult the @code{errorLog} argument to
 @code{parseProgram}
 @end deftypevar
+
+The remaining functions in this section are not typically called
+directly by an application program.
 
 @defun isGNodeType (PVType type) @arrow{} bool
 Returns true if a PVType is one of the GNode types.
@@ -80,7 +286,7 @@ Divides two PValues and returns their quotient.
 @end defun
 
 @defun modPValues (PValue, PValue, bool* eflag) @arrow{} PValue
-Takes the modulus of two PValues. Both values must be integers.
+Takes the modulus of two PValues.  Both values must be integers.
 @end defun
 
 @defun negPValue (PValue, bool* eflag) @arrow{} PValue
@@ -88,7 +294,7 @@ Negates a PValue which must be numeric.
 @end defun
 
 @defun expPValues (PValue, PValue, bool* eflag) @arrow{} PValue
-Raises the first number to the power of the second. They must be integers.
+Raises the first number to the power of the second.  They must be integers.
 @end defun
 
 @defun equalPValues (PValue, PValue) @arrow{} bool
@@ -142,3 +348,59 @@ Increments the reference count for those @code{PValue}s which are countable.
 
 @defun releasePValue (PValue *pvalue) @arrow{} void
 @end defun
+
+@section pvaluelist.h
+
+@defun createPValueList (void) @arrow{} PValueList*
+Creates a PValueList.
+@end defun
+
+@defun deletePValueList (PValueList*) @arrow{} void
+Deletes a PValueList.
+@end defun
+
+@section pvaluetable.h
+
+@defun createPValueTable (void) @arrow{} PValueTable*
+Creates and returns a PValueTable.
+@end defun
+
+@defun insertInPValueTable (PValueTable*, String key, PValue pvalue) @arrow{} void
+Adds a new (@code{key}, @code{pvalue}) element to a program value table.
+@end defun
+
+@defun getValueOfPValueElement (PValueTable*, String key) @arrow{} PValue
+Gets the PValue mapped to by the @code{key} from PValueTable.
+@end defun
+
+@section symboltable.h
+
+@defun createSymbolTable (void) @arrow{} SymbolTable*
+Creates a SymbolTable.
+@end defun
+
+@defun deleteSymbolTable (SymbolTable*) @arrow{} void
+Deletes a SymbolTable.
+@end defun
+
+@defun assignValueToSymbol (Context* context, CString ident, PValue pvalue) @arrow{} void
+Assigns a PValue to a Symbol in a Context. If the Symbol isn't in the
+current Frame's table, check the global table.
+@end defun
+
+@defun assignValueToSymbolTable (SymbolTable* table, CString ident, PValue pvalue) @arrow{} void
+Assigns a value to a Symbol.
+@end defun
+
+@defun getValueOfSymbol (Context* context, CString ident) @arrow{} PValue
+Gets the value of a symbol from a Context; the PValue is returned on the stack.
+@end defun
+
+@defun getValueFromSymbolTable (SymbolTable* table, CString ident) @arrow{} PValue
+Gets the value of a Symbol from a SymbolTable; PValue is returned on stack.
+@end defun
+
+@defun showSymbolTable (SymbolTable* table) @arrow{} void
+For debugging.  Shows the contents of a SymbolTalbe on stdout.
+@end defun
+

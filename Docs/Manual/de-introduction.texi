@@ -1,5 +1,5 @@
-There are many MANY functions that are not documented here.  Currently
-only slightly over one half of the core DeadEnds functions are
+There are many functions that are not documented here.  Currently
+only slightly over two thirds of the core DeadEnds functions are
 listed.
 
 Currently, only functions found in core DeadEnds libraries are listed.
@@ -22,9 +22,12 @@ developers that wish to modify the libraries -- whether to extend them
 or to fix bugs.  The second, as yet unwritten, document, will need to
 document not just the interfaces, but also the internals.
 
-For a first cut, this document concentrates on the functions in
-the core DeadEnds libraries that are called by the port of the
-LifeLines user interface.
+This document concentrates on the functions in the core DeadEnds
+libraries that are called by the port of the LifeLines user interface.
+Initially it only included such functions, and a subset at that.  The
+document has grown.  It undoubtably only documents some of the
+functions that are called by LifeLines, but it also documents many
+functions that are not called directly by LifeLines.
 
 It is hoped that it will eventually encompass all of the DeadEnds
 functions meant to be called directly by applications.
@@ -36,3 +39,7 @@ someone wishing to support, maintain, enhance, or extend the
 libraries, but is not the focus of this document.  The focus of this
 document is on @b{using} the libraries.  Hence the emphasis on the
 interfaces.
+
+For the functions which are documented that are @b{NOT} meant to be
+called by applications, the hope is that they will eventually become
+part of an internals document.
