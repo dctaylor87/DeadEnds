@@ -13,17 +13,20 @@
 
 #include "standard.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "context.h"
 #include "database.h"
 #include "evaluate.h"
 #include "gedcom.h"
 #include "gnode.h"
-#include "errors.h"
 #include "pnode.h"
 #include "interp.h"
 #include "pvalue.h"
 #include "sequence.h"
+#include "seqlineage.h"
 #include "symboltable.h"
 #include "builtintable.h"
 
@@ -186,7 +189,7 @@ PValue __keysort(PNode* pnode, Context* context, bool* eflg)
 
 // __valuesort sort a sequence by its value.
 // usage: valuesort(SET) -> VOID
-PValue __valuesort(PNode* pnode, Context* context, bool* eflg) {
+PValue __valuesort(PNode* pnode, Context* context ATTRIBUTE_UNUSED, bool* eflg) {
 	scriptError(pnode, "valuesort has been removed from the script language");
     *eflg = true;
     return nullPValue;

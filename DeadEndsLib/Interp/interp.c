@@ -14,8 +14,10 @@
 
 #include <stdarg.h>
 #include "hashtable.h"
-#include "refnindex.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "errors.h"
+#include "refnindex.h"
 #include "context.h"
 #include "database.h"
 #include "evaluate.h"

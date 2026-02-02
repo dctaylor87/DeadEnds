@@ -17,8 +17,9 @@
 #include "functiontable.h"
 #include "pnode.h"
 #include "interp.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "refnindex.h"
-#include "errors.h"
 
 #include "pnode.h"
 

@@ -20,6 +20,8 @@
 #include "list.h"
 #include "pvalue.h"
 #include "symboltable.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "refnindex.h"
 #include "grammar.h"
 #include "errors.h"

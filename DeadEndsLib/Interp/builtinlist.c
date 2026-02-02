@@ -12,11 +12,13 @@
 #include <stdint.h>
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "context.h"
 #include "frame.h"
 #include "hashtable.h"
-#include "errors.h"
 #include "pnode.h"
 #include "interp.h"
 #include "list.h"

@@ -18,6 +18,8 @@
 #include "symboltable.h"
 #include "pvalue.h"
 #include "pvaluetable.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "refnindex.h"
 #include "builtintable.h"
 #include "hashtable.h"

@@ -17,9 +17,11 @@
 #include "denls.h"
 #include "path.h"		/* fopenPath */
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gnode.h"
-#include "recordindex.h"
 #include "locales.h"
 #include "lloptions.h"
 

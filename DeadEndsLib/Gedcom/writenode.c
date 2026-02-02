@@ -12,12 +12,15 @@
 
 #include "standard.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "writenode.h"
 
-void writeGNodes(FILE*, int level, GNode*, bool indent, bool kids, bool sibs);
-void writeGNode(FILE*, int level, GNode*, bool indent);
+//void writeGNodes(FILE*, int level, GNode*, bool indent, bool kids, bool sibs);
+//void writeGNode(FILE*, int level, GNode*, bool indent);
 
 static String swriteGNodes(int level, GNode*, String);
 static String swriteGNode(int level, GNode*, String);

@@ -13,6 +13,9 @@
 
 #include "standard.h"
 #include "gnode.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "errors.h"
 #include "functiontable.h"

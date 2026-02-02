@@ -21,6 +21,8 @@
 #include "sequence.h"
 #include "sequence.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "refnindex.h"
 #include "pvalue.h"
 #include "standard.h"
@@ -29,6 +31,7 @@
 #include "symboltable.h"
 #include "context.h"
 #include "builtintable.h"
+#include "writenode.h"
 
 /// Returns true if a PVType is one of the GNode types.
 bool isGNodeType(PVType type) {

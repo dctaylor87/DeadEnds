@@ -12,6 +12,9 @@
 #include "denls.h"
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "database.h"
@@ -19,7 +22,6 @@
 #include "rfmt.h"
 #include "gstrings.h"
 #include "gedcom.h"
-#include "recordindex.h"
 
 #include "refns.h"
 #include "locales.h"

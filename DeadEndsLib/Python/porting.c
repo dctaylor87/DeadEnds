@@ -19,9 +19,11 @@
 #include "porting.h"
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "database.h"
-#include "recordindex.h"
 #include "gnode.h"
 
 #include "llpy-externs.h"

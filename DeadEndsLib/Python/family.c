@@ -18,10 +18,12 @@
 #include "denls.h"
 #include "gedcom.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gnode.h"		/* GNode */
 #include "database.h"
-#include "recordindex.h"	/* releaseRecord */
 #include "nodeutils.h"		/* equal_tree */
 #include "py-messages.h"
 #include "ll-node.h"

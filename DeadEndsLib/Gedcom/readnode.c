@@ -9,12 +9,14 @@
 #include <stdint.h>
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "readnode.h"
 #include "stringtable.h"
 #include "gnodelist.h"
 #include "list.h"
-#include "errors.h"
 #include "file.h"
 
 static bool extractDebugging = false;

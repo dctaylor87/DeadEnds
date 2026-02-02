@@ -11,6 +11,9 @@
 #include "sys_inc.h"
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gedcom.h"
 #include "gnode.h"

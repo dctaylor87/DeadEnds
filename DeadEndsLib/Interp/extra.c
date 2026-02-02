@@ -4,8 +4,10 @@
 
 #include "standard.h"
 #include "hashtable.h"
-#include "refnindex.h"
+#include "recordindex.h" // searchRecordIndex.
+#include "integertable.h"
 #include "errors.h"
+#include "refnindex.h"
 #include "gnode.h"    // GNode.
 #include "lineage.h"
 #include "list.h"
@@ -14,7 +16,6 @@
 #include "name.h"     // getSurname, manipulateName.
 #include "functiontable.h"
 #include "interp.h"
-#include "recordindex.h" // searchRecordIndex.
 #include "database.h"    // personIndex, familyIndex.
 #include "hashtable.h"
 #include "evaluate.h"  // evaluate.
