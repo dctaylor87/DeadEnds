@@ -24,11 +24,12 @@
 #include "list.h"
 #include "zstr.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gedcom.h"
 #include "gnode.h"
-#include "errors.h"
-#include "integertable.h"
 #include "translat.h"
 #include "feedback.h"
 #include "date.h"
@@ -45,6 +46,7 @@
 #include "import.h"
 #include "locales.h"
 #include "lloptions.h"
+#include "validate.h"
 
 /*********************************************
  * local function prototypes, alphabetical
