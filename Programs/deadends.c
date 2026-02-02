@@ -30,6 +30,8 @@
 #include "path.h"
 #include "errors.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "refnindex.h"
 #include "gedcom.h"
 #include "gnode.h"
