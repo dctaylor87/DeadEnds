@@ -23,9 +23,11 @@
 static bool addingLineNumbers = true;
 char lnBuffer[16];
 
+static void printSExpr(FILE *out, PNode *node, int *line, int depth);
+
 // printSExpr prints a PNode as an S-Expression. This feature allows DeadEnds scripts to be parsed by the "DeadEnds
 // C world" and converted into S-expressions that are interpreted by the "DeadEnds Swift" world.
-void printSExpr(FILE *out, PNode *node, int *line, int depth) {
+static void printSExpr(FILE *out, PNode *node, int *line, int depth) {
     if (!node) { return; }
 	int curline = node->lineNumber;
 	if (curline != *line) {
