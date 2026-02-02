@@ -10,8 +10,8 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "stdlib.h"
-#include "time.h"
+#include <stdlib.h>
+#include <time.h>
 #include "gedcom.h"
 #include "generatekey.h"
 #include "set.h"

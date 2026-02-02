@@ -8,7 +8,7 @@
 #include <ansidecl.h>		/* ATTRIBUTE_UNUSED */
 #include <stdint.h>
 
-#include "stdlib.h"
+#include <stdlib.h>
 #include "splitjoin.h"
 #include "gnode.h"
 #include "gedcom.h"
