@@ -16,11 +16,13 @@ MANUALSSRC_en = ll-python-api.texi \
 		de-libraries.texi
 
 de_libraries_INPUTS = \
+	de-introduction.texi \
 	de-database.texi \
 	de-datatypes.texi \
 	de-gedcom.texi \
 	de-interp.texi \
 	de-parser.texi \
+	de-python.texi \
 	de-ui.texi \
 	de-utils.texi \
 	de-validate.texi
