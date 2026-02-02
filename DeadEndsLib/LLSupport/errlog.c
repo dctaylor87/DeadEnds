@@ -48,6 +48,8 @@
 #include "de-strings.h"
 #include "codesets.h"		/* uu8 */
 #include "feedback.h"
+#include "llabort.h"
+#include "init.h"
 
 /* local variables */
 
