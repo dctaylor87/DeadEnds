@@ -41,6 +41,9 @@
 #include "standard.h"
 #include "denls.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gedcom.h"
 #include "gnode.h"
@@ -56,7 +59,6 @@
 
 #include "rfmt.h"
 #include "sequence.h"
-#include "errors.h"
 #include "ask.h"
 #include "feedback.h"
 #include "liflines.h"

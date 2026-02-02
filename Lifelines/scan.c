@@ -42,6 +42,9 @@
 
 #include "rfmt.h"
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "database.h"
 #include "sequence.h"

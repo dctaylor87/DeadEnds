@@ -51,6 +51,8 @@
 #include "zstr.h"
 #include "translat.h"
 #include "feedback.h"
+#include "recordindex.h"
+#include "integertable.h"
 #include "refnindex.h"
 #include "gedcom.h"
 #include "gnode.h"

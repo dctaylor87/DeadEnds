@@ -28,6 +28,9 @@
 #include "denls.h"
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "database.h"
 #include "gedcom.h"
@@ -38,7 +41,6 @@
 #include "seqlineage.h"
 #include "ask.h"
 #include "llinesi.h"
-#include "errors.h"
 #include "liflines.h"
 #include "ll-list.h"
 #include "lineage.h"

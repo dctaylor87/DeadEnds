@@ -47,6 +47,9 @@
 
 #include "zstr.h"
 #include "translat.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "recordindex.h"
 #include "rfmt.h"
