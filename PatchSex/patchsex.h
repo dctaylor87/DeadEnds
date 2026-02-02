@@ -10,5 +10,6 @@
 
 #include <stdio.h>
 #include "gnodelist.h"
+#include "rootlist.h"
 
 #endif /* patchsex_h */
