@@ -72,7 +72,6 @@
 #include "screen.h"
 #include "splitjoin.h"
 #include "codesets.h"
-//#include "xreffile.h"
 #include "xref.h"
 #include "gstrings.h"
 #include "de-strings.h"
