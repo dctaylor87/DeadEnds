@@ -10,7 +10,7 @@
 #include "standard.h"
 #include "ask.h"
 #include "list.h"
-#include "stdarg.h"
+#include <stdarg.h>
 #include "regex.h"
 
 static bool checkForInteger(String, int*);
