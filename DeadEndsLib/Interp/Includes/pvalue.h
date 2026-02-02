@@ -30,7 +30,7 @@ typedef enum {
 	PVFamily, PVSource, PVEvent, PVOther, PVList, PVTable, PVSequence
 } PVType;
 
-bool isGNodeType(PVType type);
+//bool isGNodeType(PVType type);
 
 // VUnion is the union that holds PValue values.
 typedef union VUnion {
@@ -81,19 +81,19 @@ PValue mulPValues(PValue, PValue, bool* eflag);
 PValue divPValues(PValue, PValue, bool* eflag);
 PValue modPValues(PValue, PValue, bool* eflag);
 PValue negPValue(PValue, bool* eflag);
-PValue decrPValue(PValue, bool* eflag);
-PValue incrPValue(PValue, bool* eflag);
+//PValue decrPValue(PValue, bool* eflag);
+//PValue incrPValue(PValue, bool* eflag);
 PValue expPValues(PValue, PValue, bool* eflag);
-PValue gtPValues(PValue, PValue, bool* eflag);
-PValue gePValues(PValue, PValue, bool* eflag);
-PValue ltPValues(PValue, PValue, bool* eflag);
-PValue lePValues(PValue, PValue, bool* eflag);
-PValue nePValues(PValue, PValue, bool* eflag);
-PValue eqPValues(PValue, PValue, bool* eflag);
+//PValue gtPValues(PValue, PValue, bool* eflag);
+//PValue gePValues(PValue, PValue, bool* eflag);
+//PValue ltPValues(PValue, PValue, bool* eflag);
+//PValue lePValues(PValue, PValue, bool* eflag);
+//PValue nePValues(PValue, PValue, bool* eflag);
+//PValue eqPValues(PValue, PValue, bool* eflag);
 bool equalPValues(PValue, PValue);
 
 // PValue Functions.
-void coercePValue(PValue* pvalue, int newType, bool* errorFlag);
+//void coercePValue(PValue* pvalue, int newType, bool* errorFlag);
 PValue* clonePValue(const PValue* original);
 PValue cloneAndReturnPValue(const PValue* original);
 String typeOfPValue(PValue);
@@ -103,12 +103,12 @@ int pvalueReferenceCount (PValue *pvalue);
 //bool eqv_pvalues(PValue, PValue);
 
 //bool is_record_pvalue(PValue);
-bool is_zero(PValue);
+//bool is_zero(PValue);
 //void num_conform_pvalues(PValue, PValue, bool*);
 //bool numericPValue(PValue);
 //void pvalues_begin(void);
 //void pvalues_end(void);
-void setPValue(PValue, int, VUnion);
+//void setPValue(PValue, int, VUnion);
 extern bool numericPValue(PValue value); // See if a PValue is numeric.
 //String pvalue_to_string(PValue);
 //void insert_pvtable(Table, String, int, VPTR);

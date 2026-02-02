@@ -63,7 +63,6 @@ void* getLastListElement(List*);
 void* getAndRemoveLastListElement(List*);
 void* getAndRemoveFirstListElement(List*);
 
-Block* blockOfList(List*);
 void showList(List *list, String(*describe)(void*));
 
 extern void incrReferenceCountList (List *list, CString file, int line, CString function);

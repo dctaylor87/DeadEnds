@@ -13,5 +13,8 @@ bool gnodesToFile(int level, GNode* gnode, CString fileName, bool indent);
 void writeGNodeRecord(FILE*, GNode*, bool indent);
 void writeGNodes(FILE*, int level, GNode*, bool indent, bool kids, bool sibs);
 void writeGNode(FILE*, int level, GNode*, bool indent);
+int treeStringLength(int, GNode*);
+String gnodeToString(GNode*, int level);
+String gnodesToString(GNode*);
 
 #endif // writenode_h

@@ -25,7 +25,6 @@ typedef enum ValidationCodes {
 extern void validatePersons(RecordIndex*, CString name, IntegerTable*, ErrorLog*);
 extern void validateFamilies(RecordIndex*, CString name, IntegerTable*, ErrorLog*);
 extern bool validateRecord (GNode *, Database *, ErrorLog *);
-extern RefnIndex* getReferenceIndex(RecordIndex*, CString name, IntegerTable*, ErrorLog*);
 extern bool validateSourceIndex(Database* database, ErrorLog* errorLog);
 extern bool validateEventIndex(Database* database, ErrorLog* errorLog);
 extern bool validateOtherIndex(Database* database, ErrorLog* errorLog);

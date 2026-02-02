@@ -67,18 +67,10 @@ void uniqueSequenceInPlace(Sequence *sequence);
 Sequence* unionSequence(Sequence*, Sequence*);
 Sequence* intersectSequence(Sequence*, Sequence*);
 Sequence* differenceSequence(Sequence*, Sequence*);
-Sequence* childSequence(Sequence*);
 Sequence* parentSequence(Sequence*);
-Sequence* spouseSequence(Sequence*);
-Sequence* ancestorSequence(Sequence*, bool close);
-Sequence* descendentSequence(Sequence*, bool close);
-Sequence* siblingSequence(Sequence*, bool close);
 bool elementFromSequence(Sequence* sequence, int index, CString* key, CString* name);
 void renameElementInSequence(Sequence* sequence, CString key);
-void sequenceToGedcom(Sequence*, FILE*);
 void showSequence(Sequence*, String title);
-
-bool limitPersonNode(GNode *node, int level);
 
 extern void baseFree(void *word);
 extern void incrReferenceCountSequence (Sequence *seq, CString file, int line, CString function);

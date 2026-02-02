@@ -26,6 +26,7 @@ void appendToRootList(RootList*, GNode*);
 //RootList* getRootListFromFile(File*, IntegerTable*, ErrorLog*);
 RootList* getRootListFromGNodeList(GNodeList*, String file, ErrorLog*);
 void showRootList(RootList*);
+void writeGNodeTreesToFile(GNodeList*, File*);
 
 
 #endif /* rootlist_h */

@@ -91,9 +91,6 @@ void freeGNode(GNode*);
 void freeGNodes(GNode*);
 int gnodeLevel(GNode* node);
 
-String gnodeToString(GNode*, int level);
-String gnodesToString(GNode*);
-int treeStringLength(int, GNode*);
 GNode* personToFamilyAsChild(GNode *person, RecordIndex*);
 
 String personToEvent(GNode*, String, String, int, bool);

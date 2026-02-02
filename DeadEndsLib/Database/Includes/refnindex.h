@@ -27,5 +27,6 @@ void deleteRefnIndex(RefnIndex*);
 bool addToRefnIndex(RefnIndex*, CString refn, CString key);
 CString searchRefnIndex(RefnIndex*, CString refn);
 void showRefnIndex(RefnIndex*);
+extern RefnIndex* getReferenceIndex(RecordIndex*, CString name, IntegerTable*, ErrorLog*);
 
 #endif // refnindex_h
