@@ -10,16 +10,16 @@
 #include <stdint.h>
 
 #include "hashtable.h"
+#include "recordindex.h"
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "database.h"
-#include "errors.h"
 #include "gedcom.h"
 #include "gnode.h"
 #include "hashtable.h"
-#include "integertable.h"
 #include "lineage.h"
 #include "list.h"
-#include "recordindex.h"
 #include "splitjoin.h"
 #include "utils.h"
 #include "validate.h"
@@ -97,7 +97,6 @@ static bool validatePerson(GNode* person, CString name, RecordIndex* index, Inte
 	SexType sex = SEXV(person);
 	FORFAMSS(person, family, key, index) // Check FAMS links back to person.
 		bool found = false;
-		GNode *parent = null;
 		FORHUSBS(family, parent, key, index)
 		  if (parent == person) {
 		    found = true;
@@ -121,7 +120,6 @@ static bool validatePerson(GNode* person, CString name, RecordIndex* index, Inte
 			addErrorToLog(elog, createError(linkageError, name, rootLine(family, keymap), s));
 			errorCount++;
 		}
-a:;
 	ENDFAMSS
 	//  Validate NAME and SEX lines.
 	GNode* nnode = null;
