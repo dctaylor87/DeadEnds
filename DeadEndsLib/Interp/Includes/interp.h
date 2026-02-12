@@ -81,7 +81,7 @@ void scriptError(PNode*, CString, ...);
 int yylex(void);
 int yyparse(ErrorLog *errorLog);
 
-bool setScriptOutputFile (CString filename, bool append, CString *errorMessage);
+//bool setScriptOutputFile (CString filename, bool append, CString *errorMessage);
 void poutput(PNode*, String, Context*, bool*);
 // Program running state flags.
 extern bool programParsing;
