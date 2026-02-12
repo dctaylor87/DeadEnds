@@ -6,6 +6,7 @@
 noinst_LIBRARIES = libllsupport.a
 
 libllsupport_a_SOURCES = \
+	annotate.c \
 	ask.c \
 	brwslist.c \
 	charmaps.c \
