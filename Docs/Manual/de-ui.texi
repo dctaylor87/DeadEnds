@@ -25,14 +25,56 @@ when the user interface is changing to a different interface or the
 program is about to exit.
 @end defun
 
+@defvar current_uiio @arrow{} UIIO*
+This points to the current user interface input/output structure.
+Currently, there are two @code{UIIO*}'s that are defined --
+@code{uiio_curses} and @code{uiio_stdio}.  There might be additional
+@code{UIIO*}'s in the future -- such as for a @code{GUI} (graphical
+user interface) or for a @code{CLI} (command line interface).
+@end defvar
+
 @defvar uiio_curses @arrow{} UIIO*
+The curses user interface input/output structure.  Used by
+@command{llines}.
 @end defvar
 
 @defvar uiio_stdio @arrow{} UIIO*
+The stdio user interface input/output structure.  Used by @command{llexec}.
 @end defvar
 
-@defvar current_uiio @arrow{} UIIO*
-@end defvar
+@section stdio-ui.h
+
+@defun stdio_ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn) @arrow{} int
+The @code{stdio} version of @code{ask_for_char_msg};
+@end defun
+
+@defun stdio_ask_for_string (CString ttl, CString prmpt, String buffer, int buflen) @arrow{} bool
+The @code{stdio} version of @code{ask_for_string}.
+@end defun
+
+@defun stdio_prompt_stdout (CString prompt) @arrow{} int
+The @code{stdio} version of @code{prompt_stdout}.
+@end defun
+
+@defun stdio_invoke_search_menu (void) @arrow{} Sequence*
+The @code{stdio} version of @code{invoke_search_menu}.
+@end defun
+
+@defun stdio_llvwprintf (CString fmt, va_list args) @arrow{} void
+The @code{stdio} version of @code{llvwprintf}.
+@end defun
+
+@defun stdio_ask_for_program (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist) @arrow{} bool
+The @code{stdio} version of @code{ask_for_program}.
+@end defun
+
+@defun stdio_chooseFromArray (CString ttl, int no, String *pstrngs) @arrow{} int
+The @code{stdio} version of @code{chooseFromArray}.
+@end defun
+
+@defun stdio_view_array (CString ttl, int no, String *pstrngs) @arrow{} void
+The @code{stdio} version of @code{view_array}.
+@end defun
 
 @section screen.h
 
@@ -82,4 +124,84 @@ Number of columns used by LifeLines (usually COLSREQ)
 @end defun
 
 @defun chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type) @arrow{} int
+@end defun
+
+@section feeback.h
+
+This header file needs to be renamed and moved from the
+@file{LLSupport} tree to the @file{UI} tree.
+
+@defun msg_error (CString fmt, ...) @arrow{} void
+Report an error.  Just calls @code{msg_outputv} with a
+@code{MSG_LEVEL} or @code{MSG_ERROR}.
+@end defun
+
+@defun msg_info (CString fmt, ...) @arrow{} void
+Report a message.  Just calls @code{msg_outputv} with a
+@code{MSG_LEVEL} or @code{MSG_INFO}.
+@end defun
+
+@defun msg_status (CString fmt, ...) @arrow{} void
+Report transitory state that should not be preserved.  Just calls
+@code{msg_outputv} with a @code{MSG_LEVEL} or @code{MSG_STATUS}.
+@end defun
+
+@defun msg_errorlog (ErrorLog *errorLog) @arrow{} void
+@end defun
+
+@defun msg_output (MSG_LEVEL, CString fmt, ...) @arrow{} void
+Just calls @code{msg_outputv}.
+@end defun
+
+@defun msg_outputv (MSG_LEVEL, CString fmt, va_list args) @arrow{} void
+The functions above in this section call this function.  Which, in
+turn, calls the current @code{uiio_outputv_func} function.
+@end defun
+
+@defun message (CString fmt, ...) @arrow{} void
+@b{Deprecated.  Should not be used in new code.}
+@end defun
+
+@defun llwprintf (CString fmt, ...) @arrow{} void
+Just calls llvwprintf.
+@end defun
+
+@defun llvwprintf (CString fmt, va_list args) @arrow{} void
+Reports to stdout style output (used embedded carriage returns).
+@end defun
+
+@section unknown
+
+@defun ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen) @arrow{} bool
+Ask user for filename from which to read.
+Returns a static buffer.
+@code{ttl1} -- title of question (1rst line).
+@code{prmpt} -- prompt of question (3rd line).
+@code{buffer} -- response
+@code{buflen}] -- max size of response.
+@end defun
+
+@defun ask_for_output_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen) @arrow{} bool
+Ask user for filename to which to write.
+Returns a static buffer
+@code{ttl1} --  title of question (1rst line).
+@code{prmpt} --  prompt of question (3rd line).
+@code{buffer} -- response.
+@code{buflen} -- max size of response.
+@end defun
+
+@defun ask_yes_or_no (CString ttl) @arrow{} bool
+Ask yes or no question.  @code{ttl} -- title to display.
+@end defun
+
+@defun ask_yes_or_no_msg (CString msg, CString ttl) @arrow{} bool
+Ask yes or no question with message.
+@code{msg} -- top line displayed.
+@code{ttl} -- 2nd line displayed.
+@end defun
+
+@defun ask_for_string (CString ttl, CString prmpt, String buffer, int buflen) @arrow{} bool
+@end defun
+
+@defun ask_for_string2 (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen) @arrow{} bool
 @end defun

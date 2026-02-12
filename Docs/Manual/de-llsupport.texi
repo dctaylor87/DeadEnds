@@ -1,0 +1,463 @@
+Most of the files in this chapter need to be renamed.
+
+@section annotate.h 
+@section ask.h
+@defun ask_for_fam (CString pttl, CString sttl, Database*) @arrow{} GNode*
+@end defun
+@defun ask_for_fam_by_key (CString fttl, CString pttl, CString sttl, Database* database) @arrow{} GNode*
+@end defun
+@defun ask_for_indi (CString ttl, ASK1Q ask1, Database* database) @arrow{} GNode*
+@end defun
+@defun ask_for_indi_key (CString ttl, ASK1Q ask1, Database* database) @arrow{} String
+@end defun
+@defun ask_for_indi_list (CString ttl, bool reask, Database* database) @arrow{} Sequence*
+@end defun
+@defun ask_for_int (CString ttl, int* prtn) @arrow{} bool
+@end defun
+@defun ask_for_input_file (CString mode, CString ttl, String* pfname, CString path, CString ext) @arrow{} FILE*
+@end defun
+@defun ask_for_output_file (CString mode, CString ttl, String* pfname, CString path, CString ext) @arrow{} FILE*
+@end defun
+@defun 
+chooseFromSequence (Sequence* seq, ASK1Q ask1, CString titl1, CString titln, enum SequenceType type) @arrow{} GNode*
+@end defun
+@section browse.h 
+
+@defun init_browse_lists (void) @arrow{} void
+Initialize named browse lists.
+@end defun
+
+@defun term_browse_lists (void) @arrow{} void
+Terminate named browse lists.
+@end defun
+
+/* brwslist.c */
+@defun add_browse_list (String, Sequence*) @arrow{} void
+Add named browse list.
+@end defun
+
+@defun remove_browse_list (String, Sequence*) @arrow{} void
+Remove named browse list.
+@end defun
+
+@defun new_name_browse_list (String, String) @arrow{} void
+Rename named browse list.
+@end defun
+
+@defun update_browse_list (String, Sequence*) @arrow{} void
+Assign a name to a browse list.
+@end defun
+
+@defun remove_from_browse_lists (String) @arrow{} void
+Remove stale elements from browse lists.
+@end defun
+
+@defun rename_from_browse_lists (String) @arrow{} void
+Re-figures name of possible element in browse liists.
+
+Huh?
+@end defun
+
+@defun find_named_seq (CString) @arrow{} Sequence*
+Find named browse list.
+@end defun
+
+@section charmaps.h 
+@defun get_decimal (CString str) @arrow{} int
+@end defun
+@defun get_hexidecimal (CString str) @arrow{} int
+@end defun
+@defun hexvalue (int c) @arrow{} int
+@end defun
+@defun custom_translate (CString str, TRANTABLE tt) @arrow{} ZSTR
+@end defun
+@defun custom_translatez (ZSTR zstr, TRANTABLE tt) @arrow{} void
+@end defun
+@defun init_map_from_file (CString file, CString mapname, TRANTABLE*  ptt, ZSTR zerr) @arrow{} bool
+@end defun
+@section charprops.h 
+@defun charprops_load_utf8 (void) @arrow{} bool
+@end defun
+@defun charprops_free_all (void) @arrow{} void
+@end defun
+@defun charprops_load (const char*  codepage) @arrow{} bool
+@end defun
+@defun charprops_is_loaded (void) @arrow{} bool
+@end defun
+@section codesets.h 
+@defun get_defcodeset (void) @arrow{} CString
+@end defun
+@defun init_codesets (void) @arrow{} void
+@end defun
+@defun term_codesets (void) @arrow{} void
+@end defun
+@defun is_codeset_utf8 (CString codename) @arrow{} bool
+@end defun
+@section datei.h
+@section dateprint.h 
+@section editing.h 
+
+@defun editfile @arrow{} String
+@end defun
+@defun editstr @arrow{} String
+@end defun
+@defun prefix_file_for_edit (FILE* fp) @arrow{} void
+@end defun
+@defun prefix_file_for_gedcom (FILE* fp) @arrow{} void
+@end defun
+@defun prefix_file_for_report (FILE* fp) @arrow{} void
+@end defun
+@defun write_indi_to_file (GNode* indi, CString file) @arrow{} void
+@end defun
+@defun write_fam_to_file_for_edit (GNode* fam, CString file, bool rfmt, Database* database) @arrow{} void
+@end defun
+@defun write_indi_to_file_for_edit (GNode* indi, CString file, bool rfmt, Database* database) @arrow{} void
+@end defun
+@defun write_nodes (int, FILE*, XLAT, GNode* , bool, bool, bool) @arrow{} void
+@end defun
+@defun write_node_to_editfile (GNode*) @arrow{} void
+@end defun
+@section equaliso.h 
+@defun equal_tree (GNode* root1, GNode* root2) @arrow{} bool
+@end defun
+@section errlog.h 
+@defun crashlog (String fmt, ...) @arrow{} void
+@end defun
+@defun crashlogn (String fmt, ...) @arrow{} void
+@end defun
+@defun errlog_out (CString title, CString msg, CString file, int line, CString function) @arrow{} void
+@end defun
+@defun crash_setcrashlog (CString crashlog) @arrow{} void
+@end defun
+@defun crash_setdb (String dbname) @arrow{} void
+@end defun
+@section expandvars.h
+@section feedback.h 
+@section gstrings.h 
+@defun get_child_strings (GNode* fam, bool rfmt, int* pnum, String** pkeys, Database* database) @arrow{} String*
+Return children strings; each string has name and event info, if available.
+
+@*@code{fam} -- [in] family of interest
+@*@code{rfmt} -- [in] reformatting functions
+@*@code{pnum} --  [out] number of output strings
+@*@code{pkeys} -- [out] array of output strings (children descriptions)
+@end defun
+@defun indi_to_list_string (GNode* indi, GNode* fam, int len, bool rfmt, bool appkey) @arrow{} String
+Return menu list string; returns heap-alloc'd string.
+@*@code{indi}   [IN]  source person
+@*@code{fam}    [IN]  relevant family (used in spouse lists)
+@*@code{len}    [IN]  max length desired
+@*@code{rfmt}   [IN]  reformating functions (may be NULL)
+@*@code{appkey} [IN]  allow appending key ?
+@end defun
+@defun sour_to_list_string (GNode* sour, int len, String delim) @arrow{} String
+Return menu list string.
+@end defun
+@defun even_to_list_string (GNode* even, int len, String delim) @arrow{} String
+Return menu list string.
+@end defun
+@defun fam_to_list_string (GNode* fam, int len, String delim, Database* database) @arrow{} String
+Return menu list string.
+@end defun
+@defun other_to_list_string (GNode* node, int len, String delim) @arrow{} String
+Return menu list string.
+@end defun
+@defun generic_to_list_string (GNode* node, CString key, int len, String delim, bool rfmt, bool appkey, Database* database) @arrow{} String
+Format a print line from a top-level node of any type.
+Caller may specify either node or key (& leave other NULL).
+Returns heap-alloc'd string.
+Caller must specify either node or key (or both).
+Used in lists and in extended gedcom view.
+
+@*@code{node}   [IN]  node tree of indi or fam ... to be described
+@*@code{key}    [IN]  key of record specified by node
+@*@code{len}    [IN]  max description desired
+@*@code{delim}  [IN]  separator to use between events
+@*@code{rfmt}   [IN]  reformatting information
+@*@code{appkey} [IN]  allow appending key ?
+@end defun
+@defun set_displaykeys (bool keyflag) @arrow{} void
+@end defun
+@section icvt.h 
+@section iterate.h 
+@section langinfz.h
+@section listener.h 
+@section ll-addoperations.h 
+@defun addOrUpdatePersonInDatabase (GNode* person, Database* database) @arrow{} bool
+If @code{person} is not in the database, add it; if it is, then
+update it.
+@end defun
+@defun addOrUpdateFamilyInDatabase (GNode* family, Database* database) @arrow{} bool
+If @code{family} is not in the database, add it; if it is, then
+update it.
+@end defun
+@defun addOrUpdateSourceInDatabase (GNode* source, Database* database) @arrow{} bool
+If @code{source} is not in the database, add it; if it is then
+update it.
+@end defun
+@defun addOrUpdateEventInDatabase (GNode* event, Database* database) @arrow{} bool
+If @code{event} is not in the database, add it; if it is, then
+update it.
+@end defun
+@defun addOrUpdateOtherInDatabase (GNode* other, Database* database) @arrow{} bool
+If @code{other} is not in the database, add it; if it is, then
+update it.
+@end defun
+@section ll-database.h 
+In Lifelines, record keys were always of the form
+
+@code{letter one-or-more-digits}
+
+with the @code{letter} being one of the five letters @code{I,F,S,E,X}
+for person, family, source, event, and other records, respectively.
+
+In a DeadEnds library, there is no such restriction.  However, there
+are parts of Lifelines, including the port of it to DeadEnds, that
+still assume that keys have this format.
+
+In Lifelines, @code{KEYNUM_TYPE} was sometimes 32-bits and sometimes
+64-bits -- depending on the platform.  In DeadEnds, support for
+64-bits in personal systems has become sufficiently ubiquitous, that
+keynums are always 64-bits.  And the maximum key number
+(@code{MAXKEYNUMBER})is currently 999,999,999,999.  As this only
+requires 40 bits for storage, it could be raised without much pain, by
+a factor of a thousand or even a million, but I see no need to do so.
+
+If you change @code{MAXKEYNUMBER}, then you should adjust
+@code{MAXKEYWIDTH} as well.
+
+@defun keynumToPersonRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
+Get a person record from a database.
+@end defun
+@defun keynumToFamilyRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
+Get a family record from a database.
+@end defun
+@defun keynumToSourceRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
+Get a source record from a database.
+@end defun
+@defun keynumToEventRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
+Get an event record from a database.
+@end defun
+@defun keynumToOtherRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
+Get an other record from a database.
+@end defun
+@section ll-indiseq.h 
+@section ll-list.h
+@section ll-node.h 
+@defun tree_strlen (int levl, GNode* node) @arrow{} int
+Compute string length of tree.  Does not count the terminating null.
+@end defun
+@defun unknown_node_to_dbase (GNode* node) @arrow{} void
+@end defun
+@defun next_spouse (GNode** node, GNode** spouse, Database* database) @arrow{} int
+@end defun
+@defun indi_to_prev_sib (GNode* irec, Database* database) @arrow{} GNode*
+Returns previous sibling of person.
+Returned record is @code{addref}'d.
+@end defun
+@defun indi_to_next_sib (GNode* irec, Database* database) @arrow{} GNode*
+Returns next sibling of person.
+Returned record is @code{addref}'d.
+@end defun
+@defun node_to_tag (GNode* node, CString tag, int len) @arrow{} String
+@end defun
+@defun record_to_date_place (GNode* record, String tag, String*  date, String*  plac, int*  count) @arrow{} void
+@end defun
+@defun record_to_first_event (GNode* record, CString tag) @arrow{} GNode*
+@end defun
+@defun node_to_next_event (GNode* node, CString tag) @arrow{} GNode*
+@end defun
+@defun event_to_date_place (GNode* node, String*  date, String*  plac) @arrow{} void
+@end defun
+@defun copy_node_subtree (GNode* node) @arrow{} GNode*
+@end defun
+@defun traverse_nodes (GNode* node, bool (*func)(GNode* , void*), void* param) @arrow{} bool
+Traverse nodes in tree while doing something.  Children and siblings are visited.
+@code{node}         root of tree to traverse
+@code{func}         function to call at each node (returns false to stop traversal)
+@code{param}        opaque pointer for client use, passed thru to callback
+@end defun
+@defun term_node_allocator (void) @arrow{} void
+@end defun
+@section ll-porting.h 
+@section ll-sequence.h 
+@defun getAllPersons (Database* database) @arrow{} Sequence*
+Returns a sequence of all Person records in the database.
+Caller is responsible for freeing the Sequence when done.
+@end defun
+@defun getAllFamilies (Database* database) @arrow{} Sequence*
+Returns a sequence of all Family records in the database.
+Caller is responsible for freeing the Sequence when done.
+@end defun
+@defun getAllSources (Database* database) @arrow{} Sequence*
+Returns a sequence of all Source records in the database.
+Caller is responsible for freeing the Sequence when done.
+@end defun
+@defun getAllEvents (Database* database) @arrow{} Sequence*
+Returns a sequence of all Event records in the database.
+Caller is responsible for freeing the Sequence when done.
+@end defun
+@defun getAllOthers (Database* database) @arrow{} Sequence*
+Returns a sequence of all Other records in the database.
+Caller is responsible for freeing the Sequence when done.
+@end defun
+@defun getAllRefns (Database* database) @arrow{} Sequence*
+Returns a sequence of all @code{REFN}s in the database.
+Caller is responsible for freeing the Sequence when done.
+@end defun
+@defun GNodeToSources (GNode* node, Database* database) @arrow{} Sequence*
+Returns a sequence of all @code{SOUR} records pointed to by nodes within @code{node}s tree.
+@end defun
+@defun GNodeToNotes (GNode* node, Database* database) @arrow{} Sequence*
+Returns a sequence of all @code{NOTE} records pointed to by nodes within @code{node}s tree.
+@end defun
+@defun GNodeToPointers (GNode* node, Database* database) @arrow{} Sequence*
+Returns a sequence of all pointers present in in @code{node}s tree.
+@end defun
+@defun familyToSpouses (GNode* fam, Database* database) @arrow{} Sequence*
+Returns a sequence of all spouses (@code{HUSB}, @code{WIFE}) present in family @code{fam}.
+@end defun
+@defun getAllRecordOfType (Database* database, RecordType type) @arrow{} Sequence*
+Returns a sequence of all records of type @code{type}.
+@end defun
+@section llgettext.h 
+@section lloptions.h
+@section locales.h 
+@section norm_charmap.h 
+@section options.h 
+@section proptbls.h 
+@section remove.h
+@defun remove_indi_by_root (GNode* indi, Database* database) @arrow{} void
+@end defun
+@defun remove_empty_fam (GNode* fam, Database* database) @arrow{} bool
+Remove an empty family @code{fam} from the database.  It will fail and
+call @code{msg_error} if the family is not empty.
+@end defun
+@defun remove_child (GNode* indi, GNode* fam, Database* database) @arrow{} bool
+Remove child @code{indi} from family @code{fam}.  Updates both set of links.
+@end defun
+@defun remove_spouse (GNode* indi, GNode* fam, Database* database) @arrow{} bool
+Remove spouse @code{indi} from family @code{fam}.  Updates both set of links.
+@end defun
+@defun remove_fam_record (GNode* frec) @arrow{} bool
+@end defun
+@defun remove_any_record (GNode* record, Database* database) @arrow{} bool
+@end defun
+@defun num_fam_xrefs (GNode* fam) @arrow{} int
+@end defun
+@section replace.h 
+@defun replace_indi (GNode* indi1, GNode* indi2, Database* database) @arrow{} void
+@end defun
+@defun replace_fam (GNode* fam1, GNode* fam2, Database* database) @arrow{} void
+@end defun
+@section rfmt.h 
+@section rptui.h 
+@section sprintpic.h 
+@section stdlibi.h
+@section strcvt.h 
+@section sys_inc.h 
+@section translat.h 
+@section valid.h 
+@defun validate_new_record (GNode* new, GNode* orig, RecordType ntype, Database* database, CString* pmsg) @arrow{} bool
+@end defun
+@section xlat.h
+@section xref.h 
+@defun getFirstPersonRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getFirstFamilyRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getFirstSourceRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getFirstEventRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getFirstOtherRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getNextPersonRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getNextFamilyRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getNextSourceRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getNextEventRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getNextOtherRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getLastPersonRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getLastFamilyRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getLastSourceRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getLastEventRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getLastOtherRecord (Database* database) @arrow{} GNode*
+@end defun
+@defun getPreviousPersonRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getPreviousFamilyRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getPreviousSourceRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getPreviousEventRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getPreviousOtherRecord (CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getNewPersonKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewFamilyKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewSourceKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewEventKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewOtherKey (Database* database) @arrow{} CString
+@end defun
+@defun getFirstRecord (RecordType type, Database* database) @arrow{} GNode*
+@end defun
+@defun getLastRecord (RecordType type, Database* database) @arrow{} GNode*
+@end defun
+@defun getNextRecord (RecordType type, CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun getPreviousRecord (RecordType type, CString key, Database* database) @arrow{} GNode*
+@end defun
+@defun isKeyInUse (CString key, Database* database) @arrow{} bool
+@end defun
+
+/* The following five functions return a new (unused) key of the specified type.
+   It is the callers responsibility to use the key or release it.
+   Also, the key is in static storage and the caller should save it
+   (strsave or similar).  */
+
+@defun getNewFamilyKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewPersonKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewSourceKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewEventKey (Database* database) @arrow{} CString
+@end defun
+@defun getNewOtherKey (Database* database) @arrow{} CString
+@end defun
+
+/* The following five functions release a key of the specified type.
+   It is the callers responsibility to have already removed the
+   corresponding record from the database.
+
+   Keys must be of the appropriate type, however we accept both with
+   and without the surrounding '@'s.  */
+
+@defun releaseFamilyKey (Database* database, CString key) @arrow{} void
+@end defun
+@defun releasePersonKey (Database* databas, CString key) @arrow{} void
+@end defun
+@defun releaseSourceKey (Database* database, CString key) @arrow{} void
+@end defun
+@defun releaseEventKey (Database* database, CString key) @arrow{} void
+@end defun
+@defun releaseOtherKey (Database* database, CString key) @arrow{} void
+@end defun
+@defun xref_max_any (Database* database) @arrow{} uint64_t
+@end defun
+
+@defun value_to_xref (CString val) @arrow{} CString
+@end defun

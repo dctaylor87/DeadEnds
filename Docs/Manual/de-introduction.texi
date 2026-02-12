@@ -1,11 +1,11 @@
-There are many functions that are not documented here.  Currently
-only slightly over two thirds of the core DeadEnds functions are
-listed.
+There are many functions that are not documented here.  While many
+DeadEnds functions are NOT described, the BULK of the DeadEnds
+functions that are called by the port of LifeLines @b{ARE} documented.
 
-Currently, only functions found in core DeadEnds libraries are listed.
-The @code{LLSupport}, @code{Python}, and @code{UI} libraries are
-@b{NOT} core DeadEnds libraries.  Descriptions of their functions and
-variables will be added in the future.
+The emphasis is on the core DeadEnds libraries.  The @code{LLSupport},
+@code{Python}, and @code{UI} libraries are @b{NOT} considered core
+DeadEnds libraries.  Descriptions of some of their functions and
+variables are listed.  Others will be added in the future.
 
 While the intent is to document @b{ALL} the functions meant to be
 called by applications, which functions are in that category isn't
@@ -16,21 +16,15 @@ functions meant only to be called from within the same library and
 functions meant only to be called from within other DeadEnds
 libraries.
 
-The hope is that eventually there will be two documents.  One for
-applications writers that want to use the library and one for
-developers that wish to modify the libraries -- whether to extend them
-or to fix bugs.  The second, as yet unwritten, document, will need to
-document not just the interfaces, but also the internals.
+The hope is that eventually there will be a collection of documents.
+One for applications writers that want to use the DeadEnds libraries.
+And another for developers that wish to modify the libraries --
+whether to extend them or to fix bugs.  The latter, as yet unwritten,
+document, will need to document not just the interfaces, but also the
+internals.
 
-This document concentrates on the functions in the core DeadEnds
-libraries that are called by the port of the LifeLines user interface.
-Initially it only included such functions, and a subset at that.  The
-document has grown.  It undoubtably only documents some of the
-functions that are called by LifeLines, but it also documents many
-functions that are not called directly by LifeLines.
-
-It is hoped that it will eventually encompass all of the DeadEnds
-functions meant to be called directly by applications.
+It is hoped that this document will eventually encompass all of the
+DeadEnds functions meant to be called directly by applications.
 
 Additionally, as it is being written for the application developer,
 not a library developer, its focus is on the @b{interfaces}, not on
@@ -43,3 +37,5 @@ interfaces.
 For the functions which are documented that are @b{NOT} meant to be
 called by applications, the hope is that they will eventually become
 part of an internals document.
+
+Corrections, additions, and suggestions for improvement are always welcome.

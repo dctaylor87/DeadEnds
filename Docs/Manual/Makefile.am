@@ -21,6 +21,7 @@ de_libraries_INPUTS = \
 	de-datatypes.texi \
 	de-gedcom.texi \
 	de-interp.texi \
+	de-llsupport.texi \
 	de-parser.texi \
 	de-python.texi \
 	de-ui.texi \

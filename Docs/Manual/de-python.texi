@@ -5,8 +5,30 @@ be called from other files within the Python library.
 There are two variables meant to be accessible outside the library --
 @code{llpy_debug} and @code{Lifelines_Module}.
 
-And there are four functions --
+And there are six functions --
 @code{llpy_python_interactive},
 @code{llpy_register_script},
-@code{llpy_execute_script}, and
+@code{llpy_execute_scripts},
+@code{llpy_python_terminate},
+@code{_py_traverse_nodes},and
 @code{llpy_init}.
+
+@defun llpy_init (void) @arrow{}  void
+Initialize the @code{Python} subsystem.
+@end defun
+
+@defun llpy_python_terminate (void) @arrow{}  void
+Terminate the @code{Python} subsystem.
+@end defun
+
+@defun llpy_register_script (char *script) @arrow{}  int
+Register a @code{Python} script.
+@end defun
+
+@defun llpy_execute_scripts (int continue_on_failure) @arrow{}  int
+Execute the registered @code{Python} scripts.
+@end defun
+
+@defun llpy_python_interactive (void) @arrow{}  int
+Invoke the interactive @code{Python} interpreter.
+@end defun

@@ -25,34 +25,44 @@ script interpreter.
 
 @defun createContext (Program*, Database*, File*) @arrow{} Context*
 Creates a @code{Context} structure.
+
+Usually not called directly by applications as @code{runProgram} calls
+it to create a @code{Context*} for executing the script.
 @end defun
 
 @defun deleteContext (Context*) @arrow{} void
 Deletes a @code{Context} structure.
+
+Like @code{createContext}, not usually called directly by applications
+as @code{runProgram} calls it after the script finishes executing.
 @end defun
 
 @defun createProgram (void) @arrow{} Program*
-Creates a @code{Program} structure.
-
-TODO: Change to take parameters.
+Creates a @code{Program} structure.  @b{NOTE}: Not usually called
+directly as it creates an empty @code{Program*} structure.  Instead,
+use @code{parseProgram} to call @code{createProgram} and initialize
+the fields based on the files that were parsed.
 @end defun
 
 @defun deleteProgram (Program*) @arrow{} void
 Deletes a @code{Program} structure.
+
+@b{NOTE}: Not deleted by @code{runProgram} and friends as that allows
+the same script to be run against multiple databases without having to
+reparse the script.  When the script will no longer be executed, the
+application should call @code{deleteProgram}.
 @end defun
 
 @defun validateCalls (FunctionTable* procedures, FunctionTable* functions) @arrow{} void
 Checks that the @code{procedures} and @code{functions} to be called by
 a program are defined.
+
+Called by @code{parseProgram} after the script has been parsed.
+
+Applications do not normally need tro call it directly.
 @end defun
 
 @section interp.h
-
-@defvar Poutfp
-@end defvar
-
-@defun setScriptOutputFile
-@end defun
 
 @defun initializeInterpreter (Database*) @arrow{} void
 Currently sets @code{Perrors} to zero; does nothing else.
@@ -62,11 +72,18 @@ Currently sets @code{Perrors} to zero; does nothing else.
 supplied database.
 @end defun
 
-@defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Context*
+@defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Program*
 Searches for @code{fileName} along @code{searchPath}.  If found, it is
-parsed.  If there are no errors, a @code{Context *} is returned.
+parsed.  If there are no errors, a @code{Program*} is returned.
 Otherwise, @code{null} is returned.  Errors are returned in
 @code{errorLog}.
+@end defun
+
+@defun runProgram (Program* program, Database* database, File* outfile) @arrow{} InterpType
+Runs a DeadEnds script program.  The argument @code{program} is a
+@code{Program*} as returned by @code{parseProgram}.  The
+@code{database} is the @code{Database*} to run the script against.
+And @code{outfile} specifies where to place the script output.
 @end defun
 
 @defun finishInterpreter (void) @arrow{} void
