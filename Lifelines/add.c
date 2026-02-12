@@ -227,6 +227,8 @@ add_new_indi_to_db (GNode *indi0)
 	currentDatabase->dirty = true;
 	indi_to_dbase(indi);
 }
+
+#if 0
 /*================================================================
  * add_indi_no_cache -- Add new person to database
  *  does not insert into cache
@@ -256,6 +258,8 @@ add_indi_no_cache (GNode *indi)
 	currentDatabase->dirty = true;
 	return storeRecord (database, indi);
 }
+#endif
+
 /*========================================================
  * ask_child_order --  ask user in what order to put child
  * (with user interaction)

@@ -32,7 +32,7 @@ struct tag_export_feedback;
 GNode *add_family_by_edit(GNode *sprec1, GNode *sprec2,
 			  GNode *chrec, bool rfmt);
 GNode *add_indi_by_edit(bool rfmt);
-bool add_indi_no_cache(GNode *);
+//bool add_indi_no_cache(GNode *);
 CString get_unresolved_ref_error_string(int count);
 GNode *prompt_add_child(GNode *child, GNode *fam, bool rfmt);
 bool prompt_add_spouse(GNode *spouse, GNode *fam, bool conf);
