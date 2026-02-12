@@ -315,7 +315,7 @@ clear_lang (void)
 #endif
 }
 
-#if !defined(DEADNES)		/* never called */
+#if !defined(DEADEND)		/* never called */
 /*=============================
  * load_lang -- Load generated picture strings
  *  based on current language

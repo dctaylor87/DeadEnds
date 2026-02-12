@@ -58,7 +58,7 @@ struct GNode {
  \
       {
 
-#define ENDITERGNODETEEE \
+#define ENDITERGNODETREE \
       }	\
  \
       /* depth first before siblings */ \
