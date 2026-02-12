@@ -10,23 +10,131 @@
 #include "standard.h"
 
 #include "hashtable.h"
+#include "recordindex.h"	/* releaseRecord */
+#include "integertable.h"
+#include "errors.h"
 #include "refnindex.h"
 #include "gnode.h"
 #include "database.h"
 #include "zstr.h"
 #include "gstrings.h"
 #include "gedcom.h"
-#include "recordindex.h"	/* releaseRecord */
 
+#include "refns.h"
 #include "annotate.h"
 #include "locales.h"		/* needed by lloptions.h */
 #include "lloptions.h"
 #include "xref.h"
 #include "iterate.h"
 
+struct tag_node_iter {
+  GNode *start;
+  GNode *next;
+};
+
+typedef struct tag_node_iter *NODE_ITER;
+/* forward references */
+
 static void annotate_node (GNode *node, bool expand_refns,
 			   bool annotate_pointers, bool rfmt,
 			   Database *database);
+static bool is_annotated_xref(CString val, int * len);
+static bool resolve_node (GNode *node, bool annotate_pointers,
+			     Database *database);
+static String symbolic_link (CString val);
+
+static void begin_node_it (GNode *node, NODE_ITER nodeit);
+static GNode *find_next (NODE_ITER nodeit);
+static GNode *next_node_it_ptr (NODE_ITER nodeit);
+
+/* resolveRefnLinks -- attempt to resolve the REFN links within node.
+   When successful, replaces <something> with @something-else@.
+   Returns the number of unresolved REFN links.  */
+
+int
+resolveRefnLinks (GNode *node, Database *database)
+{
+  int unresolved = 0;
+  bool annotate_pointers = (getdeoptint("AnnotatePointers", 0) > 0);
+  GNode *child=0;
+  struct tag_node_iter nodeit;
+
+  if (!node) return 0;
+
+  /* resolve all descendant nodes */
+  begin_node_it(node, &nodeit);
+  while ((child = next_node_it_ptr(&nodeit)) != NULL) {
+    if (!resolve_node(child, annotate_pointers, database))
+      ++unresolved;
+  }
+  return unresolved;
+}
+
+/* resolve_node -- Traverse routine for resolve_refn_links (q.v.)
+   node:    Current node in traversal
+   returns false if bad refn pointer.  */
+
+static bool
+resolve_node (GNode *node, bool annotate_pointers, Database *database)
+{
+	String val = nval(node);
+	String refn=0;
+
+	if (!val) return true;
+	refn = symbolic_link(val);
+	if (refn) {
+		int letr = record_letter(ntag(node));
+		GNode *refr = refn_to_record(refn, letr, database);
+		if (refr) {
+			stdfree(nval(node));
+			nval(node) = strsave(nxref(refr));
+		} else {
+			return false;
+		}
+	}
+	if (annotate_pointers) {
+		int i=0,len=0;
+		if (is_annotated_xref(nval(node), &len)) {
+			char newval[20];
+			ASSERT(len < (int)sizeof(newval));
+			for (i=0; i<len; ++i) {
+				newval[i] = nval(node)[i];
+			}
+			newval[i] = 0;
+			stdfree(nval(node));
+			nval(node) = strsave(newval);
+		}
+	}
+
+	return true;
+}
+/* is_annotated_xref -- Return true if this is an annotated
+   xref value (eg, "@I1@ {{ John/SMITH }}").  */
+
+static bool
+is_annotated_xref (CString val, int * len)
+{
+	CString ptr=val;
+	int end=0;
+	if (!val) return false;
+	if (val[0] != '@') return false;
+	if (val[1] != 'I' && val[1] != 'F' && val[1] != 'S' 
+		&& val[1] != 'E' && val[1] != 'X') return false;
+	if (!isdigit((u_char)val[2])) return false;
+	for (ptr = val + 3; isdigit((u_char)*ptr); ++ptr) {
+	}
+	if (ptr > val+9) return false;
+	if (*ptr++ != '@') return false;
+	if (ptr[0] != ' ') return false;
+	if (ptr[1] != '{') return false;
+	if (ptr[2] != '{') return false;
+	end = strlen(ptr);
+	if (end < 3) return false;
+	if (ptr[end-1] != '}') return false;
+	if (ptr[end-2] != '}') return false;
+	*len = ptr-val;
+	return true;
+}
 
 /* annotateWithSupplemental -- Expand any references that have REFNs
    This converts, eg, "@S25@" to "<1850.Census>" Used for editing.  */
@@ -101,4 +209,101 @@ annotate_node (GNode *node, bool expand_refns,
 
 	/* release the (temporary) record created in key_possible_to_record() */
 	releaseRecord(rec);
+}
+
+/* symbolic_link -- See if value is symbolic link
+   If so, returns heap-allocated copy of the reference
+   (without surrounding angle brackets).  */
+static String
+symbolic_link (CString val)
+{
+	CString ptr=val;
+	String link=0;
+	int len=0;
+	if (!val || *val != '<') return NULL;
+	len = strlen(val);
+	if (len < 3) return false;
+	if (val[len-1] == '>') {
+		/* entirely a symbolic link */
+		link = strsave(val+1);
+		link[len-2]=0;
+		return link;
+	}
+	/* test for annotated symbolic link, that is, a line such as
+	<a_ref_name> {{ James /SMITH/ }} */
+	for (ptr=val+1; ptr[0]!='>'; ++ptr) {
+		if (!ptr[0]) return NULL; /* no > at all */
+	}
+	if (ptr == val+1) return NULL; /* "<>" doesn't count */
+	/* found end of symbolic link, see if annotation follows */
+	if (ptr[1]!=' ' || ptr[2]!= '{' || ptr[3]!='{') return false;
+	if (val[len-2]!='}' || val[len-1]!='}') return false;
+	len = ptr-val;
+	link = strsave(val+1);
+	link[len-1]=0;
+	return link;
+}
+/* record_letter -- Return letter for record type */
+
+int
+record_letter (CString tag)
+{
+	if (eqstr("FATH", tag)) return 'I';
+	if (eqstr("MOTH", tag)) return 'I';
+	if (eqstr("HUSB", tag)) return 'I';
+	if (eqstr("WIFE", tag)) return 'I';
+	if (eqstr("INDI", tag)) return 'I';
+	if (eqstr("CHIL", tag)) return 'I';
+	if (eqstr("FAMC", tag)) return 'F';
+	if (eqstr("FAMS", tag)) return 'F';
+	if (eqstr("FAM",  tag)) return 'F';
+	if (eqstr("SOUR", tag)) return 'S';
+	if (eqstr("EVEN", tag)) return 'E';
+	if (eqstr("EVID", tag)) return 'E';
+	return 0;
+}
+
+/* begin_node_it -- Being a node iteration.  */
+
+static void
+begin_node_it (GNode *node, NODE_ITER nodeit)
+{
+	nodeit->start = node;
+	/* first node to return is node */
+	nodeit->next = node;
+}
+
+/* find_next -- Find next node in an ongoing iteration  */
+
+static GNode *
+find_next (NODE_ITER nodeit)
+{
+	GNode *curr = nodeit->next;
+	/* goto child if there is one */
+	GNode *next = nchild(curr);
+	if (next)
+		return next;
+	/* otherwise try for sibling, going up to ancestors until
+	we find one, or we hit the start & give up */
+	while (1) {
+		if (next == nodeit->start)
+			return NULL;
+		if (nsibling(curr))
+			return nsibling(curr);
+		curr = nparent(curr);
+		if (!curr)
+			return NULL;
+	}
+
+}
+
+/* next_node_it_ptr -- Return next node in an ongoing iteration.  */
+
+static GNode *
+next_node_it_ptr (NODE_ITER nodeit)
+{
+	GNode *current = nodeit->next;
+	if (current)
+		nodeit->next = find_next(nodeit);
+	return current;
 }
