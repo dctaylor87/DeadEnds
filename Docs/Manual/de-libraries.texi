@@ -31,6 +31,8 @@
 @include de-ui.texi
 @chapter Python
 @include de-python.texi
+@chapter LLSupport
+@include de-llsupport.texi
 @unnumbered Function Index
 @printindex fn
 @unnumbered Variable Index
