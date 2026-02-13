@@ -158,7 +158,7 @@ PValue __getfam (PNode *pnode, Context *context, bool *eflg) {
   }
   GNode *fam = ask_for_fam (_("Enter a spouse from family."),
 			    _("Enter a sibling from family."),
-			    null);
+			    context->database);
   assignValueToSymbol(context, iden->identifier, PVALUE(PVGNode, uGNode, fam));
   return nullPValue;
 }
