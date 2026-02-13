@@ -107,8 +107,10 @@ GNode *
 ask_for_fam (CString pttl, CString sttl, Database *database)
 {
 	GNode *sib=0, *prn=0;
-	if (! database)
-	  database = currentDatabase;
+	if (! database) {
+		msg_error ("%s", _(qSiddbse));
+		return NULL;
+	}
 
 	prn = ask_for_indi(pttl, DOASK1, database);
 	if (!prn)  {
