@@ -31,6 +31,25 @@ RecordType recordType(GNode* root) {
     return GROther;
 }
 
+static CString recordTypeStrings[] = {
+  "Unknown",
+  "Person",
+  "Family",
+  "Source",
+  "Event",
+  "Other",
+  "Header",
+  "Trailer"
+};
+
+// strRecordType returns a RecordType as a string
+CString strRecordType (RecordType type) {
+  if ((type < 0) || (type > GRTrailer))
+    return "UNKNOWN RecordType;
+
+  return recordTypeStrings[type];
+}
+
 //  compareRecordKeys compares record keys; longer keys sort after shorter keys.
 int compareRecordKeys(CString a, CString b) {
     ASSERT(strlen(a) > 1 && strlen(b) > 1);  // Is this strictly necessary?

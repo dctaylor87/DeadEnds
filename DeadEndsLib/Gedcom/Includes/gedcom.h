@@ -38,6 +38,7 @@ bool validSexString(String);
 RecordType recordType(GNode *root);  // Return the type of a Gedcom record tree.
 CString keyToKey(CString);
 
+CString strRecordType (RecordType type); // return a RecordType as a string
 int compareRecordKeys(CString, CString);  // gedcom.c
 
 // FORCHILDREN / ENDCHILDREN is a macro pair that iterates children in a family.
