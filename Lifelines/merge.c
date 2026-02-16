@@ -596,7 +596,7 @@ merge_two_fams (GNode *fam1, GNode *fam2)
 	joinFamily(fam4, fref2, husb2, wife2, chil2, rest2);
 	freeGNodes(fam4);
 	nchild(fam1) = NULL;
-	remove_empty_fam(fam1, currentDatabase); /* TO DO - can this fail ? 2001/11/08, Perry */
+	removeEmptyFamily(fam1, currentDatabase); /* TO DO - can this fail ? 2001/11/08, Perry */
 	freeGNodes(husb1);
 	freeGNodes(wife1);
 	freeGNodes(chil1);

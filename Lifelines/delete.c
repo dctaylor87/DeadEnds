@@ -123,18 +123,18 @@ chooseAndRemoveFamily (void)
 
 		if (lengthSequence(spseq)+lengthSequence(chseq) == 0) {
 			/* handle empty family */
-			remove_empty_fam(fam, currentDatabase);
+			removeEmptyFamily(fam, currentDatabase);
 		}
 		else {
 			/* the last remove command will delete the family */
 			FORSEQUENCE(spseq, el, num)
 				indi = keyToPerson(element_skey(el), currentDatabase->recordIndex);
-				remove_spouse(indi, fam, currentDatabase);
+				removeSpouseFromFamily(indi, fam, currentDatabase);
 			ENDSEQUENCE
 
 			FORSEQUENCE(chseq, el, num)
 				indi = keyToPerson(element_skey(el), currentDatabase->recordIndex);
-				remove_child(indi, fam, currentDatabase);
+				removeChildFromFamily(indi, fam, currentDatabase);
 			ENDSEQUENCE
 		}
 	}
@@ -208,8 +208,8 @@ chooseAndRemoveSpouse (GNode *irec, GNode *frec, bool nolast)
 	}
 	if (!ask_yes_or_no(_(qScfsrmv))) return false;
 
-	/* call internal workhorse remove_spouse() to do the actual removal */
-	if (!remove_spouse(nztop(irec), fam, currentDatabase)) {
+	/* call internal workhorse removeSpouseFromFamily() to do the actual removal */
+	if (!removeSpouseFromFamily(nztop(irec), fam, currentDatabase)) {
 		msg_error("%s", _(qSntsinf));
 		return false;
 	}
@@ -245,7 +245,7 @@ chooseAndRemoveChild (GNode *irec, GNode *frec, bool nolast)
 	}
 	if (!ask_yes_or_no(_(qScfcrmv))) return true;
 
-	if (!remove_child(nztop(irec), fam, currentDatabase)) {
+	if (!removeChildFromFamily(nztop(irec), fam, currentDatabase)) {
 		msg_error("%s", _(qSntcinf));
 		return false;
 	}

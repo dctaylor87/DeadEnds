@@ -95,7 +95,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 		wife = remove_any_xrefs_node_list(nxref(indi), wife);
 		joinFamily(fam, fref, husb, wife, chil, rest);
 		if (! husb && ! wife && ! chil)
-			remove_empty_fam (fam, database);
+			removeEmptyFamily (fam, database);
 	}
 
 /* Remove person from families he/she is in as a child */
@@ -107,7 +107,7 @@ remove_indi_by_root (GNode *indi, Database *database)
 		chil = remove_any_xrefs_node_list(nxref(indi), chil);
 		joinFamily(fam, fref, husb, wife, chil, rest);
 		if (! husb && ! wife && ! chil)
-			remove_empty_fam (fam, database);
+			removeEmptyFamily (fam, database);
 	}
 
 
@@ -124,12 +124,12 @@ remove_indi_by_root (GNode *indi, Database *database)
 	database->dirty = true;
 }
 /*==========================================
- * remove_empty_fam -- Delete family from database
+ * removeEmptyFamily -- Delete family from database
  *  This will call message & fail if there are any
  *  people in the family.
  *========================================*/
 bool
-remove_empty_fam (GNode *fam, Database *database)
+removeEmptyFamily (GNode *fam, Database *database)
 {
 	String key;
 	GNode *husb, *wife, *chil, *rest, *refn;
@@ -158,11 +158,11 @@ remove_empty_fam (GNode *fam, Database *database)
 	return true;
 }
 /*=========================================
- * remove_child -- Remove child from family
+ * removeChildFromFamily -- Remove child from family
  *  silent function
  *=======================================*/
 bool
-remove_child (GNode *indi, GNode *fam, Database *database)
+removeChildFromFamily (GNode *indi, GNode *fam, Database *database)
 {
 	GNode *node, *last;
 
@@ -186,16 +186,16 @@ remove_child (GNode *indi, GNode *fam, Database *database)
 
 	/* Update database with changed records */
 	if (num_fam_xrefs(fam) == 0)
-		remove_empty_fam(fam, database);
+		removeEmptyFamily(fam, database);
 	return true;
 }
 /*===========================================
- * remove_spouse -- Remove spouse from family
+ * removeSpouseFromFamily -- Remove spouse from family
  *  both arguments required
  *  silent function
  *=========================================*/
 bool
-remove_spouse (GNode *indi, GNode *fam, Database *database)
+removeSpouseFromFamily (GNode *indi, GNode *fam, Database *database)
 {
 	GNode *node=0, *last=0;
 
@@ -223,7 +223,7 @@ remove_spouse (GNode *indi, GNode *fam, Database *database)
 	node = NULL;
 
 	if (num_fam_xrefs(fam) == 0)
-		remove_empty_fam(fam, database);
+		removeEmptyFamily(fam, database);
 	return true;
 }
 /*================================================================
