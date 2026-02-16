@@ -15,11 +15,12 @@
 
 //  ErrorType is the type of a DeadEnds Error.
 typedef enum ErrorType {
-	systemError,
-	syntaxError,
+	systemError,		/* e.g., unable to open file */
+	syntaxError,		/* e.g., line with bad syntax */
 	gedcomError,
-	linkageError,
-	usageError
+	linkageError,		/* e.g., missing link, link to non-existent record */
+	corruptionError,	/* e.g., corrupt database */
+	usageError		/* e.g., calling a function with bad arguments */
 } ErrorType;
 
 // ErrorSeverity is the severity of a DeadEnds Error.
