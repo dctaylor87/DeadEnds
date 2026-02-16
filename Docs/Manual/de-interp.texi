@@ -72,7 +72,7 @@ Currently sets @code{Perrors} to zero; does nothing else.
 supplied database.
 @end defun
 
-@defun parseProgram (CString fileName, CString searchPath, ErrorLog *errorLog) @arrow{} Program*
+@defun parseProgram (CString fileName, CString searchPath, ErrorLog* errorLog) @arrow{} Program*
 Searches for @code{fileName} along @code{searchPath}.  If found, it is
 parsed.  If there are no errors, a @code{Program*} is returned.
 Otherwise, @code{null} is returned.  Errors are returned in
@@ -109,6 +109,8 @@ otherwise.
 A boolean, @code{true} when a script is running, @code{false}
 otherwise.
 @end deftypevar
+
+@subsection Debugging
 
 @deftypevar bool programDebugging
 When @code{true} some debugging information is printed.
@@ -255,8 +257,10 @@ Creates a parents loop node.
 Frees the program nodes rooted at the given program node.
 @end defun
 
+@subsection Debugging
+
 @defun showPNode (PNode*) @arrow{} void 
-For debugging.  Shows a PNode on stdout.
+Shows a PNode on stdout.
 @end defun
 
 @section pvalue.h
@@ -417,7 +421,9 @@ Gets the value of a symbol from a Context; the PValue is returned on the stack.
 Gets the value of a Symbol from a SymbolTable; PValue is returned on stack.
 @end defun
 
+@subsection Debugging
+
 @defun showSymbolTable (SymbolTable* table) @arrow{} void
-For debugging.  Shows the contents of a SymbolTalbe on stdout.
+Shows the contents of a SymbolTalbe on stdout.
 @end defun
 

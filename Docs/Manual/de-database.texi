@@ -45,13 +45,14 @@ Creates a RefnIndex.
 Deletes a RefnIndex.
 @end defun
 
-@defun showRefnIndex (RefnIndex*) @arrow{} void
-For debugging.  Shows a RefnIndex.
-@end defun
-
 @defun getReferenceIndex (RecordIndex* index, CString fname, IntegerTable* keymap, ErrorLog* elog) @arrow{}  RefnIndex*
 Creates a reference index from the records in a Database.  It checks
 that REFN values are defined once.
+@end defun
+
+@subsection Debugging
+@defun showRefnIndex (RefnIndex*) @arrow{} void
+Shows a RefnIndex.
 @end defun
 
 @section database.h / database.c
@@ -110,15 +111,15 @@ Writes the contents of a Database to a Gedcom file.
 
 @section database.h / DoNotExist
 
-@defun databaseIsDirty (Database *database) @arrow{} bool
+@defun databaseIsDirty (Database* database) @arrow{} bool
 Returns true if the database is dirty;  false if the database is clean.
 @end defun
 
-@defun setDatabaseDirty (Database *database, bool dirty) @arrow{} void
+@defun setDatabaseDirty (Database* database, bool dirty) @arrow{} void
 Sets the database dirty state to value of 'dirty'.
 @end defun
 
-@defun getDatabaseDirty (Database *database) @arrow{} bool
+@defun getDatabaseDirty (Database* database) @arrow{} bool
 Gets the database dirty state.
 @end defun
 
@@ -126,7 +127,7 @@ Gets the database dirty state.
 Index person names after reading the Gedcom file.
 @end defun
 
-@defun keyToRecord (CString key, Database *) @arrow{} GNode*
+@defun keyToRecord (CString key, Database*) @arrow{} GNode*
 Return a key's record
 @end defun
 
@@ -143,11 +144,11 @@ Indexes all person names in a database.
 Adds a GNode record tree to a RecordIndex.
 @end defun
 
-@defun addrefRecord (GNode *element) @arrow{} void
+@defun addrefRecord (GNode* element) @arrow{} void
 Increment the reference count of a GNode.
 @end defun
 
-@defun releaseRecord (GNode *element) @arrow{} void
+@defun releaseRecord (GNode* element) @arrow{} void
 Decrement the reference count of a GNode.
 If it reaches zero, we do NOT free it.
 If it is zero before we decrement, we ABORT.

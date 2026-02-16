@@ -137,7 +137,7 @@ Adds an Error to an ErrorLog.
 Shows the contents of an ErrorLog on standard output.
 @end defun
 
-@defun saveErrorLog (String filename, ErrorLog *errorLog) @arrow{} bool
+@defun saveErrorLog (String filename, ErrorLog* errorLog) @arrow{} bool
 Writes the @code{errorLog} to @code{filename}.
 @end defun
 

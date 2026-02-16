@@ -2,19 +2,17 @@ Currently the bulk of the Python functions are @b{static}.  And the
 bulk of the non-static functions are only non-static to allow them to
 be called from other files within the Python library.
 
-There are two variables meant to be accessible outside the library --
-@code{llpy_debug} and @code{Lifelines_Module}.
-
-And there are six functions --
-@code{llpy_python_interactive},
-@code{llpy_register_script},
-@code{llpy_execute_scripts},
-@code{llpy_python_terminate},
+There is one variable meant to be accessible outside the library --
+@code{llpy_debug}.  And there are six functions -- @code{llpy_init}.
+@code{llpy_python_terminate}, @code{llpy_register_script},
+@code{llpy_execute_scripts}, @code{llpy_python_interactive},
 @code{_py_traverse_nodes},and
-@code{llpy_init}.
 
 @defun llpy_init (void) @arrow{}  void
 Initialize the @code{Python} subsystem.
+
+Normally the application does not need to call this function as both
+@code{llpy_execute_scripts} and @code{llpy_python_interactive} call it.
 @end defun
 
 @defun llpy_python_terminate (void) @arrow{}  void
@@ -26,9 +24,56 @@ Register a @code{Python} script.
 @end defun
 
 @defun llpy_execute_scripts (int continue_on_failure) @arrow{}  int
-Execute the registered @code{Python} scripts.
+Execute the registered @code{Python} scripts.  If
+@code{continue_on_failure} is @code{true}, then if any script fails,
+then the remaining scripts are still executed.  If it is @code{false},
+then the remaining scripts are skipped.  Scripts are executed in the
+order in which they were registered.
 @end defun
 
 @defun llpy_python_interactive (void) @arrow{}  int
 Invoke the interactive @code{Python} interpreter.
+
+An interactive @code{Python} interpreter is useful for a variety of
+tasks including running quick tests and for resolving ambiguities in
+the documentation.  For the latter, please report the issue so that
+the documentation can be clarified.
+
+For information on the @code{DeadEnds Python Extension Module}, how to
+use it, and its internals, please consult the companion documents
+@code{DeadEnds Python Extension Reference Manual} and @code{DeadEnds
+Python Extension Internals Manual}.
+@end defun
+
+@defun _py_traverse_nodes (GNode* node, int level, int (*func)(GNode*, int, void*), void* extra) @arrow{} int
+@b{This function badly needs a name change.}
+
+This function is inspired by @code{traverseNodes} in
+@code{Gedcom/gnode.c}, with three very imporatant differences:
+
+@itemize @bullet
+@item
+We return success or failure, not void.
+@item
+There are three return values (not two) from the function called
+on each node:
+@*   --  1 success, continue normally
+@*   --  0 success, done (early)
+@*   -- -1 error, return failure
+@item
+The function called takes three arguments -- the node, the level,
+and an opaque pointer -- instead of the two taken by traverseNodes.
+The opaque pointer allows us to avoid communication via external
+variables.
+@end itemize
+
+NOTE: while there are three return values from @code{func} recognized by
+@code{_py_traverse_nodes}, depending upon @code{func}, there might only be two
+meaningful return values for a particular call or use case --
+e.g. if we are searching for a node, @code{retval=1} might well mean keep
+searching and @code{retval=0} mean 'found it, recorded it in 'extra'.
+
+Alternatively, if we are writing out nodes (e.g., as part of export),
+then @code{retval=-1} might mean 'we encountered an error writing out the
+node' and @code{retval=1} mean 'do the next node'.
 @end defun

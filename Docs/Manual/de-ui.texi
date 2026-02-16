@@ -126,7 +126,7 @@ Number of columns used by LifeLines (usually COLSREQ)
 @defun chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type) @arrow{} int
 @end defun
 
-@section feeback.h
+@section feedback.h
 
 This header file needs to be renamed and moved from the
 @file{LLSupport} tree to the @file{UI} tree.
@@ -146,7 +146,7 @@ Report transitory state that should not be preserved.  Just calls
 @code{msg_outputv} with a @code{MSG_LEVEL} or @code{MSG_STATUS}.
 @end defun
 
-@defun msg_errorlog (ErrorLog *errorLog) @arrow{} void
+@defun msg_errorlog (ErrorLog* errorLog) @arrow{} void
 @end defun
 
 @defun msg_output (MSG_LEVEL, CString fmt, ...) @arrow{} void

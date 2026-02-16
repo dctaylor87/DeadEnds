@@ -72,17 +72,6 @@ Searches a HashTable for the element with the same key as the given element.
 Returns the size (number of elements) in a hash table.
 @end defun
 
-@defun showHashTable (HashTable*, void(*show)(void*)) @arrow{} void
-For debugging.  Shows the contents of a hash table, including bucket
-and element indexes.  The argument @code{show} is a function to show
-an element. Uses variables defined in the FORHASHTABLE macro.
-@end defun
-
-@defun dumpHashTable (HashTable*, void(*show)(void*)) @arrow{} void
-For debugging.  Dumps a hash table to standard error.  The argument
-@code{show} is currently ignored.
-@end defun
-
 @defun getHash (CString, int) @arrow{} int
 Returns the hash code of a String.
 @end defun
@@ -135,6 +124,18 @@ macro.
 Calls @code{incrReferenceCountTable} to increment the reference count of @code{table}.
 @end defmac
 
+@subsection Debugging
+@defun showHashTable (HashTable*, void(*show)(void*)) @arrow{} void
+Shows the contents of a hash table, including bucket
+and element indexes.  The argument @code{show} is a function to show
+an element. Uses variables defined in the FORHASHTABLE macro.
+@end defun
+
+@defun dumpHashTable (HashTable*, void(*show)(void*)) @arrow{} void
+Dumps a hash table to standard error.  The argument @code{show} is
+currently ignored.
+@end defun
+
 @section integertable.h
 
 @defun createIntegerTable (int numBuckets) @arrow{} IntegerTable*
@@ -159,8 +160,9 @@ Searches for @code{key} in an integer table and returns its integer value.
 Returns @code{DeadEndsNAN} (== @code{__INT_MAX__}) if @code{key} is not there.
 @end defun
 
+@subsection Debugging
 @defun showIntegerTable (IntegerTable*) @arrow{} void
-For debugging.  Shows the contents of an integer table.
+Shows the contents of an integer table.
 @end defun
 
 @section list.h
@@ -302,17 +304,12 @@ The caller must free it when done.
 @defun blockOfList (List*) @arrow{} Block*
 @end defun
 
-@defun showList (List *list, String(*describe)(void*)) @arrow{} void
-For debugging.  Shows the contents of a list to stdout.  The function
-@code{describe} is called on each element to print it.
-@end defun
-
 @defun incrReferenceCountList (List *list, CString file, int line, CString function) @arrow{} void
 Increments a list's reference count.  The @code{file}, @code{line},
 and @code{function} arguments are those of the caller and areused for
 debugging reference count issues.
 
-@b{NOTE:} This function is typically not alled directly, but instead
+@b{NOTE:} This function is typically not called directly, but instead
 via the INCRLISTREFCOUNT macro.
 @end defun
 
@@ -320,6 +317,13 @@ via the INCRLISTREFCOUNT macro.
 Calls the @code{incrReferenceCountList} function supplying the
 @code{file}, @code{line}, and @code{function} arguments.
 @end defmac
+
+@subsection Debugging
+
+@defun showList (List *list, String(*describe)(void*)) @arrow{} void
+Shows the contents of a list to stdout.  The function
+@code{describe} is called on each element to print it.
+@end defun
 
 @section sequence.h
 
@@ -409,14 +413,16 @@ Returns the intersection of two Sequences.
 Returns the difference of two Sequences.
 @end defun
 
-@defun showSequence (Sequence*, String title) @arrow{} void
-For debugging.  Shows the contents of a Sequence on stdout.
-@end defun
-
 @defun baseFree (void *word) @arrow{} void
 @end defun
 
 @defun incrReferenceCountSequence (Sequence *seq, CString file, int line, CString function) @arrow{} void
+@end defun
+
+@subsection Debugging
+
+@defun showSequence (Sequence*, String title) @arrow{} void
+Shows the contents of a Sequence on stdout.
 @end defun
 
 @section set.h
@@ -452,13 +458,14 @@ having key @code{key} is found, does nothing.
 Iterates the elements of a set, calling function @code{iter} on each.
 @end defun
 
-@defun showSet (Set*, String(*show)(void*)) @arrow{} void
-For debugging.
-Shows the contents of a set using the the function @code{show}.
-@end defun
-
 @defun listOfSet (Set*) @arrow{} List* // Underlying List.
 Returns the list that holds the set's elements.
+@end defun
+
+@subsection Debugging
+
+@defun showSet (Set*, String(*show)(void*)) @arrow{} void
+Shows the contents of a set using the the function @code{show}.
 @end defun
 
 @section stringset.h
@@ -472,8 +479,10 @@ Deletes (frees) a string set.  If the boolean @code{del} is
 @code{true}, then the strings are also freed.
 @end defun
 
+@subsection Debugging
+
 @defun showStringSet (StringSet*) @arrow{} void
-For debugging.  Shows the strings in a string set.
+Shows the strings in a string set.
 @end defun
 
 @section stringtable.h
@@ -502,8 +511,10 @@ Adds an element to a string table that maps a string to itself.
 Both key and value point to different strings.
 @end defun
 
+@subsection Debugging
+
 @defun showStringTable (StringTable*) @arrow{} void
-For debugging.  Prints the string table keys and values o stdout.
+Prints the string table keys and values to stdout.
 @end defun
 
 @section zstr.h
