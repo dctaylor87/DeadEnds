@@ -60,7 +60,6 @@
 #include "llinesi.h"
 #include "feedback.h"
 #include "liflines.h"
-#include "pvalue.h"
 #include "editing.h"
 #include "ll-node.h"
 #include "xref.h"

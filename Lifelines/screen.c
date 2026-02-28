@@ -76,7 +76,6 @@
 #include "locales.h"
 #include "database.h"
 //#include "readindex.h"
-#include "pnode.h"
 #include "functiontable.h"
 #include "interp.h"		/* interpret, programRunning */
 #include "charprops.h"

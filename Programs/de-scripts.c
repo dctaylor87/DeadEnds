@@ -13,12 +13,10 @@
 #include "integertable.h"
 #include "errors.h"
 #include "refnindex.h"
-#include "pnode.h"
 #include "functiontable.h"
 #include "interp.h"
 #include "database.h"
 #include "file.h"
-#include "context.h"
 #include "pvalue.h"
 
 #include "deadends.h"
