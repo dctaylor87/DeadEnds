@@ -1,4 +1,4 @@
-@section validate.h
+@subsection validate.h
 
 @defun rootLine (GNode*, IntegerTable*) @arrow{} int
 Returns the line number wqhere a root node was located in its GEDCOM file.
@@ -22,19 +22,19 @@ Validates the records in a datatbase's other index.
 @b{NOTE:  Needs to be written.  Currently a stub that just returns true.}
 @end defun
 
-@section validate.h / valperson.c
+@subsection validate.h / valperson.c
 
 @defun validatePersons (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
 Validates the person records in a database.
 @end defun
 
-@section validate.h / valfamily.c
+@subsection validate.h / valfamily.c
 
 @defun validateFamilies (RecordIndex*, CString name, IntegerTable*, ErrorLog*) @arrow{} void
 Validates the family records in a database
 @end defun
 
-@section validate.h / valrecord.c
+@subsection validate.h / valrecord.c
 
 These functions are concerned with validating new records and edited
 records against a previously validated database.

@@ -6,13 +6,16 @@ There is one variable meant to be accessible outside the library --
 @code{llpy_debug}.  And there are six functions -- @code{llpy_init}.
 @code{llpy_python_terminate}, @code{llpy_register_script},
 @code{llpy_execute_scripts}, @code{llpy_python_interactive},
-@code{_py_traverse_nodes},and
+@code{_py_traverse_nodes}.
+
+@subsection llpy-externs.h
 
 @defun llpy_init (void) @arrow{}  void
-Initialize the @code{Python} subsystem.
+Initializes the @code{Python} subsystem.
 
-Normally the application does not need to call this function as both
-@code{llpy_execute_scripts} and @code{llpy_python_interactive} call it.
+Normally the application does not need to call this function directly
+as both @code{llpy_execute_scripts} and @code{llpy_python_interactive}
+call it.
 @end defun
 
 @defun llpy_python_terminate (void) @arrow{}  void
@@ -24,11 +27,11 @@ Register a @code{Python} script.
 @end defun
 
 @defun llpy_execute_scripts (int continue_on_failure) @arrow{}  int
-Execute the registered @code{Python} scripts.  If
-@code{continue_on_failure} is @code{true}, then if any script fails,
-then the remaining scripts are still executed.  If it is @code{false},
-then the remaining scripts are skipped.  Scripts are executed in the
-order in which they were registered.
+Execute the registered @code{Python} scripts.
+If @code{continue_on_failure} is @code{true}, then if any script
+fails, then the remaining scripts are still executed.  If it is
+@code{false}, then the remaining scripts are skipped.  Scripts are
+executed in the order in which they were registered.
 @end defun
 
 @defun llpy_python_interactive (void) @arrow{}  int
@@ -70,10 +73,115 @@ variables.
 NOTE: while there are three return values from @code{func} recognized by
 @code{_py_traverse_nodes}, depending upon @code{func}, there might only be two
 meaningful return values for a particular call or use case --
-e.g. if we are searching for a node, @code{retval=1} might well mean keep
-searching and @code{retval=0} mean 'found it, recorded it in 'extra'.
 
-Alternatively, if we are writing out nodes (e.g., as part of export),
-then @code{retval=-1} might mean 'we encountered an error writing out the
-node' and @code{retval=1} mean 'do the next node'.
+Use case 1 -- searching for a node, @code{retval=1} might well mean keep
+searching and @code{retval=0} might mean 'found it, recorded it in 'extra'.
+
+Use case 2 -- writing out nodes (e.g., as part of export), then
+@code{retval=-1} might mean 'we encountered an error writing out the
+node' and @code{retval=1} mean 'all is well, do the next node'.
+@end defun
+
+@section Internal Functions
+
+@subsection python-to-c.h
+
+@defun llpy_database_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{database.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_event_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{event.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_export_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{export.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_iter_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{iter.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_list_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{list.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_nodes_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{nodes.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_person_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{person.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_records_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{records.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_set_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{set.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@defun llpy_user_init (void) @arrow void
+Responsible for any initialization needed by the code in @file{user.c}
+Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
+@end defun
+
+@subsection event.h
+@defun llpy_date (PyObject *self, PyObject *args) @arrow{} PyObject*
+@defunx llpy_place (PyObject *self, PyObject *args) @arrow{} PyObject*
+@defunx llpy_year (PyObject *self, PyObject *args) @arrow{} PyObject*
+@defunx llpy_long (PyObject *self, PyObject *args) @arrow{} PyObject*
+@defunx llpy_short (PyObject *self, PyObject *args) @arrow{} PyObject*
+@defunx llpy_stddate_node  (PyObject *self, PyObject *args) @arrow{} PyObject*
+@defunx llpy_complexdate_node (PyObject *self, PyObject *args) @arrow{} PyObject*
+These functions are declared in @file{event.h}, defined in
+@file{event.c}, and called by code in @file{nodes.c}.  They implement
+@code{node} methods, but use data maintained by @code{event}
+functions.
+@end defun
+
+@subsection types.h / types.c
+
+@defun llines_record_hash (PyObject* obj) @arrow{} Py_hash_t
+We need a hash for the RECORD.  We would like the hash to be the same
+even if the RECORD gets flushed and read back in at a different
+location... (which I don't think can happen because we should be
+holding a reference to the RECORD..., but just in case...).  So, we
+use the RECORD's key.  And rather than design a new hash, we just use
+Python's string hash.
+@end defun
+
+@defun llines_record_richcompare (PyObject *self, PyObject *other, int op) @arrow{} PyObject*
+Sorting rules -- RECORDS < NODES < everything else.
+
+For comparisons between two RECORDS, major sort on record type, minor
+sort on keynum.
+@end defun
+
+@defun llines_node_richcompare (PyObject *self, PyObject *other, int op) @arrow{} PyObject*
+Sorting rules -- RECORDS < NODES < everything else.
+
+For comparisons between two NODES, first determine the type and key of
+the records containing the nodes, then major sort on record type, minor
+sort on keynum.
+
+This, obviously, ``fails'' when one or both nodes is a detached node
+or both nodes are part of the same record.
+@end defun
+
+@subsection python-to-c.h / export.c
+
+@defun _llpy_export (Database *database, CString filename, CString gedcom_version, CString submitter) @arrow{} PyObject*
+This is the implementation of the commonality of @code{llpy_export}
+(function) and @code{llpy_export_db} (method).
 @end defun

@@ -1,33 +1,43 @@
 Many of the functions in this chapter need to be renamed to conform to DeadEnds naming conventions.
 
-@section annotate.h 
-@section ask.h
+@subsection annotate.h 
+@subsection ask.h
 @defun ask_for_fam (CString pttl, CString sttl, Database*) @arrow{} GNode*
 @end defun
+
 @defun ask_for_fam_by_key (CString fttl, CString pttl, CString sttl, Database* database) @arrow{} GNode*
 @end defun
+
 @defun ask_for_indi (CString ttl, ASK1Q ask1, Database* database) @arrow{} GNode*
 @end defun
+
 @defun ask_for_indi_key (CString ttl, ASK1Q ask1, Database* database) @arrow{} String
 @end defun
+
 @defun ask_for_indi_list (CString ttl, bool reask, Database* database) @arrow{} Sequence*
 @end defun
 
 @defun ask_for_int (CString ttl, int* prtn) @arrow{} bool
 Ask user to provide an integer.
-@*@code{ttl} -- prompt title.
-@*@code{prtn} -- the integer returned.
+@*Parameters:
+@itemize @bullet
+@item @code{ttl} -- prompt title.
+@item @code{prtn} -- the integer returned.
+@end itemize
 
 Returns @code{true} on success, @code{false} on failure.
 @end defun
 
 @defun ask_for_input_file (CString mode, CString ttl, String* pfname, CString path, CString ext) @arrow{} FILE*
 Ask for and open a file for input.
-@*@code{mode} -- open mode.
-@*@code{ttl} -- title of question (first line).
-@*@code{pfname} -- file as user entered it.
-@*@code{path} -- file as found.
-@*@code{ext} -- file extension to use if file is not found at first.
+@*Parameters:
+@itemize @bullet
+@item @code{mode} -- open mode.
+@item @code{ttl} -- title of question (first line).
+@item @code{pfname} -- file as user entered it.
+@item @code{path} -- file as found.
+@item @code{ext} -- file extension to use if file is not found at first.
+@end itemize
 
 On success, the @code{FILE*} returned by @code{fopen} is returned.  On
 failure, @code{NULL} is returned.
@@ -35,11 +45,14 @@ failure, @code{NULL} is returned.
 
 @defun ask_for_output_file (CString mode, CString ttl, String* pfname, CString path, CString ext) @arrow{} FILE*
 Ask for and open a file for output.
-@*@code{mode} -- open mode.
-@*@code{ttl} -- title of question (first line).
-@*@code{pfname} -- file as user entered it.
-@*@code{path} -- file as found.
-@*@code{ext} -- file extension to use if file is not found at first.
+@*Parameters:
+@itemize @bullet
+@item @code{mode} -- open mode.
+@item @code{ttl} -- title of question (first line).
+@item @code{pfname} -- file as user entered it.
+@item @code{path} -- file as found.
+@item @code{ext} -- file extension to use if file is not found at first.
+@end itemize
 
 On success, the @code{FILE*} returned by @code{fopen} is returned.  On
 failure, @code{NULL} is returned.
@@ -50,16 +63,19 @@ Format sequence and have user choose from it (any type).
 This handles bad pointers, which can get into the data
 several ways.
 
-@code{seq}   [IN]  sequence from which to choose
-@*@code{ask1}  [IN]  whether to prompt if only one element in sequence
-@*@code{titl1} [IN]  title if sequence has one element
-@*@code{titln} [IN]  title if sequence has multiple elements
-@*@code{type} [IN]  sequence type
+@*Parameters:
+@itemize @bullet
+@item @code{seq}   [IN]  sequence from which to choose
+@item @code{ask1}  [IN]  whether to prompt if only one element in sequence
+@item @code{titl1} [IN]  title if sequence has one element
+@item @code{titln} [IN]  title if sequence has multiple elements
+@item @code{type} [IN]  sequence type
+@end itemize
 
 Returns the selected @code{GNode*}.  If user cancels, @code{NULL} is returned.
 @end defun
 
-@section browse.h 
+@subsection browse.h 
 
 @defun init_browse_lists (void) @arrow{} void
 Initialize named browse lists.
@@ -100,106 +116,248 @@ Huh?
 Find named browse list.
 @end defun
 
-@section charmaps.h 
+@subsection charmaps.h 
 
 @defun get_decimal (CString str) @arrow{} int
 @end defun
+
 @defun get_hexidecimal (CString str) @arrow{} int
 @end defun
+
 @defun hexvalue (int c) @arrow{} int
 @end defun
+
 @defun custom_translate (CString str, TRANTABLE tt) @arrow{} ZSTR
 @end defun
+
 @defun custom_translatez (ZSTR zstr, TRANTABLE tt) @arrow{} void
 @end defun
+
 @defun init_map_from_file (CString file, CString mapname, TRANTABLE*  ptt, ZSTR zerr) @arrow{} bool
 @end defun
 
-@section charprops.h 
+@subsection charprops.h 
 
 @defun charprops_load_utf8 (void) @arrow{} bool
 @end defun
+
 @defun charprops_free_all (void) @arrow{} void
 @end defun
+
 @defun charprops_load (const char*  codepage) @arrow{} bool
 @end defun
+
 @defun charprops_is_loaded (void) @arrow{} bool
 @end defun
 
-@section codesets.h 
+@subsection choose.h
+@defun chooseChild (GNode* irec, GNode* frec, CString msg0, CString msgn, ASK1Q ask1, Database *database) @arrow{} GNode*
+Choose child of person or family.
+@*Parameters:
+@itemize @bullet
+@item @code{irec}:    [IN] parent (may be null if fam provided)
+@item @code{frec}:    [IN] family (may be null if indi provided)
+@item @code{msg0}:    [IN] message to display if no children
+@item @code{msgn}:    [IN] title for choosing child from list
+@item @code{ask1}     [IN] whether to prompt if only one child
+@item @code{database} [IN] database to use
+@end itemize
+@end defun
+
+@c @defun chooseAndRemoveFamily(void) @arrow{} void
+@c @end defun
+
+@defun chooseFather (GNode* irec, GNode* frec, CString msg0, CString msgn, ASK1Q ask1, Database *database) @arrow{} GNode*
+Choose father of person or family
+@*Parameters:
+@itemize @bullet
+@item @code{irec} [IN]  person of interest if non-null
+@item @code{frec} [IN]  family of interest if non-null
+@item @code{msg0} [IN]  message to display if no fathers
+@item @code{msgn} [IN]  title if need to choose which father
+@item @code{ask1} [IN]  whether or not to prompt if only one father found
+@end itemize
+@end defun
+
+@defun chooseFamily (GNode* irec, CString msg0, CString msgn, bool fams, Database *database) @arrow{} GNode*
+Choose family from person's FAMS/C lines
+@*Parameters:
+@itemize @bullet
+@item @code{irec} [IN]  person of interest
+@item @code{msg0} [IN]  message to display if no families
+@item @code{msgn} [IN]  title if need to choose which family
+@item @code{fams} [IN]  want spousal families of indi ? (or families indi is child in)
+@end itemize
+Asks if multiple matches.
+@end defun
+
+@defun chooseMother (GNode* indi, GNode* fam, CString msg0, CString msgn, ASK1Q ask1, Database *database) @arrow{} GNode*
+Choose mother of person or family
+@*Parameters:
+@itemize @bullet
+@item @code{irec} [IN]  person of interest if non-null
+@item @code{frec} [IN]  family of interest if non-null
+@item @code{msg0} [IN]  message to display if no mothers
+@item @code{msgn} [IN]  title if need to choose which mother
+@item @code{ask1} [IN]  whether or not to prompt if only one mother found
+@end itemize
+@end defun
+
+@defun chooseNote (GNode* current, CString msg0, CString msgn, Database *database) @arrow{} GNode*
+Choose any referenced note from some,
+@end defun
+
+@defun choosePointer (GNode* current, CString msg0, CString msgn, Database *database) @arrow{} GNode*
+Choose any reference (pointer) from some,
+Returns addref'd record
+@end defun
+
+@defun chooseSource (GNode* current, CString msg0, CString msgn, Database *database) @arrow{} GNode*
+Choose any referenced source from some,
+@end defun
+
+@defun chooseSpouse (GNode* irec, CString msg0, CString msgn, Database *database) @arrow{} GNode*
+Choose person's spouse.
+@*Parameters:
+@itemize @bullet
+@item @code{irec} [IN] known person (gives up if this is null)
+@item @code{msg0} [IN] message to display if no spouses
+@item @code{msgn} [IN] title for choosing spouse from list
+@end itemize
+Asks if multiple matches.
+@end defun
+
+@subsection codesets.h 
 
 @defun get_defcodeset (void) @arrow{} CString
 @end defun
+
 @defun init_codesets (void) @arrow{} void
 @end defun
+
 @defun term_codesets (void) @arrow{} void
 @end defun
+
 @defun is_codeset_utf8 (CString codename) @arrow{} bool
 @end defun
 
-@section datei.h
-@section dateprint.h 
-@section editing.h 
+@c @subsection dateprint.h 
+@subsection editing.h / init.c
 
-@defun editfile @arrow{} String
+@deftypevar String editfile
+@end deftypevar
+
+@deftypevar String editstr
+@end deftypevar
+
+@subsection editing.h / write.c
+
+@defun write_nodes (int level, FILE* fp, XLAT ttm, GNode* node, bool indent, bool kids, bool sibs) @arrow{} void
+Write tree of nodes rooted at @code{node} to file @code{fp}.
+@*Parameters:
+@itemize
+@item @code{level}  [IN] level
+@item @code{fp}     [IN] file
+@item @code{ttm}    [IN] character map
+@item @code{node}   [IN] root node
+@item @code{indent} [IN] whether to indent
+@item @code{kids}   [IN] whether to output children
+@item @code{sibs}   [IN] whether to output siblings
+@end itemize
 @end defun
-@defun editstr @arrow{} String
-@end defun
+
 @defun prefix_file_for_edit (FILE* fp) @arrow{} void
+Write BOM prefix to file if appropriate.
+This handles prepending BOM (byte order mark) to UTF-8 files.
 @end defun
+
 @defun prefix_file_for_gedcom (FILE* fp) @arrow{} void
+Write BOM prefix to file if appropriate.
+This handles prepending BOM (byte order mark) to UTF-8 files.
 @end defun
+
 @defun prefix_file_for_report (FILE* fp) @arrow{} void
+Write BOM prefix to file if appropriate.
+This handles prepending BOM (byte order mark) to UTF-8 files.
 @end defun
+
 @defun write_indi_to_file (GNode* indi, CString file) @arrow{} void
+Write node tree into GEDCOM
+(no user interaction).
 @end defun
-@defun write_fam_to_file_for_edit (GNode* fam, CString file, bool rfmt, Database* database) @arrow{} void
-@end defun
+
 @defun write_indi_to_file_for_edit (GNode* indi, CString file, bool rfmt, Database* database) @arrow{} void
+Write person node tree into GEDCOM
+(no user interaction).
+@*Parameters:
+@itemize
+@item @code{indi}     [IN] node tree to be edited
+@item @code{file}     [IN] file to be edited
+@item @code{rfmt}     [IN]
+@item @code{database} [IN] database to use
+@end itemize
 @end defun
-@defun write_nodes (int, FILE*, XLAT, GNode* , bool, bool, bool) @arrow{} void
+
+@defun write_fam_to_file_for_edit (GNode* fam, CString file, bool rfmt, Database* database) @arrow{} void
+Write family node tree into GEDCOM
+(no user interaction).
+@*Parameters:
+@itemize
+@item @code{fam}      [IN] node tree to be edited
+@item @code{file}     [IN] file to be edited
+@item @code{rfmt}     [IN]
+@item @code{database} [IN] database to use
+@end itemize
 @end defun
+
+#@subsection editing.h / newrecs.c
+
 @defun write_node_to_editfile (GNode*) @arrow{} void
 @end defun
 
-@section equaliso.h 
-
-@defun equal_tree (GNode* root1, GNode* root2) @arrow{} bool
-@end defun
-
-@section errlog.h 
+@subsection errlog.h 
 
 @defun crashlog (String fmt, ...) @arrow{} void
 @end defun
+
 @defun crashlogn (String fmt, ...) @arrow{} void
 @end defun
+
 @defun errlog_out (CString title, CString msg, CString file, int line, CString function) @arrow{} void
 @end defun
+
 @defun crash_setcrashlog (CString crashlog) @arrow{} void
 @end defun
+
 @defun crash_setdb (String dbname) @arrow{} void
 @end defun
 
-@section expandvars.h
+@subsection expandvars.h
 
-@section gstrings.h 
+@subsection gstrings.h 
 
 @defun get_child_strings (GNode* fam, bool rfmt, int* pnum, String** pkeys, Database* database) @arrow{} String*
 Return children strings; each string has name and event info, if available.
 
-@*@code{fam} -- [in] family of interest
-@*@code{rfmt} -- [in] reformatting functions
-@*@code{pnum} --  [out] number of output strings
-@*@code{pkeys} -- [out] array of output strings (children descriptions)
+@*Parameters:
+@itemize @bullet
+@item @code{fam} -- [in] family of interest
+@item @code{rfmt} -- [in] reformatting functions
+@item @code{pnum} --  [out] number of output strings
+@item @code{pkeys} -- [out] array of output strings (children descriptions)
+@end itemize
 @end defun
 
 @defun indi_to_list_string (GNode* indi, GNode* fam, int len, bool rfmt, bool appkey) @arrow{} String
 Return menu list string; returns heap-alloc'd string.
-@*@code{indi}   [IN]  source person
-@*@code{fam}    [IN]  relevant family (used in spouse lists)
-@*@code{len}    [IN]  max length desired
-@*@code{rfmt}   [IN]  reformating functions (may be NULL)
-@*@code{appkey} [IN]  allow appending key ?
+@*Parameters:
+@itemize @bullet
+@item @code{indi}   [IN]  source person
+@item @code{fam}    [IN]  relevant family (used in spouse lists)
+@item @code{len}    [IN]  max length desired
+@item @code{rfmt}   [IN]  reformating functions (may be NULL)
+@item @code{appkey} [IN]  allow appending key ?
+@end itemize
 @end defun
 
 @defun sour_to_list_string (GNode* sour, int len, String delim) @arrow{} String
@@ -225,23 +383,26 @@ Returns heap-alloc'd string.
 Caller must specify either node or key (or both).
 Used in lists and in extended gedcom view.
 
-@*@code{node}   [IN]  node tree of indi or fam ... to be described
-@*@code{key}    [IN]  key of record specified by node
-@*@code{len}    [IN]  max description desired
-@*@code{delim}  [IN]  separator to use between events
-@*@code{rfmt}   [IN]  reformatting information
-@*@code{appkey} [IN]  allow appending key ?
+@*Parameters:
+@itemize @bullet
+@item @code{node}   [IN]  node tree of indi or fam ... to be described
+@item @code{key}    [IN]  key of record specified by node
+@item @code{len}    [IN]  max description desired
+@item @code{delim}  [IN]  separator to use between events
+@item @code{rfmt}   [IN]  reformatting information
+@item @code{appkey} [IN]  allow appending key ?
+@end itemize
 @end defun
 
 @defun set_displaykeys (bool keyflag) @arrow{} void
 @end defun
 
-@section icvt.h 
-@section iterate.h 
-@section langinfz.h
-@section listener.h 
+@subsection icvt.h 
+@subsection iterate.h 
+@subsection langinfz.h
+@subsection listener.h 
 
-@section ll-addoperations.h 
+@subsection ll-addoperations.h 
 
 @defun addOrUpdatePersonInDatabase (GNode* person, Database* database) @arrow{} bool
 If @code{person} is not in the database, add it; if it is, then
@@ -268,54 +429,10 @@ If @code{other} is not in the database, add it; if it is, then
 update it.
 @end defun
 
-@section ll-database.h 
+@subsection ll-indiseq.h 
+@subsection ll-list.h
 
-In Lifelines, record keys were always of the form
-
-@code{letter one-or-more-digits}
-
-with the @code{letter} being one of the five letters @code{I,F,S,E,X}
-for person, family, source, event, and other records, respectively.
-
-In a DeadEnds library, there is no such restriction.  However, there
-are parts of Lifelines, including the port of it to DeadEnds, that
-still assume that keys have this format.
-
-In Lifelines, @code{KEYNUM_TYPE} was sometimes 32-bits and sometimes
-64-bits -- depending on the platform.  In DeadEnds, support for
-64-bits in personal systems has become sufficiently ubiquitous, that
-keynums are always 64-bits.  And the maximum key number
-(@code{MAXKEYNUMBER})is currently 999,999,999,999.  As this only
-requires 40 bits for storage, it could be raised, without much pain, by
-a factor of a thousand or even a million, but I see no need to do so.
-
-If you change @code{MAXKEYNUMBER}, then you should adjust
-@code{MAXKEYWIDTH} as well.
-
-@defun keynumToPersonRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
-Get a person record from a database.
-@end defun
-
-@defun keynumToFamilyRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
-Get a family record from a database.
-@end defun
-
-@defun keynumToSourceRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
-Get a source record from a database.
-@end defun
-
-@defun keynumToEventRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
-Get an event record from a database.
-@end defun
-
-@defun keynumToOtherRecord (KEYNUM_TYPE keynum, Database* database) @arrow{} GNode*
-Get an other record from a database.
-@end defun
-
-@section ll-indiseq.h 
-@section ll-list.h
-
-@section ll-node.h 
+@subsection ll-node.h 
 
 @defun tree_strlen (int levl, GNode* node) @arrow{} int
 Compute string length of tree.  Does not count the terminating null.
@@ -357,9 +474,13 @@ Returned record is @code{addref}'d.
 
 @defun traverse_nodes (GNode* node, bool (*func)(GNode* , void*), void* param) @arrow{} bool
 Traverse nodes in tree while doing something.  Children and siblings are visited.
-@*@code{node}         root of tree to traverse
-@*@code{func}         function to call at each node (returns false to stop traversal)
-@*@code{param}        opaque pointer for client use, passed thru to callback
+
+@*Parameters:
+@itemize @bullet
+@item @code{node}         root of tree to traverse
+@item @code{func}         function to call at each node (returns false to stop traversal)
+@item @code{param}        opaque pointer for client use, passed thru to callback
+@end itemize
 
 If @code{func} returns @code{false}, then traversal stops and
 @code{false} is returned, otherwise traversal continues.  If all nodes
@@ -370,9 +491,7 @@ are traversed without a @code{false} return from @code{func}, then
 @defun term_node_allocator (void) @arrow{} void
 @end defun
 
-@section ll-porting.h 
-
-@section ll-sequence.h 
+@subsection ll-sequence.h 
 
 @defun getAllPersons (Database* database) @arrow{} Sequence*
 Returns a sequence of all Person records in the database.
@@ -424,8 +543,8 @@ Returns a sequence of all spouses (@code{HUSB}, @code{WIFE}) present in family @
 Returns a sequence of all records of type @code{type}.
 @end defun
 
-@section llgettext.h 
-@section lloptions.h
+@subsection llgettext.h 
+@subsection lloptions.h
 
 Handling for (opaque) string & numeric options.
 Options are fetched on-the-fly when requested.
@@ -434,7 +553,7 @@ then from db properties
 then from global properties
 then from fallback properties.
 
-@subsection Initialization & Termination
+@subsubsection Initialization & Termination
 
 @defun get_db_options (HashTable *opts) @arrow{} void
 @defunx set_db_options (HashTable *opts) @arrow{} void
@@ -461,6 +580,7 @@ Sets a fallback value for the specified option.
 
 In the Lifelines port, it is currently called to set a fallback value
 for the options:
+@*Parameters:
 @itemize
 @item @code{DEPROGRAMS}
 @item @code{DEREPORTS}
@@ -498,7 +618,7 @@ Frees memory allocated by the option subsystem.
 Free the specified option table. @code{ptab}.
 @end defun
 
-@subsection Routine Use
+@subsubsection Routine Use
 
 All options are stored as strings.
 
@@ -537,12 +657,12 @@ Unless you are extending an existing scripting language or are adding
 a new one, you probably don't need to call this.
 @end defun
 
-@section locales.h 
-@section norm_charmap.h 
-@section options.h 
-@section proptbls.h 
+@subsection locales.h 
+@subsection norm_charmap.h 
+@subsection options.h 
+@subsection proptbls.h 
 
-@section remove.h
+@subsection remove.h
 
 @defun remove_indi_by_root (GNode* indi, Database* database) @arrow{} void
 @end defun
@@ -569,7 +689,7 @@ Remove spouse @code{indi} from family @code{fam}.  Updates both set of links.
 @defun num_fam_xrefs (GNode* fam) @arrow{} int
 @end defun
 
-@section replace.h 
+@subsection replace.h 
 
 @defun replace_indi (GNode* indi1, GNode* indi2, Database* database) @arrow{} void
 @end defun
@@ -577,8 +697,8 @@ Remove spouse @code{indi} from family @code{fam}.  Updates both set of links.
 @defun replace_fam (GNode* fam1, GNode* fam2, Database* database) @arrow{} void
 @end defun
 
-@section rfmt.h 
-@section rptui.h 
+@subsection rfmt.h 
+@subsection rptui.h 
 
 @defun rptui_ask_for_fam (CString s1, CString s2, Database*) @arrow{} GNode*
 @defunx rptui_ask_for_indi (CString ttl, ASK1Q ask1, Database* database) @arrow{} GNode*
@@ -618,20 +738,32 @@ Returns the accumulated total time, in seconds, spent waiting for the
 user to respond.
 @end defun
 
-@section sprintpic.h 
-@section stdlibi.h
-@section strcvt.h 
-@section sys_inc.h 
-@section translat.h 
+@subsection sprintpic.h 
+@defun sprintpic0 (String buffer, int len, int utf8, CString pic) @arrow{} void
+@defunx sprintpic1 (String buffer, int len, int utf8, CString pic, CString arg1) @arrow{} bool
+@defunx zprintpic1 (CString pic, CString arg1) @arrow{} ZSTR
+@defunx sprintpic2 (String buffer, int len, int utf8, CString pic, CString arg1, CString arg2) @arrow{} bool
+@defunx zprintpic2 (CString pic, CString arg1, CString arg2) @arrow{} ZSTR
+@defunx sprintpic3 (String buffer, int len, int utf8, CString pic, CString arg1, CString arg2, CString arg3) @arrow{} bool
+@defunx zprintpic3 (CString pic, CString arg1, CString arg2, CString arg3) @arrow{} ZSTR
+@code{DeadEnds} formats dates differently.  These routines currently
+have no callers.  If that does not change, they might get removed from
+the library.
+@end defun
 
-@section valid.h 
+@subsection stdlibi.h
+@subsection strcvt.h 
+@subsection sys_inc.h 
+@subsection translat.h 
+
+@subsection valid.h 
 
 @defun validate_new_record (GNode* new, GNode* orig, RecordType ntype, Database* database, CString* pmsg) @arrow{} bool
 @end defun
 
-@section xlat.h
+@subsection xlat.h
 
-@section xref.h 
+@subsection xref.h 
 
 @defun getFirstPersonRecord (Database* database) @arrow{} GNode*
 @defunx getFirstFamilyRecord (Database* database) @arrow{} GNode*
@@ -703,4 +835,11 @@ both with and without the surrounding '@@'s.
 @end defun
 
 @defun value_to_xref (CString val) @arrow{} CString
+In DeadEnds, unlike LifeLines, keys contain the `@@'s.
+So, after verifying that it is a proper LL/DE key
+@*
+'@@' <one of the five letters I,F,S,E,X> <numbers> '@@'
+@*
+rather than strip the3 '@@'s, and return the result, we just return it.
+If it is not a proper key, then we return @code{NULL}.
 @end defun

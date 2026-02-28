@@ -1,0 +1,8 @@
+@subsection python-to-c.h
+
+There is one variable meant to be accessible outside of the library -- @code{llpy_debug}.
+
+@deftypevar bool llpy_debug
+As the name suggests, when this is @code{true}, some debugging
+statements are executed.  They print to @code{stderr}.
+@end deftypevar

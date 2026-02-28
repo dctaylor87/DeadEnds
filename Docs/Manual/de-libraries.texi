@@ -13,26 +13,54 @@
 
 @chapter Introduction
 @include de-introduction.texi
+
 @chapter Database
+@section Application Functions
 @include de-database.texi
+@section Debugging Functions
+@include de-database-dbg.texi
 @chapter Gedcom
+@section Application Functions
 @include de-gedcom.texi
-@chapter Parser
-@include de-parser.texi
-@chapter Interpreter
-@include de-interp.texi
-@chapter Validation
-@include de-validate.texi
-@chapter DataTypes
-@include de-datatypes.texi
-@chapter Utilities
-@include de-utils.texi
+@section Debugging Functions
+@include de-gedcom-dbg.texi
 @chapter User Interface
+@section Application Functions
 @include de-ui.texi
-@chapter Python
-@include de-python.texi
+@c @section Debugging Functions
+@c @include de-ui-dbg.texi
+@chapter DataTypes
+@section Application Functions
+@include de-datatypes.texi
+@section Debugging Functions
+@include de-datatypes-dbg.texi
+@chapter Utilities
+@section Application Functions
+@include de-utils.texi
+@c @section Debugging Functions
+@chapter Validation
+@section Application Functions
+@include de-validate.texi
+@c @section Debugging Functions
 @chapter LLSupport
+@section Application Functions
 @include de-llsupport.texi
+@c @section Debugging Functions
+@chapter Parser
+@section Application Functions
+@include de-parser.texi
+@c @section Debugging Functions
+@chapter Interpreter
+@section Application Functions
+@include de-interp.texi
+@section Debugging Functions
+@include de-interp-dbg.texi
+@chapter Python
+@section Application Functions
+@include de-python.texi
+@section Debugging Variables
+@include de-python-dbg.texi
+
 @unnumbered Function Index
 @printindex fn
 @unnumbered Variable Index

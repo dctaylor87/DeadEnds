@@ -1,9 +1,11 @@
-@section de-strings.h
+@subsection de-strings.h
 
-@defun chartype (int c) @arrow{} int
+@defun chartype (int) @arrow{} int
+Return type of a character.
 @end defun
 
-@defun iswhite (int c) @arrow{} bool
+@defun iswhite (int) @arrow{} bool
+Is character white space?
 @end defun
 
 @defun islinebreak (int c) @arrow{} bool
@@ -19,7 +21,7 @@
 @end defun
 
 @defun destrncpy (char *dest, const char *src, size_t n, int utf8) @arrow{} char*
-strncpy that always zero-terminates.
+A version of @code{strncpy} that always zero-terminates.
 Handles UTF-8.
 @end defun
 
@@ -100,7 +102,7 @@ Handles UTF-8.
 @defun ll_what_collation (void) @arrow{} CString
 @end defun
 
-@section file.h
+@subsection file.h
 
 @defun openFile (CString path, CString mode) @arrow{} File*
 Creates a File structure and opens the underlying UNIX file.  When a
@@ -111,7 +113,7 @@ File is opened it is given line mode by default.
 Closes the UNIX file and deletes the File structure.
 @end defun
 
-@section errors.h
+@subsection errors.h
 
 @defun createErrorLog (void) @arrow{} ErrorLog*
 Creates an error log, a specialized List.
@@ -133,30 +135,21 @@ Changes the severity of an Error.
 Adds an Error to an ErrorLog.
 @end defun
 
-@defun showErrorLog (ErrorLog*) @arrow{} void
-Shows the contents of an ErrorLog on standard output.
+@defun showErrorLog (ErrorLog*) @arrow{} voidShows the contents of an ErrorLog on standard output.
 @end defun
 
 @defun saveErrorLog (String filename, ErrorLog* errorLog) @arrow{} bool
 Writes the @code{errorLog} to @code{filename}.
 @end defun
 
-@section standard.h
+@subsection standard.h
 
 @defun strsave (CString) @arrow{} String
 Save String in heap.
 @end defun
 
-@defun iswhite (int) @arrow{} bool
-Is character white space?
-@end defun
-
 @defun striptrail (String) @arrow{} void
 Strip trailing white space.
-@end defun
-
-@defun chartype (int) @arrow{} int
-Return type of a character.
 @end defun
 
 @defun _alloc (size_t len, CString file, int line) @arrow{} void*
@@ -194,7 +187,7 @@ Terminates the program with a message that includes the file name
 @code{function}, and a message @code{msg}.
 @end defun
 
-@section path.h
+@subsection path.h
 
 @defun fopenPath (CString fileName, CString mode, CString searchPath, CString suffix) @arrow{} FILE*
 Tries to open a file using a path variable and optional suffix.

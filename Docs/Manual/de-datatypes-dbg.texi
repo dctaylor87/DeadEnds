@@ -1,0 +1,64 @@
+@subsection block.h / block.h
+
+@defun showBlock (Block* block, CString(*getString)(void*)) @arrow{} void
+Shows the contents of Block @code{block}.  The function
+@code{getString} is called for each element in turn and is expected to
+return a string representation of the element that is useful for
+debugging.  Each return value is printed to @code{stdout} followed by
+a newline.
+@end defun
+
+@defun fprintfBlock (FILE* file, Block* block, CString(*toString)(void*)) @arrow{} void
+Similar to @code{showBlock}, but instead of printing to @code{stdout},
+it prints to @code{file}.
+@end defun
+
+@subsection hashtable.h
+
+@defun showHashTable (HashTable*, void(*show)(void*)) @arrow{} void
+Shows the contents of a hash table, including bucket
+and element indexes.  The argument @code{show} is a function to show
+an element. Uses variables defined in the FORHASHTABLE macro.
+@end defun
+
+@defun dumpHashTable (HashTable*, void(*show)(void*)) @arrow{} void
+Dumps a hash table to standard error.  The argument @code{show} is
+currently ignored.
+@end defun
+
+@subsection integertable.h
+
+@defun showIntegerTable (IntegerTable*) @arrow{} void
+Shows the contents of an integer table.
+@end defun
+
+@subsection list.h
+
+@defun showList (List *list, String(*describe)(void*)) @arrow{} void
+Shows the contents of a list to stdout.  The function
+@code{describe} is called on each element to print it.
+@end defun
+
+@subsection sequence.h
+
+@defun showSequence (Sequence*, String title) @arrow{} void
+Shows the contents of a Sequence on stdout.
+@end defun
+
+@subsection set.h
+
+@defun showSet (Set*, String(*show)(void*)) @arrow{} void
+Shows the contents of a set using the the function @code{show}.
+@end defun
+
+@subsection stringset.h
+
+@defun showStringSet (StringSet*) @arrow{} void
+Shows the strings in a string set.
+@end defun
+
+@subsection stringtable.h
+
+@defun showStringTable (StringTable*) @arrow{} void
+Prints the string table keys and values to stdout.
+@end defun

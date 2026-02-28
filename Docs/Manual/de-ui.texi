@@ -2,7 +2,7 @@ The names of the current user interface header files, their locations,
 and which functions are declared in each of them is likely to change.
 This is an attempt to document the current state.
 
-@section uiio.h
+@subsection uiio.h
 
 This file declares the public interface to the user interface abstraction.
 
@@ -25,24 +25,24 @@ when the user interface is changing to a different interface or the
 program is about to exit.
 @end defun
 
-@defvar current_uiio @arrow{} UIIO*
+@deftypevar UIIO* current_uiio
 This points to the current user interface input/output structure.
 Currently, there are two @code{UIIO*}'s that are defined --
 @code{uiio_curses} and @code{uiio_stdio}.  There might be additional
 @code{UIIO*}'s in the future -- such as for a @code{GUI} (graphical
 user interface) or for a @code{CLI} (command line interface).
-@end defvar
+@end deftypevar
 
-@defvar uiio_curses @arrow{} UIIO*
+@deftypevar UIIO* uiio_curses
 The curses user interface input/output structure.  Used by
 @command{llines}.
-@end defvar
+@end deftypevar
 
-@defvar uiio_stdio @arrow{} UIIO*
+@deftypevar UIIO* uiio_stdio
 The stdio user interface input/output structure.  Used by @command{llexec}.
-@end defvar
+@end deftypevar
 
-@section stdio-ui.h
+@subsection stdio-ui.h
 
 @defun stdio_ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn) @arrow{} int
 The @code{stdio} version of @code{ask_for_char_msg};
@@ -76,7 +76,7 @@ The @code{stdio} version of @code{chooseFromArray}.
 The @code{stdio} version of @code{view_array}.
 @end defun
 
-@section screen.h
+@subsection screen.h
 
 Many of the functions declared in this header are defined in the
 @file{Lifelines} directory.  Others are defined in the @file{UI}
@@ -86,9 +86,11 @@ each declaring the appropriate functions.
 @deftypevar int ll_lines
 Number of lines used by LifeLines (usually LINES)
 @end deftypevar
+
 @deftypevar int ll_cols
 Number of columns used by LifeLines (usually COLSREQ)
 @end deftypevar
+
 @deftypevar UIWINDOW main_win
 @end deftypevar
 
@@ -98,7 +100,7 @@ Number of columns used by LifeLines (usually COLSREQ)
 @defun main_menu (void) @arrow{} void
 @end defun
 
-@section ui.h
+@subsection ui.h
 
 @defun ask_for_program (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist) @arrow{} bool
 @end defun
@@ -115,7 +117,7 @@ Number of columns used by LifeLines (usually COLSREQ)
 @defun invoke_search_menu (void) @arrow{} Sequence*
 @end defun
 
-@section generic.h
+@subsection generic.h
 
 @defun chooseFromList (CString ttl, List *list) @arrow{} int
 @end defun
@@ -126,7 +128,7 @@ Number of columns used by LifeLines (usually COLSREQ)
 @defun chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type) @arrow{} int
 @end defun
 
-@section feedback.h
+@subsection feedback.h
 
 This header file needs to be renamed and moved from the
 @file{LLSupport} tree to the @file{UI} tree.
@@ -170,7 +172,7 @@ Just calls llvwprintf.
 Reports to stdout style output (used embedded carriage returns).
 @end defun
 
-@section unknown
+@subsection unknown
 
 @defun ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer, int buflen) @arrow{} bool
 Ask user for filename from which to read.

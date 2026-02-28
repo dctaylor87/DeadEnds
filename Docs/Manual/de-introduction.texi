@@ -34,8 +34,25 @@ libraries, but is not the focus of this document.  The focus of this
 document is on @b{using} the libraries.  Hence the emphasis on the
 interfaces.
 
+The functions are grouped into three parts.
+
+The first is those believed to be useful to applications.
+
+The second is those which are considered internal to the libraries.
+Many of these are non-static because they need to accessible to other
+files in the library.  Some, because they need to be accessible to
+other libraries.  Others, nobody noticed that they could be made
+static.
+
+The third part is those believed to be useful for debugging.  Whether
+debugging an application or debugging the libraries.
+
 For the functions which are documented that are @b{NOT} meant to be
 called by applications, the hope is that they will eventually become
 part of an internals document.
+
+Currently, the header files make no distinction between functions and
+variables for applications versus other functions and variables.  I
+hope to change this.
 
 Corrections, additions, and suggestions for improvement are always welcome.

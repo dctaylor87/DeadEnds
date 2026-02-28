@@ -1,4 +1,4 @@
-@section hashtable.h
+@subsection hashtable.h
 
 @defun createHashTable (CString(*getKey)(const void*), int(*compare)(CString, CString), void(*delete)(void*), int numBuckets) @arrow{} HashTable*
 @end defun
@@ -53,11 +53,11 @@ Remove the element having @code{key} from the HashTable @code{table}.
 @end defun
 
 @defun addrefHashTable (HashTable *table) @arrow{} void
-increment ref. count of table
+Increments the reference count of @code{table}.
 @end defun
 
 @defun releaseHashTable (HashTable *table) @arrow{} void
-decrement ref. count of table, free if zero
+Decrements the reference count of @code{table}, free if zero.
 @end defun
 
 @defun isInHashTable (HashTable*, CString key) @arrow{} bool
@@ -124,19 +124,7 @@ macro.
 Calls @code{incrReferenceCountTable} to increment the reference count of @code{table}.
 @end defmac
 
-@subsection Debugging
-@defun showHashTable (HashTable*, void(*show)(void*)) @arrow{} void
-Shows the contents of a hash table, including bucket
-and element indexes.  The argument @code{show} is a function to show
-an element. Uses variables defined in the FORHASHTABLE macro.
-@end defun
-
-@defun dumpHashTable (HashTable*, void(*show)(void*)) @arrow{} void
-Dumps a hash table to standard error.  The argument @code{show} is
-currently ignored.
-@end defun
-
-@section integertable.h
+@subsection integertable.h
 
 @defun createIntegerTable (int numBuckets) @arrow{} IntegerTable*
 Creates a hash table having the specified number of buckets.  The hash
@@ -160,12 +148,7 @@ Searches for @code{key} in an integer table and returns its integer value.
 Returns @code{DeadEndsNAN} (== @code{__INT_MAX__}) if @code{key} is not there.
 @end defun
 
-@subsection Debugging
-@defun showIntegerTable (IntegerTable*) @arrow{} void
-Shows the contents of an integer table.
-@end defun
-
-@section list.h
+@subsection list.h
 
 @defun createList (CString(*g)(const void*), int(*c)(CString, CString), void (*d)(void*), bool sorted) @arrow{} List*
 Creates an empty List having the specified getKey @code{g}, compare
@@ -318,14 +301,7 @@ Calls the @code{incrReferenceCountList} function supplying the
 @code{file}, @code{line}, and @code{function} arguments.
 @end defmac
 
-@subsection Debugging
-
-@defun showList (List *list, String(*describe)(void*)) @arrow{} void
-Shows the contents of a list to stdout.  The function
-@code{describe} is called on each element to print it.
-@end defun
-
-@section sequence.h
+@subsection sequence.h
 
 @defun createSequence (RecordIndex* index) @arrow{} Sequence*
 Creates an empty sequence and returns it.  The @code{index} is
@@ -364,7 +340,7 @@ Removes the sequence element having index @code{code}.  Returns
 @end defun
 
 @defun nameSortSequence (Sequence* sequence) @arrow{} void
-Sorts #@code{sequence} by name.  Assumes it is a sequence of person records.
+Sorts @code{sequence} by name.  Assumes it is a sequence of person records.
 @end defun
 
 @defun elementFromSequence (Sequence* sequence, int index, CString* key, CString* name) @arrow{} bool
@@ -419,13 +395,7 @@ Returns the difference of two Sequences.
 @defun incrReferenceCountSequence (Sequence *seq, CString file, int line, CString function) @arrow{} void
 @end defun
 
-@subsection Debugging
-
-@defun showSequence (Sequence*, String title) @arrow{} void
-Shows the contents of a Sequence on stdout.
-@end defun
-
-@section set.h
+@subsection set.h
 
 @defun createSet (CString(*getKey)(const void*), int(*compare)(CString, CString), void(*delete)(void*)) @arrow{} Set*
 Creates a set.  The @code{getKey} and @code{compare} functions are
@@ -462,13 +432,7 @@ Iterates the elements of a set, calling function @code{iter} on each.
 Returns the list that holds the set's elements.
 @end defun
 
-@subsection Debugging
-
-@defun showSet (Set*, String(*show)(void*)) @arrow{} void
-Shows the contents of a set using the the function @code{show}.
-@end defun
-
-@section stringset.h
+@subsection stringset.h
 
 @defun createStringSet (void) @arrow{} StringSet*
 Creates a stringSet.
@@ -479,13 +443,7 @@ Deletes (frees) a string set.  If the boolean @code{del} is
 @code{true}, then the strings are also freed.
 @end defun
 
-@subsection Debugging
-
-@defun showStringSet (StringSet*) @arrow{} void
-Shows the strings in a string set.
-@end defun
-
-@section stringtable.h
+@subsection stringtable.h
 
 @defun createStringTable (int numBuckets) @arrow{} HashTable*
 A StringTable is created with the specified number of buckets.
@@ -511,13 +469,7 @@ Adds an element to a string table that maps a string to itself.
 Both key and value point to different strings.
 @end defun
 
-@subsection Debugging
-
-@defun showStringTable (StringTable*) @arrow{} void
-Prints the string table keys and values to stdout.
-@end defun
-
-@section zstr.h
+@subsection zstr.h
 The functions in this section are present because the LifeLines user
 interface used them and it was considered too much work to remove them
 during the port effort.  They should not be used in new code as they
@@ -587,4 +539,173 @@ during the port effort.  They should not be used in new code as they
 @end defun
 
 @defun zs_reserve (ZSTR zstr, unsigned int min) @arrow{} char*
+@end defun
+
+@section Internal Functions
+@subsection block.h / block.c
+
+With the exception of @code{initBlock}, @code{emptyBlock}, and
+@code{appendToBlock}, none of these functions are accessed outside of
+the @code{DataTypes} library.
+
+From outside the library, the aforementioned three functions are only
+called by @code{personKeysFromName} in @file{Gedcom/name.c}.
+
+Additionally, from outside the library, there are three functions that
+do not call any of these functions, but do know the internals of the
+@code{Block} structure.  They are @code{getRootListFromGNodeList} in
+@file{Gedcom/rootlist.c}, @code{interpForList} in
+@file{Interp/builtinlist.c}, and @code{showSymbolTable} in
+@file{Interp/symboltable.c}.
+
+@defun createBlock (void) @arrow{} Block*
+Create an empty Block.
+@end defun
+
+@defun initBlock (Block*) @arrow{} void
+Initialize an existing Block.
+@end defun
+
+@defun deleteBlock (Block*, void(*delete)(void*)) @arrow{} void
+Deallocates the elements of a Block, but not the Block itself.  If a
+delete function @code{delete} is supplied, it is called on each
+element before the elements are freed.
+@end defun
+
+@defun emptyBlock (Block*, void(*delete)(void*)) @arrow{} void
+Removes all the elements in a block.
+@end defun
+
+@defun lengthBlock (Block* block) @arrow{} int
+Returns the length of a Block @code{block}.
+@end defun
+
+@defun isEmptyBlock (Block* block) @arrow{} bool
+Returns @code{true} if @code{block} is empty.
+@end defun
+
+@defun getBlockElement (Block* block, int index) @arrow{} void*
+Returns the @code{index} element from @code{block}.  The caller must
+not change it.
+@end defun
+
+@defun setBlockElement (Block* block, void* element, void(*delete)(void*), int index) @arrow{} void
+Replaces the @code{index} element in @code{block}.  Before
+replacement, @code{delete} is called on the element being replaced.
+@end defun
+
+@defun findInBlock (Block* block, CString key, CString(*getKey)(const void*), int* index) @arrow{} void*
+Returns the element in @code{block} having key @code{key}, if it
+exists.  If it is not found, @code{null} is returned.  Uses linear search.
+@end defun
+
+@defun findInSortedBlock (Block* block, CString key, CString(*getKey)(const void*), int(*compare)(CString, CString), int* index) @arrow{} void*
+Returns the element in @code{block} having key @code{key}, if it
+exists.  If it is not found, @code{null} is returned.  Uses binary search.
+@end defun
+
+@defun isInBlock (Block* block, CString key, CString(*getKey)(const void*), int* index) @arrow{} bool
+If key @code{key} is found in Block @code{block}, returns @code{true}
+and sets @code{index} to its index.
+Uses linear search.
+@end defun
+
+@defun isInSortedBlock (Block*, CString, CString(*g)(const void*), int(*c)(CString, CString), int*) @arrow{} bool
+If key @code{key} is found in Block @code{block}, returns @code{true}
+and sets @code{index} to its index.
+Uses binary search.
+@end defun
+
+@defun prependToBlock (Block* block, const void* element) @arrow{} void
+Prepends a new element @code{element} to the front of Block @code{block}'s elements.
+@end defun
+
+@defun appendToBlock (Block* block, const void* element) @arrow{} void
+Appeds a new element @code{element} to the end of Block @code{block}'s elements.
+@end defun
+
+@defun insertInBlock (Block* block, const void* element, int index) @arrow{} void
+Inserts an element @code{element} into a Block @code{block} at index
+@code{index}.  Elements from the given location to the end are shifted
+downward.  The Block @code{block} is grown if necessary to accommodate
+the new element.
+@end defun
+
+@defun removeFromBlock (Block* block, int index, void(*delete)(void*)) @arrow{} bool
+Removes the element at location @code{index} from @code{block}.
+Subsequence elements are moved up.  If @code{block} is @code{null} or
+@code{index} is out of range, then @code{false} is returned.
+Otherwise, @code{true} is returned.
+@end defun
+
+@defun removeFromSortedBlock (Block* block, CString key, CString(*getKey)(const void* a), int(*compare)(CString, CString), void(*delete)(void*)) @arrow{} bool
+Removes an element with key @code{key} from Block @code{block}.  Uses
+binary search to find the element and then uses @code{removeFromBlock}
+to remove it.
+@end defun
+
+@defun removeFromUnsortedBlock (Block*, CString, CString(*g)(const void* a), void(*d)(void*)) @arrow{} bool
+Removes an element with key @code{key} from Block @code{block}.  Uses
+linear search to find the element and then uses @code{removeFromBlock}
+to remove it.
+@end defun
+
+@defun removeFirstBlockElement (Block* block, void(*delete)(void*)) @arrow{} bool
+Removes the first element from @code{block}.
+@end defun
+
+@defun removeLastBlockElement (Block* block, void(*delete)(void*)) @arrow{} bool
+Removes the last element from @code{block}.
+@end defun
+
+@defun sortBlock (Block* block, CString(*getKey)(const void*), int(*compare)(CString, CString)) @arrow{} void
+Sorts the elements in @code{block}.
+@end defun
+
+@defun isSorted (Block* block, CString(*getKey)(const void*), int(*compare)(CString, CString)) @arrow{} bool
+Returns @code{true} if Block @code{block} is currently in sorted order.
+@end defun
+
+@defun getFromBlock (Block* block, int index) @arrow{} void*
+Returns the Block @code{block} element at index @code{index}.
+It is @b{NOT} removed from @code{block}.
+@end defun
+
+@defun getFirstBlockElement (Block*) @arrow{} void*
+Returns the first element in Block @code{block}.
+It is @b{NOT} removed from @code{block}.
+@end defun
+
+@defun getLastBlockElement (Block*) @arrow{} void*
+Returns the last element in Block @code{block}.
+It is @b{NOT} removed from @code{block}.
+@end defun
+
+@defun uniqueBlock (Block* block, CString(*getKey)(const void*), void(*delete)(void*)) @arrow{} void
+Removes elements with duplicate keys from @code{block}.  The Block
+@code{block} must be ordered so that all elements with the same key
+are grouped together.
+@end defun
+
+@defun copyBlock (Block* block, void*(*copy)(void*)) @arrow{} Block*
+Creates and returns a copy of @code{block}.
+@end defun
+
+@defun iterateBlock (Block* block, void(*perform)(void*)) @arrow{} void
+Iterates over the elements of @code{block} performing an action
+@code{perform} on each one.
+@end defun
+
+@defun searchBlock (Block* block, CString key, CString(*getKey)(const void*), int* index) @arrow{} void*
+Searches an unsorted Block @code{block} for an element having key
+@code{key}.  If found, it is returned and @code{index} is set to its
+location.  Otherwise, @code{null} is returned and @code{index} is set
+to @code{-1}.  Uses linear search.
+@end defun
+
+@defun searchSortedBlock (Block* block, CString key, CString(*g)(const void*), int(*c)(CString, CString), int*) @arrow{} void*
+Searches an unsorted Block @code{block} for an element having key
+@code{key}.  If found, it is returned and @code{index} is set to its
+location.  Otherwise, @code{null} is returned and @code{index} is set
+to @code{-1}.  Uses binary search.
 @end defun

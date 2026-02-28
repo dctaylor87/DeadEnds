@@ -1,68 +1,4 @@
-@section builtintable.h
-
-There are over 170 functions having names that start with @code{__},
-that return a @code{PValue} and have an argument list of @code{(PNode*,
-Context*, bool*)} that are declared in this file.
-
-They are, at the time of this writing, defined in the files
-@code{builtinlist.c}, @code{builtin.c}, @code{builtintable.c},
-@code{extra.c}, @code{intrpevent.c}, @code{intrpfamily.c},
-@code{intrpgnode.c}, @code{intrpmath.c}, @code{intrpperson.c},
-@code{intrpseq.c}, @code{intrpstring.c}, and @code{rassa.c}.
-
-The functions starting with @code{__} implement the DeadEnds script
-functions.  To get the name of the script function that it implements,
-remove the @code{__} at the start of the name.  In a handful of cases,
-a script function has an alias.  If you do not find the implementation
-of a script function after adding @code{__} to the start of its name,
-then check the mapping in @code{functable.c}.
-
-That said, an application will typically @b{NOT} call any of these
-functions directly, but instead call them indirectly through the
-script interpreter.
-
-@section context.h
-
-@defun createContext (Program*, Database*, File*) @arrow{} Context*
-Creates a @code{Context} structure.
-
-Usually not called directly by applications as @code{runProgram} calls
-it to create a @code{Context*} for executing the script.
-@end defun
-
-@defun deleteContext (Context*) @arrow{} void
-Deletes a @code{Context} structure.
-
-Like @code{createContext}, not usually called directly by applications
-as @code{runProgram} calls it after the script finishes executing.
-@end defun
-
-@defun createProgram (void) @arrow{} Program*
-Creates a @code{Program} structure.  @b{NOTE}: Not usually called
-directly as it creates an empty @code{Program*} structure.  Instead,
-use @code{parseProgram} to call @code{createProgram} and initialize
-the fields based on the files that were parsed.
-@end defun
-
-@defun deleteProgram (Program*) @arrow{} void
-Deletes a @code{Program} structure.
-
-@b{NOTE}: Not deleted by @code{runProgram} and friends as that allows
-the same script to be run against multiple databases without having to
-reparse the script.  When the script will no longer be executed, the
-application should call @code{deleteProgram}.
-@end defun
-
-@defun validateCalls (FunctionTable* procedures, FunctionTable* functions) @arrow{} void
-Checks that the @code{procedures} and @code{functions} to be called by
-a program are defined.
-
-Called by @code{parseProgram} after the script has been parsed.
-
-Applications do not normally need tro call it directly.
-@end defun
-
-@section interp.h
+@subsection interp.h
 
 @defun initializeInterpreter (Database*) @arrow{} void
 Currently sets @code{Perrors} to zero; does nothing else.
@@ -110,13 +46,173 @@ A boolean, @code{true} when a script is running, @code{false}
 otherwise.
 @end deftypevar
 
-@subsection Debugging
+@section Internal Functions
 
-@deftypevar bool programDebugging
-When @code{true} some debugging information is printed.
-@end deftypevar
+The following sections describe functions that are generally only
+needed within other Interpreter or Parser library files and not by
+applications.
 
-@section pnode.h
+@subsection builtintable.h
+
+There are over 170 functions having names that start with @code{__},
+that return a @code{PValue} and have an argument list of @code{(PNode*,
+Context*, bool*)} that are declared in this file.
+
+They are, at the time of this writing, defined in the files
+@code{builtinlist.c}, @code{builtin.c}, @code{builtintable.c},
+@code{extra.c}, @code{intrpevent.c}, @code{intrpfamily.c},
+@code{intrpgnode.c}, @code{intrpmath.c}, @code{intrpperson.c},
+@code{intrpseq.c}, @code{intrpstring.c}, and @code{rassa.c}.
+
+The functions starting with @code{__} implement the DeadEnds script
+functions.  To get the name of the script function that it implements,
+remove the @code{__} at the start of the name.  In a handful of cases,
+a script function has an alias.  If you do not find the implementation
+of a script function after adding @code{__} to the start of its name,
+then check the mapping in @code{functable.c}.
+
+That said, an application will typically @b{NOT} call any of these
+functions directly, but instead call them indirectly through the
+script interpreter.
+
+@subsection context.h
+
+@defun createContext (Program*, Database*, File*) @arrow{} Context*
+Creates a @code{Context} structure.
+
+Usually not called directly by applications as @code{runProgram} calls
+it to create a @code{Context*} for executing the script.
+@end defun
+
+@defun deleteContext (Context*) @arrow{} void
+Deletes a @code{Context} structure.
+
+Like @code{createContext}, not usually called directly by applications
+as @code{runProgram} calls it after the script finishes executing.
+@end defun
+
+@defun createProgram (void) @arrow{} Program*
+Creates a @code{Program} structure.  @b{NOTE}: Not usually called
+directly as it creates an empty @code{Program*} structure.  Instead,
+use @code{parseProgram} to call @code{createProgram} and initialize
+the fields based on the files that were parsed.
+@end defun
+
+@defun deleteProgram (Program*) @arrow{} void
+Deletes a @code{Program} structure.
+
+@b{NOTE}: Not deleted by @code{runProgram} and friends as that allows
+the same script to be run against multiple databases without having to
+reparse the script.  When the script will no longer be executed, the
+application should call @code{deleteProgram}.
+@end defun
+
+@defun validateCalls (FunctionTable* procedures, FunctionTable* functions) @arrow{} void
+Checks that the @code{procedures} and @code{functions} to be called by
+a program are defined.
+
+Called by @code{parseProgram} after the script has been parsed.
+
+Applications do not normally need tro call it directly.
+@end defun
+
+@subsection evaluate.h / evaluate.h
+
+@defun evaluate (PNode*, Context*, bool*) @arrow{} PValue
+Generic evaluator.
+@end defun
+
+@defun evaluateIdent (PNode*, Context*) @arrow{} PValue
+Evaluate an identifier.
+@end defun
+
+@defun evaluateBuiltin (PNode*, Context*, bool*) @arrow{} PValue
+Evaluate a built-in.
+@end defun
+
+@defun evaluateUserFunc (PNode*, Context*, bool*) @arrow{} PValue
+Evaluate a user function.
+@end defun
+
+@defun evaluatePerson (PNode*, Context*, bool*) @arrow{} GNode*
+Evaluate and return a person.
+@end defun
+
+@defun evaluateFamily (PNode*, Context*, bool*) @arrow{} GNode*
+Evaluate and return a family.
+@end defun
+
+@defun evaluateBoolean (PNode*, Context*, bool*) @arrow{} PValue
+Evaluate a boolean expression.
+@end defun
+
+@defun evaluateInteger (PNode*, Context*, bool*) @arrow{} int
+Evaluate an integer expression.
+@end defun
+
+@defun evaluateString (PNode*, Context*, bool*) @arrow{} String
+Evaluate a string expression.
+@end defun
+
+@subsection frame.h / frame.c
+
+@defun createFrame (PNode* pnode, PNode* routine, SymbolTable* table, Frame* caller) @arrow{} Frame*
+Creates a new frame for the run time stack.
+
+Called by @code{interpProcCall} and @code{evaluateUserFunc}.
+
+Parameters:
+@itemize
+@item @code{pnode}: `PNProcCall` node in the calling function.
+@item @code{routine}: `PNProcDef` node of the called function.
+@item @code{table}: `SymbolTable` for the called function.
+@item @code{caller}: `Frame` of the calling function.
+@end itemize
+@end defun
+
+@defun deleteFrame (Frame*) @arrow{} void
+Deletes a Frame.  Called by @code{interpProcCall} and @code{evaluateUserFunc}.
+@end defun
+
+@defun showFrame (Frame* frame) @arrow{} void
+Shows a Fame of the run time stack.
+@end defun
+
+@subsection interp.h / interp.c
+
+@defun interpret (PNode*, Context*, PValue*) @arrow{} InterpType
+Invoked by @code{interpScript}.
+@end defun
+
+@defun interpScript (Context*, File*) @arrow{} InterpType
+Library internal.
+@end defun
+
+@defun interpChildren (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpSpouses (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpFamilies (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpFathers (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpMothers (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpParents (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpFornotes (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpForindi (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpForfam (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpForsour (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpForeven (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpForothr (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpretSequenceLoop (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpForList (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpIfStatement (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpWhileStatement (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpProcCall (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interpTraverse (PNode*, Context*, PValue*) @arrow{} InterpType
+@defunx interp_fornodes (PNode*, Context*, PValue*) @arrow{} InterpType
+These routines are library internal.  They are only meant to be called
+from within the @code{Interp} library.  They might be documented in
+the future.
+@end defun
+
+@subsection pnode.h
 
 @defun procCallPNode (String, PNode*) @arrow{} PNode*
 Creates a user-defined proc call node.
@@ -257,13 +353,60 @@ Creates a parents loop node.
 Frees the program nodes rooted at the given program node.
 @end defun
 
-@subsection Debugging
+@subsection pvaluelist.h
 
-@defun showPNode (PNode*) @arrow{} void 
-Shows a PNode on stdout.
+@defun createPValueList (void) @arrow{} PValueList*
+Creates a PValueList.  Called by the script @code{list} function.
 @end defun
 
-@section pvalue.h
+@defun deletePValueList (PValueList*) @arrow{} void
+Deletes a PValueList.  No callers.
+@end defun
+
+@subsection pvaluetable.h
+
+@defun createPValueTable (void) @arrow{} PValueTable*
+Creates and returns a PValueTable.  Called by the script @code{table} function.
+@end defun
+
+@defun insertInPValueTable (PValueTable*, String key, PValue pvalue) @arrow{} void
+Adds a new (@code{key}, @code{pvalue}) element to a program value table.
+Called by the script @code{insert} function.
+@end defun
+
+@defun getValueOfPValueElement (PValueTable*, String key) @arrow{} PValue
+Gets the PValue mapped to by the @code{key} from PValueTable.
+Called by the script @code{lookup} function.
+@end defun
+
+@subsection symboltable.h
+
+@defun createSymbolTable (void) @arrow{} SymbolTable*
+Creates a SymbolTable.
+@end defun
+
+@defun deleteSymbolTable (SymbolTable*) @arrow{} void
+Deletes a SymbolTable.
+@end defun
+
+@defun assignValueToSymbol (Context* context, CString ident, PValue pvalue) @arrow{} void
+Assigns a PValue to a Symbol in a Context. If the Symbol isn't in the
+current Frame's table, check the global table.
+@end defun
+
+@defun assignValueToSymbolTable (SymbolTable* table, CString ident, PValue pvalue) @arrow{} void
+Assigns a value to a Symbol.
+@end defun
+
+@defun getValueOfSymbol (Context* context, CString ident) @arrow{} PValue
+Gets the value of a symbol from a Context; the PValue is returned on the stack.
+@end defun
+
+@defun getValueFromSymbolTable (SymbolTable* table, CString ident) @arrow{} PValue
+Gets the value of a Symbol from a SymbolTable; PValue is returned on stack.
+@end defun
+
+@subsection pvalue.h
 
 @deftypevar int Perrors
 Counts the errors encountered while parsing the program.  For the
@@ -353,7 +496,7 @@ returns it.  For other @code{PValue}s, it returns zero.
 Checks if a PValue has numeric type.
 @end defun
 
-@defun* allocPValue (PVType type, VUnion value) @arrow{} PValue
+@defun allocPValue (PVType type, VUnion value) @arrow{} PValue*
 Allocates a @code{PValue} in the heap.
 @code{PValue}s are usually value types, but when stored in tables or
 lists they must be in the heap.
@@ -369,61 +512,3 @@ Increments the reference count for those @code{PValue}s which are countable.
 
 @defun releasePValue (PValue *pvalue) @arrow{} void
 @end defun
-
-@section pvaluelist.h
-
-@defun createPValueList (void) @arrow{} PValueList*
-Creates a PValueList.
-@end defun
-
-@defun deletePValueList (PValueList*) @arrow{} void
-Deletes a PValueList.
-@end defun
-
-@section pvaluetable.h
-
-@defun createPValueTable (void) @arrow{} PValueTable*
-Creates and returns a PValueTable.
-@end defun
-
-@defun insertInPValueTable (PValueTable*, String key, PValue pvalue) @arrow{} void
-Adds a new (@code{key}, @code{pvalue}) element to a program value table.
-@end defun
-
-@defun getValueOfPValueElement (PValueTable*, String key) @arrow{} PValue
-Gets the PValue mapped to by the @code{key} from PValueTable.
-@end defun
-
-@section symboltable.h
-
-@defun createSymbolTable (void) @arrow{} SymbolTable*
-Creates a SymbolTable.
-@end defun
-
-@defun deleteSymbolTable (SymbolTable*) @arrow{} void
-Deletes a SymbolTable.
-@end defun
-
-@defun assignValueToSymbol (Context* context, CString ident, PValue pvalue) @arrow{} void
-Assigns a PValue to a Symbol in a Context. If the Symbol isn't in the
-current Frame's table, check the global table.
-@end defun
-
-@defun assignValueToSymbolTable (SymbolTable* table, CString ident, PValue pvalue) @arrow{} void
-Assigns a value to a Symbol.
-@end defun
-
-@defun getValueOfSymbol (Context* context, CString ident) @arrow{} PValue
-Gets the value of a symbol from a Context; the PValue is returned on the stack.
-@end defun
-
-@defun getValueFromSymbolTable (SymbolTable* table, CString ident) @arrow{} PValue
-Gets the value of a Symbol from a SymbolTable; PValue is returned on stack.
-@end defun
-
-@subsection Debugging
-
-@defun showSymbolTable (SymbolTable* table) @arrow{} void
-Shows the contents of a SymbolTalbe on stdout.
-@end defun
-

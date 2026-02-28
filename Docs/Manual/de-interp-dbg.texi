@@ -1,0 +1,23 @@
+@subsection interp.h
+
+@deftypevar bool programDebugging
+When @code{true} some debugging information is printed.
+@end deftypevar
+
+@c @subsection builtintable.h
+@c @subsection context.h
+@subsection pnode.h
+
+@defun showPNode (PNode*) @arrow{} void 
+Shows a PNode on stdout.
+@end defun
+
+@c @subsubsection pvaluelist.h
+@c @subsubsection pvaluetable.h
+@c @subsubsection symboltable.h
+
+@subsection pvalue.h
+
+@defun showSymbolTable (SymbolTable* table) @arrow{} void
+Shows the contents of a SymbolTalbe on stdout.
+@end defun

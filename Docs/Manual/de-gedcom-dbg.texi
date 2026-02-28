@@ -1,0 +1,77 @@
+@c @subsection date.h
+@c @subsection gedcom.h
+@subsection gedpath.h
+
+@defun showGedPath (GedPath*) @arrow{} void
+Show a GedPath on stdout.
+@end defun
+
+@defun showGNodePath (GNode*, int level) @arrow{} int
+Shows the path from root to node.  Prints, on stdout, the path from
+the root of a GNode tree to a given node in the tree.  Intended for
+debugging the GedPath feature.
+@end defun
+
+@subsection gnode.h
+
+@defun numGNodeAllocs (void) @arrow{} int
+Returns the number of GNodes that have been allocated.
+@end defun
+
+@defun numGNodeFrees (void) @arrow{} int
+Returns the number of GNodes that have been freed.
+@end defun
+
+@defun showGNodeTree (GNode*) @arrow{} void
+Shows a tree of GNodes.
+@end defun
+
+@defun showGNodes (int, GNode*) @arrow{} void
+Prints a GNode tree recursively.
+@end defun
+
+@defun showGNode (int level, GNode*) @arrow{} void
+Prints the string (GEDCOM line) form of a GNode to stdout.
+@end defun
+
+@subsection gnodeindex.h
+
+@defun showGNodeIndex (GNodeIndex*, void(*show)(void*)) @arrow{} void
+Shows a GNodeIndex.
+@end defun
+
+@c @subsection gnodelist.h
+
+@c @defun showGNodeList (GNodeList* nodeList) @arrow{} void
+@c @end defun
+
+@c @subsection key.h
+@c @subsection lineage.h
+@c @subsection name.h
+@c @subsection nameindex.h
+
+@defun showNameIndex (NameIndex* index) @arrow{} void
+Writes the @code{index} entries to @code{stdout}
+@end defun
+
+@defun showNameIndexStats (NameIndex*) @arrow{} void
+For testing and debugging.  Shows the statistics of a NameIndex on @code{stderr}.
+@end defun
+
+@defun getNameIndexStats (NameIndex*, int*, int*) @arrow{} void
+For testing and debugging.  Returns statistics about the NameIndex.
+@end defun
+
+@c @subsection nodeutils.h
+@c @subsection place.h
+@c @subsection readnode.h
+@c @subsection refns.h
+@subsection rootlist.h
+
+@defun showRootList (RootList*) @arrow{} void
+Shows on stdout the root GNodes of the trees in the RootList.
+@end defun
+
+@c @subsection seqlineage.h
+@c @subsection splitjoin.h
+@c @subsection writenode.h

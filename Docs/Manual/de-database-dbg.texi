@@ -1,0 +1,14 @@
+@c @subsection import.h / import.c
+@c @subsection keylist.h / DoNotExist
+@subsection refnindex.h
+@defun showRefnIndex (RefnIndex*) @arrow{} void
+Shows a RefnIndex.
+@end defun
+
+@c @subsection database.h / database.c
+@c @subsection database.h / DoNotExist
+
+@subsection recordindex.h
+@defun showRecordIndex (RecordIndex*) @arrow{} void
+Shows the contents of a RecordIndex on stdout.
+@end defun

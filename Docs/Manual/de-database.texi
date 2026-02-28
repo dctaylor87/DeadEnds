@@ -1,17 +1,30 @@
-@section import.h / import.c
+@subsection import.h / import.c
 
 @defun getDatabaseFromFile (CString path, int vcodes, ErrorLog* errlog) @arrow{} Database*
 Reads the @code{GEDCOM} file found in @code{path}, creates a database
 and returns it.  If errors occur, null is returned and the errors are
 logged in @code{errlog}.
+
+Most applications will use this to create a database from a
+@code{GEDCOM} file.  Currently the @code{vcodes} argument is unused.
+Zero should be supplied for backwards compatibility with future
+changes.
 @end defun
 
 @defun getRecordListFromFile (CString path, IntegerTable* keymap, ErrorLog* elog) @arrow{} RootList*
 This is used by the @acronym{GEDCOM} import code and when editing a
 database, whether to modify existing records or to add new records.
+
+This is useful for specialized applications, for example, to find the
+partitions within a @code{GEDCOM} file or to rekey a @code{GEDCOM}
+file.  It is also useful when reading an edited record or if the
+application wishes to have a specialized version of creating a database.
 @end defun
 
-@section keylist.h / DoNotExist
+@subsection keylist.h / DoNotExist
+
+The functions declared in this header file do not exist.  Eiher the
+functions should be implemented or the header file should be deleted.
 
 @defun createKeyList (Database*) @arrow{} KeyList*
 Create a KeyList with its compare and getkey functions.
@@ -21,7 +34,7 @@ Create a KeyList with its compare and getkey functions.
 Insert a key into a KeyList.
 @end defun
 
-@section refnindex.h
+@subsection refnindex.h
 
 @defun addToRefnIndex (RefnIndex* index, CString refn, CString key) @arrow{} bool
 Adds the REFN @code{refn} present in the record having key @code{key} into 
@@ -33,31 +46,50 @@ Searches RefnIndex @code{index} for REFN @code{refn}.  If found, it
 returns its key, otherwise it returns null.
 @end defun
 
+@section Internal Functions
+
 @defun createRefnIndexEl (CString refn, CString key) @arrow{} RefnIndexEl*
 Creates a new reference index entry.
+
+A @code{RefnIndexEl} is a structure containing the @code{refn} and the
+@code{key}.  One is created by @code{addRefnToIndex}.  Applications
+should never need to call this function directly.
 @end defun
 
 @defun createRefnIndex (void) @arrow{} RefnIndex*
 Creates a RefnIndex.
+
+Called by @code{getReferenceIndex}.  Generally applications do not
+need to call this directly.
 @end defun
 
 @defun deleteRefnIndex (RefnIndex*) @arrow{} void
 Deletes a RefnIndex.
+
+Called by @code{deleteDatabase}.  Generally applications do not need
+to call this directly.
 @end defun
 
 @defun getReferenceIndex (RecordIndex* index, CString fname, IntegerTable* keymap, ErrorLog* elog) @arrow{}  RefnIndex*
 Creates a reference index from the records in a Database.  It checks
 that REFN values are defined once.
+
+Called by @code{createDatabase} as part of creating a database and
+populates it with @code{REFN} values found in the @code{index}.
+
+Generally applications do not need to call this directly.
 @end defun
 
-@subsection Debugging
-@defun showRefnIndex (RefnIndex*) @arrow{} void
-Shows a RefnIndex.
-@end defun
-
-@section database.h / database.c
+@subsection database.h / database.c
 
 @deftypevar Database* currentDatabase
+The current database.
+
+It is intended that eventually the Lifelines port to DeadEnds will
+support multiple concurrent databases.
+
+At any time there might be multiple in memory, but one will be the
+default for use when a database is not otherwise explicitly specified.
 @end deftypevar
 
 @defun createDatabase (CString fileName, RootList*, IntegerTable*, ErrorLog*) @arrow{} Database*
@@ -109,7 +141,7 @@ Add a record to the database.
 Writes the contents of a Database to a Gedcom file.
 @end defun
 
-@section database.h / DoNotExist
+@subsection database.h / DoNotExist
 
 @defun databaseIsDirty (Database* database) @arrow{} bool
 Returns true if the database is dirty;  false if the database is clean.
@@ -135,10 +167,10 @@ Return a key's record
 Indexes all person names in a database.
 @end defun
 
-@defun getCount (void) @arrow{} int
-@end defun
+@c @defun getCount (void) @arrow{} int
+@c @end defun
 
-@section recordindex.h
+@subsection recordindex.h
 
 @defun addToRecordIndex (RecordIndex*, GNode* root) @arrow{} void
 Adds a GNode record tree to a RecordIndex.
@@ -157,22 +189,27 @@ If it is zero before we decrement, we ABORT.
 @defun createRecordIndex (void) @arrow{} RecordIndex*
 Creates a RecordIndex. The delete function is null to prevent the
 trees themselves from being deleted.
+
+Called by @code{createDatabase}.  Normally applications do not need to
+call this directly.
 @end defun
 
 @defun deleteRecordIndex (RecordIndex*) @arrow{} void
 Deletes a RecordIndex.
+
+Called by @code{deleteDatabase}.  Normally applications do not need to
+call this directly.
 @end defun
 
 @defun searchRecordIndex (RecordIndex*, CString) @arrow{} GNode*
 Searches a RecordIndex by key and returns the associated GNode tree.
 @end defun
 
-@defun showRecordIndex (RecordIndex*) @arrow{} void
-For debgugging.  Shows the contents of a RecordIndex on stdout.
-@end defun
-
 @defmac FORRECORDINDEX (table, gnode, type)
-Iterates a RecordIndex returning only GNode*s of a specific type.
-@end defmac
-@defmac ENDRECORDINDEX
+@defmacx ENDRECORDINDEX
+Iterates a RecordIndex @code{table} returning only GNode*s
+@code{gnode} of a specific type @code{type}.
+
+These come as a pair.  The iteration starts with the
+@code{FORRECORDINDEX} and ends with the @code{ENDRECORDINDEX}.
 @end defmac
