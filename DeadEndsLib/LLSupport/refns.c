@@ -7,7 +7,6 @@
 #include <ansidecl.h>
 #include <stdint.h>
 
-#include "porting.h"
 #include "standard.h"
 #include "denls.h"
 
@@ -18,15 +17,9 @@
 #include "refnindex.h"
 #include "gnode.h"
 #include "database.h"
-#include "zstr.h"
-#include "rfmt.h"
-#include "gstrings.h"
 #include "gedcom.h"
 
 #include "refns.h"
-#include "locales.h"
-#include "lloptions.h"
-#include "xref.h"
 
 /* addRefn -- if refn is already present in the refn index,
                   if it maps to key, returns true
@@ -156,7 +149,7 @@ refn_to_record (String ukey,    /* user refn key */
   if (! key)
     return NULL;
 
-  return nztop (getRecord (key, database->recordIndex));
+  return (getRecord (key, database->recordIndex));
 }
 
 /* getRefn -- searches the index for a mapping for refn, if found, returns it.
