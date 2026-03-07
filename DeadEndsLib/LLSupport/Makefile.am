@@ -3,6 +3,8 @@
 
 # Makefile for the DeadEnds LLSupport library
 
+# OLD: datei.c, equaliso.c, ll-database.c, xreffile.c
+
 noinst_LIBRARIES = libllsupport.a
 
 libllsupport_a_SOURCES = \
@@ -30,7 +32,6 @@ libllsupport_a_SOURCES = \
 	locales.c \
 	norm_charmap.c \
 	proptbls.c \
-	refns.c \
 	remove.c \
 	replace.c \
 	rptui.c \
