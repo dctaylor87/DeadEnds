@@ -57,7 +57,7 @@ Database* getDatabaseFromFile(CString path, ErrorLog* errlog) {
 	}
 	if (! records) {
 	  Error *error = createError (systemError, path, 0,
-				      "getRecordListFromFile return null without creating an error entry");
+				      "getRecordListFromFile returned null without creating an error entry");
 	  addErrorToLog (errlog, error);
 	  deleteHashTable (keymap);
 	  return null;
