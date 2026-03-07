@@ -45,7 +45,7 @@ static CString recordTypeStrings[] = {
 // strRecordType returns a RecordType as a string
 CString strRecordType (RecordType type) {
   if ((type < 0) || (type > GRTrailer))
-    return "UNKNOWN RecordType;
+    return "UNKNOWN RecordType";
 
   return recordTypeStrings[type];
 }
