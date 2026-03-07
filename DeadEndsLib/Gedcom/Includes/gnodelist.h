@@ -37,6 +37,5 @@ GNodeList* getGNodeListFromFile(File*, IntegerTable*, ErrorLog*);
 GNodeList* getGNodeListFromString(String, ErrorLog*);
 GNodeList* getGNodeTreesFromString(String, String, ErrorLog* errorLog);
 void appendToGNodeList(GNodeList*, GNode*, int);
-void showGNodeList(GNodeList* nodeList); // Debugging.
 
 #endif // gnodelist_h
