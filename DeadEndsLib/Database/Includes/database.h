@@ -103,8 +103,6 @@ extern GNode *keyToOtherRecord(CString Key, Database*);
 bool storeRecord(Database*, GNode*); // Add a record to the database.
 void summarizeDatabase(Database*);
 
-extern int getCount(void);
-
 String generateFamilyKey(Database*);
 String generatePersonKey(Database*);
 
