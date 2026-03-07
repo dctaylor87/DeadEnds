@@ -310,7 +310,7 @@ Write family node tree into GEDCOM
 @end itemize
 @end defun
 
-#@subsection editing.h / newrecs.c
+@subsection editing.h / newrecs.c
 
 @defun write_node_to_editfile (GNode*) @arrow{} void
 @end defun
@@ -546,13 +546,15 @@ Returns a sequence of all records of type @code{type}.
 @subsection llgettext.h 
 @subsection lloptions.h
 
-Handling for (opaque) string & numeric options.
-Options are fetched on-the-fly when requested.
-First from report properties (if getdeoptstr_rpt or getoptint_rpt),
-then from db properties
-then from global properties
-then from fallback properties.
-
+Functions for handling for (opaque) string & numeric options.
+Options are fetched on-the-fly when requested, in the following order:
+@itemize
+@item First from report properties (if getdeoptstr_rpt or getoptint_rpt),
+@item then from db properties
+@item then from global properties
+@item then from fallback properties.
+@end itemize
+3
 @subsubsection Initialization & Termination
 
 @defun get_db_options (HashTable *opts) @arrow{} void
@@ -651,7 +653,7 @@ Currently nothing sets any report specific options.
 Called by DE script function @code{getproperty}.  Searches a report
 specific option list (by calling @code{getdeoptstr_rpt}) and if that
 fails, then searches the standard option lists (by calling
-@#code{getdeoptstr}).
+@code{getdeoptstr}).
 
 Unless you are extending an existing scripting language or are adding
 a new one, you probably don't need to call this.
@@ -660,6 +662,69 @@ a new one, you probably don't need to call this.
 @subsection locales.h 
 @subsection norm_charmap.h 
 @subsection options.h 
+
+Declarations of variables that are accessed by various functions in
+the @file{LLSupport} and @file{Lifelines} directories.
+
+The curses code uses the following three variables:
+
+@deftypevar int winx
+Screen size in columns.
+@end deftypevar
+
+@deftypevar int winy
+Screen size, in rows.
+@end deftypevar
+
+@deftypevar bool graphical
+Whether curses should use graphical characters, if the terminal
+supports it, to draw boxes.
+@end deftypevar
+
+@deftypevar bool debugmode;		/* no signal handling, so we can get coredump */
+@end deftypevar
+
+@deftypevar bool keyflag;		/* show key values */
+@end deftypevar
+@deftypevar bool traditional;	/* use traditional family rules */
+@end deftypevar
+
+@deftypevar List *exprogs
+List of registered LifeLines scripts.
+@end deftypevar
+@deftypevar StringTable *exargs
+HashTable of options specified on the command line.
+@end deftypevar
+@deftypevar String progout
+@end deftypevar
+@deftypevar String configfile
+@end deftypevar
+
+@deftypevar String ImportLog
+If errors occur during an import, they are written to this file (in
+addition to anywhere else they might be written -- such as the
+screen).
+@end deftypevar
+
+@deftypevar bool python_interactive
+Are we supposed to invoke the interactive Python interpreter?
+@end deftypevar
+
+@deftypevar bool have_python_scripts
+Have any Pythgon scripts been registered?
+@end deftypevar
+
+//extern CString usageSummary;
+@deftypevar CString optString
+Command line option string for @code{parseArguments} to pass to
+@code{getopt}.  The function @code{parseArguments} knows all the
+arguments of both @code{llines} and @code{llexec}.  Each sets
+@optString} to the arguments that it understands.
+@end deftypevar
+
+@deftypevar int alldone		/* completion flag */
+@end deftypevar
+
 @subsection proptbls.h 
 
 @subsection remove.h
