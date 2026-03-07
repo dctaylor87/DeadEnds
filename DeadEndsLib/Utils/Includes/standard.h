@@ -33,10 +33,8 @@ typedef enum { Letter = 300, Digit, White, Other } CharType;
 extern String strconcat(String s1, String s2);
 String strsave(CString);  // Save String in heap.
 String strnsave(CString, int);  // Save String prefix in heap.
-bool iswhite(int);       // Is character white space?
 bool allwhite(String);   // Is String all white space?
 void striptrail(String);  // Strip trailing white space.
-int chartype(int);      // Return type of a character.
 void alloc_out(String); // standard.c
 CharType characterType(int);  // standard.c
 String lower(String);  // Convert a string to lower case.
