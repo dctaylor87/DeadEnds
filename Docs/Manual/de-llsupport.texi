@@ -719,7 +719,7 @@ Have any Pythgon scripts been registered?
 Command line option string for @code{parseArguments} to pass to
 @code{getopt}.  The function @code{parseArguments} knows all the
 arguments of both @code{llines} and @code{llexec}.  Each sets
-@optString} to the arguments that it understands.
+@code{optString} to the arguments that it understands.
 @end deftypevar
 
 @deftypevar int alldone		/* completion flag */

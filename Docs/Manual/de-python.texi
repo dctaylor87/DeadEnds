@@ -86,52 +86,52 @@ node' and @code{retval=1} mean 'all is well, do the next node'.
 
 @subsection python-to-c.h
 
-@defun llpy_database_init (void) @arrow void
+@defun llpy_database_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{database.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_event_init (void) @arrow void
+@defun llpy_event_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{event.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_export_init (void) @arrow void
+@defun llpy_export_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{export.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_iter_init (void) @arrow void
+@defun llpy_iter_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{iter.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_list_init (void) @arrow void
+@defun llpy_list_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{list.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_nodes_init (void) @arrow void
+@defun llpy_nodes_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{nodes.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_person_init (void) @arrow void
+@defun llpy_person_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{person.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_records_init (void) @arrow void
+@defun llpy_records_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{records.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_set_init (void) @arrow void
+@defun llpy_set_init (void) @arrow{} void
 Responsible for any initialization needed by the code in @file{set.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
 
-@defun llpy_user_init (void) @arrow void
+@defun llpy_user_init (void) @arrow{}  void
 Responsible for any initialization needed by the code in @file{user.c}
 Called by @code{PyInit_llines} (which is indirectly called by @code{llpy_init}).
 @end defun
