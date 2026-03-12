@@ -622,49 +622,6 @@ Gedcom lines.  Reads to the next newline, if any, and processes that
 part of the String. Returns updated pointer to next line.
 @end defun
 
-@subsection refns.h
-
-@defun resolveRefnLinks (GNode* node, Database* database) @arrow{} int
-Attempt to resolve the REFN links within node.  When successful,
-replaces <something> with @@something-else@@.  Returns the number of
-unresolved REFN links.
-@end defun
-
-@defun addRefn (CString refn, CString key, Database* database) @arrow{} bool
-If refn is already present in the refn index,
- if it maps to key, returns true
- if it maps to a different key, returns false
- otherwise, add the mapping refn --> key to the index,
- and return true.
-@end defun
-
-@defun removeRefn (CString refn, CString key, Database* database) @arrow{} bool
-Searches the refn index within the database, if not found or it maps
-to a different key, then returns false.  Otherwise, removes it and
-returns true.
-@end defun
-
-@defun getRefn (CString refn, Database* database) @arrow{} CString
-Searches the index for a mapping for @code{refn}, if found, returns it.
-If not found, @code{null} is returned.  */
-@end defun
-
-@defun indexByRefn (GNode* node, Database* database) @arrow{} bool
-Scans all immediate children of node for REFNs.
-For each one found, we add a mapping in the REFN index.
-
-If any already exist with a different key, false (failure) is
-returned indicating one or more failures; otherwise true (success)
-is returned.  All that do not currently exist are added.
-
-NOTE: needs a better name!
-@end defun
-
-@defun annotateWithSupplemental (GNode* node, bool rfmt, Database* database) @arrow{} void
-
-@b{QUESTION:}  Should it copy the tree?
-@end defun
-
 @subsection rootlist.h
 
 @defun createRootList (void) @arrow{} RootList*
