@@ -29,13 +29,26 @@ static bool valid_name (String name);
    'database'.
 
    If validation succeeds, true is returned.  Otherwise, false is
-   returned and the errors are recorded in errorLog.  */
+   returned and the errors are recorded in errorLog.
+
+   This function is to be called when either a record is to be added
+   to the database or an existing record has been edited.
+
+   We want to validate the record against the database before adding /
+   replacing the record.  */
 
 bool validateRecord (GNode *record,
 		     Database *database,
 		     ErrorLog *errorLog)
 {
   bool errorsFound = false;
+
+  /* Traverse the nodes in the record, looking for keys --
+
+     For each key, first check if it points to a record, then check
+     that it points to a record of a known type, that it is the
+     'right' type.  And that a record with that key exists in the
+     corresponding type index.  */
 
   FORTRAVERSE(record, node)
     if (isKey(nval(node)))
@@ -412,6 +425,7 @@ validateNewEvent (GNode *node, ATTRIBUTE_UNUSED GNode *orig,
 #endif
 	return true;
 }
+
 /*======================================
  * validateNewOther -- Validate OTHR tree
  *  node:  [IN]  source to validate
