@@ -25,6 +25,7 @@ LDADD = ../DeadEndsLib/Python/libpyllines.a \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
+	../DeadEndsLib/Services/libservices.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a ../DeadEndsLib/Utils/libutils.a
 
 #	../DeadEndsLib/Utils/libutils.a ../DeadEndsLib/DataTypes/libdatatypes.a
@@ -53,6 +54,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Services/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	$(PYTHON_CPPFLAGS)
 

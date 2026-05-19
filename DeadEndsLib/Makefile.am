@@ -3,4 +3,4 @@
 
 SUBDIRS = Database DataTypes Gedcom Validate Interp Parser
 SUBDIRS+= @PYTHON_DIR@
-SUBDIRS+= Utils Operations UI LLSupport
+SUBDIRS+= Utils Operations UI LLSupport Services

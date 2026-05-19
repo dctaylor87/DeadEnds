@@ -674,6 +674,7 @@ AC_CONFIG_FILES([Makefile \
 	DeadEndsLib/Operations/Makefile \
         DeadEndsLib/Parser/Makefile \
         DeadEndsLib/Python/Makefile \
+        DeadEndsLib/Services/Makefile \
         DeadEndsLib/UI/Makefile \
         DeadEndsLib/Utils/Makefile \
         DeadEndsLib/Validate/Makefile \
