@@ -149,7 +149,7 @@ static CString errorTypeStrings[] = {
   "gedcom",
   "linkage",
   "corruption",
- "usage"
+  "usage"
 };
 
 CString strErrorType (Error *error)
