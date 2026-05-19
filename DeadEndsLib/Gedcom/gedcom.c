@@ -33,11 +33,11 @@ RecordType recordType(GNode* root) {
 
 static CString recordTypeStrings[] = {
   "Unknown",
-  "Person",
-  "Family",
-  "Source",
-  "Event",
-  "Other",
+  "person",
+  "family",
+  "source",
+  "event",
+  "other",
   "Header",
   "Trailer"
 };
