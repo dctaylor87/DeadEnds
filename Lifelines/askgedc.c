@@ -208,7 +208,7 @@ set_gedcom_d0 (HashTable ** fileprops)
 bool
 ask_for_gedcom (CString mode,
                  CString ttl,
-                 String *pfname,
+                 CString *pfname,
                  String path,
                  String ext,
                  bool picklist)

@@ -131,7 +131,7 @@ rptui_ask_for_int (CString ttl, int * prtn)
 	return b;
 }
 FILE *
-rptui_ask_for_output_file (CString mode, CString ttl, String *pfname,
+rptui_ask_for_output_file (CString mode, CString ttl, CString *pfname,
 			   CString path, CString ext)
 {
 	FILE * fp;

@@ -12,7 +12,7 @@ extern int stdio_prompt_stdout (CString prompt);
 extern Sequence *stdio_invoke_search_menu (void);
 extern void stdio_llvwprintf (CString fmt, va_list args);
 extern void stdio_view_array (CString ttl, int no, String *pstrngs);
-extern bool stdio_ask_for_program (CString mode, CString ttl, String *pfname,
+extern bool stdio_ask_for_program (CString mode, CString ttl, CString *pfname,
 				   CString path, CString ext, bool picklist);
 extern int stdio_chooseOneOrListFromSequence (CString ttl, Sequence *seq,
 					      bool multi, enum SequenceType type);

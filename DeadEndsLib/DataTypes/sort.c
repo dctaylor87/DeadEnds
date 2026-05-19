@@ -19,12 +19,12 @@ static int getPivot(int left, int right);
 static int partition(int left, int right, void *pivot);
 
 // State variables used by the sort functions.
-static void** lelements;  // lelements is the array of elements.
+static const void** lelements;  // lelements is the array of elements.
 static CString (*lgetKey)(const void*); // static getKey function.
 static int (*lcompare)(CString, CString); // static compare function.
 
 // sortElements is the external interface for sorting an array of elements.
-void sortElements(void** elements, int length, CString(*getKey)(const void*), int(*compare)(CString, CString))
+void sortElements(const void** elements, int length, CString(*getKey)(const void*), int(*compare)(CString, CString))
 {
 	lelements = elements;
 	lcompare = compare;
@@ -75,7 +75,7 @@ static int getPivot(int left, int right) {
 }
 
 // linearSearch searches a list of elements for the one with a matching key.
-void* linearSearch(void** elements, int length, CString key, CString(*getKey)(const void*), int* index) {
+void* linearSearch(const void** elements, int length, CString key, CString(*getKey)(const void*), int* index) {
 	ASSERT(elements && key && getKey);
 	if (index) *index = 0;
 	if (!elements || !key || !getKey) return null;
@@ -89,7 +89,7 @@ void* linearSearch(void** elements, int length, CString key, CString(*getKey)(co
 }
 
 // binarySearch search a sorted list of elements for an element with given key.
-void* binarySearch(void** elements, int length, CString key, CString(*getKey)(const void*),
+void* binarySearch(const void** elements, int length, CString key, CString(*getKey)(const void*),
 				   int(*compare)(CString, CString), int* index) {
 	ASSERT(elements && key && getKey && compare);
 	if (index) *index = -1;

@@ -72,7 +72,7 @@ struct uiio
   int (*uiio_prompt_stdout) (CString prompt);
   void (*uiio_llvwprintf) (CString fmt, va_list args);
   void (*uiio_view_array) (CString ttl, int no, String *pstrngs);
-  bool (*uiio_ask_for_program) (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist);
+  bool (*uiio_ask_for_program) (CString mode, CString ttl, CString *pfname, CString path, CString ext, bool picklist);
   int (*uiio_chooseOneOrListFromSequence) (CString ttl, Sequence *seq, bool multi, enum SequenceType type);
 };
 

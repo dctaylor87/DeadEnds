@@ -12,7 +12,7 @@ extern int curses_prompt_stdout (CString prompt);
 extern Sequence *curses_invoke_search_menu (void);
 extern void curses_llvwprintf (CString fmt, va_list args);
 extern void curses_view_array (CString ttl, int no, String *pstrngs);
-extern bool curses_ask_for_program (CString mode, CString ttl, String *pfname,
+extern bool curses_ask_for_program (CString mode, CString ttl, CString *pfname,
 				    CString path, CString ext, bool picklist);
 enum SequenceType;		/* forward reference */
 extern int curses_chooseOneOrListFromSequence (CString ttl, Sequence *seq,

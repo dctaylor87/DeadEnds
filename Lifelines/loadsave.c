@@ -109,7 +109,7 @@ void
 load_gedcom (bool picklist, Database *database)
 {
 	String srcdir=NULL;
-	String filename = 0;
+	CString filename = 0;
 	CString fullpath=0;
 	time_t begin = time(NULL);
 	time_t beginui = get_uitime();
@@ -168,7 +168,8 @@ save_gedcom (Database *database)
 {
 	FILE *fp=NULL;
 	//struct tag_export_feedback efeed;
-	String srcdir=NULL, fname=0;
+	String srcdir=NULL;
+	CString fname=0;
 	CString fullpath=0;
 
 	if (! database)

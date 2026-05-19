@@ -121,7 +121,7 @@ Block *copyBlock(Block *block, void*(*copyfunc)(void*)) {
 	Block* copy = createBlock();
 	if (! copy)
 	  fatal ("call to createBlock failed");
-	void** els = block->elements;
+	const void** els = block->elements;
 	for (int i = 0; i < block->length; i++) {
 		appendToBlock(copy, copyfunc(els[i]));
 	}
@@ -142,7 +142,7 @@ void prependToBlock(Block *block, const void *element) {
 void insertInBlock(Block *block, const void *element, int index) {
 	ASSERT(block && element && index >= 0 && index <= block->length);
 	if (block->length >= block->maxLength) growBlock(block);
-	void **elements = block->elements;
+	const void **elements = block->elements;
 	int length = block->length;
 	insertAtIndex(elements, length, element, index);
 	(block->length)++;
@@ -178,7 +178,7 @@ bool removeLastBlockElement(Block *block, void(*delete)(void*)) {
 bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
 	if (blockDebugging) printf("remove from %d\n", index);
 	if (! block || index < 0 || index >= block->length) return false;
-	void **elements = block->elements;
+	const void **elements = block->elements;
 	if (delete) delete(elements[index]);
 	for (; index < block->length - 1; index++)
 		elements[index] = elements[index + 1];
@@ -247,7 +247,7 @@ void fprintfBlock(FILE* file, Block* block, CString(*toString)(void*)) {
 // isSorted returns true if the Block is sorted.
 bool isSorted(Block *block, CString(*getKey)(const void*), int(*compare)(CString, CString)) {
 	if (block->length <= 1) return true;
-	void **elements = block->elements;
+	const void **elements = block->elements;
 	CString key = getKey(elements[0]);
 	for (int i = 1; i < block->length; i++) {
 		CString next = getKey(elements[i]);
@@ -273,7 +273,7 @@ void uniqueBlock(Block* block, CString(*getKey)(const void*), void(*delete)(void
 	ASSERT(block && getKey);
 	int length = block->length;
 	if (! block || !getKey || length <= 0) return;
-	void** elements = block->elements;
+	const void** elements = block->elements;
 	int j = 0;
 	CString key = getKey(elements[0]);
 	for (int i = 1; i < length; i++) {

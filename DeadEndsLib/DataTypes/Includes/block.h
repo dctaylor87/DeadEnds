@@ -17,7 +17,7 @@
 typedef struct Block {
 	int length;
 	int maxLength;
-	void** elements;
+	const void** elements;
 } Block;
 
 Block *createBlock(void);

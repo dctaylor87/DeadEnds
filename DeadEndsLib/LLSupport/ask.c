@@ -182,7 +182,7 @@ typedef enum { INPUT, OUTPUT } DIRECTION;
 static FILE *
 ask_for_file_worker (CString mode,
                      CString ttl,
-                     String *pfname,
+                     CString *pfname,
                      CString path,
                      CString ext,
                      DIRECTION direction)
@@ -263,7 +263,7 @@ make_fname_prompt (String fnamebuf, int len, CString ext)
 FILE *
 ask_for_input_file (CString mode,
                     CString ttl,
-                    String *pfname,
+                    CString *pfname,
                     CString path,
                     CString ext)
 {
@@ -278,7 +278,7 @@ ask_for_input_file (CString mode,
 FILE *
 ask_for_output_file (CString mode,
                      CString ttl,
-                     String *pfname,
+                     CString *pfname,
                      CString path,
                      CString ext)
 {

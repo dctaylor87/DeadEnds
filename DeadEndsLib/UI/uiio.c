@@ -141,7 +141,7 @@ void uiio_view_array(UIIO *uiio, CString ttl, int no, String *pstrngs)
     (*uiio->uiio_view_array)(ttl, no, pstrngs);
 }
 
-bool uiio_ask_for_program(UIIO *uiio, CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist)
+bool uiio_ask_for_program(UIIO *uiio, CString mode, CString ttl, CString *pfname, CString path, CString ext, bool picklist)
 {
   if (uiio->uiio_ask_for_program)
     return (*uiio->uiio_ask_for_program)(mode, ttl, pfname, path, ext, picklist);

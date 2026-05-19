@@ -49,6 +49,6 @@ extern int uiio_chooseFromArray(UIIO *uiio, CString ttl, int no, String *pstrngs
 extern Sequence *uiio_invoke_search_menu(UIIO *uiio);
 extern void uiio_llwprintf();
 extern void uiio_view_array(UIIO *uiio, CString ttl, int no, String *pstrngs);
-extern bool uiio_ask_for_program(UIIO *uiio, CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist);
+extern bool uiio_ask_for_program(UIIO *uiio, CString mode, CString ttl, CString *pfname, CString path, CString ext, bool picklist);
 extern int uiio_chooseOneOrListFromSequence(UIIO *uiio, CString ttl, Sequence *seq, bool multi, enum SequenceType type);
 #endif

@@ -230,7 +230,7 @@ set_programs_d0 (HashTable ** fileprops)
 bool
 curses_ask_for_program (CString mode,
 			CString ttl,
-			String *pfname,
+			CString *pfname,
 			CString path,
 			CString ext,
 			bool picklist)

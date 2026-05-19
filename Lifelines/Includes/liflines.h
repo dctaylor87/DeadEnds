@@ -47,7 +47,7 @@ GNode *chooseFromSequence(Sequence *, ASK1Q ask1, CString titl1, CString titln,
 			  enum SequenceType type);
 
 /* askgedc.c */
-bool ask_for_gedcom(CString mode, CString ttl, String *pfname,
+bool ask_for_gedcom(CString mode, CString ttl, CString *pfname,
 		    String path, String ext, bool picklist);
 
 /* askprogram.c */

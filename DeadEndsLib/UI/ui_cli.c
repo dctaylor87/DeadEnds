@@ -144,7 +144,7 @@ call_system_cmd (CString cmd)
 bool
 stdio_ask_for_program (ATTRIBUTE_UNUSED CString mode,
 		       ATTRIBUTE_UNUSED CString ttl,
-		       ATTRIBUTE_UNUSED String *pfname,
+		       ATTRIBUTE_UNUSED CString *pfname,
 		       ATTRIBUTE_UNUSED CString path,
 		       ATTRIBUTE_UNUSED CString ext,
 		       ATTRIBUTE_UNUSED bool picklist)

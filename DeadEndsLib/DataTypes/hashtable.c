@@ -197,7 +197,7 @@ void removeElement(HashTable* table, void *element) {
 	CString key = table->getKey(element);
 	Bucket *bucket = table->buckets[getHash(key, table->numBuckets)];
 	Block *block = &(bucket->block);
-	void **elements = block->elements;
+	const void **elements = block->elements;
 	int length = block->length;
 	int i = 0;
 	for (; i < length; i++) {

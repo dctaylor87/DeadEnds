@@ -137,7 +137,7 @@ main (int argc, char **argv)
 	int c;
 	bool ok=false;
 	//	bool python_interactive = false;
-	String dbrequested=NULL; /* database (path) requested */
+	CString dbrequested=NULL; /* database (path) requested */
 	//	List *exprogs=NULL;
 	//	TABLE exargs=NULL;
 	//	String progout=NULL;

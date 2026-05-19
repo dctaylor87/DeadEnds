@@ -68,7 +68,7 @@ RootList* getRootListFromGNodeList(GNodeList *gnodes, String name, ErrorLog *elo
 	int clevel = 0; // cur node's level
 	int plevel = 0; // prev node's level
 	Block* block = &(gnodes->block);
-	void** els = block->elements; // Starting elements as simple array.
+	const void** els = block->elements; // Starting elements as simple array.
 	for (int i = 0; i < block->length; i++) {
 		el = els[i];
 		pnode = cnode;

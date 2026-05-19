@@ -14,12 +14,12 @@ extern Sequence *ask_for_indi_list (CString ttl, bool reask, Database *database)
 extern bool ask_for_int (CString ttl, int *prtn);
 extern FILE *ask_for_input_file (CString mode,
 				 CString ttl,
-				 String *pfname,
+				 CString *pfname,
 				 CString path,
 				 CString ext);
 extern FILE *ask_for_output_file (CString mode,
 				  CString ttl,
-				  String *pfname,
+				  CString *pfname,
 				  CString path,
 				  CString ext);
 extern GNode *
