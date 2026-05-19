@@ -1,8 +1,8 @@
 
 /* stdstrng.c */
-extern int chartype (int c);
+//extern int chartype (int c);
 extern bool isnumch (int c);
-extern bool iswhite (int c);
+//extern bool iswhite (int c);
 extern bool islinebreak (int c);
 extern bool isletter (int c);
 extern bool isasciiletter (int c);
