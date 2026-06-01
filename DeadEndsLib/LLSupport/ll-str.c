@@ -11,8 +11,9 @@
 #include "stdlibi.h"
 
 void
-strfree (String *str)
+strfree (void *vstr)
 {
+  char **str = (char **)vstr;
   if (*str)
     {
       stdfree (*str);
