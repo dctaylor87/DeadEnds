@@ -32,13 +32,9 @@
 
 #include "gnode.h"
 #include "stringtable.h"
-#include "locales.h"
-#include "codesets.h"
 #include "list.h"
 #include "listener.h"
 #include "zstr.h"
-#include "translat.h"
-#include "xlat.h"
 #include "readwrite.h"
 #include "hashtable.h"
 #include "lloptions.h"
