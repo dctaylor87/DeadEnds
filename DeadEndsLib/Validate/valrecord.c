@@ -21,6 +21,7 @@
 #include "splitjoin.h"
 #include "nodeutils.h"
 #include "refns.h"
+#include "lloptions.h"
 #include "messages.h"
 
 static bool valid_name (String name);
