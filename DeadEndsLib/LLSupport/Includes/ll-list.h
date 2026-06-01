@@ -3,4 +3,4 @@
 
 typedef void (*ELEMENT_DESTRUCTOR)(void*);
 
-extern void llFreeListElement (void *ptr);
+//extern void llFreeListElement (void *ptr);

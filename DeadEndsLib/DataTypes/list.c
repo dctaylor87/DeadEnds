@@ -243,3 +243,16 @@ void incrReferenceCountList (List *list,
   logRefCountChange ((void *)list, "List", list->refCount,
 		     file, line, function);
 }
+
+// freeListElement -- this function exists solely to have the
+// corresponding calls to free tracked when allocations are being
+// logged.
+
+// If you are creating a List and are thinking of passing 'free' as
+// the delete function, pass this function instead.
+
+void
+freeListElement (void *ptr)
+{
+  stdfree (ptr);
+}

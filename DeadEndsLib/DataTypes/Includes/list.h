@@ -65,6 +65,8 @@ void* getAndRemoveFirstListElement(List*);
 
 void showList(List *list, String(*describe)(void*));
 
+void freeListElement (void*);
+
 extern void incrReferenceCountList (List *list, CString file, int line, CString function);
 
 #define FORLIST(list, value)\

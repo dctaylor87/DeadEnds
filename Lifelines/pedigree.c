@@ -216,7 +216,7 @@ text_to_list (String text, int width, int whattofree)
 {
 	List *list;
 	if (whattofree == LISTDOFREE)
-		list = createList (NULL, NULL, llFreeListElement, false);
+		list = createList (NULL, NULL, freeListElement, false);
 	else
 		list = createList (NULL, NULL, NULL, false);
 	append_to_text_list(list, text, width, true);

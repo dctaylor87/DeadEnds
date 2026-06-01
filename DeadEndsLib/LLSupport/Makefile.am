@@ -22,7 +22,6 @@ libllsupport_a_SOURCES = \
 	listener.c \
 	ll-addoperations.c \
 	ll-indiseq.c \
-	ll-list.c \
 	ll-node.c \
 	ll-node-seq.c \
 	ll-sequence.c \
@@ -54,6 +53,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/DeadEndsLib/Parser/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Services/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Validate/Includes
 

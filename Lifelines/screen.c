@@ -1425,7 +1425,7 @@ invoke_del_menu (void)
 static void
 invoke_cset_display (void)
 {
-	List *list = createList (NULL, NULL, llFreeListElement, false);
+	List *list = createList (NULL, NULL, freeListElement, false);
 	ZSTR zstr=zs_newn(80);
 
 	zs_setf(zstr, "%s: %s", _("Internal codeset"), int_codeset);
@@ -2502,7 +2502,7 @@ static void
 append_to_msg_list (String msg)
 {
 		if (!msg_list)
-			msg_list = createList (NULL, NULL, llFreeListElement, false);
+			msg_list = createList (NULL, NULL, freeListElement, false);
 		enqueueList(msg_list, strsave(msg));
 }
 #endif

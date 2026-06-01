@@ -138,7 +138,7 @@ parseArguments (int argc, char *argv[], CString optString)
       break;
     case 'x': /* execute program */
       if (!exprogs) {
-	exprogs = createList (NULL, NULL, llFreeListElement, false);
+	exprogs = createList (NULL, NULL, freeListElement, false);
       }
       pushList(exprogs, strsave(optarg ? optarg : ""));
       break;

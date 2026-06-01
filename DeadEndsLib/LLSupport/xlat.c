@@ -138,7 +138,7 @@ create_null_xlat (bool adhoc)
 	/* create & initialize new xlat */
 	XLAT xlat = (XLAT)stdalloc(sizeof(*xlat));
 	memset(xlat, 0, sizeof(*xlat));
-	xlat->steps = createList (NULL, NULL, llFreeListElement, false);
+	xlat->steps = createList (NULL, NULL, freeListElement, false);
 	xlat->valid = true;
 	if (!f_xlats) {
 		f_xlats = createList(NULL, NULL, NULL, false);
@@ -689,7 +689,7 @@ xl_parse_codeset (CString codeset, ZSTR zcsname, List **subcodes)
 				if (subcodes) {
 					ZSTR ztemp=0;
 					if (!*subcodes) {
-						*subcodes = createList (NULL, NULL, llFreeListElement, false);
+						*subcodes = createList (NULL, NULL, freeListElement, false);
 					}
 					ztemp = zs_newsubs(prev, p-prev);
 					enqueueList(*subcodes, strsave(zs_str(ztemp)));
