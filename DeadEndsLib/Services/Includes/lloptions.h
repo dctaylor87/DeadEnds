@@ -19,6 +19,8 @@
 #ifndef LLOPTIONS_H_INCLUDED
 #define LLOPTIONS_H_INCLUDED
 
+typedef void (*CALLBACK_FNC)(void*);
+
 /* initialization & termination */
 void free_optable(HashTable **ptab);
 void get_db_options(HashTable *opts); /* free with FREEBOTH */
