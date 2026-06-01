@@ -31,7 +31,7 @@
 /* Prototypes */
 int ask_for_char_msg(CString msg, CString ttl, CString prmpt, CString ptrn);
 bool ask_for_filename_impl(CString ttl, CString path, CString prmpt, String buffer, int buflen);
-bool ask_for_program (CString mode, CString ttl, String *pfname, CString path, CString ext, bool picklist);
+bool ask_for_program (CString mode, CString ttl, CString *pfname, CString path, CString ext, bool picklist);
 int chooseFromArray (CString ttl, int no, String *pstrngs);
 enum SequenceType;		/* forward reference */
 int chooseOneOrListFromSequence(CString ttl, Sequence *seq, bool multi, enum SequenceType type); /* XXX */

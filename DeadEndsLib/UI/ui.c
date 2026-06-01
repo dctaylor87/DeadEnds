@@ -96,7 +96,7 @@ bool ask_for_string2 (CString ttl1, CString ttl2, CString prmpt,
   return false;			/* cancelled, unsupported */
 }
 
-bool ask_for_program (CString mode, CString ttl, String *pfname,
+bool ask_for_program (CString mode, CString ttl, CString *pfname,
 		      CString path, CString ext, bool picklist)
 {
   UIIO *uiio = current_uiio;
