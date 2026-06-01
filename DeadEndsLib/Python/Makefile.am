@@ -54,6 +54,7 @@ AM_CPPFLAGS=-I$(top_builddir) \
 	-I$(top_srcdir)/DeadEndsLib/Interp/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Database/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Gedcom/Includes \
+	-I$(top_srcdir)/DeadEndsLib/Services/Includes \
 	-I$(top_srcdir)/DeadEndsLib/DataTypes/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
 	$(PYTHON_CPPFLAGS)
