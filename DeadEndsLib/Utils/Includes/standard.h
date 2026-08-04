@@ -39,9 +39,9 @@ void striptrail(String);  // Strip trailing white space.
 int chartype(int);      // Return type of a character.
 void alloc_out(String); // standard.c
 CharType characterType(int);  // standard.c
-String lower(String);  // Convert a string to lower case.
-String upper(String);  // Convert a string to upper case.
-String capitalize(String);
+String lower(CString);  // Convert a string to lower case.
+String upper(CString);  // Convert a string to upper case.
+String capitalize(CString);
 
 void basicDelete(void*);
 

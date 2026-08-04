@@ -211,7 +211,7 @@ bool isLetter(int c) {
 
 // lower converts a string to lower case. Must change with Unicode.
 // MNOTE: Reuses buffer for the returned string.
-String lower(String str) {
+String lower(CString str) {
     ASSERT(strlen(str) < MAXSTRINGSIZE);
 	static char scratch[MAXSTRINGSIZE];
     String p = scratch;
@@ -223,7 +223,7 @@ String lower(String str) {
 
 // upper converts a string to upper case. Must change with Unicode.
 // MNOTE: Reuses data space buffer for the returned string.
-String upper(String str) {
+String upper(CString str) {
     ASSERT(strlen(str) < MAXSTRINGSIZE);
 	static char scratch[MAXSTRINGSIZE];
     String p = scratch;
@@ -235,7 +235,7 @@ String upper(String str) {
 
 // capitalize capitalizes a string. Must change with Unicode.
 // MNOTE: Reuses data space buffer for the returned string.
-String capitalize(String str) {
+String capitalize(CString str) {
     String p = lower(str);
 	*p = toupper(*p);
 	return p;

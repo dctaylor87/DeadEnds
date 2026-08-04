@@ -113,7 +113,7 @@ bool uiio_ask_for_string2(UIIO *uiio, CString ttl1, CString ttl2, CString prmpt,
   return false;			/* not supported */
 }
 
-int uiio_chooseFromArray(UIIO *uiio, CString ttl, int no, String *pstrngs)
+int uiio_chooseFromArray(UIIO *uiio, CString ttl, int no, CString *pstrngs)
 {
   if (uiio->uiio_chooseFromArray)
     return (*uiio->uiio_chooseFromArray)(ttl, no, pstrngs);
@@ -135,7 +135,7 @@ void uiio_llwprintf()
     (*uiio->uiio_llwprintf)();
 }
 
-void uiio_view_array(UIIO *uiio, CString ttl, int no, String *pstrngs)
+void uiio_view_array(UIIO *uiio, CString ttl, int no, CString *pstrngs)
 {
   if (uiio->uiio_view_array)
     (*uiio->uiio_view_array)(ttl, no, pstrngs);

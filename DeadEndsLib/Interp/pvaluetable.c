@@ -70,7 +70,7 @@ void insertInPValueTable(PValueTable* table, String key, PValue pvalue) {
 }
 
 // getValueOfPValueElement gets the PValue mapped to by the key from PValueTable.
-PValue getValueOfPValueElement(PValueTable* table, String key) {
+PValue getValueOfPValueElement(PValueTable* table, CString key) {
     PValueElement* element = searchHashTable(table, key);
     if (element) {
         PValue* ppvalue = element->value;

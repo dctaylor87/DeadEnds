@@ -271,7 +271,8 @@ int
 ask_child_order (GNode *fam, PROMPTQ promptq, bool rfmt)
 {
 	int i, nchildren;
-	String *childstrings, *childkeys;
+	CString *childstrings;
+	String *childkeys;
 /* If first child in family, confirm and add */
 
 	childstrings = get_child_strings(fam, rfmt, &nchildren, &childkeys,

@@ -25,6 +25,6 @@ typedef struct {
 // User interface to pvalue tables.
 PValueTable *createPValueTable(void);
 void insertInPValueTable(PValueTable*, String, PValue);
-PValue getValueOfPValueElement(PValueTable*, String);
+PValue getValueOfPValueElement(PValueTable*, CString);
 
 #endif // pvaluetable_h

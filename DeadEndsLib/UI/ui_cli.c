@@ -70,7 +70,7 @@ static void output(const char * txt);
 static int interact(CString ptrn);
 
 static int
-chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selectable);
+chooseOrViewArray (CString ttl, int no, CString *pstrngs, bool selectable);
 /*=============================================================
  * Xprintf() implementations
  *===========================================================*/
@@ -209,14 +209,14 @@ stdio_ask_for_filename_impl (CString ttl, CString path, CString prmpt, String bu
  *===========================================================*/
 
 int
-stdio_chooseFromArray (CString ttl, int no, String *pstrngs)
+stdio_chooseFromArray (CString ttl, int no, CString *pstrngs)
 {
 	bool selectable = true;
 	return chooseOrViewArray(ttl, no, pstrngs, selectable);
 }
 
 void
-stdio_view_array (CString ttl, int no, String *pstrngs)
+stdio_view_array (CString ttl, int no, CString *pstrngs)
 {
 	bool selectable = false;
 	chooseOrViewArray(ttl, no, pstrngs, selectable);
@@ -237,7 +237,7 @@ stdio_chooseOneOrListFromSequence (ATTRIBUTE_UNUSED CString ttl,
 }
 
 static int
-chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selectable)
+chooseOrViewArray (CString ttl, int no, CString *pstrngs, bool selectable)
 {
 	String promptline = selectable ? _(qSchlistx) : _(qSvwlistx);
 	String responses = selectable ? "0123456789udq" : "udq";

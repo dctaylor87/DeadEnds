@@ -313,7 +313,7 @@ PValue __strcmp (PNode* pnode, Context* context, bool* errflg) {
 		*errflg = true;
 		return nullPValue;
 	}
-	String str1 = pvalue.value.uString;
+	CString str1 = pvalue.value.uString;
 	arg = arg->next;
 	pvalue = evaluate(arg, context, errflg);
 	if (pvalue.type != PVString) {
@@ -321,7 +321,7 @@ PValue __strcmp (PNode* pnode, Context* context, bool* errflg) {
 		*errflg = true;
 		return nullPValue;
 	}
-	String str2 = pvalue.value.uString;
+	CString str2 = pvalue.value.uString;
 	return PVALUE(PVInt, uInt, (long) strcmp(str1, str2));
 }
 
@@ -335,7 +335,7 @@ PValue __eqstr (PNode *pnode, Context *context, bool *errflg) {
 		*errflg = true;
 		return nullPValue;
 	}
-	String left = pvalue.value.uString;
+	CString left = pvalue.value.uString;
 	arg = arg->next;
 	pvalue = evaluate(arg, context, errflg);
 	if (pvalue.type != PVString) {
@@ -385,7 +385,7 @@ PValue __concat(PNode *pnode, Context *context, bool *errflg) {
 	PNode *arg = pnode->arguments;
 	if (arg == null) return nullPValue;
 	int len = 0, nstrs = 0;
-	String hold[CC];
+	CString hold[CC];
 	while (arg != null) {
 		PValue svalue = evaluate(arg, context, errflg);
 		if (*errflg || svalue.type != PVString) return nullPValue;
@@ -694,8 +694,8 @@ PValue __createnode(PNode* pnode, Context* context, bool* errflg) {
 		*errflg = true;
 		return nullPValue;
 	}
-	String tag = tagValue.value.uString;
-	String value = null;
+	CString tag = tagValue.value.uString;
+	CString value = null;
 	// Get the value if there.
 	if (arg2) {
 		PValue valValue = evaluate(arg2, context, errflg);

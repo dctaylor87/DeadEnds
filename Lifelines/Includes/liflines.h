@@ -14,7 +14,7 @@
 /* screen.c types */
 /* data used in chooseFromArray_x */
 typedef struct tag_array_details {
-  String * list; /* original array of choices */
+  CString * list; /* original array of choices */
   int cur; /* currently selected choice */
   String * lines; /* lines of details */
   int count; /* how many lines */
@@ -54,7 +54,7 @@ bool ask_for_gedcom(CString mode, CString ttl, CString *pfname,
 void proparrdetails(ARRAY_DETAILS arrdets, void * param);
 
 /* screen.c functions */
-int chooseFromArray_x(CString ttl, int count, String* list, DETAILFNC, void *);
+int chooseFromArray_x(CString ttl, int count, CString* list, DETAILFNC, void *);
 int display_list(CString ttl, List *list);
 
 /* selectdb.c */

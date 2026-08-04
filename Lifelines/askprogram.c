@@ -238,7 +238,7 @@ curses_ask_for_program (CString mode,
 	int choice;
 	int nfiles, i;
 	HashTable ** fileprops;
-	String * choices;
+	CString * choices;
 	FILE * fp;
 
 	if (pfname) *pfname = 0;
@@ -253,7 +253,7 @@ curses_ask_for_program (CString mode,
 	set_programs_d0(fileprops);
 	if (!nfiles) goto AskForString;
 
-	choices = (String *)stdalloc(sizeof(String)*(nfiles+1));
+	choices = (CString *)stdalloc(sizeof(CString)*(nfiles+1));
 	/* choices are all shared pointers */
 	choices[0] = _(qSextchoos);
 	for (i=0; i<nfiles; ++i) {

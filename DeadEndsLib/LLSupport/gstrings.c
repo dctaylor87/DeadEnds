@@ -71,7 +71,8 @@
  *********************************************/
 
 static int nchil = 0, maxchil = 0;
-static String *chstrings = NULL, *chkeys = NULL;
+static String *chkeys = NULL;
+static CString *chstrings = NULL;
 
 static bool displaykeys=true;
 
@@ -88,7 +89,7 @@ static bool displaykeys=true;
  *  pnum:  [out] number of output strings
  *  pkeys: [out] array of output strings (children descriptions)
  *=================================================================*/
-String *
+CString *
 get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *database)
 {
 	GNode *chil;
@@ -107,7 +108,7 @@ get_child_strings (GNode *fam, bool rfmt, int *pnum, String **pkeys, Database *d
 			stdfree(chstrings); 
 			stdfree(chkeys); 
 		}
-		chstrings = (String *) stdalloc((nchil+5)*sizeof(String));
+		chstrings = (CString *) stdalloc((nchil+5)*sizeof(CString));
 		chkeys = (String *) stdalloc((nchil+5)*sizeof(String));
 		maxchil = nchil + 5;
 	}

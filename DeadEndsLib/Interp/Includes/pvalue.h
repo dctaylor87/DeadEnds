@@ -38,7 +38,7 @@ typedef union VUnion {
 	GNode* uGNode;
 	long uInt;
 	double uFloat;
-	String uString;
+	CString uString;
 	List* uList;
 	PValueTable* uTable;
 	Sequence* uSequence;

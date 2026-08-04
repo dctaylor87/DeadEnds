@@ -141,7 +141,7 @@ rptui_ask_for_output_file (CString mode, CString ttl, CString *pfname,
 	return fp;
 }
 bool
-rptui_ask_for_program (CString mode, CString ttl, String *pfname,
+rptui_ask_for_program (CString mode, CString ttl, CString *pfname,
 		       CString path, CString ext, bool picklist)
 {
 	bool b;
@@ -151,7 +151,7 @@ rptui_ask_for_program (CString mode, CString ttl, String *pfname,
 	return b;
 }
 int
-rptui_chooseFromArray (CString ttl, int no, String *pstrngs)
+rptui_chooseFromArray (CString ttl, int no, CString *pstrngs)
 {
 	int i;
 	begin_rptui();
@@ -171,7 +171,7 @@ rptui_prompt_stdout (CString prompt)
 }
 
 void
-rptui_view_array (CString ttl, int no, String *pstrngs)
+rptui_view_array (CString ttl, int no, CString *pstrngs)
 {
 	begin_rptui();
 	view_array(ttl, no, pstrngs);

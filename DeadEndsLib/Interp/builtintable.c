@@ -86,7 +86,7 @@ PValue __lookup(PNode* pnode, Context* context, bool* errflg) {
         scriptError(pnode, "the second argument to lookup must be a string");
         return nullPValue;
     }
-    String key = svalue.value.uString;
+    CString key = svalue.value.uString;
     PValue pvalue = getValueOfPValueElement(table, key);
     return cloneAndReturnPValue(&pvalue);
 }

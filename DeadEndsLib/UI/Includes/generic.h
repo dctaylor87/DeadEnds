@@ -9,3 +9,4 @@ int chooseFromList (CString ttl, List *list);
 int chooseListFromSequence (CString ttl, Sequence *seq, enum SequenceType type);
 int chooseOneFromSequence (CString ttl, Sequence *seq, enum SequenceType type);
 bool yes_no_value(int c);
+void displayErrorLog (ErrorLog *errorLog);

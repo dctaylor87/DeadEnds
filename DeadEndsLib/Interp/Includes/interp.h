@@ -82,7 +82,7 @@ int yylex(void);
 int yyparse(ErrorLog *errorLog);
 
 //bool setScriptOutputFile (CString filename, bool append, CString *errorMessage);
-void poutput(PNode*, String, Context*, bool*);
+void poutput(PNode*, CString, Context*, bool*);
 // Program running state flags.
 extern bool programParsing;
 extern bool programRunning;

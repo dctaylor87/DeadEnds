@@ -136,7 +136,7 @@ PValue __newfile(PNode* pnode, Context* context, bool* errflg) {
         scriptError(pnode, "first argument to newfile() must be a non-empty string");
         return nullPValue;
     }
-    String name = pvalue.value.uString;
+    CString name = pvalue.value.uString;
     // Default mode is write
     char* mode = "w";
     // The optional second argument can specify append mode.
@@ -451,7 +451,7 @@ static void pageout_1 (FILE *fp)
 #endif
 
 // adjustCols adjusts the column after printing a string.
-static void adjustCols(String string, File* file) {
+static void adjustCols(CString string, File* file) {
 	int c;
 	while ((c = *string++)) {
 		if (c == '\n')
@@ -463,7 +463,7 @@ static void adjustCols(String string, File* file) {
 
 /// Outputs a string to the program output file in the current mode,
 // decoding UTF-8 into Unicode codepoints stored in the page grid.
-void poutput(PNode *pnode, String string, Context* context, bool *errflg) {
+void poutput(PNode *pnode, CString string, Context* context, bool *errflg) {
     File* file = context->file;
 
     if (! file) {

@@ -216,7 +216,7 @@ ask_for_gedcom (CString mode,
 	int choice;
 	int nfiles, i;
 	HashTable ** fileprops;
-	String * choices;
+	CString * choices;
 	FILE * fp;
 
 	if (pfname) *pfname = 0;
@@ -231,7 +231,7 @@ ask_for_gedcom (CString mode,
 
 	if (!nfiles) goto AskForString;
 
-	choices = (String *)stdalloc(sizeof(String)*(nfiles+1));
+	choices = (CString *)stdalloc(sizeof(CString)*(nfiles+1));
 	/* choices are all shared pointers */
 	choices[0] = _(qSextchoos);
 	for (i=0; i<nfiles; ++i) {

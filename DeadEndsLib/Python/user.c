@@ -189,7 +189,7 @@ static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
   char *prompt = _("Please choose from the following list.");
   char *c_string;
   int len;
-  String *strings;
+  CString *strings;
   int ndx;
   int answer;
 
@@ -207,7 +207,7 @@ static PyObject *llpy_menuchoose (PyObject *self ATTRIBUTE_UNUSED, PyObject *arg
       PyErr_SetString (PyExc_IndexError, _("menuchoose: CHOICES must have a size > 0"));
       return NULL;
     }
-  strings = (char **)stdalloc (len * sizeof (String));
+  strings = (CString *)stdalloc (len * sizeof (CString));
   PyObject *tuple = PyTuple_New (1);
   for (ndx = 0; ndx < len; ndx++)
     {

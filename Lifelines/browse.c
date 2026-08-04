@@ -140,7 +140,7 @@ static void load_hist_lists(void);
 static void load_nkey_list(CString key, struct hist * histp);
 #endif
 static void prompt_add_spouse_with_candidate(GNode *fam, GNode *save);
-static GNode *pick_create_new_family(GNode *current, GNode *save, String * addstrings);
+static GNode *pick_create_new_family(GNode *current, GNode *save, CString * addstrings);
 static void pick_remove_spouse_from_family(GNode *frec);
 #if !defined(DEADENDS)
 static void save_hist_lists(void);
@@ -349,7 +349,7 @@ goto_fam_child (GNode *frec, int childno)
  * returns addref'd record
  *=============================================*/
 static GNode *
-pick_create_new_family (GNode *current, GNode *save, String * addstrings)
+pick_create_new_family (GNode *current, GNode *save, CString * addstrings)
 {
 	int i;
 	GNode *rec=0;
@@ -665,7 +665,7 @@ reprocess_indi_cmd: /* so one command can forward to another */
 			break;
 		case CMD_NEWFAMILY:	/* Add family for current person */
 			{
-				String addstrings[2];
+				CString addstrings[2];
 				addstrings[0] = _(qScrtcfm);
 				addstrings[1] = _(qScrtsfm);
 				if ((tmp = pick_create_new_family(current, save, addstrings)) != 0) {
@@ -944,7 +944,7 @@ pick_remove_spouse_from_family (GNode *frec)
 	GNode *fam = nztop(frec);
 	GNode *fref, *husb, *wife, *chil, *rest;
 	GNode *root, *node, *spnodes[MAX_SPOUSES];
-	String spstrings[MAX_SPOUSES];
+	CString spstrings[MAX_SPOUSES];
 	int i;
 
 	splitFamily(fam, &fref, &husb, &wife, &chil, &rest);
@@ -2045,7 +2045,7 @@ add_new_rec_maybe_ref (GNode *current, char ntype)
 {
 	GNode *newrec=0;
 	GNode *newnode;
-	String choices[4];
+	CString choices[4];
 	char title[60];
 	int rtn;
 

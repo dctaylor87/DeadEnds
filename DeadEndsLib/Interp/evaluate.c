@@ -255,7 +255,7 @@ String evaluateString(PNode* pnode, Context* context, bool *errflg) {
         scriptError(pnode, "error evaluating argument");
 	return "";
     }
-    String string;
+    CString string;
     if (pvalue.type == PVString)
         string = pvalue.value.uString ? pvalue.value.uString : "";
     else if (pvalue.type == PVNull)

@@ -7,11 +7,11 @@ extern bool stdio_ask_for_string (CString ttl, CString prmpt,
 				  String buffer, int buflen);
 extern bool stdio_ask_for_string2 (CString ttl1, CString ttl2, CString prmpt,
 				   String buffer, int buflen);
-extern int stdio_chooseFromArray (CString ttl, int no, String *pstrngs);
+extern int stdio_chooseFromArray (CString ttl, int no, CString *pstrngs);
 extern int stdio_prompt_stdout (CString prompt);
 extern Sequence *stdio_invoke_search_menu (void);
 extern void stdio_llvwprintf (CString fmt, va_list args);
-extern void stdio_view_array (CString ttl, int no, String *pstrngs);
+extern void stdio_view_array (CString ttl, int no, CString *pstrngs);
 extern bool stdio_ask_for_program (CString mode, CString ttl, CString *pfname,
 				   CString path, CString ext, bool picklist);
 extern int stdio_chooseOneOrListFromSequence (CString ttl, Sequence *seq,

@@ -59,7 +59,7 @@ PValue __getindi (PNode *pnode, Context *context, bool* eflg)
       return nullPValue;
     }
   PNode *expr = iden->next;
-  String ttl = "Identify person for report program:";
+  CString ttl = "Identify person for report program:";
   if (expr)
     {
       PValue svalue = evaluate (expr, context, eflg);
@@ -551,7 +551,7 @@ PValue __menuchoose (PNode *pnode, Context *context, bool *eflg)
     {
       /* XXX list is empty XXX */
     }
-  String *strngs = stdalloc (len * sizeof (String));
+  CString *strngs = stdalloc (len * sizeof (CString));
   int ndx = 0;
 
   FORLIST (list, el)

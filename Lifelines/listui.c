@@ -112,7 +112,7 @@ static void display_string(UIWINDOW uiwin, LLRECT rect, CString text);
 static int handle_list_cmds(listdisp * ld, int code);
 static bool handle_popup_list_resize(listdisp * ld, int code);
 static void print_list_title(char * buffer, int len, const listdisp * ld, CString ttl);
-static void shw_array_of_strings(String *strings, listdisp *ld
+static void shw_array_of_strings(CString *strings, listdisp *ld
 	, DETAILFNC detfnc, void * param);
 static void shw_popup_list(Sequence *seq, listdisp * ld, enum SequenceType type);
 static void shw_recordlist_details(Sequence *seq, listdisp * ld);
@@ -157,7 +157,7 @@ listui_init_windows (int extralines)
  * returns 0-based index chosen, or -1 if cancelled
  *============================================*/
 int
-array_interact (CString ttl, int len, String *strings
+array_interact (CString ttl, int len, CString *strings
 	, bool selectable, DETAILFNC detfnc, void * param)
 {
 	WINDOW *win=0;
@@ -590,7 +590,7 @@ print_list_title (char * buffer, int len, const listdisp * ld, CString ttl)
  *  param:   [IN]  opaque data for callback
  *==============================================================*/
 static void
-shw_array_of_strings (String *strings, listdisp * ld, DETAILFNC detfnc
+shw_array_of_strings (CString *strings, listdisp * ld, DETAILFNC detfnc
 	, void * param)
 {
 	/* 120 spaces */

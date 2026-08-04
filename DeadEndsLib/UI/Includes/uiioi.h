@@ -67,11 +67,11 @@ struct uiio
   bool (*uiio_ask_for_filename_impl) (CString ttl, CString path, CString prmpt, String buffer, int buflen);
   bool (*uiio_ask_for_string) (CString ttl, CString prmpt, String buffer, int buflen);
   bool (*uiio_ask_for_string2) (CString ttl1, CString ttl2, CString prmpt, String buffer, int buflen);
-  int (*uiio_chooseFromArray) (CString ttl, int no, String *pstrngs);
+  int (*uiio_chooseFromArray) (CString ttl, int no, CString *pstrngs);
   Sequence *(*uiio_invoke_search_menu) (void);
   int (*uiio_prompt_stdout) (CString prompt);
   void (*uiio_llvwprintf) (CString fmt, va_list args);
-  void (*uiio_view_array) (CString ttl, int no, String *pstrngs);
+  void (*uiio_view_array) (CString ttl, int no, CString *pstrngs);
   bool (*uiio_ask_for_program) (CString mode, CString ttl, CString *pfname, CString path, CString ext, bool picklist);
   int (*uiio_chooseOneOrListFromSequence) (CString ttl, Sequence *seq, bool multi, enum SequenceType type);
 };

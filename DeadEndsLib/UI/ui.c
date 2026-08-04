@@ -31,7 +31,7 @@ bool ask_for_filename_impl (CString ttl, CString path,
   return false;			/* cancelled, unsupported */
 }
 
-int chooseFromArray (CString ttl, int no, String *pstrngs)
+int chooseFromArray (CString ttl, int no, CString *pstrngs)
 {
   UIIO *uiio = current_uiio;
   if (uiio->uiio_chooseFromArray)
@@ -58,7 +58,7 @@ int prompt_stdout (CString prompt)
   return 0;			/* cancelled, unsupported */
 }
 
-void view_array (CString ttl, int no, String *pstrngs)
+void view_array (CString ttl, int no, CString *pstrngs)
 {
   UIIO *uiio = current_uiio;
   if (uiio->uiio_view_array)

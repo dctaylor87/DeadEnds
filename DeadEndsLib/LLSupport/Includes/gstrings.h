@@ -1,5 +1,5 @@
-extern String *get_child_strings (GNode *fam, bool rfmt,
-				  int *pnum, String **pkeys, Database *database);
+extern CString *get_child_strings (GNode *fam, bool rfmt,
+				   int *pnum, String **pkeys, Database *database);
 extern String indi_to_list_string (GNode *indi, GNode *fam, int len,
 				   bool rfmt, bool appkey);
 extern String sour_to_list_string (GNode *sour, int len, String delim);

@@ -119,7 +119,7 @@ PValue __fam(PNode* pnode, Context* context, bool* errflg) {
 		*errflg = true;
 		return nullPValue;
 	}
-	String key = value.value.uString;
+	CString key = value.value.uString;
 	GNode* family = keyToFamily(key, context->database->recordIndex); // Find family with key.
 	if (!family) {
 	  //scriptError(pnode, "Could not find a family with key %s.\n", key);
