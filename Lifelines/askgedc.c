@@ -209,8 +209,8 @@ bool
 ask_for_gedcom (CString mode,
                  CString ttl,
                  CString *pfname,
-                 String path,
-                 String ext,
+                 CString path,
+                 CString ext,
                  bool picklist)
 {
 	int choice;

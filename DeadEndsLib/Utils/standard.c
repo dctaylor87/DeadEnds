@@ -278,6 +278,6 @@ bool allwhite(String p) {
 
 // basicDelete is used as the delete function in data types where the elements but none of
 // their fields are freed when the datatype is deleted.
-void basicDelete(void* element) {
+void basicDelete(const void* element) {
 	stdfree(element);
 }

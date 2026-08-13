@@ -145,7 +145,7 @@ bool isInStringList(String string, List* strings) {
 // createStringList creates a List of Strings of any non-zero length. Caller must pass null as
 // the last argument to end the list.
 // MNOTE: User is responible for freeing the list; when freed the String elements are also freed.
-static void del(void* element) { stdfree(element); }
+static void del(const void* element) { stdfree(element); }
 List* createStringList(String first, ...) {
 	va_list args;
 	List* list = createList(null, null, del, false);

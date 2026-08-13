@@ -17,13 +17,13 @@ typedef struct Set {
 } Set;
 
 // Public interface.
-Set* createSet(CString(*get)(const void*), int(*cmp)(CString, CString), void(*del)(void*));
+Set* createSet(CString(*get)(const void*), int(*cmp)(CString, CString), void(*del)(const void*));
 void deleteSet(Set*);
 int lengthSet(Set*);
 bool isInSet(Set*, CString);
 void addToSet(Set*, const void*);
 void removeFromSet(Set*, CString);
-void iterateSet(Set*, void(*iter)(void*));
+void iterateSet(Set*, void(*iter)(const void*));
 void showSet(Set*, String(*show)(void*));
 List* listOfSet(Set*); // Underlying List.
 

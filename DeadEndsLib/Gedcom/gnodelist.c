@@ -38,7 +38,7 @@ static CString getKey(const void* element) {
 }
 
 // delete is the delete function for GNodeLists. It frees the elements but not the GNodes the elements point to.
-static void delete(void* element) {
+static void delete(const void* element) {
 	stdfree(element);
 }
 

@@ -39,7 +39,7 @@ static int compare(CString a, CString b) {
 // MNOTE: the nameKey is freed.
 // MNOTE: the recordKeys Set is freed (the recordKeys it contains are not).
 // MNOTE: the element itself is freed.
-static void delete(void* element) {
+static void delete(const void* element) {
 	NameIndexEl *el = (NameIndexEl*) element;
 	stdfree(el->nameKey);
 	deleteSet(el->recordKeys);
@@ -128,10 +128,10 @@ Set* searchNameIndex(NameIndex* index, CString name) {
 }
 
 // showNameIndex shows the contents of a name index.
-static void showSetElement(void* setEl) {
+static void showSetElement(const void* setEl) {
 	printf("  %s\n", (String) setEl);
 }
-static void showElement(void* element) {
+static void showElement(const void* element) {
 	Set* recordKeys = ((NameIndexEl*)element)->recordKeys;
 	iterateSet(recordKeys, showSetElement);
 }

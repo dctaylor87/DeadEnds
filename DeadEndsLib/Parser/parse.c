@@ -46,7 +46,7 @@ FILE* currentFile = null; // FILE being parsed.
 int curLine = 1; // Line number in current file.
 
 // parseProgram parses a DeadEnds program and returns a Program object to be interpreted.
-static void delete(void* a) { stdfree(a); }
+static void delete(const void* a) { stdfree(a); }
 Program* parseProgram(CString fileName, CString searchPath, ErrorLog *errorLog) {
     parsedFiles = createList(null, null, delete, false);  // Parsed file names.
     pendingFiles = createList(null, null, delete, false); // Queue of pending files.

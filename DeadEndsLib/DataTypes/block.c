@@ -37,7 +37,7 @@ void initBlock(Block* block) {
 
 // deleteBlock deallocates the elements of a Block, but not the Block itself. If the Block has
 // a delete function, it is called on each element before the elements are freed.
-void deleteBlock(Block *block, void(*delete)(void*)) {
+void deleteBlock(Block *block, void(*delete)(const void*)) {
 	if (delete) {
 		for (int i = 0; i < block->length; i++) {
 			delete((block->elements)[i]);
@@ -56,7 +56,7 @@ static void growBlock(Block *block) {
 }
 
 // emptyBlock removes all the elements in a Block.
-void emptyBlock(Block *block, void(*delete)(void*)) {
+void emptyBlock(Block *block, void(*delete)(const void*)) {
 	if (delete) {
 		for (int i = 0; i < block->length; i++) {
 			delete(block->elements[i]);
@@ -77,12 +77,12 @@ bool isEmptyBlock(Block* block) {
 }
 
 // getBlockElement returns an element from a Block; caller must not change it.
-void* getBlockElement(Block* block, int index) {
+const void* getBlockElement(Block* block, int index) {
 	return (index < 0 || index >= block->length) ? null : (block->elements)[index];
 }
 
 // setBlockElement replaces an element in a Block. The replaced element is freed.
-void setBlockElement(Block* block, void* element, void(*delete)(void*), int index) {
+void setBlockElement(Block* block, void* element, void(*delete)(const void*), int index) {
 	if (index < 0 || index >= block->length) return;
 	if (delete && (block->elements)[index])
 		delete((block->elements)[index]);
@@ -117,7 +117,7 @@ bool isInSortedBlock(Block* block, CString key, CString(*getKey)(const void*),
 }
 
 // copyBlock creates and returns a copy of a Block.
-Block *copyBlock(Block *block, void*(*copyfunc)(void*)) {
+Block *copyBlock(Block *block, void*(*copyfunc)(const void*)) {
 	Block* copy = createBlock();
 	if (! copy)
 	  fatal ("call to createBlock failed");
@@ -149,33 +149,33 @@ void insertInBlock(Block *block, const void *element, int index) {
 }
 
 // getFromBlock returns the indexed elemment from the Block; it is not removed from the Block.
-void* getFromBlock(Block* block, int index) {
+const void* getFromBlock(Block* block, int index) {
 	if (index < 0 || index >= block->length) return null;
 	return block->elements[index];
 }
 
 // getFirstBlockElement returns the first element in the Block; it is not removed from the Block.
-void* getFirstBlockElement(Block* block) {
+const void* getFirstBlockElement(Block* block) {
 	return getFromBlock(block, 0);
 }
 
 // getLastBlockElement return the last element in the Block; it is not removed from the Block.
-void* getLastBlockElement(Block* block) {
+const void* getLastBlockElement(Block* block) {
 	return getFromBlock(block, block->length - 1);
 }
 
 // removeFirstBlockEement removes the first element from the given Block.
-bool removeFirstBlockElement(Block *block, void(*delete)(void*)) {
+bool removeFirstBlockElement(Block *block, void(*delete)(const void*)) {
 	return removeFromBlock(block, 0, delete);
 }
 
 // removeLastBlockElement removes the last elem,ent from the given Block.
-bool removeLastBlockElement(Block *block, void(*delete)(void*)) {
+bool removeLastBlockElement(Block *block, void(*delete)(const void*)) {
 	return removeFromBlock(block, block->length - 1, delete);
 }
 
 // removeFromBlock removes the element at a specific index from a Block's elements.
-bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
+bool removeFromBlock(Block *block, int index, void(*delete)(const void*)) {
 	if (blockDebugging) printf("remove from %d\n", index);
 	if (! block || index < 0 || index >= block->length) return false;
 	const void **elements = block->elements;
@@ -188,7 +188,7 @@ bool removeFromBlock(Block *block, int index, void(*delete)(void*)) {
 
 // removeFromSortedBlock removes an element with specific key from a sorted Block's elements.
 bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(const void *a),
-						   int(*compare)(CString, CString), void(*delete)(void*)) {
+						   int(*compare)(CString, CString), void(*delete)(const void*)) {
 	if (blockDebugging) printf("remove %s from sorted block\n", key);
 	int index = -1;
 	if (! binarySearch(block->elements, block->length, key, getKey, compare, &index)) return false;
@@ -198,7 +198,7 @@ bool removeFromSortedBlock(Block *block, CString key, CString(*getKey)(const voi
 
 // removeFromUnsortedBlock removes an element with specific key from an unsorted Block's elements.
 bool removeFromUnsortedBlock(Block* block, CString key, CString(*getKey)(const void*),
-							 void(*delete)(void*)) {
+							 void(*delete)(const void*)) {
 	if (blockDebugging) printf("remove %s from unsorted block\n", key);
 	int index = -1;
 	if (! linearSearch(block->elements, block->length, key, getKey, &index)) return false;
@@ -226,7 +226,7 @@ void* searchSortedBlock(Block *block, CString key, CString(*getKey)(const void*)
 }
 
 // showBlock is a debugging function that shows the contents of a Block.
-void showBlock(Block *block, CString(*getString)(void*)) {
+void showBlock(Block *block, CString(*getString)(const void*)) {
 	printf("Block: %d %d\n", (int) block->length, (int) block->maxLength);
 	for (int i = 0; i < block->length; i++) {
 		printf("%s\n", getString(block->elements[i]));
@@ -235,7 +235,7 @@ void showBlock(Block *block, CString(*getString)(void*)) {
 }
 
 // fprintfBlock is a debugging function that prints the contents of a Block to an open file.
-void fprintfBlock(FILE* file, Block* block, CString(*toString)(void*)) {
+void fprintfBlock(FILE* file, Block* block, CString(*toString)(const void*)) {
 	if (! file) return;
 	fprintf(file, "Block: %d %d\n", (int)block->length, (int)block->maxLength);
 	for (int i = 0; i < block->length; i++) {
@@ -259,7 +259,7 @@ bool isSorted(Block *block, CString(*getKey)(const void*), int(*compare)(CString
 }
 
 // iterateBlock iterates over the elements of a Block performing an action.
-void iterateBlock(Block *block, void(*perform)(void*)) {
+void iterateBlock(Block *block, void(*perform)(const void*)) {
 	ASSERT(block && perform);
 	if (! perform) return;
 	for (int i = 0; i < block->length; i++) {
@@ -269,7 +269,7 @@ void iterateBlock(Block *block, void(*perform)(void*)) {
 
 // uniqueBlock removes elements with duplicate keys from a Block. The Block must be ordered so
 // that all elements with the same key are grouped together.
-void uniqueBlock(Block* block, CString(*getKey)(const void*), void(*delete)(void*)) {
+void uniqueBlock(Block* block, CString(*getKey)(const void*), void(*delete)(const void*)) {
 	ASSERT(block && getKey);
 	int length = block->length;
 	if (! block || !getKey || length <= 0) return;

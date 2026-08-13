@@ -12,7 +12,7 @@
 
 // createList creates and returns a List.
 List* createList(CString(*getKey)(const void*), int(*compare)(CString, CString),
-				 void(*delete)(void*), bool sorted) {
+				 void(*delete)(const void*), bool sorted) {
 	List *list = (List *) stdalloc(sizeof(List));
 	if (! list)
 	  return NULL;
@@ -22,7 +22,7 @@ List* createList(CString(*getKey)(const void*), int(*compare)(CString, CString),
 
 // initList initializes a List.
 void initList(List *list, CString(*getKey)(const void*), int(*compare)(CString, CString),
-			  void (*delete)(void*), bool sorted) {
+			  void (*delete)(const void*), bool sorted) {
 	memset(list, 0, sizeof(List));
 	initBlock(&(list->block));
 	list->refCount = 1;
@@ -221,7 +221,7 @@ bool isLastElementInList(List* list, void* element) {
 }
 
 // iterateList iterates the elements of a List calling a function on each.
-void iterateList(List *list, void(*iterate)(void*)) {
+void iterateList(List *list, void(*iterate)(const void*)) {
 	iterateBlock(&(list->block), iterate);
 }
 
@@ -252,7 +252,7 @@ void incrReferenceCountList (List *list,
 // the delete function, pass this function instead.
 
 void
-freeListElement (void *ptr)
+freeListElement (const void *ptr)
 {
   stdfree (ptr);
 }

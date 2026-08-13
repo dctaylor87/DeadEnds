@@ -39,7 +39,7 @@ GNodeIndexEl* createGNodeIndexEl(GNode* root, void* data) {
 
 // createGNodeIndex creates a HashTable that indexes GNode roots with arbitrary data. Set delete
 // to a function if the data should be deleted when the table is deleted.
-GNodeIndex* createGNodeIndex(void (*delete)(void*)) {
+GNodeIndex* createGNodeIndex(void (*delete)(const void*)) {
 	return createHashTable(getKey, compare, delete, 1207);
 }
 

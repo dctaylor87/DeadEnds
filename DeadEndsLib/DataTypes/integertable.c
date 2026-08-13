@@ -47,7 +47,7 @@ void incrIntegerTable (IntegerTable* table, CString key) {
 	else insertInIntegerTable(table, key, 1);
 }
 
-static void show(void* element) {
+static void show(const void* element) {
 	IntegerElement* el = (IntegerElement*) element;
 	printf(" %s -> %d\n", el->key, el->value);
 }

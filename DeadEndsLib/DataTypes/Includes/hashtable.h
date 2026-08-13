@@ -35,12 +35,12 @@ typedef struct HashTable {
 	int numBuckets; // Should be a prime number.
 	CString (*getKey)(const void*);
 	int (*compare)(CString, CString);
-	void (*delete)(void*);
+	void (*delete)(const void*);
 	Bucket** buckets;
 } HashTable;
 
 // User interface to HashTable.
-HashTable* createHashTable(CString(*)(const void*), int(*)(CString, CString), void(*)(void*), int);
+HashTable* createHashTable(CString(*)(const void*), int(*)(CString, CString), void(*)(const void*), int);
 void deleteHashTable(HashTable*);
 bool isInHashTable(HashTable*, CString key);
 void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex);
@@ -49,19 +49,19 @@ void* searchHashTableWithElement(HashTable* table, void* element);
 
 void addToHashTable(HashTable*, void*, bool);
 bool addToHashTableIfNew(HashTable*, void*);
-void *firstInHashTable(HashTable*, int*, int*);
-void* nextInHashTable(HashTable*, int*, int*);
-void *lastInHashTable(HashTable*, int*, int*);
-void* previousInHashTable(HashTable*, int*, int*);
+const void *firstInHashTable(HashTable*, int*, int*);
+const void* nextInHashTable(HashTable*, int*, int*);
+const void *lastInHashTable(HashTable*, int*, int*);
+const void* previousInHashTable(HashTable*, int*, int*);
 
 int sizeHashTable(HashTable*);
-void showHashTable(HashTable*, void(*show)(void*));
-void dumpHashTable(HashTable*, void(*show)(void*));
+void showHashTable(HashTable*, void(*show)(const void*));
+void dumpHashTable(HashTable*, void(*show)(const void*));
 /*static*/ int getHash(CString, int);
 void removeFromHashTable(HashTable*, CString key);
-void iterateHashTable(HashTable*, void (*)(void*));
-int iterateHashTableWithPredicate(HashTable*, bool(*)(void*));
-int iterateHashTableWithPredicate2(HashTable*, void *, bool(*)(void*, void*));
+void iterateHashTable(HashTable*, void (*)(const void*));
+int iterateHashTableWithPredicate(HashTable*, bool(*)(const void*));
+int iterateHashTableWithPredicate2(HashTable*, void *, bool(*)(const void*, void*));
 
 extern void addrefHashTable (HashTable *table); // increment ref. count of table
 extern void releaseHashTable (HashTable *table); // decrement ref. count of table, free if zero
@@ -76,8 +76,8 @@ extern void incrReferenceCountTable (HashTable *table, CString file, int line, C
 #define FORHASHTABLE(table, element) {\
 		int __i = 0, __j = 0;\
 		HashTable *__table = table;\
-		void *element = null;\
-		void *__element = firstInHashTable(__table, &__i, &__j);\
+		const void *element = null;\
+		const void *__element = firstInHashTable(__table, &__i, &__j);\
 		for(; __element; __element = nextInHashTable(__table, &__i, &__j)) {\
 			element = __element;
 #define ENDHASHTABLE }}

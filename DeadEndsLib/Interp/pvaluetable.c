@@ -28,7 +28,7 @@ static int compare(CString a, CString b) { return strcmp(a, b); }
 
 // delete deletes a program value element when it is removed from a table.
 // MNOTE: This has to be done carefully.
-static void delete(void* a) {
+static void delete(const void* a) {
     PValueElement *element = (PValueElement*) a;
     stdfree(element->key);
     PValue* pvalue = element->value;

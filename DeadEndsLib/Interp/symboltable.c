@@ -39,7 +39,7 @@ static int compare(CString a, CString b) {
 }
 
 // delete deletes a Symbol. It frees both PValue and the identifier before deleting the Symbol itself.
-static void delete(void* a) {
+static void delete(const void* a) {
 	Symbol* symbol = (Symbol*) a;
 	stdfree(symbol->value); // CURRENT: Must call deletePValue here.
     stdfree(symbol->ident);

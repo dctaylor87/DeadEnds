@@ -112,7 +112,7 @@ static void showConnects(List* list, GNodeIndex* index) {
 }
 
 // deleteData is the delete function use by GNodeIndex to delete the connect data areas.
-static void deleteData(void* data) {
+static void deleteData(const void* data) {
 	stdfree(data);
 }
 

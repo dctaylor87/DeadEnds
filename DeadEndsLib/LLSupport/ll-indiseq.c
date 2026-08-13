@@ -110,7 +110,7 @@
 #define snam(s) ((s)->name)
 #define sval(s) ((s)->value)
 //#define sprn(s) ((s)->s_prn)
-#define sprn(s) ((s)->value)	/* XXX not sure of this one! XXX */
+#define sprn(s) ((s)->value->value.uString)	/* XXX not sure of this one! XXX */
 //#define spri(s) ((s)->s_pri)
 
 /*********************************************

@@ -22,7 +22,7 @@ static int compare(CString a, CString b) {
 }
 
 // delete is the delete function for StringTable; key and value are both freed.
-static void delete(void* word) {
+static void delete(const void* word) {
 	StringElement *element = (StringElement*) word;
 	stdfree(element->key);
 	if (element->value) stdfree(element->value);
@@ -66,7 +66,7 @@ CString fixString(StringTable *table, CString string) {
 }
 
 // show is the private function that shows StringElement in the showStringTable function.
-static void show(void* element) {
+static void show(const void* element) {
 	StringElement* el = (StringElement*) element;
 	printf("  %s -> %s\n", el->key, el->value ? el-> value : "null");
 }

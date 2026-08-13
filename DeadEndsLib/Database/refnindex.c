@@ -40,7 +40,7 @@ RefnIndexEl *createRefnIndexEl(CString refn, CString key) {
 }
 
 /// Shows a RefnIndexEl, for debugging
-static void showRefnIndexEl(void *element) {
+static void showRefnIndexEl(const void *element) {
   RefnIndexEl *elt = (RefnIndexEl *)element;
   printf("refn: %s, key: %s\n", elt->refn, elt->key);
 }
@@ -61,7 +61,7 @@ static CString getKey(const void* a) {
 }
 
 /// Frees a RefnIndexEl.
-static void delete(void* element) {
+static void delete(const void* element) {
     stdfree(element);
 }
 

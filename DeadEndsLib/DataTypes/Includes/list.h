@@ -22,13 +22,13 @@ typedef struct List {
 	int refCount; // how man references to the List exist
 	bool sorted; // Is a sorted list.
 	bool isSorted; // Is currently sorted.
-	void (*delete)(void*);
+	void (*delete)(const void*);
 	CString (*getKey)(const void*);
 	int (*compare)(CString, CString);
 } List;
 
-List* createList(CString(*g)(const void*), int(*c)(CString, CString), void (*d)(void*), bool sorted);
-void initList(List*, CString(*g)(const void*), int(*c)(CString, CString), void(*d)(void*), bool sorted);
+List* createList(CString(*g)(const void*), int(*c)(CString, CString), void (*d)(const void*), bool sorted);
+void initList(List*, CString(*g)(const void*), int(*c)(CString, CString), void(*d)(const void*), bool sorted);
 void deleteList(List*);
 int lengthList(List*);
 void emptyList(List*);
@@ -51,7 +51,7 @@ void uniqueList(List*);
 bool removeFromList(List*, int);
 bool removeFirstListElement(List*);
 bool removeLastListElement(List*);
-void iterateList(List*, void(*perform)(void*));
+void iterateList(List*, void(*perform)(const void*));
 
 bool isFirstElementInList(List*, void*);
 bool isLastElementInList(List*, void*);
@@ -65,7 +65,7 @@ void* getAndRemoveFirstListElement(List*);
 
 void showList(List *list, String(*describe)(void*));
 
-void freeListElement (void*);
+void freeListElement (const void*);
 
 extern void incrReferenceCountList (List *list, CString file, int line, CString function);
 

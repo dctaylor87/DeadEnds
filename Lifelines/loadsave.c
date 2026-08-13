@@ -108,7 +108,7 @@ static char *mabbv[] =
 void
 load_gedcom (bool picklist, Database *database)
 {
-	String srcdir=NULL;
+	CString srcdir=NULL;
 	CString filename = 0;
 	CString fullpath=0;
 	time_t begin = time(NULL);
@@ -168,7 +168,7 @@ save_gedcom (Database *database)
 {
 	FILE *fp=NULL;
 	//struct tag_export_feedback efeed;
-	String srcdir=NULL;
+	CString srcdir=NULL;
 	CString fname=0;
 	CString fullpath=0;
 

@@ -46,7 +46,7 @@ static int nameCompare(CString a, CString b) {
 }
 
 // delete is the function that deletes a SequenceEl.
-static void delete(void* element) {
+static void delete(const void* element) {
 	stdfree(element);
 }
 

@@ -18,7 +18,7 @@ static void* searchBucket(Bucket*, CString key, CString(*g)(const void*), int(*c
 // createHashTable creates and returns a HashTable. getKey is a function that returns the key of
 // an element, and delete is an optional function that frees an element.
 HashTable* createHashTable(CString(*getKey)(const void*), int(*compare)(CString, CString),
-						   void(*delete)(void*), int numBuckets) {
+						   void(*delete)(const void*), int numBuckets) {
 	HashTable *table = (HashTable*) stdalloc(sizeof(HashTable));
 	if (! table)
 	  return NULL;
@@ -39,7 +39,7 @@ HashTable* createHashTable(CString(*getKey)(const void*), int(*compare)(CString,
 }
 
 // deleteBucket deletes a Bucket. If there is a delete function it is called on the elements.
-static void deleteBucket(Bucket* bucket, void(*delete)(void*)) {
+static void deleteBucket(Bucket* bucket, void(*delete)(const void*)) {
   if (!bucket) return;
   deleteBlock (&bucket->block, delete);
   stdfree(bucket);
@@ -228,7 +228,7 @@ int sizeHashTable(HashTable* table) {
 // iteration state. The caller provides locations for them. This function and nextInHashTable are
 // called from the same function. Use macros FORHASHTABLE and ENDHASHTABLE to automate calling
 // these functions. They manage the state variables.
-void* firstInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
+const void* firstInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
 	for (int i = 0; i < table->numBuckets; i++) {
 		Bucket* bucket = table->buckets[i];
 		if (bucket == null) continue;
@@ -242,7 +242,7 @@ void* firstInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { 
 
 // nextInHashTable returns the next element in the hash table, using the (in,out) state
 // variables to keep track of the state of the iteration.
-void* nextInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) {
+const void* nextInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) {
 	Bucket* bucket = table->buckets[*bucketIndex];
 	Block* block = &(bucket->block);
 	if (*elementIndex < block->length - 1) {
@@ -267,7 +267,7 @@ void* nextInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) {
 // iteration state. The caller must provide the locations of two
 // integer varibalbes to hold the state.
 
-void* lastInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
+const void* lastInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
 	for (int i = table->numBuckets - 1; i >= 0; i--) {
 		Bucket* bucket = table->buckets[i];
 
@@ -284,7 +284,7 @@ void* lastInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { /
 
 // previousInHashTable returns the next element in the hash table, using the (in,out) state
 // variables to keep track of the state of the iteration.
-void* previousInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
+const void* previousInHashTable(HashTable* table, int* bucketIndex, int* elementIndex) { //PH;
 	Bucket* bucket = table->buckets[*bucketIndex];
 	Block* block = &(bucket->block);
 	if (*elementIndex > 0) {
@@ -305,7 +305,7 @@ void* previousInHashTable(HashTable* table, int* bucketIndex, int* elementIndex)
 
 // iterateHashTable iterates a hash table and performs a function on each element; elements
 // are visited in hash key order.
-void iterateHashTable(HashTable* table, void (*function)(void*)) {
+void iterateHashTable(HashTable* table, void (*function)(const void*)) {
 	if (!function) return;
 	FORHASHTABLE(table, element)
 		(*function)(element);
@@ -314,7 +314,7 @@ void iterateHashTable(HashTable* table, void (*function)(void*)) {
 
 // iterateHashTableWithPredicate iterates a hash table running a predicate on each; elements
 // are visited in hash key order; returns the number of elements that match the predicate.
-int iterateHashTableWithPredicate(HashTable* table, bool (*predicate)(void*)) { //PH;
+int iterateHashTableWithPredicate(HashTable* table, bool (*predicate)(const void*)) { //PH;
 	int count = 0;
 	FORHASHTABLE(table, element)
 		if ((*predicate)(element)) count++;
@@ -326,7 +326,7 @@ int iterateHashTableWithPredicate(HashTable* table, bool (*predicate)(void*)) { 
 // iterateHashTableWithPredicate except that the predicate takes an
 // extra argument -- to avoid the need for extra variables.
 int iterateHashTableWithPredicate2 (HashTable* table, void *predicateArg,
-				    bool (*predicate)(void *elt, void *extra))
+				    bool (*predicate)(const void *elt, void *extra))
 {
   int count = 0;
   FORHASHTABLE(table, element)
@@ -338,7 +338,7 @@ int iterateHashTableWithPredicate2 (HashTable* table, void *predicateArg,
 
 // showHashTable shows the contents of a hash table, including bucket and element indexes.
 // show is a function to show an element. For debugging. Uses variables defined in macro.
-void showHashTable(HashTable* table, void (*show)(void*)) {
+void showHashTable(HashTable* table, void (*show)(const void*)) {
 	int count = 0;
 	FORHASHTABLE(table, element)
 		printf("%d %d ", __i, __j);
@@ -377,7 +377,7 @@ releaseHashTable (HashTable *table)
 }
 
 // Dumps a hash table to standard error.
-void dumpHashTable(HashTable* table, void (*show)(void*)) {
+void dumpHashTable(HashTable* table, void (*show)(const void*)) {
     fprintf(stderr, "Dumping Hash Table with %d buckets\n", table->numBuckets);
     int numElements = 0;
     for (int i = 0; i < table->numBuckets; i++) {

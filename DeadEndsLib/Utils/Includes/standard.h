@@ -43,7 +43,7 @@ String lower(CString);  // Convert a string to lower case.
 String upper(CString);  // Convert a string to upper case.
 String capitalize(CString);
 
-void basicDelete(void*);
+void basicDelete(const void*);
 
 #define MAXLINELEN 4096  // Max length for Gedcom lines when reading files.
 

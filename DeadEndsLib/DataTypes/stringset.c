@@ -16,7 +16,7 @@ static CString getKey(const void* element) {
 }
 
 // delete is the optional delete function for StringSets.
-static void delete(void* element) {
+static void delete(const void* element) {
 	stdfree(element);
 }
 

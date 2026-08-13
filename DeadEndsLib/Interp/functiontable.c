@@ -28,7 +28,7 @@ static CString getKey(const void* element) {
 }
 
 // delete is the delete function for FunctionTables.
-static void delete(void* element) {
+static void delete(const void* element) {
 	FunctionElement* funcEl = (FunctionElement*) element;
 	stdfree(funcEl->name);
 	freePNodes(funcEl->function);

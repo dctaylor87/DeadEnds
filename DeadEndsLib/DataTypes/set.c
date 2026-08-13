@@ -12,7 +12,7 @@
 #include "set.h"
 
 // createSet creates a Set; the getKey and compare functions are required; delete is optional.
-Set* createSet(CString(*getKey)(const void*), int(*compare)(CString, CString), void(*delete)(void*)) {
+Set* createSet(CString(*getKey)(const void*), int(*compare)(CString, CString), void(*delete)(const void*)) {
 	Set* set = (Set*) stdalloc(sizeof(Set));
 	if (! set)
 	  return NULL;
@@ -54,7 +54,7 @@ void removeFromSet(Set* set, CString key) {
 }
 
 // iterateSet iterates the elements of a set, calling a function on each.
-void iterateSet(Set* set, void (*action)(void*)) {
+void iterateSet(Set* set, void (*action)(const void*)) {
 	iterateList(&(set->list), action);
 }
 

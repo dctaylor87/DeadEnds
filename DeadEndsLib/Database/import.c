@@ -31,7 +31,7 @@ bool importDebugging = false;
 
 // getDatabasesFromFiles imports a list of Gedcom files into a List of Databases, one per file.
 // If errors are found in a file its Database is not created and the errors are logged.
-static void deletedbase(void* element) { deleteDatabase((Database*) element); }
+static void deletedbase(const void* element) { deleteDatabase((Database*) element); }
 List* getDatabasesFromFiles(List* filePaths, ErrorLog* errorLog) {
     ASSERT(filePaths && errorLog);
 	List* databases = createList(null, null, deletedbase, false);

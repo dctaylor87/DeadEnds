@@ -15,7 +15,7 @@ static int pvlistAllocs = 0;
 static int pvlistFrees = 0;
 
 /// Frees an element of a PValueList.
-static void delete(void* element) { freePValue(element); }
+static void delete(const void* element) { freePValue(element); }
 
 /// Creates a PValueList.
 PValueList* createPValueList(void) {

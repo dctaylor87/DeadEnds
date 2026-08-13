@@ -23,7 +23,7 @@ typedef struct GNodeIndexEl {
 typedef HashTable GNodeIndex;
 
 // Interface to GNodeIndex and GNodeIndexEl.
-GNodeIndex* createGNodeIndex(void(*delete)(void*));
+GNodeIndex* createGNodeIndex(void(*delete)(const void*));
 GNodeIndexEl* createGNodeIndexEl(GNode* root, void* data);
 void addToGNodeIndex(GNodeIndex*, GNode*, void* data);
 void showGNodeIndex(GNodeIndex*, void(*show)(void*));

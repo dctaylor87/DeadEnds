@@ -79,7 +79,7 @@ static List* getFileNames(int argc, char** argv) {
 }
 
 // getListFromStrings creates a List of Strings from a comma-separated String.
-static void delete(void* element) { stdfree(element); }
+static void delete(const void* element) { stdfree(element); }
 List* listFromStrings(const String string) {
 	char *input = strsave(string); // Duplicate for safe tokenization
 	List* strings = createList(null, null, delete, false);

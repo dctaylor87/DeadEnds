@@ -16,7 +16,7 @@ static bool sortDebugging = false;
 //  Internal quick sort functions.
 static void quickSort(int, int);
 static int getPivot(int left, int right);
-static int partition(int left, int right, void *pivot);
+static int partition(int left, int right, const void *pivot);
 
 // State variables used by the sort functions.
 static const void** lelements;  // lelements is the array of elements.
@@ -32,7 +32,7 @@ void sortElements(const void** elements, int length, CString(*getKey)(const void
 	quickSort(0, length - 1);
 }
 
-static int magicCompare(void* a, void* b) {
+static int magicCompare(const void* a, const void* b) {
 	return lcompare(lgetKey(a), lgetKey(b));
 }
 #define LNULL -1
@@ -41,7 +41,7 @@ void quickSort(int left, int right) {
 	int pivotIndex = getPivot(left, right);
 	if (sortDebugging) printf("quickSort: left=%d, right=%d, pivot=%d\n", left, right, pivotIndex);
 	if (pivotIndex != LNULL) {
-		void *pivot = lelements[pivotIndex];
+		const void *pivot = lelements[pivotIndex];
 		int midIndex = partition(left, right, pivot);
 		quickSort(left, midIndex-1);
 		quickSort(midIndex, right);
@@ -49,10 +49,10 @@ void quickSort(int left, int right) {
 }
 
 // partition partitions around a pivot.
-static int partition(int left, int right, void* pivot) {
+static int partition(int left, int right, const void* pivot) {
 	int i = left, j = right;
 	do {
-		void* tmp = lelements[i];
+		const void* tmp = lelements[i];
 		lelements[i] = lelements[j];
 		lelements[j] = tmp;
 		while (magicCompare(lelements[i], pivot) < 0) i++;
@@ -63,10 +63,10 @@ static int partition(int left, int right, void* pivot) {
 
 // getPivot chooses the pivot element.
 static int getPivot(int left, int right) {
-	void* pivot = lelements[left];
+	const void* pivot = lelements[left];
 	int left0 = left, rel;
 	for (++left; left <= right; left++) {
-		void* next = lelements[left];
+		const void* next = lelements[left];
 
 		if ((rel = magicCompare(next, pivot)) > 0) return left;
 		if (rel < 0) return left0;
