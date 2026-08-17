@@ -14,13 +14,9 @@
 #include "hashtable.h"
 #include "parse.h"
 #include "path.h"
-#include "pnode.h"
 #include "functiontable.h"
 #include "interp.h"
 #include "errors.h"
-#include "symboltable.h"
-#include "frame.h"
-#include "context.h"
 #include "pvalue.h"
 
 #include "messages.h"
@@ -34,7 +30,7 @@
 #include "denls.h"
 #include "lloptions.h"
 #include "dateprint.h"
-#include "readwrite.h"
+//#include "readwrite.h"
 #include "codesets.h"
 #include "liflines.h"		/* interp_main */
 
@@ -113,7 +109,7 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   else
     {
       /* Caller did not provide a script name, ask the user for one */
-      String fname = null;
+      CString fname = null;
       if (! rptui_ask_for_program(DEREADTEXT, _(qSwhatrpt), &fname,
 				  programsdir, ".ll", picklist))
 	{
@@ -177,7 +173,17 @@ interp_program (String proc, int nargs, void **args, CString sfile,
   programRunning = true;
 
   msg_output(MSG_STATUS, _("Program is running..."));
-  runProgram (program, database, file);
+  InterpType retval = runProgram (program, database, file);
+  switch (retval)
+    {
+    case InterpOkay:
+    case InterpReturn:
+      msg_info(_("Program was run successfully.\n"));
+      break;
+    default:
+      msg_status(_("Program was not run.\n"));
+      break;
+    }
 #endif
   /* Clean up and return */
 
