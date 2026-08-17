@@ -195,10 +195,10 @@ GNode *__llpy_key_to_record (CString key, int *int_type, Database *database)
   int ndx;
   int type = 0;
 
-  char key_buffer[strlen(key) + 3];
-
   if (! key || (key[0] == '\0'))
     return NULL;
+
+  char key_buffer[strlen(key) + 3];
 
   /* convenience -- add '@'s if needed; convert to uppercase */
   if (key[0] != '@')
