@@ -24,7 +24,7 @@
 PValue __substring (PNode *pnode, Context *context, bool *errflg)
 {
 	PNode *arg = pnode->arguments;
-	String full = evaluateString(arg, context, errflg);
+	CString full = evaluateString(arg, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The first argument to substring must be a string.");
 		return nullPValue;
@@ -129,7 +129,7 @@ static int llindex(const char *str, const char *sub, int nth) {
 PValue __trim (PNode *pnode, Context *context, bool *errflg) {
 	// Get the String to be trimmed.
 	PNode *arg = pnode->arguments;
-	String string = evaluateString(arg, context, errflg);
+	CString string = evaluateString(arg, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The first argument to trim must be a string.");
 		return nullPValue;
@@ -149,7 +149,7 @@ PValue __trim (PNode *pnode, Context *context, bool *errflg) {
 PValue __rjustify (PNode *pnode, Context *context, bool *errflg) {
 	// Get the String to be right justified.
 	PNode *arg = pnode->arguments;
-	String string = evaluateString(arg, context, errflg);
+	CString string = evaluateString(arg, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The first argument to rjustify must be a string.");
 		return nullPValue;

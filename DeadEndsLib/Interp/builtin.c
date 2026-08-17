@@ -50,7 +50,7 @@ const PValue nullPValue = {PVNull, PV()};
 const PValue truePValue = PVALUE(PVBool, uBool, true);
 const PValue falsePValue = PVALUE(PVBool, uBool, false);
 
-static bool debugging = false;
+//static bool debugging = false;
 
 // isZeroVUnion returns if VUnion value is a numeric zero.
 bool isZeroVUnion(PVType type, VUnion vunion) {
@@ -356,7 +356,7 @@ PValue __strtoint (PNode *node, Context *context, bool *eflg) {
 
 //  __save copies a string on the heap.
 PValue __save (PNode *pnode, Context *context, bool *errflg) {
-    String value = evaluateString(pnode->arguments, context, errflg);
+	CString value = evaluateString(pnode->arguments, context, errflg);
 	if (*errflg || !value || *value == 0) {
 		scriptError(pnode, "argument to save() must be a string.");
 		*errflg = true;
@@ -618,7 +618,7 @@ PValue __extractplaces(PNode *pnode, Context *context, bool *errflg) {
 // __copyfile copies the contents of a file to the output stream.
 // usage: copyfile(STRING) -> VOID
 PValue __copyfile (PNode *pnode, Context *context, bool *errflg) {
-	String fileName = evaluateString(pnode->arguments, context, errflg);
+	CString fileName = evaluateString(pnode->arguments, context, errflg);
 	if (*errflg || fileName == null || strlen(fileName) == 0) {
 		*errflg = true;
 		scriptError(pnode, "The argument to copyfile must be a string.");
@@ -794,7 +794,7 @@ PValue __deletenode(PNode *node, Context *context, bool *errflg) {
 // __getrecord reads a GNode record from a database.
 // usage: getrecord(STRING) -> NODE and dereference(STRING) -> NODE
 PValue __getrecord (PNode *pnode, Context *context, bool *errflg) {
-	String key = evaluateString(pnode->arguments, context, errflg);
+	CString key = evaluateString(pnode->arguments, context, errflg);
 	if (*errflg || !key || *key == 0) {
 		scriptError(pnode, "first parameter to getrecord/dereference() must be a record key");
 		*errflg = true;
@@ -815,7 +815,7 @@ PValue __freerecord (PNode* pnode ATTRIBUTE_UNUSED,
 // __reference checks if a String is has the format of a record key.
 // usage: reference(STRING) -> BOOLEAN
 PValue __reference (PNode* pnode, Context* context, bool* errflg) {
-	String key = evaluateString(pnode->arguments, context, errflg);
+	CString key = evaluateString(pnode->arguments, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "The argument to reference must be formatted as a record key.");
 		return nullPValue;
@@ -831,7 +831,7 @@ PValue __reference (PNode* pnode, Context* context, bool* errflg) {
 PValue __extracttokens (PNode *pnode, Context *context, bool *errflg) {
 	// Get the String to be tokenized.
 	PNode *sexp = pnode->arguments;
-	String str = evaluateString(sexp, context, errflg);
+	CString str = evaluateString(sexp, context, errflg);
 	if (*errflg) {
 		scriptError(pnode, "the first arg to extracttokens must be a string");
 		return nullPValue;
@@ -855,7 +855,7 @@ PValue __extracttokens (PNode *pnode, Context *context, bool *errflg) {
 		return nullPValue;
 	}
 	// Get the delimiter between tokens.
-	String dlm = evaluateString(lvar->next, context, errflg);
+	CString dlm = evaluateString(lvar->next, context, errflg);
     if (*errflg) return nullPValue;
 	if (!dlm || *dlm == 0) {
 		scriptError(pnode, "The fourth arg to extracttokens must be a string delimiter");

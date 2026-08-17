@@ -248,7 +248,7 @@ int evaluateInteger(PNode *pnode, Context *context, bool *errflg) {
 }
 
 //  evaluateString evaluates an expression that should resolve to a String.
-String evaluateString(PNode* pnode, Context* context, bool *errflg) {
+CString evaluateString(PNode* pnode, Context* context, bool *errflg) {
     ASSERT(pnode && context);
     PValue pvalue = evaluate(pnode, context, errflg);
     if (*errflg) {

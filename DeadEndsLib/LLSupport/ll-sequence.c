@@ -75,9 +75,9 @@ getAllRecordOfType (Database *database, RecordType type)
   int element = 0;
   GNode *record = 0;
 
-  for (record = firstInHashTable (database->recordIndex, &bucket, &element);
+  for (record = (GNode *)firstInHashTable (database->recordIndex, &bucket, &element);
        record;
-       record = nextInHashTable (database->recordIndex, &bucket, &element))
+       record = (GNode *)nextInHashTable (database->recordIndex, &bucket, &element))
     {
       if (nztype(record) == type)
 	appendToSequence (seq, nzkey(record), NULL);
@@ -99,9 +99,9 @@ getAllRefns (Database *database)
   int element = 0;
   RefnIndexEl *refnelt = 0;
 
-  for (refnelt = firstInHashTable (database->refnIndex, &bucket, &element);
+  for (refnelt = (RefnIndexEl *)firstInHashTable (database->refnIndex, &bucket, &element);
        refnelt;
-       refnelt = nextInHashTable (database->refnIndex, &bucket, &element))
+       refnelt = (RefnIndexEl *)nextInHashTable (database->refnIndex, &bucket, &element))
     appendToSequence (seq, refnelt->refn, NULL);
 
   if (lengthSequence (seq) <= 0)

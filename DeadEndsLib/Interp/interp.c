@@ -568,7 +568,7 @@ InterpType interpForindi (PNode* pnode, Context* context, PValue* pvalue) {
     sortList(roots);
     SymbolTable* table = context->frame->table;
     for (int i = 0; i < lengthList(roots); i++) {
-        GNode* person = getListElement(roots, i);
+        GNode* person = (GNode *)getListElement(roots, i);
         assignValueToSymbol(context, pnode->personIden, PVALUE(PVPerson, uGNode, person));
         assignValueToSymbol(context, pnode->countIden, PVALUE(PVInt, uInt, i + 1));
         InterpType irc = interpret(pnode->loopState, context, pvalue);
@@ -592,7 +592,7 @@ InterpType interpForfam(PNode* pnode, Context* context, PValue* pvalue) {
     sortList(roots);
     SymbolTable* table = context->frame->table;
     for (int i = 0; i < lengthList(roots); i++) {
-        GNode* family = getListElement(roots, i);
+        GNode* family = (GNode *)getListElement(roots, i);
         assignValueToSymbol(context, pnode->familyIden, PVALUE(PVFamily, uGNode, family));
         assignValueToSymbol(context, pnode->countIden, PVALUE(PVInt, uInt, i + 1));
         InterpType irc = interpret(pnode->loopState, context, pvalue);
@@ -616,7 +616,7 @@ InterpType interpForsour(PNode *pnode, Context *context, PValue *pvalue) {
     sortList(roots);
     SymbolTable* table = context->frame->table;
     for (int i = 0; i < lengthList(roots); i++) {
-        GNode* source = getListElement(roots, i);
+        GNode* source = (GNode *)getListElement(roots, i);
         assignValueToSymbol(context, pnode->familyIden, PVALUE(PVFamily, uGNode, source));
         assignValueToSymbol(context, pnode->countIden, PVALUE(PVInt, uInt, i + 1));
         InterpType irc = interpret(pnode->loopState, context, pvalue);
@@ -640,7 +640,7 @@ InterpType interpForeven (PNode* node, Context* context, PValue *pvalue) {
     sortList(roots);
     SymbolTable* table = context->frame->table;
     for (int i = 0; i < lengthList(roots); i++) {
-        GNode *event = getListElement(roots, i);
+        GNode *event = (GNode *)getListElement(roots, i);
         assignValueToSymbol(context, node->eventIden, PVALUE(PVEvent, uGNode, event));
         assignValueToSymbol(context, node->countIden, PVALUE(PVInt, uInt, i + 1));
         InterpType irc = interpret(node->loopState, context, pvalue);
@@ -663,7 +663,7 @@ InterpType interpForothr(PNode *node, Context *context, PValue *pval) {
     SymbolTable* table = context->frame->table;
     RootList* roots = context->database->otherRoots;
     for (int i = 0; i < lengthList(roots); i++) {
-        GNode* othr = getListElement(roots, i);
+        GNode* othr = (GNode *)getListElement(roots, i);
         assignValueToSymbol(context, node->otherIden, PVALUE(PVEvent, uGNode, othr));
         assignValueToSymbol(context, node->countIden, PVALUE(PVInt, uInt, i + 1));
         InterpType irc = interpret(node->loopState, context, pval);

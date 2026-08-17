@@ -16,7 +16,7 @@
 //static bool debugging = false;
 
 extern void testSequence(Database*, int);
-static Database *createDatabaseTest(String, int, ErrorLog*);
+//static Database *createDatabaseTest(String, int, ErrorLog*);
 static void listTest(Database*, int);
 static void forHashTableTest(Database*, int);
 static void parseAndRunProgramTest(Database*, int);
@@ -56,8 +56,9 @@ int main(void) {
 	return 0;
 }
 
+#if 0
 // createDatabaseTest creates a test database from a Gedcom file.
-Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorLog) {
+static Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorLog) {
 	printf("%d: START OF CREATE DATABASE TEST: %s %s\n", testNumber, gedcomFile, gms);
 	String lastSegment = lastPathSegment(gedcomFile);
 	printf("lastPathSegment: %s\n", lastSegment);
@@ -67,6 +68,7 @@ Database *createDatabaseTest(String gedcomFile, int testNumber, ErrorLog *errorL
 	printf("END OF CREATE DATABASE TEST: %2.3f\n", getMseconds());
 	return database;
 }
+#endif
 
 // getKey gets the key of a GNode element.
 static CString getKey(const void* element) { return ((GNode*) element)->key; }
@@ -82,7 +84,7 @@ void listTest(Database* database, int testNumber) {
 	GNode *person;
 	List *personList = createList(getKey, compareRecordKeys, null, false); // List for the persons.
 	int i, j;
-	void* element = firstInHashTable(database->recordIndex, &i, &j);
+	const void* element = firstInHashTable(database->recordIndex, &i, &j);
 	while (element) {
 		person = (GNode*) element;
 		if (count++ % 2) // Alternate to improve sorting.
@@ -158,7 +160,7 @@ static void forTraverseTest(Database* database, int testNumber) {
 }
 
 // showPersonName shows a person's name; used by the showHashTable test.
-static void showPersonName(void* element) {
+static void showPersonName(const void* element) {
 	GNode *person = (GNode*) element;
 	ASSERT(person);
 	GNode *name = NAME(person);

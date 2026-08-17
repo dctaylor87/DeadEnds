@@ -175,7 +175,7 @@ traverseRefns (TRAV_REFNS_FUNC func, void* param, Database *database)
 
   for (refn_elt = (RefnIndexEl *)firstInHashTable (database->refnIndex, &bucket, &element);
        refn_elt;
-       refn_elt = nextInHashTable (database->refnIndex, &bucket, &element))
+       refn_elt = (RefnIndexEl *)nextInHashTable (database->refnIndex, &bucket, &element))
     {
       refn = refn_elt->refn;
       key = refn_elt->key;

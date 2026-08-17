@@ -70,7 +70,7 @@ RootList* getRootListFromGNodeList(GNodeList *gnodes, String name, ErrorLog *elo
 	Block* block = &(gnodes->block);
 	const void** els = block->elements; // Starting elements as simple array.
 	for (int i = 0; i < block->length; i++) {
-		el = els[i];
+		el = (GNodeListEl *)els[i];
 		pnode = cnode;
 		cnode = el->node; // TODO: how is this possible; how is the type of el known?
 		plevel = clevel;

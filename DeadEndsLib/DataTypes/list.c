@@ -59,7 +59,7 @@ bool isEmptyList(List *list) {
 }
 
 // copyList creates a copy of a List; requires a copy function to make copies of elements.
-List* copyList(List* list, void* (*copyFunc)(void*)) {
+List* copyList(List* list, void* (*copyFunc)(const void*)) {
 	List* copy = createList(list->getKey, list->compare, list->delete, list->sorted);
 	if (! copy)
 	  fatal ("call to createList failed");
@@ -88,17 +88,17 @@ void prependToList(List* list, const void* element) {
 }
 
 // getFromList returns an indexed element from a List; the element is not removed from the List.
-void* getFromList(List* list, int index) {
+const void* getFromList(List* list, int index) {
 	return getFromBlock(&(list->block), index);
 }
 
 // getFirstListElement returns the first element from a List; it is not removed from the List.
-void* getFirstListElement(List* list) {
+const void* getFirstListElement(List* list) {
 	return getFirstBlockElement(&(list->block));
 }
 
 // getLastListElement returns the last element from a List; it is not removed from the List.
-void* getLastListElement(List* list) {
+const void* getLastListElement(List* list) {
 	return getLastBlockElement(&(list->block));
 }
 
@@ -118,15 +118,15 @@ bool removeLastListElement(List* list) {
 }
 
 // getAndRemoveFirstListElement removes and returns the first element from a List; caller must free.
-void* getAndRemoveFirstListElement(List* list) {
-	void* element = getFirstListElement(list);
+const void* getAndRemoveFirstListElement(List* list) {
+	const void* element = getFirstListElement(list);
 	removeFirstBlockElement(&(list->block), null); // null == don't delete
 	return element;
 }
 
 // getAndRemoveLastListElement removes and returns the last element from a List; caller must free.
-void* getAndRemoveLastListElement(List* list) {
-	void* element = getLastListElement(list);
+const void* getAndRemoveLastListElement(List* list) {
+	const void* element = getLastListElement(list);
 	removeLastBlockElement(&(list->block), null);
 	return element;
 }
@@ -152,7 +152,7 @@ void sortList(List* list) {
 }
 
 // searchList searches a List for a given Key. If sorted is true the List must be sorted.
-void* searchList(List* list, CString key, int* index) {
+const void* searchList(List* list, CString key, int* index) {
 	if (list->sorted) {
 		if (! list->isSorted)
 			sortList(list);
@@ -175,7 +175,7 @@ void setListElement(List *list, void* element, int index) {
 }
 
 // getListElement gets a specific element from a list. It is not a copy.
-void* getListElement(List *list, int index) {
+const void* getListElement(List *list, int index) {
 	Block *b = &(list->block);
 	ASSERT(list && index >= 0 && index < b->length);
 	return b->elements[index];
@@ -190,7 +190,7 @@ void insertInList(List *list, const void *element, int index) {
 
 // showList shows the contents of a List. The describe function it is called on each element to
 // get the String to print.
-void showList(List *list, String (*describe)(void*)) {
+void showList(List *list, String (*describe)(const void*)) {
 	if (!list || !describe) return;
 	Block *block = &(list->block);
 	printf("showList: len = %d; maxlen = %d\n", block->length, block->maxLength);
@@ -228,7 +228,7 @@ void iterateList(List *list, void(*iterate)(const void*)) {
 // findInList finds the element with given key in a list; the List may be sorted or unsorted.
 // If the element is in the List it is returned. The returned element also remains in the List
 // so the calling function must not modify it.
-void* findInList(List* list, CString key, int* index) {
+const void* findInList(List* list, CString key, int* index) {
 	if (list->sorted) {
 		sortList(list);
 		return findInSortedBlock(&(list->block), key, list->getKey, list->compare, index);

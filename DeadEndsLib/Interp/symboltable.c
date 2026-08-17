@@ -78,7 +78,7 @@ void assignValueToSymbolTable(SymbolTable* table, CString ident, PValue pvalue) 
     // Prepare the value to put in the symbol table.
     PValue* copy = clonePValue(&pvalue);
     // If the symbol exists free its old value.
-    Symbol* symbol = searchHashTable(table, ident);
+    Symbol* symbol = (Symbol *)searchHashTable(table, ident);
     addReferenceToPValue (copy);
     if (symbol) {
         freePValue(symbol->value);
@@ -106,7 +106,7 @@ void assignValueToSymbol(Context* context, CString ident, PValue pvalue) {
     }
 #endif
     addReferenceToPValue (copy);
-    Symbol* symbol = searchHashTable(table, ident);
+    Symbol* symbol = (Symbol *)searchHashTable(table, ident);
     if (symbol) {
         freePValue(symbol->value);
         symbol->value = copy;
@@ -118,7 +118,7 @@ void assignValueToSymbol(Context* context, CString ident, PValue pvalue) {
 
 // getValueFromSymbolTable gets the value of a Symbol from a SymbolTable; PValue is returned on stack.
 PValue getValueFromSymbolTable(SymbolTable* symtab, CString ident) {
-    Symbol *symbol = searchHashTable(symtab, ident);
+    Symbol *symbol = (Symbol *)searchHashTable(symtab, ident);
     if (!symbol || !symbol->value) return nullPValue;
 #ifdef LISTBUG
     if (symbol->value->type == PVList) {
@@ -131,8 +131,8 @@ PValue getValueFromSymbolTable(SymbolTable* symtab, CString ident) {
 // getValueOfSymbol gets the value of a symbol from a Context; the PValue is returned on the stack.
 PValue getValueOfSymbol(Context* context, CString ident) {
     SymbolTable* locals = context->frame->table;
-    Symbol* symbol = searchHashTable(locals, ident);
-    if (!symbol) symbol = searchHashTable(context->globals, ident);
+    Symbol* symbol = (Symbol *)searchHashTable(locals, ident);
+    if (!symbol) symbol = (Symbol *)searchHashTable(context->globals, ident);
     if (!symbol || !symbol->value) return nullPValue;
      return cloneAndReturnPValue(symbol->value);
 }

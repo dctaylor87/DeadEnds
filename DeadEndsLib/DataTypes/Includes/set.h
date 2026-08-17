@@ -24,7 +24,7 @@ bool isInSet(Set*, CString);
 void addToSet(Set*, const void*);
 void removeFromSet(Set*, CString);
 void iterateSet(Set*, void(*iter)(const void*));
-void showSet(Set*, String(*show)(void*));
+void showSet(Set*, String(*show)(const void*));
 List* listOfSet(Set*); // Underlying List.
 
 // FORSET and ENDSET are macros that iterate the elements of a Set.

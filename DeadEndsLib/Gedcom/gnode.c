@@ -45,7 +45,7 @@ static CString getFromTagTable(CString tag) {
 
 // freeGNode frees a GNode. Do not free the tag!
 void freeGNode(GNode* node) {
-	/*ASSERT (get_nrefcnt(node) == 0); /* XXX */
+	//ASSERT (get_nrefcnt(node) == 0); /* XXX */
 	if (node->key) {
 		stdfree(node->key);
 		node->key = 0;	/* paranoia */

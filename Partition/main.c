@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 	// Get the Gedcom file.
 	getArguments(argc, argv, &gedcomFile);
 	getEnvironment(&searchPath);
-	String resolvedFile = resolveFile(gedcomFile, searchPath, "ged");
+	CString resolvedFile = resolveFile(gedcomFile, searchPath, "ged");
 	if (!resolvedFile) {
 		fprintf(stderr, "Could not open file %s.\n", gedcomFile);
 		exit(1);
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 	GNode* topGun = null;
 	FORLIST(persons, el)
 		GNode* person = (GNode*) el;
-		GNodeIndexEl* element = searchHashTable(index, person->key);
+		GNodeIndexEl* element = (GNodeIndexEl *)searchHashTable(index, person->key);
 		ConnectData* data = element->data;
 		int score = data->numAncestors + data->numDescendents;
 		if (score > max) {
@@ -104,7 +104,7 @@ static void showConnects(List* list, GNodeIndex* index) {
 	printf("\nPartition:\n");
 	FORLIST(list, el)
 		GNode* root = el;
-		GNodeIndexEl* element = searchHashTable(index, root->key);
+		GNodeIndexEl* element = (GNodeIndexEl *)searchHashTable(index, root->key);
 		ConnectData* data = element->data;
 		printf("%s: %s: %d: %d\n", root->key, root->child->value, data->numAncestors,
 			   data->numDescendents);

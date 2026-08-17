@@ -9,6 +9,6 @@
 #define place_h
 
 void placeToList(String place, List *list);
-void valueToList (String str, List *list, String dlm); // TODO: Should be elsewhere.
+void valueToList (CString str, List *list, CString dlm); // TODO: Should be elsewhere.
 
 #endif // place_h

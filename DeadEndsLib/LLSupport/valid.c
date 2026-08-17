@@ -35,7 +35,7 @@ validate_new_record (GNode *new, GNode *orig, RecordType ntype,
   if (lengthList (errorLog) == 1)
     {
       /* XXX insert code to retrieve first error and set pmsg XXX */
-      Error *error = getFirstListElement (errorLog);
+      Error *error = (Error *)getFirstListElement (errorLog);
       snprintf (buffer, sizeof (buffer), "%s %s error: %s",
 		strErrorSeverity(error), strErrorType(error), error->message);
       *pmsg = buffer;

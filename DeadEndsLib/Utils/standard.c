@@ -254,7 +254,7 @@ String capitalize(CString str) {
 //}
 
 // trim trims a String if it is too long.
-String trim(String string, int maxLength) {
+String trim(CString string, int maxLength) {
 	static char scratch[MAXLINELEN+1];
 	if (!string || strlen(string) > MAXLINELEN) return null;
 	if (maxLength < 0) maxLength = 0;

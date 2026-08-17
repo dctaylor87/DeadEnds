@@ -289,7 +289,7 @@ PValue __getindiset (PNode *pnode, Context *context, bool* errflg)
       scriptError (pnode, "First argument to getindiset must be an identifier.");
       return nullPValue;
     }
-  String msg = _("Identify list of persons for program:");
+  CString msg = _("Identify list of persons for program:");
   if (iden->next)
     {
       msg = evaluateString (iden->next, context, errflg);

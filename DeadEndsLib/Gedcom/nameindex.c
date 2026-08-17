@@ -123,7 +123,7 @@ void removeNamesOfPersonFromIndex(NameIndex* index, GNode* person) {
 // MNOTE: The set that is returned is in the NameIndex. It cannot be changed.
 Set* searchNameIndex(NameIndex* index, CString name) {
 	String nameKey = nameToNameKey(name);
-	NameIndexEl* element = searchHashTable(index, nameKey);
+	NameIndexEl* element = (NameIndexEl*)searchHashTable(index, nameKey);
 	return element == null ? null : element->recordKeys;
 }
 

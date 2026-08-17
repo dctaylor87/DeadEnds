@@ -216,7 +216,7 @@ int compareRecordKeys(CString, CString);  // gedcom.c
     while (!isEmptyList(stack)) {\
 		protection++;\
 		if (protection > 500000) break;\
-        node = getAndRemoveFirstListElement(stack);\
+		node = (GNode *)getAndRemoveFirstListElement(stack);	\
         {
 
 #define ENDTRAVERSE\

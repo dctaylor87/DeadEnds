@@ -278,7 +278,7 @@ resize_win: /* we come back here if we resize the window */
 	if (first) {
 		elemwidth = ld.rectDetails.right - ld.rectDetails.left + 1;
 		if (lengthSequence(seq)<50)
-		  preprint_indiseq(seq, elemwidth, true, type, currentDatabase);
+		  preprint_indiseq(seq, elemwidth, &disp_long_rfmt, type, currentDatabase);
 		first=false;
 	}
 	uierase(ld.uiwin);
@@ -547,7 +547,7 @@ shw_recordlist_list (Sequence *seq, listdisp * ld, enum SequenceType type)
 				snprintf(numstr, sizeof(numstr), FMT_INT ":", i+1);
 				mvccwaddstr(win, row, ld->rectList.left+4, numstr);
 			}
-			print_indiseq_element(seq, i, buffer, width, true, type, currentDatabase);
+			print_indiseq_element(seq, i, buffer, width, &disp_long_rfmt, type, currentDatabase);
 			mvccwaddstr(win, row, ld->rectList.left+offset, buffer);
 		}
 	}
@@ -638,7 +638,7 @@ shw_array_of_strings (CString *strings, listdisp * ld, DETAILFNC detfnc
 		row++;
 	}
 	if (ld->details) {
-		String ptr = strings[ld->cur];
+		CString ptr = strings[ld->cur];
 		int count;
 		row = 2;
 		mvccwaddstr(win, row++, 2, _("-- CURRENT SELECTION --"));

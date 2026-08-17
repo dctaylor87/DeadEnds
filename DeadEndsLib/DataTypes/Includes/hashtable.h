@@ -43,12 +43,12 @@ typedef struct HashTable {
 HashTable* createHashTable(CString(*)(const void*), int(*)(CString, CString), void(*)(const void*), int);
 void deleteHashTable(HashTable*);
 bool isInHashTable(HashTable*, CString key);
-void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex);
-void* searchHashTable(HashTable*, CString key);
-void* searchHashTableWithElement(HashTable* table, void* element);
+const void* detailSearchHashTable(HashTable* table, CString key, int* phash, int* pindex);
+const void* searchHashTable(HashTable*, CString key);
+const void* searchHashTableWithElement(HashTable* table, const void* element);
 
-void addToHashTable(HashTable*, void*, bool);
-bool addToHashTableIfNew(HashTable*, void*);
+void addToHashTable(HashTable*, const void*, bool);
+bool addToHashTableIfNew(HashTable*, const void*);
 const void *firstInHashTable(HashTable*, int*, int*);
 const void* nextInHashTable(HashTable*, int*, int*);
 const void *lastInHashTable(HashTable*, int*, int*);

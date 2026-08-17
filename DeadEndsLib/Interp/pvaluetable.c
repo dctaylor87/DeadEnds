@@ -59,7 +59,7 @@ static PValueElement* createPValueElement(String key, PValue* ppvalue) {
 void insertInPValueTable(PValueTable* table, String key, PValue pvalue) {
     PValue* ppvalue = (PValue*) stdalloc(sizeof(PValue));
     memcpy(ppvalue, &pvalue, sizeof(PValue));
-    PValueElement *element = searchHashTable(table, key);
+    PValueElement *element = (PValueElement *)searchHashTable(table, key);
     addReferenceToPValue (ppvalue);
     if (element) {
         freePValue(element->value);
@@ -71,7 +71,7 @@ void insertInPValueTable(PValueTable* table, String key, PValue pvalue) {
 
 // getValueOfPValueElement gets the PValue mapped to by the key from PValueTable.
 PValue getValueOfPValueElement(PValueTable* table, CString key) {
-    PValueElement* element = searchHashTable(table, key);
+    PValueElement* element = (PValueElement *)searchHashTable(table, key);
     if (element) {
         PValue* ppvalue = element->value;
         if (ppvalue) return (PValue){ppvalue->type, ppvalue->value};

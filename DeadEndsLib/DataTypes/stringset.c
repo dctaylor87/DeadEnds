@@ -40,7 +40,7 @@ void deleteStringSet(StringSet* set, bool del) {
 }
 
 // showStringSet shows the Strings in a StringSet on a single line.
-static String toString(void* el) { return (String) el; }
+static String toString(const void* el) { return (String) el; }
 void showStringSet(StringSet* set) {
 	showSet(set, toString);
 

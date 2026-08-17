@@ -236,7 +236,8 @@ static void
 append_to_text_list (List *list, String text, int width, bool newline)
 {
 	String ptr = text;
-	String temp, current, curptr;
+	CString temp;
+	String current, curptr;
 	int len, curlen;
 	if (!text || !text[0])
 		return;

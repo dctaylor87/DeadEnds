@@ -14,7 +14,7 @@
 
 double getMseconds(void);
 String getMsecondsStr(void);
-String substring(String, int, int);
-String rightjustify (String, int);
+String substring(CString, int, int);
+String rightjustify (CString, int);
 
 #endif // utils_h

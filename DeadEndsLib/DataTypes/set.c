@@ -32,7 +32,7 @@ void addToSet(Set* set, const void* element) {
 	int index;
 	List* list = &(set->list);
 	CString key = list->getKey(element);
-	void* oldElement = findInList(list, key, &index);
+	const void* oldElement = findInList(list, key, &index);
 	if (oldElement)
 		removeFromList(list, index);
 	insertInList(list, element, index);
@@ -48,7 +48,7 @@ void removeFromSet(Set* set, CString key) {
 	if (!set || !key) return;
 	List* list = &(set->list);
 	int index;
-	void* element = findInList(list, key, &index);
+	const void* element = findInList(list, key, &index);
 	if (!element) return;
 	removeFromList(list, index);
 }
@@ -64,7 +64,7 @@ int lengthSet(Set *set) {
 }
 
 // showSet show the contents of a set using a describe function. Delegate to the list.
-void showSet(Set *set, String (*toString)(void*)) {
+void showSet(Set *set, String (*toString)(const void*)) {
 	showList(&(set->list), toString);
 }
 

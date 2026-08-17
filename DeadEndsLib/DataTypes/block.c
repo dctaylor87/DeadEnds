@@ -82,7 +82,7 @@ const void* getBlockElement(Block* block, int index) {
 }
 
 // setBlockElement replaces an element in a Block. The replaced element is freed.
-void setBlockElement(Block* block, void* element, void(*delete)(const void*), int index) {
+void setBlockElement(Block* block, const void* element, void(*delete)(const void*), int index) {
 	if (index < 0 || index >= block->length) return;
 	if (delete && (block->elements)[index])
 		delete((block->elements)[index]);
@@ -90,13 +90,13 @@ void setBlockElement(Block* block, void* element, void(*delete)(const void*), in
 }
 
 // findInBlock returns the element with given key if it exists; null otherwise; uses linear search.
-void* findInBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
+const void* findInBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
 	return linearSearch(block->elements, block->length, key, getKey, index);
 }
 
 // findInSortedBlock returns the element with given key if it exists; null otherwise; uses
 // binary search.
-void* findInSortedBlock(Block* block, CString key, CString(*getKey)(const void*),
+const void* findInSortedBlock(Block* block, CString key, CString(*getKey)(const void*),
 						int(*compare)(CString, CString), int* index) {
 	if (block->length == 0) {
 		if (index) *index = 0;
@@ -213,13 +213,13 @@ void sortBlock(Block* block, CString(*getKey)(const void*), int(*compare)(CStrin
 }
 
 // searchBlock searches an unsorted Block for an element. Index is set to its location.
-void* searchBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
+const void* searchBlock(Block* block, CString key, CString(*getKey)(const void*), int* index) {
 	if (index) *index = -1;
 	return linearSearch(block->elements, block->length, key, getKey, index);
 }
 
 // searchSortedBlock searches a sorted Block for an element. Index is set to its location.
-void* searchSortedBlock(Block *block, CString key, CString(*getKey)(const void*),
+const void* searchSortedBlock(Block *block, CString key, CString(*getKey)(const void*),
 						int(*compare)(CString, CString), int* index) {
 	if (index) *index = -1;
 	return binarySearch(block->elements, block->length, key, getKey, compare, index);

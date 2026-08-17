@@ -33,12 +33,12 @@ void deleteList(List*);
 int lengthList(List*);
 void emptyList(List*);
 bool isEmptyList(List*);
-List* copyList(List*, void*(*c)(void*));
+List* copyList(List*, void*(*c)(const void*));
 bool isInList(List*, CString, int*);
-void* findInList(List*, CString, int* index);
+const void* findInList(List*, CString, int* index);
 // Array access.
 void setListElement(List*, void*, int);
-void *getListElement(List *list, int index);
+const void *getListElement(List *list, int index);
 
 void appendToList(List*, const void*);
 void prependToList(List*, const void*);
@@ -46,7 +46,7 @@ void insertInList(List*, const void*, int);
 bool isSortedList(List*); // Uses sorted flag.
 bool isListSorted(List*); // Really checks.
 void sortList(List*);
-void* searchList(List* list, CString key, int* index);
+const void* searchList(List* list, CString key, int* index);
 void uniqueList(List*);
 bool removeFromList(List*, int);
 bool removeFirstListElement(List*);
@@ -56,14 +56,14 @@ void iterateList(List*, void(*perform)(const void*));
 bool isFirstElementInList(List*, void*);
 bool isLastElementInList(List*, void*);
 
-void* getFromList(List*, int);
-void* getFirstListElement(List*);
-void* getLastListElement(List*);
+const void* getFromList(List*, int);
+const void* getFirstListElement(List*);
+const void* getLastListElement(List*);
 
-void* getAndRemoveLastListElement(List*);
-void* getAndRemoveFirstListElement(List*);
+const void* getAndRemoveLastListElement(List*);
+const void* getAndRemoveFirstListElement(List*);
 
-void showList(List *list, String(*describe)(void*));
+void showList(List *list, String(*describe)(const void*));
 
 void freeListElement (const void*);
 

@@ -405,7 +405,7 @@ PValue __firstindi(PNode* pnode, Context* context, bool* eflg) {
 		return nullPValue;
 	}
 	sortList(personRoots);
-	GNode *root = getListElement(personRoots, 0);
+	GNode *root = (GNode *)getListElement(personRoots, 0);
 	return PVALUE(PVPerson, uGNode, root);
 }
 
@@ -421,7 +421,7 @@ PValue __nextindi(PNode* pnode, Context* context, bool* eflg) {
 	List *personRoots = context->database->personRoots;
 	sortList(personRoots);
 	int index;
-	GNode* cur = findInList(personRoots, indi->key, &index);
+	GNode* cur = (GNode *)findInList(personRoots, indi->key, &index);
 	if (indi != cur || index < 0 || index >= lengthList(personRoots)) {
 		*eflg = true;
 		scriptError(pnode, "The argument person doesn't have a valid index; call maintenance.");
@@ -430,7 +430,7 @@ PValue __nextindi(PNode* pnode, Context* context, bool* eflg) {
 	if (index == lengthList(personRoots) - 1) { // At last person.
 		return nullPValue;
 	}
-	return PVALUE(PVPerson, uGNode, getListElement(personRoots, index + 1));
+	return PVALUE(PVPerson, uGNode, (GNode *)getListElement(personRoots, index + 1));
 }
 
 // previndi returns the previous person in the database.
@@ -445,7 +445,7 @@ PValue __previndi(PNode* pnode, Context* context, bool* eflg) {
 	List *personRoots = context->database->personRoots;
 	sortList(personRoots);
 	int index;
-	GNode* cur = findInList(personRoots, indi->key, &index);
+	GNode* cur = (GNode *)findInList(personRoots, indi->key, &index);
 	if (indi != cur || index < 0 || index >= lengthList(personRoots)) {
 		*eflg = true;
 		scriptError(pnode, "The argument person doesn't have a valid index; call maintenance.");

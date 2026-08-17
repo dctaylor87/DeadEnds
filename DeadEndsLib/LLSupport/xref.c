@@ -130,7 +130,7 @@ static GNode *genericGetNextRecord (CString key, RecordIndex *index, RecordType 
   int bucket_index = 0;
   int element_index = 0;
   GNode *new;
-  void *detail;
+  const void *detail;
 
   if (! key)
     new = (GNode *)firstInHashTable (index, &bucket_index, &element_index);
@@ -142,7 +142,7 @@ static GNode *genericGetNextRecord (CString key, RecordIndex *index, RecordType 
       new = (GNode *)nextInHashTable (index, &bucket_index, &element_index);
     }
   while (new && (recordType(new) != type))
-    new = nextInHashTable (index, &bucket_index, &element_index);
+    new = (GNode *)nextInHashTable (index, &bucket_index, &element_index);
 
   /* if new is NULL, we've exhausted the index, if non-NULL, we found one.  */
   return (new);
@@ -160,7 +160,7 @@ getFirstRecord_PF (RootList *rootList)
     return NULL;		/* list empty */
 
   sortList (rootList);
-  GNode *new = getListElement (rootList, 0);
+  GNode *new = (GNode *)getListElement (rootList, 0);
 
   return (new);
 }
@@ -202,7 +202,7 @@ getLastRecord_PF (RootList *rootList)
     return NULL;		/* list empty */
 
   sortList (rootList);
-  GNode *new = getListElement (rootList, lengthList(rootList) - 1);
+  GNode *new = (GNode *)getListElement (rootList, lengthList(rootList) - 1);
 
   return (new);
 }
@@ -235,7 +235,7 @@ getNextRecord_PF (CString key, RootList *rootList)
   sortList (rootList);
 
   int index;
-  GNode *current = findInList (rootList, key, &index);
+  GNode *current = (GNode *)findInList (rootList, key, &index);
   if ((! current) || (index < 0) || (index >= lengthList(rootList)))
     {
       /* XXX report error somehow XXX */
@@ -243,7 +243,7 @@ getNextRecord_PF (CString key, RootList *rootList)
     }
   if (index == lengthList (rootList))
     return NULL;		/* at end of list, exhausted, no more */
-  GNode *new = getListElement (rootList, index + 1);
+  GNode *new = (GNode *)getListElement (rootList, index + 1);
 
   return (new);
 }
@@ -266,7 +266,7 @@ getPreviousRecord_PF (CString key, RootList *rootList)
   sortList (rootList);
 
   int index;
-  GNode *current = findInList (rootList, key, &index);
+  GNode *current = (GNode *)findInList (rootList, key, &index);
   if ((! current) || (index < 0) || (index >= lengthList(rootList)))
     {
       /* XXX report error somehow XXX */
@@ -274,7 +274,7 @@ getPreviousRecord_PF (CString key, RootList *rootList)
     }
   if (index == 0)
     return NULL;		/* at end of list, exhausted, no more */
-  GNode *new = getListElement (rootList, index - 1);
+  GNode *new = (GNode *)getListElement (rootList, index - 1);
 
   return (new);
 }
@@ -297,7 +297,7 @@ genericPreviousRecord (CString key, RecordIndex *index, RecordType type)
       new = (GNode *)previousInHashTable (index, &bucket_index, &element_index);
     }
   while (new && (recordType(new) != type))
-    new = previousInHashTable (index, &bucket_index, &element_index);
+    new = (GNode *)previousInHashTable (index, &bucket_index, &element_index);
 
   /* if new is NULL, we've exhausted the index, if non-NULL, we found one.  */
   return (new);

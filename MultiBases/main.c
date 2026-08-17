@@ -97,7 +97,7 @@ List* listFromStrings(const String string) {
 List* resolveFileNames(List* names, String path, String suffix) {
 	List* resolvedNames = createList(null, null, delete, false);
 	FORLIST(names, element)
-		String resolved = resolveFile(element, path, suffix);
+		CString resolved = resolveFile(element, path, suffix);
 		if (resolved) appendToList(resolvedNames, resolved);
 		else fprintf(stderr, "Could not resolve %s\n", (String) element);
 	ENDLIST

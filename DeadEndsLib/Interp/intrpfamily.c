@@ -138,7 +138,7 @@ PValue __firstfam(PNode* pnode, Context* context, bool* errflg) {
 		return nullPValue;
 	}
 	sortList(familyRoots);
-	GNode *root = getListElement(familyRoots, 0);
+	GNode *root = (GNode *)getListElement(familyRoots, 0);
 	return PVALUE(PVFamily, uGNode, root);
 }
 
@@ -154,7 +154,7 @@ PValue __nextfam(PNode* pnode, Context* context, bool* errflg) {
 	List *familyRoots = context->database->familyRoots;
 	sortList(familyRoots);
 	int index;
-	GNode* cur = findInList(familyRoots, fam->key, &index);
+	GNode* cur = (GNode *)findInList(familyRoots, fam->key, &index);
 	if (fam != cur || index < 0 || index >= lengthList(familyRoots)) {
 		*errflg = true;
 		scriptError(pnode, "The argument family doesn't have a valid index; call maintenance.");
@@ -163,7 +163,7 @@ PValue __nextfam(PNode* pnode, Context* context, bool* errflg) {
 	if (index == lengthList(familyRoots) - 1) { // At last family.
 		return nullPValue;
 	}
-	return PVALUE(PVFamily, uGNode, getListElement(familyRoots, index + 1));
+	return PVALUE(PVFamily, uGNode, (GNode *)getListElement(familyRoots, index + 1));
 }
 
 // prevfam returns the previous family in the database.
@@ -178,7 +178,7 @@ PValue __prevfam(PNode* pnode, Context* context, bool* errflg) {
 	List *familyRoots = context->database->familyRoots;
 	sortList(familyRoots);
 	int index;
-	GNode* cur = findInList(familyRoots, fam->key, &index);
+	GNode* cur = (GNode *)findInList(familyRoots, fam->key, &index);
 	if (fam != cur || index < 0 || index >= lengthList(familyRoots)) {
 		*errflg = true;
 		scriptError(pnode, "The argument person doesn't have a valid index; call maintenance.");

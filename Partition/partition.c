@@ -43,7 +43,7 @@ static List* createPartition(GNode* person, GNodeIndex* index, StringSet* visite
 
 	// Iterate until the queue is empty.
 	while (lengthList(queue) > 0) {
-		GNode* curr = getAndRemoveLastListElement(queue); // Could be person or family.
+		GNode* curr = (GNode *)getAndRemoveLastListElement(queue); // Could be person or family.
 		String key = curr->key;
 		if (isInSet(visited, key)) continue; // Skip if already processed.
 		addToSet(visited, key);

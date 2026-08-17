@@ -26,6 +26,6 @@ GNode* evaluatePerson(PNode*, Context*, bool*);    // Evaluate and return a pers
 GNode* evaluateFamily(PNode*, Context*, bool*);    // Evaluate and return a family.
 PValue evaluateBoolean(PNode*, Context*, bool*);   // Evaluate a boolean expression.
 int evaluateInteger(PNode*, Context*, bool*);      // Evaluate an integer expression.
-String evaluateString(PNode*, Context*, bool*);    // Evaluate a string expression.
+CString evaluateString(PNode*, Context*, bool*);   // Evaluate a string expression.
 
 #endif /* evaluate_h */

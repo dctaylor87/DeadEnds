@@ -194,7 +194,7 @@ PValue __print (PNode *pnode, Context *context, bool *errflg)
   for (PNode *arg = pnode->arguments; arg; arg = arg->next)
     {
       count++;
-      String str = evaluateString (arg, context, errflg);
+      CString str = evaluateString (arg, context, errflg);
       if (*errflg)
 	{
 	  *errflg = true;

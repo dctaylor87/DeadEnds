@@ -32,7 +32,7 @@ void getConnections(List* list, GNodeIndex* index) {
 
 // getNumAncestors returns the number of ancestors a person has.
 static int getNumAncestors(GNode* root, GNodeIndex* index) {
-	GNodeIndexEl* element = searchHashTable(index, root->key);
+	GNodeIndexEl* element = (GNodeIndexEl *)searchHashTable(index, root->key);
 	ConnectData* data = element->data;
 	if (data->ancestorsDone) return data->numAncestors; // Memoized.
 
@@ -40,11 +40,11 @@ static int getNumAncestors(GNode* root, GNodeIndex* index) {
 	int ancestors = 0;
 	for (GNode* pnode = root->child; pnode; pnode = pnode->sibling) {
 		if (eqstr("FAMC", pnode->tag)) { // Families this person is a child in.
-			GNodeIndexEl* felement = searchHashTable(index, pnode->value);
+			GNodeIndexEl* felement = (GNodeIndexEl *)searchHashTable(index, pnode->value);
 			GNode* family = felement->root;
 			for (GNode* fnode = family->child; fnode; fnode = fnode->sibling) {
 				if (eqstr("HUSB", fnode->tag) || eqstr("WIFE", fnode->tag)) {
-					GNodeIndexEl* pelement = searchHashTable(index, fnode->value);
+					GNodeIndexEl* pelement = (GNodeIndexEl *)searchHashTable(index, fnode->value);
 					ancestors += 1 + getNumAncestors(pelement->root, index);
 				}
 			}
@@ -57,7 +57,7 @@ static int getNumAncestors(GNode* root, GNodeIndex* index) {
 
 // getNumDescendents returns the number of descendents a person has.
 static int getNumDescendents(GNode* root, GNodeIndex* index) {
-	GNodeIndexEl* element = searchHashTable(index, root->key);
+	GNodeIndexEl* element = (GNodeIndexEl *)searchHashTable(index, root->key);
 	ConnectData* data = element->data;
 	if (data->descendentsDone) return data->numDescendents; // Memoized.
 
@@ -65,11 +65,11 @@ static int getNumDescendents(GNode* root, GNodeIndex* index) {
 	int descendents = 0;
 	for (GNode* pnode = root->child; pnode; pnode = pnode->sibling) {
 		if (eqstr("FAMS", pnode->tag)) { // Families this person is a spouse/parent in.
-			GNodeIndexEl* felement = searchHashTable(index, pnode->value);
+			GNodeIndexEl* felement = (GNodeIndexEl *)searchHashTable(index, pnode->value);
 			GNode* family = felement->root;
 			for (GNode* fnode = family->child; fnode; fnode = fnode->sibling) {
 				if (eqstr("CHIL", fnode->tag)) { // Children in this family are descendents.
-					GNodeIndexEl* pelement = searchHashTable(index, fnode->value);
+					GNodeIndexEl* pelement = (GNodeIndexEl *)searchHashTable(index, fnode->value);
 					descendents += 1 + getNumDescendents(pelement->root, index);
 				}
 			}

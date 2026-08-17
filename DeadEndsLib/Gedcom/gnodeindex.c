@@ -50,7 +50,7 @@ void addToGNodeIndex(GNodeIndex* index, GNode* gnode, void* data) {
 
 // searchGNodeIndex searches a GNodeIndex for the GNode with the given key.
 GNode* searchGNodeIndex(GNodeIndex* index, String key) {
-	GNodeIndexEl* el = searchHashTable(index, key);
+	GNodeIndexEl* el = (GNodeIndexEl *)searchHashTable(index, key);
 	if (!el || !el->root) return null;
 	return el->root;
 }
@@ -59,7 +59,7 @@ GNode* searchGNodeIndex(GNodeIndex* index, String key) {
 void showGNodeIndex(GNodeIndex* index, void(*show)(void*)) {
 	printf("GNodeIndex:\n");
 	FORHASHTABLE(index, el)
-		GNodeIndexEl* element = el;
+		GNodeIndexEl* element = (GNodeIndexEl *)el;
 		printf("\t%s: ", element->root->key);
 		if (show) (*show)(element->data);
 	ENDHASHTABLE

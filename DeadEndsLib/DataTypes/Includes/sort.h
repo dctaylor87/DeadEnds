@@ -13,8 +13,8 @@
 #include "standard.h"
 
 void sortElements(const void**, int, CString(*g)(const void*), int(*c)(CString, CString));
-void* linearSearch(const void**, int, CString, CString(*)(const void*), int*);
-void* binarySearch(const void**, int, CString, CString(*)(const void*), int(*c)(CString, CString), int*);
+const void* linearSearch(const void**, int, CString, CString(*)(const void*), int*);
+const void* binarySearch(const void**, int, CString, CString(*)(const void*), int(*c)(CString, CString), int*);
 
 void insertAtIndex(const void**, int len, const void*, int index);
 

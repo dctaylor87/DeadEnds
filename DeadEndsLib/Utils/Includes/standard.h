@@ -71,7 +71,7 @@ void* _alloc(size_t, CString, int);
 #endif
 void* _realloc(void* ptr, size_t, CString, int) __attribute__ ((alloc_size (2))) __attribute__ ((assume_aligned (8))) __attribute__ ((__returns_nonnull__));
 bool isLetter(int);  // Is character is an Ascii letter?
-String trim(String, int); // Trim String to size.
+String trim(CString, int); // Trim String to size.
 void _logAllocations(bool);  // Turn allocation logging on and off.
 void logRefCountChange (void *element, CString eltName, int refCount,
 			CString file, int line, CString function);

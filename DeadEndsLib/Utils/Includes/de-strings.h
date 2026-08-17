@@ -39,7 +39,7 @@ extern void chopstr_utf8 (String str, size_t index, bool utf8);
 extern void limit_width (String str, size_t width, bool utf8);
 
 /* strwhite.c */
-extern String trim (String str, int len);
+//extern String trim (String str, int len); // now declred in standard.h
 //extern void striptrail (String p); // now declared in standard.h
 extern void skipws (String * ptr);
 extern bool allwhite (String p);

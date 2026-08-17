@@ -11,7 +11,7 @@
 #include "place.h"
 
 static bool inString (int chr, CString str);
-void valueToList (String str, List *list, String dlm);
+//void valueToList (CString str, List *list, String dlm);
 
 // placeToList converts a Gedcom PLAC value to a list of phrases. A phrase is a string that
 // occurs before the first comma, after the last comma, or between successive commas. White
@@ -23,7 +23,7 @@ void placeToList(String place, List *list) {
 // valueToList converts a String to a list of trimmed phrases split by delimiters.
 // Each phrase is trimmed of leading/trailing whitespace and added to the list.
 // Returns true on success.
-void valueToList(String str, List* list, String dlm) {
+void valueToList(CString str, List* list, CString dlm) {
     emptyList(list); // Empty list before use.
     if (!str || *str == 0 || !list) return;
     // Create heap buffer to hold copy of string.

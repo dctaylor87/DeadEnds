@@ -144,7 +144,7 @@ static void append_to_msg_list(String msg);
 static void begin_action(void);
 static void check_menu(DYNMENU dynmenu);
 static void check_stdout(void);
-static int chooseOrViewArray (CString ttl, int no, String *pstrngs
+static int chooseOrViewArray (CString ttl, int no, CString *pstrngs
 	, bool selecting, DETAILFNC detfnc, void *param);
 #if !defined(DEADENDS)
 static int choose_tt(String prompt);
@@ -159,7 +159,8 @@ static void create_uisubwindow(UIWINDOW * puiw, CString name, UIWINDOW parent, i
 static void create_uiwindow_impl(UIWINDOW * puiw, CString name, WINDOW * win, int rows, int cols);
 static void create_windows(void);
 static void deactivate_uiwin(void);
-static void delete_uiwindow_impl(UIWINDOW uiw);
+//static void delete_uiwindow_impl(UIWINDOW uiw);
+static void delete_uiwindow_impl(const void *uiw);
 static void delete_uiwindow(UIWINDOW * uiw);
 static void destroy_windows(void);
 #if !defined(DEADENDS)
@@ -546,8 +547,9 @@ create_boxed_newwin2 (UIWINDOW * puiw, CString name, int rows, int cols)
  * Used by delete_uiwindow and list element destructor
  *========================================*/
 static void
-delete_uiwindow_impl (UIWINDOW w)
+delete_uiwindow_impl (const void *vw)
 {
+	UIWINDOW w = (UIWINDOW) vw;
 	if (w) {
 		// delete window (curses)
 		ASSERT(uiw_win(w));
@@ -1224,7 +1226,7 @@ curses_ask_for_char_msg (CString msg, CString ttl, CString prmpt, CString ptrn)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 int
-curses_chooseFromArray (CString ttl, int no, String *pstrngs)
+curses_chooseFromArray (CString ttl, int no, CString *pstrngs)
 {
 	bool selecting = true;
 	if (!ttl) ttl=_(qSdefttl);
@@ -1253,7 +1255,7 @@ display_list (CString ttl, List *list)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 int
-chooseFromArray_x (CString ttl, int no, String *pstrngs, DETAILFNC detfnc
+chooseFromArray_x (CString ttl, int no, CString *pstrngs, DETAILFNC detfnc
 	, void *param)
 {
 	bool selecting = true;
@@ -1268,7 +1270,7 @@ chooseFromArray_x (CString ttl, int no, String *pstrngs, DETAILFNC detfnc
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 void
-curses_view_array (CString ttl, int no, String *pstrngs)
+curses_view_array (CString ttl, int no, CString *pstrngs)
 {
 	bool selecting = false;
 	chooseOrViewArray(ttl, no, pstrngs, selecting, 0, 0);
@@ -1284,7 +1286,7 @@ curses_view_array (CString ttl, int no, String *pstrngs)
  * returns 0-based index chosen, or -1 if cancelled
  *==========================================*/
 static int
-chooseOrViewArray (CString ttl, int no, String *pstrngs, bool selecting
+chooseOrViewArray (CString ttl, int no, CString *pstrngs, bool selecting
 	, DETAILFNC detfnc, void *param)
 {
 	int rv;
@@ -1660,9 +1662,9 @@ static void
 load_tt_action (void)
 {
 	FILE * fp;
-	String fname=0;
+	CString fname=0;
 	int ttnum;
-	String ttimportdir;
+	CSString ttimportdir;
 
 	/* Ask which table */
 	ttnum = choose_tt(_(qSmn_svttttl));
@@ -1691,9 +1693,9 @@ static void
 save_tt_action (void)
 {
 	FILE * fp;
-	String fname=0;
+	CString fname=0;
 	int ttnum;
-	String ttexportdir;
+	CString ttexportdir;
 	
 	/* Ask which table */
 	ttnum = choose_tt(_(qSmn_svttttl));
@@ -2525,7 +2527,7 @@ void end_action (void)
 	check_stdout();
 	/* put up list of errors if appropriate */
 	if (msg_flag && msg_list) {
-		String * strngs = (String *)stdalloc(lengthList(msg_list)*sizeof(String));
+		CString * strngs = (CString *)stdalloc(lengthList(msg_list)*sizeof(CString));
 		int i=0;
 		FORLIST(msg_list, el)
 			strngs[i++] = el;

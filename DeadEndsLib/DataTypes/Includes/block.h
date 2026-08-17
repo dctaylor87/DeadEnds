@@ -28,10 +28,10 @@ int lengthBlock(Block*);
 bool isEmptyBlock(Block*);
 
 const void* getBlockElement(Block*, int);
-void setBlockElement(Block*, void*, void(*delete)(const void*), int);
+void setBlockElement(Block*, const void*, void(*delete)(const void*), int);
 
-void* findInBlock(Block*, CString, CString(*g)(const void*), int*);
-void* findInSortedBlock(Block*, CString, CString(*g)(const void*), int(*c)(CString, CString), int*);
+const void* findInBlock(Block*, CString, CString(*g)(const void*), int*);
+const void* findInSortedBlock(Block*, CString, CString(*g)(const void*), int(*c)(CString, CString), int*);
 
 bool isInBlock(Block*, CString, CString(*g)(const void*), int*); // Linear search.
 bool isInSortedBlock(Block*, CString, CString(*g)(const void*), int(*c)(CString, CString), int*); // Binary search.
@@ -54,8 +54,8 @@ void uniqueBlock(Block*, CString(*g)(const void*), void(*d)(const void*));
 Block *copyBlock(Block*, void*(*copy)(const void*));
 void iterateBlock(Block*, void(*perform)(const void*));
 
-void* searchBlock(Block* block, CString, CString(*g)(const void*), int*);
-void* searchSortedBlock(Block* block, CString key, CString(*g)(const void*), int(*c)(CString, CString), int*);
+const void* searchBlock(Block* block, CString, CString(*g)(const void*), int*);
+const void* searchSortedBlock(Block* block, CString key, CString(*g)(const void*), int(*c)(CString, CString), int*);
 
 // Debugging only.
 void showBlock(Block*, CString(*describe)(const void*));
