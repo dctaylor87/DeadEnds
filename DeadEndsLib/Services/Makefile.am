@@ -13,6 +13,7 @@ libservices_a_SOURCES = \
 AM_CPPFLAGS = \
 	-I$(top_builddir) \
 	-I$(top_srcdir)/DeadEndsLib/Services/Includes \
+	-I$(top_srcdir)/DeadEndsLib/LLSupport/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Python/Includes \
 	-I$(top_srcdir)/DeadEndsLib/UI/Includes \
 	-I$(top_srcdir)/DeadEndsLib/Utils/Includes \
