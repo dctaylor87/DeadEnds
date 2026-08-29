@@ -54,13 +54,13 @@ static void load_one_cmplx_pic (int ecmplx, String abbrev,
 static void load_one_month (int monum, MONTH_NAMES * monarr,
 			    String abbrev, String full);
 
-#if !defined(DEADENDS)
+//#if !defined(DEADENDS)
 static void init_keywordtbl(void);
 static void load_lang(void);
 static String lower_dup(String s);
 static String title_dup(String s);
 static String upper_dup(String s);
-#endif
+//#endif
 
 /*********************************************
  * local variables
@@ -74,7 +74,7 @@ String date_pic;
 /* generated month names (for Gregorian/Julian months) */
 String calendar_pics[GDV_CALENDARS_IX];
 
-#if !defined(DEADENDS)		/* not referenced */
+//#if !defined(DEADENDS)		/* not referenced */
 String roman_lower[] = { "i","ii","iii","iv","v","vi","vii","viii"
 	,"ix","x","xi","xii","xiii" };
 String roman_upper[] = { "I","II","III","IV","V","VI","VII","VIII"
@@ -83,9 +83,9 @@ String roman_upper[] = { "I","II","III","IV","V","VI","VII","VIII"
 MONTH_NAMES months_gj[12];
 MONTH_NAMES months_fr[13];
 MONTH_NAMES months_heb[13];
-#endif
+//#endif
 
-#if !defined(DEADENDS)		/* not referenced */
+//#if !defined(DEADENDS)		/* not referenced */
 
 /* GEDCOM keywords (fixed, not language dependent) */
 struct gedcom_keywords_s gedkeys[] = {
@@ -177,13 +177,13 @@ struct gedcom_keywords_s gedkeys[] = {
 	,{ "AFTER", 1000+GD_AFT }
 	,{ "BETWEEN", 1000+GD_BET }
 };
-#endif
+//#endif
 
 HashTable *keywordtbl = NULL;
 bool lang_changed=false;
 
 
-#if !defined(DEADENDS)		/* never called */
+//#if !defined(DEADENDS)		/* never called */
 /*=============================
  * initialize_if_needed -- init module or reload language
  *===========================*/
@@ -271,7 +271,7 @@ load_one_month (int monum, MONTH_NAMES * monarr, String abbrev, String full)
 	stdfree(locx_abbrev);
 	stdfree(loc_full);
 }
-#endif
+//#endif
 
 /*=============================
  * clear_lang -- Free all generated picture strings
@@ -315,7 +315,7 @@ clear_lang (void)
 #endif
 }
 
-#if !defined(DEADEND)		/* never called */
+//#if !defined(DEADEND)		/* never called */
 /*=============================
  * load_lang -- Load generated picture strings
  *  based on current language
@@ -418,7 +418,7 @@ load_lang (void)
 		}
 	}
 }
-#endif
+//#endif
 
 /*=============================
  * term_date -- Cleanup for finishing program
@@ -434,7 +434,7 @@ term_date (void)
 	}
 }
 
-#if !defined(DEADENDS)
+//#if !defined(DEADENDS)
 /*=============================
  * upper_dup -- Get uppercase & strdup it
  *===========================*/
@@ -468,7 +468,7 @@ title_dup (String s)
 	zs_free(&zstr);
 	return str;
 }
-#endif
+//#endif
 
 #if !defined(DEADENDS)
 /*=============================
