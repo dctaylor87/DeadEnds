@@ -37,6 +37,7 @@
 #include "zstr.h"
 #include "readwrite.h"
 #include "hashtable.h"
+#include "codesets.h"
 #include "lloptions.h"
 #include "de-strings.h"
 #include "messages.h"
