@@ -15,11 +15,13 @@ libllsupport_a_SOURCES = \
 	charprops.c \
 	choose.c \
 	codesets.c \
+	datei.c \
+	dateprint.c \
+	dispfmt.c \
 	errlog.c \
 	expandvars.c \
 	gstrings.c \
 	icvt.c \
-	listener.c \
 	ll-addoperations.c \
 	ll-indiseq.c \
 	ll-node.c \
@@ -27,7 +29,6 @@ libllsupport_a_SOURCES = \
 	ll-sequence.c \
 	ll-str.c \
 	llgettext.c \
-	lloptions.c \
 	locales.c \
 	norm_charmap.c \
 	proptbls.c \
