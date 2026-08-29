@@ -92,7 +92,7 @@ ask_for_input_filename (CString ttl, CString path, CString prmpt, String buffer,
 int
 chooseFromList (CString ttl, List *list)
 {
-	String * array=0;
+	CString * array=0;
 	String choice=0;
 	int i=0, rtn=-1;
 	int len = lengthList(list);
@@ -100,7 +100,7 @@ chooseFromList (CString ttl, List *list)
 	if (len < 1) return -1;
 	if (!ttl) ttl=_(qSdefttl);
 
-	array = (String *) stdalloc(len*sizeof(String));
+	array = (CString *) stdalloc(len*sizeof(CString));
 	i = 0;
 	FORLIST(list, el)
 	  choice = (String)el;
@@ -152,4 +152,47 @@ yes_no_value (int c)
 		if (c == *ptr) return true;
 	}
 	return false;
+}
+
+void
+displayErrorLog (ErrorLog *errorLog)
+{
+  if (lengthList (errorLog) == 0)
+    {
+      msg_info ("No errors occurred");
+      return;
+    }
+  msg_error ("%d Error(s) occurred", lengthList (errorLog));
+
+  FORLIST (errorLog, element)
+    Error *error = (Error *)element;
+    int len = 5 + 4 + 6 + 2 + 1;
+    if (error->fileName)
+      len += strlen (error->fileName);
+    if (error->lineNumber)
+      len += 20;
+    if (error->message)
+      len += strlen (error->message);
+    char buffer[len];
+    char *end = buffer;
+    end = strcpy (end, "error");
+    if (error->fileName)
+    {
+      end = strcpy (end, " in ");
+      end = strcpy (end, error->fileName);
+    }
+    if (error->lineNumber)
+    {
+      end = strcpy (end, " line ");
+      char number[21];
+      sprintf (number, "%d", error->lineNumber);
+      end = strcpy (end, number);
+    }
+    if (error->message)
+    {
+      end = strcpy (end, ": ");
+      end = strcpy (end, error->message);
+    }
+    msg_error (buffer);
+  ENDLIST
 }
