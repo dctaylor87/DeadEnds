@@ -29,3 +29,5 @@ extern void term_screen(void);
 
 /* defn: show.c, used: curses-ui.c */
 extern void init_show_module(void);
+/* defn: browse.c, used curses-ui.c */
+extern void init_browse_module(void);
