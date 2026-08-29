@@ -58,7 +58,7 @@ bool handle_indi_mode_cmds(int c, int * mode);
 bool handle_menu_cmds(int c, bool * reuse);
 bool handle_scroll_cmds(int c, bool * reuse);
 void history_record_change(GNode *);
-void init_browse_module(void);
+//void init_browse_module(void); /* XXX now in curses-ui.h XXX */
 void main_browse(GNode *, int code);
 GNode *my_prompt_add_child(GNode *child, GNode *fam);
 void term_browse_module(void);
