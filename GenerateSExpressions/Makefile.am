@@ -15,6 +15,7 @@ gensexpr_LDADD = \
 	../DeadEndsLib/Database/libdatabase.a \
 	../DeadEndsLib/Validate/libvalidate.a \
 	../DeadEndsLib/Gedcom/libgedcom.a \
+	../DeadEndsLib/Services/libservices.a \
 	../DeadEndsLib/DataTypes/libdatatypes.a \
 	../DeadEndsLib/Utils/libutils.a
 
