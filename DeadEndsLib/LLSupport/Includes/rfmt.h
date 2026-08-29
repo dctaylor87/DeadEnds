@@ -12,3 +12,5 @@ typedef struct tag_rfmt *RFMT;
 
 extern struct tag_rfmt disp_long_rfmt;
 extern struct tag_rfmt disp_shrt_rfmt;
+
+extern void init_disp_reformat(void);
